@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+env/
+
+# Build outputs
+dist/
+build/
+out/
+target/
+coverage/
+
+# Logs and temporary files
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Runtime/user data
+data/
+runtime/
+backups/
+exports/
+uploads/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Codex/local automation artifacts
+.codex/
