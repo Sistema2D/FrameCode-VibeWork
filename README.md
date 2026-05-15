@@ -43,6 +43,46 @@ A pasta `governança/` preserva templates genéricos. Os documentos preenchidos 
 
 ## Estrutura De Diretórios
 
+```text
+.
+├── AGENTS.md
+├── MANIFESTO.md
+├── README.md
+├── INSTANCIACAO.md
+├── ESCOPO.md
+├── STACK.md
+├── DESIGN.md
+├── WORKFLOW.md
+├── PLANEJAMENTO.md
+├── VERSIONAMENTO.md
+├── TROUBLESHOOTING.md
+├── TESTES.md
+├── SEGURANCA.md
+├── DADOS.md
+├── IA.md
+├── REFATORACAO.md
+├── RELEASE.md
+├── AUDITORIA.md
+├── DECISOES_ARQUITETURAIS.md
+├── Planos/
+│   ├── pendente/
+│   ├── em andamento/
+│   ├── concluído/
+│   └── descontinuado/
+├── changelogs/
+├── troubleshooting/
+├── decisoes/
+├── auditorias/
+├── briefings/
+├── wiki/
+│   ├── schema.md
+│   ├── index.md
+│   ├── log.md
+│   └── templates/
+├── snippets/
+└── governança/
+```
+
 - `Planos/`: ciclo de vida das alterações.
 - `changelogs/`: histórico formal por versão.
 - `troubleshooting/`: registros de falhas, hipóteses e validações.
