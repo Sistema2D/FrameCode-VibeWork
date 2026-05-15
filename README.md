@@ -31,6 +31,8 @@ Toda alteração em arquivo versionado deve ser registrada em `changelogs/Vx.y.z
 
 A pasta `wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, índice, log, links internos, estados de confiança e lint periódico.
 
+> **Portabilidade e Reuso:** O conhecimento acumulado na `wiki/` (padrões, decisões, troubleshooting) pode e deve ser portado e reutilizado em novos projetos para acelerar o desenvolvimento assistido por IA e manter a consistência técnica entre diferentes aplicações.
+
 ### 4. Snippets reutilizáveis
 
 A pasta `snippets/` guarda componentes e padrões prontos para adaptação, com galeria visual e tokens CSS.
