@@ -1,111 +1,111 @@
-# Índice da LLM Wiki
+# LLM Wiki Index
 
-Este arquivo é o índice navegável da wiki do projeto.
+This file is the navigable index of the project's wiki.
 
-Ele deve ser atualizado sempre que novas páginas relevantes forem criadas, obsoletas, substituídas ou validadas.
+It must be updated whenever new pages are created, obsoleted, replaced, or validated.
 
 ---
 
-## Páginas centrais
+## Core Pages
 
-- [[schema]] — Regras estruturais e operacionais da wiki.
-- [[log]] — Registro cronológico de eventos da wiki.
-- [[README]] — Visão geral da pasta `wiki/`.
+- [[schema]] — Structural and operational rules of the wiki.
+- [[log]] — Chronological log of wiki events.
+- [[README]] — Overview of the `wiki/` folder.
 
-## Fontes formais prioritárias
+## Preferred Formal Sources
 
 - `AGENTS.md`
-- `INSTANCIACAO.md`
-- `MANIFESTO.md`
-- `PLANEJAMENTO.md`
-- `VERSIONAMENTO.md`
+- `INSTANTIATION.md`
+- `MANIFEST.md`
+- `PLANNING.md`
+- `VERSIONING.md`
 - `TROUBLESHOOTING.md`
-- `Planos/concluído/`
+- `Plans/completed/`
 - `changelogs/`
 - `troubleshooting/`
-- `decisoes/`
-- `auditorias/`
+- `decisions/`
+- `audits/`
 
 ---
 
-## Padrões técnicos validados
+## Validated Technical Patterns
 
-> Registrar aqui padrões reutilizáveis que já foram aplicados e validados.
+> Record here reusable patterns that have been applied and validated.
 
-- Nenhum padrão técnico registrado até o momento.
-
----
-
-## Falhas conhecidas e aprendizados
-
-> Registrar aqui falhas recorrentes, causas raiz e soluções validadas.
-
-- Nenhuma falha consolidada até o momento.
+- No technical patterns recorded so far.
 
 ---
 
-## Decisões consolidadas
+## Known Failures and Learnings
 
-> Registrar aqui decisões arquiteturais ou técnicas que impactam o projeto.
+> Record here recurring failures, root causes, and validated solutions.
 
-- Nenhuma decisão consolidada na wiki até o momento.
-
----
-
-## Componentes e módulos
-
-> Registrar aqui páginas sobre módulos, telas, serviços, componentes ou camadas do projeto.
-
-- Nenhum componente registrado até o momento.
+- No consolidated failures so far.
 
 ---
 
-- [[refactorings/guia-completo|Guia completo de métricas de refatoração]] — Referência validada para ICR, IRR, complexidade, duplicação, acoplamento e testabilidade. (Opcional: mover para snippets se for padrão global).
+## Consolidated Decisions
+
+> Record here architectural or technical decisions that impact the project.
+
+- No consolidated decisions in the wiki so far.
 
 ---
 
-## Auditorias
+## Components and Modules
 
-> Registrar aqui páginas sobre auditorias formais executadas no projeto.
+> Record here pages about modules, screens, services, components, or project layers.
 
-- Nenhuma auditoria consolidada até o momento.
+- No components recorded so far.
+
+---
+
+- [[refactorings/complete-guide|Complete Guide to Refactoring Metrics]] — Validated reference for ICR, IRR, complexity, duplication, coupling, and testability.
+
+---
+
+## Audits
+
+> Record here pages about formal audits executed in the project.
+
+- No consolidated audits so far.
 
 ---
 
 ## Releases
 
-> Registrar aqui sínteses de versões publicadas.
+> Record here syntheses of published versions.
 
-- Nenhuma release consolidada até o momento.
-
----
-
-## Prompts úteis
-
-> Registrar aqui prompts reutilizáveis e validados.
-
-- Nenhum prompt registrado até o momento.
+- No consolidated releases so far.
 
 ---
 
-## Perguntas abertas
+## Useful Prompts
 
-> Registrar aqui dúvidas importantes que podem orientar decisões futuras.
+> Record here reusable and validated prompts.
 
-- Nenhuma pergunta aberta registrada até o momento.
-
----
-
-## Sínteses transversais
-
-> Registrar aqui sínteses que conectam múltiplas fontes, decisões, falhas ou padrões.
-
-- Nenhuma síntese transversal registrada até o momento.
+- No prompts recorded so far.
 
 ---
 
-## Páginas obsoletas ou substituídas
+## Open Questions
 
-> Registrar aqui páginas que não devem mais ser usadas como fonte principal.
+> Record here important questions that may guide future decisions.
 
-- Nenhuma página obsoleta registrada até o momento.
+- No open questions recorded so far.
+
+---
+
+## Cross-Cutting Syntheses
+
+> Record here syntheses that connect multiple sources, decisions, failures, or patterns.
+
+- No cross-cutting syntheses recorded so far.
+
+---
+
+## Obsolete or Replaced Pages
+
+> Record here pages that should no longer be used as a primary source.
+
+- No obsolete pages recorded so far.

@@ -1,219 +1,219 @@
-# Briefing Inicial do Projeto
+# Initial Project Briefing
 
-Documento metodológico para conduzir a **Fase 0 — Descoberta e Briefing** antes do desenvolvimento ou reestruturação de uma aplicação.
+Methodological document to conduct **Phase 0 — Discovery and Briefing** before the development or restructuring of an application.
 
-Este arquivo define as perguntas, critérios mínimos e regras de preenchimento que devem ser usados por humanos e agentes de IA para coletar as informações necessárias antes de gerar ou atualizar `ESCOPO.md`, `STACK.md`, `DESIGN.md`, `WORKFLOW.md`, `PLANEJAMENTO.md`, `VERSIONAMENTO.md`, `SEGURANCA.md`, `DADOS.md`, `IA.md` e demais documentos oficiais do projeto.
+This file defines the questions, minimum criteria, and completion rules to be used by humans and AI agents to collect the necessary information before generating or updating `SCOPE.md`, `STACK.md`, `DESIGN.md`, `WORKFLOW.md`, `PLANNING.md`, `VERSIONING.md`, `SECURITY.md`, `DATA.md`, `AI.md`, and other official project documents.
 
-## Objetivo
+## Objective
 
-Garantir que o início do desenvolvimento seja guiado, rastreável e sem lacunas críticas.
+Ensure that the start of development is guided, traceable, and free of critical gaps.
 
-A Fase 0 deve produzir um arquivo preenchido em:
+Phase 0 must produce a completed file in:
 
 ```text
-briefings/BRIEFING_INICIAL.md
+briefings/INITIAL_BRIEFING.md
 ```
 
-Esse arquivo deve funcionar como a fonte inicial de entendimento do projeto. Depois que os documentos oficiais forem criados, ele deixa de ser fonte normativa principal, mas permanece como registro histórico da concepção do projeto.
+This file will serve as the initial source of project understanding. After the official documents are created, it ceases to be the main normative source but remains as a historical record of the project's conception.
 
-## Relação com os demais documentos
+## Relationship with Other Documents
 
-- `AGENTS.md`: deve acionar este processo quando o usuário solicitar criação ou reestruturação de aplicação.
-- `ESCOPO.md`: deve ser preenchido a partir das respostas sobre objetivo, público, limites e funcionalidades.
-- `STACK.md`: deve ser preenchido a partir das decisões técnicas.
-- `DESIGN.md`: deve ser preenchido a partir das preferências visuais e critérios de UX.
-- `WORKFLOW.md`: deve ser preenchido a partir dos fluxos, telas, módulos e eventos.
-- `SEGURANCA.md`: deve ser preenchido a partir dos riscos, permissões, dados sensíveis e integrações.
-- `DADOS.md`: deve ser preenchido a partir da persistência, arquivos, banco, retenção e migração.
-- `IA.md`: deve ser preenchido a partir do papel da IA, modelos, contexto, memória, RAG e limites de ação.
-- `PLANEJAMENTO.md`: deve orientar os planos posteriores.
-- `VERSIONAMENTO.md`: deve orientar a versão inicial e futuras releases.
+- `AGENTS.md`: triggers this process when the user requests the creation or restructuring of an application.
+- `SCOPE.md`: filled out based on the answers about objective, audience, boundaries, and features.
+- `STACK.md`: filled out based on technical decisions.
+- `DESIGN.md`: filled out based on visual preferences and UX criteria.
+- `WORKFLOW.md`: filled out based on flows, screens, modules, and events.
+- `SECURITY.md`: filled out based on risks, permissions, sensitive data, and integrations.
+- `DATA.md`: filled out based on persistence, files, database, retention, and migration.
+- `AI.md`: filled out based on the role of AI, models, context, memory, RAG, and boundaries of action.
+- `PLANNING.md`: guides subsequent plans.
+- `VERSIONING.md`: guides the initial version and future releases.
 
-## Regra de ativação obrigatória
+## Mandatory Activation Rule
 
-Quando o usuário solicitar o início de uma nova aplicação, uma reconstrução do zero, uma migração ampla, ou a adaptação deste framework para outro projeto, o agente de IA deve:
+When the user requests the start of a new application, a reconstruction from scratch, a broad migration, or the adaptation of this framework to another project, the AI agent must:
 
-1. Verificar se já existe `briefings/BRIEFING_INICIAL.md`.
-2. Se não existir, iniciar a entrevista guiada.
-3. Registrar as respostas no arquivo de briefing.
-4. Consultar `INSTANCIACAO.md` e aplicar manualmente as regras de renomeação, placeholders e separação entre documentos canônicos e templates.
-5. Marcar campos desconhecidos como `A definir`.
-6. Listar lacunas críticas antes de gerar os documentos oficiais.
-7. Não iniciar implementação de código enquanto houver lacunas críticas sem decisão explícita do usuário.
+1. Check if `briefings/INITIAL_BRIEFING.md` already exists.
+2. If it does not exist, start the guided interview.
+3. Record the answers in the briefing file.
+4. Consult `INSTANTIATION.md` and manually apply the renaming, placeholder, and canonical vs. template document separation rules.
+5. Mark unknown fields as `To be defined`.
+6. List critical gaps before generating official documents.
+7. Do not start code implementation while there are critical gaps without an explicit decision from the user.
 
-## Níveis de lacuna
+## Gap Levels
 
-### Lacuna crítica
+### Critical Gap
 
-Impede o início seguro do desenvolvimento.
+Prevents the safe start of development.
 
-Exemplos:
+Examples:
 
-- objetivo da aplicação indefinido;
-- público-alvo indefinido;
-- plataforma alvo indefinida;
-- forma de uso da IA indefinida;
-- dados manipulados desconhecidos;
-- requisitos de segurança não avaliados;
-- stack obrigatória ou restrições técnicas não definidas;
-- funcionalidades obrigatórias não priorizadas.
+- undefined application objective;
+- undefined target audience;
+- undefined target platform;
+- undefined use of AI;
+- unknown handled data;
+- unevaluated security requirements;
+- undefined mandatory stack or technical constraints;
+- unprioritized mandatory features.
 
-### Lacuna relevante
+### Relevant Gap
 
-Não impede prototipação, mas deve ser resolvida antes de desenvolvimento estável.
+Does not prevent prototyping but must be resolved before stable development.
 
-Exemplos:
+Examples:
 
-- identidade visual ainda não aprovada;
-- nome final indefinido;
-- integrações futuras ainda não detalhadas;
-- política de backup pendente;
-- critérios de aceite ainda genéricos.
+- visual identity not yet approved;
+- final name undefined;
+- future integrations not yet detailed;
+- pending backup policy;
+- generic acceptance criteria.
 
-### Lacuna tolerável
+### Tolerable Gap
 
-Pode permanecer em aberto durante as primeiras versões.
+Can remain open during initial versions.
 
-Exemplos:
+Examples:
 
 - slogan;
-- ícone final;
-- documentação pública;
-- recursos opcionais;
-- internacionalização futura.
+- final icon;
+- public documentation;
+- optional resources;
+- future internationalization.
 
-## Questionário obrigatório
+## Mandatory Questionnaire
 
-### 1. Identificação do projeto
+### 1. Project Identification
 
-- Nome provisório:
-- Nome final, se houver:
-- Tipo de aplicação:
-- Plataforma alvo:
-- Sistema operacional alvo:
-- Público-alvo:
-- Problema que a aplicação resolve:
-- Objetivo principal:
-- Critério de sucesso do produto:
+- Temporary name:
+- Final name, if any:
+- Type of application:
+- Target platform:
+- Target operating system:
+- Target audience:
+- Problem the application solves:
+- Main objective:
+- Product success criterion:
 
-### 2. Contexto de uso
+### 2. Context of Use
 
-- Quem usará a aplicação?
-- Em qual ambiente a aplicação será usada?
-- A aplicação será usada de forma pessoal, interna, corporativa ou pública?
-- A aplicação precisa funcionar offline?
-- A aplicação precisa funcionar em rede local?
-- A aplicação terá múltiplos usuários?
-- Existe alguma restrição de hardware ou desempenho?
+- Who will use the application?
+- In what environment will the application be used?
+- Will the application be used for personal, internal, corporate, or public purposes?
+- Does the application need to work offline?
+- Does the application need to work on a local network?
+- Will the application have multiple users?
+- Are there any hardware or performance constraints?
 
-### 3. Escopo funcional
+### 3. Functional Scope
 
-- Funcionalidades obrigatórias:
-- Funcionalidades desejáveis:
-- Funcionalidades explicitamente fora de escopo:
-- Fluxo principal do usuário:
-- Telas ou módulos previstos:
-- Ações críticas do usuário:
-- Ações destrutivas que exigem confirmação:
-- Integrações necessárias:
-- Relatórios, exportações ou importações necessárias:
+- Mandatory features:
+- Desirable features:
+- Explicitly out of scope features:
+- Main user flow:
+- Planned screens or modules:
+- Critical user actions:
+- Destructive actions requiring confirmation:
+- Necessary integrations:
+- Required reports, exports, or imports:
 
-### 4. Uso de IA
+### 4. Use of AI
 
-- A aplicação usará IA local, online ou híbrida?
-- Qual runtime, provedor ou modelo está previsto?
-- A IA será usada para chat, automação, análise, RAG, geração de conteúdo, classificação, agentes ou outro uso?
-- A IA poderá executar ações ou apenas responder?
-- Haverá memória, histórico ou base de conhecimento?
-- Haverá embeddings ou busca vetorial?
-- Haverá aprendizado contínuo?
-- Quais informações a IA não deve acessar?
-- Quais ações a IA nunca poderá executar automaticamente?
+- Will the application use local, online, or hybrid AI?
+- What runtime, provider, or model is planned?
+- Will AI be used for chat, automation, analysis, RAG, content generation, classification, agents, or another use?
+- Will AI be able to execute actions or only respond?
+- Will there be memory, history, or a knowledge base?
+- Will there be embeddings or vector search?
+- Will there be continuous learning?
+- What information should the AI not access?
+- What actions should the AI never execute automatically?
 
-### 5. Dados e persistência
+### 5. Data and Persistence
 
-- Quais dados serão armazenados?
-- Onde serão armazenados?
-- Haverá banco de dados?
-- Haverá arquivos locais?
-- Haverá dados sensíveis?
-- Haverá logs?
-- Haverá backup?
-- Haverá exportação ou importação?
-- Haverá migração entre versões?
-- Qual dado deve ser ignorado pelo Git?
+- What data will be stored?
+- Where will they be stored?
+- Will there be a database?
+- Will there be local files?
+- Will there be sensitive data?
+- Will there be logs?
+- Will there be backups?
+- Will there be export or import features?
+- Will there be migration between versions?
+- What data should be ignored by Git?
 
-### 6. Segurança e privacidade
+### 6. Security and Privacy
 
-- A aplicação exigirá autenticação?
-- Haverá perfis ou permissões?
-- Haverá tokens, chaves ou segredos?
-- Haverá execução de comandos locais?
-- Haverá acesso ao sistema de arquivos?
-- Haverá comunicação com APIs externas?
-- Quais ameaças iniciais são previsíveis?
-- Como serão tratados dados privados ou sensíveis?
+- Will the application require authentication?
+- Will there be roles or permissions?
+- Will there be tokens, keys, or secrets?
+- Will there be local command execution?
+- Will there be filesystem access?
+- Will there be communication with external APIs?
+- What initial threats are predictable?
+- How will private or sensitive data be handled?
 
-### 7. Design e experiência
+### 7. Design and Experience
 
-- Estilo visual desejado:
-- Tema claro, escuro ou ambos:
-- Densidade da interface:
-- Referências visuais:
-- Paleta desejada:
-- Tipografia desejada:
-- Componentes principais:
-- Requisitos de acessibilidade:
-- Restrições de layout:
-- Comportamento em telas pequenas ou janelas redimensionadas:
+- Desired visual style:
+- Light, dark theme, or both:
+- Interface density:
+- Visual references:
+- Desired palette:
+- Desired typography:
+- Main components:
+- Accessibility requirements:
+- Layout constraints:
+- Behavior on small screens or resized windows:
 
-### 8. Stack técnica
+### 8. Technical Stack
 
-- Linguagem principal:
-- Framework de frontend:
-- Framework de backend:
-- Banco de dados:
-- Runtime de IA:
-- Ferramentas de build:
-- Dependências externas:
-- Padrão de empacotamento:
-- Restrições obrigatórias:
-- Tecnologias proibidas:
+- Main language:
+- Frontend framework:
+- Backend framework:
+- Database:
+- AI runtime:
+- Build tools:
+- External dependencies:
+- Packaging standard:
+- Mandatory constraints:
+- Prohibited technologies:
 
-### 9. Qualidade, testes e validação
+### 9. Quality, Testing, and Validation
 
-- Como o projeto será testado?
-- Quais fluxos precisam de teste manual obrigatório?
-- Haverá testes automatizados?
-- Haverá checklist de release?
-- Quais critérios definem que uma versão está pronta?
-- Quais regressões seriam inaceitáveis?
+- How will the project be tested?
+- Which flows require mandatory manual testing?
+- Will there be automated tests?
+- Will there be a release checklist?
+- What criteria define that a version is ready?
+- What regressions would be unacceptable?
 
-### 10. Versionamento e governança
+### 10. Versioning and Governance
 
-- Versão inicial:
-- Estratégia de versionamento:
-- Padrão de changelog:
-- Padrão de planos:
-- Critério para versão minor:
-- Critério para versão patch:
-- Critério para versão major:
-- Responsável por aprovar mudanças de escopo:
-- Responsável por aprovar mudanças visuais:
+- Initial version:
+- Versioning strategy:
+- Changelog standard:
+- Plans standard:
+- Criteria for minor version:
+- Criteria for patch version:
+- Criteria for major version:
+- Responsible for approving scope changes:
+- Responsible for approving visual changes:
 
 ---
 
-## Modelos e Templates
+## Models and Templates
 
-Para realizar o levantamento inicial de um novo projeto, utilize o modelo em:
-`governança/TEMPLATE_BRIEFING.md`
+To perform the initial survey of a new project, use the template in:
+`governance/TEMPLATE_BRIEFING.md`
 
-## Regra de encerramento da Fase 0
+## Phase 0 Closure Rule
 
-A Fase 0 só pode ser marcada como concluída quando:
+Phase 0 can only be marked as completed when:
 
-- o briefing inicial existir;
-- as lacunas críticas estiverem resolvidas ou formalmente aceitas pelo usuário;
-- o agente tiver indicado quais documentos oficiais serão criados ou atualizados;
-- o usuário tiver aprovado o escopo mínimo de início;
-- qualquer premissa assumida estiver registrada.
+- the initial briefing exists;
+- critical gaps are resolved or formally accepted by the user;
+- the agent has indicated which official documents will be created or updated;
+- the user has approved the minimum starting scope;
+- any assumed premise is recorded.

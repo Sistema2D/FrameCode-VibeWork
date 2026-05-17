@@ -1,83 +1,83 @@
-# Release e Publicação
+# Release and Publication
 
-Documento operacional para preparar, validar e publicar versões da aplicação.
+Operational document to prepare, validate, and publish versions of the application.
 
-Este arquivo complementa `VERSIONAMENTO.md`. Enquanto `VERSIONAMENTO.md` define regras de versão e changelog, este documento descreve o fluxo prático de preparação de uma release.
+This file complements `VERSIONING.md`. While `VERSIONING.md` defines versioning and changelog rules, this document describes the practical workflow of preparing a release.
 
-O changelog em `changelogs/Vx.y.z.md` é a fonte formal da release. Este documento não cria uma fonte paralela de versão.
+The changelog in `changelogs/Vx.y.z.md` is the formal source of the release. This document does not create a parallel version source.
 
-## Objetivo
+## Objective
 
-Padronizar o encerramento de versões, evitando publicação com planos incompletos, versão inconsistente, changelog incompleto, testes ausentes ou pendências desconhecidas.
+Standardize the closure of versions, preventing publication with incomplete plans, inconsistent versions, incomplete changelogs, missing tests, or unknown gaps.
 
-## Estados de uma release
+## States of a Release
 
-- `planejada`: versão prevista, ainda sem alterações concluídas.
-- `em preparação`: alterações sendo agrupadas e documentadas.
-- `em validação`: implementação concluída, testes em execução.
-- `publicada`: versão finalizada.
-- `cancelada`: versão planejada que não será publicada.
+- `planned`: expected version, with no completed changes yet.
+- `in_preparation`: changes being grouped and documented.
+- `in_validation`: implementation completed, tests in progress.
+- `published`: finalized version.
+- `canceled`: planned version that will not be published.
 
-## Fluxo recomendado
+## Recommended Workflow
 
-1. Identificar planos que compõem a release.
-2. Confirmar versão prevista.
-3. Garantir que cada plano tem status correto.
-4. Atualizar changelog da versão.
-5. Executar testes conforme `TESTES.md`.
-6. Executar auditoria conforme `AUDITORIA.md`.
-7. Confirmar coerência de versão em código, `STACK.md` e changelog.
-8. Registrar pendências conhecidas.
-9. Registrar rollback quando aplicável.
-10. Marcar changelog como `publicada`.
-11. Avaliar se a release gerou aprendizado reutilizável para `wiki/releases/`.
+1. Identify plans that compose the release.
+2. Confirm expected version.
+3. Ensure each plan has the correct status.
+4. Update the version's changelog.
+5. Execute tests as per `TESTS.md`.
+6. Execute audit as per `AUDIT.md`.
+7. Confirm version coherence in code, `STACK.md`, and changelog.
+8. Record known gaps.
+9. Record rollback procedures when applicable.
+10. Mark changelog as `published`.
+11. Evaluate if the release generated reusable learning for `wiki/releases/`.
 
-## Critérios mínimos para publicar
+## Minimum Criteria to Publish
 
-- Todos os planos incluídos estão concluídos ou explicitamente removidos da release.
-- Changelog existe e está completo.
-- Versão exibida na aplicação está coerente.
-- Versão em `STACK.md` está coerente.
-- Testes mínimos foram executados.
-- Pendências conhecidas foram registradas.
-- Riscos residuais foram registrados.
-- Rollback foi descrito ou justificado como não aplicável.
+- All included plans are completed or explicitly removed from the release.
+- Changelog exists and is complete.
+- Version displayed in the application is coherent.
+- Version in `STACK.md` is coherent.
+- Minimum tests were executed.
+- Known gaps were recorded.
+- Residual risks were recorded.
+- Rollback was described or justified as not applicable.
 
-## Checklist de pré-release
+## Pre-Release Checklist
 
-- [ ] A versão prevista segue `Vx.y.z`.
-- [ ] O tipo de release foi definido.
-- [ ] Planos relacionados foram listados.
-- [ ] Changelog foi criado.
-- [ ] Arquivos afetados foram listados.
-- [ ] Testes foram definidos.
-- [ ] Validação foi executada ou limitação foi registrada.
-- [ ] Pendências conhecidas foram registradas.
-- [ ] Rollback foi registrado quando aplicável.
-- [ ] Auditoria documental foi executada.
+- [ ] The expected version follows `Vx.y.z`.
+- [ ] The type of release was defined.
+- [ ] Related plans were listed.
+- [ ] Changelog was created.
+- [ ] Affected files were listed.
+- [ ] Tests were defined.
+- [ ] Validation was executed or limitation was recorded.
+- [ ] Known gaps were recorded.
+- [ ] Rollback was recorded when applicable.
+- [ ] Document audit was executed.
 
-## Checklist de publicação
+## Publication Checklist
 
-- [ ] Build final executado.
-- [ ] Aplicação inicia.
-- [ ] Fluxo principal funciona.
-- [ ] Versão exibida confere.
-- [ ] Changelog está como `publicada`.
-- [ ] Planos estão em `Planos/concluído`.
-- [ ] Não há arquivos temporários como fonte de verdade.
-- [ ] Artefatos de build não foram versionados indevidamente.
+- [ ] Final build executed.
+- [ ] Application starts.
+- [ ] Main workflow works.
+- [ ] Displayed version matches.
+- [ ] Changelog is set to `published`.
+- [ ] Plans are in `Plans/completed`.
+- [ ] There are no temporary files as source of truth.
+- [ ] Build artifacts were not improperly versioned.
 
-## Checklist pós-release
+## Post-Release Checklist
 
-- [ ] Próximas pendências foram registradas em planos futuros, se aplicável.
-- [ ] Issues recorrentes foram revisadas.
-- [ ] Documentos oficiais permanecem coerentes.
-- [ ] Riscos residuais foram comunicados.
-- [ ] Versão seguinte não foi iniciada sem plano.
+- [ ] Next gaps were registered in future plans, if applicable.
+- [ ] Recurring issues were reviewed.
+- [ ] Official documents remain coherent.
+- [ ] Residual risks were communicated.
+- [ ] Following version was not started without a plan.
 
 ---
 
-## Modelos e Templates
+## Models and Templates
 
-Para criar notas de release ou resumos executivos, utilize o modelo em:
-`governança/TEMPLATE_RELEASE.md`
+To create release notes or executive summaries, use the template in:
+`governance/TEMPLATE_RELEASE.md`

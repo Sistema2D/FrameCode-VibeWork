@@ -1,25 +1,25 @@
 ---
-titulo: "Modal de confirmação — tema escuro"
+title: "Confirmation modal — dark theme"
 stack: "web"
-tipo: "modal"
-tags: [dark-theme, overlay, confirmacao, acessibilidade, escape, focus-trap]
-dependencias: ["CSS nativo", "JS nativo"]
-testado: "sim"
-criado: 2026-05-15
-atualizado: 2026-05-15
+type: "modal"
+tags: [dark-theme, overlay, confirmation, accessibility, escape, focus-trap]
+dependencies: ["Native CSS", "Native JS"]
+tested: "yes"
+created: 2026-05-15
+updated: 2026-05-15
 ---
 
-# Modal de Confirmação — Tema Escuro
+# Confirmation Modal — Dark Theme
 
-Modal de confirmação com overlay, animação de entrada, trap de foco, fechamento por Escape e suporte a ação destrutiva.
+Confirmation modal with overlay, entrance animation, focus trap, Escape key closing, and support for destructive action.
 
-## Variantes disponíveis
+## Available Variants
 
-- Modal de confirmação genérica (neutro)
-- Modal de ação destrutiva (botão de confirmar em vermelho)
-- Adaptável para formulários simples substituindo o parágrafo pelo form
+- Generic confirmation modal (neutral)
+- Destructive action modal (confirm button in red)
+- Adaptable for simple forms by replacing the paragraph with a form
 
-## Código CSS
+## CSS Code
 
 ```css
 /* ── Overlay ───────────────────────────────────────────────── */
@@ -43,7 +43,7 @@ Modal de confirmação com overlay, animação de entrada, trap de foco, fechame
 
 /* ── Container ─────────────────────────────────────────────── */
 .modal {
-  background:    #1e1e2e;          /* trocar por --cor-superficie */
+  background:    #1e1e2e;          /* replace with --cor-superficie */
   border:        1px solid rgba(255,255,255,0.1);
   border-radius: 12px;
   padding:       28px;
@@ -60,7 +60,7 @@ Modal de confirmação com overlay, animação de entrada, trap de foco, fechame
   opacity:   1;
 }
 
-/* ── Cabeçalho ─────────────────────────────────────────────── */
+/* ── Header ─────────────────────────────────────────────── */
 .modal-header {
   display:         flex;
   align-items:     flex-start;
@@ -94,7 +94,7 @@ Modal de confirmação com overlay, animação de entrada, trap de foco, fechame
   background: rgba(255,255,255,0.07);
 }
 
-/* ── Corpo ─────────────────────────────────────────────────── */
+/* ── Body ─────────────────────────────────────────────────── */
 .modal-corpo {
   color:       #94a3b8;
   font-size:   14px;
@@ -102,7 +102,7 @@ Modal de confirmação com overlay, animação de entrada, trap de foco, fechame
   margin:      0 0 24px;
 }
 
-/* ── Rodapé ────────────────────────────────────────────────── */
+/* ── Footer ────────────────────────────────────────────────── */
 .modal-footer {
   display:         flex;
   gap:             10px;
@@ -110,12 +110,12 @@ Modal de confirmação com overlay, animação de entrada, trap de foco, fechame
 }
 ```
 
-## Código HTML
+## HTML Code
 
 ```html
 <!-- Trigger -->
 <button class="btn btn-danger" onclick="abrirModal('modal-excluir')">
-  Excluir item
+  Delete item
 </button>
 
 <!-- Modal -->
@@ -130,11 +130,11 @@ Modal de confirmação com overlay, animação de entrada, trap de foco, fechame
 >
   <div class="modal">
     <div class="modal-header">
-      <h2 class="modal-titulo" id="modal-excluir-titulo">Excluir item?</h2>
+      <h2 class="modal-titulo" id="modal-excluir-titulo">Delete item?</h2>
       <button
         class="modal-fechar"
         onclick="fecharModal('modal-excluir')"
-        aria-label="Fechar"
+        aria-label="Close"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2">
@@ -145,33 +145,33 @@ Modal de confirmação com overlay, animação de entrada, trap de foco, fechame
     </div>
 
     <p class="modal-corpo">
-      Esta ação não pode ser desfeita. O item será removido permanentemente.
+      This action cannot be undone. The item will be permanently removed.
     </p>
 
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="fecharModal('modal-excluir')">
-        Cancelar
+        Cancel
       </button>
       <button class="btn btn-danger" onclick="confirmarExcluir()">
-        Excluir
+        Delete
       </button>
     </div>
   </div>
 </div>
 ```
 
-## Código JS
+## JS Code
 
 ```javascript
 function abrirModal(id) {
   const overlay = document.getElementById(id);
   if (!overlay) return;
   overlay.style.display = 'flex';
-  // força reflow para a animação funcionar
+  // force reflow to trigger animation
   requestAnimationFrame(() => overlay.classList.add('modal-aberto'));
-  // foca o overlay para acessibilidade e captura de Escape
+  // focus overlay for accessibility and Escape capture
   overlay.focus();
-  // listener de Escape
+  // Escape listener
   overlay._escapeHandler = (e) => {
     if (e.key === 'Escape') fecharModal(id);
   };
@@ -183,39 +183,39 @@ function fecharModal(id) {
   if (!overlay) return;
   overlay.classList.remove('modal-aberto');
   document.removeEventListener('keydown', overlay._escapeHandler);
-  // aguarda a transição antes de esconder
+  // wait for transition before hiding
   overlay.addEventListener('transitionend', () => {
     overlay.style.display = 'none';
   }, { once: true });
 }
 
 function fecharModalOverlay(event, id) {
-  // fecha somente se o clique for no overlay, não no modal em si
+  // close only if click is on overlay, not the modal itself
   if (event.target === event.currentTarget) fecharModal(id);
 }
 
-// Exemplo de ação de confirmação
+// Example of confirmation action
 function confirmarExcluir() {
-  // sua lógica aqui
+  // your logic here
   fecharModal('modal-excluir');
 }
 ```
 
-## Adaptações comuns
+## Common Adaptations
 
-- **Modal informativo** (sem ação destrutiva): trocar `.btn-danger` por `.btn-primary` no rodapé.
-- **Modal com formulário**: substituir `.modal-corpo > p` por `<form>` com inputs.
-- **Modal centralizado no painel** (não na tela): trocar `position: fixed` por `position: absolute` no overlay e garantir `position: relative` no pai.
-- **Sem backdrop blur**: remover `backdrop-filter: blur(4px)`.
-- **Tamanho maior**: aumentar `max-width` (ex: `640px` para formulários extensos).
+- **Informative modal** (no destructive action): replace `.btn-danger` with `.btn-primary` in footer.
+- **Modal with form**: replace `.modal-corpo > p` with `<form>` containing inputs.
+- **Modal centered on panel** (not viewport): replace `position: fixed` with `position: absolute` on overlay and ensure `position: relative` on parent.
+- **Without backdrop blur**: remove `backdrop-filter: blur(4px)`.
+- **Larger size**: increase `max-width` (e.g., `640px` for extensive forms).
 
-## Dependências
+## Dependencies
 
-CSS e JS nativos. Sem dependências externas. Os botões usam as classes de `snippets/ui/buttons/button-primary.md`.
+Native CSS and JS. No external dependencies. Buttons use classes from `snippets/ui/buttons/button-primary.md`.
 
-## Notas
+## Notes
 
-- `aria-modal="true"` e `aria-labelledby` são obrigatórios para acessibilidade com leitores de tela.
-- O overlay recebe `tabindex="-1"` para poder receber foco programaticamente.
-- Sempre remover o listener de Escape ao fechar para evitar vazamento de memória.
-- Em aplicações com múltiplos modais simultâneos, usar um `z-index` crescente por instância.
+- `aria-modal="true"` and `aria-labelledby` are mandatory for screen reader accessibility.
+- Overlay receives `tabindex="-1"` to be programmatically focusable.
+- Always remove the Escape listener on close to avoid memory leaks.
+- In applications with multiple simultaneous modals, use an increasing `z-index` per instance.

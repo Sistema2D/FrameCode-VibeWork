@@ -1,48 +1,48 @@
 ---
-titulo: "<nome do padrão>"
-tipo: "pattern"
-status: "rascunho"
-confianca: "baixa"
-ultima_revisao: "AAAA-MM-DD"
-versao_relacionada: "V0.0.0"
-fontes:
-  - "<plano, changelog, código, auditoria ou issue>"
+title: "<pattern name>"
+type: "pattern"
+status: "draft"
+confidence: "low"
+last_reviewed: "YYYY-MM-DD"
+related_version: "V0.0.0"
+sources:
+  - "<plan, changelog, code, audit, or issue>"
 tags:
   - "pattern"
 ---
 
-# <Nome do padrão>
+# <Pattern Name>
 
-## Problema que resolve
+## Problem it Solves
 
-<Descreva o problema recorrente que este padrão resolve.>
+<Describe the recurring problem that this pattern solves.>
 
-## Solução recomendada
+## Recommended Solution
 
-<Descreva a solução de forma clara e reutilizável.>
+<Describe the solution in a clear and reusable way.>
 
-## Quando usar
-
-- 
-
-## Quando não usar
+## When to Use
 
 - 
 
-## Exemplo de aplicação
+## When Not to Use
+
+- 
+
+## Application Example
 
 ```text
-<exemplo>
+<example>
 ```
 
-## Evidências de validação
+## Validation Evidence
 
 - 
 
-## Riscos
+## Risks
 
 - 
 
-## Páginas relacionadas
+## Related Pages
 
-- [[<pagina>]]
+- [[<page>]]

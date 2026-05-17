@@ -1,9 +1,9 @@
 # Templates
 
-Modelos de páginas para a wiki.
+Wiki page templates.
 
-## Regras
+## Rules
 
-- Use esta pasta para armazenar templates padronizados.
-- Ao criar nova página de conhecimento, escolha o template mais próximo.
-- Templates podem ser adaptados conforme a necessidade, mas devem preservar frontmatter e fontes.
+- Use this folder to store standardized templates.
+- When creating a new knowledge page, choose the closest template.
+- Templates can be adapted as needed, but must preserve frontmatter and sources.

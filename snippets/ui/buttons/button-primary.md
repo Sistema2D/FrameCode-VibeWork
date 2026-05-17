@@ -1,33 +1,33 @@
 ---
-titulo: "Conjunto de botões — tema escuro"
+title: "Buttons Set — dark theme"
 stack: "web"
-tipo: "button"
+type: "button"
 tags: [dark-theme, hover, focus, disabled, primary, secondary, danger]
-dependencias: ["CSS nativo", "Google Fonts — Inter"]
-testado: "sim"
-criado: 2026-05-15
-atualizado: 2026-05-15
+dependencies: ["Native CSS", "Google Fonts — Inter"]
+tested: "yes"
+created: 2026-05-15
+updated: 2026-05-15
 ---
 
-# Botões — Tema Escuro
+# Buttons — Dark Theme
 
-Conjunto completo de botões para aplicações com tema escuro. Cobre variantes primário, secundário, ghost e perigo, além dos estados hover, foco, pressionado e desabilitado.
+Complete set of buttons for dark theme applications. Covers primary, secondary, ghost, and danger variants, in addition to hover, focus, active, and disabled states.
 
-## Variantes disponíveis
+## Available Variants
 
-- `.btn-primary` — ação principal, fundo colorido
-- `.btn-secondary` — ação secundária, borda sutil
-- `.btn-ghost` — ação terciária, sem borda
-- `.btn-danger` — ação destrutiva, tom vermelho
-- `.btn-icon` — botão quadrado só com ícone
-- Modificador `.btn-sm` — versão menor
+- `.btn-primary` — main action, filled background
+- `.btn-secondary` — secondary action, subtle border
+- `.btn-ghost` — tertiary action, no border
+- `.btn-danger` — destructive action, red tone
+- `.btn-icon` — square button with icon only
+- Modifier `.btn-sm` — smaller version
 
-## Código CSS
+## CSS Code
 
 ```css
-/* ── Variáveis recomendadas no :root do projeto ────────────── */
+/* ── Recommended variables in project's :root ────────────── */
 :root {
-  --cor-destaque:    #6366f1;   /* indigo — trocar pela cor do projeto */
+  --cor-destaque:    #6366f1;   /* indigo — replace with project highlight color */
   --cor-hover:       #4f46e5;
   --cor-perigo:      #ef4444;
   --cor-perigo-hover:#dc2626;
@@ -74,7 +74,7 @@ Conjunto completo de botões para aplicações com tema escuro. Cobre variantes 
   pointer-events: none;
 }
 
-/* ── Primário ──────────────────────────────────────────────── */
+/* ── Primary ──────────────────────────────────────────────── */
 .btn-primary {
   background: var(--cor-destaque);
   color:      #fff;
@@ -90,7 +90,7 @@ Conjunto completo de botões para aplicações com tema escuro. Cobre variantes 
   transform:    scale(0.97);
 }
 
-/* ── Secundário ────────────────────────────────────────────── */
+/* ── Secondary ────────────────────────────────────────────── */
 .btn-secondary {
   background:   transparent;
   color:        var(--cor-texto);
@@ -118,7 +118,7 @@ Conjunto completo de botões para aplicações com tema escuro. Cobre variantes 
   color:      var(--cor-texto);
 }
 
-/* ── Perigo ────────────────────────────────────────────────── */
+/* ── Danger ────────────────────────────────────────────────── */
 .btn-danger {
   background:   transparent;
   color:        var(--cor-perigo);
@@ -137,7 +137,7 @@ Conjunto completo de botões para aplicações com tema escuro. Cobre variantes 
   transform:    scale(0.97);
 }
 
-/* ── Ícone ─────────────────────────────────────────────────── */
+/* ── Icon ─────────────────────────────────────────────────── */
 .btn-icon {
   padding:       10px;
   width:         40px;
@@ -145,7 +145,7 @@ Conjunto completo de botões para aplicações com tema escuro. Cobre variantes 
   justify-content: center;
 }
 
-/* ── Tamanho menor ─────────────────────────────────────────── */
+/* ── Smaller Size ─────────────────────────────────────────── */
 .btn.btn-sm {
   padding:     6px 14px;
   font-size:   13px;
@@ -158,53 +158,53 @@ Conjunto completo de botões para aplicações com tema escuro. Cobre variantes 
 }
 ```
 
-## Código HTML
+## HTML Code
 
 ```html
-<!-- Primário -->
-<button class="btn btn-primary">Salvar</button>
+<!-- Primary -->
+<button class="btn btn-primary">Save</button>
 
-<!-- Secundário -->
-<button class="btn btn-secondary">Cancelar</button>
+<!-- Secondary -->
+<button class="btn btn-secondary">Cancel</button>
 
 <!-- Ghost -->
-<button class="btn btn-ghost">Saiba mais</button>
+<button class="btn btn-ghost">Learn more</button>
 
-<!-- Perigo -->
-<button class="btn btn-danger">Excluir</button>
+<!-- Danger -->
+<button class="btn btn-danger">Delete</button>
 
-<!-- Com ícone (usando Lucide ou SVG inline) -->
+<!-- With icon (using Lucide or inline SVG) -->
 <button class="btn btn-primary">
   <svg width="16" height="16" ...></svg>
-  Publicar
+  Publish
 </button>
 
-<!-- Ícone only (requer tooltip) -->
-<button class="btn btn-icon btn-secondary" title="Configurações" aria-label="Configurações">
+<!-- Icon only (requires tooltip) -->
+<button class="btn btn-icon btn-secondary" title="Settings" aria-label="Settings">
   <svg width="16" height="16" ...></svg>
 </button>
 
-<!-- Desabilitado -->
-<button class="btn btn-primary" disabled>Processando...</button>
+<!-- Disabled -->
+<button class="btn btn-primary" disabled>Processing...</button>
 
-<!-- Tamanho menor -->
-<button class="btn btn-secondary btn-sm">Filtrar</button>
+<!-- Smaller size -->
+<button class="btn btn-secondary btn-sm">Filter</button>
 ```
 
-## Adaptações comuns
+## Common Adaptations
 
-- **Cor de destaque**: trocar `--cor-destaque` e `--cor-hover` pelas cores do projeto em `:root`.
-- **Raio de borda**: ajustar `--raio` (0 = quadrado, 999px = pill).
-- **Fonte**: trocar `--fonte` pela fonte do projeto.
-- **Botão de loading**: adicionar `pointer-events: none` e substituir o texto por spinner durante request.
-- **Largura total**: adicionar `width: 100%; justify-content: center;` inline ou via classe auxiliar.
+- **Highlight color**: replace `--cor-destaque` and `--cor-hover` with project highlight colors in `:root`.
+- **Border radius**: adjust `--raio` (0 = square, 999px = pill).
+- **Font**: replace `--fonte` with project font.
+- **Loading button**: add `pointer-events: none` and replace text with a spinner during request.
+- **Full width**: add `width: 100%; justify-content: center;` inline or via utility class.
 
-## Dependências
+## Dependencies
 
-CSS nativo. Sem dependências externas. Funciona com qualquer framework ou HTML puro.
+Native CSS. No external dependencies. Works with any framework or pure HTML.
 
-## Notas
+## Notes
 
-- `.btn:focus-visible` garante acessibilidade por teclado sem aparecer em clique por mouse.
-- Botões icon-only **sempre** devem ter `title` ou `aria-label` e tooltip visual.
-- Não usar `<a>` estilizado como botão para ações que não navegam — usar `<button>`.
+- `.btn:focus-visible` ensures keyboard accessibility without showing up during mouse clicks.
+- Icon-only buttons **always** must have `title` or `aria-label` and visual tooltip.
+- Do not use `<a>` styled as a button for actions that do not navigate — use `<button>`.

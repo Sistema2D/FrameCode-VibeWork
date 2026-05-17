@@ -1,9 +1,9 @@
 # Prompts
 
-Prompts úteis, testados ou recomendados.
+Useful, tested, or recommended prompts.
 
-## Regras
+## Rules
 
-- Use esta pasta para registrar prompts que produziram bons resultados no projeto.
-- Cada prompt deve indicar objetivo, contexto de uso, pré-condições, resultado esperado e limitações.
-- Prompts obsoletos devem ser marcados para evitar reutilização inadequada.
+- Use this folder to record prompts that produced good results in the project.
+- Each prompt must indicate its objective, context of use, pre-conditions, expected result, and limitations.
+- Obsolete prompts must be marked to avoid inappropriate reuse.

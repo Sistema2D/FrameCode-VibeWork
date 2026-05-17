@@ -1,48 +1,48 @@
 ---
-titulo: "<decisão>"
-tipo: "decision"
-status: "rascunho"
-confianca: "baixa"
-ultima_revisao: "AAAA-MM-DD"
-versao_relacionada: "V0.0.0"
-fontes:
-  - "decisoes/<ADR>.md"
+title: "<decision>"
+type: "decision"
+status: "draft"
+confidence: "low"
+last_reviewed: "YYYY-MM-DD"
+related_version: "V0.0.0"
+sources:
+  - "decisions/<ADR>.md"
 tags:
   - "decision"
 ---
 
-# <Decisão>
+# <Decision>
 
-## Contexto
+## Context
 
-<Explique o contexto da decisão.>
+<Explain the context of the decision.>
 
-## Alternativas consideradas
+## Alternatives Considered
 
 1. 
 2. 
 3. 
 
-## Decisão tomada
+## Decision Made
 
-<Descreva a decisão.>
+<Describe the decision.>
 
-## Justificativa
+## Justification
 
-<Explique por que esta decisão foi tomada.>
+<Explain why this decision was made.>
 
-## Consequências positivas
-
-- 
-
-## Consequências negativas ou trade-offs
+## Positive Consequences
 
 - 
 
-## Condições para revisão
+## Negative Consequences or Trade-Offs
 
 - 
 
-## Relações
+## Conditions for Review
 
-- [[<pagina-relacionada>]]
+- 
+
+## Relations
+
+- [[<related-page>]]

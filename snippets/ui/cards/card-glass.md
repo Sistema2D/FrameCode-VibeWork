@@ -1,19 +1,19 @@
 ---
-titulo: "Card com efeito glass — tema escuro"
+title: "Glass Card — dark theme"
 stack: "web"
-tipo: "card"
-tags: [dark-theme, glassmorphism, hover, card, painel, stat]
-dependencias: ["CSS nativo"]
-testado: "sim"
-criado: 2026-05-15
-atualizado: 2026-05-15
+type: "card"
+tags: [dark-theme, glassmorphism, hover, card, panel, stat]
+dependencies: ["Native CSS"]
+tested: "yes"
+created: 2026-05-15
+updated: 2026-05-15
 ---
 
-# Card Glass — Tema Escuro
+# Glass Card — Dark Theme
 
-Card com efeito glassmorphism para tema escuro. Inclui: card simples, card interativo, card com header/footer e card de estatística.
+Card with glassmorphism effect for dark theme. Includes: simple card, interactive card, card with header/footer, and statistic card.
 
-## Código CSS
+## CSS Code
 
 ```css
 .card {
@@ -26,7 +26,7 @@ Card com efeito glassmorphism para tema escuro. Inclui: card simples, card inter
   overflow:      hidden;
 }
 
-/* Interativo */
+/* Interactive */
 .card-interativo {
   cursor:     pointer;
   transition: background 150ms ease, border-color 150ms ease,
@@ -79,68 +79,68 @@ Card com efeito glassmorphism para tema escuro. Inclui: card simples, card inter
 .card-stat-delta.positivo { color: #34d399; }
 .card-stat-delta.negativo { color: #f87171; }
 
-/* Borda colorida à esquerda */
+/* Colored border on the left */
 .card-destaque-esquerda {
   border-left: 3px solid var(--cor-destaque, #6366f1);
   padding-left: 17px;
 }
 ```
 
-## Código HTML
+## HTML Code
 
 ```html
-<!-- Card simples -->
+<!-- Simple card -->
 <div class="card">
-  <p class="card-body">Conteúdo aqui.</p>
+  <p class="card-body">Content here.</p>
 </div>
 
-<!-- Card com header e footer -->
+<!-- Card with header and footer -->
 <div class="card">
   <div class="card-header-area">
     <div>
-      <h3 class="card-titulo">Título</h3>
-      <p class="card-subtitulo">Subtítulo</p>
+      <h3 class="card-titulo">Title</h3>
+      <p class="card-subtitulo">Subtitle</p>
     </div>
-    <span class="card-badge">Novo</span>
+    <span class="card-badge">New</span>
   </div>
-  <div class="card-body">Corpo do card.</div>
+  <div class="card-body">Card body.</div>
   <div class="card-footer">
-    <span style="font-size:13px;color:#64748b">Atualizado há 2h</span>
-    <button class="btn btn-ghost btn-sm">Ver mais</button>
+    <span style="font-size:13px;color:#64748b">Updated 2h ago</span>
+    <button class="btn btn-ghost btn-sm">See more</button>
   </div>
 </div>
 
-<!-- Card interativo -->
+<!-- Interactive card -->
 <div class="card card-interativo" role="button" tabindex="0" onclick="...">
-  <div class="card-body">Clique para navegar.</div>
+  <div class="card-body">Click to navigate.</div>
 </div>
 
 <!-- Stat card -->
 <div class="card card-stat">
-  <span class="card-stat-label">Usuários ativos</span>
-  <span class="card-stat-valor">1.284</span>
-  <span class="card-stat-delta positivo">▲ 12,4%</span>
+  <span class="card-stat-label">Active users</span>
+  <span class="card-stat-valor">1,284</span>
+  <span class="card-stat-delta positivo">▲ 12.4%</span>
 </div>
 
-<!-- Borda colorida -->
+<!-- Colored border -->
 <div class="card card-destaque-esquerda">
-  <h3 class="card-titulo">Aviso</h3>
-  <p class="card-body">Texto do aviso.</p>
+  <h3 class="card-titulo">Notice</h3>
+  <p class="card-body">Notice text.</p>
 </div>
 ```
 
-## Adaptações comuns
+## Common Adaptations
 
-- **Glass sobre imagem**: ativar `backdrop-filter: blur(8px)` e garantir fundo no elemento pai.
-- **Grid de cards**: `display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px` no container.
-- **Card aninhado (subnível)**: `background:rgba(255,255,255,0.03); border-radius:8px`.
-- **Sombra base**: adicionar `box-shadow: 0 4px 24px rgba(0,0,0,0.3)` ao `.card`.
+- **Glass over image**: enable `backdrop-filter: blur(8px)` and ensure parent element background.
+- **Cards grid**: `display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px` on container.
+- **Nested card (sub-level)**: `background:rgba(255,255,255,0.03); border-radius:8px`.
+- **Base shadow**: add `box-shadow: 0 4px 24px rgba(0,0,0,0.3)` to `.card`.
 
-## Dependências
+## Dependencies
 
-CSS nativo. Botões no footer usam `snippets/ui/buttons/button-primary.md`.
+Native CSS. Buttons in footer use `snippets/ui/buttons/button-primary.md`.
 
-## Notas
+## Notes
 
-- Cards clicáveis devem ter `role="button"` e `tabindex="0"` para acessibilidade.
-- Não aninhar `.card` dentro de outro `.card` — usar fundo ligeiramente diferente para subnível.
+- Clickable cards must have `role="button"` and `tabindex="0"` for accessibility.
+- Do not nest `.card` inside another `.card` — use a slightly different background for sub-level.

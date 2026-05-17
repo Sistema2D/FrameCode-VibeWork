@@ -1,46 +1,46 @@
 ---
-titulo: "<falha>"
-tipo: "failure"
-status: "rascunho"
-confianca: "baixa"
-ultima_revisao: "AAAA-MM-DD"
-versao_relacionada: "V0.0.0"
-fontes:
-  - "troubleshooting/<arquivo>.md"
+title: "<failure>"
+type: "failure"
+status: "draft"
+confidence: "low"
+last_reviewed: "YYYY-MM-DD"
+related_version: "V0.0.0"
+sources:
+  - "troubleshooting/<file>.md"
 tags:
   - "failure"
 ---
 
-# <Falha>
+# <Failure>
 
-## Sintomas
-
-- 
-
-## Contexto
-
-<Quando a falha ocorre?>
-
-## Causa raiz provável
-
-<Descreva a causa raiz ou hipótese principal.>
-
-## Tentativas que não funcionaram
+## Symptoms
 
 - 
 
-## Solução validada
+## Context
+
+<When does the failure occur?>
+
+## Probable Root Cause
+
+<Describe the root cause or main hypothesis.>
+
+## Unsuccessful Attempts
 
 - 
 
-## Validação executada
+## Validated Solution
 
 - 
 
-## Prevenção
+## Validation Executed
 
 - 
 
-## Relações
+## Prevention
 
-- [[<pattern-ou-componente>]]
+- 
+
+## Relations
+
+- [[<pattern-or-component>]]

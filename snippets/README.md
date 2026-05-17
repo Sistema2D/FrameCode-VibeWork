@@ -1,176 +1,176 @@
-# Snippets — Biblioteca de Código Reutilizável
+# Snippets — Reusable Code Library
 
-Esta pasta contém referências de código prontas para serem adaptadas e aplicadas durante o desenvolvimento.
+This folder contains code references ready to be adapted and applied during development.
 
-O objetivo é que a IA e o desenvolvedor possam reutilizar implementações testadas de componentes visuais e padrões de comportamento sem partir do zero a cada nova tela ou sessão.
+The goal is for the AI and the developer to reuse tested implementations of visual components and behavioral patterns without starting from scratch for every new screen or session.
 
-A Galeria de Snippets (`snippets/gallery.html`) permite visualizar os componentes em tempo real e copiar o código necessário.
-
----
-
-## Manutenção por IA
-
-A IA tem permissão e dever de:
-- **Atualizar**: Ajustar o código dos snippets existentes conforme o usuário solicitar mudanças visuais ou melhorias funcionais.
-- **Incluir**: Criar novos snippets quando um componente útil for desenvolvido e validado.
-- **Excluir**: Remover snippets obsoletos ou que não atendam mais aos padrões de design do projeto.
-- **Sincronizar**: Garantir que a `gallery.html` reflita os snippets disponíveis.
-
-- Consultar antes de implementar um componente de UI (botão, modal, card, barra, etc.)
-- Manter consistência visual entre sessões e entre projetos
-- Reduzir retrabalho: o snippet já resolve o caso base; basta adaptar cores, tamanhos e textos
-- Registrar implementações aprovadas para reutilização futura
-
-Esta pasta **não substitui** `DESIGN.md` (que define *regras* visuais) nem `wiki/components/` (que documenta módulos do projeto). Ela contém *código concreto* pronto para uso.
+The Snippets Gallery (`snippets/gallery.html`) allows visualizing the components in real-time and copying the required code.
 
 ---
 
-## Reutilização Global
+## AI Maintenance
 
-Para manter a mesma identidade visual entre múltiplos projetos, a pasta `snippets/` (especialmente o arquivo `tokens.css`) deve ser tratada como uma biblioteca compartilhada. Recomenda-se o uso de **Git Submodules** para sincronizar esta pasta entre repositórios, garantindo que ajustes visuais feitos em um projeto sejam propagados para os demais.
+The AI has the permission and duty to:
+- **Update**: Adjust the code of existing snippets as the user requests visual changes or functional improvements.
+- **Include**: Create new snippets when a useful component is developed and validated.
+- **Delete**: Remove obsolete snippets or those that no longer meet the project's design standards.
+- **Synchronize**: Ensure that `gallery.html` reflects the available snippets.
+
+- Consult before implementing a UI component (button, modal, card, bar, etc.)
+- Maintain visual consistency between sessions and projects.
+- Reduce rework: the snippet already solves the base case; just adapt colors, sizes, and texts.
+- Record approved implementations for future reuse.
+
+This folder **does not replace** `DESIGN.md` (which defines visual *rules*) nor `wiki/components/` (which documents project modules). It contains *concrete code* ready for use.
 
 ---
 
-## Estrutura
+## Global Reuse
+
+To maintain the same visual identity across multiple projects, the `snippets/` folder (especially the `tokens.css` file) must be treated as a shared library. It is recommended to use **Git Submodules** to synchronize this folder between repositories, ensuring that visual adjustments made in one project are propagated to the others.
+
+---
+
+## Structure
 
 ```text
 snippets/
-├── README.md              ← este arquivo (schema)
+├── README.md              ← this file (schema)
 ├── ui/
-│   ├── buttons/           ← botões e variantes
-│   ├── modals/            ← modais, overlays, diálogos
-│   ├── cards/             ← cards, painéis, superfícies
+│   ├── buttons/           ← buttons and variants
+│   ├── modals/            ← modals, overlays, dialogs
+│   ├── cards/             ← cards, panels, surfaces
 │   ├── navigation/        ← navbars, sidebars, tabs, breadcrumbs
 │   ├── forms/             ← inputs, selects, checkboxes, sliders
-│   ├── backgrounds/       ← gradientes, padrões de fundo, texturas
-│   └── animations/        ← transições, micro-animações, loaders
+│   ├── backgrounds/       ← gradients, background patterns, textures
+│   └── animations/        ← transitions, micro-animations, loaders
 └── patterns/
-    ├── loading/            ← estados de carregamento
-    ├── empty-states/       ← estados vazios e placeholders
+    ├── loading/            ← loading states
+    ├── empty-states/       ← empty states and placeholders
     └── feedback/           ← toasts, alerts, banners, badges
 ```
 
 ---
 
-## Frontmatter obrigatório
+## Mandatory Frontmatter
 
-Todo arquivo de snippet deve iniciar com frontmatter YAML.
+Every snippet file must start with YAML frontmatter.
 
 ```yaml
 ---
-titulo: "<nome descritivo do snippet>"
-stack: "web | mobile | desktop | cli | agnostico"
-tipo: "button | modal | card | form | navigation | background | animation | pattern"
-tags: [dark-theme, glassmorphism, hover, confirmacao]
-dependencias: ["CSS nativo", "JS nativo"]
-testado: "sim | não"
-criado: AAAA-MM-DD
-atualizado: AAAA-MM-DD
+title: "<descriptive name of the snippet>"
+stack: "web | mobile | desktop | cli | agnostic"
+type: "button | modal | card | form | navigation | background | animation | pattern"
+tags: [dark-theme, glassmorphism, hover, confirmation]
+dependencies: ["Native CSS", "Native JS"]
+tested: "yes | no"
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
 ---
 ```
 
 ---
 
-## Padrão de nomenclatura
+## Naming Pattern
 
 ```text
-{tipo}-{variante}-{modificador}.md
+{type}-{variant}-{modifier}.md
 ```
 
-Exemplos:
+Examples:
 
 ```text
 button-primary.md
 button-danger-icon.md
-modal-confirmacao.md
+modal-confirmation.md
 card-glass.md
-card-lista-item.md
-background-gradient-escuro.md
-toast-sucesso.md
-input-com-label.md
+card-list-item.md
+background-dark.md
+toast-success.md
+input-with-label.md
 ```
 
 ---
 
-## Como usar (fluxo para a IA)
+## How to Use (Workflow for AI)
 
-Ao receber uma solicitação de implementação de componente de UI:
+When receiving a UI component implementation request:
 
-1. Verificar se existe snippet correspondente em `snippets/ui/` ou `snippets/patterns/`.
-2. Ler o snippet identificado.
-3. Adaptar cores, tamanhos, textos e comportamentos conforme `DESIGN.md` do projeto.
-4. Implementar sem reinventar o padrão base.
-5. Se o resultado for significativamente melhor que o snippet original, ou se o usuário solicitar um ajuste no padrão, a IA deve atualizar o snippet correspondente ou criar um novo.
+1. Check if there is a corresponding snippet in `snippets/ui/` or `snippets/patterns/`.
+2. Read the identified snippet.
+3. Adapt colors, sizes, texts, and behaviors according to `DESIGN.md` of the project.
+4. Implement without reinventing the base pattern.
+5. If the result is significantly better than the original snippet, or if the user requests an adjustment in the pattern, the AI must update the corresponding snippet or create a new one.
 
-Ao concluir uma alteração em `snippets/`, a IA deve atualizar a `gallery.html` para refletir a mudança.
+Upon concluding a change in `snippets/`, the AI must update `gallery.html` to reflect the change.
 
-Quando não existir snippet:
+When no snippet exists:
 
-1. Implementar seguindo `DESIGN.md`.
-2. Ao concluir e validar, avaliar se vale criar um snippet reutilizável.
-3. Criar o snippet na pasta correta com frontmatter completo.
+1. Implement following `DESIGN.md`.
+2. Upon concluding and validating, evaluate if it is worth creating a reusable snippet.
+3. Create the snippet in the correct folder with complete frontmatter.
 
 ---
 
-## Como contribuir com novos snippets
+## How to Contribute New Snippets
 
-Critérios para promover código a snippet:
+Criteria to promote code to a snippet:
 
-- O componente foi validado visualmente e funcionalmente.
-- O padrão pode ser reutilizado em outros projetos ou telas com adaptação mínima.
-- O código é autocontido ou declara dependências claramente.
-- O snippet não replica conteúdo já coberto por outro snippet existente.
+- The component was visually and functionally validated.
+- The pattern can be reused in other projects or screens with minimal adaptation.
+- The code is self-contained or declares dependencies clearly.
+- The snippet does not replicate content already covered by another existing snippet.
 
-Estrutura mínima de um snippet:
+Minimum structure of a snippet:
 
 ```markdown
 ---
 [frontmatter]
 ---
 
-# Título do snippet
+# Snippet Title
 
-Breve descrição do componente, quando usar e variações existentes.
+Brief description of the component, when to use it, and existing variations.
 
-## Preview (opcional)
+## Preview (optional)
 
-Descreva ou ilustre o resultado visual esperado.
+Describe or illustrate the expected visual result.
 
-## Código
+## Code
 
 \`\`\`html
-<!-- código aqui -->
+<!-- code here -->
 \`\`\`
 
-## Adaptações comuns
+## Common Adaptations
 
-- Como mudar a cor de destaque: ...
-- Como adicionar ícone: ...
-- Como desabilitar: ...
+- How to change the highlight color: ...
+- How to add an icon: ...
+- How to disable: ...
 
-## Dependências
+## Dependencies
 
-- CSS nativo: sem dependências externas.
-- ou: requer variáveis CSS definidas em `:root { --cor-destaque: ... }`.
+- Native CSS: no external dependencies.
+- or: requires CSS variables defined in `:root { --highlight-color: ... }`.
 
-## Notas
+## Notes
 
-Observações sobre compatibilidade, limitações ou contexto de uso.
+Observations on compatibility, limitations, or context of use.
 ```
 
 ---
 
-## Carregamento por tipo de componente
+## Loading by Component Type
 
-| Componente a implementar | Pasta a consultar |
+| Component to Implement | Folder to Consult |
 |---|---|
-| Botão, CTA, ação | `snippets/ui/buttons/` |
-| Modal, diálogo, confirmação | `snippets/ui/modals/` |
-| Card, painel, superfície | `snippets/ui/cards/` |
+| Button, CTA, action | `snippets/ui/buttons/` |
+| Modal, dialog, confirmation | `snippets/ui/modals/` |
+| Card, panel, surface | `snippets/ui/cards/` |
 | Navbar, sidebar, tabs | `snippets/ui/navigation/` |
-| Input, select, formulário | `snippets/ui/forms/` |
-| Fundo, gradiente, textura | `snippets/ui/backgrounds/` |
-| Transição, hover, animação | `snippets/ui/animations/` |
-| Estado de carregamento | `snippets/patterns/loading/` |
-| Tela vazia, placeholder | `snippets/patterns/empty-states/` |
-| Toast, alerta, banner | `snippets/patterns/feedback/` |
+| Input, select, form | `snippets/ui/forms/` |
+| Background, gradient, texture | `snippets/ui/backgrounds/` |
+| Transition, hover, animation | `snippets/ui/animations/` |
+| Loading state | `snippets/patterns/loading/` |
+| Empty screen, placeholder | `snippets/patterns/empty-states/` |
+| Toast, alert, banner | `snippets/patterns/feedback/` |

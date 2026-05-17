@@ -1,9 +1,9 @@
 # Sources
 
-Fontes descritas, normalizadas ou resumidas.
+Described, normalized, or summarized sources.
 
-## Regras
+## Rules
 
-- Use esta pasta para criar páginas que expliquem a origem, contexto e relevância de fontes brutas.
-- Cada fonte relevante deve apontar para seu arquivo bruto, se houver.
-- Fontes usadas em sínteses devem ser citadas no frontmatter das páginas.
+- Use this folder to create pages that explain the origin, context, and relevance of raw sources.
+- Each relevant source must point to its raw file, if any.
+- Sources used in syntheses must be cited in the frontmatter of the pages.

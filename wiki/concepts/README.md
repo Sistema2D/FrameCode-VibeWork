@@ -1,9 +1,9 @@
 # Concepts
 
-Conceitos técnicos, de produto, processo ou domínio.
+Technical, product, process, or domain concepts.
 
-## Regras
+## Rules
 
-- Use esta pasta para conceitos reutilizáveis que ajudam a IA a entender o projeto.
-- Cada conceito deve explicar definição, contexto de uso, limites e links relacionados.
-- Conceitos importantes devem ser ligados a padrões, decisões, componentes ou falhas.
+- Use this folder for reusable concepts that help the AI understand the project.
+- Each concept must explain its definition, context of use, boundaries, and related links.
+- Important concepts must be linked to patterns, decisions, components, or failures.

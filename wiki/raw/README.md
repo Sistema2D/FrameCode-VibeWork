@@ -1,9 +1,9 @@
 # Raw
 
-Fontes brutas preservadas, preferencialmente imutáveis.
+Preserved raw sources, preferably immutable.
 
-## Regras
+## Rules
 
-- Armazene aqui fontes originais, logs, trechos exportados, evidências e materiais de referência.
-- Não modifique fontes brutas sem registrar justificativa.
-- Não salve segredos, tokens, senhas ou dados sensíveis desnecessários.
+- Store here original sources, logs, exported snippets, evidence, and reference materials.
+- Do not modify raw sources without recording a justification.
+- Do not save secrets, tokens, passwords, or unnecessary sensitive data.

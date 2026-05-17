@@ -1,53 +1,53 @@
-# Wiki de Governança do Projeto
+# Project Governance Wiki
 
-Esta pasta armazena a memória técnica acumulativa de governança do projeto em formato Markdown.
+This folder stores the cumulative technical memory of the project's governance in Markdown format.
 
-A wiki não substitui os documentos oficiais do repositório, como `AGENTS.md`, `PLANEJAMENTO.md`, `VERSIONAMENTO.md`, `TROUBLESHOOTING.md`, `AUDITORIA.md`, `REFATORACAO.md`, `IA.md` ou `DESIGN.md`.
+The wiki does not replace the official documents of the repository, such as `AGENTS.md`, `PLANNING.md`, `VERSIONING.md`, `TROUBLESHOOTING.md`, `AUDIT.md`, `REFACTORING.md`, `AI.md`, or `DESIGN.md`.
 
-Ela funciona como uma camada de aprendizado contínuo: registra padrões validados, falhas recorrentes, decisões consolidadas, refatorações, auditorias, releases, componentes, prompts úteis, perguntas abertas e sínteses reutilizáveis.
+It works as a continuous learning layer: it records validated patterns, recurring failures, consolidated decisions, refactorings, audits, releases, components, useful prompts, open questions, and reusable syntheses.
 
-Quando o projeto também possuir uma wiki ou vault de usuário/runtime, diferencie explicitamente essa estrutura da wiki de governança.
+When the project also has a user/runtime wiki or vault, explicitly differentiate that structure from this governance wiki.
 
-## Princípios
+## Principles
 
-1. Fontes brutas devem ser preservadas.
-2. Sínteses devem apontar para suas fontes.
-3. Conhecimento reutilizável deve ser promovido para páginas próprias.
-4. Hipóteses não devem ser tratadas como verdades.
-5. Conteúdo obsoleto deve ser marcado como tal, não apagado sem justificativa.
-6. A wiki deve ser consultada antes de mudanças relevantes.
-7. A wiki deve ser atualizada após mudanças que gerem aprendizado reutilizável.
-8. A wiki não deve armazenar segredos, tokens, logs privados ou dados pessoais desnecessários.
+1. Raw sources must be preserved.
+2. Syntheses must point to their sources.
+3. Reusable knowledge must be promoted to its own pages.
+4. Hypotheses must not be treated as truths.
+5. Obsolete content must be marked as such, not deleted without justification.
+6. The wiki must be consulted before making relevant changes.
+7. The wiki must be updated after changes that generate reusable learning.
+8. The wiki must not store secrets, tokens, private logs, or unnecessary personal data.
 
-## Arquivos principais
+## Main Files
 
-- `schema.md`: regras estruturais da wiki.
-- `index.md`: índice navegável dos conhecimentos.
-- `log.md`: registro cronológico de ingestões, sínteses, auditorias e lint.
-- `inbox/`: entradas ainda não processadas.
-- `raw/`: fontes brutas imutáveis.
-- `sources/`: fontes normalizadas ou descritas.
-- `concepts/`: conceitos técnicos e de produto.
-- `decisions/`: decisões arquiteturais consolidadas.
-- `patterns/`: padrões técnicos aprovados.
-- `failures/`: aprendizados sobre falhas.
-- `refactorings/`: aprendizados e oportunidades de refatoração.
-- `audits/`: achados recorrentes de auditorias.
-- `releases/`: sínteses de versões publicadas.
-- `components/`: componentes, módulos e responsabilidades.
-- `prompts/`: prompts úteis e validados.
-- `questions/`: perguntas abertas.
-- `syntheses/`: sínteses transversais.
-- `templates/`: modelos de páginas da wiki.
+- `schema.md`: structural rules of the wiki.
+- `index.md`: navigable index of knowledge.
+- `log.md`: chronological log of ingestions, syntheses, audits, and linting.
+- `inbox/`: unprocessed inputs.
+- `raw/`: immutable raw sources.
+- `sources/`: normalized or described sources.
+- `concepts/`: technical and product concepts.
+- `decisions/`: consolidated architectural decisions.
+- `patterns/`: approved technical patterns.
+- `failures/`: learnings about failures.
+- `refactorings/`: refactoring learnings and opportunities.
+- `audits/`: recurring audit findings.
+- `releases/`: syntheses of published versions.
+- `components/`: components, modules, and responsibilities.
+- `prompts/`: useful and validated prompts.
+- `questions/`: open questions.
+- `syntheses/`: cross-cutting syntheses.
+- `templates/`: wiki page templates.
 
-## Fontes formais
+## Formal Sources
 
-Fontes formais preferenciais:
+Preferred formal sources:
 
-- `Planos/concluído/`
+- `Plans/completed/`
 - `changelogs/`
 - `troubleshooting/`
-- `decisoes/`
-- `auditorias/`
-- documentos oficiais da raiz
-- trechos de código ou documentação usados como evidência
+- `decisions/`
+- `audits/`
+- Root official documents
+- Code snippets or documentation used as evidence

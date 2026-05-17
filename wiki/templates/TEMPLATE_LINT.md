@@ -1,56 +1,56 @@
 ---
-titulo: "Relatório de lint da LLM Wiki"
-tipo: "audit"
-status: "rascunho"
-confianca: "baixa"
-ultima_revisao: "AAAA-MM-DD"
-versao_relacionada: "V0.0.0"
-fontes:
+title: "LLM Wiki Lint Report"
+type: "audit"
+status: "draft"
+confidence: "low"
+last_reviewed: "YYYY-MM-DD"
+related_version: "V0.0.0"
+sources:
   - "wiki/schema.md"
 tags:
   - "wiki-lint"
 ---
 
-# Relatório de lint da LLM Wiki
+# LLM Wiki Lint Report
 
-## Data
+## Date
 
-AAAA-MM-DD
+YYYY-MM-DD
 
-## Escopo
+## Scope
 
-<Descrever escopo do lint.>
+<Describe the scope of the lint.>
 
-## Gatilho
+## Trigger
 
-<Descrever por que o lint foi executado.>
+<Describe why the lint was executed.>
 
-## Verificações
+## Checks
 
-- [ ] Páginas órfãs.
-- [ ] Links quebrados.
-- [ ] Conceitos citados sem página.
-- [ ] Falhas resolvidas sem síntese.
-- [ ] Planos concluídos sem aprendizado extraído.
-- [ ] Changelogs sem síntese de release.
-- [ ] ADRs sem página em `decisions/`.
-- [ ] Páginas obsoletas sem marcação.
-- [ ] Contradições entre fontes.
-- [ ] `index.md` atualizado.
-- [ ] `log.md` atualizado.
+- [ ] Orphan pages.
+- [ ] Broken links.
+- [ ] Cited concepts without a page.
+- [ ] Resolved failures without a synthesis.
+- [ ] Completed plans without extracted learning.
+- [ ] Changelogs without a release synthesis.
+- [ ] ADRs without a page in `decisions/`.
+- [ ] Obsolete pages without marking.
+- [ ] Contradictions between sources.
+- [ ] `index.md` updated.
+- [ ] `log.md` updated.
 
-## Achados
-
-- 
-
-## Ações executadas
+## Findings
 
 - 
 
-## Pendências
+## Actions Executed
 
 - 
 
-## Resultado
+## Gaps / Open Items
 
-`aprovado` / `aprovado com ressalvas` / `reprovado`
+- 
+
+## Result
+
+`approved` / `approved with reservations` / `rejected`

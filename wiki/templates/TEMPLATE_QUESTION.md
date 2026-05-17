@@ -1,46 +1,46 @@
 ---
-titulo: "<pergunta>"
-tipo: "question"
-status: "rascunho"
-confianca: "baixa"
-ultima_revisao: "AAAA-MM-DD"
-versao_relacionada: "V0.0.0"
-fontes:
-  - "<fonte>"
+title: "<question>"
+type: "question"
+status: "draft"
+confidence: "low"
+last_reviewed: "YYYY-MM-DD"
+related_version: "V0.0.0"
+sources:
+  - "<source>"
 tags:
   - "question"
 ---
 
-# <Pergunta>
+# <Question>
 
-## Pergunta
+## Question
 
-<Escreva a pergunta aberta.>
+<Write the open question.>
 
-## Por que isso importa?
+## Why Does This Matter?
 
-<Explique o impacto da resposta.>
+<Explain the impact of the answer.>
 
-## Contexto
+## Context
 
-<Contextualize a dúvida.>
+<Contextualize the doubt.>
 
-## Hipóteses
-
-- 
-
-## Evidências existentes
+## Hypotheses
 
 - 
 
-## Próximos passos
+## Existing Evidence
 
 - 
 
-## Resolução
+## Next Steps
 
-Não resolvida.
+- 
 
-## Página de decisão ou síntese relacionada
+## Resolution
+
+Unresolved.
+
+## Related Decision or Synthesis Page
 
 -

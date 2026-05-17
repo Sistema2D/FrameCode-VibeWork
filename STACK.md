@@ -1,81 +1,81 @@
-# Stack
+# Tech Stack
 
-> Este é um modelo. Substitua os campos entre `<...>` pelas informações reais do projeto.
+> This is a template. Replace the fields between `<...>` with the actual information of the project.
 
-## Aplicacao
+## Application
 
-- Nome: `<nome do projeto>`
-- Versao atual: `V0.0.0`
-- Tipo: `<web / desktop / mobile / CLI / API / biblioteca / híbrida>`
-- Plataforma alvo: `<Windows / Linux / macOS / Web / multiplataforma>`
-- Objetivo: `<resumo em uma linha>`
+- Name: `<project name>`
+- Current version: `V0.1.0`
+- Type: `<web / desktop / mobile / CLI / API / library / hybrid>`
+- Target platform: `<Windows / Linux / macOS / Web / cross-platform>`
+- Objective: `<one-line summary>`
 
 ## Frontend
 
-`<Remover se não houver UI.>`
+`<Remove if there is no UI.>`
 
-- Linguagem: `<tecnologia>`
-- Framework / UI toolkit: `<framework ou API>`
-- Build: `<ferramenta de build>`
-- Compilador / bundler: `<compilador ou bundler>`
-- Bibliotecas principais: `<lista>`
+- Language: `<technology>`
+- Framework / UI toolkit: `<framework or API>`
+- Build: `<build tool>`
+- Compiler / bundler: `<compiler or bundler>`
+- Main libraries: `<list>`
 
 ## Backend
 
-`<Remover se não houver backend separado.>`
+`<Remove if there is no separate backend.>`
 
-- Linguagem: `<tecnologia>`
-- Framework HTTP: `<framework>`
-- Porta local: `<endereço e porta>`
-- Seguranca local: `<token, autenticação ou CORS>`
-- Módulos principais: `<lista>`
+- Language: `<technology>`
+- HTTP Framework: `<framework>`
+- Local port: `<address and port>`
+- Local security: `<token, authentication, or CORS>`
+- Main modules: `<list>`
 
-## IA local ou remota
+## Local or Remote AI
 
-`<Remover se não houver IA.>`
+`<Remove if there is no AI.>`
 
-- Runtime / model server: `<Ollama / OpenAI / outro>`
+- Runtime / model server: `<Ollama / OpenAI / other>`
 - API: `<endpoint>`
-- Recursos usados: `<listagem, chat, embeddings, etc.>`
-- Aprendizado contínuo: `<descrever ou "não aplicável">`
+- Used resources: `<list, chat, embeddings, etc.>`
+- Continuous learning: `<describe or "not applicable">`
 
-## Vault / Base de conhecimento
+## Vault / Knowledge Base
 
-`<Remover se não houver vault ou RAG.>`
+`<Remove if there is no vault or RAG.>`
 
-- Diretório local: `<caminho>`
-- Formato: `<Markdown / JSON / outro>`
-- Estrutura principal: `<schema.md, index.md, log.md, raw/, notes/, etc.>`
+- Local directory: `<path>`
+- Format: `<Markdown / JSON / other>`
+- Main structure: `<schema.md, index.md, log.md, raw/, notes/, etc.>`
 
-## Build e execucao
+## Build and Execution
 
-- Script de build: `<comando ou arquivo>`
-- Script de execução: `<comando ou arquivo>`
-- Saída principal: `<caminho do artefato>`
+- Build script: `<command or file>`
+- Execution script: `<command or file>`
+- Main output: `<artifact path>`
 
-## Build matrix
+## Build Matrix
 
-`<Remover se o projeto não for multiplataforma.>`
+`<Remove if the project is not cross-platform.>`
 
-| Plataforma / SO | Compilador / runtime | Flags ou variantes | Status |
+| Platform / OS | Compiler / Runtime | Flags or Variants | Status |
 |---|---|---|---|
-| `<Windows x64>` | `<MSVC / MinGW / clang>` | `<Release / Debug>` | `<suportado>` |
-| `<Linux x64>` | `<GCC / clang>` | `<Release>` | `<suportado>` |
+| `<Windows x64>` | `<MSVC / MinGW / clang>` | `<Release / Debug>` | `<supported>` |
+| `<Linux x64>` | `<GCC / clang>` | `<Release>` | `<supported>` |
 
-## Persistencia e logs
+## Persistence and Logs
 
-- Dados do usuário: `<caminho e formato>`
-- Configurações: `<caminho e formato>`
-- Logs: `<pasta ou mecanismo>`
-- Estratégia de escrita: `<atômica / backup / direto>`
-- Dados ignorados pelo Git: `<logs, builds, vault, dados privados>`
+- User data: `<path and format>`
+- Settings: `<path and format>`
+- Logs: `<folder or mechanism>`
+- Writing strategy: `<atomic / backup / direct>`
+- Data ignored by Git: `<logs, builds, vault, private data>`
 
-## Governanca documental
+## Document Governance
 
-- Documentos oficiais preenchidos: arquivos Markdown na raiz da aplicação.
-- Modelos vazios reutilizáveis: pasta `governança/`.
-- Memória técnica de governança: pasta `wiki/`.
-- Registros formais: `Planos/`, `changelogs/`, `troubleshooting/`.
-- Instanciação e renomeação: `INSTANCIACAO.md`.
-- Exclusões de versionamento: `.gitignore`.
-- Changelog obrigatório: toda alteração em arquivo versionado deve ser registrada em `changelogs/Vx.y.z.md`.
+- Completed official documents: Markdown files at the root of the application.
+- Reusable empty templates: `governance/` folder.
+- Technical memory of governance: `wiki/` folder.
+- Formal records: `Plans/`, `changelogs/`, `troubleshooting/`.
+- Instantiation and renaming: `INSTANTIATION.md`.
+- Versioning exclusions: `.gitignore`.
+- Mandatory changelog: every change in a versioned file must be registered in `changelogs/Vx.y.z.md`.

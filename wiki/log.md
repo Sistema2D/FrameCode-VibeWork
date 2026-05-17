@@ -1,57 +1,57 @@
-# Log da LLM Wiki
+# LLM Wiki Log
 
-Registro cronológico de eventos relevantes da wiki.
+Chronological log of relevant wiki events.
 
-Este arquivo deve ser tratado como histórico append-first: preferir adicionar novos registros em vez de apagar registros antigos.
+This file must be treated as append-first history: prefer adding new records over erasing old ones.
 
 ---
 
-## Formato recomendado
+## Recommended Format
 
 ```markdown
-## [AAAA-MM-DD HH:MM] <tipo> | <título curto>
+## [YYYY-MM-DD HH:MM] <type> | <short title>
 
-- Origem:
-- Ação executada:
-- Páginas criadas:
-- Páginas atualizadas:
-- Páginas obsoletas:
-- Resultado:
-- Pendências:
+- Source:
+- Executed action:
+- Pages created:
+- Pages updated:
+- Pages obsolete:
+- Result:
+- Gaps:
 ```
 
 ---
 
-## Tipos de evento
+## Event Types
 
-- `init`: inicialização da wiki.
-- `ingest`: entrada de nova fonte.
-- `synthesis`: criação ou atualização de síntese.
-- `promotion`: promoção de registro para conhecimento reutilizável.
-- `lint`: verificação estrutural da wiki.
-- `audit`: aprendizado derivado de auditoria.
-- `failure`: aprendizado derivado de troubleshooting.
-- `refactoring`: aprendizado derivado de refatoração.
-- `release`: aprendizado derivado de release.
-- `decision`: decisão consolidada.
-- `obsolete`: marcação de página como obsoleta.
-- `contradiction`: contradição identificada.
-- `maintenance`: manutenção geral.
+- `init`: initialization of the wiki.
+- `ingest`: entry of new source.
+- `synthesis`: creation or update of synthesis.
+- `promotion`: promotion of record to reusable knowledge.
+- `lint`: structural check of the wiki.
+- `audit`: learning derived from audit.
+- `failure`: learning derived from troubleshooting.
+- `refactoring`: learning derived from refactoring.
+- `release`: learning derived from release.
+- `decision`: consolidated decision.
+- `obsolete`: marking page as obsolete.
+- `contradiction`: identified contradiction.
+- `maintenance`: general maintenance.
 
 ---
 
-## Registros
+## Records
 
-## [AAAA-MM-DD HH:MM] init | Inicialização da LLM Wiki
+## [YYYY-MM-DD HH:MM] init | LLM Wiki Initialization
 
-- Origem: criação da estrutura inicial da pasta `wiki/`.
-- Ação executada: criação de `README.md`, `schema.md`, `index.md`, `log.md`, pastas temáticas e templates.
-- Páginas criadas:
+- Source: creation of the initial structure of the `wiki/` folder.
+- Executed action: creation of `README.md`, `schema.md`, `index.md`, `log.md`, thematic folders, and templates.
+- Pages created:
   - `wiki/README.md`
   - `wiki/schema.md`
   - `wiki/index.md`
   - `wiki/log.md`
-- Páginas atualizadas: nenhuma.
-- Páginas obsoletas: nenhuma.
-- Resultado: estrutura inicial criada.
-- Pendências: preencher índice com conhecimentos reais do projeto conforme novas evidências forem surgindo.
+- Pages updated: none.
+- Pages obsolete: none.
+- Result: initial structure created.
+- Gaps: fill index with actual project knowledge as new evidence emerges.

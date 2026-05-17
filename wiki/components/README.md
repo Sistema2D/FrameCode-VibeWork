@@ -1,9 +1,9 @@
 # Components
 
-Módulos, telas, serviços, componentes e responsabilidades.
+Modules, screens, services, components, and responsibilities.
 
-## Regras
+## Rules
 
-- Use esta pasta para explicar como partes importantes da aplicação funcionam.
-- Cada componente deve descrever responsabilidades, entradas, saídas, dependências e riscos.
-- Componentes devem ser ligados a padrões, falhas, decisões e testes relacionados.
+- Use this folder to explain how important parts of the application function.
+- Each component must describe responsibilities, inputs, outputs, dependencies, and risks.
+- Components must be linked to related patterns, failures, decisions, and tests.

@@ -1,147 +1,147 @@
 # WORKFLOW.md
 
-Documento operacional detalhado da aplicação.
+Detailed operational document of the application.
 
-> Este é um modelo. Adapte as seções conforme a arquitetura real do projeto. Remova ou substitua módulos que não existirem.
+> This is a template. Adapt the sections according to the actual architecture of the project. Remove or replace modules that do not exist.
 
-Este arquivo descreve o comportamento funcional de cada módulo/tela/serviço da aplicação com foco em:
+This file describes the functional behavior of each module/screen/service of the application with focus on:
 
-- conceito e objetivo de cada área;
-- controles e componentes (botões, campos, listas, modais, toggles, sliders);
-- eventos de usuário e efeitos no estado da aplicação;
-- integração entre camadas (frontend, backend, serviços externos);
-- persistência local e fluxos de processamento;
-- fluxogramas Mermaid dos principais caminhos.
+- concept and objective of each area;
+- controls and components (buttons, fields, lists, modals, toggles, sliders);
+- user events and effects on application state;
+- integration between layers (frontend, backend, external services);
+- local persistence and processing workflows;
+- Mermaid flowcharts of the main paths.
 
-## 1. Visão geral da arquitetura de runtime
+## 1. Overview of Runtime Architecture
 
-### 1.1 `<Camada 1 — ex: Frontend>`
+### 1.1 `<Layer 1 — e.g., Frontend>`
 
-`<Descreva o processo principal, responsabilidades e estado em memória.>`
+`<Describe the main process, responsibilities, and memory state.>`
 
-### 1.2 `<Camada 2 — ex: Backend>`
+### 1.2 `<Layer 2 — e.g., Backend>`
 
-`<Descreva o serviço local/remoto, endpoints e integrações.>`
+`<Describe the local/remote service, endpoints, and integrations.>`
 
-### 1.3 Persistência local
+### 1.3 Local Persistence
 
-`<Descreva os arquivos de configuração, dados do usuário e vault.>`
+`<Describe configuration files, user data, and vault.>`
 
-## 2. Ciclo de vida da aplicação
+## 2. Application Lifecycle
 
-### 2.1 Inicialização
+### 2.1 Initialization
 
-`<Descreva os passos de boot: carregamento de configurações, criação de controles, conexão com serviços.>`
+`<Describe boot steps: configuration loading, control creation, connection to services.>`
 
 ```mermaid
 flowchart TD
-    A["Início"] --> B["Carregar configurações"]
-    B --> C["Inicializar serviços"]
-    C --> D["Aplicação pronta"]
+    A["Start"] --> B["Load settings"]
+    B --> C["Initialize services"]
+    C --> D["Application ready"]
 ```
 
-### 2.2 Encerramento
+### 2.2 Shutdown
 
-`<Descreva os passos de shutdown: salvar estado, fechar conexões, liberar recursos.>`
+`<Describe shutdown steps: save state, close connections, release resources.>`
 
-## 3. Navegação global
+## 3. Global Navigation
 
-`<Descreva como o usuário navega entre telas ou módulos.>`
+`<Describe how the user navigates between screens or modules.>`
 
 ```mermaid
 flowchart LR
-    A["Módulo 1"] --> B["Módulo 2"]
-    A --> C["Módulo 3"]
+    A["Module 1"] --> B["Module 2"]
+    A --> C["Module 3"]
 ```
 
-## 4. Módulo `<Nome do módulo 1>`
+## 4. Module `<Module Name 1>`
 
-### 4.1 Conceito e objetivo
+### 4.1 Concept and Objective
 
-`<Descreva o propósito do módulo.>`
+`<Describe the purpose of the module.>`
 
-### 4.2 Componentes
+### 4.2 Components
 
-`<Liste controles, campos e elementos visuais relevantes.>`
+`<List relevant controls, fields, and visual elements.>`
 
-### 4.3 Fluxo principal
+### 4.3 Main Workflow
 
-`<Descreva o fluxo passo a passo.>`
+`<Describe the step-by-step workflow.>`
 
 ```mermaid
 flowchart TD
-    A["Ação do usuário"] --> B["Validação"]
-    B -- "Válido" --> C["Processar"]
-    B -- "Inválido" --> D["Feedback de erro"]
-    C --> E["Resultado"]
+    A["User action"] --> B["Validation"]
+    B -- "Valid" --> C["Process"]
+    B -- "Invalid" --> D["Error feedback"]
+    C --> E["Result"]
 ```
 
-## 5. Módulo `<Nome do módulo 2>`
+## 5. Module `<Module Name 2>`
 
-### 5.1 Conceito e objetivo
+### 5.1 Concept and Objective
 
-`<Descreva o propósito do módulo.>`
+`<Describe the purpose of the module.>`
 
-### 5.2 Componentes
+### 5.2 Components
 
-`<Liste controles, campos e elementos visuais relevantes.>`
+`<List relevant controls, fields, and visual elements.>`
 
-### 5.3 Fluxo principal
+### 5.3 Main Workflow
 
-`<Descreva o fluxo passo a passo.>`
+`<Describe the step-by-step workflow.>`
 
-## 6. Backend / Serviço local
+## 6. Backend / Local Service
 
-`<Remover se não houver backend separado.>`
+`<Remove if there is no separate backend.>`
 
-### 6.1 Segurança e middleware
+### 6.1 Security and Middleware
 
-`<Descreva token, CORS e autenticação.>`
+`<Describe token, CORS, and authentication.>`
 
-### 6.2 Endpoints principais
+### 6.2 Main Endpoints
 
-`<Liste os endpoints com método, rota e finalidade.>`
+`<List endpoints with method, route, and purpose.>`
 
-| Método | Rota | Finalidade |
+| Method | Route | Purpose |
 |---|---|---|
-| GET | `/health` | Healthcheck |
-| `<método>` | `<rota>` | `<descrição>` |
+| GET | `/health` | Health check |
+| `<method>` | `<route>` | `<description>` |
 
-## 7. Fluxo integrado
+## 7. Integrated Workflow
 
-`<Descreva o fluxo que conecta todas as camadas para o caso de uso principal.>`
+`<Describe the workflow that connects all layers for the main use case.>`
 
 ```mermaid
 flowchart TD
-    A["Ação do usuário"] --> B["Frontend"]
+    A["User action"] --> B["Frontend"]
     B --> C["Backend"]
-    C --> D["Serviço externo / IA / dados"]
-    D --> E["Resposta ao usuário"]
+    C --> D["External service / AI / data"]
+    D --> E["Response to user"]
 ```
 
-## 8. Atalhos e comportamentos transversais
+## 8. Shortcuts and Cross-Cutting Behaviors
 
-`<Liste atalhos de teclado, gestos ou comportamentos que se aplicam a múltiplos módulos.>`
+`<List keyboard shortcuts, gestures, or behaviors that apply to multiple modules.>`
 
-## 9. Workflow de governança documental
+## 9. Document Governance Workflow
 
-O framework FrameCode VibeWork possui um fluxo operacional próprio, separado do runtime da aplicação.
+The FrameCode VibeWork framework has its own operational workflow, separate from the application's runtime.
 
-1. `AGENTS.md` orienta a consulta inicial e aponta para os documentos oficiais aplicáveis.
-2. `PLANEJAMENTO.md` define a metodologia e cada mudança é registrada em `Planos/{status}`.
-3. A implementação ou alteração documental atualiza os documentos oficiais afetados.
-4. `VERSIONAMENTO.md` orienta a versão prevista e o changelog correspondente em `changelogs/`.
+1. `AGENTS.md` guides the initial consultation and points to the applicable official documents.
+2. `PLANNING.md` defines the methodology, and each change is recorded in `Plans/{status}`.
+3. The implementation or document change updates the affected official documents.
+4. `VERSIONING.md` guides the expected version and the corresponding changelog in `changelogs/`.
 
 ```mermaid
 flowchart TD
-    A["AGENTS.md"] --> B["Documentos oficiais aplicáveis"]
-    B --> C["Plano em Planos/{status}"]
-    C --> D["Alteração documentada"]
-    D --> E["Changelog em changelogs/"]
+    A["AGENTS.md"] --> B["Applicable official documents"]
+    B --> C["Plan in Plans/{status}"]
+    C --> D["Documented change"]
+    D --> E["Changelog in changelogs/"]
 ```
 
-## 10. Observações de manutenção
+## 10. Maintenance Observations
 
-`<Registre aqui riscos de manutenção conhecidos, dependências críticas e áreas que exigem atenção especial ao fazer mudanças.>`
+`<Record here known maintenance risks, critical dependencies, and areas requiring special attention when making changes.>`
 
-- Ao evoluir comportamento descrito aqui, manter este documento sincronizado no mesmo plano/changelog da mudança.
+- When evolving the behavior described here, keep this document synchronized within the same change plan/changelog.

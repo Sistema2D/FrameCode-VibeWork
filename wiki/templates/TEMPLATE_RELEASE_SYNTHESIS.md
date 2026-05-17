@@ -1,54 +1,54 @@
 ---
-titulo: "Síntese da release <Vx.y.z>"
-tipo: "release"
-status: "rascunho"
-confianca: "media"
-ultima_revisao: "AAAA-MM-DD"
-versao_relacionada: "Vx.y.z"
-fontes:
+title: "Release Synthesis <Vx.y.z>"
+type: "release"
+status: "draft"
+confidence: "medium"
+last_reviewed: "YYYY-MM-DD"
+related_version: "Vx.y.z"
+sources:
   - "changelogs/Vx.y.z.md"
 tags:
   - "release"
 ---
 
-# Síntese da release <Vx.y.z>
+# Release Synthesis <Vx.y.z>
 
-## Resumo da versão
+## Version Summary
 
-<Resumo objetivo da versão.>
+<Objective version summary.>
 
-## Mudanças principais
-
-- 
-
-## Decisões relevantes
+## Main Changes
 
 - 
 
-## Padrões criados ou reforçados
+## Relevant Decisions
 
 - 
 
-## Falhas corrigidas
+## Patterns Created or Reinforced
 
 - 
 
-## Refatorações executadas
+## Fixed Failures
 
 - 
 
-## Auditorias relacionadas
+## Refactorings Executed
 
 - 
 
-## Pendências conhecidas
+## Related Audits
 
 - 
 
-## Aprendizados reutilizáveis
+## Known Gaps / Open Items
 
 - 
 
-## Próximas recomendações
+## Reusable Learnings
+
+- 
+
+## Next Recommendations
 
 -

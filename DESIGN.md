@@ -1,230 +1,230 @@
 # DESIGN.md
 
-Diretrizes visuais e de experiência do usuário da aplicação.
+Visual and user experience guidelines for the application.
 
-> Este é um modelo. Substitua os campos entre `<...>` pelas informações reais do projeto. Remova seções que não se aplicarem à plataforma ou stack escolhida.
+> This is a template. Replace the fields between `<...>` with the actual information of the project. Remove sections that do not apply to the chosen platform or stack.
 
-Este documento registra o padrão de UI/UX esperado para alterações futuras. Deve ser consultado antes de qualquer mudança visual, criação de tela, ajuste de componente ou alteração de interação.
+This document records the expected UI/UX standards for future changes. It must be consulted before any visual modification, screen creation, component adjustment, or interaction change.
 
-## Objetivo
+## Objective
 
-`<Descreva em uma ou duas frases o tom visual e o propósito do design: ex: minimalista escuro para uso técnico, colorido e amigável para uso casual, etc.>`
+`<Describe in one or two sentences the visual tone and purpose of the design: e.g., minimalist dark for technical use, colorful and friendly for casual use, etc.>`
 
-## Princípios Visuais
+## Visual Principles
 
-- `<princípio 1>`
-- `<princípio 2>`
-- `<princípio 3>`
-- Todo controle icon-only ou pouco óbvio deve ter tooltip.
-- Estados visuais devem ser explícitos: ativo, hover, foco, pressionado, desabilitado, erro e sucesso.
-- O layout deve funcionar em janela normal, maximizada e tamanho mínimo suportado.
+- `<principle 1>`
+- `<principle 2>`
+- `<principle 3>`
+- Every icon-only or non-obvious control must have a tooltip.
+- Visual states must be explicit: active, hover, focus, pressed, disabled, error, and success.
+- The layout must work in normal, maximized, and minimum supported window sizes.
 
-## Paleta Oficial
+## Official Palette
 
-`<Defina a paleta de cores do projeto. Registre os valores exatos usados no código para que futuras implementações permaneçam coerentes.>`
-
-```text
-<COR_FUNDO>      <valor>
-<COR_PAINEL>     <valor>
-<COR_TEXTO>      <valor>
-<COR_DESTAQUE>   <valor>
-<COR_ERRO>       <valor>
-<COR_SUCESSO>    <valor>
-<COR_AVISO>      <valor>
-```
-
-### Uso Da Paleta
-
-- Fundo geral: `<COR_FUNDO>`.
-- Painéis e superfícies: `<COR_PAINEL>`.
-- Texto principal: `<COR_TEXTO>`.
-- Ação primária e estado ativo: `<COR_DESTAQUE>`.
-- Erro ou destruição: `<COR_ERRO>`.
-- Sucesso: `<COR_SUCESSO>`.
-- Aviso: `<COR_AVISO>`.
-
-Não introduzir nova família de cores sem plano específico e atualização deste documento.
-
-## Tipografia
+`<Define the color palette of the project. Record the exact values used in the code so that future implementations remain coherent.>`
 
 ```text
-Texto padrão: <fonte>, <tamanho>
-Título principal: <fonte>, <tamanho>
-Subtítulos: <fonte>, <tamanho>
-Texto auxiliar: <fonte>, <tamanho>
-Ícones: <fonte de ícones>
-Código: <fonte monoespaçada>
+<BACKGROUND_COLOR>    <value>
+<PANEL_COLOR>         <value>
+<TEXT_COLOR>          <value>
+<HIGHLIGHT_COLOR>      <value>
+<ERROR_COLOR>         <value>
+<SUCCESS_COLOR>       <value>
+<WARNING_COLOR>       <value>
 ```
 
-### Regras Tipográficas
+### Palette Usage
 
-- Usar `<fonte principal>` para texto de interface.
-- Usar `<fonte de ícones>` para ícones.
-- Usar `<fonte monoespaçada>` apenas para código, caminhos e logs.
-- Garantir que textos longos usem elipse, quebra de linha ou área rolável; nunca sobreposição.
+- General background: `<BACKGROUND_COLOR>`.
+- Panels and surfaces: `<PANEL_COLOR>`.
+- Main text: `<TEXT_COLOR>`.
+- Primary action and active state: `<HIGHLIGHT_COLOR>`.
+- Error or destruction: `<ERROR_COLOR>`.
+- Success: `<SUCCESS_COLOR>`.
+- Warning: `<WARNING_COLOR>`.
 
-## Layout Geral
+Do not introduce new color families without a specific plan and updating this document.
 
-### Estrutura
+## Typography
 
-`<Descreva a estrutura de layout: sidebar, painel principal, cards, modais, etc.>`
+```text
+Default text: <font>, <size>
+Main title: <font>, <size>
+Subtitles: <font>, <size>
+Helper text: <font>, <size>
+Icons: <icon font>
+Code: <monospaced font>
+```
 
-### Medidas Relevantes
+### Typographical Rules
 
-`<Registre margens, tamanhos de botões, raios de cards e demais métricas fixas do projeto.>`
+- Use `<main font>` for interface text.
+- Use `<icon font>` for icons.
+- Use `<monospaced font>` only for code, paths, and logs.
+- Ensure long texts use ellipsis, line breaks, or a scrollable area; never overlap.
 
-- Margem externa principal: `<valor>`.
-- Botões de navegação: `<largura x altura>`.
-- Raio de cards principais: `<valor>`.
-- Raio de cards secundários: `<valor>`.
+## General Layout
 
-### Regras De Layout
+### Structure
 
-- Não colocar card dentro de card.
-- Usar cards apenas para regiões funcionais, itens repetidos e modais.
-- Manter dimensões estáveis para toolbars, botões, listas e cards.
-- Nenhum hover, label ou estado dinâmico deve deslocar o layout de forma inesperada.
+`<Describe the layout structure: sidebar, main panel, cards, modals, etc.>`
 
-## Botões
+### Relevant Dimensions
 
-### Botões Icon-Only
+`<Record margins, button sizes, card border radii, and other fixed metrics of the project.>`
 
-Usar icon-only para ações frequentes ou familiares.
+- Main outer margin: `<value>`.
+- Navigation buttons: `<width x height>`.
+- Main card border radius: `<value>`.
+- Secondary card border radius: `<value>`.
 
-Regras:
+### Layout Rules
 
-- Sempre incluir tooltip.
-- Manter área clicável mínima de `<valor>` para ações principais.
-- Ações destrutivas devem usar tratamento visual de perigo.
+- Do not place a card inside another card.
+- Use cards only for functional regions, repeated items, and modals.
+- Maintain stable dimensions for toolbars, buttons, lists, and cards.
+- No hover, label, or dynamic state should shift the layout unexpectedly.
 
-### Botões Com Texto
+## Buttons
 
-Usar texto quando:
+### Icon-Only Buttons
 
-- a ação é ambígua sem rótulo;
-- há risco de erro destrutivo;
-- a ação aparece em modal de confirmação;
-- o botão é primário em um formulário.
+Use icon-only buttons for frequent or familiar actions.
+
+Rules:
+
+- Always include a tooltip.
+- Maintain a minimum clickable area of `<value>` for main actions.
+- Destructive actions must use visual warning styling.
+
+### Buttons with Text
+
+Use text when:
+
+- the action is ambiguous without a label;
+- there is a risk of a destructive error;
+- the action appears in a confirmation modal;
+- the button is primary in a form.
 
 ## Tooltips
 
-Obrigatórios para:
+Mandatory for:
 
-- botões icon-only;
-- controles compactos;
-- qualquer ação cuja consequência não seja óbvia.
+- icon-only buttons;
+- compact controls;
+- any action whose consequence is not obvious.
 
-Tooltips não devem encobrir o controle de forma persistente nem sair da área visível da janela.
+Tooltips must not persistently cover the control nor go outside the visible window area.
 
-## Cards E Superfícies
+## Cards and Surfaces
 
-### Cards Principais
+### Main Cards
 
-- Fundo: `<cor>`.
-- Raio: `<valor>`.
-- O card deve enquadrar a área funcional inteira da tela.
+- Background: `<color>`.
+- Radius: `<value>`.
+- The card should frame the entire functional area of the screen.
 
-### Cards Secundários
+### Secondary Cards
 
-- Fundo: `<cor>`.
-- Raio: `<valor>`.
-- Borda sutil.
+- Background: `<color>`.
+- Radius: `<value>`.
+- Subtle border.
 
-## Modais
+## Modals
 
-Regras:
+Rules:
 
-- Todos os modais devem ser nativos da própria aplicação, sem caixas de sistema.
-- Modais devem ser centralizados em relação à janela da aplicação.
-- O restante da aplicação deve ficar visualmente abaixo do modal.
-- Controles por trás do modal devem ficar desabilitados.
-- `Escape` deve cancelar quando seguro.
-- `Enter` deve confirmar quando a ação estiver clara.
-- Ação destrutiva deve usar botão visualmente distinto.
+- All modals must be native to the application itself, without system dialog boxes.
+- Modals must be centered relative to the application window.
+- The rest of the application should be visually layered beneath the modal.
+- Controls behind the modal must be disabled.
+- `Escape` should cancel when safe.
+- `Enter` should confirm when the action is clear.
+- Destructive actions must use a visually distinct button.
 
-## Barras De Rolagem
+## Scrollbars
 
-`<Adapte conforme a plataforma e toolkit. Descreva como as barras devem aparecer em áreas escuras.>`
+`<Adapt according to the platform and toolkit. Describe how scrollbars should appear in dark areas.>`
 
-Regra obrigatória:
+Mandatory rule:
 
-- o fundo da barra de rolagem deve usar a mesma cor de fundo do contêiner em que aparece;
-- o thumb deve ser mais claro que o fundo, mas não branco puro;
-- aplicar este padrão a todas as áreas roláveis novas ou alteradas.
+- the scrollbar background must use the same background color as the container in which it appears;
+- the thumb must be lighter than the background, but not pure white;
+- apply this standard to all new or modified scrollable areas.
 
-## Estados Visuais
+## Visual States
 
-### Ativo
+### Active
 
-- Fundo: `<cor de destaque suave>`.
-- Borda: `<cor de destaque>`.
-- Deve ser mais persistente e perceptível que hover.
+- Background: `<soft highlight color>`.
+- Border: `<highlight color>`.
+- Must be more persistent and noticeable than hover.
 
 ### Hover
 
-- Aumentar contraste sem mudar tamanho.
-- Nunca deslocar layout.
+- Increase contrast without changing size.
+- Never shift the layout.
 
-### Foco
+### Focus
 
-- Deve ser visível por borda ou realce.
-- Deve funcionar com navegação por teclado.
+- Must be visible via a border or outline.
+- Must work with keyboard navigation.
 
-### Desabilitado
+### Disabled
 
-- Texto e fundo devem ter contraste reduzido.
-- Ação não deve responder visualmente como ativa.
+- Text and background must have reduced contrast.
+- Action must not visually respond as active.
 
-### Erro
+### Error
 
-- Usar `<COR_ERRO>` ou variações.
-- Mensagens devem ser claras e não confundidas com sucesso.
+- Use `<ERROR_COLOR>` or variations.
+- Messages must be clear and not confused with success.
 
-### Sucesso
+### Success
 
-- Usar `<COR_SUCESSO>` ou variações discretas.
-- Feedback temporário deve voltar ao estado normal automaticamente.
+- Use `<SUCCESS_COLOR>` or discrete variations.
+- Temporary feedback should return to normal state automatically.
 
-## Acessibilidade E Usabilidade
+## Accessibility and Usability
 
-- Toda ação por mouse deve ter alternativa razoável por teclado quando possível.
-- Modais devem controlar foco.
-- Textos devem ter contraste suficiente sobre o fundo.
-- Ícones devem ter tooltip.
-- Áreas clicáveis devem ser grandes o bastante para uso confortável.
+- Every mouse action must have a reasonable keyboard alternative when possible.
+- Modals must trap focus.
+- Texts must have sufficient contrast against the background.
+- Icons must have tooltips.
+- Clickable areas must be large enough for comfortable use.
 
-## Regras Para Novas Telas
+## Rules for New Screens
 
-Ao criar uma nova tela:
+When creating a new screen:
 
-1. Usar card principal com fundo adequado.
-2. Definir toolbar compacta para ações.
-3. Usar tooltip em todas as ações icon-only.
-4. Garantir layout estável em resize.
-5. Registrar qualquer novo padrão neste documento.
-6. Criar ou atualizar o plano correspondente em `Planos/`.
+1. Use a main card with an appropriate background.
+2. Define a compact toolbar for actions.
+3. Use tooltips on all icon-only actions.
+4. Ensure a stable layout during resizing.
+5. Register any new standard in this document.
+6. Create or update the corresponding plan in `Plans/`.
 
-## Regras Para Novos Componentes
+## Rules for New Components
 
-Novos componentes devem:
+New components must:
 
-- reutilizar elementos, estilos e padrões existentes;
-- ter estados hover, foco, pressionado e desabilitado;
-- não criar scrollbars de cor incorreta em áreas escuras;
-- ser testados em janela normal, maximizada e mínima.
+- reuse existing elements, styles, and standards;
+- have hover, focus, pressed, and disabled states;
+- not create scrollbars of incorrect colors in dark areas;
+- be tested in normal, maximized, and minimum window sizes.
 
-## Critérios De Revisão Visual
+## Visual Review Criteria
 
-Antes de concluir uma alteração visual, verificar:
+Before completing a visual change, check:
 
-- Há sobreposição de texto ou controles?
-- O texto cabe no espaço disponível?
-- O estado ativo é óbvio?
-- O hover é discreto e consistente?
-- O foco por teclado é visível?
-- A barra de rolagem combina com o contêiner?
-- Ícones têm tooltip?
-- Botões destrutivos são diferenciados?
-- A janela maximizada preserva clique e foco?
-- A janela mínima mantém ações principais acessíveis?
-- O resultado segue os padrões deste documento?
+- Is there overlapping text or controls?
+- Does the text fit in the available space?
+- Is the active state obvious?
+- Is the hover subtle and consistent?
+- Is the keyboard focus visible?
+- Does the scrollbar match the container?
+- Do icons have tooltips?
+- Are destructive buttons differentiated?
+- Does the maximized window preserve clicking and focus?
+- Does the minimum window keep main actions accessible?
+- Does the result follow the standards of this document?

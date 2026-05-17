@@ -1,214 +1,214 @@
-# Troubleshooting e Histórico de Issues
+# Troubleshooting and Issue History
 
-Este documento define as regras para registrar, consultar, atualizar e encerrar falhas identificadas na aplicação.
+This document defines the rules for recording, consulting, updating, and closing failures identified in the application.
 
-O objetivo é manter um histórico técnico das falhas e tratativas para que desenvolvedores humanos e agentes de IA possam consultar ocorrências anteriores, reutilizar soluções já validadas e evitar repetir tentativas que não funcionaram.
+The goal is to maintain a technical history of failures and remedies so that human developers and AI agents can consult previous occurrences, reuse validated solutions, and avoid repeating unsuccessful attempts.
 
-## Regra mandatória de consulta
+## Mandatory Consultation Rule
 
-Antes de iniciar qualquer tratativa de falha, bug, comportamento inesperado, erro de build, erro de execução, regressão visual, problema de persistência ou falha de integração, a pasta `troubleshooting/` deve ser consultada.
+Before starting any handling of a failure, bug, unexpected behavior, build error, execution error, visual regression, persistence issue, or integration failure, the `troubleshooting/` folder must be consulted.
 
-A consulta deve buscar:
+The consultation must look for:
 
-- falhas com sintomas semelhantes;
-- arquivos ou módulos afetados em ocorrências anteriores;
-- hipóteses já testadas;
-- tentativas que falharam;
-- soluções já aplicadas;
-- validações necessárias para confirmar a correção.
+- failures with similar symptoms;
+- files or modules affected in previous occurrences;
+- hypotheses already tested;
+- attempts that failed;
+- solutions already applied;
+- validations required to confirm the fix.
 
-Quando uma falha similar já estiver documentada, a nova tratativa deve reutilizar o aprendizado registrado e atualizar o arquivo existente se for a mesma ocorrência ou recorrência direta.
+When a similar failure is already documented, the new handling should reuse the registered learning and update the existing file if it is the same occurrence or a direct recurrence.
 
-## Relação com planos de alteração
+## Relationship with Change Plans
 
-O registro em `troubleshooting/` não substitui os planos formais de alteração definidos em `PLANEJAMENTO.md`.
+The record in `troubleshooting/` does not replace the formal change plans defined in `PLANNING.md`.
 
-Quando a solução de uma falha exigir mudança funcional, visual, estrutural, documental ou de configuração, deve existir um plano correspondente em `Planos/` antes da alteração ser aplicada.
+When the solution of a failure requires functional, visual, structural, documental, or configuration changes, a corresponding plan must exist in `Plans/` before the alteration is applied.
 
-Fluxo recomendado:
+Recommended workflow:
 
-1. Consultar `troubleshooting/`.
-2. Registrar ou atualizar a issue em `troubleshooting/`.
-3. Criar ou localizar o plano correspondente em `Planos/`.
-4. Executar a mudança conforme a metodologia de planejamento.
-5. Atualizar a issue com as tratativas, resultado e validação.
-6. Encerrar a issue somente após confirmação objetiva.
+1. Consult `troubleshooting/`.
+2. Record or update the issue in `troubleshooting/`.
+3. Create or locate the corresponding plan in `Plans/`.
+4. Execute the change according to the planning methodology.
+5. Update the issue with handlings, results, and validation.
+6. Close the issue only after objective confirmation.
 
-Quando uma falha gerar aprendizado reutilizável, a `wiki/` de governança deve ser avaliada para receber uma síntese em `wiki/failures/` ou `wiki/patterns/`.
+When a failure generates reusable learning, the governance `wiki/` should be evaluated to receive a synthesis in `wiki/failures/` or `wiki/patterns/`.
 
-## Local dos registros
+## Location of Records
 
 ```text
 troubleshooting/
 ```
 
-Cada falha deve ser documentada em um arquivo Markdown próprio.
+Each failure must be documented in its own Markdown file.
 
-## Padrão de nomenclatura
+## Naming Pattern
 
 ```text
-YYYY-MM-DD-descricao-curta-da-falha.md
+YYYY-MM-DD-short-description-of-failure.md
 ```
 
-O status da issue deve ficar dentro do arquivo, não depender apenas do nome.
+The status of the issue must reside inside the file, not just depend on the filename.
 
-## Status permitidos
+## Allowed Statuses
 
-- `em aberto`: falha registrada, ainda sem análise conclusiva.
-- `em análise`: falha em investigação, com reprodução, logs ou hipóteses em andamento.
-- `em tratativa`: solução em implementação ou teste.
-- `aguardando validação`: correção aplicada, aguardando confirmação.
-- `resolvido`: falha corrigida e validada.
-- `recorrente`: falha voltou a ocorrer após tratativa anterior.
-- `descartado`: registro encerrado por não se confirmar como falha, por ficar fora de escopo ou por ter sido substituído.
+- `open`: failure recorded, no conclusive analysis yet.
+- `in_analysis`: failure under investigation, with reproduction, logs, or hypotheses in progress.
+- `in_progress`: solution in implementation or test.
+- `awaiting_validation`: fix applied, awaiting confirmation.
+- `resolved`: failure fixed and validated.
+- `recurring`: failure recurred after previous handling.
+- `discarded`: record closed because it was not confirmed as a failure, was out of scope, or was replaced.
 
-## Estrutura mínima de uma issue
+## Minimum Structure of an Issue
 
 ```markdown
-# Título da issue
+# Issue Title
 
 ## Status
 
-`em aberto`
+`open`
 
-## Data de identificação
+## Date of Identification
 
 YYYY-MM-DD
 
-## Data de resolução
+## Date of Resolution
 
-Não aplicável.
+Not applicable.
 
-## Versão da aplicação
+## Application Version
 
 `Vx.y.z`
 
-## Ambiente
+## Environment
 
-- Sistema operacional:
+- Operating System:
 - Build:
-- Observações do ambiente:
+- Environment observations:
 
-## Resumo
+## Summary
 
-Descrição curta do problema.
+Short description of the problem.
 
-## Descrição detalhada
+## Detailed Description
 
-Contexto, sintomas e condições em que a falha ocorre.
+Context, symptoms, and conditions under which the failure occurs.
 
-## Passos para reproduzir
+## Steps to Reproduce
 
 1.
 2.
 3.
 
-## Comportamento esperado
+## Expected Behavior
 
 -
 
-## Comportamento observado
+## Observed Behavior
 
 -
 
-## Impacto
+## Impact
 
 -
 
-## Arquivos, módulos ou telas possivelmente afetados
+## Files, Modules, or Screens Possibly Affected
 
 -
 
-## Evidências
+## Evidence
 
 - Logs:
-- Mensagens de erro:
-- Observações visuais:
+- Error messages:
+- Visual observations:
 
-## Hipóteses
-
--
-
-## Tratativas tentadas
-
-### Tentativa 1 — YYYY-MM-DD HH:MM
-
-- Ação:
-- Resultado:
-- Funcionou: `sim` / `não` / `parcial`
-- Observações:
-
-## Resultado das tratativas
+## Hypotheses
 
 -
 
-## Solução aplicada
+## Handlings Attempted
 
-Não aplicável enquanto a issue estiver em aberto.
+### Attempt 1 — YYYY-MM-DD HH:MM
 
-## Plano relacionado
+- Action:
+- Result:
+- Worked: `yes` / `no` / `partial`
+- Observations:
 
--
-
-## Validação executada
-
--
-
-## Prevenção ou recomendações futuras
+## Result of Handlings
 
 -
 
-## Observações técnicas
+## Solution Applied
+
+Not applicable while the issue is open.
+
+## Related Plan
+
+-
+
+## Validation Executed
+
+-
+
+## Prevention or Future Recommendations
+
+-
+
+## Technical Observations
 
 -
 ```
 
-## Registro de tratativas
+## Record of Handlings
 
-Todas as tratativas devem ser registradas, inclusive as que não funcionaram.
+All handlings must be recorded, including those that did not work.
 
-Cada tentativa deve indicar: data e hora aproximada, ação executada, resultado observado, se funcionou ou falhou e nova hipótese gerada.
+Each attempt must indicate: date and approximate time, executed action, observed result, whether it worked or failed, and new hypothesis generated.
 
-Não apague tentativas antigas. Quando uma hipótese for descartada, registre o motivo.
+Do not erase old attempts. When a hypothesis is discarded, record the reason.
 
-## Critérios para encerrar uma issue
+## Criteria to Close an Issue
 
-Uma issue só pode ser marcada como `resolvido` quando:
+An issue can only be marked as `resolved` when:
 
-- a causa provável ou confirmada estiver documentada;
-- a solução aplicada estiver descrita;
-- houver validação objetiva;
-- os testes relevantes tiverem sido executados ou a limitação estiver registrada;
-- o plano relacionado estiver concluído, quando a solução tiver exigido alteração formal.
+- the probable or confirmed cause is documented;
+- the applied solution is described;
+- there is objective validation;
+- relevant tests have been executed or the limitation is recorded;
+- the related plan is completed, when the solution required a formal change.
 
-## Evidências e logs
+## Evidence and Logs
 
-Regras:
+Rules:
 
-- não registrar tokens, segredos ou credenciais;
-- não registrar dados privados do usuário;
-- remover ou anonimizar caminhos pessoais quando não forem necessários;
-- resumir logs longos em vez de colar conteúdo excessivo;
-- preservar mensagens de erro com fidelidade suficiente para busca futura.
+- do not record tokens, secrets, or credentials;
+- do not record private user data;
+- remove or anonymize personal paths when they are not necessary;
+- summarize long logs instead of pasting excessive content;
+- preserve error messages with enough fidelity for future searches.
 
-## Consulta recomendada
+## Recommended Consultation
 
-Antes de iniciar uma nova tratativa, use busca textual em `troubleshooting/`.
+Before starting a new handling, use textual search in `troubleshooting/`.
 
-Exemplos:
+Examples:
 
 ```powershell
-rg -n "<sintoma ou módulo>" troubleshooting
-rg -n "<sintoma ou módulo>" Planos
+rg -n "<symptom or module>" troubleshooting
+rg -n "<symptom or module>" Plans
 ```
 
-## Responsabilidade de agentes de IA
+## Responsibility of AI Agents
 
-Agentes de IA devem:
+AI agents must:
 
-- consultar `troubleshooting/` antes de propor correção de falha;
-- registrar novas falhas quando identificadas durante análise, implementação ou testes;
-- atualizar tratativas com resultados reais dos comandos executados;
-- não declarar uma issue como resolvida sem validação objetiva;
-- criar plano formal em `Planos/` antes de aplicar mudanças na aplicação;
-- preservar o histórico de tentativas, inclusive as malsucedidas.
+- consult `troubleshooting/` before proposing a failure correction;
+- record new failures when identified during analysis, implementation, or testing;
+- update handlings with real results of executed commands;
+- not declare an issue as resolved without objective validation;
+- create a formal plan in `Plans/` before applying changes to the application;
+- preserve the history of attempts, including unsuccessful ones.
