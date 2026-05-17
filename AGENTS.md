@@ -91,6 +91,7 @@ If the query evolves into a modification of code, documentation, configuration, 
 - `INSTANTIATION.md`: rules for instantiating the framework in a new project, including renaming, placeholders, and separation between templates and canonical documents.
 - `BRIEFING.md`: Phase 0 guide — discovery, initial interview, and gap criteria. Activate when instantiating the framework in a new project.
 - `STACK.md`: technical stack, dependencies, build, persistence, and logs.
+- `FILESYSTEM.md`: physical application folder/file tree blueprint and self-healing rules.
 - `SCOPE.md`: functional scope, objectives, boundaries, modules, screens, and current content.
 - `PLANNING.md`: mandatory methodology for planning changes, priority, risk, and acceptance criteria.
 - `DESIGN.md`: UI/UX visual rules. `<Remove or adapt when there is no UI.>`

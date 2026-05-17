@@ -17,6 +17,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 - `AGENTS.md`
 - `INSTANTIATION.md`
 - `MANIFEST.md`
+- `FILESYSTEM.md`
 - `PLANNING.md`
 - `VERSIONING.md`
 - `TROUBLESHOOTING.md`

@@ -18,7 +18,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `<Windows / Linux / macOS / Web / Android / iOS / cross-platform>` |
 | Main Lead | `<name>` |
 | Repository | `<URL or local path>` |
-| Current Version | `V0.1.0` |
+| Current Version | `V0.1.1` |
 | Manifest Creation Date | `YYYY-MM-DD` |
 | Last Update | `2026-05-17` |
 | Project Status | `concept / planning / development / validation / published / suspended / discontinued` |
@@ -135,6 +135,7 @@ The documents below compose the project's governance. The absence of any documen
 | `INSTANTIATION.md` | Phase 0 | Framework instantiation, renaming, and placeholders | `<existing/pending/not applicable>` |
 | `SCOPE.md` | Yes | Functional scope and project boundaries | `<existing/pending>` |
 | `STACK.md` | Yes | Technical stack, dependencies, and environment | `<existing/pending>` |
+| `FILESYSTEM.md` | Yes | Physical folder structure blueprint and self-healing rules | `<existing>` |
 | `DESIGN.md` | When UI | Visual guidelines and UX | `<existing/pending/not applicable>` |
 | `WORKFLOW.md` | Yes | Functional flows, screens, events, and integrations | `<existing/pending>` |
 | `PLANNING.md` | Yes | Method for change plans | `<existing/pending>` |
@@ -163,6 +164,7 @@ The documents below compose the project's governance. The absence of any documen
 ├── INSTANTIATION.md
 ├── SCOPE.md
 ├── STACK.md
+├── FILESYSTEM.md
 ├── DESIGN.md
 ├── WORKFLOW.md
 ├── PLANNING.md
@@ -240,6 +242,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-15 | `V0.0.0` | Manifest creation. | Hugo Araújo de Melo |
 | 2026-05-15 | `V0.0.1` | Added Star History to README. | Antigravity |
 | 2026-05-17 | `V0.1.0` | Repository internationalization: translated all files and structures to English. | Antigravity |
+| 2026-05-17 | `V0.1.1` | Implemented FILESYSTEM.md and sync-filesystem.ps1 script. | Antigravity |
 
 ---
 
