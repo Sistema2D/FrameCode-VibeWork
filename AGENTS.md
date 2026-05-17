@@ -124,6 +124,7 @@ If the query evolves into a modification of code, documentation, configuration, 
 - `wiki/`: technical memory of the project (see `wiki/schema.md` for Ingest/Query/Lint operations). Contains **knowledge** templates (decisions, failures, learnings) in `wiki/templates/`.
 - `snippets/`: reusable code library (UI components, visual patterns). See `snippets/README.md`, `snippets/gallery.html`, and `snippets/tokens.css`.
 - `governance/`: central hub of empty templates for **operational processes** (plans, ADRs, AI specifications, data schemas, etc.). Use these files to instantiate new framework records.
+- `mockups/`: visual calibration guide, conceptual design mocks, captured actual UI screenshots, and comparative discrepancy analyses.
 
 ## Operational Rules
 

@@ -18,7 +18,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `<Windows / Linux / macOS / Web / Android / iOS / cross-platform>` |
 | Main Lead | `<name>` |
 | Repository | `<URL or local path>` |
-| Current Version | `V0.1.1` |
+| Current Version | `V0.1.2` |
 | Manifest Creation Date | `YYYY-MM-DD` |
 | Last Update | `2026-05-17` |
 | Project Status | `concept / planning / development / validation / published / suspended / discontinued` |
@@ -190,6 +190,7 @@ The documents below compose the project's governance. The absence of any documen
 ├── briefings/
 ├── wiki/
 ├── governance/
+├── mockups/
 ├── .gitignore
 ├── src/
 ├── tests/
@@ -243,6 +244,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-15 | `V0.0.1` | Added Star History to README. | Antigravity |
 | 2026-05-17 | `V0.1.0` | Repository internationalization: translated all files and structures to English. | Antigravity |
 | 2026-05-17 | `V0.1.1` | Implemented FILESYSTEM.md and sync-filesystem.ps1 script. | Antigravity |
+| 2026-05-17 | `V0.1.2` | Implemented mockup calibration system and TEMPLATE_VISUAL_DIFF.md. | Antigravity |
 
 ---
 

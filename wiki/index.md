@@ -18,6 +18,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 - `INSTANTIATION.md`
 - `MANIFEST.md`
 - `FILESYSTEM.md`
+- `mockups/README.md`
 - `PLANNING.md`
 - `VERSIONING.md`
 - `TROUBLESHOOTING.md`
