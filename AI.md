@@ -166,6 +166,23 @@ Recommended criteria:
 - behavior in the absence of context;
 - behavior in the presence of malicious instruction.
 
+## Token Efficiency and Performance Rules for AI Agents
+
+To optimize execution speed, minimize financial API token costs, and prevent context window exhaustion, all AI agents cooperating on this repository must strictly adhere to the following directives:
+
+### 1. High-Density Communication Standard
+* **No Conversational Padding:** Avoid polite fillers (e.g., "I apologize for the oversight", "Let me help you with that", "Sure, I can do that"). Proceed directly to technical solutions and code changes.
+* **No Unnecessary Summaries:** Do not re-summarize, describe, or restate the contents of files that have been written, updated, or viewed during the turn. Let the code speak for itself.
+* **Telegraphic Responses:** Use brief, structured, high-density bullet points or tables for chat responses and final summaries.
+
+### 2. Context Boundaries & Pruning
+* **Strict Domain Isolation:** Never open, read, or search files that are outside the active session type mapped in the table in `AGENTS.md` (e.g., in a bugfix session, do not open `DESIGN.md` or `DATA.md`).
+* **Chunked View Limits:** Do not view entire large files. Limit reads using targeted line range parameters (`StartLine` and `EndLine`) to inspect only the required context.
+
+### 3. Log and Terminal Compaction
+* **Silent Execution Flags:** When executing terminal commands, always use the shortest possible status flags (e.g., `git status -s` instead of `git status`) and suppress verbose outputs.
+* **No Repetitive Status Checks:** Do not execute redundant status or check commands. Rely on clean, single-pass validations.
+
 ## Checklist for AI-Related Changes
 
 - [ ] AI's role is defined.

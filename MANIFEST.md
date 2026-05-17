@@ -18,7 +18,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `<Windows / Linux / macOS / Web / Android / iOS / cross-platform>` |
 | Main Lead | `<name>` |
 | Repository | `<URL or local path>` |
-| Current Version | `V0.1.2` |
+| Current Version | `V0.1.3` |
 | Manifest Creation Date | `YYYY-MM-DD` |
 | Last Update | `2026-05-17` |
 | Project Status | `concept / planning / development / validation / published / suspended / discontinued` |
@@ -245,6 +245,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-17 | `V0.1.0` | Repository internationalization: translated all files and structures to English. | Antigravity |
 | 2026-05-17 | `V0.1.1` | Implemented FILESYSTEM.md and sync-filesystem.ps1 script. | Antigravity |
 | 2026-05-17 | `V0.1.2` | Implemented mockup calibration system and TEMPLATE_VISUAL_DIFF.md. | Antigravity |
+| 2026-05-17 | `V0.1.3` | Implemented database schema update protocols and token optimization. | Antigravity |
 
 ---
 

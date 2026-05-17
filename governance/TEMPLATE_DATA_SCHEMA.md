@@ -23,15 +23,29 @@ Copy this content when defining a new persistence format (JSON, database, CSV, e
 |---|---|---|---|---|
 | | | | | |
 
+## SQL DDL Blueprint
+
+*Use this standard SQLite DDL code to generate or reset the physical table:*
+
+```sql
+CREATE TABLE IF NOT EXISTS <table_name> (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    -- Define columns here...
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## Migration Script Mapping
+
+- **Init Migration:** `data/migrations/V1__init_<table_name>.sql`
+- **Upgrades Mapping:**
+  | Target Version | Migration Script | Rollback Script | Description |
+  |---|---|---|---|
+  | `2` | `data/migrations/V2__upgrade.sql` | `data/migrations/V2__rollback.sql` | |
+
 ## Validation Rules
 
 - <e.g., non-null fields, date format, etc.>
-
-## Migrations
-
-| Origin | Target | Description | Rollback |
-|---|---|---|---|
-| | | | |
 
 ## Sensitive Data
 

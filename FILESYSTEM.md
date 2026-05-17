@@ -39,7 +39,8 @@ This document defines the physical directory structure of the application. It se
 |   |-- V0.0.1.md
 |   |-- V0.1.0.md
 |   |-- V0.1.1.md
-|   \-- V0.1.2.md
+|   |-- V0.1.2.md
+|   \-- V0.1.3.md
 |-- DATA.md
 |-- decisions
 |-- DESIGN.md
@@ -73,6 +74,7 @@ This document defines the physical directory structure of the application. It se
 |   |   |-- 20260515-sync-readme.md
 |   |   |-- P2-R1-2026-05-17-filesystem-implementation.md
 |   |   |-- P3-R1-2026-05-17-mockups-system-implementation.md
+|   |   |-- P4-R1-2026-05-17-database-schemas-and-token-optimization.md
 |   |   \-- P5-R1-2026-05-15-add-star-history.md
 |   \-- in_progress
 |       \-- P1-R2-2026-05-17-repo-internationalization.md

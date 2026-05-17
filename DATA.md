@@ -173,6 +173,44 @@ Every persisted format must have, when applicable:
 - validation rules;
 - backward compatibility.
 
+## Database Schema Creation and Update Protocols
+
+To prevent data drift and ensure that databases created by the user are always in sync with the active application version, the following operational protocols must be followed:
+
+### 1. Database Creation Blueprint
+* **Pristine Schema Mapping:** Every database table must have an associated SQL DDL blueprint recorded in `governance/TEMPLATE_DATA_SCHEMA.md` or a dedicated markdown record in `/data/schemas/`.
+* **Standard SQLite Engine:** Since SQLite is the recommended local persistence database, all schema DDLs must follow standard ANSI SQL optimized for SQLite 3.x.
+* **Schema Version Tracking:** Every database must contain a core metadata table named `schema_metadata` or utilize the SQLite `user_version` PRAGMA to record the current active schema version:
+  ```sql
+  CREATE TABLE IF NOT EXISTS schema_metadata (
+      version INTEGER PRIMARY KEY,
+      applied_at TEXT NOT NULL,
+      description TEXT NOT NULL
+  );
+  ```
+
+### 2. Automated Schema Update Engine
+To automate schema upgrades safely without relying on external system script dependencies, the application's startup lifecycle must implement a light **Migration Runner** following these rules:
+1. **Startup Check:** On application startup, the database manager queries `schema_metadata` (or PRAGMA `user_version`) to identify the current database schema version.
+2. **Sequential Upgrade (Idempotent Migrations):** The manager compares the database's version against the target schema version specified in `DATA.md`. If the database version is lower, the manager runs the sequential `.sql` migration scripts defined in `data/migrations/` (e.g., `V1__init.sql`, `V2__add_email_to_users.sql`) in a strict transaction block:
+   ```sql
+   BEGIN TRANSACTION;
+   -- Apply DDL/DML upgrades here...
+   INSERT INTO schema_metadata (version, applied_at, description) VALUES (2, datetime('now'), 'Add email field');
+   COMMIT;
+   ```
+3. **Automatic Backup Before Rewrite:** Before executing any migration transaction, the manager must copy the current database file (e.g. `data/app.db`) to a temporary backup file (`data/app.db.bak`).
+4. **Failure Recovery (Self-Healing Rollback):** If any query inside the migration transaction fails:
+   * The transaction is rolled back immediately via `ROLLBACK TRANSACTION;`.
+   * The manager restores the temporary backup file (`app.db.bak`) over the active database file.
+   * The application halts execution and displays a clear error log, preventing silent corruption.
+
+### 3. Verification & Maintenance Routine
+* Whenever the developer or the AI adds a new field or table in `governance/TEMPLATE_DATA_SCHEMA.md`:
+  1. A new migration `.sql` script must be added to `/data/migrations/`.
+  2. The target schema version must be bumped in both `DATA.md` and `MANIFEST.md`.
+  3. The visual directory tree in `FILESYSTEM.md` must be refreshed.
+
 ## Checklist for Data Changes
 
 - [ ] Data type has been classified.
