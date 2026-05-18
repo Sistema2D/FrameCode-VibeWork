@@ -41,7 +41,8 @@ This document defines the physical directory structure of the application. It se
 |   |-- V0.1.3.md
 |   |-- V0.2.0.md
 |   |-- V0.2.1.md
-|   \-- V0.3.0.md
+|   |-- V0.3.0.md
+|   \-- V0.3.1.md
 |-- DATA.md
 |-- DESIGN.md
 |-- FILESYSTEM.md
@@ -76,6 +77,7 @@ This document defines the physical directory structure of the application. It se
 |   |   |-- P2-R1-2026-05-17-filesystem-implementation.md
 |   |   |-- P3-R1-2026-05-17-mockups-system-implementation.md
 |   |   |-- P3-R1-2026-05-18-token-estimations-readme-integration.md
+|   |   |-- P3-R1-2026-05-18-update-readme-directory-trees.md
 |   |   |-- P3-R2-2026-05-18-ai-context-compression-implementation.md
 |   |   |-- P3-R2-2026-05-18-skills-engine-and-obsidian-markdown-integration.md
 |   |   |-- P4-R1-2026-05-17-database-schemas-and-token-optimization.md
@@ -128,7 +130,8 @@ This document defines the physical directory structure of the application. It se
 |   |   |-- README.md
 |   |   |-- S001-2026-05-18-ai-context-compression-implementation.md
 |   |   |-- S002-2026-05-18-integrate-token-estimations.md
-|   |   \-- S003-2026-05-18-implement-skills-engine.md
+|   |   |-- S003-2026-05-18-implement-skills-engine.md
+|   |   \-- S004-2026-05-18-align-readme-directory-trees.md
 |   |-- sources
 |   |   \-- README.md
 |   \-- templates

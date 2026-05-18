@@ -18,7 +18,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `<Windows / Linux / macOS / Web / Android / iOS / cross-platform>` |
 | Main Lead | `<name>` |
 | Repository | `<URL or local path>` |
-| Current Version | `V0.3.0` |
+| Current Version | `V0.3.1` |
 | Manifest Creation Date | `YYYY-MM-DD` |
 | Last Update | `2026-05-18` |
 | Project Status | `concept / planning / development / validation / published / suspended / discontinued` |
@@ -268,6 +268,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-18 | `V0.2.0` | Implemented AI Interaction Context Compression (AICC) system. | Antigravity |
 | 2026-05-18 | `V0.2.1` | Added bilingual token consumption estimates to README.md and AI.md. | Antigravity |
 | 2026-05-18 | `V0.3.0` | Implemented AI Skills Engine (ASE) and integrated obsidian-markdown skill. | Antigravity |
+| 2026-05-18 | `V0.3.1` | Aligned README.md visual directory trees with physical filesystem tree. | Antigravity |
 
 ---
 

@@ -72,6 +72,7 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 ├── 📄 RELEASE.md
 ├── 📄 AUDIT.md
 ├── 📄 ARCHITECTURAL_DECISIONS.md
+├── 📄 FILESYSTEM.md
 ├── 📂 Plans/
 │   ├── 📂 pending/
 │   ├── 📂 in_progress/
@@ -86,8 +87,14 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 │   ├── 📄 schema.md
 │   ├── 📄 index.md
 │   ├── 📄 log.md
-│   └── 📂 templates/
+│   ├── 📂 templates/
+│   └── 📂 sessions/
+├── 📂 skills/
+│   ├── 📄 README.md
+│   └── 📂 obsidian-markdown/
+│       └── 📄 SKILL.md
 ├── 📂 snippets/
+├── 📂 mockups/
 └── 📂 governance/
 ```
 
@@ -98,7 +105,9 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 - `audits/`: relatórios de auditoria.
 - `briefings/`: registros de descoberta e Fase 0.
 - `wiki/`: memória técnica compatível com Obsidian.
+- `skills/`: catálogo de habilidades executáveis do agente de IA.
 - `snippets/`: biblioteca de componentes e padrões reutilizáveis.
+- `mockups/`: guia de calibração visual e capturas de tela.
 - `governance/`: templates genéricos do framework.
 
 ### Consumo de Tokens por Cenário
@@ -206,6 +215,7 @@ The `governance/` folder preserves generic templates. Filled project documents r
 ├── 📄 RELEASE.md
 ├── 📄 AUDIT.md
 ├── 📄 ARCHITECTURAL_DECISIONS.md
+├── 📄 FILESYSTEM.md
 ├── 📂 Plans/
 │   ├── 📂 pending/
 │   ├── 📂 in_progress/
@@ -220,8 +230,14 @@ The `governance/` folder preserves generic templates. Filled project documents r
 │   ├── 📄 schema.md
 │   ├── 📄 index.md
 │   ├── 📄 log.md
-│   └── 📂 templates/
+│   ├── 📂 templates/
+│   └── 📂 sessions/
+├── 📂 skills/
+│   ├── 📄 README.md
+│   └── 📂 obsidian-markdown/
+│       └── 📄 SKILL.md
 ├── 📂 snippets/
+├── 📂 mockups/
 └── 📂 governance/
 ```
 
@@ -232,7 +248,9 @@ The `governance/` folder preserves generic templates. Filled project documents r
 - `audits/`: audit reports.
 - `briefings/`: discovery and Phase 0 records.
 - `wiki/`: Obsidian-compatible technical memory.
+- `skills/`: catalog of executable AI agent skills.
 - `snippets/`: library of reusable components and patterns.
+- `mockups/`: visual calibration guide and conceptual mocks.
 - `governance/`: generic templates of the framework.
 
 ### Token Consumption by Scenario
