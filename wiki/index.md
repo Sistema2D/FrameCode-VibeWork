@@ -103,7 +103,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 
 > Record here syntheses that connect multiple sources, decisions, failures, or patterns.
 
-- No cross-cutting syntheses recorded so far.
+- [[syntheses/S005-framework-optimization-analysis|Framework Optimization & Architectural Analysis]] — In-depth architectural audit proposing 5 major pillars of automation and safety improvements.
 
 ---
 

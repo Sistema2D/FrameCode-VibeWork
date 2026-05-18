@@ -134,6 +134,8 @@ This document defines the physical directory structure of the application. It se
 |   |   \-- S004-2026-05-18-align-readme-directory-trees.md
 |   |-- sources
 |   |   \-- README.md
+|   |-- syntheses
+|   |   \-- S005-framework-optimization-analysis.md
 |   \-- templates
 |       |-- README.md
 |       |-- TEMPLATE_DECISION.md
