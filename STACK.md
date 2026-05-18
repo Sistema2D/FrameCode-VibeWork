@@ -5,7 +5,7 @@
 ## Application
 
 - Name: `<project name>`
-- Current version: `V0.1.3`
+- Current version: `V0.3.0`
 - Type: `<web / desktop / mobile / CLI / API / library / hybrid>`
 - Target platform: `<Windows / Linux / macOS / Web / cross-platform>`
 - Objective: `<one-line summary>`

@@ -101,6 +101,20 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 - `snippets/`: biblioteca de componentes e padrões reutilizáveis.
 - `governance/`: templates genéricos do framework.
 
+### Consumo de Tokens por Cenário
+
+Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framework mapeia o consumo de tokens estimado para cada cenário de desenvolvimento com base em suas políticas ativas:
+
+| Cenário Mapeado | Documentos Ingeridos | Custo Inicial (Sem AICC) | Custo por Turno com AICC | Economia com AICC |
+| :--- | :--- | :---: | :---: | :---: |
+| **Bugfix / Troubleshooting** | `AGENTS.md` + `TROUBLESHOOTING.md` + `PLANNING.md` | ~5.000 tokens | **~1.200 tokens** | **-76%** |
+| **Nova Funcionalidade** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7.000 tokens | **~1.500 tokens** | **-78%** |
+| **Componentes / UI** | `AGENTS.md` + `DESIGN.md` + `snippets/README.md` | ~4.500 tokens | **~1.000 tokens** | **-77%** |
+| **Refatoração** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8.000 tokens | **~1.800 tokens** | **-77%** |
+| **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
+
+*Nota: As estimativas consideram o tamanho médio atual dos arquivos de governança do framework. 1 token ≈ 4 caracteres em inglês ou ~3 caracteres em português.*
+
 ### Como Usar
 
 #### 1. Copiar ou clonar
@@ -220,6 +234,20 @@ The `governance/` folder preserves generic templates. Filled project documents r
 - `wiki/`: Obsidian-compatible technical memory.
 - `snippets/`: library of reusable components and patterns.
 - `governance/`: generic templates of the framework.
+
+### Token Consumption by Scenario
+
+To maximize transparency and API call cost-efficiency with LLMs, the framework maps the estimated token consumption for each development scenario based on its active policies:
+
+| Mapped Scenario | Ingested Documents | Initial Load (No AICC) | Continuous Turn Cost (With AICC) | Savings with AICC |
+| :--- | :--- | :---: | :---: | :---: |
+| **Bugfix / Troubleshooting** | `AGENTS.md` + `TROUBLESHOOTING.md` + `PLANNING.md` | ~5,000 tokens | **~1,200 tokens** | **-76%** |
+| **New Feature** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7,000 tokens | **~1,500 tokens** | **-78%** |
+| **Componentes / UI** | `AGENTS.md` + `DESIGN.md` + `snippets/README.md` | ~4,500 tokens | **~1,000 tokens** | **-77%** |
+| **Refactoring** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8,000 tokens | **~1,800 tokens** | **-77%** |
+| **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
+
+*Note: Estimates are based on the current average size of the framework's governance files. 1 token ≈ 4 characters in English or ~3 characters in Portuguese.*
 
 ### How to Use
 

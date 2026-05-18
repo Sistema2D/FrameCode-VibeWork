@@ -10,6 +10,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 
 - [[schema]] — Structural and operational rules of the wiki.
 - [[log]] — Chronological log of wiki events.
+- [[sessions/README]] — Index and chronological ledger of AI Session Syntheses.
 - [[README]] — Overview of the `wiki/` folder.
 
 ## Preferred Formal Sources

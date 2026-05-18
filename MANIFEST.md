@@ -18,9 +18,9 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `<Windows / Linux / macOS / Web / Android / iOS / cross-platform>` |
 | Main Lead | `<name>` |
 | Repository | `<URL or local path>` |
-| Current Version | `V0.1.3` |
+| Current Version | `V0.3.0` |
 | Manifest Creation Date | `YYYY-MM-DD` |
-| Last Update | `2026-05-17` |
+| Last Update | `2026-05-18` |
 | Project Status | `concept / planning / development / validation / published / suspended / discontinued` |
 
 ---
@@ -105,7 +105,9 @@ Mark or describe the planned roles:
   - [ ] Classification or data extraction.
   - [ ] Agents with tools.
   - [ ] Task automation.
-  - [ ] Continuous learning (Ingest/Query/Lint cycle described in `wiki/schema.md`).
+  - [x] Continuous learning (Ingest/Query/Lint cycle described in `wiki/schema.md`).
+  - [x] AI Interaction Context Compression (AICC).
+  - [x] AI Skills Engine (ASE) with trigger activation.
   - [ ] Other: `<describe>`.
 
 ### 6.2 AI Boundaries
@@ -151,6 +153,8 @@ The documents below compose the project's governance. The absence of any documen
 | `ARCHITECTURAL_DECISIONS.md` | Recommended | Registry of architectural decisions | `<existing/pending>` |
 | `BRIEFING.md` | Phase 0 | Discovery and initial project briefing | `<existing/pending/not applicable>` |
 | `wiki/schema.md` | When vault/RAG | Operational rules of the wiki in LLM Wiki standard | `<existing/pending/not applicable>` |
+| `wiki/sessions/README.md` | When AI | Index and chronological ledger of AI session contexts | `existing` |
+| `skills/README.md` | When AI | Index and guidelines catalog of AI agent skills | `existing` |
 
 ---
 
@@ -189,7 +193,22 @@ The documents below compose the project's governance. The absence of any documen
 ├── audits/
 ├── briefings/
 ├── wiki/
+│   ├── README.md
+│   ├── index.md
+│   ├── log.md
+│   ├── schema.md
+│   ├── templates/
+│   │   └── TEMPLATE_SESSION_SYNTHESIS.md
+│   └── sessions/
+│       └── README.md
 ├── governance/
+│   ├── README_FRAMEWORK.md
+│   ├── TEMPLATE_AI_SESSION_SYNTHESIS.md
+│   └── TEMPLATE_PLAN.md
+├── skills/
+│   ├── README.md
+│   └── obsidian-markdown/
+│       └── SKILL.md
 ├── mockups/
 ├── .gitignore
 ├── src/
@@ -246,6 +265,9 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-17 | `V0.1.1` | Implemented FILESYSTEM.md and sync-filesystem.ps1 script. | Antigravity |
 | 2026-05-17 | `V0.1.2` | Implemented mockup calibration system and TEMPLATE_VISUAL_DIFF.md. | Antigravity |
 | 2026-05-17 | `V0.1.3` | Implemented database schema update protocols and token optimization. | Antigravity |
+| 2026-05-18 | `V0.2.0` | Implemented AI Interaction Context Compression (AICC) system. | Antigravity |
+| 2026-05-18 | `V0.2.1` | Added bilingual token consumption estimates to README.md and AI.md. | Antigravity |
+| 2026-05-18 | `V0.3.0` | Implemented AI Skills Engine (ASE) and integrated obsidian-markdown skill. | Antigravity |
 
 ---
 

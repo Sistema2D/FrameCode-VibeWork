@@ -142,6 +142,8 @@ Detailed rules are in the domain documents. Summary of responsibility:
 Before executing a request that might modify files:
 
 - check the status of the repository with `git status --short`;
+- **AI Context Ingestion**: read the latest compressed session context in [`wiki/sessions/`](file:///c:/Users/meloha/Desktop/FCVW/wiki/sessions/) to immediately align with previous changes and active next steps;
+- **Skills Engine Check**: check if the active task triggers any specialized skills mapped in [skills/README.md](file:///c:/Users/meloha/Desktop/FCVW/skills/README.md). If yes, load that skill using `view_file` with `IsSkillFile: true` to guide execution;
 - **New Project Instantiation**: upon detecting Phase 0, consult `INSTANTIATION.md`, apply the documented renaming rules, and replace placeholders only in canonical root documents, preserving generic templates in `governance/` and `wiki/templates/`;
 - when starting a new project, execute the Phase 0 process described in `BRIEFING.md`;
 - locate the corresponding plan in `Plans/`;
@@ -187,6 +189,7 @@ If a necessary change is not covered by the plan, create or update a plan before
 - If there was a visual change, does `DESIGN.md` reflect the current state?
 - If there was a bug, was `troubleshooting/` consulted or updated?
 - Has the changelog been created or updated and does it cite the altered files?
+- **AI Context Compression**: has a new chronological session synthesis been created in [`wiki/sessions/`](file:///c:/Users/meloha/Desktop/FCVW/wiki/sessions/) following the template to compress context for the next session?
 - Were tests executed or has the limitation been recorded?
 - Were temporary files, logs, and private data left out of versioning?
 - Was the final state clearly described to the user?

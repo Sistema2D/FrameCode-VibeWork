@@ -31,18 +31,18 @@ This document defines the physical directory structure of the application. It se
 |-- AI.md
 |-- ARCHITECTURAL_DECISIONS.md
 |-- AUDIT.md
-|-- audits
 |-- BRIEFING.md
-|-- briefings
 |-- changelogs
 |   |-- V0.0.0.md
 |   |-- V0.0.1.md
 |   |-- V0.1.0.md
 |   |-- V0.1.1.md
 |   |-- V0.1.2.md
-|   \-- V0.1.3.md
+|   |-- V0.1.3.md
+|   |-- V0.2.0.md
+|   |-- V0.2.1.md
+|   \-- V0.3.0.md
 |-- DATA.md
-|-- decisions
 |-- DESIGN.md
 |-- FILESYSTEM.md
 |-- governance
@@ -51,6 +51,7 @@ This document defines the physical directory structure of the application. It se
 |   |   \-- sync-filesystem.ps1
 |   |-- TEMPLATE_ADR.md
 |   |-- TEMPLATE_AI_RESOURCE.md
+|   |-- TEMPLATE_AI_SESSION_SYNTHESIS.md
 |   |-- TEMPLATE_BRIEFING.md
 |   |-- TEMPLATE_DATA_SCHEMA.md
 |   |-- TEMPLATE_PLAN.md
@@ -74,15 +75,23 @@ This document defines the physical directory structure of the application. It se
 |   |   |-- 20260515-sync-readme.md
 |   |   |-- P2-R1-2026-05-17-filesystem-implementation.md
 |   |   |-- P3-R1-2026-05-17-mockups-system-implementation.md
+|   |   |-- P3-R1-2026-05-18-token-estimations-readme-integration.md
+|   |   |-- P3-R2-2026-05-18-ai-context-compression-implementation.md
+|   |   |-- P3-R2-2026-05-18-skills-engine-and-obsidian-markdown-integration.md
 |   |   |-- P4-R1-2026-05-17-database-schemas-and-token-optimization.md
 |   |   \-- P5-R1-2026-05-15-add-star-history.md
-|   \-- in_progress
-|       \-- P1-R2-2026-05-17-repo-internationalization.md
+|   |-- in_progress
+|   |   \-- P1-R2-2026-05-17-repo-internationalization.md
+|   \-- pending
 |-- README.md
 |-- REFACTORING.md
 |-- RELEASE.md
 |-- SCOPE.md
 |-- SECURITY.md
+|-- skills
+|   |-- obsidian-markdown
+|   |   \-- SKILL.md
+|   \-- README.md
 |-- snippets
 |   |-- gallery.html
 |   |-- README.md
@@ -98,34 +107,30 @@ This document defines the physical directory structure of the application. It se
 |           \-- modal-confirmation.md
 |-- STACK.md
 |-- TESTS.md
-|-- troubleshooting
 |-- TROUBLESHOOTING.md
 |-- VERSIONING.md
 |-- wiki
-|   |-- audits
 |   |-- components
 |   |   \-- README.md
 |   |-- concepts
 |   |   \-- README.md
-|   |-- decisions
-|   |-- failures
 |   |-- inbox
 |   |   \-- README.md
 |   |-- index.md
 |   |-- log.md
-|   |-- patterns
 |   |-- prompts
 |   |   \-- README.md
-|   |-- questions
 |   |-- raw
 |   |   \-- README.md
 |   |-- README.md
-|   |-- refactorings
-|   |-- releases
 |   |-- schema.md
+|   |-- sessions
+|   |   |-- README.md
+|   |   |-- S001-2026-05-18-ai-context-compression-implementation.md
+|   |   |-- S002-2026-05-18-integrate-token-estimations.md
+|   |   \-- S003-2026-05-18-implement-skills-engine.md
 |   |-- sources
 |   |   \-- README.md
-|   |-- syntheses
 |   \-- templates
 |       |-- README.md
 |       |-- TEMPLATE_DECISION.md
@@ -134,7 +139,8 @@ This document defines the physical directory structure of the application. It se
 |       |-- TEMPLATE_LINT.md
 |       |-- TEMPLATE_PATTERN.md
 |       |-- TEMPLATE_QUESTION.md
-|       \-- TEMPLATE_RELEASE_SYNTHESIS.md
+|       |-- TEMPLATE_RELEASE_SYNTHESIS.md
+|       \-- TEMPLATE_SESSION_SYNTHESIS.md
 \-- WORKFLOW.md
 ```
 <!-- END_TREE -->
