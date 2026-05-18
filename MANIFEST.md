@@ -18,7 +18,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `<Windows / Linux / macOS / Web / Android / iOS / cross-platform>` |
 | Main Lead | `<name>` |
 | Repository | `<URL or local path>` |
-| Current Version | `V0.3.1` |
+| Current Version | `V0.4.0` |
 | Manifest Creation Date | `YYYY-MM-DD` |
 | Last Update | `2026-05-18` |
 | Project Status | `concept / planning / development / validation / published / suspended / discontinued` |
@@ -209,7 +209,6 @@ The documents below compose the project's governance. The absence of any documen
 │   ├── README.md
 │   └── obsidian-markdown/
 │       └── SKILL.md
-├── mockups/
 ├── .gitignore
 ├── src/
 ├── tests/
@@ -269,6 +268,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-18 | `V0.2.1` | Added bilingual token consumption estimates to README.md and AI.md. | Antigravity |
 | 2026-05-18 | `V0.3.0` | Implemented AI Skills Engine (ASE) and integrated obsidian-markdown skill. | Antigravity |
 | 2026-05-18 | `V0.3.1` | Aligned README.md visual directory trees with physical filesystem tree. | Antigravity |
+| 2026-05-18 | `V0.4.0` | Transitioned to pure-markdown instruction model, deprecated mockups and automated scripts (ADR-0001). | Antigravity |
 
 ---
 

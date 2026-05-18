@@ -3,13 +3,13 @@ title: "Project Filesystem Architecture"
 type: "concept"
 status: "validated"
 confidence: "high"
-last_reviewed: "2026-05-17"
-related_version: "V0.0.2"
+last_reviewed: "2026-05-18"
+related_version: "V0.4.0"
 sources:
   - "STACK.md"
   - "SCOPE.md"
   - "DESIGN.md"
-  - "DATA.md"
+  - "decisions/ADR-0001-pure-markdown-over-automation-scripts.md"
 tags:
   - "filesystem"
   - "architecture"
@@ -18,6 +18,8 @@ tags:
 # Project Filesystem Architecture
 
 This document defines the physical directory structure of the application. It serves as the single source of truth for the file organization, ensuring absolute consistency between design rules, stack requirements, and physical implementation.
+
+In accordance with [ADR-0001](file:///c:/Users/meloha/Desktop/FCVW/decisions/ADR-0001-pure-markdown-over-automation-scripts.md), this directory layout is maintained purely declaratively in Markdown and verified manually by agents, eliminating dependencies on local environment scripts.
 
 ---
 
@@ -44,12 +46,12 @@ This document defines the physical directory structure of the application. It se
 |   |-- V0.3.0.md
 |   \-- V0.3.1.md
 |-- DATA.md
+|-- decisions
+|   \-- ADR-0001-pure-markdown-over-automation-scripts.md
 |-- DESIGN.md
 |-- FILESYSTEM.md
 |-- governance
 |   |-- README_FRAMEWORK.md
-|   |-- scripts
-|   |   \-- sync-filesystem.ps1
 |   |-- TEMPLATE_ADR.md
 |   |-- TEMPLATE_AI_RESOURCE.md
 |   |-- TEMPLATE_AI_SESSION_SYNTHESIS.md
@@ -62,14 +64,6 @@ This document defines the physical directory structure of the application. It se
 |-- INSTANTIATION.md
 |-- LICENSE
 |-- MANIFEST.md
-|-- mockups
-|   |-- actual
-|   |   \-- .gitkeep
-|   |-- design
-|   |   \-- .gitkeep
-|   |-- diffs
-|   |   \-- .gitkeep
-|   \-- README.md
 |-- PLANNING.md
 |-- Plans
 |   |-- completed
@@ -81,9 +75,9 @@ This document defines the physical directory structure of the application. It se
 |   |   |-- P3-R2-2026-05-18-ai-context-compression-implementation.md
 |   |   |-- P3-R2-2026-05-18-skills-engine-and-obsidian-markdown-integration.md
 |   |   |-- P4-R1-2026-05-17-database-schemas-and-token-optimization.md
-|   |   \-- P5-R1-2026-05-15-add-star-history.md
+|   |   \-- P5-R1-2025-05-15-add-star-history.md
 |   |-- in_progress
-|   |   \-- P1-R2-2026-05-17-repo-internationalization.md
+|   |   \-- P4-R2-2026-05-18-discontinue-mockups-and-automation-scripts.md
 |   \-- pending
 |-- README.md
 |-- REFACTORING.md
@@ -131,7 +125,8 @@ This document defines the physical directory structure of the application. It se
 |   |   |-- S001-2026-05-18-ai-context-compression-implementation.md
 |   |   |-- S002-2026-05-18-integrate-token-estimations.md
 |   |   |-- S003-2026-05-18-implement-skills-engine.md
-|   |   \-- S004-2026-05-18-align-readme-directory-trees.md
+|   |   |-- S004-2026-05-18-align-readme-directory-trees.md
+|   |   \-- S005-framework-optimization-analysis.md
 |   |-- sources
 |   |   \-- README.md
 |   |-- syntheses
@@ -156,31 +151,18 @@ This document defines the physical directory structure of the application. It se
 
 | Path | Primary Role | Stakeholders / Sources | Git Ignored? |
 |---|---|---|---|
-| `/Plans/` | Contains chronological implementation change plans. | [PLANNING.md](file:///c:/Users/Hugo/Desktop/FCVW/PLANNING.md) | No |
-| `/changelogs/` | Formal versions releases notes (`Vx.y.z.md`). | [VERSIONING.md](file:///c:/Users/Hugo/Desktop/FCVW/VERSIONING.md) | No |
-| `/governance/` | Reusable empty blueprints and automation scripts. | [INSTANTIATION.md](file:///c:/Users/Hugo/Desktop/FCVW/INSTANTIATION.md) | No |
-| `/snippets/` | Shared catalog of premade CSS/JS UI snippets. | [DESIGN.md](file:///c:/Users/Hugo/Desktop/FCVW/DESIGN.md) | No |
-| `/wiki/` | Continuous technical learning vault of the project. | [AI.md](file:///c:/Users/Hugo/Desktop/FCVW/AI.md) / `wiki/schema.md` | No |
-| `/data/` | Stores local SQLite database and backups. | [DATA.md](file:///c:/Users/Hugo/Desktop/FCVW/DATA.md) | **Yes** (strict) |
+| `/Plans/` | Contains chronological implementation change plans. | [PLANNING.md](file:///c:/Users/meloha/Desktop/FCVW/PLANNING.md) | No |
+| `/decisions/` | Stores formal Architectural Decision Records (ADRs). | [ARCHITECTURAL_DECISIONS.md](file:///c:/Users/meloha/Desktop/FCVW/ARCHITECTURAL_DECISIONS.md) | No |
+| `/changelogs/` | Formal versions releases notes (`Vx.y.z.md`). | [VERSIONING.md](file:///c:/Users/meloha/Desktop/FCVW/VERSIONING.md) | No |
+| `/governance/` | Reusable empty blueprint templates. | [INSTANTIATION.md](file:///c:/Users/meloha/Desktop/FCVW/INSTANTIATION.md) | No |
+| `/snippets/` | Shared catalog of premade CSS/JS UI snippets. | [DESIGN.md](file:///c:/Users/meloha/Desktop/FCVW/DESIGN.md) | No |
+| `/wiki/` | Continuous technical learning vault of the project. | [AI.md](file:///c:/Users/meloha/Desktop/FCVW/AI.md) / `wiki/schema.md` | No |
+| `/data/` | Stores local SQLite database and backups. | [DATA.md](file:///c:/Users/meloha/Desktop/FCVW/DATA.md) | **Yes** (strict) |
 
 ---
 
-## 3. Automation Bootstrap Script
-
-*Use the following PowerShell script to instantly generate this directory layout on a fresh instantiation:*
-
-```powershell
-# Create standard folders
-New-Item -ItemType Directory -Force -Path "data", "public/assets", "src/components/common", "src/services", "src/styles", "src/utils", "tests"
-
-# Create core files
-New-Item -ItemType File -Force -Path "src/styles/tokens.css", "src/App.jsx", "src/main.jsx"
-```
-
----
-
-## 4. Maintenance and Self-Healing Rules
+## 3. Maintenance and Self-Healing Rules
 
 1. **AI Checkpoints:** Whenever a new feature is requested, the AI must check `FILESYSTEM.md` before writing code to confirm where the new files belong.
-2. **Auto-Check:** During initialization or wiki lints, the AI will execute the tree synchronization script located in `governance/scripts/sync-filesystem.ps1` to keep this document dynamically in sync with the physical filesystem.
-3. **Definition of Done:** Every plan that introduces or removes folders must run the synchronization script before closure.
+2. **Declarative Layout Integrity:** Visual trees in `FILESYSTEM.md` and `README.md` must be updated manually by the agent whenever files are added or deleted.
+3. **Audit Closure:** The final step of any plan that alters directories is a manual verification of this document's visual tree.

@@ -1,230 +1,132 @@
-# DESIGN.md
+# FrameCode VibeWork UI/UX Design System & Verification Guidelines
 
-Visual and user experience guidelines for the application.
+---
 
-> This is a template. Replace the fields between `<...>` with the actual information of the project. Remove sections that do not apply to the chosen platform or stack.
+This document establishes the official visual identity, component tokens, and user experience standards for the application. Furthermore, it defines a **pure-markdown verification standard** to calibrate and audit layout structures without relying on physical binary mockup folders, keeping the framework 100% portable and document-driven.
 
-This document records the expected UI/UX standards for future changes. It must be consulted before any visual modification, screen creation, component adjustment, or interaction change.
+## 1. Visual Tone & Principles
+The default visual identity of VibeWork-derived applications is **Premium Minimalist Dark Mode** with high visual depth, fluid micro-animations, and balanced information density (glassmorphism/sleek surfaces).
 
-## Objective
+* **Visual Depth (Elevation)**: Use layered semi-transparent surfaces with soft shadows to build a clear information hierarchy.
+* **Micro-Animations**: All interactive elements must react instantly but smoothly (hover, active transitions).
+* **Keyboard-First Accessibility**: Every key action must have tooltips and clear visual keyboard focus indicators.
+* **Platform Sizing Resilience**: Layouts must dynamically flow and remain fully usable under three target viewport window tests:
+  1. **Standard Desktop**: `1920x1080` (maximized, spacious).
+  2. **Compact Desktop / Tablet**: `1024x768` (dense list layouts).
+  3. **Minimum Supported Size**: `800x600` (focus on main actions, sidebars collapsed or compact).
 
-`<Describe in one or two sentences the visual tone and purpose of the design: e.g., minimalist dark for technical use, colorful and friendly for casual use, etc.>`
+---
 
-## Visual Principles
+## 2. Core Design System Tokens
 
-- `<principle 1>`
-- `<principle 2>`
-- `<principle 3>`
-- Every icon-only or non-obvious control must have a tooltip.
-- Visual states must be explicit: active, hover, focus, pressed, disabled, error, and success.
-- The layout must work in normal, maximized, and minimum supported window sizes.
+### 2.1. Harmonious HSL Color Palette
+To prevent generic plain colors, VibeWork projects strictly enforce a curated dark palette based on HSL tailored colors.
 
-## Official Palette
+| Token | HSL Value | Hex Equivalent | Usage |
+| :--- | :--- | :--- | :--- |
+| `--bg-main` | `hsl(222, 19%, 8%)` | `#0b0e14` | Deep canvas base background. |
+| `--surface-panel` | `hsl(222, 15%, 12%)` | `#1a1d24` | Sidebar and elevated container panels. |
+| `--card-glass` | `hsla(222, 15%, 15%, 0.7)` | `#20232b (70%)` | Semi-transparent card components. |
+| `--border-subtle` | `hsla(222, 10%, 25%, 0.4)` | `#3a3c42 (40%)` | Discrete borders and separating rules. |
+| `--text-primary` | `hsl(210, 15%, 85%)` | `#d1d5db` | High-contrast body text and titles. |
+| `--text-muted` | `hsl(215, 10%, 60%)` | `#9ca3af` | Secondary labels, descriptions, and metadata. |
+| `--brand-accent` | `hsl(260, 85%, 65%)` | `#8b5cf6` | Sleek violet accents, primary action hovers. |
+| `--color-success` | `hsl(142, 70%, 45%)` | `#10b981` | Positive feedback, completions, validated states. |
+| `--color-error` | `hsl(350, 75%, 50%)` | `#ef4444` | Warnings, deleted tags, destructive actions. |
 
-`<Define the color palette of the project. Record the exact values used in the code so that future implementations remain coherent.>`
+### 2.2. Typographical Hierarchy
+Ensure google fonts like **Inter** or **Outfit** are loaded for premium interfaces.
+* **Main Title (H1)**: `24px / 32px line-height`, semibold, primary text color.
+* **Section Title (H2)**: `18px / 24px line-height`, medium, accent borders.
+* **Component Labels (H3)**: `14px / 20px line-height`, regular.
+* **Body / Prose**: `14px / 22px line-height`, regular, secondary text.
+* **Technical Code / Logs**: `13px`, monospaced font family (e.g., Fira Code, JetBrains Mono).
 
-```text
-<BACKGROUND_COLOR>    <value>
-<PANEL_COLOR>         <value>
-<TEXT_COLOR>          <value>
-<HIGHLIGHT_COLOR>      <value>
-<ERROR_COLOR>         <value>
-<SUCCESS_COLOR>       <value>
-<WARNING_COLOR>       <value>
+### 2.3. Spatial Layout and Margins
+* **Base Grid Unit**: `4px`
+* **Card Border Radius**: `8px` for primary elements, `6px` for small sub-components.
+* **Container Padding**: `16px` inner padding.
+* **Clickable Area target**: Minimum `36px` width/height for buttons to ensure touch and cursor click ease.
+
+---
+
+## 3. Pure-Markdown Visual Calibration Methodology (VCM)
+
+In order to eliminate environment dependencies and folder clutter associated with binary screenshot mockups, the framework establishes the **Visual Calibration Methodology (VCM)** in pure prose.
+
+When validating visual interfaces, the AI agent must perform a **Visual Description Audit (VDA)** by following this step-by-step descriptive checklist:
+
+```mermaid
+graph TD
+    A["Agent launches Browser Sandbox"] --> B["Opens UI Page"]
+    B --> C["Extracts computed DOM layout and styles"]
+    C --> D["Runs prose-based Visual Description Audit"]
+    D --> E["Compares computed tokens with DESIGN.md standard"]
+    E --> F["Outputs detailed Markdown audit statement"]
 ```
 
-### Palette Usage
+### 3.1. Visual Description Audit (VDA) Specification
+Instead of visual image diffing, the agent creates a descriptive markdown audit log of the target layout. The VDA must objectively verify the following structural aspects:
 
-- General background: `<BACKGROUND_COLOR>`.
-- Panels and surfaces: `<PANEL_COLOR>`.
-- Main text: `<TEXT_COLOR>`.
-- Primary action and active state: `<HIGHLIGHT_COLOR>`.
-- Error or destruction: `<ERROR_COLOR>`.
-- Success: `<SUCCESS_COLOR>`.
-- Warning: `<WARNING_COLOR>`.
+1. **Alignment and Box Model**:
+   * Inspect container outer margins. Confirm they match the spatial layout padding (e.g., `16px` padding, stable grid multipliers).
+   * Verify that no elements overlap or push others outside the parent boundary box.
+2. **Computed Style Check**:
+   * Query the computed styles of container panels. Verify that backgrounds match the `--surface-panel` HSL token exactly.
+   * Check scrollbar containers. Verify that custom scrollbar background matches its container background, with a discrete lighter thumb.
+3. **Contrast Ratio compliance**:
+   * Verify text color classes. Primary body must be `--text-primary` and helper text must be `--text-muted` to guarantee accessibility contrast.
+4. **Behavior under Viewport Resize**:
+   * Describe how the layout responds when the viewport is resized to `1024x768` and `800x600`.
+   * Confirm that navigation toolbars collapse cleanly or slide into a hamburger menu, and main buttons remain fully accessible without overflow.
 
-Do not introduce new color families without a specific plan and updating this document.
+---
 
-## Typography
+## 4. UI Component Standards
 
-```text
-Default text: <font>, <size>
-Main title: <font>, <size>
-Subtitles: <font>, <size>
-Helper text: <font>, <size>
-Icons: <icon font>
-Code: <monospaced font>
+### 4.1. The Glassmorphism Card (`--card-glass`)
+To keep surfaces feeling premium and state-of-the-art:
+* **CSS Properties**:
+  ```css
+  background: var(--card-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  ```
+
+### 4.2. Custom Scrollbar Integration
+Native scrollbars dilute a premium dark interface. Enforce this custom standard on all scrollable components:
+```css
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent; /* Seamless match with container background */
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 3px;
+}
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
 ```
 
-### Typographical Rules
+### 4.3. Native Modals & Overlay Layers
+* Modals must never be standard browser alerts or system boxes.
+* The backdrop overlay must use `hsla(222, 19%, 8%, 0.65)` with a backdrop blur of `4px` to visually separate background elements.
+* Trapped keyboard focus inside modal containers is mandatory.
 
-- Use `<main font>` for interface text.
-- Use `<icon font>` for icons.
-- Use `<monospaced font>` only for code, paths, and logs.
-- Ensure long texts use ellipsis, line breaks, or a scrollable area; never overlap.
+---
 
-## General Layout
+## 5. Visual Review & Verification Checklist
+Before declaring a UI task as completed, the agent must execute and document this visual validation list inside the change plan:
 
-### Structure
-
-`<Describe the layout structure: sidebar, main panel, cards, modals, etc.>`
-
-### Relevant Dimensions
-
-`<Record margins, button sizes, card border radii, and other fixed metrics of the project.>`
-
-- Main outer margin: `<value>`.
-- Navigation buttons: `<width x height>`.
-- Main card border radius: `<value>`.
-- Secondary card border radius: `<value>`.
-
-### Layout Rules
-
-- Do not place a card inside another card.
-- Use cards only for functional regions, repeated items, and modals.
-- Maintain stable dimensions for toolbars, buttons, lists, and cards.
-- No hover, label, or dynamic state should shift the layout unexpectedly.
-
-## Buttons
-
-### Icon-Only Buttons
-
-Use icon-only buttons for frequent or familiar actions.
-
-Rules:
-
-- Always include a tooltip.
-- Maintain a minimum clickable area of `<value>` for main actions.
-- Destructive actions must use visual warning styling.
-
-### Buttons with Text
-
-Use text when:
-
-- the action is ambiguous without a label;
-- there is a risk of a destructive error;
-- the action appears in a confirmation modal;
-- the button is primary in a form.
-
-## Tooltips
-
-Mandatory for:
-
-- icon-only buttons;
-- compact controls;
-- any action whose consequence is not obvious.
-
-Tooltips must not persistently cover the control nor go outside the visible window area.
-
-## Cards and Surfaces
-
-### Main Cards
-
-- Background: `<color>`.
-- Radius: `<value>`.
-- The card should frame the entire functional area of the screen.
-
-### Secondary Cards
-
-- Background: `<color>`.
-- Radius: `<value>`.
-- Subtle border.
-
-## Modals
-
-Rules:
-
-- All modals must be native to the application itself, without system dialog boxes.
-- Modals must be centered relative to the application window.
-- The rest of the application should be visually layered beneath the modal.
-- Controls behind the modal must be disabled.
-- `Escape` should cancel when safe.
-- `Enter` should confirm when the action is clear.
-- Destructive actions must use a visually distinct button.
-
-## Scrollbars
-
-`<Adapt according to the platform and toolkit. Describe how scrollbars should appear in dark areas.>`
-
-Mandatory rule:
-
-- the scrollbar background must use the same background color as the container in which it appears;
-- the thumb must be lighter than the background, but not pure white;
-- apply this standard to all new or modified scrollable areas.
-
-## Visual States
-
-### Active
-
-- Background: `<soft highlight color>`.
-- Border: `<highlight color>`.
-- Must be more persistent and noticeable than hover.
-
-### Hover
-
-- Increase contrast without changing size.
-- Never shift the layout.
-
-### Focus
-
-- Must be visible via a border or outline.
-- Must work with keyboard navigation.
-
-### Disabled
-
-- Text and background must have reduced contrast.
-- Action must not visually respond as active.
-
-### Error
-
-- Use `<ERROR_COLOR>` or variations.
-- Messages must be clear and not confused with success.
-
-### Success
-
-- Use `<SUCCESS_COLOR>` or discrete variations.
-- Temporary feedback should return to normal state automatically.
-
-## Accessibility and Usability
-
-- Every mouse action must have a reasonable keyboard alternative when possible.
-- Modals must trap focus.
-- Texts must have sufficient contrast against the background.
-- Icons must have tooltips.
-- Clickable areas must be large enough for comfortable use.
-
-## Rules for New Screens
-
-When creating a new screen:
-
-1. Use a main card with an appropriate background.
-2. Define a compact toolbar for actions.
-3. Use tooltips on all icon-only actions.
-4. Ensure a stable layout during resizing.
-5. Register any new standard in this document.
-6. Create or update the corresponding plan in `Plans/`.
-
-## Rules for New Components
-
-New components must:
-
-- reuse existing elements, styles, and standards;
-- have hover, focus, pressed, and disabled states;
-- not create scrollbars of incorrect colors in dark areas;
-- be tested in normal, maximized, and minimum window sizes.
-
-## Visual Review Criteria
-
-Before completing a visual change, check:
-
-- Is there overlapping text or controls?
-- Does the text fit in the available space?
-- Is the active state obvious?
-- Is the hover subtle and consistent?
-- Is the keyboard focus visible?
-- Does the scrollbar match the container?
-- Do icons have tooltips?
-- Are destructive buttons differentiated?
-- Does the maximized window preserve clicking and focus?
-- Does the minimum window keep main actions accessible?
-- Does the result follow the standards of this document?
+- [ ] **Descriptive Audit**: Has a Visual Description Audit (VDA) been run and logged?
+- [ ] **Contrast Check**: Do all foreground texts have excellent contrast ratios against HSL backgrounds?
+- [ ] **No Overlap**: Are long texts handled dynamically via ellipsis or scroll without colliding?
+- [ ] **Responsive Test**: Was the component verified at `1920x1080`, `1024x768`, and `800x600`?
+- [ ] **Custom Scrollbars**: Are native browser scrollbars styled cleanly using custom track and thumb tokens?
+- [ ] **Interactive Tooltips**: Do all icon-only or non-obvious controls have tooltips?
