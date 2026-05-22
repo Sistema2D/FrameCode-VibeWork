@@ -22,7 +22,8 @@ graph TD
     D -->|"Rastreabilidade"| E["Changelog e versionamento"]
     E -->|"Validação"| F["Auditoria e release"]
     F -->|"Aprendizado"| G["Wiki / memória técnica"]
-    G -->|"Contexto acumulado"| C
+    G -->|"Publicação documental"| H["Documentação pública (Wiki + GitHub Pages)"]
+    H -->|"Contexto acumulado"| C
 ```
 
 ### Pilares
@@ -178,7 +179,8 @@ graph TD
     D -->|"Traceability"| E["Changelog and versioning"]
     E -->|"Validation"| F["Audit and release"]
     F -->|"Learning"| G["Wiki / technical memory"]
-    G -->|"Accumulated context"| C
+    G -->|"Documentation publishing"| H["Public documentation (Wiki + GitHub Pages)"]
+    H -->|"Accumulated context"| C
 ```
 
 ### Pillars

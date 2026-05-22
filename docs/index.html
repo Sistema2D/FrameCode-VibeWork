@@ -6,294 +6,318 @@
   <title>FrameCode VibeWork - Complete Application Guide</title>
   <meta name="description" content="Complete bilingual guide (PT-BR and EN) for the FrameCode VibeWork framework.">
   <style>
-    :root {
-      --bg: #0b1320;
-      --panel: #121d2f;
-      --panel-2: #182740;
-      --text: #e6edf7;
-      --muted: #9fb2cc;
-      --line: #2d3f5f;
-      --accent: #37c7a2;
-      --accent-2: #ffb454;
-      --danger: #f26d6d;
-      --radius: 14px;
-      --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-      --maxw: 1160px;
-      --mono: "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
-      --sans: "Segoe UI", "Trebuchet MS", "Noto Sans", sans-serif;
-    }
+  :root {
+    --bg: #ffffff;
+    --surface-dark: #000000;
+    --surface-soft: #f7f7f7;
+    --surface-elevated: #1a1a1a;
+    --text: #1a1a1a;
+    --muted: #757575;
+    --line: #cccccc;
+    --line-strong: #5e5e5e;
+    --accent: #76b900;
+    --accent-dark: #5a8d00;
+    --danger: #e52020;
+    --danger-bg: #fdeaea;
+    --radius: 2px;
+    --maxw: 1160px;
+    --mono: "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    --sans: "NVIDIA-EMEA", Arial, Helvetica, sans-serif;
+  }
 
-    * { box-sizing: border-box; }
+  * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: var(--sans);
-      color: var(--text);
-      background:
-        radial-gradient(1200px 420px at 110% -10%, rgba(55, 199, 162, 0.20), transparent 60%),
-        radial-gradient(1200px 420px at -10% -10%, rgba(255, 180, 84, 0.16), transparent 60%),
-        linear-gradient(180deg, #09101b, #0c1523 42%, #0a1320);
-      line-height: 1.55;
-    }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+  }
 
-    .container {
-      width: min(100% - 2rem, var(--maxw));
-      margin: 0 auto;
-    }
+  .container {
+    width: min(100% - 2rem, var(--maxw));
+    margin: 0 auto;
+  }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      backdrop-filter: blur(8px);
-      background: rgba(9, 16, 27, 0.82);
-      border-bottom: 1px solid rgba(159, 178, 204, 0.2);
-    }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--surface-dark);
+    border-bottom: 1px solid var(--line-strong);
+  }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.9rem 0;
-    }
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 0;
+  }
 
-    .brand {
-      font-weight: 700;
-      letter-spacing: 0.3px;
-    }
+  .brand {
+    font-weight: 700;
+    letter-spacing: 0;
+    color: #ffffff;
+  }
 
-    .lang-switch {
-      display: inline-flex;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      overflow: hidden;
-    }
+  .lang-switch {
+    display: inline-flex;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
 
-    .lang-btn {
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      padding: 0.5rem 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 140ms ease;
-    }
+  .lang-btn {
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    padding: 0.5rem 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 140ms ease;
+    border-right: 1px solid var(--line-strong);
+  }
 
-    .lang-btn[aria-pressed="true"] {
-      background: linear-gradient(135deg, rgba(55, 199, 162, 0.25), rgba(255, 180, 84, 0.25));
-      color: var(--text);
-    }
+  .lang-btn:last-child {
+    border-right: 0;
+  }
 
-    .hero {
-      padding: 2.2rem 0 1.4rem;
-    }
+  .lang-btn[aria-pressed="true"] {
+    background: var(--accent);
+    color: #000000;
+  }
 
-    .hero h1 {
-      font-size: clamp(1.6rem, 2.6vw, 2.5rem);
-      line-height: 1.15;
-      margin: 0 0 0.7rem;
-    }
+  .hero {
+    padding: 2rem 0 1.2rem;
+    border-bottom: 1px solid var(--line);
+  }
 
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      max-width: 80ch;
-    }
+  .hero h1 {
+    font-size: clamp(1.6rem, 2.6vw, 2.45rem);
+    line-height: 1.15;
+    margin: 0 0 0.7rem;
+    color: #000000;
+  }
 
-    .badges {
-      margin-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+  .hero p {
+    margin: 0;
+    color: var(--muted);
+    max-width: 80ch;
+  }
 
-    .badge {
-      border: 1px solid var(--line);
-      background: var(--panel);
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 0.24rem 0.65rem;
-      font-size: 0.82rem;
-      font-family: var(--mono);
-    }
+  .badges {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 
+  .badge {
+    border: 1px solid var(--line);
+    background: var(--surface-soft);
+    color: var(--text);
+    border-radius: var(--radius);
+    padding: 0.24rem 0.65rem;
+    font-size: 0.82rem;
+    font-family: var(--mono);
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.4rem;
+    margin-top: 1rem;
+  }
+
+  nav {
+    align-self: start;
+    position: sticky;
+    top: 4.8rem;
+    background: var(--surface-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.8rem;
+  }
+
+  nav h2 {
+    margin: 0.15rem 0 0.65rem;
+    font-size: 0.98rem;
+    color: #000000;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0;
+  }
+
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  nav a {
+    display: block;
+    text-decoration: none;
+    color: #000000;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.6rem;
+    font-size: 0.92rem;
+  }
+
+  nav a:hover {
+    border-color: var(--accent);
+    color: #000000;
+  }
+
+  main {
+    min-width: 0;
+  }
+
+  .panel {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .panel h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    letter-spacing: 0;
+    color: #000000;
+  }
+
+  .panel .lead {
+    margin-top: 0.45rem;
+    color: var(--muted);
+  }
+
+  .grid-2 {
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0.8rem;
+  }
+
+  .card {
+    border: 1px solid var(--line);
+    background: #ffffff;
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    position: relative;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+  }
+
+  .card h3 {
+    margin: 0 0 0.45rem;
+    font-size: 1rem;
+    color: #000000;
+  }
+
+  .card p, .card li, .panel li {
+    color: #1a1a1a;
+  }
+
+  .card ul, .panel ul, .panel ol {
+    margin: 0.35rem 0 0;
+    padding-left: 1.1rem;
+  }
+
+  .tiny {
+    font-size: 0.87rem;
+    color: var(--muted);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.7rem;
+    font-size: 0.92rem;
+  }
+
+  th, td {
+    border: 1px solid var(--line);
+    padding: 0.5rem 0.55rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--surface-soft);
+    font-weight: 700;
+    color: #000000;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    color: #000000;
+    background: #eef8dc;
+    border: 1px solid #cde8a0;
+    border-radius: var(--radius);
+    padding: 0.1rem 0.3rem;
+  }
+
+  .notice {
+    border-left: 4px solid var(--accent);
+    background: #f6fbea;
+    padding: 0.7rem 0.8rem;
+    border-radius: var(--radius);
+    margin-top: 0.65rem;
+  }
+
+  .danger {
+    border-left-color: var(--danger);
+    background: var(--danger-bg);
+  }
+
+  .lang-section[hidden] {
+    display: none !important;
+  }
+
+  footer {
+    background: var(--surface-dark);
+    border-top: 1px solid var(--line-strong);
+    padding: 1.2rem 0 2rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  footer a {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1024px) {
     .shell {
-      display: grid;
-      grid-template-columns: 290px minmax(0, 1fr);
-      gap: 1rem;
-      margin-bottom: 2.4rem;
+      grid-template-columns: 1fr;
     }
 
     nav {
-      align-self: start;
-      position: sticky;
-      top: 4.8rem;
-      background: linear-gradient(180deg, rgba(18, 29, 47, 0.95), rgba(18, 29, 47, 0.82));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 0.8rem;
-    }
-
-    nav h2 {
-      margin: 0.15rem 0 0.65rem;
-      font-size: 0.98rem;
-      color: var(--muted);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 0.25rem;
-    }
-
-    nav a {
-      display: block;
-      text-decoration: none;
-      color: var(--text);
-      background: rgba(24, 39, 64, 0.45);
-      border: 1px solid rgba(45, 63, 95, 0.55);
-      border-radius: 10px;
-      padding: 0.5rem 0.6rem;
-      font-size: 0.92rem;
-    }
-
-    nav a:hover {
-      border-color: rgba(55, 199, 162, 0.7);
-      transform: translateY(-1px);
-    }
-
-    main {
-      min-width: 0;
-    }
-
-    .panel {
-      background: linear-gradient(180deg, rgba(18, 29, 47, 0.98), rgba(18, 29, 47, 0.82));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .panel h2 {
-      margin: 0;
-      font-size: 1.2rem;
-      letter-spacing: 0.2px;
-    }
-
-    .panel .lead {
-      margin-top: 0.45rem;
-      color: var(--muted);
+      position: relative;
+      top: 0;
     }
 
     .grid-2 {
-      display: grid;
-      gap: 0.8rem;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 0.8rem;
+      grid-template-columns: 1fr;
     }
-
-    .card {
-      border: 1px solid rgba(45, 63, 95, 0.75);
-      background: linear-gradient(180deg, rgba(24, 39, 64, 0.78), rgba(24, 39, 64, 0.5));
-      border-radius: 12px;
-      padding: 0.75rem;
-    }
-
-    .card h3 {
-      margin: 0 0 0.45rem;
-      font-size: 1rem;
-    }
-
-    .card p, .card li, .panel li {
-      color: #d4dfef;
-    }
-
-    .card ul, .panel ul, .panel ol {
-      margin: 0.35rem 0 0;
-      padding-left: 1.1rem;
-    }
-
-    .tiny {
-      font-size: 0.87rem;
-      color: var(--muted);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.7rem;
-      font-size: 0.92rem;
-    }
-
-    th, td {
-      border: 1px solid var(--line);
-      padding: 0.5rem 0.55rem;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: rgba(24, 39, 64, 0.7);
-      font-weight: 700;
-    }
-
-    code {
-      font-family: var(--mono);
-      font-size: 0.9em;
-      color: #d9f9ef;
-      background: rgba(55, 199, 162, 0.14);
-      border: 1px solid rgba(55, 199, 162, 0.24);
-      border-radius: 6px;
-      padding: 0.1rem 0.3rem;
-    }
-
-    .notice {
-      border-left: 4px solid var(--accent-2);
-      background: rgba(255, 180, 84, 0.12);
-      padding: 0.7rem 0.8rem;
-      border-radius: 8px;
-      margin-top: 0.65rem;
-    }
-
-    .danger {
-      border-left-color: var(--danger);
-      background: rgba(242, 109, 109, 0.13);
-    }
-
-    .lang-section[hidden] {
-      display: none !important;
-    }
-
-    footer {
-      border-top: 1px solid rgba(159, 178, 204, 0.2);
-      padding: 1.2rem 0 2rem;
-      color: var(--muted);
-    }
-
-    @media (max-width: 1024px) {
-      .shell {
-        grid-template-columns: 1fr;
-      }
-
-      nav {
-        position: relative;
-        top: 0;
-      }
-
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <header>
@@ -328,10 +352,11 @@
         <li><a href="#pt-governance">5) Governança por planos</a></li>
         <li><a href="#pt-versioning">6) Versionamento e release</a></li>
         <li><a href="#pt-ai">7) IA, AICC e ASE</a></li>
-        <li><a href="#pt-security">8) Segurança e dados</a></li>
-        <li><a href="#pt-validation">9) Validação e auditoria</a></li>
-        <li><a href="#pt-pages">10) Publicação no GitHub Pages</a></li>
-        <li><a href="#pt-quickstart">11) Início rápido</a></li>
+        <li><a href="#pt-local-models">8) Modelos locais: parâmetros e contexto</a></li>
+        <li><a href="#pt-security">9) Segurança e dados</a></li>
+        <li><a href="#pt-validation">10) Validação e auditoria</a></li>
+        <li><a href="#pt-pages">11) Publicação no GitHub Pages</a></li>
+        <li><a href="#pt-quickstart">12) Início rápido</a></li>
       </ul>
       <ul id="nav-en" hidden>
         <li><a href="#en-overview">1) Overview</a></li>
@@ -341,10 +366,11 @@
         <li><a href="#en-governance">5) Plan-driven governance</a></li>
         <li><a href="#en-versioning">6) Versioning and release</a></li>
         <li><a href="#en-ai">7) AI, AICC and ASE</a></li>
-        <li><a href="#en-security">8) Security and data</a></li>
-        <li><a href="#en-validation">9) Validation and audit</a></li>
-        <li><a href="#en-pages">10) GitHub Pages publishing</a></li>
-        <li><a href="#en-quickstart">11) Quick start</a></li>
+        <li><a href="#en-local-models">8) Local models: parameters and context</a></li>
+        <li><a href="#en-security">9) Security and data</a></li>
+        <li><a href="#en-validation">10) Validation and audit</a></li>
+        <li><a href="#en-pages">11) GitHub Pages publishing</a></li>
+        <li><a href="#en-quickstart">12) Quick start</a></li>
       </ul>
     </nav>
 
@@ -487,8 +513,29 @@
           <p class="tiny">Referências: <code>AI.md</code>, <code>CONTEXT_MAP.md</code>, <code>skills/README.md</code>, <code>wiki/schema.md</code>.</p>
         </article>
 
+        <article class="panel" id="pt-local-models">
+          <h2>8) Modelos locais: parâmetros e janela de contexto</h2>
+          <p class="lead">Recomendação prática para uso do framework com modelos locais, com base no volume documental do próprio FCVW e no custo de contexto por sessão.</p>
+          <table>
+            <thead>
+              <tr><th>Faixa</th><th>Parâmetros</th><th>Janela de contexto</th><th>Uso recomendado no framework</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Mínimo operacional</td><td><code>7B-8B</code></td><td><code>16k</code></td><td>Correções curtas, ajustes em 1-3 arquivos, tarefas objetivas com contexto enxuto.</td></tr>
+              <tr><td>Recomendado geral</td><td><code>14B-32B</code></td><td><code>32k-64k</code></td><td>Fluxo completo com plano + changelog + wiki, revisões médias e múltiplos documentos.</td></tr>
+              <tr><td>Alta confiabilidade</td><td><code>32B-70B+</code></td><td><code>64k-128k</code></td><td>Refatorações amplas, auditorias, releases complexos e sessões longas sem perda de coerência.</td></tr>
+            </tbody>
+          </table>
+          <ul>
+            <li>Para operar com estabilidade, reserve folga de contexto de 40% a 60% para histórico, diffs e respostas longas.</li>
+            <li>No FCVW, a carga inicial varia por tipo de sessão; sem compressão pode chegar a ~8.5k tokens, então <code>16k</code> é o piso seguro para uso real.</li>
+            <li>Para desempenho consistente em tarefas de governança e escrita técnica estruturada, a faixa <code>14B+</code> tende a reduzir retrabalho.</li>
+          </ul>
+          <div class="notice">Inferência aplicada ao framework: estas faixas foram definidas a partir dos cenários de ingestão e ciclo operacional documentados no próprio repositório.</div>
+        </article>
+
         <article class="panel" id="pt-security">
-          <h2>8) Segurança e dados</h2>
+          <h2>9) Segurança e dados</h2>
           <ul>
             <li>Não versionar credenciais, dados privados e artefatos temporários.</li>
             <li>Validar path traversal em qualquer leitura/escrita de caminhos dinâmicos.</li>
@@ -498,7 +545,7 @@
         </article>
 
         <article class="panel" id="pt-validation">
-          <h2>9) Validação e auditoria</h2>
+          <h2>10) Validação e auditoria</h2>
           <p class="lead">A validação é proporcional ao risco e sempre precisa ser registrada com evidência.</p>
           <table>
             <thead>
@@ -513,7 +560,7 @@
         </article>
 
         <article class="panel" id="pt-pages">
-          <h2>10) Publicação no GitHub Pages</h2>
+          <h2>11) Publicação no GitHub Pages</h2>
           <p class="lead">Esta página foi desenhada para publicação estática em <code>docs/index.html</code>.</p>
           <ol>
             <li>Acesse <strong>Settings &gt; Pages</strong> no repositório.</li>
@@ -525,7 +572,7 @@
         </article>
 
         <article class="panel" id="pt-quickstart">
-          <h2>11) Início rápido</h2>
+          <h2>12) Início rápido</h2>
           <ol>
             <li>Clone: <code>git clone https://github.com/Sistema2D/FrameCode-VibeWork.git</code></li>
             <li>Leia <code>AGENTS.md</code> e <code>CONTEXT_MAP.md</code> antes de iniciar qualquer mudança.</li>
@@ -670,8 +717,29 @@
           <p class="tiny">References: <code>AI.md</code>, <code>CONTEXT_MAP.md</code>, <code>skills/README.md</code>, <code>wiki/schema.md</code>.</p>
         </article>
 
+        <article class="panel" id="en-local-models">
+          <h2>8) Local models: parameters and context window</h2>
+          <p class="lead">Practical sizing guidance for running this framework with local models, based on FCVW's own document load profile and session context volume.</p>
+          <table>
+            <thead>
+              <tr><th>Tier</th><th>Parameters</th><th>Context window</th><th>Recommended framework usage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Minimum operational</td><td><code>7B-8B</code></td><td><code>16k</code></td><td>Short fixes, small edits in 1-3 files, narrow prompts with compact context.</td></tr>
+              <tr><td>General recommended</td><td><code>14B-32B</code></td><td><code>32k-64k</code></td><td>Full flow with plan + changelog + wiki, medium reviews, and multi-document sessions.</td></tr>
+              <tr><td>High reliability</td><td><code>32B-70B+</code></td><td><code>64k-128k</code></td><td>Large refactors, audits, complex releases, and long sessions with stronger coherence.</td></tr>
+            </tbody>
+          </table>
+          <ul>
+            <li>For stable operation, keep 40% to 60% free context headroom for history, diffs, and long completions.</li>
+            <li>In FCVW, initial session ingestion can reach ~8.5k tokens without compression, so <code>16k</code> is the practical floor.</li>
+            <li>For consistent governance-heavy writing and structured outputs, <code>14B+</code> generally reduces rework.</li>
+          </ul>
+          <div class="notice">Framework inference: these thresholds are derived from FCVW's documented ingestion scenarios and operational cycle.</div>
+        </article>
+
         <article class="panel" id="en-security">
-          <h2>8) Security and data</h2>
+          <h2>9) Security and data</h2>
           <ul>
             <li>Do not version credentials, private data, or temporary artifacts.</li>
             <li>Validate path traversal on any dynamic path read/write workflow.</li>
@@ -681,7 +749,7 @@
         </article>
 
         <article class="panel" id="en-validation">
-          <h2>9) Validation and audit</h2>
+          <h2>10) Validation and audit</h2>
           <p class="lead">Validation is risk-proportional and must be recorded with evidence.</p>
           <table>
             <thead>
@@ -696,7 +764,7 @@
         </article>
 
         <article class="panel" id="en-pages">
-          <h2>10) GitHub Pages publishing</h2>
+          <h2>11) GitHub Pages publishing</h2>
           <p class="lead">This page is designed for static publishing at <code>docs/index.html</code>.</p>
           <ol>
             <li>Go to repository <strong>Settings &gt; Pages</strong>.</li>
@@ -708,7 +776,7 @@
         </article>
 
         <article class="panel" id="en-quickstart">
-          <h2>11) Quick start</h2>
+          <h2>12) Quick start</h2>
           <ol>
             <li>Clone: <code>git clone https://github.com/Sistema2D/FrameCode-VibeWork.git</code></li>
             <li>Read <code>AGENTS.md</code> and <code>CONTEXT_MAP.md</code> before any change.</li>
@@ -723,7 +791,7 @@
 
   <footer>
     <div class="container">
-      <div>Repository: <a href="https://github.com/Sistema2D/FrameCode-VibeWork" style="color:#9fd5ff;">Sistema2D/FrameCode-VibeWork</a></div>
+      <div>Repository: <a href="https://github.com/Sistema2D/FrameCode-VibeWork">Sistema2D/FrameCode-VibeWork</a></div>
       <div class="tiny">This page is static and GitHub Pages compatible by design.</div>
     </div>
   </footer>
@@ -783,3 +851,4 @@
   </script>
 </body>
 </html>
+
