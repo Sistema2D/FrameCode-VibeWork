@@ -122,9 +122,7 @@
   }
 
   .lang-btn:focus-visible,
-  .coffee-btn:focus-visible,
-  .nav-group summary:focus-visible,
-  .nav-group a:focus-visible {
+  .coffee-btn:focus-visible {
     outline: 2px solid var(--primary-focus);
     outline-offset: 2px;
   }
@@ -134,25 +132,22 @@
   }
 
   .coffee-btn {
-    text-decoration: none;
-    height: 32px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 0 14px;
     border-radius: var(--radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.24);
-    color: var(--body-on-dark);
-    background: var(--ink);
-    font-family: var(--font-text);
-    font-size: 14px;
-    line-height: 1.29;
-    letter-spacing: -0.224px;
-    transition: transform 160ms ease, background-color 160ms ease;
+    overflow: hidden;
+    line-height: 0;
+    background: transparent;
+  }
+
+  .coffee-btn img {
+    display: block;
+    height: 32px;
+    width: auto;
   }
 
   .coffee-btn:hover {
-    background: var(--surface-tile-2);
     transform: scale(0.98);
   }
 
@@ -206,110 +201,8 @@
   }
 
   .shell {
-    display: grid;
-    grid-template-columns: 320px minmax(0, 1fr);
-    gap: 1rem;
     margin-top: 14px;
     margin-bottom: 2rem;
-  }
-
-  nav {
-    align-self: start;
-    position: sticky;
-    top: 56px;
-    background: rgba(245, 245, 247, 0.84);
-    backdrop-filter: saturate(180%) blur(20px);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    padding: 0.8rem;
-  }
-
-  nav h2 {
-    margin: 0.1rem 0 0.6rem;
-    color: var(--ink);
-    font-family: var(--font-text);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.12px;
-    text-transform: uppercase;
-  }
-
-  .nav-language {
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .nav-group {
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background: var(--canvas);
-  }
-
-  .nav-group summary {
-    list-style: none;
-    cursor: pointer;
-    padding: 0.6rem 0.72rem;
-    color: var(--ink);
-    background: var(--canvas-parchment);
-    font-family: var(--font-text);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.29;
-    letter-spacing: -0.224px;
-    transition: background-color 160ms ease;
-  }
-
-  .nav-group summary:hover {
-    background: var(--surface-pearl);
-  }
-
-  .nav-group summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .nav-group summary::after {
-    content: "+";
-    float: right;
-    color: var(--ink-muted-48);
-  }
-
-  .nav-group[open] summary {
-    background: var(--canvas);
-  }
-
-  .nav-group[open] summary::after {
-    content: "−";
-  }
-
-  .nav-group ul {
-    list-style: none;
-    margin: 0;
-    padding: 0.38rem;
-    display: grid;
-    gap: 0.3rem;
-    background: var(--canvas);
-  }
-
-  .nav-group a {
-    text-decoration: none;
-    display: block;
-    border-radius: var(--radius-sm);
-    padding: 0.45rem 0.55rem;
-    font-family: var(--font-text);
-    font-size: 14px;
-    line-height: 1.43;
-    letter-spacing: -0.224px;
-    color: var(--ink);
-    border: 1px solid transparent;
-    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
-  }
-
-  .nav-group a:hover {
-    border-color: var(--hairline);
-    background: var(--surface-pearl);
-    color: var(--primary);
   }
 
   main {
@@ -526,6 +419,8 @@
   }
 
   .flow-step {
+    width: 52%;
+    margin-inline: auto;
     border-radius: var(--radius-lg);
     border: 1px solid var(--hairline);
     background: var(--canvas);
@@ -564,6 +459,8 @@
   }
 
   .flow-loop {
+    width: 52%;
+    margin-inline: auto;
     border-radius: var(--radius-lg);
     border: 1px dashed var(--hairline);
     background: var(--surface-pearl);
@@ -607,15 +504,6 @@
   }
 
   @media (max-width: 1068px) {
-    .shell {
-      grid-template-columns: 1fr;
-    }
-
-    nav {
-      position: relative;
-      top: 0;
-    }
-
     .grid-2 {
       grid-template-columns: 1fr;
     }
@@ -648,16 +536,17 @@
     .panel {
       padding: 1.2rem;
     }
+
+    .flow-step,
+    .flow-loop {
+      width: 100%;
+    }
   }
 
   @media (max-width: 640px) {
     .lang-btn {
       min-width: 36px;
       padding-inline: 0.45rem;
-    }
-
-    .coffee-btn {
-      padding-inline: 0.7rem;
     }
 
     .panel h2 {
@@ -681,7 +570,9 @@
           <button class="lang-btn" data-lang="es" aria-pressed="false" aria-label="Español" title="Español"><span class="flag-icon" aria-hidden="true">🇪🇸</span></button>
           <button class="lang-btn" data-lang="de" aria-pressed="false" aria-label="Deutsch" title="Deutsch"><span class="flag-icon" aria-hidden="true">🇩🇪</span></button>
         </div>
-        <a class="coffee-btn" href="https://www.buymeacoffee.com/hugomelovek" target="_blank" rel="noopener noreferrer" aria-label="Support this project" title="Support this project">Support</a>
+        <a class="coffee-btn" href="https://www.buymeacoffee.com/hugomelovek" target="_blank" rel="noopener noreferrer" aria-label="Buy me a coffee" title="Buy me a coffee">
+          <img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=hugomelovek&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy me a coffee">
+        </a>
       </div>
     </div>
   </header>
@@ -695,126 +586,6 @@
   </div>
 
   <div class="container shell">
-    <nav>
-      <h2 id="nav-title">Navegação</h2>
-      <div id="nav-pt-br" class="nav-language">
-        <details class="nav-group" open>
-          <summary>1. Fundamentos</summary>
-          <ul>
-            <li><a href="#pt-overview">1.1 Visão geral</a></li>
-            <li><a href="#pt-problem">1.2 Problema resolvido</a></li>
-            <li><a href="#pt-lifecycle">1.3 Ciclo de funcionamento</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>2. Governança e Operação</summary>
-          <ul>
-            <li><a href="#pt-architecture">2.1 Arquitetura documental</a></li>
-            <li><a href="#pt-governance">2.2 Governança por planos</a></li>
-            <li><a href="#pt-versioning">2.3 Versionamento e release</a></li>
-            <li><a href="#pt-ai">2.4 IA, AICC e ASE</a></li>
-            <li><a href="#pt-local-models">2.5 Modelos locais: parâmetros e contexto</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>3. Controles e Publicação</summary>
-          <ul>
-            <li><a href="#pt-security">3.1 Segurança e dados</a></li>
-            <li><a href="#pt-validation">3.2 Validação e auditoria</a></li>
-            <li><a href="#pt-pages">3.3 Publicação no GitHub Pages</a></li>
-            <li><a href="#pt-quickstart">3.4 Início rápido</a></li>
-          </ul>
-        </details>
-      </div>
-      <div id="nav-en" class="nav-language" hidden>
-        <details class="nav-group" open>
-          <summary>1. Foundations</summary>
-          <ul>
-            <li><a href="#en-overview">1.1 Overview</a></li>
-            <li><a href="#en-problem">1.2 Problem solved</a></li>
-            <li><a href="#en-lifecycle">1.3 Operating lifecycle</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>2. Governance and Operations</summary>
-          <ul>
-            <li><a href="#en-architecture">2.1 Document architecture</a></li>
-            <li><a href="#en-governance">2.2 Plan-driven governance</a></li>
-            <li><a href="#en-versioning">2.3 Versioning and release</a></li>
-            <li><a href="#en-ai">2.4 AI, AICC and ASE</a></li>
-            <li><a href="#en-local-models">2.5 Local models: parameters and context</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>3. Controls and Publishing</summary>
-          <ul>
-            <li><a href="#en-security">3.1 Security and data</a></li>
-            <li><a href="#en-validation">3.2 Validation and audit</a></li>
-            <li><a href="#en-pages">3.3 GitHub Pages publishing</a></li>
-            <li><a href="#en-quickstart">3.4 Quick start</a></li>
-          </ul>
-        </details>
-      </div>
-      <div id="nav-es" class="nav-language" hidden>
-        <details class="nav-group" open>
-          <summary>1. Fundamentos</summary>
-          <ul>
-            <li><a href="#es-overview">1.1 Resumen general</a></li>
-            <li><a href="#es-problem">1.2 Problema resuelto</a></li>
-            <li><a href="#es-lifecycle">1.3 Ciclo operativo</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>2. Gobernanza y Operación</summary>
-          <ul>
-            <li><a href="#es-architecture">2.1 Arquitectura documental</a></li>
-            <li><a href="#es-governance">2.2 Gobernanza por planes</a></li>
-            <li><a href="#es-versioning">2.3 Versionado y release</a></li>
-            <li><a href="#es-ai">2.4 IA, AICC y ASE</a></li>
-            <li><a href="#es-local-models">2.5 Modelos locales: parámetros y contexto</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>3. Controles y Publicación</summary>
-          <ul>
-            <li><a href="#es-security">3.1 Seguridad y datos</a></li>
-            <li><a href="#es-validation">3.2 Validación y auditoría</a></li>
-            <li><a href="#es-pages">3.3 Publicación en GitHub Pages</a></li>
-            <li><a href="#es-quickstart">3.4 Inicio rápido</a></li>
-          </ul>
-        </details>
-      </div>
-      <div id="nav-de" class="nav-language" hidden>
-        <details class="nav-group" open>
-          <summary>1. Grundlagen</summary>
-          <ul>
-            <li><a href="#de-overview">1.1 Überblick</a></li>
-            <li><a href="#de-problem">1.2 Gelöstes Problem</a></li>
-            <li><a href="#de-lifecycle">1.3 Betriebsablauf</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>2. Governance und Betrieb</summary>
-          <ul>
-            <li><a href="#de-architecture">2.1 Dokumentenarchitektur</a></li>
-            <li><a href="#de-governance">2.2 Planbasierte Governance</a></li>
-            <li><a href="#de-versioning">2.3 Versionierung und Release</a></li>
-            <li><a href="#de-ai">2.4 KI, AICC und ASE</a></li>
-            <li><a href="#de-local-models">2.5 Lokale Modelle: Parameter und Kontext</a></li>
-          </ul>
-        </details>
-        <details class="nav-group">
-          <summary>3. Kontrollen und Veröffentlichung</summary>
-          <ul>
-            <li><a href="#de-security">3.1 Sicherheit und Daten</a></li>
-            <li><a href="#de-validation">3.2 Validierung und Audit</a></li>
-            <li><a href="#de-pages">3.3 Veröffentlichung auf GitHub Pages</a></li>
-            <li><a href="#de-quickstart">3.4 Schnellstart</a></li>
-          </ul>
-        </details>
-      </div>
-    </nav>
-
     <main>
       <section class="lang-section" data-lang="pt-BR">
         <article class="panel" id="pt-overview">
@@ -1688,67 +1459,29 @@
   <script>
     const buttons = document.querySelectorAll('.lang-btn');
     const sections = document.querySelectorAll('.lang-section');
-    const navByLang = {
-      'pt-BR': document.getElementById('nav-pt-br'),
-      en: document.getElementById('nav-en'),
-      es: document.getElementById('nav-es'),
-      de: document.getElementById('nav-de')
-    };
-    const navTitle = document.getElementById('nav-title');
     const title = document.getElementById('title');
     const subtitle = document.getElementById('subtitle');
 
     const labels = {
       'pt-BR': {
-        navTitle: 'Navegação',
         title: 'Guia Completo do Framework',
         subtitle: ''
       },
       en: {
-        navTitle: 'Navigation',
         title: 'Complete Framework Guide',
         subtitle: ''
       },
       es: {
-        navTitle: 'Navegación',
         title: 'Guía Completa del Framework',
         subtitle: ''
       },
       de: {
-        navTitle: 'Navigation',
         title: 'Vollständiger Framework-Leitfaden',
         subtitle: ''
       }
     };
 
     const supportedLangs = ['pt-BR', 'en', 'es', 'de'];
-    const navContainers = Object.values(navByLang);
-
-    function ensureSingleOpen(container, sourceDetails = null) {
-      const groups = container.querySelectorAll('.nav-group');
-
-      if (sourceDetails && sourceDetails.open) {
-        groups.forEach(group => {
-          if (group !== sourceDetails) {
-            group.open = false;
-          }
-        });
-        return;
-      }
-
-      const hasOpenGroup = container.querySelector('.nav-group[open]');
-      if (!hasOpenGroup && groups.length > 0) {
-        groups[0].open = true;
-      }
-    }
-
-    navContainers.forEach(container => {
-      const groups = container.querySelectorAll('.nav-group');
-      groups.forEach((group, index) => {
-        group.open = index === 0;
-        group.addEventListener('toggle', () => ensureSingleOpen(container, group));
-      });
-    });
 
     function setLanguage(lang) {
       if (!supportedLangs.includes(lang)) {
@@ -1763,16 +1496,6 @@
         const active = button.dataset.lang === lang;
         button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
-
-      Object.entries(navByLang).forEach(([language, container]) => {
-        const isActive = language === lang;
-        container.hidden = !isActive;
-        if (isActive) {
-          ensureSingleOpen(container);
-        }
-      });
-
-      navTitle.textContent = labels[lang].navTitle;
       title.textContent = labels[lang].title;
       subtitle.textContent = labels[lang].subtitle;
 

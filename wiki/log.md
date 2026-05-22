@@ -243,3 +243,18 @@ This file must be treated as append-first history: prefer adding new records ove
 - Pages obsolete: none.
 - Result: Public page now uses Apple-style visual language (Action Blue, SF Pro stack, parchment/light surfaces, pill interactions, restrained depth).
 - Gaps: none.
+
+## [2026-05-22 20:10] synthesis | Session S014 Pages Cleanup: Nav Removal + Flow Cards + BMAC
+
+- Source: `Plans/completed/P4-R1-2026-05-22-pages-remove-nav-reduce-flow-cards-and-restore-bmac.md`.
+- Executed action: Removed sidebar navigation from GitHub Pages, reduced flowchart card widths by ~50% on desktop (responsive reset on mobile), and restored the original BuyMeACoffee image button visual.
+- Pages created:
+  - `wiki/sessions/S014-2026-05-22-pages-remove-nav-reduce-flow-cards-and-restore-bmac.md`
+- Pages updated:
+  - `docs/index.html`
+  - `changelogs/V0.5.1.md`
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: Public page is more direct/content-first while preserving multilingual coverage and language switching.
+- Gaps: none.

@@ -105,6 +105,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 - [[sessions/S011-2026-05-22-pages-header-language-expansion-and-outline-renumbering|Session S011 - Pages Header UX + 4-Language Expansion]] â€” Reworked header controls, hierarchical numbering, and multilingual coverage (PT-BR, EN, ES, DE).
 - [[sessions/S012-2026-05-22-pages-accordion-quickstart-flowchart-and-es-de-parity|Session S012 - Pages Accordion Navigation + AGENTS-First Quick Start]] â€” Simplified public instructions, added single-open nav accordions, and upgraded ES/DE sections to full topic parity.
 - [[sessions/S013-2026-05-22-pages-apple-design-system-adoption|Session S013 - Apple DESIGN.md Adoption for Pages]] â€” Replaced GitHub Pages visual system with Apple tokens/components from `VoltAgent/awesome-design-md`.
+- [[sessions/S014-2026-05-22-pages-remove-nav-reduce-flow-cards-and-restore-bmac|Session S014 - Pages Nav Removal + Flowchart Width + BuyMeACoffee Restore]] â€” Removed sidebar navigation, narrowed flowchart cards, and restored the original BuyMeACoffee visual.
 
 ---
 
