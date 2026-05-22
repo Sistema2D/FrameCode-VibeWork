@@ -182,3 +182,19 @@ This file must be treated as append-first history: prefer adding new records ove
 - Pages obsolete: none.
 - Result: Public documentation entrypoint prepared for GitHub Pages publication with bilingual UX and full operational content.
 - Gaps: none (Pages source configured to `main` + `/docs`).
+
+## [2026-05-22 16:10] synthesis | Session S010 Local Model Guidelines + Lifecycle Sync
+
+- Source: `Plans/completed/P2-R2-2026-05-22-local-model-guidelines-pages-wiki-and-readme-flow-update.md`.
+- Executed action: Added local-model sizing recommendations (parameters/context tiers) to GitHub Pages and project Wiki in PT-BR/EN; updated README lifecycle flowchart for public documentation stage.
+- Pages created:
+  - `wiki/sessions/S010-2026-05-22-local-model-guidelines-pages-wiki-and-readme-flow-update.md`
+- Pages updated:
+  - `docs/index.html`
+  - `README.md`
+  - `changelogs/V0.5.1.md`
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: Local-model guidance consolidated across public documentation surfaces; lifecycle diagram synchronized with current framework operation.
+- Gaps: none.
