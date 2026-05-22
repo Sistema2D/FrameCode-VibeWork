@@ -168,3 +168,17 @@ This file must be treated as append-first history: prefer adding new records ove
 - Pages obsolete: none.
 - Result: Session continuity preserved with release context and next maintenance actions.
 - Gaps: None.
+
+## [2026-05-22 15:20] synthesis | Session S009 GitHub Pages Bilingual Guide
+
+- Source: Plans/completed/P3-R2-2026-05-22-github-pages-bilingual-application-page.md.
+- Executed action: Created a complete bilingual (PT-BR and EN) GitHub Pages documentation page with selectable language and operational framework details.
+- Pages created:
+  - docs/index.html
+  - wiki/sessions/S009-2026-05-22-github-pages-bilingual-application-page.md
+- Pages updated:
+  - wiki/index.md
+  - wiki/log.md
+- Pages obsolete: none.
+- Result: Public documentation entrypoint prepared for GitHub Pages publication with bilingual UX and full operational content.
+- Gaps: none (Pages source configured to `main` + `/docs`).

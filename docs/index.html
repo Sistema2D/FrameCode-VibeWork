@@ -1,0 +1,785 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FrameCode VibeWork - Complete Application Guide</title>
+  <meta name="description" content="Complete bilingual guide (PT-BR and EN) for the FrameCode VibeWork framework.">
+  <style>
+    :root {
+      --bg: #0b1320;
+      --panel: #121d2f;
+      --panel-2: #182740;
+      --text: #e6edf7;
+      --muted: #9fb2cc;
+      --line: #2d3f5f;
+      --accent: #37c7a2;
+      --accent-2: #ffb454;
+      --danger: #f26d6d;
+      --radius: 14px;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      --maxw: 1160px;
+      --mono: "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+      --sans: "Segoe UI", "Trebuchet MS", "Noto Sans", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 420px at 110% -10%, rgba(55, 199, 162, 0.20), transparent 60%),
+        radial-gradient(1200px 420px at -10% -10%, rgba(255, 180, 84, 0.16), transparent 60%),
+        linear-gradient(180deg, #09101b, #0c1523 42%, #0a1320);
+      line-height: 1.55;
+    }
+
+    .container {
+      width: min(100% - 2rem, var(--maxw));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(8px);
+      background: rgba(9, 16, 27, 0.82);
+      border-bottom: 1px solid rgba(159, 178, 204, 0.2);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+    }
+
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 0.5rem 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 140ms ease;
+    }
+
+    .lang-btn[aria-pressed="true"] {
+      background: linear-gradient(135deg, rgba(55, 199, 162, 0.25), rgba(255, 180, 84, 0.25));
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 2.2rem 0 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+      line-height: 1.15;
+      margin: 0 0 0.7rem;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 80ch;
+    }
+
+    .badges {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 0.24rem 0.65rem;
+      font-size: 0.82rem;
+      font-family: var(--mono);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.4rem;
+    }
+
+    nav {
+      align-self: start;
+      position: sticky;
+      top: 4.8rem;
+      background: linear-gradient(180deg, rgba(18, 29, 47, 0.95), rgba(18, 29, 47, 0.82));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 0.8rem;
+    }
+
+    nav h2 {
+      margin: 0.15rem 0 0.65rem;
+      font-size: 0.98rem;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    nav a {
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(24, 39, 64, 0.45);
+      border: 1px solid rgba(45, 63, 95, 0.55);
+      border-radius: 10px;
+      padding: 0.5rem 0.6rem;
+      font-size: 0.92rem;
+    }
+
+    nav a:hover {
+      border-color: rgba(55, 199, 162, 0.7);
+      transform: translateY(-1px);
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(18, 29, 47, 0.98), rgba(18, 29, 47, 0.82));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: 0.2px;
+    }
+
+    .panel .lead {
+      margin-top: 0.45rem;
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 0.8rem;
+    }
+
+    .card {
+      border: 1px solid rgba(45, 63, 95, 0.75);
+      background: linear-gradient(180deg, rgba(24, 39, 64, 0.78), rgba(24, 39, 64, 0.5));
+      border-radius: 12px;
+      padding: 0.75rem;
+    }
+
+    .card h3 {
+      margin: 0 0 0.45rem;
+      font-size: 1rem;
+    }
+
+    .card p, .card li, .panel li {
+      color: #d4dfef;
+    }
+
+    .card ul, .panel ul, .panel ol {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+    }
+
+    .tiny {
+      font-size: 0.87rem;
+      color: var(--muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.7rem;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.5rem 0.55rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: rgba(24, 39, 64, 0.7);
+      font-weight: 700;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.9em;
+      color: #d9f9ef;
+      background: rgba(55, 199, 162, 0.14);
+      border: 1px solid rgba(55, 199, 162, 0.24);
+      border-radius: 6px;
+      padding: 0.1rem 0.3rem;
+    }
+
+    .notice {
+      border-left: 4px solid var(--accent-2);
+      background: rgba(255, 180, 84, 0.12);
+      padding: 0.7rem 0.8rem;
+      border-radius: 8px;
+      margin-top: 0.65rem;
+    }
+
+    .danger {
+      border-left-color: var(--danger);
+      background: rgba(242, 109, 109, 0.13);
+    }
+
+    .lang-section[hidden] {
+      display: none !important;
+    }
+
+    footer {
+      border-top: 1px solid rgba(159, 178, 204, 0.2);
+      padding: 1.2rem 0 2rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1024px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        position: relative;
+        top: 0;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container topbar">
+      <div class="brand">FrameCode VibeWork</div>
+      <div class="lang-switch" role="group" aria-label="Language selector">
+        <button class="lang-btn" data-lang="pt-BR" aria-pressed="true">PT-BR</button>
+        <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container hero">
+    <h1 id="title">Guia Completo da Aplicação</h1>
+    <p id="subtitle">Esta página explica o funcionamento completo do framework, em português e inglês, com foco em operação real, governança e rastreabilidade.</p>
+    <div class="badges">
+      <span class="badge">Version: V0.5.0+</span>
+      <span class="badge">Type: Framework</span>
+      <span class="badge">Format: Markdown + Git</span>
+      <span class="badge">Audience: Humans + AI Agents</span>
+    </div>
+  </div>
+
+  <div class="container shell">
+    <nav>
+      <h2 id="nav-title">Navegação</h2>
+      <ul id="nav-pt-br">
+        <li><a href="#pt-overview">1) Visão geral</a></li>
+        <li><a href="#pt-problem">2) Problema resolvido</a></li>
+        <li><a href="#pt-lifecycle">3) Ciclo de funcionamento</a></li>
+        <li><a href="#pt-architecture">4) Arquitetura documental</a></li>
+        <li><a href="#pt-governance">5) Governança por planos</a></li>
+        <li><a href="#pt-versioning">6) Versionamento e release</a></li>
+        <li><a href="#pt-ai">7) IA, AICC e ASE</a></li>
+        <li><a href="#pt-security">8) Segurança e dados</a></li>
+        <li><a href="#pt-validation">9) Validação e auditoria</a></li>
+        <li><a href="#pt-pages">10) Publicação no GitHub Pages</a></li>
+        <li><a href="#pt-quickstart">11) Início rápido</a></li>
+      </ul>
+      <ul id="nav-en" hidden>
+        <li><a href="#en-overview">1) Overview</a></li>
+        <li><a href="#en-problem">2) Problem solved</a></li>
+        <li><a href="#en-lifecycle">3) Operating lifecycle</a></li>
+        <li><a href="#en-architecture">4) Document architecture</a></li>
+        <li><a href="#en-governance">5) Plan-driven governance</a></li>
+        <li><a href="#en-versioning">6) Versioning and release</a></li>
+        <li><a href="#en-ai">7) AI, AICC and ASE</a></li>
+        <li><a href="#en-security">8) Security and data</a></li>
+        <li><a href="#en-validation">9) Validation and audit</a></li>
+        <li><a href="#en-pages">10) GitHub Pages publishing</a></li>
+        <li><a href="#en-quickstart">11) Quick start</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="lang-section" data-lang="pt-BR">
+        <article class="panel" id="pt-overview">
+          <h2>1) Visão geral</h2>
+          <p class="lead">FrameCode VibeWork é um framework de desenvolvimento assistido por IA orientado por documentação, criado para reduzir perda de contexto, controlar escopo e padronizar execução técnica entre humanos e agentes.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>O que ele é</h3>
+              <ul>
+                <li>Um framework de governança operacional e técnica.</li>
+                <li>Uma estrutura de memória incremental baseada em Markdown.</li>
+                <li>Um padrão de trabalho com rastreabilidade completa por versão.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>O que ele não é</h3>
+              <ul>
+                <li>Não é um framework de frontend/backend com runtime próprio.</li>
+                <li>Não substitui Git, revisão ou decisão arquitetural humana.</li>
+                <li>Não depende de scripts automáticos para governança.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="pt-problem">
+          <h2>2) Problema resolvido</h2>
+          <p class="lead">Sessões com IA sofrem com perda de contexto, repetição de erros e mudanças sem trilha de auditoria. O framework estrutura esse processo para tornar a execução previsível e auditável.</p>
+          <table>
+            <thead>
+              <tr><th>Dor comum</th><th>Resposta no framework</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Contexto se perde entre sessões</td><td>Síntese AICC em <code>wiki/sessions/</code> e ingestão seletiva.</td></tr>
+              <tr><td>Escopo muda sem controle</td><td>Regra obrigatória de plano em <code>Plans/</code> antes de qualquer modificação.</td></tr>
+              <tr><td>Mudanças sem histórico claro</td><td>Changelog versionado em <code>changelogs/Vx.y.z.md</code>.</td></tr>
+              <tr><td>Conhecimento técnico disperso</td><td>LLM Wiki estruturada em <code>wiki/</code> (patterns, decisions, releases, sessions).</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="pt-lifecycle">
+          <h2>3) Ciclo de funcionamento</h2>
+          <ol>
+            <li><strong>Fase 0:</strong> briefing, escopo, stack e manifesto base.</li>
+            <li><strong>Solicitação:</strong> entrada de demanda (bug, feature, release, refactor).</li>
+            <li><strong>Planejamento:</strong> criação de plano com prioridade, risco, critérios e testes.</li>
+            <li><strong>Execução:</strong> mudanças limitadas ao escopo do plano.</li>
+            <li><strong>Registro:</strong> atualização de changelog e documentos impactados.</li>
+            <li><strong>Validação:</strong> testes proporcionais ao risco + auditoria documental.</li>
+            <li><strong>Memória:</strong> síntese da sessão e atualização da wiki quando houver aprendizado reutilizável.</li>
+          </ol>
+          <div class="notice">Regra central: nenhuma alteração funcional, visual, estrutural ou documental deve ocorrer sem plano correspondente.</div>
+        </article>
+
+        <article class="panel" id="pt-architecture">
+          <h2>4) Arquitetura documental</h2>
+          <p class="lead">A aplicação funciona como uma malha de documentos com responsabilidades explícitas.</p>
+          <table>
+            <thead>
+              <tr><th>Camada</th><th>Documento / Pasta</th><th>Responsabilidade</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Operação</td><td><code>AGENTS.md</code></td><td>Guia principal de execução para humanos e IA.</td></tr>
+              <tr><td>Identidade</td><td><code>MANIFEST.md</code></td><td>Estado oficial, escopo resumido e riscos principais.</td></tr>
+              <tr><td>Mudanças</td><td><code>Plans/</code></td><td>Ciclo de vida de cada alteração.</td></tr>
+              <tr><td>Versões</td><td><code>changelogs/</code></td><td>Registro formal por versão.</td></tr>
+              <tr><td>Memória</td><td><code>wiki/</code></td><td>Conhecimento técnico incremental e navegável.</td></tr>
+              <tr><td>Padrões IA</td><td><code>skills/</code></td><td>Checklists de alta densidade carregados sob demanda.</td></tr>
+              <tr><td>Templates</td><td><code>governance/</code></td><td>Estruturas vazias reutilizáveis para novos projetos.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="pt-governance">
+          <h2>5) Governança por planos</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Fluxo obrigatório</h3>
+              <ol>
+                <li>Criar plano em <code>Plans/pending/</code>.</li>
+                <li>Mover para <code>Plans/in_progress/</code> ao iniciar.</li>
+                <li>Executar somente o escopo aprovado.</li>
+                <li>Atualizar changelog da versão.</li>
+                <li>Fechar plano em <code>Plans/completed/</code> ou <code>discontinued/</code>.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Campos mínimos do plano</h3>
+              <ul>
+                <li>Prioridade <code>P1..P5</code> e risco <code>R1..R5</code></li>
+                <li>Versão atual e esperada</li>
+                <li>Critérios de aceite</li>
+                <li>Plano de testes</li>
+                <li>Status e evidências de validação</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="pt-versioning">
+          <h2>6) Versionamento e release</h2>
+          <p class="lead">O framework segue <code>Vx.y.z</code> e exige changelog para toda mudança em arquivo versionado.</p>
+          <ul>
+            <li><strong>Major:</strong> quebra de compatibilidade, mudança arquitetural ampla.</li>
+            <li><strong>Minor:</strong> novas capacidades e fluxos relevantes.</li>
+            <li><strong>Patch:</strong> correções e melhorias documentais/processuais.</li>
+          </ul>
+          <div class="notice">
+            Estados de release: <code>in_preparation</code>, <code>in_validation</code>, <code>published</code>, <code>canceled</code>.
+          </div>
+          <div class="notice danger">
+            Uma versão só pode ser <code>published</code> quando os planos citados estiverem em <code>Plans/completed/</code> e as validações estiverem registradas.
+          </div>
+        </article>
+
+        <article class="panel" id="pt-ai">
+          <h2>7) IA, AICC e ASE</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>AICC (compressão de contexto)</h3>
+              <ul>
+                <li>Gera síntese cronológica por sessão em <code>wiki/sessions/S*.md</code>.</li>
+                <li>Reduz custo de tokens com handoff estruturado.</li>
+                <li>Permite retomar trabalho sem reprocessar todo o repositório.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>ASE (motor de habilidades)</h3>
+              <ul>
+                <li>Carrega skills sob demanda (JIT), não no prompt inicial.</li>
+                <li>Inclui habilidades de release, lint wiki, commits e formatação.</li>
+                <li>Melhora consistência e reduz ruído de contexto.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="tiny">Referências: <code>AI.md</code>, <code>CONTEXT_MAP.md</code>, <code>skills/README.md</code>, <code>wiki/schema.md</code>.</p>
+        </article>
+
+        <article class="panel" id="pt-security">
+          <h2>8) Segurança e dados</h2>
+          <ul>
+            <li>Não versionar credenciais, dados privados e artefatos temporários.</li>
+            <li>Validar path traversal em qualquer leitura/escrita de caminhos dinâmicos.</li>
+            <li>Manter <code>.env</code> e variantes fora do versionamento (com <code>.env.example</code> permitido).</li>
+            <li>Registrar limitações ou riscos residuais ao fechar planos.</li>
+          </ul>
+        </article>
+
+        <article class="panel" id="pt-validation">
+          <h2>9) Validação e auditoria</h2>
+          <p class="lead">A validação é proporcional ao risco e sempre precisa ser registrada com evidência.</p>
+          <table>
+            <thead>
+              <tr><th>Risco</th><th>Nível mínimo esperado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>R1</code> / <code>R2</code></td><td>Verificações locais + revisão de links/consistência.</td></tr>
+              <tr><td><code>R3</code></td><td>Validação de fluxos compartilhados e regressão local.</td></tr>
+              <tr><td><code>R4</code> / <code>R5</code></td><td>Validações completas com foco em segurança, dados e rollback.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="pt-pages">
+          <h2>10) Publicação no GitHub Pages</h2>
+          <p class="lead">Esta página foi desenhada para publicação estática em <code>docs/index.html</code>.</p>
+          <ol>
+            <li>Acesse <strong>Settings &gt; Pages</strong> no repositório.</li>
+            <li>Em <strong>Build and deployment</strong>, selecione <strong>Deploy from a branch</strong>.</li>
+            <li>Escolha a branch de publicação (normalmente <code>main</code>) e a pasta <code>/docs</code>.</li>
+            <li>Salve e aguarde o deploy automático do GitHub Pages.</li>
+          </ol>
+          <p class="tiny">URL esperada: <code>https://sistema2d.github.io/FrameCode-VibeWork/</code>.</p>
+        </article>
+
+        <article class="panel" id="pt-quickstart">
+          <h2>11) Início rápido</h2>
+          <ol>
+            <li>Clone: <code>git clone https://github.com/Sistema2D/FrameCode-VibeWork.git</code></li>
+            <li>Leia <code>AGENTS.md</code> e <code>CONTEXT_MAP.md</code> antes de iniciar qualquer mudança.</li>
+            <li>Abra/instancie seu projeto seguindo <code>INSTANTIATION.md</code>.</li>
+            <li>Para cada alteração: plano + implementação + changelog + validação + síntese de sessão.</li>
+          </ol>
+          <div class="notice">Resultado prático: mais previsibilidade, menor retrabalho e histórico auditável para qualquer entrega.</div>
+        </article>
+      </section>
+
+      <section class="lang-section" data-lang="en" hidden>
+        <article class="panel" id="en-overview">
+          <h2>1) Overview</h2>
+          <p class="lead">FrameCode VibeWork is a documentation-first framework for AI-assisted development, designed to reduce context loss, enforce scope control, and standardize technical execution across humans and agents.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>What it is</h3>
+              <ul>
+                <li>An operational and technical governance framework.</li>
+                <li>An incremental memory system based on Markdown.</li>
+                <li>A work model with full version-level traceability.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>What it is not</h3>
+              <ul>
+                <li>Not a frontend/backend runtime framework.</li>
+                <li>Not a replacement for Git review or human architectural decisions.</li>
+                <li>Not dependent on automation scripts for governance.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="en-problem">
+          <h2>2) Problem solved</h2>
+          <p class="lead">AI sessions often drift, repeat mistakes, and apply changes without audit trails. This framework structures the process to keep execution predictable and verifiable.</p>
+          <table>
+            <thead>
+              <tr><th>Common pain</th><th>Framework response</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Session context gets lost</td><td>AICC session synthesis in <code>wiki/sessions/</code> plus selective ingestion.</td></tr>
+              <tr><td>Scope changes without control</td><td>Mandatory plan rule in <code>Plans/</code> before any modification.</td></tr>
+              <tr><td>Changes with unclear history</td><td>Versioned changelog in <code>changelogs/Vx.y.z.md</code>.</td></tr>
+              <tr><td>Scattered technical knowledge</td><td>Structured LLM Wiki in <code>wiki/</code> (patterns, decisions, releases, sessions).</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="en-lifecycle">
+          <h2>3) Operating lifecycle</h2>
+          <ol>
+            <li><strong>Phase 0:</strong> briefing, scope, stack, and baseline manifest.</li>
+            <li><strong>Request:</strong> incoming demand (bug, feature, release, refactor).</li>
+            <li><strong>Planning:</strong> create plan with priority, risk, acceptance criteria, and tests.</li>
+            <li><strong>Execution:</strong> apply changes strictly within plan scope.</li>
+            <li><strong>Recording:</strong> update changelog and impacted documents.</li>
+            <li><strong>Validation:</strong> risk-proportional tests plus documentation audit.</li>
+            <li><strong>Memory:</strong> session synthesis and wiki update for reusable knowledge.</li>
+          </ol>
+          <div class="notice">Core rule: no functional, visual, structural, or document change without a corresponding plan.</div>
+        </article>
+
+        <article class="panel" id="en-architecture">
+          <h2>4) Document architecture</h2>
+          <p class="lead">The application operates as a documentation mesh with explicit responsibilities.</p>
+          <table>
+            <thead>
+              <tr><th>Layer</th><th>File / Directory</th><th>Responsibility</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Operations</td><td><code>AGENTS.md</code></td><td>Primary execution guide for humans and AI.</td></tr>
+              <tr><td>Identity</td><td><code>MANIFEST.md</code></td><td>Official state, summarized scope, and key risks.</td></tr>
+              <tr><td>Change control</td><td><code>Plans/</code></td><td>Lifecycle of each change.</td></tr>
+              <tr><td>Version history</td><td><code>changelogs/</code></td><td>Formal per-version record.</td></tr>
+              <tr><td>Memory</td><td><code>wiki/</code></td><td>Incremental and navigable technical knowledge.</td></tr>
+              <tr><td>AI patterns</td><td><code>skills/</code></td><td>High-density checklists loaded on demand.</td></tr>
+              <tr><td>Templates</td><td><code>governance/</code></td><td>Reusable empty structures for new projects.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="en-governance">
+          <h2>5) Plan-driven governance</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Mandatory flow</h3>
+              <ol>
+                <li>Create plan in <code>Plans/pending/</code>.</li>
+                <li>Move to <code>Plans/in_progress/</code> when work starts.</li>
+                <li>Execute only approved scope.</li>
+                <li>Update version changelog.</li>
+                <li>Close in <code>Plans/completed/</code> or <code>discontinued/</code>.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Minimum plan fields</h3>
+              <ul>
+                <li>Priority <code>P1..P5</code> and risk <code>R1..R5</code></li>
+                <li>Current and expected version</li>
+                <li>Acceptance criteria</li>
+                <li>Test plan</li>
+                <li>Status and validation evidence</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="en-versioning">
+          <h2>6) Versioning and release</h2>
+          <p class="lead">The framework follows <code>Vx.y.z</code> and requires changelog updates for every versioned-file modification.</p>
+          <ul>
+            <li><strong>Major:</strong> compatibility breaks and broad architecture changes.</li>
+            <li><strong>Minor:</strong> relevant new capabilities and flows.</li>
+            <li><strong>Patch:</strong> fixes and documentation/process improvements.</li>
+          </ul>
+          <div class="notice">Release states: <code>in_preparation</code>, <code>in_validation</code>, <code>published</code>, <code>canceled</code>.</div>
+          <div class="notice danger">A version can be marked <code>published</code> only when cited plans are in <code>Plans/completed/</code> and validations are documented.</div>
+        </article>
+
+        <article class="panel" id="en-ai">
+          <h2>7) AI, AICC and ASE</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>AICC (context compression)</h3>
+              <ul>
+                <li>Creates chronological synthesis per session in <code>wiki/sessions/S*.md</code>.</li>
+                <li>Reduces token cost via structured handoff.</li>
+                <li>Allows fast continuation without re-reading the entire repository.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>ASE (skills engine)</h3>
+              <ul>
+                <li>Loads skills on demand (JIT), never in the initial prompt.</li>
+                <li>Includes release, wiki lint, commit, and formatting skills.</li>
+                <li>Improves consistency while preserving context window.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="tiny">References: <code>AI.md</code>, <code>CONTEXT_MAP.md</code>, <code>skills/README.md</code>, <code>wiki/schema.md</code>.</p>
+        </article>
+
+        <article class="panel" id="en-security">
+          <h2>8) Security and data</h2>
+          <ul>
+            <li>Do not version credentials, private data, or temporary artifacts.</li>
+            <li>Validate path traversal on any dynamic path read/write workflow.</li>
+            <li>Keep <code>.env</code> and variants out of version control (allow <code>.env.example</code> only).</li>
+            <li>Record limitations and residual risk when closing plans.</li>
+          </ul>
+        </article>
+
+        <article class="panel" id="en-validation">
+          <h2>9) Validation and audit</h2>
+          <p class="lead">Validation is risk-proportional and must be recorded with evidence.</p>
+          <table>
+            <thead>
+              <tr><th>Risk</th><th>Minimum expected level</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>R1</code> / <code>R2</code></td><td>Local checks plus links/consistency review.</td></tr>
+              <tr><td><code>R3</code></td><td>Shared-flow validation and local regression checks.</td></tr>
+              <tr><td><code>R4</code> / <code>R5</code></td><td>Complete validations focused on security, data, and rollback.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="en-pages">
+          <h2>10) GitHub Pages publishing</h2>
+          <p class="lead">This page is designed for static publishing at <code>docs/index.html</code>.</p>
+          <ol>
+            <li>Go to repository <strong>Settings &gt; Pages</strong>.</li>
+            <li>Under <strong>Build and deployment</strong>, choose <strong>Deploy from a branch</strong>.</li>
+            <li>Select the publishing branch (usually <code>main</code>) and <code>/docs</code> folder.</li>
+            <li>Save and wait for GitHub Pages deployment.</li>
+          </ol>
+          <p class="tiny">Expected URL: <code>https://sistema2d.github.io/FrameCode-VibeWork/</code>.</p>
+        </article>
+
+        <article class="panel" id="en-quickstart">
+          <h2>11) Quick start</h2>
+          <ol>
+            <li>Clone: <code>git clone https://github.com/Sistema2D/FrameCode-VibeWork.git</code></li>
+            <li>Read <code>AGENTS.md</code> and <code>CONTEXT_MAP.md</code> before any change.</li>
+            <li>Instantiate your project using <code>INSTANTIATION.md</code>.</li>
+            <li>For every change: plan + implementation + changelog + validation + session synthesis.</li>
+          </ol>
+          <div class="notice">Practical result: higher predictability, lower rework, and auditable delivery history.</div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div>Repository: <a href="https://github.com/Sistema2D/FrameCode-VibeWork" style="color:#9fd5ff;">Sistema2D/FrameCode-VibeWork</a></div>
+      <div class="tiny">This page is static and GitHub Pages compatible by design.</div>
+    </div>
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll('.lang-btn');
+    const sections = document.querySelectorAll('.lang-section');
+    const navPt = document.getElementById('nav-pt-br');
+    const navEn = document.getElementById('nav-en');
+    const navTitle = document.getElementById('nav-title');
+    const title = document.getElementById('title');
+    const subtitle = document.getElementById('subtitle');
+
+    const labels = {
+      'pt-BR': {
+        navTitle: 'Navegação',
+        title: 'Guia Completo da Aplicação',
+        subtitle: 'Esta página explica o funcionamento completo do framework, em português e inglês, com foco em operação real, governança e rastreabilidade.'
+      },
+      en: {
+        navTitle: 'Navigation',
+        title: 'Complete Application Guide',
+        subtitle: 'This page explains the full framework operation in Portuguese and English, focused on real operations, governance, and traceability.'
+      }
+    };
+
+    function setLanguage(lang) {
+      sections.forEach(section => {
+        section.hidden = section.dataset.lang !== lang;
+      });
+
+      buttons.forEach(button => {
+        const active = button.dataset.lang === lang;
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+
+      navPt.hidden = lang !== 'pt-BR';
+      navEn.hidden = lang !== 'en';
+
+      navTitle.textContent = labels[lang].navTitle;
+      title.textContent = labels[lang].title;
+      subtitle.textContent = labels[lang].subtitle;
+
+      localStorage.setItem('fcvw-lang', lang);
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => setLanguage(button.dataset.lang));
+    });
+
+    const savedLanguage = localStorage.getItem('fcvw-lang');
+    if (savedLanguage === 'pt-BR' || savedLanguage === 'en') {
+      setLanguage(savedLanguage);
+    } else {
+      setLanguage('pt-BR');
+    }
+  </script>
+</body>
+</html>

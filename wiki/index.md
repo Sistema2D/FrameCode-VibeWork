@@ -100,6 +100,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 > Record here syntheses that connect multiple sources, decisions, failures, or patterns.
 
 - [[syntheses/S005-framework-optimization-analysis|Framework Optimization & Architectural Analysis]] — In-depth architectural audit proposing 5 major pillars of automation and safety improvements.
+- [[sessions/S009-2026-05-22-github-pages-bilingual-application-page|Session S009 - GitHub Pages Bilingual Application Guide]] — Documentation-focused synthesis for the bilingual public page.
 
 ---
 
