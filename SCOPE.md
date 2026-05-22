@@ -1,99 +1,128 @@
 # SCOPE.md
 
-General scope of the application according to the current state of the project.
+General scope of the FrameCode VibeWork framework according to its current state.
 
-This document describes the purpose, boundaries, modules, screens, and main contents of the application. It does not replace `README.md`, `STACK.md`, `DESIGN.md`, or `PLANNING.md`; its role is to consolidate the functional scope view to guide future analysis, planning, and evolution.
-
-> This is a template. Replace the fields between `<...>` with the actual information of the project.
+This document describes the purpose, boundaries, modules, and main components of the framework. It does not replace `README.md`, `STACK.md`, `DESIGN.md`, or `PLANNING.md`; its role is to consolidate the functional scope view to guide future analysis, planning, and evolution.
 
 ## Overview
 
-`<Describe in two or three sentences what the application is, its main stack, and its execution context.>`
+FrameCode VibeWork (FCVW) is a stack-agnostic, document-based governance framework for AI-assisted application development. It runs entirely in Markdown and Git, requiring no runtime dependencies or automation scripts. It is designed to be forked, cloned, or used as a template for any new software project that uses AI agents as primary implementers.
 
 ## General Objective
 
-`<Describe the main objective of the application in one or two sentences.>`
+Provide a structured, traceable, and token-efficient lifecycle for AI-assisted development — from initial briefing through planning, implementation, validation, release, and incremental knowledge accumulation.
 
 ## Specific Objectives
 
-- `<objective 1>`
-- `<objective 2>`
-- `<objective 3>`
+- Eliminate context loss between AI sessions through compressed session syntheses (AICC)
+- Enforce traceability of every change through a mandatory Plans → Changelog workflow
+- Accumulate reusable technical memory in a structured LLM Wiki (Obsidian-compatible)
+- Reduce AI governance token overhead by 70–80% via selective document loading and JIT skills
+- Provide a clear instantiation path for bootstrapping new projects from the framework
 
 ## Limits of Current Scope
 
-- `<limit 1>`
-- `<limit 2>`
-- `<limit 3>`
+- FCVW does not include application source code — it is stack-agnostic infrastructure
+- Automation scripts are out of scope (deprecated by ADR-0001; pure markdown model adopted)
+- Cloud deployment, CI/CD pipelines, and hosting infrastructure are not part of the framework
+- AI model fine-tuning, RAG embedding pipelines, and vector databases are out of scope
 
 ## High-Level Architecture
 
-### Frontend
+### Governance Layer
 
-`<Describe the technology, main responsibilities, and relevant files. Remove if not applicable.>`
+The core of the framework. All documents at the root (`AGENTS.md`, `MANIFEST.md`, `PLANNING.md`, `AI.md`, etc.) define the rules, methodology, and boundaries for any change. Plans in `Plans/{status}` govern the lifecycle of every modification. Changelogs in `changelogs/` track formal version history.
 
-### Backend
+### AI Skills Engine (ASE)
 
-`<Describe the framework, local port, main endpoints, and relevant modules. Remove if not applicable.>`
+The `skills/` directory hosts SKILL.md files — high-density procedural checklists loaded JIT by AI agents via `view_file` with `IsSkillFile: true`. Skills are never pre-loaded; they are activated only when the active task explicitly triggers their condition. This keeps the base token window lean.
 
-### Local or Remote AI
+**Active skills (V0.5.0):**
+- `obsidian-markdown` — LLM Wiki formatting, wikilinks, and frontmatter standardization
+- `git-conventional-commits` — commit conventions, tagging, and release note generation
+- `wiki-lint` — structural validation of the LLM Wiki (orphans, broken links, frontmatter)
+- `release-checklist` — condensed pre-release, publication, and post-release procedure
 
-`<Describe the runtime, the AI's roles in the application, and usage limits. Remove if not applicable.>`
+### LLM Wiki (Technical Memory)
 
-### Vault / Knowledge Base
+The `wiki/` directory implements the LLM Wiki standard (inspired by Andrej Karpathy's concept). It contains: raw sources, synthesized knowledge pages, an index, a chronological log, AICC session syntheses, and thematic subfolders (patterns, decisions, failures, releases, etc.).
 
-`<Describe the location, format, and structure. Remove if not applicable.>`
+**Key operational cycle:** Ingest → Query → Lint (defined in `wiki/schema.md`)
 
-## Modules and Screens
+### AI Interaction Context Compression (AICC)
 
-### `<Module or screen name 1>`
+Session syntheses stored in `wiki/sessions/S{num}-{date}-{description}.md` compress each working session into a dense, telegraphic handoff document. At the start of each new session, the agent reads the latest synthesis to restore context without rereading all history.
 
-Objective: `<objective>`
+**Estimated token savings:** ~77% reduction vs. raw chat history ingestion.
+
+### Snippets Library
+
+The `snippets/` directory holds reusable UI components, CSS tokens (`tokens.css`), and a visual gallery (`gallery.html`) for projects that include a frontend. It is optional for projects without a UI layer.
+
+### Governance Templates
+
+The `governance/` directory preserves generic, empty templates for all operational processes: plans, ADRs, session syntheses, briefings, data schemas, refactoring records, and release notes. These templates are never filled with project-specific data — they serve as canonical blanks for instantiation.
+
+## Modules and Components
+
+### Root Documents (Governance Layer)
+
+Objective: Define rules, methodology, and identity for the project using this framework.
 
 Content and features:
+- `AGENTS.md` — master operational guide and index; loaded first in every session
+- `MANIFEST.md` — identity, state, scope, stack, risks, gaps, and governance statement
+- `CONTEXT_MAP.md` — session-type selective loading table (token optimization)
+- `PLANNING.md` — mandatory plan methodology (P/R scale, naming, lifecycle)
+- `AI.md` — AICC and ASE operational standards, token efficiency rules
+- `DESIGN.md` — visual rules for projects with UI (HSL palette, glassmorphism, VDA)
+- `VERSIONING.md`, `RELEASE.md`, `AUDIT.md` — release and version lifecycle
 
-- `<item 1>`
-- `<item 2>`
+### Plans Workflow
 
-### Public API and Exported Contracts
-
-`<Remove when not a library or SDK.>`
-
-`<Describe the contracts that external consumers see: exported functions, public endpoints, events, schemas, or interfaces. Changes here require a major version increment.>`
-
-### `<Module or screen name 2>`
-
-Objective: `<objective>`
+Objective: Govern every change with a formal, traceable plan.
 
 Content and features:
+- `Plans/pending/` — approved plans not yet started
+- `Plans/in_progress/` — plans actively being executed
+- `Plans/completed/` — validated and closed plans
+- `Plans/discontinued/` — canceled plans with justification
+- Naming convention: `P{priority}-R{risk}-{date}-{description}.md`
 
-- `<item 1>`
-- `<item 2>`
+### LLM Wiki
 
-## Cross-Cutting Components
+Objective: Accumulate and maintain reusable technical knowledge across sessions.
+
+Content and features:
+- `wiki/schema.md` — structural and operational rules (Ingest/Query/Lint cycle)
+- `wiki/index.md` — navigable map of all knowledge pages
+- `wiki/log.md` — chronological event log
+- `wiki/sessions/` — AICC session syntheses
+- Thematic subfolders: `patterns/`, `decisions/`, `failures/`, `releases/`, `components/`, `prompts/`, `questions/`, `syntheses/`
+
+### Cross-Cutting Components
 
 ### Navigation
 
-`<Describe how the user navigates between screens or modules.>`
+Users navigate between documents via Markdown hyperlinks and Obsidian-style wikilinks. The `CONTEXT_MAP.md` provides a quick reference for which documents to load in each session type.
 
 ### Local Persistence
 
-`<Describe what data is persisted, where, and in what format.>`
+All state is persisted as Markdown files in Git. No database or binary format is used. Session state is compressed into `wiki/sessions/S{num}.md` files.
 
 ### Local Security
 
-`<Describe authentication controls, local token, CORS, and path validation.>`
+No secrets, API keys, or personal data should be stored in the repository. See `SECURITY.md`. The `AI.md` data rules require anonymization of any sensitive path or environment data before committing to `troubleshooting/` or `wiki/`.
 
 ### Build and Execution
 
-`<Describe how to build and execute the application.>`
+No build step required. Clone the repository, open in a Markdown editor (Obsidian recommended for graph view), and begin using the framework with an AI agent following `AGENTS.md`.
 
 ### Document Governance
 
-The application maintains a versioned document layer to guide planning, implementation, validation, release, and continuous learning of the project itself.
+The framework maintains a versioned document layer to guide planning, implementation, validation, release, and continuous learning.
 
 Main components:
-
 - official documents at the root of the repository;
 - plans in `Plans/{status}`;
 - changelogs in `changelogs/`;
@@ -111,3 +140,4 @@ Main components:
 - `TROUBLESHOOTING.md`: failure registration and handling process.
 - `VERSIONING.md`: version, release, and changelog rules.
 - `MANIFEST.md`: identity and governance synthesis of the project.
+- `CONTEXT_MAP.md`: selective loading map by session type.

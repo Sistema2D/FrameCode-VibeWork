@@ -1,0 +1,79 @@
+# CONTEXT_MAP.md
+
+Selective context loading map for AI agents and human contributors.
+
+This document is designed to be the **first document read** in any session — before `AGENTS.md`. It provides a compact, scannable reference for which documents to load (and which to skip) based on session type, minimizing unnecessary token consumption.
+
+> For full operational rules, always consult `AGENTS.md`. This map is a navigation shortcut, not a replacement.
+
+---
+
+## Session Type Reference Table
+
+| Session Type | Load Immediately | Load On Demand | Skip Unless Crossing Domain |
+|---|---|---|---|
+| **Bugfix / Troubleshooting** | `AGENTS.md §checklist`, `TROUBLESHOOTING.md`, `PLANNING.md` | `troubleshooting/<record>`, `wiki/failures/` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
+| **New Feature** | `AGENTS.md §checklist`, `SCOPE.md`, `PLANNING.md` | `DESIGN.md` (if UI), `AI.md` (if AI), `wiki/index.md` | `SECURITY.md`, `REFACTORING.md`, `RELEASE.md` |
+| **UI / Components** | `AGENTS.md §checklist`, `DESIGN.md`, `snippets/README.md` | `snippets/tokens.css`, `wiki/patterns/` | `DATA.md`, `SECURITY.md`, `RELEASE.md` |
+| **Refactoring** | `AGENTS.md §checklist`, `REFACTORING.md`, `PLANNING.md` | `wiki/refactorings/`, `TESTS.md` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
+| **Release** | `AGENTS.md §checklist`, `skill:release-checklist` | `VERSIONING.md`, `AUDIT.md`, `RELEASE.md` | `DESIGN.md`, `REFACTORING.md` |
+| **Briefing / Instantiation** | `AGENTS.md §checklist`, `INSTANTIATION.md`, `BRIEFING.md` | `MANIFEST.md`, `SCOPE.md`, `STACK.md` | `REFACTORING.md`, `RELEASE.md` |
+| **Wiki / Knowledge** | `AGENTS.md §checklist`, `wiki/schema.md`, `wiki/index.md` | `skill:wiki-lint`, `wiki/log.md` | `DESIGN.md`, `DATA.md`, `SECURITY.md` |
+| **Security / Data** | `AGENTS.md §checklist`, `SECURITY.md`, `DATA.md` | `AI.md`, `TESTS.md` | `DESIGN.md`, `REFACTORING.md` |
+| **Document Audit** | `AGENTS.md §checklist`, `MANIFEST.md`, `AUDIT.md` | `wiki/index.md`, `changelogs/` | `DESIGN.md`, `DATA.md` |
+| **Git / Commit / Tag** | `skill:git-conventional-commits` | `VERSIONING.md` | Most governance docs |
+
+---
+
+## Skills Quick Reference
+
+| Skill | Trigger Keywords | Size Saved vs. Full Docs |
+|---|---|---|
+| `skills/git-conventional-commits/SKILL.md` | commit, tag, push, release notes | Replaces ad-hoc reinstructions |
+| `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages | ~275 lines vs. reading schema.md §12 |
+| `skills/release-checklist/SKILL.md` | release, publish, version bump | ~2.7k tokens vs. RELEASE+VERSIONING+AUDIT |
+| `skills/obsidian-markdown/SKILL.md` | wikilink, frontmatter, Obsidian note | Replaces ad-hoc formatting instructions |
+
+---
+
+## AICC Session Ingestion Quick Steps
+
+1. List `wiki/sessions/` → identify file with highest `S{num}`
+2. Read that file only
+3. Align with: completed tasks, active next steps, open risks
+4. Confirm alignment to user before starting work
+
+---
+
+## Document Size Reference (V0.5.0)
+
+> Use to make informed decisions about what to load. Larger files cost more tokens.
+
+| Document | Size | Load Priority |
+|---|---|---|
+| `AGENTS.md` | ~12 KB | Always (first) |
+| `REFACTORING.md` | ~14 KB | On demand |
+| `AI.md` | ~11 KB | On demand (AI sessions) |
+| `README.md` | ~13 KB | Rarely (orientation only) |
+| `wiki/schema.md` | ~9 KB | Use `skill:wiki-lint` instead |
+| `SECURITY.md` | ~7 KB | On demand (security sessions) |
+| `DESIGN.md` | ~7 KB | On demand (UI sessions) |
+| `TESTS.md` | ~7 KB | On demand |
+| `MANIFEST.md` | ~10 KB | On demand (audit / identity) |
+| `DATA.md` | ~9 KB | On demand (persistence sessions) |
+| `SCOPE.md` | ~4 KB | On demand (new feature) |
+| `PLANNING.md` | ~3 KB | Most sessions |
+| `TROUBLESHOOTING.md` | ~5 KB | Bugfix sessions |
+| `VERSIONING.md` | ~5 KB | Use `skill:release-checklist` instead |
+| `RELEASE.md` | ~3 KB | Use `skill:release-checklist` instead |
+| `AUDIT.md` | ~4 KB | Use `skill:release-checklist` instead |
+| `CONTEXT_MAP.md` | ~3 KB | Always first (this file) |
+
+---
+
+## Related Documents
+
+- `AGENTS.md` — full operational guide, checklists, and document index
+- `AI.md §Token Efficiency` — detailed token optimization rules
+- `skills/README.md` — skills catalog and usage guidelines
+- `wiki/sessions/` — AICC session syntheses (latest = current context)

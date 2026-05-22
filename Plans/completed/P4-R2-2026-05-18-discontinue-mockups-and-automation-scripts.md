@@ -15,13 +15,13 @@
 - **Affected files:**
   - `mockups/` (Deleted)
   - `governance/scripts/sync-filesystem.ps1` (Deleted)
-  - [`DESIGN.md`](file:///c:/Users/meloha/Desktop/FCVW/DESIGN.md) (Modified)
-  - [`decisions/ADR-0001-pure-markdown-over-automation-scripts.md`](file:///c:/Users/meloha/Desktop/FCVW/decisions/ADR-0001-pure-markdown-over-automation-scripts.md) (Created)
-  - [`AGENTS.md`](file:///c:/Users/meloha/Desktop/FCVW/AGENTS.md) (Modified)
-  - [`MANIFEST.md`](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md) (Modified)
-  - [`STACK.md`](file:///c:/Users/meloha/Desktop/FCVW/STACK.md) (Modified)
-  - [`README.md`](file:///c:/Users/meloha/Desktop/FCVW/README.md) (Modified)
-  - [`changelogs/V0.4.0.md`](file:///c:/Users/meloha/Desktop/FCVW/changelogs/V0.4.0.md) (Created)
+  - [`DESIGN.md`](../../DESIGN.md) (Modified)
+  - [`decisions/ADR-0001-pure-markdown-over-automation-scripts.md`](../../decisions/ADR-0001-pure-markdown-over-automation-scripts.md) (Created)
+  - [`AGENTS.md`](../../AGENTS.md) (Modified)
+  - [`MANIFEST.md`](../../MANIFEST.md) (Modified)
+  - [`STACK.md`](../../STACK.md) (Modified)
+  - [`README.md`](../../README.md) (Modified)
+  - [`changelogs/V0.4.0.md`](../../changelogs/V0.4.0.md) (Created)
 - **Implementation plan:**
   1. Create the ADR record `decisions/ADR-0001-pure-markdown-over-automation-scripts.md`.
   2. Physically delete the `mockups/` folder and `governance/scripts/sync-filesystem.ps1` script.
@@ -65,3 +65,5 @@
 
 ### Final Result
 `approved`
+
+

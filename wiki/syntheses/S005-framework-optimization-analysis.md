@@ -42,9 +42,9 @@ This document contains a comprehensive technical and structural audit of the **F
 * **Impact**: Saves ~10 minutes per minor feature release, eliminates developer formatting errors, and ensures pristine procedural compliance.
 
 ### 🔍 Pillar 2: Linter & Obsidian Bidirectional Graph Validator
-* **Problem**: Obsidian markdown files heavily rely on `[[wikilinks]]` for internal navigation. In larger wikis, it is common to have orphaned pages, broken links, or missing concept pages.
+* **Problem**: Obsidian markdown files heavily rely on `[ [wikilinks] ]` for internal navigation. In larger wikis, it is common to have orphaned pages, broken links, or missing concept pages.
 * **Proposed Optimization**: Implement `governance/scripts/lint-wiki.ps1`:
-  1. **Link Verification**: Scans the `/wiki/` directory and parses all `[[Target]]` links. Checks if the destination file physically exists.
+  1. **Link Verification**: Scans the `/wiki/` directory and parses all `[ [Target] ]` links. Checks if the destination file physically exists.
   2. **Taxonomy Enforcement**: Assures that all files in `wiki/` (except READMEs) have valid YAML frontmatter containing the mandatory schema keys (`type`, `status`, `confidence`, `last_reviewed`, `related_version`).
   3. **Orphan Finder**: Lists files with zero incoming internal wikilinks to ensure they are connected to `wiki/index.md`.
 * **Impact**: Maintains a pristine Obsidian graph view and ensures flawless RAG parsing accuracy for subsequent AI agents.

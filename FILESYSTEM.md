@@ -19,7 +19,7 @@ tags:
 
 This document defines the physical directory structure of the application. It serves as the single source of truth for the file organization, ensuring absolute consistency between design rules, stack requirements, and physical implementation.
 
-In accordance with [ADR-0001](file:///c:/Users/meloha/Desktop/FCVW/decisions/ADR-0001-pure-markdown-over-automation-scripts.md), this directory layout is maintained purely declaratively in Markdown and verified manually by agents, eliminating dependencies on local environment scripts.
+In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-scripts.md), this directory layout is maintained purely declaratively in Markdown and verified manually by agents, eliminating dependencies on local environment scripts.
 
 ---
 
@@ -151,13 +151,13 @@ In accordance with [ADR-0001](file:///c:/Users/meloha/Desktop/FCVW/decisions/ADR
 
 | Path | Primary Role | Stakeholders / Sources | Git Ignored? |
 |---|---|---|---|
-| `/Plans/` | Contains chronological implementation change plans. | [PLANNING.md](file:///c:/Users/meloha/Desktop/FCVW/PLANNING.md) | No |
-| `/decisions/` | Stores formal Architectural Decision Records (ADRs). | [ARCHITECTURAL_DECISIONS.md](file:///c:/Users/meloha/Desktop/FCVW/ARCHITECTURAL_DECISIONS.md) | No |
-| `/changelogs/` | Formal versions releases notes (`Vx.y.z.md`). | [VERSIONING.md](file:///c:/Users/meloha/Desktop/FCVW/VERSIONING.md) | No |
-| `/governance/` | Reusable empty blueprint templates. | [INSTANTIATION.md](file:///c:/Users/meloha/Desktop/FCVW/INSTANTIATION.md) | No |
-| `/snippets/` | Shared catalog of premade CSS/JS UI snippets. | [DESIGN.md](file:///c:/Users/meloha/Desktop/FCVW/DESIGN.md) | No |
-| `/wiki/` | Continuous technical learning vault of the project. | [AI.md](file:///c:/Users/meloha/Desktop/FCVW/AI.md) / `wiki/schema.md` | No |
-| `/data/` | Stores local SQLite database and backups. | [DATA.md](file:///c:/Users/meloha/Desktop/FCVW/DATA.md) | **Yes** (strict) |
+| `/Plans/` | Contains chronological implementation change plans. | [PLANNING.md](PLANNING.md) | No |
+| `/decisions/` | Stores formal Architectural Decision Records (ADRs). | [ARCHITECTURAL_DECISIONS.md](ARCHITECTURAL_DECISIONS.md) | No |
+| `/changelogs/` | Formal versions releases notes (`Vx.y.z.md`). | [VERSIONING.md](VERSIONING.md) | No |
+| `/governance/` | Reusable empty blueprint templates. | [INSTANTIATION.md](INSTANTIATION.md) | No |
+| `/snippets/` | Shared catalog of premade CSS/JS UI snippets. | [DESIGN.md](DESIGN.md) | No |
+| `/wiki/` | Continuous technical learning vault of the project. | [AI.md](AI.md) / `wiki/schema.md` | No |
+| `/data/` | Stores local SQLite database and backups. | [DATA.md](DATA.md) | **Yes** (strict) |
 
 ---
 
@@ -166,3 +166,5 @@ In accordance with [ADR-0001](file:///c:/Users/meloha/Desktop/FCVW/decisions/ADR
 1. **AI Checkpoints:** Whenever a new feature is requested, the AI must check `FILESYSTEM.md` before writing code to confirm where the new files belong.
 2. **Declarative Layout Integrity:** Visual trees in `FILESYSTEM.md` and `README.md` must be updated manually by the agent whenever files are added or deleted.
 3. **Audit Closure:** The final step of any plan that alters directories is a manual verification of this document's visual tree.
+
+

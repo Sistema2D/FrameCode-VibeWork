@@ -4,26 +4,26 @@
 - **Justification:** Gives developers clear visibility into API costs and highlights the concrete token-saving benefits of the AICC system.
 - **Objective:** Establish bilingual token footprint tables inside the core documentation files.
 - **Scope:**
-  - Update [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md) to add "Token Footprint" sections in Portuguese and English.
-  - Update [AI.md](file:///c:/Users/meloha/Desktop/FCVW/AI.md) to link to these estimates under the AICC guidelines.
-  - Update [MANIFEST.md](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md) and [STACK.md](file:///c:/Users/meloha/Desktop/FCVW/STACK.md) to bump the version to `V0.2.1`.
+  - Update [README.md](../../README.md) to add "Token Footprint" sections in Portuguese and English.
+  - Update [AI.md](../../AI.md) to link to these estimates under the AICC guidelines.
+  - Update [MANIFEST.md](../../MANIFEST.md) and [STACK.md](../../STACK.md) to bump the version to `V0.2.1`.
   - Create the version `V0.2.1` changelog.
 - **Affected files:**
-  - [`README.md`](file:///c:/Users/meloha/Desktop/FCVW/README.md)
-  - [`AI.md`](file:///c:/Users/meloha/Desktop/FCVW/AI.md)
-  - [`MANIFEST.md`](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md)
-  - [`STACK.md`](file:///c:/Users/meloha/Desktop/FCVW/STACK.md)
-  - [`changelogs/V0.2.1.md`](file:///c:/Users/meloha/Desktop/FCVW/changelogs/V0.2.1.md)
+  - [`README.md`](../../README.md)
+  - [`AI.md`](../../AI.md)
+  - [`MANIFEST.md`](../../MANIFEST.md)
+  - [`STACK.md`](../../STACK.md)
+  - [`changelogs/V0.2.1.md`](../../changelogs/V0.2.1.md)
 - **Implementation plan:**
-  1. Add Portuguese token estimations section to the Portuguese part of [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md).
-  2. Add English token estimations section to the English part of [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md).
-  3. Edit [AI.md](file:///c:/Users/meloha/Desktop/FCVW/AI.md) to integrate cross-links to these metrics.
-  4. Edit [MANIFEST.md](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md) and [STACK.md](file:///c:/Users/meloha/Desktop/FCVW/STACK.md) to bump the version to `V0.2.1`.
+  1. Add Portuguese token estimations section to the Portuguese part of [README.md](../../README.md).
+  2. Add English token estimations section to the English part of [README.md](../../README.md).
+  3. Edit [AI.md](../../AI.md) to integrate cross-links to these metrics.
+  4. Edit [MANIFEST.md](../../MANIFEST.md) and [STACK.md](../../STACK.md) to bump the version to `V0.2.1`.
   5. Automatically synchronize tree architecture via `sync-filesystem.ps1`.
   6. Create `changelogs/V0.2.1.md`.
   7. Validate criteria and finalize plan into `Plans/completed/`.
 - **Acceptance criteria:**
-  - [x] Bilingual token footprint tables exist in [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md).
+  - [x] Bilingual token footprint tables exist in [README.md](../../README.md).
   - [x] Tables compare "Custo Inicial" vs "Custo Com AICC" accurately.
   - [x] `AI.md` references the README token metrics table.
   - [x] Version `V0.2.1` is declared in `MANIFEST.md`, `STACK.md`, and the changelogs.
@@ -55,3 +55,5 @@
 
 ### Final Result
 `approved`
+
+

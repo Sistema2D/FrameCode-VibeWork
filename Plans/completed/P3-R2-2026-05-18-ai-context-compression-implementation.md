@@ -6,24 +6,24 @@
 - **Scope:**
   - Create the empty template `governance/TEMPLATE_AI_SESSION_SYNTHESIS.md`.
   - Create `wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md` and the `wiki/sessions/` folder with a basic `README.md`.
-  - Update [AGENTS.md](file:///c:/Users/meloha/Desktop/FCVW/AGENTS.md) to integrate AICC check/update into initial and final checklists.
-  - Update [AI.md](file:///c:/Users/meloha/Desktop/FCVW/AI.md) to define operational standards for AI session context compression.
-  - Update [MANIFEST.md](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md) to track folders, capability, and manifest version update.
+  - Update [AGENTS.md](../../AGENTS.md) to integrate AICC check/update into initial and final checklists.
+  - Update [AI.md](../../AI.md) to define operational standards for AI session context compression.
+  - Update [MANIFEST.md](../../MANIFEST.md) to track folders, capability, and manifest version update.
   - Create the `changelogs/V0.2.0.md` file recording all changes.
 - **Affected files:**
-  - [`governance/TEMPLATE_AI_SESSION_SYNTHESIS.md`](file:///c:/Users/meloha/Desktop/FCVW/governance/TEMPLATE_AI_SESSION_SYNTHESIS.md)
-  - [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](file:///c:/Users/meloha/Desktop/FCVW/wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md)
-  - [`wiki/sessions/README.md`](file:///c:/Users/meloha/Desktop/FCVW/wiki/sessions/README.md)
-  - [`AGENTS.md`](file:///c:/Users/meloha/Desktop/FCVW/AGENTS.md)
-  - [`AI.md`](file:///c:/Users/meloha/Desktop/FCVW/AI.md)
-  - [`MANIFEST.md`](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md)
-  - [`changelogs/V0.2.0.md`](file:///c:/Users/meloha/Desktop/FCVW/changelogs/V0.2.0.md)
+  - [`governance/TEMPLATE_AI_SESSION_SYNTHESIS.md`](../../governance/TEMPLATE_AI_SESSION_SYNTHESIS.md)
+  - [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](../../wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md)
+  - [`wiki/sessions/README.md`](../../wiki/sessions/README.md)
+  - [`AGENTS.md`](../../AGENTS.md)
+  - [`AI.md`](../../AI.md)
+  - [`MANIFEST.md`](../../MANIFEST.md)
+  - [`changelogs/V0.2.0.md`](../../changelogs/V0.2.0.md)
 - **Implementation plan:**
   1. Create the template files in `governance/` and `wiki/templates/`.
   2. Create the `wiki/sessions/` directory and populate its initial `README.md`.
-  3. Edit [AI.md](file:///c:/Users/meloha/Desktop/FCVW/AI.md) to define AICC specifications.
-  4. Edit [AGENTS.md](file:///c:/Users/meloha/Desktop/FCVW/AGENTS.md) to update initial and final checklists.
-  5. Edit [MANIFEST.md](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md) to register changes and bump project version to `V0.2.0`.
+  3. Edit [AI.md](../../AI.md) to define AICC specifications.
+  4. Edit [AGENTS.md](../../AGENTS.md) to update initial and final checklists.
+  5. Edit [MANIFEST.md](../../MANIFEST.md) to register changes and bump project version to `V0.2.0`.
   6. Create `changelogs/V0.2.0.md`.
   7. Validate the implementation against all acceptance criteria.
 - **Acceptance criteria:**
@@ -62,3 +62,5 @@
 
 ### Final Result
 `approved`
+
+
