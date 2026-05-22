@@ -198,3 +198,33 @@ This file must be treated as append-first history: prefer adding new records ove
 - Pages obsolete: none.
 - Result: Local-model guidance consolidated across public documentation surfaces; lifecycle diagram synchronized with current framework operation.
 - Gaps: none.
+
+## [2026-05-22 16:45] synthesis | Session S011 Pages Header + 4-Language Expansion
+
+- Source: `Plans/completed/P3-R2-2026-05-22-pages-header-language-expansion-and-outline-renumbering.md`.
+- Executed action: Updated GitHub Pages header UX with flag-based language selector and support button, changed page title, removed slogan, migrated outline labels to hierarchical numbering, and added ES/DE sections.
+- Pages created:
+  - `wiki/sessions/S011-2026-05-22-pages-header-language-expansion-and-outline-renumbering.md`
+- Pages updated:
+  - `docs/index.html`
+  - `changelogs/V0.5.1.md`
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: Public page now supports PT-BR/EN/ES/DE selection with consistent anchors and updated header interactions.
+- Gaps: none.
+
+## [2026-05-22 18:10] synthesis | Session S012 Pages Accordion + AGENTS-First Guidance
+
+- Source: `Plans/completed/P3-R2-2026-05-22-pages-accordion-quickstart-flowchart-and-es-de-parity.md`.
+- Executed action: Refined GitHub Pages UX/content by removing extra header badges, converting nav to single-open accordions, replacing lifecycle prose with flowcharts, shifting quick-start to AGENTS.md-first prompting, and expanding ES/DE to full topical parity.
+- Pages created:
+  - `wiki/sessions/S012-2026-05-22-pages-accordion-quickstart-flowchart-and-es-de-parity.md`
+- Pages updated:
+  - `docs/index.html`
+  - `changelogs/V0.5.1.md`
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: Public page is now more direct for human users with stronger multilingual consistency and guided AI-first workflow.
+- Gaps: Browser plugin visual QA tool was not callable in this session; validation relied on structural/script checks.

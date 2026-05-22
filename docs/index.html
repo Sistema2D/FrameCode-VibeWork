@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FrameCode VibeWork - Complete Application Guide</title>
-  <meta name="description" content="Complete bilingual guide (PT-BR and EN) for the FrameCode VibeWork framework.">
+  <title>FrameCode VibeWork - Complete Framework Guide</title>
+  <meta name="description" content="Complete multilingual guide (PT-BR, EN, ES, DE) for the FrameCode VibeWork framework.">
   <style>
   :root {
     --bg: #ffffff;
@@ -62,6 +62,12 @@
     color: #ffffff;
   }
 
+  .topbar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
   .lang-switch {
     display: inline-flex;
     background: transparent;
@@ -74,11 +80,13 @@
     border: 0;
     background: transparent;
     color: #ffffff;
-    padding: 0.5rem 0.9rem;
+    padding: 0.5rem 0.65rem;
     font-weight: 700;
     cursor: pointer;
     transition: 140ms ease;
     border-right: 1px solid var(--line-strong);
+    line-height: 1;
+    min-width: 2.25rem;
   }
 
   .lang-btn:last-child {
@@ -88,6 +96,25 @@
   .lang-btn[aria-pressed="true"] {
     background: var(--accent);
     color: #000000;
+  }
+
+  .flag-icon {
+    font-size: 1.05rem;
+  }
+
+  .coffee-btn {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .coffee-btn img {
+    display: block;
+    height: 33px;
+    width: auto;
   }
 
   .hero {
@@ -106,6 +133,10 @@
     margin: 0;
     color: var(--muted);
     max-width: 80ch;
+  }
+
+  #subtitle:empty {
+    display: none;
   }
 
   .badges {
@@ -152,15 +183,51 @@
     letter-spacing: 0;
   }
 
-  nav ul {
+  .nav-language {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .nav-group {
+    border: 1px solid var(--line);
+    background: #ffffff;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .nav-group summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.55rem 0.65rem;
+    font-size: 0.87rem;
+    font-weight: 700;
+    color: #000000;
+    background: var(--surface-soft);
+  }
+
+  .nav-group summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-group summary::after {
+    content: "+";
+    float: right;
+    font-weight: 700;
+  }
+
+  .nav-group[open] summary::after {
+    content: "-";
+  }
+
+  .nav-group ul {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0.35rem;
     display: grid;
     gap: 0.25rem;
   }
 
-  nav a {
+  .nav-group a {
     display: block;
     text-decoration: none;
     color: #000000;
@@ -171,7 +238,7 @@
     font-size: 0.92rem;
   }
 
-  nav a:hover {
+  .nav-group a:hover {
     border-color: var(--accent);
     color: #000000;
   }
@@ -283,6 +350,45 @@
     margin-top: 0.65rem;
   }
 
+  .flowchart {
+    margin-top: 0.7rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .flow-step {
+    border: 1px solid var(--line);
+    background: #ffffff;
+    border-radius: var(--radius);
+    padding: 0.6rem 0.7rem;
+  }
+
+  .flow-step strong {
+    display: block;
+    color: #000000;
+  }
+
+  .flow-step span {
+    color: #333333;
+    font-size: 0.92rem;
+  }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--accent-dark);
+    font-weight: 700;
+    line-height: 1;
+    font-size: 1rem;
+  }
+
+  .flow-loop {
+    border: 1px dashed var(--line-strong);
+    background: #fafafa;
+    border-radius: var(--radius);
+    padding: 0.55rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
   .danger {
     border-left-color: var(--danger);
     background: var(--danger-bg);
@@ -316,6 +422,16 @@
     .grid-2 {
       grid-template-columns: 1fr;
     }
+
+    .topbar {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .topbar-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 </style>
 </head>
@@ -323,61 +439,153 @@
   <header>
     <div class="container topbar">
       <div class="brand">FrameCode VibeWork</div>
-      <div class="lang-switch" role="group" aria-label="Language selector">
-        <button class="lang-btn" data-lang="pt-BR" aria-pressed="true">PT-BR</button>
-        <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      <div class="topbar-actions">
+        <div class="lang-switch" role="group" aria-label="Language selector">
+          <button class="lang-btn" data-lang="pt-BR" aria-pressed="true" aria-label="Português do Brasil" title="Português do Brasil"><span class="flag-icon" aria-hidden="true">🇧🇷</span></button>
+          <button class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English" title="English"><span class="flag-icon" aria-hidden="true">🇬🇧</span></button>
+          <button class="lang-btn" data-lang="es" aria-pressed="false" aria-label="Español" title="Español"><span class="flag-icon" aria-hidden="true">🇪🇸</span></button>
+          <button class="lang-btn" data-lang="de" aria-pressed="false" aria-label="Deutsch" title="Deutsch"><span class="flag-icon" aria-hidden="true">🇩🇪</span></button>
+        </div>
+        <a class="coffee-btn" href="https://www.buymeacoffee.com/hugomelovek" target="_blank" rel="noopener noreferrer" aria-label="Buy me a coffee" title="Buy me a coffee">
+          <img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=hugomelovek&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy me a coffee">
+        </a>
       </div>
     </div>
   </header>
 
   <div class="container hero">
-    <h1 id="title">Guia Completo da Aplicação</h1>
-    <p id="subtitle">Esta página explica o funcionamento completo do framework, em português e inglês, com foco em operação real, governança e rastreabilidade.</p>
+    <h1 id="title">Guia Completo do Framework</h1>
+    <p id="subtitle"></p>
     <div class="badges">
       <span class="badge">Version: V0.5.0+</span>
-      <span class="badge">Type: Framework</span>
-      <span class="badge">Format: Markdown + Git</span>
-      <span class="badge">Audience: Humans + AI Agents</span>
     </div>
   </div>
 
   <div class="container shell">
     <nav>
       <h2 id="nav-title">Navegação</h2>
-      <ul id="nav-pt-br">
-        <li><a href="#pt-overview">1) Visão geral</a></li>
-        <li><a href="#pt-problem">2) Problema resolvido</a></li>
-        <li><a href="#pt-lifecycle">3) Ciclo de funcionamento</a></li>
-        <li><a href="#pt-architecture">4) Arquitetura documental</a></li>
-        <li><a href="#pt-governance">5) Governança por planos</a></li>
-        <li><a href="#pt-versioning">6) Versionamento e release</a></li>
-        <li><a href="#pt-ai">7) IA, AICC e ASE</a></li>
-        <li><a href="#pt-local-models">8) Modelos locais: parâmetros e contexto</a></li>
-        <li><a href="#pt-security">9) Segurança e dados</a></li>
-        <li><a href="#pt-validation">10) Validação e auditoria</a></li>
-        <li><a href="#pt-pages">11) Publicação no GitHub Pages</a></li>
-        <li><a href="#pt-quickstart">12) Início rápido</a></li>
-      </ul>
-      <ul id="nav-en" hidden>
-        <li><a href="#en-overview">1) Overview</a></li>
-        <li><a href="#en-problem">2) Problem solved</a></li>
-        <li><a href="#en-lifecycle">3) Operating lifecycle</a></li>
-        <li><a href="#en-architecture">4) Document architecture</a></li>
-        <li><a href="#en-governance">5) Plan-driven governance</a></li>
-        <li><a href="#en-versioning">6) Versioning and release</a></li>
-        <li><a href="#en-ai">7) AI, AICC and ASE</a></li>
-        <li><a href="#en-local-models">8) Local models: parameters and context</a></li>
-        <li><a href="#en-security">9) Security and data</a></li>
-        <li><a href="#en-validation">10) Validation and audit</a></li>
-        <li><a href="#en-pages">11) GitHub Pages publishing</a></li>
-        <li><a href="#en-quickstart">12) Quick start</a></li>
-      </ul>
+      <div id="nav-pt-br" class="nav-language">
+        <details class="nav-group" open>
+          <summary>1. Fundamentos</summary>
+          <ul>
+            <li><a href="#pt-overview">1.1 Visão geral</a></li>
+            <li><a href="#pt-problem">1.2 Problema resolvido</a></li>
+            <li><a href="#pt-lifecycle">1.3 Ciclo de funcionamento</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>2. Governança e Operação</summary>
+          <ul>
+            <li><a href="#pt-architecture">2.1 Arquitetura documental</a></li>
+            <li><a href="#pt-governance">2.2 Governança por planos</a></li>
+            <li><a href="#pt-versioning">2.3 Versionamento e release</a></li>
+            <li><a href="#pt-ai">2.4 IA, AICC e ASE</a></li>
+            <li><a href="#pt-local-models">2.5 Modelos locais: parâmetros e contexto</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>3. Controles e Publicação</summary>
+          <ul>
+            <li><a href="#pt-security">3.1 Segurança e dados</a></li>
+            <li><a href="#pt-validation">3.2 Validação e auditoria</a></li>
+            <li><a href="#pt-pages">3.3 Publicação no GitHub Pages</a></li>
+            <li><a href="#pt-quickstart">3.4 Início rápido</a></li>
+          </ul>
+        </details>
+      </div>
+      <div id="nav-en" class="nav-language" hidden>
+        <details class="nav-group" open>
+          <summary>1. Foundations</summary>
+          <ul>
+            <li><a href="#en-overview">1.1 Overview</a></li>
+            <li><a href="#en-problem">1.2 Problem solved</a></li>
+            <li><a href="#en-lifecycle">1.3 Operating lifecycle</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>2. Governance and Operations</summary>
+          <ul>
+            <li><a href="#en-architecture">2.1 Document architecture</a></li>
+            <li><a href="#en-governance">2.2 Plan-driven governance</a></li>
+            <li><a href="#en-versioning">2.3 Versioning and release</a></li>
+            <li><a href="#en-ai">2.4 AI, AICC and ASE</a></li>
+            <li><a href="#en-local-models">2.5 Local models: parameters and context</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>3. Controls and Publishing</summary>
+          <ul>
+            <li><a href="#en-security">3.1 Security and data</a></li>
+            <li><a href="#en-validation">3.2 Validation and audit</a></li>
+            <li><a href="#en-pages">3.3 GitHub Pages publishing</a></li>
+            <li><a href="#en-quickstart">3.4 Quick start</a></li>
+          </ul>
+        </details>
+      </div>
+      <div id="nav-es" class="nav-language" hidden>
+        <details class="nav-group" open>
+          <summary>1. Fundamentos</summary>
+          <ul>
+            <li><a href="#es-overview">1.1 Resumen general</a></li>
+            <li><a href="#es-problem">1.2 Problema resuelto</a></li>
+            <li><a href="#es-lifecycle">1.3 Ciclo operativo</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>2. Gobernanza y Operación</summary>
+          <ul>
+            <li><a href="#es-architecture">2.1 Arquitectura documental</a></li>
+            <li><a href="#es-governance">2.2 Gobernanza por planes</a></li>
+            <li><a href="#es-versioning">2.3 Versionado y release</a></li>
+            <li><a href="#es-ai">2.4 IA, AICC y ASE</a></li>
+            <li><a href="#es-local-models">2.5 Modelos locales: parámetros y contexto</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>3. Controles y Publicación</summary>
+          <ul>
+            <li><a href="#es-security">3.1 Seguridad y datos</a></li>
+            <li><a href="#es-validation">3.2 Validación y auditoría</a></li>
+            <li><a href="#es-pages">3.3 Publicación en GitHub Pages</a></li>
+            <li><a href="#es-quickstart">3.4 Inicio rápido</a></li>
+          </ul>
+        </details>
+      </div>
+      <div id="nav-de" class="nav-language" hidden>
+        <details class="nav-group" open>
+          <summary>1. Grundlagen</summary>
+          <ul>
+            <li><a href="#de-overview">1.1 Überblick</a></li>
+            <li><a href="#de-problem">1.2 Gelöstes Problem</a></li>
+            <li><a href="#de-lifecycle">1.3 Betriebsablauf</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>2. Governance und Betrieb</summary>
+          <ul>
+            <li><a href="#de-architecture">2.1 Dokumentenarchitektur</a></li>
+            <li><a href="#de-governance">2.2 Planbasierte Governance</a></li>
+            <li><a href="#de-versioning">2.3 Versionierung und Release</a></li>
+            <li><a href="#de-ai">2.4 KI, AICC und ASE</a></li>
+            <li><a href="#de-local-models">2.5 Lokale Modelle: Parameter und Kontext</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>3. Kontrollen und Veröffentlichung</summary>
+          <ul>
+            <li><a href="#de-security">3.1 Sicherheit und Daten</a></li>
+            <li><a href="#de-validation">3.2 Validierung und Audit</a></li>
+            <li><a href="#de-pages">3.3 Veröffentlichung auf GitHub Pages</a></li>
+            <li><a href="#de-quickstart">3.4 Schnellstart</a></li>
+          </ul>
+        </details>
+      </div>
     </nav>
 
     <main>
       <section class="lang-section" data-lang="pt-BR">
         <article class="panel" id="pt-overview">
-          <h2>1) Visão geral</h2>
+          <h2>1.1 Visão geral</h2>
           <p class="lead">FrameCode VibeWork é um framework de desenvolvimento assistido por IA orientado por documentação, criado para reduzir perda de contexto, controlar escopo e padronizar execução técnica entre humanos e agentes.</p>
           <div class="grid-2">
             <div class="card">
@@ -400,7 +608,7 @@
         </article>
 
         <article class="panel" id="pt-problem">
-          <h2>2) Problema resolvido</h2>
+          <h2>1.2 Problema resolvido</h2>
           <p class="lead">Sessões com IA sofrem com perda de contexto, repetição de erros e mudanças sem trilha de auditoria. O framework estrutura esse processo para tornar a execução previsível e auditável.</p>
           <table>
             <thead>
@@ -416,21 +624,31 @@
         </article>
 
         <article class="panel" id="pt-lifecycle">
-          <h2>3) Ciclo de funcionamento</h2>
-          <ol>
-            <li><strong>Fase 0:</strong> briefing, escopo, stack e manifesto base.</li>
-            <li><strong>Solicitação:</strong> entrada de demanda (bug, feature, release, refactor).</li>
-            <li><strong>Planejamento:</strong> criação de plano com prioridade, risco, critérios e testes.</li>
-            <li><strong>Execução:</strong> mudanças limitadas ao escopo do plano.</li>
-            <li><strong>Registro:</strong> atualização de changelog e documentos impactados.</li>
-            <li><strong>Validação:</strong> testes proporcionais ao risco + auditoria documental.</li>
-            <li><strong>Memória:</strong> síntese da sessão e atualização da wiki quando houver aprendizado reutilizável.</li>
-          </ol>
+          <h2>1.3 Ciclo de funcionamento</h2>
+          <p class="lead">Fluxograma operacional do framework (mesma lógica do README), mostrando o ciclo completo de execução e retroalimentação de contexto.</p>
+          <div class="flowchart" role="img" aria-label="Fluxograma do ciclo operacional do framework">
+            <div class="flow-step"><strong>Fase 0: Briefing</strong><span>Definição inicial de escopo, contexto e objetivos do projeto.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Manifesto e escopo</strong><span>Consolidação da base oficial em documentos de identidade e limite funcional.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Plano de alteração</strong><span>Registro de prioridade, risco, critérios de aceite e validação antes de editar.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Implementação assistida por IA</strong><span>Execução limitada ao escopo aprovado no plano.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Changelog e versionamento</strong><span>Rastreabilidade formal das mudanças em arquivos versionados.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Auditoria e validação</strong><span>Validação proporcional ao risco e revisão dos impactos.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Wiki / memória técnica</strong><span>Compressão de contexto (AICC) e registro de conhecimento reutilizável.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Documentação pública</strong><span>Publicação no Wiki e no GitHub Pages para consumo humano.</span></div>
+            <div class="flow-loop">Contexto acumulado alimenta o próximo plano de alteração.</div>
+          </div>
           <div class="notice">Regra central: nenhuma alteração funcional, visual, estrutural ou documental deve ocorrer sem plano correspondente.</div>
         </article>
 
         <article class="panel" id="pt-architecture">
-          <h2>4) Arquitetura documental</h2>
+          <h2>2.1 Arquitetura documental</h2>
           <p class="lead">A aplicação funciona como uma malha de documentos com responsabilidades explícitas.</p>
           <table>
             <thead>
@@ -449,7 +667,7 @@
         </article>
 
         <article class="panel" id="pt-governance">
-          <h2>5) Governança por planos</h2>
+          <h2>2.2 Governança por planos</h2>
           <div class="grid-2">
             <div class="card">
               <h3>Fluxo obrigatório</h3>
@@ -475,7 +693,7 @@
         </article>
 
         <article class="panel" id="pt-versioning">
-          <h2>6) Versionamento e release</h2>
+          <h2>2.3 Versionamento e release</h2>
           <p class="lead">O framework segue <code>Vx.y.z</code> e exige changelog para toda mudança em arquivo versionado.</p>
           <ul>
             <li><strong>Major:</strong> quebra de compatibilidade, mudança arquitetural ampla.</li>
@@ -491,7 +709,7 @@
         </article>
 
         <article class="panel" id="pt-ai">
-          <h2>7) IA, AICC e ASE</h2>
+          <h2>2.4 IA, AICC e ASE</h2>
           <div class="grid-2">
             <div class="card">
               <h3>AICC (compressão de contexto)</h3>
@@ -514,7 +732,7 @@
         </article>
 
         <article class="panel" id="pt-local-models">
-          <h2>8) Modelos locais: parâmetros e janela de contexto</h2>
+          <h2>2.5 Modelos locais: parâmetros e janela de contexto</h2>
           <p class="lead">Recomendação prática para uso do framework com modelos locais, com base no volume documental do próprio FCVW e no custo de contexto por sessão.</p>
           <table>
             <thead>
@@ -535,7 +753,7 @@
         </article>
 
         <article class="panel" id="pt-security">
-          <h2>9) Segurança e dados</h2>
+          <h2>3.1 Segurança e dados</h2>
           <ul>
             <li>Não versionar credenciais, dados privados e artefatos temporários.</li>
             <li>Validar path traversal em qualquer leitura/escrita de caminhos dinâmicos.</li>
@@ -545,7 +763,7 @@
         </article>
 
         <article class="panel" id="pt-validation">
-          <h2>10) Validação e auditoria</h2>
+          <h2>3.2 Validação e auditoria</h2>
           <p class="lead">A validação é proporcional ao risco e sempre precisa ser registrada com evidência.</p>
           <table>
             <thead>
@@ -560,7 +778,7 @@
         </article>
 
         <article class="panel" id="pt-pages">
-          <h2>11) Publicação no GitHub Pages</h2>
+          <h2>3.3 Publicação no GitHub Pages</h2>
           <p class="lead">Esta página foi desenhada para publicação estática em <code>docs/index.html</code>.</p>
           <ol>
             <li>Acesse <strong>Settings &gt; Pages</strong> no repositório.</li>
@@ -572,20 +790,20 @@
         </article>
 
         <article class="panel" id="pt-quickstart">
-          <h2>12) Início rápido</h2>
+          <h2>3.4 Início rápido</h2>
           <ol>
-            <li>Clone: <code>git clone https://github.com/Sistema2D/FrameCode-VibeWork.git</code></li>
-            <li>Leia <code>AGENTS.md</code> e <code>CONTEXT_MAP.md</code> antes de iniciar qualquer mudança.</li>
-            <li>Abra/instancie seu projeto seguindo <code>INSTANTIATION.md</code>.</li>
-            <li>Para cada alteração: plano + implementação + changelog + validação + síntese de sessão.</li>
+            <li>Abra o repositório em uma IDE com IA.</li>
+            <li>No prompt, mencione <code>AGENTS.md</code> e peça diretamente sua tarefa: <code>Siga AGENTS.md e: &lt;sua solicitação&gt;</code>.</li>
+            <li>A IA deve ler os arquivos necessários, aplicar o fluxo de plano, implementar, validar e registrar changelog/wiki conforme o framework.</li>
+            <li>Revise o resultado e publique as mudanças para atualização do GitHub Pages.</li>
           </ol>
-          <div class="notice">Resultado prático: mais previsibilidade, menor retrabalho e histórico auditável para qualquer entrega.</div>
+          <div class="notice">Resultado prático: o processo fica quase automático para humanos, mantendo governança e rastreabilidade técnica.</div>
         </article>
       </section>
 
       <section class="lang-section" data-lang="en" hidden>
         <article class="panel" id="en-overview">
-          <h2>1) Overview</h2>
+          <h2>1.1 Overview</h2>
           <p class="lead">FrameCode VibeWork is a documentation-first framework for AI-assisted development, designed to reduce context loss, enforce scope control, and standardize technical execution across humans and agents.</p>
           <div class="grid-2">
             <div class="card">
@@ -608,7 +826,7 @@
         </article>
 
         <article class="panel" id="en-problem">
-          <h2>2) Problem solved</h2>
+          <h2>1.2 Problem solved</h2>
           <p class="lead">AI sessions often drift, repeat mistakes, and apply changes without audit trails. This framework structures the process to keep execution predictable and verifiable.</p>
           <table>
             <thead>
@@ -624,21 +842,31 @@
         </article>
 
         <article class="panel" id="en-lifecycle">
-          <h2>3) Operating lifecycle</h2>
-          <ol>
-            <li><strong>Phase 0:</strong> briefing, scope, stack, and baseline manifest.</li>
-            <li><strong>Request:</strong> incoming demand (bug, feature, release, refactor).</li>
-            <li><strong>Planning:</strong> create plan with priority, risk, acceptance criteria, and tests.</li>
-            <li><strong>Execution:</strong> apply changes strictly within plan scope.</li>
-            <li><strong>Recording:</strong> update changelog and impacted documents.</li>
-            <li><strong>Validation:</strong> risk-proportional tests plus documentation audit.</li>
-            <li><strong>Memory:</strong> session synthesis and wiki update for reusable knowledge.</li>
-          </ol>
+          <h2>1.3 Operating lifecycle</h2>
+          <p class="lead">Official framework flowchart (aligned with README), showing the end-to-end operational cycle and context feedback loop.</p>
+          <div class="flowchart" role="img" aria-label="Framework operating lifecycle flowchart">
+            <div class="flow-step"><strong>Phase 0: Briefing</strong><span>Initial definition of project scope, context, and objectives.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Manifest and scope</strong><span>Baseline official documents define identity and functional boundaries.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Change plan</strong><span>Priority, risk, acceptance criteria, and validation are set before edits.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>AI-assisted implementation</strong><span>Execution remains strictly limited to approved plan scope.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Changelog and versioning</strong><span>Formal traceability for all versioned-file modifications.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Audit and validation</strong><span>Risk-proportional testing and impact review.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Wiki / technical memory</strong><span>AICC context compression and reusable knowledge capture.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Public documentation</strong><span>Publication to Wiki and GitHub Pages for human consumption.</span></div>
+            <div class="flow-loop">Accumulated context feeds the next change plan cycle.</div>
+          </div>
           <div class="notice">Core rule: no functional, visual, structural, or document change without a corresponding plan.</div>
         </article>
 
         <article class="panel" id="en-architecture">
-          <h2>4) Document architecture</h2>
+          <h2>2.1 Document architecture</h2>
           <p class="lead">The application operates as a documentation mesh with explicit responsibilities.</p>
           <table>
             <thead>
@@ -657,7 +885,7 @@
         </article>
 
         <article class="panel" id="en-governance">
-          <h2>5) Plan-driven governance</h2>
+          <h2>2.2 Plan-driven governance</h2>
           <div class="grid-2">
             <div class="card">
               <h3>Mandatory flow</h3>
@@ -683,7 +911,7 @@
         </article>
 
         <article class="panel" id="en-versioning">
-          <h2>6) Versioning and release</h2>
+          <h2>2.3 Versioning and release</h2>
           <p class="lead">The framework follows <code>Vx.y.z</code> and requires changelog updates for every versioned-file modification.</p>
           <ul>
             <li><strong>Major:</strong> compatibility breaks and broad architecture changes.</li>
@@ -695,7 +923,7 @@
         </article>
 
         <article class="panel" id="en-ai">
-          <h2>7) AI, AICC and ASE</h2>
+          <h2>2.4 AI, AICC and ASE</h2>
           <div class="grid-2">
             <div class="card">
               <h3>AICC (context compression)</h3>
@@ -718,7 +946,7 @@
         </article>
 
         <article class="panel" id="en-local-models">
-          <h2>8) Local models: parameters and context window</h2>
+          <h2>2.5 Local models: parameters and context window</h2>
           <p class="lead">Practical sizing guidance for running this framework with local models, based on FCVW's own document load profile and session context volume.</p>
           <table>
             <thead>
@@ -739,7 +967,7 @@
         </article>
 
         <article class="panel" id="en-security">
-          <h2>9) Security and data</h2>
+          <h2>3.1 Security and data</h2>
           <ul>
             <li>Do not version credentials, private data, or temporary artifacts.</li>
             <li>Validate path traversal on any dynamic path read/write workflow.</li>
@@ -749,7 +977,7 @@
         </article>
 
         <article class="panel" id="en-validation">
-          <h2>10) Validation and audit</h2>
+          <h2>3.2 Validation and audit</h2>
           <p class="lead">Validation is risk-proportional and must be recorded with evidence.</p>
           <table>
             <thead>
@@ -764,7 +992,7 @@
         </article>
 
         <article class="panel" id="en-pages">
-          <h2>11) GitHub Pages publishing</h2>
+          <h2>3.3 GitHub Pages publishing</h2>
           <p class="lead">This page is designed for static publishing at <code>docs/index.html</code>.</p>
           <ol>
             <li>Go to repository <strong>Settings &gt; Pages</strong>.</li>
@@ -776,14 +1004,442 @@
         </article>
 
         <article class="panel" id="en-quickstart">
-          <h2>12) Quick start</h2>
+          <h2>3.4 Quick start</h2>
           <ol>
-            <li>Clone: <code>git clone https://github.com/Sistema2D/FrameCode-VibeWork.git</code></li>
-            <li>Read <code>AGENTS.md</code> and <code>CONTEXT_MAP.md</code> before any change.</li>
-            <li>Instantiate your project using <code>INSTANTIATION.md</code>.</li>
-            <li>For every change: plan + implementation + changelog + validation + session synthesis.</li>
+            <li>Open the repository in an AI-enabled IDE.</li>
+            <li>In your prompt, mention <code>AGENTS.md</code> and directly request the task: <code>Follow AGENTS.md and: &lt;your request&gt;</code>.</li>
+            <li>The AI should read required files, execute the plan workflow, implement, validate, and update changelog/wiki records.</li>
+            <li>Review output and publish changes so GitHub Pages updates automatically.</li>
           </ol>
-          <div class="notice">Practical result: higher predictability, lower rework, and auditable delivery history.</div>
+          <div class="notice">Practical result: humans stay focused on intent while the framework process is guided almost automatically.</div>
+        </article>
+      </section>
+
+      <section class="lang-section" data-lang="es" hidden>
+        <article class="panel" id="es-overview">
+          <h2>1.1 Resumen general</h2>
+          <p class="lead">FrameCode VibeWork es un framework guiado por documentación para desarrollo asistido por IA, diseñado para reducir pérdida de contexto, controlar alcance y estandarizar la ejecución técnica entre humanos y agentes.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Qué es</h3>
+              <ul>
+                <li>Un framework de gobernanza operativa y técnica.</li>
+                <li>Un sistema de memoria incremental basado en Markdown.</li>
+                <li>Un modelo de trabajo con trazabilidad completa por versión.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Qué no es</h3>
+              <ul>
+                <li>No es un framework de frontend/backend con runtime propio.</li>
+                <li>No reemplaza Git, revisiones ni decisiones arquitectónicas humanas.</li>
+                <li>No depende de scripts automáticos para gobernanza.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="es-problem">
+          <h2>1.2 Problema resuelto</h2>
+          <p class="lead">Las sesiones con IA suelen perder contexto, repetir errores y ejecutar cambios sin trazabilidad clara. El framework estructura ese proceso para mantenerlo predecible y auditable.</p>
+          <table>
+            <thead>
+              <tr><th>Problema común</th><th>Respuesta del framework</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Contexto perdido entre sesiones</td><td>Síntesis AICC en <code>wiki/sessions/</code> + ingestión selectiva.</td></tr>
+              <tr><td>Cambios sin control de alcance</td><td>Plan obligatorio en <code>Plans/</code> antes de cualquier modificación.</td></tr>
+              <tr><td>Historial técnico difuso</td><td>Changelog versionado en <code>changelogs/Vx.y.z.md</code>.</td></tr>
+              <tr><td>Conocimiento disperso</td><td>LLM Wiki estructurada en <code>wiki/</code> (patterns, decisions, releases, sessions).</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="es-lifecycle">
+          <h2>1.3 Ciclo operativo</h2>
+          <p class="lead">Flujograma oficial del framework (alineado con README), mostrando el ciclo completo de operación y realimentación de contexto.</p>
+          <div class="flowchart" role="img" aria-label="Flujograma del ciclo operativo del framework">
+            <div class="flow-step"><strong>Fase 0: Briefing</strong><span>Definición inicial del alcance, contexto y objetivos del proyecto.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Manifiesto y alcance</strong><span>Base documental oficial de identidad y límites funcionales.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Plan de cambio</strong><span>Prioridad, riesgo, criterios de aceptación y validaciones antes de editar.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Implementación asistida por IA</strong><span>Ejecución limitada estrictamente al alcance aprobado.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Changelog y versionado</strong><span>Trazabilidad formal de toda modificación en archivos versionados.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Auditoría y validación</strong><span>Pruebas proporcionales al riesgo y revisión de impactos.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Wiki / memoria técnica</strong><span>Compresión de contexto AICC y registro de conocimiento reutilizable.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Documentación pública</strong><span>Publicación en Wiki y GitHub Pages para consumo humano.</span></div>
+            <div class="flow-loop">El contexto acumulado alimenta el siguiente ciclo de planificación.</div>
+          </div>
+          <div class="notice">Regla central: no debe existir cambio funcional, visual, estructural ni documental sin un plan correspondiente.</div>
+        </article>
+
+        <article class="panel" id="es-architecture">
+          <h2>2.1 Arquitectura documental</h2>
+          <p class="lead">La aplicación opera como una malla documental con responsabilidades explícitas.</p>
+          <table>
+            <thead>
+              <tr><th>Capa</th><th>Documento / Carpeta</th><th>Responsabilidad</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Operación</td><td><code>AGENTS.md</code></td><td>Guía principal de ejecución para humanos e IA.</td></tr>
+              <tr><td>Identidad</td><td><code>MANIFEST.md</code></td><td>Estado oficial, alcance resumido y riesgos clave.</td></tr>
+              <tr><td>Cambios</td><td><code>Plans/</code></td><td>Ciclo de vida de cada modificación.</td></tr>
+              <tr><td>Versiones</td><td><code>changelogs/</code></td><td>Registro formal por versión.</td></tr>
+              <tr><td>Memoria</td><td><code>wiki/</code></td><td>Conocimiento técnico incremental y navegable.</td></tr>
+              <tr><td>Patrones IA</td><td><code>skills/</code></td><td>Checklists de alta densidad cargados bajo demanda.</td></tr>
+              <tr><td>Plantillas</td><td><code>governance/</code></td><td>Estructuras vacías reutilizables para nuevos proyectos.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="es-governance">
+          <h2>2.2 Gobernanza por planes</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Flujo obligatorio</h3>
+              <ol>
+                <li>Crear plan en <code>Plans/pending/</code>.</li>
+                <li>Mover a <code>Plans/in_progress/</code> al iniciar.</li>
+                <li>Ejecutar solo el alcance aprobado.</li>
+                <li>Actualizar changelog de versión.</li>
+                <li>Cerrar en <code>Plans/completed/</code> o <code>discontinued/</code>.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Campos mínimos del plan</h3>
+              <ul>
+                <li>Prioridad <code>P1..P5</code> y riesgo <code>R1..R5</code></li>
+                <li>Versión actual y versión esperada</li>
+                <li>Criterios de aceptación</li>
+                <li>Plan de pruebas</li>
+                <li>Estado y evidencias de validación</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="es-versioning">
+          <h2>2.3 Versionado y release</h2>
+          <p class="lead">Sigue <code>Vx.y.z</code> y exige changelog para toda modificación de archivo versionado.</p>
+          <ul>
+            <li><strong>Major:</strong> ruptura de compatibilidad y cambios arquitectónicos amplios.</li>
+            <li><strong>Minor:</strong> nuevas capacidades o flujos relevantes.</li>
+            <li><strong>Patch:</strong> correcciones y mejoras de documentación/proceso.</li>
+          </ul>
+          <div class="notice">Estados de release: <code>in_preparation</code>, <code>in_validation</code>, <code>published</code>, <code>canceled</code>.</div>
+          <div class="notice danger">Una versión solo puede marcarse como <code>published</code> cuando los planes citados estén en <code>Plans/completed/</code> y las validaciones estén registradas.</div>
+        </article>
+
+        <article class="panel" id="es-ai">
+          <h2>2.4 IA, AICC y ASE</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>AICC (compresión de contexto)</h3>
+              <ul>
+                <li>Genera síntesis cronológica por sesión en <code>wiki/sessions/S*.md</code>.</li>
+                <li>Reduce costo de tokens mediante handoff estructurado.</li>
+                <li>Permite retomar trabajo sin releer todo el repositorio.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>ASE (motor de habilidades)</h3>
+              <ul>
+                <li>Carga skills bajo demanda (JIT), nunca en el prompt inicial.</li>
+                <li>Incluye habilidades de release, wiki lint, commits y formato.</li>
+                <li>Mejora consistencia preservando la ventana de contexto.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="tiny">Referencias: <code>AI.md</code>, <code>CONTEXT_MAP.md</code>, <code>skills/README.md</code>, <code>wiki/schema.md</code>.</p>
+        </article>
+
+        <article class="panel" id="es-local-models">
+          <h2>2.5 Modelos locales: parámetros y ventana de contexto</h2>
+          <p class="lead">Guía práctica para operar el framework con modelos locales, basada en el volumen documental de FCVW y el costo de contexto por sesión.</p>
+          <table>
+            <thead>
+              <tr><th>Nivel</th><th>Parámetros</th><th>Ventana</th><th>Uso recomendado en el framework</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Mínimo operativo</td><td><code>7B-8B</code></td><td><code>16k</code></td><td>Correcciones cortas, ajustes en 1-3 archivos y tareas puntuales.</td></tr>
+              <tr><td>Recomendado general</td><td><code>14B-32B</code></td><td><code>32k-64k</code></td><td>Flujo completo con plan + changelog + wiki y revisiones medianas.</td></tr>
+              <tr><td>Alta confiabilidad</td><td><code>32B-70B+</code></td><td><code>64k-128k</code></td><td>Refactors amplios, auditorías, releases complejos y sesiones largas.</td></tr>
+            </tbody>
+          </table>
+          <ul>
+            <li>Para operar con estabilidad, reserva 40% a 60% de contexto libre para historial, diffs y respuestas largas.</li>
+            <li>En FCVW, la ingesta inicial puede llegar a ~8.5k tokens sin compresión, por eso <code>16k</code> es el piso práctico.</li>
+            <li>Para tareas largas y estructuradas, <code>14B+</code> suele reducir retrabajo.</li>
+          </ul>
+          <div class="notice">Inferencia aplicada al framework: estos rangos se definieron a partir de escenarios documentados de ingesta y ciclo operativo.</div>
+        </article>
+
+        <article class="panel" id="es-security">
+          <h2>3.1 Seguridad y datos</h2>
+          <ul>
+            <li>No versionar credenciales, datos privados ni artefactos temporales.</li>
+            <li>Validar path traversal en cualquier lectura/escritura de rutas dinámicas.</li>
+            <li>Mantener <code>.env</code> y variantes fuera del versionado (permitir solo <code>.env.example</code>).</li>
+            <li>Registrar limitaciones y riesgos residuales al cerrar planes.</li>
+          </ul>
+        </article>
+
+        <article class="panel" id="es-validation">
+          <h2>3.2 Validación y auditoría</h2>
+          <p class="lead">Las validaciones deben ser proporcionales al riesgo y registradas con evidencia.</p>
+          <table>
+            <thead>
+              <tr><th>Riesgo</th><th>Nivel mínimo esperado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>R1</code> / <code>R2</code></td><td>Comprobaciones locales + revisión de enlaces/consistencia.</td></tr>
+              <tr><td><code>R3</code></td><td>Validación de flujos compartidos y chequeos de regresión local.</td></tr>
+              <tr><td><code>R4</code> / <code>R5</code></td><td>Validaciones completas con foco en seguridad, datos y rollback.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="es-pages">
+          <h2>3.3 Publicación en GitHub Pages</h2>
+          <p class="lead">Esta página está diseñada para publicación estática en <code>docs/index.html</code>.</p>
+          <ol>
+            <li>Accede a <strong>Settings &gt; Pages</strong> del repositorio.</li>
+            <li>En <strong>Build and deployment</strong>, selecciona <strong>Deploy from a branch</strong>.</li>
+            <li>Elige la branch de publicación (normalmente <code>main</code>) y la carpeta <code>/docs</code>.</li>
+            <li>Guarda y espera el despliegue automático de GitHub Pages.</li>
+          </ol>
+          <p class="tiny">URL esperada: <code>https://sistema2d.github.io/FrameCode-VibeWork/</code>.</p>
+        </article>
+
+        <article class="panel" id="es-quickstart">
+          <h2>3.4 Inicio rápido</h2>
+          <ol>
+            <li>Abre el repositorio en una IDE con IA.</li>
+            <li>En el prompt, menciona <code>AGENTS.md</code> y pide tu tarea de forma directa: <code>Sigue AGENTS.md y: &lt;tu solicitud&gt;</code>.</li>
+            <li>La IA debe leer los archivos necesarios, ejecutar el flujo de plan, implementar, validar y actualizar changelog/wiki.</li>
+            <li>Revisa el resultado y publica cambios para actualizar GitHub Pages.</li>
+          </ol>
+          <div class="notice">Resultado práctico: la persona se enfoca en el objetivo y el framework guía la ejecución casi automáticamente.</div>
+        </article>
+      </section>
+
+      <section class="lang-section" data-lang="de" hidden>
+        <article class="panel" id="de-overview">
+          <h2>1.1 Überblick</h2>
+          <p class="lead">FrameCode VibeWork ist ein dokumentationszentriertes Framework für KI-gestützte Entwicklung. Es reduziert Kontextverlust, steuert den Scope und standardisiert die technische Ausführung zwischen Menschen und KI-Agenten.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Was es ist</h3>
+              <ul>
+                <li>Ein Framework für operative und technische Governance.</li>
+                <li>Ein inkrementelles Wissenssystem auf Markdown-Basis.</li>
+                <li>Ein Arbeitsmodell mit vollständiger Nachvollziehbarkeit pro Version.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Was es nicht ist</h3>
+              <ul>
+                <li>Kein Frontend-/Backend-Framework mit eigenem Runtime-Stack.</li>
+                <li>Kein Ersatz für Git-Review oder menschliche Architekturentscheidungen.</li>
+                <li>Keine Governance, die von Automatisierungsskripten abhängt.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="de-problem">
+          <h2>1.2 Gelöstes Problem</h2>
+          <p class="lead">KI-Sitzungen verlieren häufig Kontext, wiederholen Fehler und erzeugen Änderungen ohne klare Auditspur. Das Framework strukturiert diesen Ablauf, damit die Ausführung vorhersehbar und prüfbar bleibt.</p>
+          <table>
+            <thead>
+              <tr><th>Häufiges Problem</th><th>Framework-Lösung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Kontextverlust zwischen Sitzungen</td><td>AICC-Synthesen in <code>wiki/sessions/</code> plus selektive Ingestion.</td></tr>
+              <tr><td>Scope-Drift ohne Steuerung</td><td>Verbindliche Planregel in <code>Plans/</code> vor jeder Änderung.</td></tr>
+              <tr><td>Unklare Änderungshistorie</td><td>Versioniertes Changelog in <code>changelogs/Vx.y.z.md</code>.</td></tr>
+              <tr><td>Verteiltes technisches Wissen</td><td>Strukturierte LLM-Wiki in <code>wiki/</code> (patterns, decisions, releases, sessions).</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="de-lifecycle">
+          <h2>1.3 Betriebsablauf</h2>
+          <p class="lead">Offizielles Framework-Flussdiagramm (mit README abgestimmt), das den kompletten Zyklus inklusive Kontext-Feedback zeigt.</p>
+          <div class="flowchart" role="img" aria-label="Flussdiagramm des Framework-Betriebsablaufs">
+            <div class="flow-step"><strong>Phase 0: Briefing</strong><span>Initiale Definition von Scope, Kontext und Projektzielen.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Manifest und Scope</strong><span>Offizielle Basisdokumente für Identität und funktionale Grenzen.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Änderungsplan</strong><span>Priorität, Risiko, Akzeptanzkriterien und Validierung vor der Umsetzung.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>KI-gestützte Implementierung</strong><span>Ausführung bleibt strikt innerhalb des genehmigten Planumfangs.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Changelog und Versionierung</strong><span>Formale Nachvollziehbarkeit für alle Änderungen in versionierten Dateien.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Audit und Validierung</strong><span>Risikoproportionale Tests und Wirkungsprüfung.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Wiki / technisches Gedächtnis</strong><span>AICC-Kontextkompression und Erfassung wiederverwendbaren Wissens.</span></div>
+            <div class="flow-arrow" aria-hidden="true">&darr;</div>
+            <div class="flow-step"><strong>Öffentliche Dokumentation</strong><span>Publikation in Wiki und GitHub Pages für menschliche Nutzung.</span></div>
+            <div class="flow-loop">Der akkumulierte Kontext speist den nächsten Planungszyklus.</div>
+          </div>
+          <div class="notice">Kernregel: keine funktionale, visuelle, strukturelle oder dokumentarische Änderung ohne zugehörigen Plan.</div>
+        </article>
+
+        <article class="panel" id="de-architecture">
+          <h2>2.1 Dokumentenarchitektur</h2>
+          <p class="lead">Die Anwendung arbeitet als Dokumentationsnetz mit klaren Verantwortlichkeiten.</p>
+          <table>
+            <thead>
+              <tr><th>Ebene</th><th>Datei / Verzeichnis</th><th>Verantwortung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Betrieb</td><td><code>AGENTS.md</code></td><td>Zentrale Ausführungsanleitung für Menschen und KI.</td></tr>
+              <tr><td>Identität</td><td><code>MANIFEST.md</code></td><td>Offizieller Status, zusammengefasster Scope und Hauptrisiken.</td></tr>
+              <tr><td>Änderungen</td><td><code>Plans/</code></td><td>Lebenszyklus jeder Änderung.</td></tr>
+              <tr><td>Versionen</td><td><code>changelogs/</code></td><td>Formales Protokoll pro Version.</td></tr>
+              <tr><td>Wissen</td><td><code>wiki/</code></td><td>Inkrementelles und navigierbares technisches Wissen.</td></tr>
+              <tr><td>KI-Standards</td><td><code>skills/</code></td><td>High-Density-Checklisten, bei Bedarf geladen.</td></tr>
+              <tr><td>Vorlagen</td><td><code>governance/</code></td><td>Wiederverwendbare leere Strukturen für neue Projekte.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="de-governance">
+          <h2>2.2 Planbasierte Governance</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Verbindlicher Ablauf</h3>
+              <ol>
+                <li>Plan in <code>Plans/pending/</code> erstellen.</li>
+                <li>Zum Start nach <code>Plans/in_progress/</code> verschieben.</li>
+                <li>Nur den freigegebenen Scope umsetzen.</li>
+                <li>Versions-Changelog aktualisieren.</li>
+                <li>In <code>Plans/completed/</code> oder <code>discontinued/</code> abschließen.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Mindestfelder des Plans</h3>
+              <ul>
+                <li>Priorität <code>P1..P5</code> und Risiko <code>R1..R5</code></li>
+                <li>Aktuelle und erwartete Version</li>
+                <li>Akzeptanzkriterien</li>
+                <li>Testplan</li>
+                <li>Status und Validierungsnachweise</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="de-versioning">
+          <h2>2.3 Versionierung und Release</h2>
+          <p class="lead">Folgt <code>Vx.y.z</code> und verlangt Changelog-Updates für jede versionierte Dateiänderung.</p>
+          <ul>
+            <li><strong>Major:</strong> Kompatibilitätsbrüche und breite Architekturänderungen.</li>
+            <li><strong>Minor:</strong> relevante neue Fähigkeiten und Abläufe.</li>
+            <li><strong>Patch:</strong> Korrekturen sowie Prozess-/Dokumentationsverbesserungen.</li>
+          </ul>
+          <div class="notice">Release-Status: <code>in_preparation</code>, <code>in_validation</code>, <code>published</code>, <code>canceled</code>.</div>
+          <div class="notice danger">Eine Version darf nur als <code>published</code> markiert werden, wenn referenzierte Pläne in <code>Plans/completed/</code> liegen und Validierungen dokumentiert sind.</div>
+        </article>
+
+        <article class="panel" id="de-ai">
+          <h2>2.4 KI, AICC und ASE</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>AICC (Kontextkompression)</h3>
+              <ul>
+                <li>Erzeugt chronologische Sitzungssynthesen in <code>wiki/sessions/S*.md</code>.</li>
+                <li>Senkt Token-Kosten durch strukturierten Handoff.</li>
+                <li>Ermöglicht schnelle Fortsetzung ohne erneutes Lesen des ganzen Repos.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>ASE (Skills Engine)</h3>
+              <ul>
+                <li>Lädt Skills nur bei Bedarf (JIT), nie im initialen Prompt.</li>
+                <li>Enthält Skills für Release, Wiki-Lint, Commits und Formatierung.</li>
+                <li>Erhöht Konsistenz bei gleichzeitiger Schonung des Kontextfensters.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="tiny">Referenzen: <code>AI.md</code>, <code>CONTEXT_MAP.md</code>, <code>skills/README.md</code>, <code>wiki/schema.md</code>.</p>
+        </article>
+
+        <article class="panel" id="de-local-models">
+          <h2>2.5 Lokale Modelle: Parameter und Kontextfenster</h2>
+          <p class="lead">Praktische Größenempfehlungen für lokale Modelle im Framework, basierend auf FCVW-Dokumentlast und Sitzungs-Kontextvolumen.</p>
+          <table>
+            <thead>
+              <tr><th>Stufe</th><th>Parameter</th><th>Kontextfenster</th><th>Empfohlene Framework-Nutzung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Minimaler Betrieb</td><td><code>7B-8B</code></td><td><code>16k</code></td><td>Kurze Fixes, kleine Änderungen in 1-3 Dateien, enge Aufgabenstellung.</td></tr>
+              <tr><td>Allgemein empfohlen</td><td><code>14B-32B</code></td><td><code>32k-64k</code></td><td>Vollständiger Ablauf mit Plan + Changelog + Wiki und mittleren Reviews.</td></tr>
+              <tr><td>Hohe Zuverlässigkeit</td><td><code>32B-70B+</code></td><td><code>64k-128k</code></td><td>Große Refactorings, Audits, komplexe Releases und lange Sitzungen.</td></tr>
+            </tbody>
+          </table>
+          <ul>
+            <li>Für stabilen Betrieb 40% bis 60% Kontextreserve für Verlauf, Diffs und lange Antworten einplanen.</li>
+            <li>In FCVW kann die Initial-Ingestion ohne Kompression ~8.5k Tokens erreichen, daher ist <code>16k</code> die praktische Untergrenze.</li>
+            <li>Für lange strukturierte Aufgaben reduziert <code>14B+</code> meist Nacharbeit.</li>
+          </ul>
+          <div class="notice">Framework-spezifische Ableitung: Diese Schwellenwerte basieren auf dokumentierten Ingestion-Szenarien und dem operativen Zyklus von FCVW.</div>
+        </article>
+
+        <article class="panel" id="de-security">
+          <h2>3.1 Sicherheit und Daten</h2>
+          <ul>
+            <li>Keine Zugangsdaten, privaten Daten oder temporären Artefakte versionieren.</li>
+            <li>Path Traversal bei allen dynamischen Pfad-Lese-/Schreibabläufen validieren.</li>
+            <li><code>.env</code> und Varianten außerhalb der Versionskontrolle halten (<code>.env.example</code> ist erlaubt).</li>
+            <li>Restliche Einschränkungen und Risiken beim Planabschluss dokumentieren.</li>
+          </ul>
+        </article>
+
+        <article class="panel" id="de-validation">
+          <h2>3.2 Validierung und Audit</h2>
+          <p class="lead">Validierungen sind risikoproportional auszuführen und mit Nachweisen zu dokumentieren.</p>
+          <table>
+            <thead>
+              <tr><th>Risiko</th><th>Mindestniveau</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>R1</code> / <code>R2</code></td><td>Lokale Checks plus Link-/Konsistenzprüfung.</td></tr>
+              <tr><td><code>R3</code></td><td>Validierung gemeinsamer Abläufe und lokale Regressionsprüfung.</td></tr>
+              <tr><td><code>R4</code> / <code>R5</code></td><td>Umfassende Validierung mit Fokus auf Sicherheit, Daten und Rollback.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="de-pages">
+          <h2>3.3 Veröffentlichung auf GitHub Pages</h2>
+          <p class="lead">Diese Seite ist für statische Veröffentlichung unter <code>docs/index.html</code> ausgelegt.</p>
+          <ol>
+            <li>Im Repository zu <strong>Settings &gt; Pages</strong> gehen.</li>
+            <li>Unter <strong>Build and deployment</strong> <strong>Deploy from a branch</strong> wählen.</li>
+            <li>Publikations-Branch (meist <code>main</code>) und Ordner <code>/docs</code> auswählen.</li>
+            <li>Speichern und auf den automatischen GitHub-Pages-Deploy warten.</li>
+          </ol>
+          <p class="tiny">Erwartete URL: <code>https://sistema2d.github.io/FrameCode-VibeWork/</code>.</p>
+        </article>
+
+        <article class="panel" id="de-quickstart">
+          <h2>3.4 Schnellstart</h2>
+          <ol>
+            <li>Repository in einer KI-fähigen IDE öffnen.</li>
+            <li>Im Prompt <code>AGENTS.md</code> nennen und die Aufgabe direkt stellen: <code>Folge AGENTS.md und: &lt;deine Anfrage&gt;</code>.</li>
+            <li>Die KI soll benötigte Dateien lesen, den Plan-Workflow ausführen, implementieren, validieren und Changelog/Wiki aktualisieren.</li>
+            <li>Ergebnis prüfen und Änderungen veröffentlichen, damit GitHub Pages aktualisiert wird.</li>
+          </ol>
+          <div class="notice">Praktischer Effekt: Menschen fokussieren sich auf das Ziel, der Framework-Prozess wird nahezu automatisch geführt.</div>
         </article>
       </section>
     </main>
@@ -799,8 +1455,12 @@
   <script>
     const buttons = document.querySelectorAll('.lang-btn');
     const sections = document.querySelectorAll('.lang-section');
-    const navPt = document.getElementById('nav-pt-br');
-    const navEn = document.getElementById('nav-en');
+    const navByLang = {
+      'pt-BR': document.getElementById('nav-pt-br'),
+      en: document.getElementById('nav-en'),
+      es: document.getElementById('nav-es'),
+      de: document.getElementById('nav-de')
+    };
     const navTitle = document.getElementById('nav-title');
     const title = document.getElementById('title');
     const subtitle = document.getElementById('subtitle');
@@ -808,17 +1468,60 @@
     const labels = {
       'pt-BR': {
         navTitle: 'Navegação',
-        title: 'Guia Completo da Aplicação',
-        subtitle: 'Esta página explica o funcionamento completo do framework, em português e inglês, com foco em operação real, governança e rastreabilidade.'
+        title: 'Guia Completo do Framework',
+        subtitle: ''
       },
       en: {
         navTitle: 'Navigation',
-        title: 'Complete Application Guide',
-        subtitle: 'This page explains the full framework operation in Portuguese and English, focused on real operations, governance, and traceability.'
+        title: 'Complete Framework Guide',
+        subtitle: ''
+      },
+      es: {
+        navTitle: 'Navegación',
+        title: 'Guía Completa del Framework',
+        subtitle: ''
+      },
+      de: {
+        navTitle: 'Navigation',
+        title: 'Vollständiger Framework-Leitfaden',
+        subtitle: ''
       }
     };
 
+    const supportedLangs = ['pt-BR', 'en', 'es', 'de'];
+    const navContainers = Object.values(navByLang);
+
+    function ensureSingleOpen(container, sourceDetails = null) {
+      const groups = container.querySelectorAll('.nav-group');
+
+      if (sourceDetails && sourceDetails.open) {
+        groups.forEach(group => {
+          if (group !== sourceDetails) {
+            group.open = false;
+          }
+        });
+        return;
+      }
+
+      const hasOpenGroup = container.querySelector('.nav-group[open]');
+      if (!hasOpenGroup && groups.length > 0) {
+        groups[0].open = true;
+      }
+    }
+
+    navContainers.forEach(container => {
+      const groups = container.querySelectorAll('.nav-group');
+      groups.forEach((group, index) => {
+        group.open = index === 0;
+        group.addEventListener('toggle', () => ensureSingleOpen(container, group));
+      });
+    });
+
     function setLanguage(lang) {
+      if (!supportedLangs.includes(lang)) {
+        return;
+      }
+
       sections.forEach(section => {
         section.hidden = section.dataset.lang !== lang;
       });
@@ -828,8 +1531,13 @@
         button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
 
-      navPt.hidden = lang !== 'pt-BR';
-      navEn.hidden = lang !== 'en';
+      Object.entries(navByLang).forEach(([language, container]) => {
+        const isActive = language === lang;
+        container.hidden = !isActive;
+        if (isActive) {
+          ensureSingleOpen(container);
+        }
+      });
 
       navTitle.textContent = labels[lang].navTitle;
       title.textContent = labels[lang].title;
@@ -843,7 +1551,7 @@
     });
 
     const savedLanguage = localStorage.getItem('fcvw-lang');
-    if (savedLanguage === 'pt-BR' || savedLanguage === 'en') {
+    if (supportedLangs.includes(savedLanguage)) {
       setLanguage(savedLanguage);
     } else {
       setLanguage('pt-BR');
@@ -851,4 +1559,3 @@
   </script>
 </body>
 </html>
-
