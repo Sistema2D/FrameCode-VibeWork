@@ -228,3 +228,18 @@ This file must be treated as append-first history: prefer adding new records ove
 - Pages obsolete: none.
 - Result: Public page is now more direct for human users with stronger multilingual consistency and guided AI-first workflow.
 - Gaps: Browser plugin visual QA tool was not callable in this session; validation relied on structural/script checks.
+
+## [2026-05-22 19:05] synthesis | Session S013 Apple DESIGN.md Adoption on Pages
+
+- Source: `Plans/completed/P3-R2-2026-05-22-pages-apple-design-system-adoption.md`.
+- Executed action: Replaced the GitHub Pages visual system with Apple `DESIGN.md` tokens/components from `VoltAgent/awesome-design-md`, while preserving multilingual/accordion runtime behavior.
+- Pages created:
+  - `wiki/sessions/S013-2026-05-22-pages-apple-design-system-adoption.md`
+- Pages updated:
+  - `docs/index.html`
+  - `changelogs/V0.5.1.md`
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: Public page now uses Apple-style visual language (Action Blue, SF Pro stack, parchment/light surfaces, pill interactions, restrained depth).
+- Gaps: none.
