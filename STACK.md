@@ -1,74 +1,64 @@
 # Tech Stack
 
-> This is a template. Replace the fields between `<...>` with the actual information of the project.
-
 ## Application
 
-- Name: `<project name>`
-- Current version: `V0.4.0`
-- Type: `<web / desktop / mobile / CLI / API / library / hybrid>`
-- Target platform: `<Windows / Linux / macOS / Web / cross-platform>`
-- Objective: `<one-line summary>`
+- Name: `FrameCode VibeWork`
+- Current version: `V0.5.0`
+- Type: `framework / governance template`
+- Target platform: `cross-platform (Windows / Linux / macOS)`
+- Objective: `Document-based governance framework for AI-assisted application development with session context compression and on-demand skills engine.`
 
-## Frontend
+## Governance Layer
 
-`<Remove if there is no UI.>`
+The primary "stack" of this framework is pure Markdown and Git. No runtime dependencies.
 
-- Language: `<technology>`
-- Framework / UI toolkit: `<framework or API>`
-- Build: `<build tool>`
-- Compiler / bundler: `<compiler or bundler>`
-- Main libraries: `<list>`
+- Document format: `Markdown (.md)`
+- Version control: `Git`
+- Visualization (optional): `Obsidian` — graph view for wiki wikilinks
+- Distribution: `GitHub template / git clone`
+- ADR-0001: Pure Markdown Instruction Model — no automation scripts in the framework
 
-## Backend
+## AI / LLM Integration
 
-`<Remove if there is no separate backend.>`
+- Runtime / model server: `Model-agnostic — any LLM agent that can read and follow Markdown`
+- Tested with: `Gemini Flash/Pro, Claude Sonnet/Haiku, GPT-4 class models`
+- AI roles: `Plan author, implementer, wiki curator, session synthesizer, skill executor`
+- Context compression: `AICC — AI Interaction Context Compression (wiki/sessions/S*.md)`
+- Skills engine: `ASE — AI Skills Engine (skills/*.md, loaded JIT)`
+- Continuous learning: `LLM Wiki Ingest/Query/Lint cycle (wiki/schema.md)`
 
-- Language: `<technology>`
-- HTTP Framework: `<framework>`
-- Local port: `<address and port>`
-- Local security: `<token, authentication, or CORS>`
-- Main modules: `<list>`
+## Knowledge Base / Wiki
 
-## Local or Remote AI
+- Local directory: `wiki/`
+- Format: `Markdown`
+- Main structure: `schema.md, index.md, log.md, sessions/, patterns/, decisions/, failures/, releases/, templates/`
+- Obsidian graph: `wikilinks [[page]] across all wiki/ and decisions/ files`
 
-`<Remove if there is no AI.>`
+## Active Skills (ASE Catalog)
 
-- Runtime / model server: `<Ollama / OpenAI / other>`
-- API: `<endpoint>`
-- Used resources: `<list, chat, embeddings, etc.>`
-- Continuous learning: `<describe or "not applicable">`
-
-## Vault / Knowledge Base
-
-`<Remove if there is no vault or RAG.>`
-
-- Local directory: `<path>`
-- Format: `<Markdown / JSON / other>`
-- Main structure: `<schema.md, index.md, log.md, raw/, notes/, etc.>`
+| Skill | Path | Trigger |
+|---|---|---|
+| `obsidian-markdown` | `skills/obsidian-markdown/SKILL.md` | wiki formatting, wikilinks, Obsidian notes |
+| `git-conventional-commits` | `skills/git-conventional-commits/SKILL.md` | commit, tag, push, release notes |
+| `wiki-lint` | `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages |
+| `release-checklist` | `skills/release-checklist/SKILL.md` | release, publish, version bump |
 
 ## Build and Execution
 
-- Build script: `<command or file>`
-- Execution script: `<command or file>`
-- Main output: `<artifact path>`
-
-## Build Matrix
-
-`<Remove if the project is not cross-platform.>`
-
-| Platform / OS | Compiler / Runtime | Flags or Variants | Status |
-|---|---|---|---|
-| `<Windows x64>` | `<MSVC / MinGW / clang>` | `<Release / Debug>` | `<supported>` |
-| `<Linux x64>` | `<GCC / clang>` | `<Release>` | `<supported>` |
+- Build script: `Not applicable — no compiled artifacts`
+- Execution script: `Not applicable — open in Markdown editor or agent IDE`
+- Main output: `Populated governance documents, wiki pages, and session syntheses`
 
 ## Persistence and Logs
 
-- User data: `<path and format>`
-- Settings: `<path and format>`
-- Logs: `<folder or mechanism>`
-- Writing strategy: `<atomic / backup / direct>`
-- Data ignored by Git: `<logs, builds, vault, private data>`
+- Plans: `Plans/{pending,in_progress,completed,discontinued}/`
+- Changelogs: `changelogs/Vx.y.z.md`
+- Technical memory: `wiki/` (LLM Wiki format)
+- Session context: `wiki/sessions/S{num}-{date}-{description}.md`
+- Troubleshooting: `troubleshooting/YYYY-MM-DD-description.md`
+- ADRs: `decisions/ADR-{num}-description.md`
+- Writing strategy: `Append-first (wiki/log.md, changelogs); overwrite with version bump (MANIFEST.md)`
+- Data ignored by Git: `*.env, local build artifacts, private paths (see .gitignore)`
 
 ## Document Governance
 

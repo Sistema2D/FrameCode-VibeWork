@@ -16,10 +16,10 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 ## Preferred Formal Sources
 
 - `AGENTS.md`
+- `CONTEXT_MAP.md`
 - `INSTANTIATION.md`
 - `MANIFEST.md`
 - `FILESYSTEM.md`
-- `mockups/README.md`
 - `PLANNING.md`
 - `VERSIONING.md`
 - `TROUBLESHOOTING.md`
@@ -33,9 +33,8 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 
 ## Validated Technical Patterns
 
-> Record here reusable patterns that have been applied and validated.
-
-- No technical patterns recorded so far.
+- [[patterns/aicc-session-compression|AICC Session Compression Pattern]] — `#gold-pattern` · Validated context compression achieving ~77% token reduction across all session types.
+- [[patterns/ase-jit-skill-loading|ASE JIT Skill Loading Pattern]] — `#gold-pattern` · On-demand skill loading strategy to reduce prompt bloat and preserve active context window.
 
 ---
 
@@ -49,9 +48,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 
 ## Consolidated Decisions
 
-> Record here architectural or technical decisions that impact the project.
-
-- No consolidated decisions in the wiki so far.
+- [[decisions/adr-0001-pure-markdown|ADR-0001: Pure Markdown Over Automation Scripts]] — `#arch-decision` · Architectural pivot adopted in V0.4.0; mandates pure Markdown instruction model for all framework tooling.
 
 ---
 
@@ -63,7 +60,7 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 
 ---
 
-- [[refactorings/complete-guide|Complete Guide to Refactoring Metrics]] — Validated reference for ICR, IRR, complexity, duplication, coupling, and testability.
+- No consolidated refactoring pages recorded so far.
 
 ---
 
@@ -77,9 +74,8 @@ It must be updated whenever new pages are created, obsoleted, replaced, or valid
 
 ## Releases
 
-> Record here syntheses of published versions.
-
-- No consolidated releases so far.
+- [[releases/v0-5-0|V0.5.0 — ASE Expansion and Context Optimization]] — Expanded ASE to 4 skills, added CONTEXT_MAP, promoted wiki knowledge, and finalized portability/consistency fixes.
+- [[releases/v0-4-0|V0.4.0 — Pure Markdown Instruction Model]] — Strategic architectural pivot; removed scripts and mockups; expanded DESIGN.md and FILESYSTEM.md.
 
 ---
 

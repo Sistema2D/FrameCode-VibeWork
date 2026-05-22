@@ -4,7 +4,6 @@ Operational manifest of the project.
 
 This file centralizes the identity, state, main rules, and official documents of the project. It must serve as a quick reference for humans and AI agents before any analysis, planning, implementation, refactoring, validation, or release publication.
 
-> This is a template. Replace the fields between `<...>` with the actual information of the project.
 
 ---
 
@@ -12,37 +11,33 @@ This file centralizes the identity, state, main rules, and official documents of
 
 | Field | Information |
 |---|---|
-| Project Name | `<project-name>` |
-| Short Name / Codename | `<short-name>` |
-| Application Type | `<web / desktop / mobile / CLI / API / library / hybrid>` |
-| Target Platform | `<Windows / Linux / macOS / Web / Android / iOS / cross-platform>` |
-| Main Lead | `<name>` |
-| Repository | `<URL or local path>` |
-| Current Version | `V0.4.0` |
-| Manifest Creation Date | `YYYY-MM-DD` |
-| Last Update | `2026-05-18` |
-| Project Status | `concept / planning / development / validation / published / suspended / discontinued` |
+| Project Name | `FrameCode VibeWork` |
+| Short Name / Codename | `FCVW` |
+| Application Type | `framework / governance template` |
+| Target Platform | `cross-platform (Windows / Linux / macOS)` |
+| Main Lead | `Hugo Araújo de Melo` |
+| Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
+| Current Version | `V0.5.0` |
+| Manifest Creation Date | `2026-05-15` |
+| Last Update | `2026-05-22` |
+| Project Status | `development` |
 
 ---
 
 ## 2. Project Objective
 
-Describe, in a few lines, the main objective of the application.
-
-```text
-<Describe here the problem the application solves, who it is intended for, and what value it delivers.>
-```
+FrameCode VibeWork is a document-based governance framework for AI-assisted application development. It provides a structured lifecycle for planning, implementing, validating, and documenting changes while maintaining technical memory across sessions through compressed AI context and a LLM Wiki.
 
 ### 2.1 Handled Problem
 
 ```text
-<Describe the problem, limitation, need, or opportunity that motivated the project.>
+AI-assisted development sessions suffer from context loss between sessions, lack of traceability, scope creep, and repeated failures. Without a formal governance layer, AI agents act inconsistently, regenerate already-solved decisions, and accumulate technical debt silently.
 ```
 
 ### 2.2 Expected Result
 
 ```text
-<Describe the practical result expected when the application is functional.>
+A repository that uses FrameCode VibeWork achieves: near-zero context loss between AI sessions (via AICC), formal traceability of every change (via Plans + changelogs), incremental technical memory (via LLM Wiki), on-demand specialized AI skills (via ASE), and a 70–80% reduction in governance token overhead per session.
 ```
 
 ---
@@ -51,8 +46,9 @@ Describe, in a few lines, the main objective of the application.
 
 | Audience | Description | Main Needs |
 |---|---|---|
-| `<group 1>` | `<description>` | `<main needs>` |
-| `<group 2>` | `<description>` | `<main needs>` |
+| Solo developers | Individuals building applications with AI pair programming tools | Session continuity, context compression, low governance overhead |
+| Small development teams | 2–5 person teams combining human and AI contributors | Shared traceability, consistent decision records, audit trail |
+| AI agents / LLMs | AI models acting as primary implementers in a codebase | Clear operational rules, selective document loading, skills engine |
 
 ---
 
@@ -60,21 +56,25 @@ Describe, in a few lines, the main objective of the application.
 
 ### 4.1 In Scope
 
-- `<feature or responsibility 1>`
-- `<feature or responsibility 2>`
-- `<feature or responsibility 3>`
+- Document-based governance system (Plans, changelogs, ADRs, audits)
+- AI Interaction Context Compression (AICC) via session syntheses
+- AI Skills Engine (ASE) with on-demand JIT skill loading
+- LLM Wiki (Obsidian-compatible technical memory with Ingest/Query/Lint cycle)
+- Reusable snippets library with visual gallery and CSS tokens
+- Instantiation workflow for bootstrapping new projects from the framework
 
 ### 4.2 Out of Scope
 
-- `<item explicitly out of scope 1>`
-- `<item explicitly out of scope 2>`
-- `<item explicitly out of scope 3>`
+- Application source code (framework is stack-agnostic)
+- Automated CI/CD pipelines or scripts (deprecated by ADR-0001)
+- Cloud deployment or hosting infrastructure
+- AI model fine-tuning or RAG embedding pipelines
 
 ### 4.3 Main Dependencies
 
-- `<technical, operational, or external dependency 1>`
-- `<technical, operational, or external dependency 2>`
-- `<technical, operational, or external dependency 3>`
+- Git (version control and release tagging)
+- Markdown-compatible editor (Obsidian recommended for wiki graph view)
+- Any LLM agent or AI coding assistant that can read and follow Markdown instructions
 
 ---
 
@@ -82,13 +82,13 @@ Describe, in a few lines, the main objective of the application.
 
 | Layer | Technology / Tool | Observations |
 |---|---|---|
-| Frontend | `<technology>` | `<observations>` |
-| Backend | `<technology>` | `<observations>` |
-| Database / Persistence | `<technology>` | `<observations>` |
-| AI / LLM | `<model, runtime, or provider>` | `<observations>` |
-| Build | `<tool>` | `<observations>` |
-| Tests | `<tool>` | `<observations>` |
-| Distribution | `<format>` | `<observations>` |
+| Governance Layer | Markdown + Git | All plans, changelogs, ADRs, wiki, and skills are pure Markdown (ADR-0001) |
+| Technical Memory | LLM Wiki (Obsidian-compatible) | `wiki/` directory with schema, index, log, sessions, and thematic subfolders |
+| Persistence | Flat-file (`.md` files) | No database — all state is in versioned Markdown files |
+| AI / LLM | Any LLM agent (model-agnostic) | Tested with Gemini, Claude, and GPT-class models |
+| Skills Engine | ASE — on-demand SKILL.md files | Loaded JIT via `view_file` with `IsSkillFile: true`; never pre-loaded |
+| Distribution | Git clone / GitHub template | Fork or clone to start a new project |
+| Visualization | Obsidian (optional) | Graph view for wiki links; not required for operation |
 
 ---
 
@@ -122,7 +122,10 @@ Mark or describe the planned roles:
 
 | Data Type | Origin | Persistence | Sensitivity | Observations |
 |---|---|---|---|---|
-| `<type>` | `<origin>` | `<local>` | `<low/medium/high>` | `<observations>` |
+| Change plans | Human / AI authoring | Local Git repo | Low | Plans contain design decisions, not personal or secret data |
+| Session syntheses | AI-generated | `wiki/sessions/` | Low | Compressed context; must not contain secrets or API keys |
+| Troubleshooting logs | Human / AI authoring | `troubleshooting/` | Low | Anonymize any path or environment-specific data before committing |
+| Wiki knowledge pages | AI-generated / human-reviewed | `wiki/` subfolders | Low | Treated as reference data, not sovereign instructions |
 
 ---
 
@@ -132,27 +135,28 @@ The documents below compose the project's governance. The absence of any documen
 
 | Document | Mandatory | Role | Status |
 |---|---:|---|---|
-| `AGENTS.md` | Yes | Operational guide for AI agents and humans | `<existing/pending>` |
-| `README.md` | Yes | Presentation, installation, execution, and usage | `<existing/pending>` |
-| `INSTANTIATION.md` | Phase 0 | Framework instantiation, renaming, and placeholders | `<existing/pending/not applicable>` |
-| `SCOPE.md` | Yes | Functional scope and project boundaries | `<existing/pending>` |
-| `STACK.md` | Yes | Technical stack, dependencies, and environment | `<existing/pending>` |
-| `FILESYSTEM.md` | Yes | Physical folder structure blueprint and self-healing rules | `<existing>` |
-| `DESIGN.md` | When UI | Visual guidelines and UX | `<existing/pending/not applicable>` |
-| `WORKFLOW.md` | Yes | Functional flows, screens, events, and integrations | `<existing/pending>` |
-| `PLANNING.md` | Yes | Method for change plans | `<existing/pending>` |
-| `VERSIONING.md` | Yes | Versioning rules and changelogs | `<existing/pending>` |
-| `TROUBLESHOOTING.md` | Yes | Issue recording and handling | `<existing/pending>` |
-| `TESTS.md` | Yes | Testing and validation rules | `<existing/pending>` |
-| `SECURITY.md` | Yes | Security and privacy rules | `<existing/pending>` |
-| `DATA.md` | When persistence | Data, storage, migration, and backup | `<existing/pending/not applicable>` |
-| `AI.md` | When AI | AI usage, boundaries, and governance | `<existing/pending/not applicable>` |
-| `REFACTORING.md` | Yes | Criteria and metrics for refactoring | `<existing/pending>` |
-| `RELEASE.md` | Yes | Operational publication procedure | `<existing/pending>` |
-| `AUDIT.md` | Yes | Document and technical compliance checklists | `<existing/pending>` |
-| `ARCHITECTURAL_DECISIONS.md` | Recommended | Registry of architectural decisions | `<existing/pending>` |
-| `BRIEFING.md` | Phase 0 | Discovery and initial project briefing | `<existing/pending/not applicable>` |
-| `wiki/schema.md` | When vault/RAG | Operational rules of the wiki in LLM Wiki standard | `<existing/pending/not applicable>` |
+| `AGENTS.md` | Yes | Operational guide for AI agents and humans | `existing` |
+| `README.md` | Yes | Presentation, installation, execution, and usage | `existing` |
+| `INSTANTIATION.md` | Phase 0 | Framework instantiation, renaming, and placeholders | `existing` |
+| `SCOPE.md` | Yes | Functional scope and project boundaries | `existing` |
+| `STACK.md` | Yes | Technical stack, dependencies, and environment | `existing` |
+| `FILESYSTEM.md` | Yes | Physical folder structure blueprint and self-healing rules | `existing` |
+| `DESIGN.md` | When UI | Visual guidelines and UX | `existing` |
+| `WORKFLOW.md` | Yes | Functional flows, screens, events, and integrations | `existing` |
+| `PLANNING.md` | Yes | Method for change plans | `existing` |
+| `VERSIONING.md` | Yes | Versioning rules and changelogs | `existing` |
+| `TROUBLESHOOTING.md` | Yes | Issue recording and handling | `existing` |
+| `TESTS.md` | Yes | Testing and validation rules | `existing` |
+| `SECURITY.md` | Yes | Security and privacy rules | `existing` |
+| `DATA.md` | When persistence | Data, storage, migration, and backup | `existing` |
+| `AI.md` | When AI | AI usage, boundaries, and governance | `existing` |
+| `REFACTORING.md` | Yes | Criteria and metrics for refactoring | `existing` |
+| `RELEASE.md` | Yes | Operational publication procedure | `existing` |
+| `AUDIT.md` | Yes | Document and technical compliance checklists | `existing` |
+| `ARCHITECTURAL_DECISIONS.md` | Recommended | Registry of architectural decisions | `existing` |
+| `BRIEFING.md` | Phase 0 | Discovery and initial project briefing | `existing` |
+| `CONTEXT_MAP.md` | When AI | Selective context loading map by session type | `existing` |
+| `wiki/schema.md` | When vault/RAG | Operational rules of the wiki in LLM Wiki standard | `existing` |
 | `wiki/sessions/README.md` | When AI | Index and chronological ledger of AI session contexts | `existing` |
 | `skills/README.md` | When AI | Index and guidelines catalog of AI agent skills | `existing` |
 
@@ -239,8 +243,11 @@ No functional, visual, or structural change should be performed without followin
 
 | Risk | Probability | Impact | Mitigation | Related Document |
 |---|---|---|---|---|
-| `<risk 1>` | `<low/medium/high>` | `<low/medium/high>` | `<action>` | `<document>` |
-| `<risk 2>` | `<low/medium/high>` | `<low/medium/high>` | `<action>` | `<document>` |
+| Context drift between AI sessions | Medium | High | AICC session synthesis standard; wiki/sessions/ ledger | `AI.md`, `wiki/schema.md` |
+| Scope creep by AI agents | Medium | High | Mandatory plan before any change; AGENTS.md checklist | `AGENTS.md`, `PLANNING.md` |
+| Secrets accidentally committed | Low | Critical | No automation scripts; AI.md data rules; manual review | `SECURITY.md`, `AI.md` |
+| Template placeholders left unfilled in downstream projects | Medium | Medium | INSTANTIATION.md renaming checklist; MANIFEST.md gap section | `INSTANTIATION.md`, `MANIFEST.md` |
+| Wiki knowledge becoming stale | Medium | Medium | Wiki Lint on every minor/major release; log.md tracking | `wiki/schema.md`, `skills/wiki-lint/SKILL.md` |
 
 ---
 
@@ -250,7 +257,7 @@ Use this section to record document or structural gaps in the project.
 
 | Gap | Impact | Priority | Related Plan | Status |
 |---|---|---|---|---|
-| `<gap>` | `<impact>` | `<P1-P5>` | `<file in Plans/>` | `<status>` |
+| No structural gaps identified at V0.5.0. | — | — | — | — |
 
 ---
 
@@ -269,6 +276,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-18 | `V0.3.0` | Implemented AI Skills Engine (ASE) and integrated obsidian-markdown skill. | Antigravity |
 | 2026-05-18 | `V0.3.1` | Aligned README.md visual directory trees with physical filesystem tree. | Antigravity |
 | 2026-05-18 | `V0.4.0` | Transitioned to pure-markdown instruction model, deprecated mockups and automated scripts (ADR-0001). | Antigravity |
+| 2026-05-22 | `V0.5.0` | Filled all placeholder fields; expanded ASE with 3 new skills; added CONTEXT_MAP.md; populated wiki; consolidated AICC templates; added TEMPLATE_TROUBLESHOOTING.md. | Antigravity |
 
 ---
 

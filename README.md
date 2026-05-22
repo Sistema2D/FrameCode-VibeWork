@@ -49,11 +49,18 @@ A pasta `snippets/` guarda componentes e padrões prontos para adaptação, com 
 
 A pasta `governance/` preserva templates genéricos. Os documentos preenchidos do projeto ficam na raiz. A instanciação e as regras de renomeação estão em `INSTANTIATION.md`.
 
+#### 6. Motor de Habilidades (ASE)
+
+A pasta `skills/` armazena procedimentos técnicos de alta densidade carregados sob demanda pelo agente de IA — nunca pré-carregados no prompt. Isso preserva a janela de contexto enquanto disponibiliza checklists especializados quando necessários.
+
+Habilidades ativas: `obsidian-markdown`, `git-conventional-commits`, `wiki-lint`, `release-checklist`.
+
 ### Estrutura De Diretórios
 
 ```text
 📁 .
 ├── 📄 AGENTS.md
+├── 📄 CONTEXT_MAP.md
 ├── 📄 MANIFEST.md
 ├── 📄 README.md
 ├── 📄 INSTANTIATION.md
@@ -88,11 +95,17 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 │   ├── 📄 index.md
 │   ├── 📄 log.md
 │   ├── 📂 templates/
-│   └── 📂 sessions/
+│   ├── 📂 sessions/
+│   ├── 📂 patterns/
+│   ├── 📂 decisions/
+│   ├── 📂 releases/
+│   └── 📂 failures/
 ├── 📂 skills/
 │   ├── 📄 README.md
-│   └── 📂 obsidian-markdown/
-│       └── 📄 SKILL.md
+│   ├── 📂 obsidian-markdown/
+│   ├── 📂 git-conventional-commits/
+│   ├── 📂 wiki-lint/
+│   └── 📂 release-checklist/
 ├── 📂 snippets/
 └── 📂 governance/
 ```
@@ -103,10 +116,11 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 - `decisions/`: ADRs formais.
 - `audits/`: relatórios de auditoria.
 - `briefings/`: registros de descoberta e Fase 0.
-- `wiki/`: memória técnica compatível com Obsidian.
-- `skills/`: catálogo de habilidades executáveis do agente de IA.
+- `wiki/`: memória técnica compatível com Obsidian (padrões, decisões, falhas, releases, sínteses).
+- `skills/`: catálogo de habilidades executáveis do agente de IA — carregadas sob demanda (JIT).
 - `snippets/`: biblioteca de componentes e padrões reutilizáveis.
 - `governance/`: templates genéricos do framework.
+- `CONTEXT_MAP.md`: mapa compacto de carregamento seletivo por tipo de sessão.
 
 ### Consumo de Tokens por Cenário
 
@@ -119,6 +133,7 @@ Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framewo
 | **Componentes / UI** | `AGENTS.md` + `DESIGN.md` + `snippets/README.md` | ~4.500 tokens | **~1.000 tokens** | **-77%** |
 | **Refatoração** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8.000 tokens | **~1.800 tokens** | **-77%** |
 | **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
+| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2.500 tokens | **~600 tokens** | **-76%** |
 
 *Nota: As estimativas consideram o tamanho médio atual dos arquivos de governança do framework. 1 token ≈ 4 caracteres em inglês ou ~3 caracteres em português.*
 
@@ -190,11 +205,18 @@ The `snippets/` folder holds components and patterns ready for adaptation, with 
 
 The `governance/` folder preserves generic templates. Filled project documents reside at the root. Instantiation and renaming rules are in `INSTANTIATION.md`.
 
+#### 6. AI Skills Engine (ASE)
+
+The `skills/` folder stores high-density technical procedures loaded on-demand by the AI agent — never pre-loaded into the prompt. This preserves the context window while making specialized checklists available when needed.
+
+Active skills: `obsidian-markdown`, `git-conventional-commits`, `wiki-lint`, `release-checklist`.
+
 ### Directory Structure
 
 ```text
 📁 .
 ├── 📄 AGENTS.md
+├── 📄 CONTEXT_MAP.md
 ├── 📄 MANIFEST.md
 ├── 📄 README.md
 ├── 📄 INSTANTIATION.md
@@ -229,11 +251,17 @@ The `governance/` folder preserves generic templates. Filled project documents r
 │   ├── 📄 index.md
 │   ├── 📄 log.md
 │   ├── 📂 templates/
-│   └── 📂 sessions/
+│   ├── 📂 sessions/
+│   ├── 📂 patterns/
+│   ├── 📂 decisions/
+│   ├── 📂 releases/
+│   └── 📂 failures/
 ├── 📂 skills/
 │   ├── 📄 README.md
-│   └── 📂 obsidian-markdown/
-│       └── 📄 SKILL.md
+│   ├── 📂 obsidian-markdown/
+│   ├── 📂 git-conventional-commits/
+│   ├── 📂 wiki-lint/
+│   └── 📂 release-checklist/
 ├── 📂 snippets/
 └── 📂 governance/
 ```
@@ -244,10 +272,11 @@ The `governance/` folder preserves generic templates. Filled project documents r
 - `decisions/`: formal ADRs.
 - `audits/`: audit reports.
 - `briefings/`: discovery and Phase 0 records.
-- `wiki/`: Obsidian-compatible technical memory.
-- `skills/`: catalog of executable AI agent skills.
+- `wiki/`: Obsidian-compatible technical memory (patterns, decisions, failures, releases, syntheses).
+- `skills/`: catalog of executable AI agent skills — loaded on-demand (JIT).
 - `snippets/`: library of reusable components and patterns.
 - `governance/`: generic templates of the framework.
+- `CONTEXT_MAP.md`: compact selective loading map by session type.
 
 ### Token Consumption by Scenario
 
@@ -260,6 +289,7 @@ To maximize transparency and API call cost-efficiency with LLMs, the framework m
 | **Componentes / UI** | `AGENTS.md` + `DESIGN.md` + `snippets/README.md` | ~4,500 tokens | **~1,000 tokens** | **-77%** |
 | **Refactoring** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8,000 tokens | **~1,800 tokens** | **-77%** |
 | **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
+| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2,500 tokens | **~600 tokens** | **-76%** |
 
 *Note: Estimates are based on the current average size of the framework's governance files. 1 token ≈ 4 characters in English or ~3 characters in Portuguese.*
 

@@ -1,25 +1,30 @@
 # Skills Engine Catalog & Guidelines
 
 *Selecione o Idioma / Select Language:*
-- [Português](#português)
+- [PortuguÃªs](#portuguÃªs)
 - [English](#english)
 
 ---
 
-## Português
+## PortuguÃªs
 
-A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do framework. Ela armazena manuais de procedimentos técnicos de alta densidade e checklists operacionais especializados para direcionar a execução do agente de IA de forma eficiente e padronizada.
+A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do framework. Ela armazena manuais de procedimentos tÃ©cnicos de alta densidade e checklists operacionais especializados para direcionar a execuÃ§Ã£o do agente de IA de forma eficiente e padronizada.
 
 ### Diretrizes de Uso
 
-1. **Ativação por Demanda (Token-Efficient)**: As skills **nunca** devem ser carregadas no prompt inicial da IA. O agente deve ler um arquivo de skill (com `view_file` e `IsSkillFile: true`) apenas quando a tarefa ativamente exigir a execução daquele procedimento.
-2. **Gatilhos Claros**: Cada skill deve declarar explicitamente seus gatilhos operacionais de ativação.
+1. **AtivaÃ§Ã£o por Demanda (Token-Efficient)**: As skills **nunca** devem ser carregadas no prompt inicial da IA. O agente deve ler um arquivo de skill (com `view_file` e `IsSkillFile: true`) apenas quando a tarefa ativamente exigir a execuÃ§Ã£o daquele procedimento.
+2. **Gatilhos Claros**: Cada skill deve declarar explicitamente seus gatilhos operacionais de ativaÃ§Ã£o.
 3. **Estilo de Alta Densidade**: As skills devem usar checklists e comandos diretos, eliminando narrativa filler e conversas prolixas.
-4. **Registro de Uso**: Quando uma skill é ativada, ela deve ser listada na Síntese de Sessão AICC correspondente em `wiki/sessions/S*.md`.
+4. **Registro de Uso**: Quando uma skill Ã© ativada, ela deve ser listada na SÃ­ntese de SessÃ£o AICC correspondente em `wiki/sessions/S*.md`.
 
-### Catálogo de Skills Ativas
+### CatÃ¡logo de Skills Ativas
 
-- **[`obsidian-markdown`](file:///c:/Users/meloha/Desktop/FCVW/skills/obsidian-markdown/SKILL.md)**: Especializada em padronizar a formatação, propriedades, callouts e conexões semânticas bidirecionais (wikilinks) em notas da LLM Wiki.
+| Skill | Arquivo | Gatilhos Principais | BenefÃ­cio |
+|---|---|---|---|
+| **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | formataÃ§Ã£o wiki, wikilinks, frontmatter, notas Obsidian | Padroniza formataÃ§Ã£o e conexÃµes semÃ¢nticas da LLM Wiki |
+| **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publicar versÃ£o | Padroniza mensagens de commit, tags semÃ¢nticas e notas de release |
+| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, auditoria wiki, orphan pages, frontmatter invÃ¡lido | Valida integridade estrutural da wiki (substitui leitura de 335 linhas do schema.md Â§12) |
+| **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, publicar release | Checklist condensado de release (~2.700 tokens economizados vs. carregar RELEASE+VERSIONING+AUDIT) |
 
 ---
 
@@ -36,4 +41,11 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 
 ### Active Skills Catalog
 
-- **[`obsidian-markdown`](file:///c:/Users/meloha/Desktop/FCVW/skills/obsidian-markdown/SKILL.md)**: Specialized in standardizing formatting, properties, callouts, and internal bidirectional semantic connections (wikilinks) in LLM Wiki notes.
+| Skill | File | Primary Triggers | Benefit |
+|---|---|---|---|
+| **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | wiki formatting, wikilinks, frontmatter, Obsidian notes | Standardizes LLM Wiki formatting and semantic connections |
+| **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publish version | Standardizes commit messages, semantic tags, and release notes |
+| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, wiki audit, orphan pages, broken links, invalid frontmatter | Validates wiki structural integrity (replaces reading 335 lines of schema.md Â§12) |
+| **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, cut a release | Condensed release checklist (~2,700 tokens saved vs. loading RELEASE+VERSIONING+AUDIT) |
+
+

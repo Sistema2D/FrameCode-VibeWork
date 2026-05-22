@@ -17,22 +17,22 @@
   9. Validate the integrity of markdown links and coherence of translations.
   10. Complete the plan and move it to `Plans/completed/`.
 - **Acceptance criteria:**
-  - [ ] All files translated into English (with the exception of README.md which is bilingual).
-  - [ ] All folders and files renamed into English.
-  - [ ] Markdown links updated and working.
-  - [ ] Document governance structure maintained in English (e.g., `AGENTS.md` translated, `MANIFEST.md` -> `MANIFEST.md`, etc.).
-  - [ ] Changelog `changelogs/V0.1.0.md` created in English.
-  - [ ] Change plan updated and moved to `Plans/completed/`.
+  - [x] All files translated into English (with the exception of README.md which is bilingual).
+  - [x] All folders and files renamed into English.
+  - [x] Markdown links updated and working.
+  - [x] Document governance structure maintained in English (e.g., `AGENTS.md` translated, `MANIFEST.md` -> `MANIFEST.md`, etc.).
+  - [x] Changelog `changelogs/V0.1.0.md` created in English.
+  - [x] Change plan updated and moved to `Plans/completed/`.
 - **Test plan:**
-  - [ ] Manually verify links between main files.
-  - [ ] Validate the integrity of the English structure based on the new governance rules.
+  - [x] Manually verify links between main files.
+  - [x] Validate the integrity of the English structure based on the new governance rules.
 - **Priority:** `P1` (Critical)
 - **Risk:** `R2` (Medium-Low)
 - **Current Version:** `V0.0.1`
 - **Expected Version:** `V0.1.0`
-- **Status:** `in_progress`
+- **Status:** `completed`
 - **Creation Date:** 2026-05-17
-- **Completion Date:** Not applicable.
+- **Completion Date:** 2026-05-17
 - **Technical observations:**
   - The complete document structure will be kept, but its titles and directory names will be translated into English.
   - The README.md will have a Portuguese section followed by an English section, keeping both perfectly readable.
@@ -46,7 +46,8 @@
 ### Tests
 | Test | Result | Evidence |
 |---|---|---|
-| | | |
+| Main cross-document links | Success | README/AGENTS/MANIFEST references remained coherent after internationalization. |
+| Governance structure integrity | Success | Folder/file naming aligned with English governance model and changelog V0.1.0. |
 
 ### Final Result
-`pending`
+`approved`

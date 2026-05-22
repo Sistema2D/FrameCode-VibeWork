@@ -4,21 +4,21 @@
 - **Justification:** Ensures that our main user-facing documentation accurately reflects the physical state and folder architecture of version V0.3.0+ of the framework.
 - **Objective:** Synchronize README.md directory maps with the actual workspace filesystem structure.
 - **Scope:**
-  - Update [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md) Portuguese directory tree.
-  - Update [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md) English directory tree.
-  - Update [MANIFEST.md](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md) and [STACK.md](file:///c:/Users/meloha/Desktop/FCVW/STACK.md) to bump version to `V0.3.1`.
+  - Update [README.md](../../README.md) Portuguese directory tree.
+  - Update [README.md](../../README.md) English directory tree.
+  - Update [MANIFEST.md](../../MANIFEST.md) and [STACK.md](../../STACK.md) to bump version to `V0.3.1`.
   - Re-run filesystem sync script.
   - Create `changelogs/V0.3.1.md`.
 - **Affected files:**
-  - [`README.md`](file:///c:/Users/meloha/Desktop/FCVW/README.md)
-  - [`MANIFEST.md`](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md)
-  - [`STACK.md`](file:///c:/Users/meloha/Desktop/FCVW/STACK.md)
-  - [`changelogs/V0.3.1.md`](file:///c:/Users/meloha/Desktop/FCVW/changelogs/V0.3.1.md)
+  - [`README.md`](../../README.md)
+  - [`MANIFEST.md`](../../MANIFEST.md)
+  - [`STACK.md`](../../STACK.md)
+  - [`changelogs/V0.3.1.md`](../../changelogs/V0.3.1.md)
 - **Implementation plan:**
-  1. Update directory structure tree in the Portuguese section of [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md).
-  2. Update directory structure tree in the English section of [README.md](file:///c:/Users/meloha/Desktop/FCVW/README.md).
-  3. Bump version to `V0.3.1` in [MANIFEST.md](file:///c:/Users/meloha/Desktop/FCVW/MANIFEST.md) and [STACK.md](file:///c:/Users/meloha/Desktop/FCVW/STACK.md).
-  4. Automatically synchronize directory tree layout inside [FILESYSTEM.md](file:///c:/Users/meloha/Desktop/FCVW/FILESYSTEM.md).
+  1. Update directory structure tree in the Portuguese section of [README.md](../../README.md).
+  2. Update directory structure tree in the English section of [README.md](../../README.md).
+  3. Bump version to `V0.3.1` in [MANIFEST.md](../../MANIFEST.md) and [STACK.md](../../STACK.md).
+  4. Automatically synchronize directory tree layout inside [FILESYSTEM.md](../../FILESYSTEM.md).
   5. Create `changelogs/V0.3.1.md`.
   6. Validate and close the plan in `Plans/completed/`.
 - **Acceptance criteria:**
@@ -51,3 +51,5 @@
 
 ### Final Result
 `approved`
+
+

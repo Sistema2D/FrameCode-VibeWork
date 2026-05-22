@@ -212,3 +212,11 @@ AI agents must:
 - not declare an issue as resolved without objective validation;
 - create a formal plan in `Plans/` before applying changes to the application;
 - preserve the history of attempts, including unsuccessful ones.
+
+## Models and Templates
+
+To create new troubleshooting records, use the template in:
+`governance/TEMPLATE_TROUBLESHOOTING.md`
+
+The template includes: identification metadata, symptom description, hypotheses table, root cause, solution steps, validation checklist, prevention notes, and a wiki promotion decision field.
+

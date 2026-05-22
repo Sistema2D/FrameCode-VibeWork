@@ -154,25 +154,25 @@ Rules:
 
 ## AI Interaction Context Compression (AICC)
 
-To prevent context bloat, reduce API costs, and guarantee flawless alignment and continuity between sessions, the framework implements the AICC system. Detailed estimates of token consumption and expected savings for each development scenario are mapped in [README.md: Token Consumption by Scenario](file:///c:/Users/meloha/Desktop/FCVW/README.md#token-consumption-by-scenario).
+To prevent context bloat, reduce API costs, and guarantee flawless alignment and continuity between sessions, the framework implements the AICC system. Detailed estimates of token consumption and expected savings for each development scenario are mapped in [README.md: Token Consumption by Scenario](README.md#token-consumption-by-scenario).
 
 ### Ingestion Standard (At Session Start)
 
-1. **Locate the latest record**: Read the latest session file in [`wiki/sessions/`](file:///c:/Users/meloha/Desktop/FCVW/wiki/sessions/) (identified by the highest session number `S{session_num}`).
+1. **Locate the latest record**: Read the latest session file in [`wiki/sessions/`](wiki/sessions/) (identified by the highest session number `S{session_num}`).
 2. **Sync current state**: Align with all completed tasks, logical/visual changes, known issues, and next tasks registered in the handoff.
 3. **Report alignment**: State clearly to the user that the last compressed session context has been ingested and what items are actively targeted.
 
 ### Compaction Standard (At Session Close)
 
 1. **Analyze changes**: Review all edited code files, plans updated, and changelogs.
-2. **Create the synthesis**: Copy [`governance/TEMPLATE_AI_SESSION_SYNTHESIS.md`](file:///c:/Users/meloha/Desktop/FCVW/governance/TEMPLATE_AI_SESSION_SYNTHESIS.md) or [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](file:///c:/Users/meloha/Desktop/FCVW/wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md) to a new chronological session file in [`wiki/sessions/`](file:///c:/Users/meloha/Desktop/FCVW/wiki/sessions/) (incrementing the previous session number).
+2. **Create the synthesis**: Copy [`governance/TEMPLATE_AI_SESSION_SYNTHESIS.md`](governance/TEMPLATE_AI_SESSION_SYNTHESIS.md) or [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md) to a new chronological session file in [`wiki/sessions/`](wiki/sessions/) (incrementing the previous session number).
 3. **Synthesize dense content**:
    - Write in a highly dense, telegraphic style.
    - List absolute file URIs for modified and read files.
    - Summarize logical, visual, and documentation deltas.
    - Record newly acquired technical memory tags (`#gold-pattern`, `#failure-log`, `#arch-decision`).
    - Define exact next steps for the next agent/session.
-4. **Update records**: Reference the session in [`wiki/index.md`](file:///c:/Users/meloha/Desktop/FCVW/wiki/index.md) and record the creation in [`wiki/log.md`](file:///c:/Users/meloha/Desktop/FCVW/wiki/log.md).
+4. **Update records**: Reference the session in [`wiki/index.md`](wiki/index.md) and record the creation in [`wiki/log.md`](wiki/log.md).
 
 ## AI Skills Engine (ASE)
 
@@ -252,3 +252,5 @@ To facilitate retrieval and visualization in Obsidian, the AI must use the follo
 
 To create new AI feature specifications, use the template in:
 `governance/TEMPLATE_AI_RESOURCE.md`
+
+

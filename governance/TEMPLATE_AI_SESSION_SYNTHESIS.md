@@ -8,6 +8,7 @@ status: "validated"
 confidence: "high"
 last_reviewed: "YYYY-MM-DD"
 related_version: "Vx.y.z"
+session_number: <integer — sequential, never skip>
 tags:
   - "#session-synthesis"
   - "#context-compression"
