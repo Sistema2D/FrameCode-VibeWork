@@ -10,7 +10,6 @@
     --bg-overlay: rgba(22, 22, 26, 0.7);
     
     /* Cores de Ação (Indigo/Violet) */
-    --accent-primary: #6366f1;
     --accent-hover: #4f46e5;
     --accent-glow: rgba(99, 102, 241, 0.3);
     
@@ -25,14 +24,12 @@
     
     /* Sombras e Efeitos */
     --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
     --shadow-accent: 0 0 20px var(--accent-glow);
     
     /* Geometria */
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
-    --radius-full: 9999px;
     
     /* Tipografia */
     --font-main: 'Inter', -apple-system, sans-serif;
