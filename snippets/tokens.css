@@ -25,7 +25,6 @@
     
     /* Sombras e Efeitos */
     --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    --shadow-accent: 0 0 20px var(--accent-glow);
     
     /* Geometria */
     --radius-sm: 6px;
