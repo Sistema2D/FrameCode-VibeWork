@@ -6,32 +6,53 @@ risk: R1
 context_files: ["snippets/tokens.css", "AGENTS.md", "VERSIONING.md"]
 ---
 
-# Remove unused --radius-full CSS token
+# P4-R1-2024-05-25-remove-unused-token
 
-## Objective
+## Description
 
-Remove the unused CSS custom property `--radius-full` from `snippets/tokens.css` to improve code maintainability and remove dead code.
+Remove the unused CSS custom property `--radius-full` from `snippets/tokens.css`.
 
-## Current Behavior
+## Justification
 
-`snippets/tokens.css` defines `--radius-full: 9999px;` on line 35. A project-wide search confirms this variable is not referenced anywhere in the `snippets/tokens.css` or `snippets/gallery.html` files, nor in any other source file.
+`snippets/tokens.css` defined `--radius-full: 9999px;`, and a project-wide search confirmed the token was not referenced in `snippets/tokens.css`, `snippets/gallery.html`, or other source files. Removing the unused token improves maintainability and reduces dead code without affecting behavior.
 
-## Expected Behavior
+## Scope
 
-`snippets/tokens.css` no longer contains the `--radius-full` variable. The visual appearance and functionality of the application remain completely unchanged.
+- Remove `--radius-full: 9999px;` from `snippets/tokens.css`.
+- Keep formatting intact.
+- Record the change in `changelogs/V0.5.2.md`.
+- No functional or visual behavior changes are intended.
 
-## Implementation Plan
+## Current Version
 
-1. Remove line 35 (`--radius-full: 9999px;`) from `snippets/tokens.css`.
+V0.5.1
+
+## Expected Version
+
+V0.5.2
+
+## Creation Date
+
+2024-05-25
+
+## Completion Date
+
+2024-05-25
+
+## Implementation
+
+1. Remove `--radius-full: 9999px;` from `snippets/tokens.css`.
 2. Ensure the file remains well-formatted.
+3. Add the corresponding changelog entry in `changelogs/V0.5.2.md`.
 
-## Acceptance Criteria
+## Validation / Results
 
-- The `--radius-full` variable is absent from `snippets/tokens.css`.
-- The application (specifically any components relying on `tokens.css`) functions exactly as before.
-- A changelog entry is created for this modification in `changelogs/V0.5.2.md`.
+- Confirmed `--radius-full` was unused before removal via project-wide search.
+- Verified the token is absent from `snippets/tokens.css` after the change.
+- Reviewed impacted token consumers, including `snippets/gallery.html`, and found no required updates.
+- No visual or functional regressions were expected because the token had no references.
+- CSS formatting remains intact after the edit.
 
-## Test Plan
+## Outcome
 
-- **Manual Validation:** Run a search to verify `--radius-full` is removed. Check `snippets/gallery.html` or other UI elements using the tokens (if testable) to ensure no visual regressions occur.
-- **Linting:** Run CSS linters if available to ensure formatting is correct.
+Completed as planned. The unused `--radius-full` token was removed, the change was intended to ship in `V0.5.2`, and no behavior changes were introduced.
