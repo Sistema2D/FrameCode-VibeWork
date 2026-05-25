@@ -18,9 +18,9 @@ Remove the unused CSS variable `--accent-primary` from `snippets/tokens.css`.
 - The token is not referenced in the project.
 
 ## Test Plan
-- Run `grep -r "--accent-primary" snippets/` to ensure no usages exist.
+- Run `grep -r -e "--accent-primary" .` to ensure no usages exist anywhere in the repository.
 
 ## Validation
-- `grep -r -e "--accent-primary" snippets/` returned no results.
+- `grep -r -e "--accent-primary" .` returned no results.
 - `snippets/tokens.css` was manually inspected.
 - The framework is a document-based governance framework. No automated tests exist to run.
