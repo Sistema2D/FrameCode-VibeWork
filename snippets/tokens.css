@@ -24,7 +24,8 @@
     --border-hover: rgba(255, 255, 255, 0.15);
     
     /* Sombras e Efeitos */
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-accent: 0 0 20px var(--accent-glow);
     
     /* Geometria */
     --radius-sm: 6px;
