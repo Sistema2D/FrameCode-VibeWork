@@ -30,7 +30,7 @@
     /* Geometria */
     --radius-sm: 6px;
     --radius-md: 10px;
-    --radius-full: 9999px;
+    --radius-lg: 16px;
     
     /* Tipografia */
     --font-main: 'Inter', -apple-system, sans-serif;
