@@ -1,0 +1,6 @@
+🧹 Code Health Improvement: Remove Unused `--shadow-sm` Token
+
+🎯 **What:** Removed the `--shadow-sm` CSS variable from `snippets/tokens.css` as it was defined but not used anywhere.
+💡 **Why:** Reducing dead code improves readability and maintainability.
+✅ **Verification:** Verified by grepping the repository to ensure there are no references to `var(--shadow-sm)`.
+✨ **Result:** Cleaned up unused variables without changing any existing functionality.
