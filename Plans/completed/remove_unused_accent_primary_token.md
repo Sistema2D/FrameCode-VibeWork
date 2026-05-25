@@ -1,7 +1,9 @@
 ---
 status: completed
-priority: low
-risk: low
+priority: P4
+risk: R4
+context_files:
+  - snippets/tokens.css
 current_version: "V0.5.1"
 expected_version: "V0.5.1"
 ---
