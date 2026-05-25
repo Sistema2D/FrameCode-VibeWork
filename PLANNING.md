@@ -17,11 +17,12 @@ Mandatory sequence before any change:
 3. Classify priority (`P1`–`P5`) and risk (`R1`–`R5`).
 4. Record current version and expected version.
 5. Describe implementation plan, acceptance criteria, and test plan.
-6. Move to `Plans/in_progress/` upon starting.
-7. Apply only the scope of the plan.
-8. Create or update `changelogs/Vx.y.z.md`.
-9. Validate acceptance criteria.
-10. Update the plan with results and move to `Plans/completed/` or `Plans/discontinued/`.
+6. List exact files needed for execution in the `context_files` frontmatter array (Token Optimization).
+7. Move to `Plans/in_progress/` upon starting.
+8. Apply only the scope of the plan.
+9. Create or update `changelogs/Vx.y.z.md`.
+10. Validate acceptance criteria.
+11. Update the plan with results and move to `Plans/completed/` or `Plans/discontinued/`.
 
 ---
 

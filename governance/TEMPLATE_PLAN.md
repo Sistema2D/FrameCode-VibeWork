@@ -3,6 +3,9 @@
 This is the base template for any change in the project. Save in `Plans/pending/`.
 
 ```markdown
+---
+context_files: [] # List exact file paths the AI should load to execute this plan (reduces token bleed)
+---
 # P<Priority>-R<Risk>-YYYY-MM-DD-<short-description>
 
 - **Description:** <What will be done.>
