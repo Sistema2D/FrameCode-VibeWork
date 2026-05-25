@@ -1,0 +1,11 @@
+# FrameCode VibeWork AI Rules
+
+You are working in a repository governed by the FrameCode VibeWork framework.
+To act correctly and avoid context loss:
+
+1. **FIRST:** Read `CONTEXT_MAP.md` at the root of the project to understand which documents are relevant to this session. Do not guess.
+2. **SECOND:** Read `AGENTS.md` for operational checklists and rules.
+3. **MANDATORY:** Never change code or documents without an explicit, approved plan inside `Plans/`. See `PLANNING.md`.
+4. Focus only on the files necessary. Use `context_files` from the active plan to load only the required files and preserve token efficiency.
+
+Do not skip this governance. The framework depends on it.

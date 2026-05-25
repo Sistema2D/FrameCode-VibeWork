@@ -81,51 +81,6 @@ Queries, analyses, reviews, diagnostics, and explanatory responses do not requir
 
 If the query evolves into a modification of code, documentation, configuration, process, design, build, tests, or versioned data, create or locate a plan before modifying files.
 
-## Documentation Index
-
-### Root Documents
-
-- `MANIFEST.md`: identity, state, summarized scope, stack, risks, and governance statement.
-- `CONTEXT_MAP.md`: compact session-type loading map â€” read this before `AGENTS.md` for quick document selection by session type.
-- `governance/README_FRAMEWORK.md`: technical documentation and overview of the VibeWork FrameCode framework.
-- `README.md`: presentation, installation, execution, and usage of the application under development.
-- `INSTANTIATION.md`: rules for instantiating the framework in a new project, including renaming, placeholders, and separation between templates and canonical documents.
-- `BRIEFING.md`: Phase 0 guide â€” discovery, initial interview, and gap criteria. Activate when instantiating the framework in a new project.
-- `STACK.md`: technical stack, dependencies, build, persistence, and logs.
-- `FILESYSTEM.md`: physical application folder/file tree blueprint and self-healing rules.
-- `SCOPE.md`: functional scope, objectives, boundaries, modules, screens, and current content.
-- `PLANNING.md`: mandatory methodology for planning changes, priority, risk, and acceptance criteria.
-- `DESIGN.md`: UI/UX visual rules. `<Remove or adapt when there is no UI.>`
-- `TROUBLESHOOTING.md`: Markdown registration, query, update, and closure of issues. Use template at `governance/TEMPLATE_TROUBLESHOOTING.md`.
-- `VERSIONING.md`: versioning rules, release, changelog, and publication criteria.
-- `RELEASE.md`: operational workflow to prepare, validate, and publish releases.
-- `TESTS.md`: test and validation rules proportional to risk.
-- `SECURITY.md`: security, privacy, permissions, data protection, and operational boundaries.
-- `DATA.md`: data, persistence, migration, backup, retention, and separation of versioned data. `<Remove or adapt when there is no persistence.>`
-- `AI.md`: usage, boundaries, instruction hierarchy, context, memory, RAG, and continuous learning. `<Remove or adapt when there is no AI.>`
-- `REFACTORING.md`: criteria, metrics, risks, and safe workflow for refactoring.
-- `AUDIT.md`: document, operational, version, plans, troubleshooting, security, and AI auditing.
-- `ARCHITECTURAL_DECISIONS.md`: methodology for recording architectural decisions in ADRs.
-- `WORKFLOW.md`: operational documentation of modules, screens, and services. `<Remove or adapt when it does not apply.>`
-- `AGENTS.md`: this operational guide and document index.
-- `LICENSE`: MIT license of use (Hugo AraÃºjo de Melo).
-- `.gitignore`: standard exclusions to avoid versioning builds, logs, caches, local environments, and private data.
-
-### Document Folders
-
-- `Plans/pending/`: approved plans, not yet started.
-- `Plans/in_progress/`: plans in execution.
-- `Plans/completed/`: completed and validated plans.
-- `Plans/discontinued/`: canceled plans with justification.
-- `changelogs/`: formal version history files in `Vx.y.z.md`.
-- `troubleshooting/`: individual logs of failures, hypotheses, and validations.
-- `decisions/`: formal ADRs of the project.
-- `audits/`: formal audit reports.
-- `briefings/`: historical discovery and briefing logs.
-- `wiki/`: technical memory of the project (see `wiki/schema.md` for Ingest/Query/Lint operations). Contains **knowledge** templates (decisions, failures, learnings) in `wiki/templates/`.
-- `snippets/`: reusable code library (UI components, visual patterns). See `snippets/README.md`, `snippets/gallery.html`, and `snippets/tokens.css`.
-- `governance/`: central hub of empty templates for **operational processes** (plans, ADRs, AI specifications, data schemas, etc.). Use these files to instantiate new framework records.
-
 ## Operational Rules
 
 Detailed rules are in the domain documents. Summary of responsibility:
