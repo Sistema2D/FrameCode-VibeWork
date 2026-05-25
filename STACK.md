@@ -3,7 +3,7 @@
 ## Application
 
 - Name: `FrameCode VibeWork`
-- Current version: `V0.5.0`
+- Current version: `V0.5.2`
 - Type: `framework / governance template`
 - Target platform: `cross-platform (Windows / Linux / macOS)`
 - Objective: `Document-based governance framework for AI-assisted application development with session context compression and on-demand skills engine.`
