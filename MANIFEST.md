@@ -17,7 +17,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.5.0` |
+| Current Version | `V0.5.2` |
 | Manifest Creation Date | `2026-05-15` |
 | Last Update | `2026-05-22` |
 | Project Status | `development` |
@@ -277,6 +277,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-18 | `V0.3.1` | Aligned README.md visual directory trees with physical filesystem tree. | Antigravity |
 | 2026-05-18 | `V0.4.0` | Transitioned to pure-markdown instruction model, deprecated mockups and automated scripts (ADR-0001). | Antigravity |
 | 2026-05-22 | `V0.5.0` | Filled all placeholder fields; expanded ASE with 3 new skills; added CONTEXT_MAP.md; populated wiki; consolidated AICC templates; added TEMPLATE_TROUBLESHOOTING.md. | Antigravity |
+| 2024-05-25 | `V0.5.2` | Clean up unused css variable | Jules |
 
 ---
 
