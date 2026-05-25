@@ -14,7 +14,7 @@ Remove unused CSS variable `--chip-translucent` from `docs/index.html` to improv
 
 ## Implementation Plan
 1. Open `docs/index.html`.
-2. Delete line 28 containing `--chip-translucent`.
+2. Delete the `--chip-translucent` CSS variable definition.
 
 ## Acceptance Criteria
 - `--chip-translucent` is removed from `docs/index.html`.
