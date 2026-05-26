@@ -1,9 +1,3 @@
-# App
-
-Esta é a raiz do repositório da aplicação sob desenvolvimento. O código-fonte principal, ativos públicos e configurações de build pertencem inteiramente a esta pasta.
-
----
-
 > [!NOTE]
 > ### 🛠️ Governança Assistida por IA (FrameCode VibeWork)
 > Este projeto é regido pelo framework de governança documental e memória técnica **FrameCode VibeWork (FCVW)**, localizado integralmente na pasta `/FCVW`.
