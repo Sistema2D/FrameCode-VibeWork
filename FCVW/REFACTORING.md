@@ -282,3 +282,13 @@ When the refactoring is R3/R4/R5, the AI must respond or ask: what structural pr
 A good refactoring is one that makes the software simpler to understand, test, modify, and evolve, without surprising the user, breaking contracts, or hiding functional changes inside a technical reorganization.
 
 When in doubt between refactoring now or preserving stability, prioritize stability, evidence, and traceability.
+
+---
+
+## 24. Technical Debt & Refactoring Ledger
+
+To ensure that temporary shortcuts or non-blocking design flaws do not accumulate silently:
+1. **Mandatory Logging:** Any compromise in design patterns, missing test cases, or temporary workarounds must be logged as a `#tech-debt` item in the wiki using the template: `wiki/templates/TEMPLATE_TECH_DEBT.md`.
+2. **Refactoring Priority Alignment:** Remediation plans for high-severity technical debt must be scheduled into the priority list (P1-P5) in future change plans.
+3. **Continuous Pay-Down:** When modifying a file or module that contains an active `#tech-debt` wiki card, evaluate if part or all of that debt can be safely paid down (refactored) as part of the preparatory work of your active plan, moving the wiki card status to `obsolete` or `superseded` upon completion.
+

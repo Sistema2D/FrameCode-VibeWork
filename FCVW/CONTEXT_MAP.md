@@ -17,7 +17,7 @@ This document is designed to be the **first document read** in any session — b
 | **UI / Components** | `AGENTS.md §checklist`, `DESIGN.md`, `snippets/README.md` | `snippets/tokens.css`, `wiki/patterns/` | `DATA.md`, `SECURITY.md`, `RELEASE.md` |
 | **Refactoring** | `AGENTS.md §checklist`, `REFACTORING.md`, `PLANNING.md` | `wiki/refactorings/`, `TESTS.md` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **Release** | `AGENTS.md §checklist`, `skill:release-checklist` | `VERSIONING.md`, `AUDIT.md`, `RELEASE.md` | `DESIGN.md`, `REFACTORING.md` |
-| **Briefing / Instantiation** | `AGENTS.md §checklist`, `INSTANTIATION.md`, `BRIEFING.md` | `MANIFEST.md`, `SCOPE.md`, `STACK.md` | `REFACTORING.md`, `RELEASE.md` |
+| **Briefing / Instantiation** | `AGENTS.md §checklist`, `INSTANTIATION.md`, `BRIEFING.md` | `skill:project-instantiation`, `MANIFEST.md`, `STACK.md` | `REFACTORING.md`, `RELEASE.md` |
 | **Wiki / Knowledge** | `AGENTS.md §checklist`, `wiki/schema.md`, `wiki/index.md` | `skill:wiki-lint`, `wiki/log.md` | `DESIGN.md`, `DATA.md`, `SECURITY.md` |
 | **Security / Data** | `AGENTS.md §checklist`, `SECURITY.md`, `DATA.md` | `AI.md`, `TESTS.md` | `DESIGN.md`, `REFACTORING.md` |
 | **Document Audit** | `AGENTS.md §checklist`, `MANIFEST.md`, `AUDIT.md` | `wiki/index.md`, `changelogs/` | `DESIGN.md`, `DATA.md` |
@@ -33,6 +33,8 @@ This document is designed to be the **first document read** in any session — b
 | `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages | ~275 lines vs. reading schema.md §12 |
 | `skills/release-checklist/SKILL.md` | release, publish, version bump | ~2.7k tokens vs. RELEASE+VERSIONING+AUDIT |
 | `skills/obsidian-markdown/SKILL.md` | wikilink, frontmatter, Obsidian note | Replaces ad-hoc formatting instructions |
+| `skills/aicc-compact/SKILL.md` | shift close, compact session, close session, log sync | Reduces close turn overhead |
+| `skills/project-instantiation/SKILL.md` | bootstrap, new project, instantiate, initialize | Safely sets up workspace |
 
 ---
 
@@ -45,7 +47,7 @@ This document is designed to be the **first document read** in any session — b
 
 ---
 
-## Document Size Reference (V0.5.0)
+## Document Size Reference (V0.6.0)
 
 > Use to make informed decisions about what to load. Larger files cost more tokens.
 
@@ -57,9 +59,11 @@ This document is designed to be the **first document read** in any session — b
 | `README.md` | ~13 KB | Rarely (orientation only) |
 | `wiki/schema.md` | ~9 KB | Use `skill:wiki-lint` instead |
 | `SECURITY.md` | ~7 KB | On demand (security sessions) |
+| `ENVIRONMENT.md` | ~6 KB | On demand (environment sessions) |
+| `PERFORMANCE.md` | ~5 KB | On demand (performance sessions) |
 | `DESIGN.md` | ~7 KB | On demand (UI sessions) |
 | `TESTS.md` | ~7 KB | On demand |
-| `MANIFEST.md` | ~10 KB | On demand (audit / identity) |
+| `MANIFEST.md` | ~11 KB | On demand (audit / identity) |
 | `DATA.md` | ~9 KB | On demand (persistence sessions) |
 | `SCOPE.md` | ~4 KB | On demand (new feature) |
 | `PLANNING.md` | ~3 KB | Most sessions |

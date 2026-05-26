@@ -29,25 +29,24 @@ Use this document when:
 
 ### Canonical Project Documents
 
-They reside at the root of the project and must be filled with real application data:
+They reside inside the `FCVW/` folder (except `AGENTS.md` which remains in the root as the bridge entrypoint) and must be filled with real application data:
 
-- `README.md`
-- `MANIFEST.md`
-- `STACK.md`
-- `SCOPE.md`
-- `DESIGN.md`, when there is UI
-- `WORKFLOW.md`
-- `DATA.md`, when there is persistence
-- `AI.md`, when there are AI features
-- `AGENTS.md`
+- `FCVW/MANIFEST.md`
+- `FCVW/STACK.md`
+- `FCVW/SCOPE.md`
+- `FCVW/DESIGN.md`, when there is UI
+- `FCVW/WORKFLOW.md`
+- `FCVW/DATA.md`, when there is persistence
+- `FCVW/AI.md`, when there are AI features
+- `AGENTS.md` (at the root)
 
 ### Framework Templates
 
-They must remain generic and reusable:
+They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 
-- `governance/`
-- `wiki/templates/`
-- reusable snippets in `snippets/`, unless the project's visual identity requires a planned adaptation.
+- `FCVW/governance/`
+- `FCVW/wiki/templates/`
+- reusable snippets in `FCVW/snippets/`, unless the project's visual identity requires a planned adaptation.
 
 ## Renaming Rules
 

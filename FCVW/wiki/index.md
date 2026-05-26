@@ -35,7 +35,8 @@ This repository is intentionally distributed with a clean wiki baseline. New pro
 
 - Validated patterns: none registered.
 - Consolidated decisions: none registered.
-- Release syntheses: none registered.
+- Release syntheses:
+  - [[sessions/S016-2026-05-26-governance-expansion-v0-6-0]] - Framework V0.6.0 expansion session synthesis.
 - Cross-cutting syntheses: none registered.
 - Failure catalog: none registered.
 - Prompt catalog: none registered.

@@ -17,9 +17,9 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.5.2` |
+| Current Version | `V0.6.0` |
 | Manifest Creation Date | `2026-05-15` |
-| Last Update | `2026-05-22` |
+| Last Update | `2026-05-26` |
 | Project Status | `development` |
 
 ---
@@ -149,6 +149,8 @@ The documents below compose the project's governance. The absence of any documen
 | `TESTS.md` | Yes | Testing and validation rules | `existing` |
 | `SECURITY.md` | Yes | Security and privacy rules | `existing` |
 | `DATA.md` | When persistence | Data, storage, migration, and backup | `existing` |
+| `ENVIRONMENT.md` | Yes | Environment configurations and secrets governance | `existing` |
+| `PERFORMANCE.md` | Yes | Performance budgets and network caching governance | `existing` |
 | `AI.md` | When AI | AI usage, boundaries, and governance | `existing` |
 | `REFACTORING.md` | Yes | Criteria and metrics for refactoring | `existing` |
 | `RELEASE.md` | Yes | Operational publication procedure | `existing` |
@@ -278,6 +280,7 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-18 | `V0.4.0` | Transitioned to pure-markdown instruction model, deprecated mockups and automated scripts (ADR-0001). | Antigravity |
 | 2026-05-22 | `V0.5.0` | Filled all placeholder fields; expanded ASE with 3 new skills; added CONTEXT_MAP.md; populated wiki; consolidated AICC templates; added TEMPLATE_TROUBLESHOOTING.md. | Antigravity |
 | 2024-05-25 | `V0.5.2` | Clean up unused css variable | Jules |
+| 2026-05-26 | `V0.6.0` | Expanded framework: added ENVIRONMENT.md, PERFORMANCE.md, project-instantiation & aicc-compact skills, and integrated technical debt ledger. | Antigravity |
 
 ---
 

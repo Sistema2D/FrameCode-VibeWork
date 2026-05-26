@@ -25,6 +25,8 @@ A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do frame
 | **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publicar versÃ£o | Padroniza mensagens de commit, tags semÃ¢nticas e notas de release |
 | **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, auditoria wiki, orphan pages, frontmatter invÃ¡lido | Valida integridade estrutural da wiki (substitui leitura de 335 linhas do schema.md Â§12) |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, publicar release | Checklist condensado de release (~2.700 tokens economizados vs. carregar RELEASE+VERSIONING+AUDIT) |
+| **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, concluir turno, finalizar sessão | Automatiza e compacta a síntese de sessão AICC para evitar inchaço de tokens |
+| **project-instantiation** | [`skills/project-instantiation/SKILL.md`](project-instantiation/SKILL.md) | bootstrap, instantiate, inicializar projeto, novo projeto | Guia a IA no bootstrap e renomeação de novos projetos na Fase 0 |
 
 ---
 
@@ -47,5 +49,7 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 | **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publish version | Standardizes commit messages, semantic tags, and release notes |
 | **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, wiki audit, orphan pages, broken links, invalid frontmatter | Validates wiki structural integrity (replaces reading 335 lines of schema.md Â§12) |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, cut a release | Condensed release checklist (~2,700 tokens saved vs. loading RELEASE+VERSIONING+AUDIT) |
+| **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, close session, consolidate shift | Standardizes AICC context compression at session end to prevent token bleed |
+| **project-instantiation** | [`skills/project-instantiation/SKILL.md`](project-instantiation/SKILL.md) | bootstrap, new project, instantiate, initialize, briefing | Steers the JIT bootstrap workflow for new downstream projects securely |
 
 
