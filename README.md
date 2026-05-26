@@ -1,4 +1,4 @@
-# Nome da Aplicação em Desenvolvimento
+# App
 
 Esta é a raiz do repositório da aplicação sob desenvolvimento. O código-fonte principal, ativos públicos e configurações de build pertencem inteiramente a esta pasta.
 
