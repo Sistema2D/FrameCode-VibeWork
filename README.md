@@ -54,33 +54,33 @@ flowchart TD
     classDef transition fill:#0284c7,stroke:#fff,stroke-width:2px,color:#fff;
 
     %% Nós do Fluxo
-    A([Solicitação do Usuário]) --> B[Ler AGENTS.md<br/><i>(Sempre Carregado)</i>]:::always
-    B --> C{Necessita<br/>Alterar Código?}:::decision
+    A(["Solicitação do Usuário"]):::start --> B["Ler AGENTS.md<br/><i>(Sempre Carregado)</i>"]:::always
+    B --> C{"Necessita<br/>Alterar Código?"}:::decision
     
     %% Branch A: Bypass / Chat Resposta
-    C -- Não (Dúvida/Análise/Review) --> D[BYPASS GOVERNANÇA<br/>Evita criação de planos]:::bypass
-    D --> E[Carregar Sob Demanda:<br/>wiki/ ou ADRs específicos]:::ondemand
-    E --> F[Responder Diretamente no Chat]:::start
+    C -- "Não (Dúvida/Análise/Review)" --> D["BYPASS GOVERNANÇA<br/>Evita criação de planos"]:::bypass
+    D --> E["Carregar Sob Demanda:<br/>wiki/ ou ADRs específicos"]:::ondemand
+    E --> F["Responder Diretamente no Chat"]:::start
     
     %% Branch B: Fluxo de Governança Estrito
-    C -- Sim (Feature/Bugfix/Refatoração) --> G[Inicializar Diretivas Core<br/>MANIFEST.md & CONTEXT_MAP.md]:::always
-    G --> H[Carregar Sob Demanda:<br/>PLANNING.md]:::ondemand
-    H --> I[Criar Rascunho de Plano:<br/>Plans/pending/PLAN_XXX.md]:::ondemand
-    I --> J{Aprovação Humana<br/>(Lead/Architect)?}:::decision
+    C -- "Sim (Feature/Bugfix/Refatoração)" --> G["Inicializar Diretivas Core<br/>MANIFEST.md & CONTEXT_MAP.md"]:::always
+    G --> H["Carregar Sob Demanda:<br/>PLANNING.md"]:::ondemand
+    H --> I["Criar Rascunho de Plano:<br/>Plans/pending/PLAN_XXX.md"]:::ondemand
+    I --> J{"Aprovação Humana<br/>(Lead/Architect)?"}:::decision
     
     %% Ciclo de Aprovação
-    J -- Rejeitado --> I
-    J -- Aprovado --> K[Mover Plano para:<br/>Plans/in_progress/PLAN_XXX.md]:::transition
+    J -- "Rejeitado" --> I
+    J -- "Aprovado" --> K["Mover Plano para:<br/>Plans/in_progress/PLAN_XXX.md"]:::transition
     
     %% Ciclo de Execução
-    K --> L[Executar Código & Testes<br/>Ler STACK/TESTS.md sob demanda]:::always
-    L --> M[Gerar Fragmento de Versão:<br/>changelogs/unreleased/PLAN_XXX.md]:::ondemand
-    M --> N[Executar AICC Compact<br/>Destilar logs para wiki/ sessions]:::always
-    N --> O[Tarefa Concluída]:::start
+    K --> L["Executar Código & Testes<br/>Ler STACK/TESTS.md sob demanda"]:::always
+    L --> M["Gerar Fragmento de Versão:<br/>changelogs/unreleased/PLAN_XXX.md"]:::ondemand
+    M --> N["Executar AICC Compact<br/>Destilar logs para wiki/ sessions"]:::always
+    N --> O["Tarefa Concluída"]:::start
 
     %% Skills trigger
-    B -.-> S{Identifica Necessidade<br/>de Automação?}:::decision
-    S -. Sim .-> T[[Skills Engine<br/>skills/ carregada sob demanda]]:::ondemand
+    B -.-> S{"Identifica Necessidade<br/>de Automação?"}:::decision
+    S -. "Sim" .-> T[["Skills Engine<br/>skills/ carregada sob demanda"]]:::ondemand
     T -.-> L
 ```
 
@@ -174,33 +174,33 @@ flowchart TD
     classDef transition fill:#0284c7,stroke:#fff,stroke-width:2px,color:#fff;
 
     %% Flow Nodes
-    A([User Request]) --> B[Read AGENTS.md<br/><i>(Always Loaded)</i>]:::always
-    B --> C{Requires<br/>Code Mod?}:::decision
+    A(["User Request"]):::start --> B["Read AGENTS.md<br/><i>(Always Loaded)</i>"]:::always
+    B --> C{"Requires<br/>Code Mod?"}:::decision
     
     %% Branch A: Bypass / Chat Response
-    C -- No (Question/Analysis/Review) --> D[BYPASS GOVERNANCE<br/>Prevents plan creation]:::bypass
-    D --> E[Load On-Demand:<br/>wiki/ or specific ADRs]:::ondemand
-    E --> F[Respond Directly in Chat]:::start
+    C -- "No (Question/Analysis/Review)" --> D["BYPASS GOVERNANCE<br/>Prevents plan creation"]:::bypass
+    D --> E["Load On-Demand:<br/>wiki/ or specific ADRs"]:::ondemand
+    E --> F["Respond Directly in Chat"]:::start
     
     %% Branch B: Strict Governance Flow
-    C -- Yes (Feature/Bugfix/Refactoring) --> G[Initialize Core Directives<br/>MANIFEST.md & CONTEXT_MAP.md]:::always
-    G --> H[Load On-Demand:<br/>PLANNING.md]:::ondemand
-    H --> I[Create Draft Plan:<br/>Plans/pending/PLAN_XXX.md]:::ondemand
-    I --> J{Human Approval<br/>(Lead/Architect)?}:::decision
+    C -- "Yes (Feature/Bugfix/Refactoring)" --> G["Initialize Core Directives<br/>MANIFEST.md & CONTEXT_MAP.md"]:::always
+    G --> H["Load On-Demand:<br/>PLANNING.md"]:::ondemand
+    H --> I["Create Draft Plan:<br/>Plans/pending/PLAN_XXX.md"]:::ondemand
+    I --> J{"Human Approval<br/>(Lead/Architect)?"}:::decision
     
     %% Approval Cycle
-    J -- Rejected --> I
-    J -- Approved --> K[Move Plan to:<br/>Plans/in_progress/PLAN_XXX.md]:::transition
+    J -- "Rejected" --> I
+    J -- "Approved" --> K["Move Plan to:<br/>Plans/in_progress/PLAN_XXX.md"]:::transition
     
     %% Execution Cycle
-    K --> L[Execute Code & Tests<br/>Read STACK/TESTS.md on demand]:::always
-    L --> M[Generate Version Fragment:<br/>changelogs/unreleased/PLAN_XXX.md]:::ondemand
-    M --> N[Run AICC Compact<br/>Distill logs into wiki/ sessions]:::always
-    N --> O[Task Completed]:::start
+    K --> L["Execute Code & Tests<br/>Read STACK/TESTS.md on demand"]:::always
+    L --> M["Generate Version Fragment:<br/>changelogs/unreleased/PLAN_XXX.md"]:::ondemand
+    M --> N["Run AICC Compact<br/>Distill logs into wiki/ sessions"]:::always
+    N --> O["Task Completed"]:::start
 
     %% Skills trigger
-    B -.-> S{Identifies Automation<br/>Need?}:::decision
-    S -. Yes .-> T[[Skills Engine<br/>skills/ loaded on demand]]:::ondemand
+    B -.-> S{"Identifies Automation<br/>Need?"}:::decision
+    S -. "Yes" .-> T[["Skills Engine<br/>skills/ loaded on demand"]]:::ondemand
     T -.-> L
 ```
 
