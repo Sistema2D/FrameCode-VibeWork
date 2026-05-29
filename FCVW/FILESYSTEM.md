@@ -56,7 +56,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |       |-- P2-R2-2026-05-29-governance-state-reconciliation.md
     |       |-- P2-R3-2026-05-29-root-and-snippets-deprecation.md
     |       |-- P3-R2-2026-05-29-audit-follow-up-cleanup.md
-    |       \-- P4-R1-2026-05-29-readme-flowchart-alignment.md
+    |       |-- P4-R1-2026-05-29-readme-flowchart-alignment.md
+    |       \-- P4-R1-2026-05-29-readme-scope-wording-corrections.md
     |-- DATA.md
     |-- decisions
     |   \-- ADR-0001-pure-markdown-over-automation-scripts.md
@@ -90,7 +91,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |   |   |-- P2-R2-2026-05-29-governance-state-reconciliation.md
     |   |   |-- P2-R3-2026-05-29-root-and-snippets-deprecation.md
     |   |   |-- P3-R2-2026-05-29-audit-follow-up-cleanup.md
-    |   |   \-- P4-R1-2026-05-29-readme-flowchart-alignment.md
+    |   |   |-- P4-R1-2026-05-29-readme-flowchart-alignment.md
+    |   |   \-- P4-R1-2026-05-29-readme-scope-wording-corrections.md
     |   |-- discontinued
     |   |-- in_progress
     |   \-- pending
@@ -157,7 +159,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |   |   |-- S001-2026-05-29-readme-flowchart-alignment.md
     |   |   |-- S002-2026-05-29-governance-state-reconciliation.md
     |   |   |-- S003-2026-05-29-root-and-snippets-deprecation.md
-    |   |   \-- S004-2026-05-29-audit-follow-up-cleanup.md
+    |   |   |-- S004-2026-05-29-audit-follow-up-cleanup.md
+    |   |   \-- S005-2026-05-29-readme-scope-wording-corrections.md
     |   |-- sources
     |   |   \-- README.md
     |   \-- templates

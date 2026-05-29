@@ -22,7 +22,7 @@ graph TD
     D -->|"Rastreabilidade"| E["Changelog e versionamento"]
     E -->|"Validação"| F["Auditoria e release"]
     F -->|"Aprendizado"| G["Wiki / memória técnica"]
-    G -->|"Publicação documental"| H["Documentação pública (Wiki + GitHub Pages)"]
+    G -->|"Publicação documental"| H["Documentação publicável opcional"]
     H -->|"Contexto acumulado"| C
 ```
 
@@ -48,7 +48,7 @@ O arquivo `DESIGN.md` centraliza tokens, regras visuais, contratos de componente
 
 #### 5. Separação entre framework e projeto
 
-A pasta `governance/` preserva templates genéricos. Os documentos preenchidos do projeto ficam na raiz. A instanciação e as regras de renomeação estão em `INSTANTIATION.md`.
+A pasta `governance/` preserva templates genéricos. Os documentos preenchidos do projeto ficam na raiz da aplicação instanciada, não na raiz do framework-base. A instanciação e as regras de renomeação estão em `INSTANTIATION.md`.
 
 #### 6. Motor de Habilidades (ASE)
 
@@ -68,7 +68,7 @@ A estrutura detalhada e auditável do framework é mantida em `FILESYSTEM.md`. E
 
 ### Consumo de Tokens por Cenário
 
-Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framework mapeia o consumo de tokens estimado para cada cenário de desenvolvimento com base em suas políticas ativas:
+Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framework mapeia estimativas de planejamento para cada cenário de desenvolvimento com base em suas políticas ativas:
 
 | Cenário Mapeado | Documentos Ingeridos | Custo Inicial (Sem AICC) | Custo por Turno com AICC | Economia com AICC |
 | :--- | :--- | :---: | :---: | :---: |
@@ -79,7 +79,7 @@ Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framewo
 | **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2.500 tokens | **~600 tokens** | **-76%** |
 
-*Nota: As estimativas consideram o tamanho médio atual dos arquivos de governança do framework. 1 token ≈ 4 caracteres em inglês ou ~3 caracteres em português.*
+*Nota: As estimativas são valores de referência para planejamento, não medições recalibradas automaticamente após cada mudança documental. Recalibre-as após crescimento material dos documentos de governança. 1 token ≈ 4 caracteres em inglês ou ~3 caracteres em português.*
 
 ### Como Usar
 
@@ -122,7 +122,7 @@ graph TD
     D -->|"Traceability"| E["Changelog and versioning"]
     E -->|"Validation"| F["Audit and release"]
     F -->|"Learning"| G["Wiki / technical memory"]
-    G -->|"Documentation publishing"| H["Public documentation (Wiki + GitHub Pages)"]
+    G -->|"Documentation publishing"| H["Optional publishable documentation"]
     H -->|"Accumulated context"| C
 ```
 
@@ -148,7 +148,7 @@ The `wiki/` folder follows the LLM Wiki standard: raw sources, synthesized pages
 
 #### 5. Framework and Project Separation
 
-The `governance/` folder preserves generic templates. Filled project documents reside at the root. Instantiation and renaming rules are in `INSTANTIATION.md`.
+The `governance/` folder preserves generic templates. Filled project documents reside at the instantiated application root, not at the framework-baseline root. Instantiation and renaming rules are in `INSTANTIATION.md`.
 
 #### 6. AI Skills Engine (ASE)
 
@@ -168,7 +168,7 @@ The detailed and auditable framework structure is maintained in `FILESYSTEM.md`.
 
 ### Token Consumption by Scenario
 
-To maximize transparency and API call cost-efficiency with LLMs, the framework maps the estimated token consumption for each development scenario based on its active policies:
+To maximize transparency and API call cost-efficiency with LLMs, the framework maps planning estimates for each development scenario based on its active policies:
 
 | Mapped Scenario | Ingested Documents | Initial Load (No AICC) | Continuous Turn Cost (With AICC) | Savings with AICC |
 | :--- | :--- | :---: | :---: | :---: |
@@ -179,7 +179,7 @@ To maximize transparency and API call cost-efficiency with LLMs, the framework m
 | **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2,500 tokens | **~600 tokens** | **-76%** |
 
-*Note: Estimates are based on the current average size of the framework's governance files. 1 token ≈ 4 characters in English or ~3 characters in Portuguese.*
+*Note: Estimates are planning reference values, not measurements automatically recalibrated after every documentation change. Recalibrate them after material growth in the governance documents. 1 token ≈ 4 characters in English or ~3 characters in Portuguese.*
 
 ### How to Use
 
