@@ -39,58 +39,65 @@
     └── 📂 skills/           # Motor de habilidades avançadas e agentes autônomos
 ```
 
-### Correlação e Cenários de Governança
+### Fluxo Operacional e Roteamento de Cenários
+
+O FCVW não sobrecarrega a janela de contexto carregando todos os arquivos o tempo todo. Ele adota um fluxo de decisões inteligente e **ingestão sob demanda** de capacidades e arquivos de suporte:
 
 ```mermaid
-graph TD
-    classDef root fill:#8b5cf6,stroke:#fff,stroke-width:2px,color:#fff
-    classDef core fill:#1a1d24,stroke:#8b5cf6,stroke-width:2px,color:#fff
-    classDef node fill:#20232b,stroke:#3a3c42,stroke-width:1px,color:#d1d5db
-    classDef folder fill:#10b981,stroke:#fff,stroke-width:1px,color:#fff
+flowchart TD
+    %% Estilos de nós
+    classDef start fill:#7c3aed,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef always fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#fff;
+    classDef ondemand fill:#0f172a,stroke:#10b981,stroke-width:1.5px,color:#d1d5db;
+    classDef decision fill:#ca8a04,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef bypass fill:#475569,stroke:#fff,stroke-width:1.5px,color:#d1d5db;
+    classDef transition fill:#0284c7,stroke:#fff,stroke-width:2px,color:#fff;
 
-    A[AGENTS.md<br/>Root Entrypoint]:::root --> B(FCVW/CONTEXT_MAP.md<br/>Router):::core
+    %% Nós do Fluxo
+    A([Solicitação do Usuário]) --> B[Ler AGENTS.md<br/><i>(Sempre Carregado)</i>]:::always
+    B --> C{Necessita<br/>Alterar Código?}:::decision
     
-    subgraph "Fase 0: Instanciação"
-    B --> C1(INSTANTIATION.md)
-    C1 --> C2(BRIEFING.md)
-    C1 --> C3(MANIFEST.md)
-    end
+    %% Branch A: Bypass / Chat Resposta
+    C -- Não (Dúvida/Análise/Review) --> D[BYPASS GOVERNANÇA<br/>Evita criação de planos]:::bypass
+    D --> E[Carregar Sob Demanda:<br/>wiki/ ou ADRs específicos]:::ondemand
+    E --> F[Responder Diretamente no Chat]:::start
     
-    subgraph "Fase 1: Workflow de Modificação"
-    B --> P1(PLANNING.md)
-    P1 --> P2[[Plans/]]:::folder
-    P1 --> P3[[changelogs/]]:::folder
-    end
+    %% Branch B: Fluxo de Governança Estrito
+    C -- Sim (Feature/Bugfix/Refatoração) --> G[Inicializar Diretivas Core<br/>MANIFEST.md & CONTEXT_MAP.md]:::always
+    G --> H[Carregar Sob Demanda:<br/>PLANNING.md]:::ondemand
+    H --> I[Criar Rascunho de Plano:<br/>Plans/pending/PLAN_XXX.md]:::ondemand
+    I --> J{Aprovação Humana<br/>(Lead/Architect)?}:::decision
     
-    subgraph "Fase 2: Arquitetura Core"
-    B --> A1(STACK.md)
-    A1 --> A2(SCOPE.md)
-    A1 --> A3(DATA.md)
-    A1 --> A4(ENVIRONMENT.md)
-    end
+    %% Ciclo de Aprovação
+    J -- Rejeitado --> I
+    J -- Aprovado --> K[Mover Plano para:<br/>Plans/in_progress/PLAN_XXX.md]:::transition
     
-    subgraph "Fase 3: Motor de Inteligência"
-    B --> M1(AI.md)
-    M1 --> M2[[skills/]]:::folder
-    M1 --> M3[[wiki/]]:::folder
-    end
-    
-    subgraph "Fase 4: UX & Resiliência"
-    B --> T1(TESTS.md)
-    T1 --> T2(TROUBLESHOOTING.md)
-    B --> D1(DESIGN.md)
-    end
-    
-    subgraph "Fase 5: Entrega & Segurança"
-    B --> R1(VERSIONING.md)
-    R1 --> R2(RELEASE.md)
-    R1 --> R3(SECURITY.md)
-    R1 --> R4(AUDIT.md)
-    R1 --> R5(PERFORMANCE.md)
-    end
+    %% Ciclo de Execução
+    K --> L[Executar Código & Testes<br/>Ler STACK/TESTS.md sob demanda]:::always
+    L --> M[Gerar Fragmento de Versão:<br/>changelogs/unreleased/PLAN_XXX.md]:::ondemand
+    M --> N[Executar AICC Compact<br/>Destilar logs para wiki/ sessions]:::always
+    N --> O[Tarefa Concluída]:::start
 
-    class C1,C2,C3,P1,A1,A2,A3,A4,T1,T2,D1,M1,R1,R2,R3,R4,R5 node
+    %% Skills trigger
+    B -.-> S{Identifica Necessidade<br/>de Automação?}:::decision
+    S -. Sim .-> T[[Skills Engine<br/>skills/ carregada sob demanda]]:::ondemand
+    T -.-> L
 ```
+
+#### 📌 Regras de Ingestão de Arquivos (Context Ingestion Rules)
+
+1. **Sempre Carregados (Always Loaded):**
+   - [AGENTS.md](file:///c:/Users/meloha/Desktop/AGENTES/FrameCode-VibeWork/AGENTS.md): Gancho de contexto inicial da IDE.
+   - [FCVW/MANIFEST.md](file:///c:/Users/meloha/Desktop/AGENTES/FrameCode-VibeWork/FCVW/MANIFEST.md): Regras fundamentais e pilares inegociáveis de arquitetura.
+   - [FCVW/CONTEXT_MAP.md](file:///c:/Users/meloha/Desktop/AGENTES/FrameCode-VibeWork/FCVW/CONTEXT_MAP.md): Router e limites do mapa de escopos.
+
+2. **Sob Demanda (On-Demand / Conditional):**
+   - **`Plans/` e `PLANNING.md`:** Apenas quando há modificações físicas de código em andamento.
+   - **`changelogs/` e `VERSIONING.md`:** Apenas no encerramento da tarefa e ciclo de release.
+   - **`wiki/` e ADRs:** Apenas durante a pesquisa de conceitos específicos ou consolidação de fim de sessão (AICC Compact).
+   - **`skills/`:** Ativadas apenas sob comando específico de IA (ex: linting, empacotamento, auditoria profunda).
+   - **Documentos de Suporte** (ex: `TESTS.md`, `SECURITY.md`, `PERFORMANCE.md`): Ingeridos somente se o plano ativo listar alterações nestas subáreas.
+
 
 ### Como Começar
 
@@ -152,58 +159,65 @@ Para visualizar os gráficos de decisão, o histórico de versões formais, rela
     └── 📂 skills/           # Advanced skills engine and autonomous agents
 ```
 
-### Correlation and Governance Scenarios
+### Operational Flow and Scenario Routing
+
+FCVW does not overload the context window by loading all files at all times. It implements an intelligent decision tree and **on-demand ingestion** of capabilities and support files:
 
 ```mermaid
-graph TD
-    classDef root fill:#8b5cf6,stroke:#fff,stroke-width:2px,color:#fff
-    classDef core fill:#1a1d24,stroke:#8b5cf6,stroke-width:2px,color:#fff
-    classDef node fill:#20232b,stroke:#3a3c42,stroke-width:1px,color:#d1d5db
-    classDef folder fill:#10b981,stroke:#fff,stroke-width:1px,color:#fff
+flowchart TD
+    %% Node styles
+    classDef start fill:#7c3aed,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef always fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#fff;
+    classDef ondemand fill:#0f172a,stroke:#10b981,stroke-width:1.5px,color:#d1d5db;
+    classDef decision fill:#ca8a04,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef bypass fill:#475569,stroke:#fff,stroke-width:1.5px,color:#d1d5db;
+    classDef transition fill:#0284c7,stroke:#fff,stroke-width:2px,color:#fff;
 
-    A[AGENTS.md<br/>Root Entrypoint]:::root --> B(FCVW/CONTEXT_MAP.md<br/>Router):::core
+    %% Flow Nodes
+    A([User Request]) --> B[Read AGENTS.md<br/><i>(Always Loaded)</i>]:::always
+    B --> C{Requires<br/>Code Mod?}:::decision
     
-    subgraph "Phase 0: Instantiation"
-    B --> C1(INSTANTIATION.md)
-    C1 --> C2(BRIEFING.md)
-    C1 --> C3(MANIFEST.md)
-    end
+    %% Branch A: Bypass / Chat Response
+    C -- No (Question/Analysis/Review) --> D[BYPASS GOVERNANCE<br/>Prevents plan creation]:::bypass
+    D --> E[Load On-Demand:<br/>wiki/ or specific ADRs]:::ondemand
+    E --> F[Respond Directly in Chat]:::start
     
-    subgraph "Phase 1: Modification Workflow"
-    B --> P1(PLANNING.md)
-    P1 --> P2[[Plans/]]:::folder
-    P1 --> P3[[changelogs/]]:::folder
-    end
+    %% Branch B: Strict Governance Flow
+    C -- Yes (Feature/Bugfix/Refactoring) --> G[Initialize Core Directives<br/>MANIFEST.md & CONTEXT_MAP.md]:::always
+    G --> H[Load On-Demand:<br/>PLANNING.md]:::ondemand
+    H --> I[Create Draft Plan:<br/>Plans/pending/PLAN_XXX.md]:::ondemand
+    I --> J{Human Approval<br/>(Lead/Architect)?}:::decision
     
-    subgraph "Phase 2: Core Architecture"
-    B --> A1(STACK.md)
-    A1 --> A2(SCOPE.md)
-    A1 --> A3(DATA.md)
-    A1 --> A4(ENVIRONMENT.md)
-    end
+    %% Approval Cycle
+    J -- Rejected --> I
+    J -- Approved --> K[Move Plan to:<br/>Plans/in_progress/PLAN_XXX.md]:::transition
     
-    subgraph "Phase 3: Intelligence Engine"
-    B --> M1(AI.md)
-    M1 --> M2[[skills/]]:::folder
-    M1 --> M3[[wiki/]]:::folder
-    end
-    
-    subgraph "Phase 4: UX & Resilience"
-    B --> T1(TESTS.md)
-    T1 --> T2(TROUBLESHOOTING.md)
-    B --> D1(DESIGN.md)
-    end
-    
-    subgraph "Phase 5: Delivery & Security"
-    B --> R1(VERSIONING.md)
-    R1 --> R2(RELEASE.md)
-    R1 --> R3(SECURITY.md)
-    R1 --> R4(AUDIT.md)
-    R1 --> R5(PERFORMANCE.md)
-    end
+    %% Execution Cycle
+    K --> L[Execute Code & Tests<br/>Read STACK/TESTS.md on demand]:::always
+    L --> M[Generate Version Fragment:<br/>changelogs/unreleased/PLAN_XXX.md]:::ondemand
+    M --> N[Run AICC Compact<br/>Distill logs into wiki/ sessions]:::always
+    N --> O[Task Completed]:::start
 
-    class C1,C2,C3,P1,A1,A2,A3,A4,T1,T2,D1,M1,R1,R2,R3,R4,R5 node
+    %% Skills trigger
+    B -.-> S{Identifies Automation<br/>Need?}:::decision
+    S -. Yes .-> T[[Skills Engine<br/>skills/ loaded on demand]]:::ondemand
+    T -.-> L
 ```
+
+#### 📌 Context Ingestion Rules
+
+1. **Always Loaded:**
+   - [AGENTS.md](file:///c:/Users/meloha/Desktop/AGENTES/FrameCode-VibeWork/AGENTS.md): Initial IDE context hook.
+   - [FCVW/MANIFEST.md](file:///c:/Users/meloha/Desktop/AGENTES/FrameCode-VibeWork/FCVW/MANIFEST.md): Fundamental rules and non-negotiable architectural pillars.
+   - [FCVW/CONTEXT_MAP.md](file:///c:/Users/meloha/Desktop/AGENTES/FrameCode-VibeWork/FCVW/CONTEXT_MAP.md): Router and boundary of scopes.
+
+2. **On-Demand (Conditional):**
+   - **`Plans/` and `PLANNING.md`:** Ingested only when physical code changes are active.
+   - **`changelogs/` and `VERSIONING.md`:** Loaded only at task closure and release cycles.
+   - **`wiki/` and ADRs:** Read/written only during research of specific concepts or session consolidation (AICC Compact).
+   - **`skills/`:** Triggered only under specific AI commands (e.g. linting, packaging, deep audits).
+   - **Support Documents** (e.g., `TESTS.md`, `SECURITY.md`, `PERFORMANCE.md`): Loaded only if the active plan touches these specific subareas.
+
 
 ### Getting Started
 
