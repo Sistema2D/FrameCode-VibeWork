@@ -6,7 +6,7 @@ This document serves as the entry point for the documentation, an index of Markd
 
 ## Overview
 
-FrameCode VibeWork is a document-based framework for AI-assisted application development featuring governance, traceability, and incremental technical memory. It organizes plans, changelogs, audits, decisions, troubleshooting, snippets, and an LLM Wiki in Markdown to reduce context loss between sessions.
+FrameCode VibeWork is a document-based framework for AI-assisted application development featuring governance, traceability, and incremental technical memory. It organizes plans, changelogs, audits, decisions, troubleshooting, and an LLM Wiki in Markdown to reduce context loss between sessions.
 
 ## How to Use This Guide in Prompts
 
@@ -31,7 +31,7 @@ Load only the documents relevant to the session context. All files (except this 
 |---|---|
 | Bugfix / troubleshooting | `AGENTS.md`, `FCVW/TROUBLESHOOTING.md`, `FCVW/PLANNING.md` |
 | New feature | `AGENTS.md`, `FCVW/SCOPE.md`, `FCVW/PLANNING.md`, `FCVW/DESIGN.md` (if UI), `FCVW/PERFORMANCE.md` |
-| UI implementation / components | `AGENTS.md`, `FCVW/DESIGN.md`, `FCVW/snippets/` |
+| UI implementation / components | `AGENTS.md`, `FCVW/DESIGN.md` |
 | Refactoring | `AGENTS.md`, `FCVW/REFACTORING.md`, `FCVW/PLANNING.md` |
 | Release | `FCVW/CONTEXT_MAP.md`, `FCVW/skills/` (release-checklist load JIT) |
 | Security / data | `AGENTS.md`, `FCVW/SECURITY.md`, `FCVW/DATA.md`, `FCVW/ENVIRONMENT.md` |
@@ -90,15 +90,18 @@ Detailed rules are in the domain documents. Summary of responsibility:
 - **Implementation**: do not mix opportunistic refactorings with bugfixes; do not revert pre-existing changes outside the active plan; do not version private data.
 - **Documentation**: plans go in `FCVW/Plans/{status}`; `AGENTS.md` must be updated when new official documents are created; templates in `FCVW/governance/` follow structural changes of the VibeWork FrameCode.
 - **Instantiation**: when starting a new project from the framework, consult `FCVW/INSTANTIATION.md`; do not use recursive scripts to rename or replace content in batch without explicit review of the affected files.
-- **Security**: `FCVW/SECURITY.md` â€” validate path traversal in any workflow that reads or writes paths coming from the UI or backend.
+- **Security**: `FCVW/SECURITY.md` — validate path traversal in any workflow that reads or writes paths coming from the UI or backend.
+- **Terminal Restrictions (Sandboxing)**: It is strictly forbidden to install global dependencies (e.g., `-g`) or modify system/environment configurations outside the workspace directory without explicit human approval.
 
 ## Initial Checklist
 
 Before executing a request that might modify files:
 
 - check the status of the repository with `git status --short`;
+- **Anti-Immediate Action (Brainstorming)**: before writing any code or creating a plan, stop and ask clarifying questions to extract a strict specification. Do not proceed to `Plans/pending/` until the spec is clear.
 - **Context Map**: check [`CONTEXT_MAP.md`](FCVW/CONTEXT_MAP.md) to identify the session type and the minimal set of documents to load;
 - **AI Context Ingestion**: read the latest compressed session context in [`FCVW/wiki/sessions/`](FCVW/wiki/sessions/) to immediately align with previous changes and active next steps;
+- **Memory Rotation**: if the `FCVW/wiki/sessions/` directory has more than 10 files, load the `memory-rotation` skill to condense older sessions into `FCVW/wiki/concepts/` and archive them, keeping only the 3 most recent sessions;
 - **Skills Engine Check**: check if the active task triggers any specialized skills mapped in [skills/README.md](FCVW/skills/README.md). If yes, load that skill using `view_file` with `IsSkillFile: true` to guide execution;
 - **New Project Instantiation**: upon detecting Phase 0, consult `FCVW/INSTANTIATION.md`, apply the documented renaming rules, and replace placeholders only in canonical framework documents, preserving generic templates in `FCVW/governance/` and `FCVW/wiki/templates/`;
 - when starting a new project, execute the Phase 0 process described in `FCVW/BRIEFING.md`;
@@ -128,8 +131,8 @@ Before executing a request that might modify files:
 4. Update the **Status** field to `in_progress` and move the file.
 5. Apply only the planned changes.
 6. Update auxiliary documentation when the change affects rules, process, design, or versioning.
-7. Create or update `FCVW/changelogs/Vx.y.z.md`.
-8. Execute the validations indicated in the plan.
+7. Create a changelog fragment in `FCVW/changelogs/unreleased/{plan-name}.md`.
+8. Execute the validations indicated in the plan (paste physical stdout as evidence).
 9. Record relevant technical observations in the plan.
 10. Update **Status** to `completed` or `discontinued` and move the file.
 
@@ -144,7 +147,7 @@ If a necessary change is not covered by the plan, create or update a plan before
 - Has the affected documentation been updated?
 - If there was a visual change, does `FCVW/DESIGN.md` reflect the current state?
 - If there was a bug, was `FCVW/troubleshooting/` consulted or updated?
-- Has the changelog been created or updated and does it cite the altered files?
+- Has the changelog fragment been created in `unreleased/` and does it cite the altered files?
 - **AI Context Compression**: has a new chronological session synthesis been created in [`FCVW/wiki/sessions/`](FCVW/wiki/sessions/) following the template to compress context for the next session?
 - Were tests executed or has the limitation been recorded?
 - Were temporary files, logs, and private data left out of versioning?

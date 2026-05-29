@@ -191,6 +191,10 @@ Applicable to web, native desktop, mobile, TUI, or hybrid interfaces.
 - AI does not execute actions outside allowed scope.
 - Prompt injection in retrieved data is treated as untrusted content.
 
+### Automated Prompt Evaluation (LLM Regression)
+
+For mature projects, relying solely on manual empirical prompt tests is insufficient. The project must adopt an automated LLM evaluation framework (e.g., `promptfoo`) integrated into the CI/CD pipeline to ensure that changes to `AGENTS.md` or the `FCVW/` knowledge base do not degrade the agent's behavior.
+
 ### Recommended Cases
 
 - Simple question.

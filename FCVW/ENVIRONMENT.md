@@ -99,5 +99,6 @@ Before completing any task related to environment variables, the AI agent must v
 
 - [ ] I have not written or committed any raw keys, tokens, or credentials.
 - [ ] Any new configuration key is documented in `FCVW/ENVIRONMENT.md` or the project `.env.example`.
+- [ ] **Active Environment Warning**: If I modified `.env.example`, I MUST immediately output a `> [!WARNING]` markdown alert in the chat instructing the human user to manually replicate the new key in their local `.env` file to prevent silent application crashes.
 - [ ] The `.gitignore` file includes strict overrides for all active runtime configuration files.
 - [ ] Local development configurations fallback safely to mocks or sandbox environments.

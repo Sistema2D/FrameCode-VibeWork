@@ -157,6 +157,15 @@ Consider sensitive:
 - Changelogs must not contain secrets.
 - Screenshots, logs, and error messages must hide secrets.
 
+### The Secret Handshake Protocol
+
+When an AI agent requires an API Key, Token, or Password to complete a task, the agent is **strictly forbidden** from asking the human user to paste the secret into the IDE chat interface. Pasting secrets in the chat permanently records them in the AI's conversation history logs.
+
+Instead, the agent must execute the **Secret Handshake**:
+1. The agent creates or identifies the target environment variable in `.env.local` (e.g., `SUPABASE_TOKEN=`).
+2. The agent outputs a message instructing the user: *"Human, I have prepared the `SUPABASE_TOKEN` variable in your `.env.local` file. Please open the file, paste your secret, save it, and let me know when you are done."*
+3. The agent pauses execution and waits for the human's confirmation.
+
 ## Permissions and Destructive Actions
 
 Destructive actions include:

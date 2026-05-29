@@ -20,8 +20,8 @@ Mandatory sequence before any change:
 6. List exact files needed for execution in the `context_files` frontmatter array (Token Optimization).
 7. Move to `Plans/in_progress/` upon starting.
 8. Apply only the scope of the plan.
-9. Create or update `changelogs/Vx.y.z.md`.
-10. Validate acceptance criteria.
+9. Create a changelog fragment in `changelogs/unreleased/{plan-name}.md`.
+10. Validate acceptance criteria (execute tests via terminal and paste the stdout inside the plan as physical evidence).
 11. Update the plan with results and move to `Plans/completed/` or `Plans/discontinued/`.
 
 ---

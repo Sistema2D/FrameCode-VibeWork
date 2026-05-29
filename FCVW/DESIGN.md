@@ -1,132 +1,172 @@
-# FrameCode VibeWork UI/UX Design System & Verification Guidelines
-
+---
+version: "1.0.0"
+name: "FrameCode VibeWork Base Design"
+description: "Premium Minimalist Dark Mode design system with fluid micro-animations and sleek surfaces."
+colors:
+  primary: "#8b5cf6"
+  secondary: "#1a1d24"
+  accent: "#8b5cf6"
+  background: "#0b0e14"
+  surface: "#1a1d24"
+  surface-alt: "#20232b"
+  text-primary: "#d1d5db"
+  text-secondary: "#9ca3af"
+  border: "#3a3c42"
+  success: "#10b981"
+  warning: "#f59e0b"
+  error: "#ef4444"
+  on-primary: "#ffffff"
+  on-accent: "#ffffff"
+typography:
+  h1:
+    fontFamily: "Inter, sans-serif"
+    fontSize: "24px"
+    fontWeight: "600"
+    lineHeight: "32px"
+  h2:
+    fontFamily: "Inter, sans-serif"
+    fontSize: "18px"
+    fontWeight: "500"
+    lineHeight: "24px"
+  h3:
+    fontFamily: "Inter, sans-serif"
+    fontSize: "14px"
+    fontWeight: "400"
+    lineHeight: "20px"
+  body-md:
+    fontFamily: "Inter, sans-serif"
+    fontSize: "14px"
+    fontWeight: "400"
+    lineHeight: "22px"
+  code:
+    fontFamily: "Fira Code, monospace"
+    fontSize: "13px"
+    fontWeight: "400"
+    lineHeight: "20px"
+rounded:
+  sm: "6px"
+  md: "8px"
+  lg: "12px"
+spacing:
+  xs: "4px"
+  sm: "8px"
+  md: "16px"
+  lg: "24px"
+  xl: "36px"
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.sm} {spacing.md}"
+    height: "{spacing.xl}"
+  button-secondary:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.sm} {spacing.md}"
+    border: "1px solid {colors.border}"
+    height: "{spacing.xl}"
+  input:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.sm} {spacing.md}"
+    border: "1px solid {colors.border}"
+    height: "{spacing.xl}"
+  card:
+    backgroundColor: "{colors.surface-alt}"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.md}"
+    border: "1px solid {colors.border}"
+  modal:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.lg}"
+    border: "1px solid {colors.border}"
+  table:
+    backgroundColor: "transparent"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.md}"
+    padding: "0"
+  navbar:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.text-primary}"
+    height: "64px"
+    border: "1px solid {colors.border}"
+  badge:
+    backgroundColor: "{colors.surface-alt}"
+    textColor: "{colors.text-secondary}"
+    rounded: "{rounded.sm}"
+    padding: "{spacing.xs} {spacing.sm}"
 ---
 
-This document establishes the official visual identity, component tokens, and user experience standards for the application. Furthermore, it defines a **pure-markdown verification standard** to calibrate and audit layout structures without relying on physical binary mockup folders, keeping the framework 100% portable and document-driven.
+## Overview
 
-## 1. Visual Tone & Principles
-The default visual identity of VibeWork-derived applications is **Premium Minimalist Dark Mode** with high visual depth, fluid micro-animations, and balanced information density (glassmorphism/sleek surfaces).
+This document establishes the official visual identity, component tokens, and user experience standards for the VibeWork application. The default visual identity is a **Premium Minimalist Dark Mode** prioritizing high visual depth, fluid micro-animations, and keyboard-first accessibility. 
 
-* **Visual Depth (Elevation)**: Use layered semi-transparent surfaces with soft shadows to build a clear information hierarchy.
-* **Micro-Animations**: All interactive elements must react instantly but smoothly (hover, active transitions).
-* **Keyboard-First Accessibility**: Every key action must have tooltips and clear visual keyboard focus indicators.
-* **Platform Sizing Resilience**: Layouts must dynamically flow and remain fully usable under three target viewport window tests:
-  1. **Standard Desktop**: `1920x1080` (maximized, spacious).
-  2. **Compact Desktop / Tablet**: `1024x768` (dense list layouts).
-  3. **Minimum Supported Size**: `800x600` (focus on main actions, sidebars collapsed or compact).
+The YAML front matter above acts as the Single Source of Truth (SSOT) for UI components. AI agents must extract the variables programmatically to generate CSS, Tailwind classes, or React components.
 
----
+## Colors
 
-## 2. Core Design System Tokens
+The color palette was strictly defined to avoid generic plain colors, utilizing deep dark tones to prevent eye strain while ensuring components "pop" off the background.
 
-### 2.1. Harmonious HSL Color Palette
-To prevent generic plain colors, VibeWork projects strictly enforce a curated dark palette based on HSL tailored colors.
+- **Background & Surfaces**: `{colors.background}` is the absolute lowest z-index layer. Panels (`{colors.surface}`) and cards (`{colors.surface-alt}`) have progressively lighter hex values to simulate lighting elevation.
+- **Brand/Primary**: We use a sleek violet accent (`{colors.primary}`) because it conveys a premium, modern feel.
+- **Text**: Pure white is avoided to reduce blooming. `{colors.text-primary}` guarantees an excellent WCAG AA contrast ratio against the dark background. Helper texts use `{colors.text-secondary}`.
+- **Feedback**: Standard semantic colors (`success`, `warning`, `error`) are used to convey state instantly.
 
-| Token | HSL Value | Hex Equivalent | Usage |
-| :--- | :--- | :--- | :--- |
-| `--bg-main` | `hsl(222, 19%, 8%)` | `#0b0e14` | Deep canvas base background. |
-| `--surface-panel` | `hsl(222, 15%, 12%)` | `#1a1d24` | Sidebar and elevated container panels. |
-| `--card-glass` | `hsla(222, 15%, 15%, 0.7)` | `#20232b (70%)` | Semi-transparent card components. |
-| `--border-subtle` | `hsla(222, 10%, 25%, 0.4)` | `#3a3c42 (40%)` | Discrete borders and separating rules. |
-| `--text-primary` | `hsl(210, 15%, 85%)` | `#d1d5db` | High-contrast body text and titles. |
-| `--text-muted` | `hsl(215, 10%, 60%)` | `#9ca3af` | Secondary labels, descriptions, and metadata. |
-| `--brand-accent` | `hsl(260, 85%, 65%)` | `#8b5cf6` | Sleek violet accents, primary action hovers. |
-| `--color-success` | `hsl(142, 70%, 45%)` | `#10b981` | Positive feedback, completions, validated states. |
-| `--color-error` | `hsl(350, 75%, 50%)` | `#ef4444` | Warnings, deleted tags, destructive actions. |
+## Typography
 
-### 2.2. Typographical Hierarchy
-Ensure google fonts like **Inter** or **Outfit** are loaded for premium interfaces.
-* **Main Title (H1)**: `24px / 32px line-height`, semibold, primary text color.
-* **Section Title (H2)**: `18px / 24px line-height`, medium, accent borders.
-* **Component Labels (H3)**: `14px / 20px line-height`, regular.
-* **Body / Prose**: `14px / 22px line-height`, regular, secondary text.
-* **Technical Code / Logs**: `13px`, monospaced font family (e.g., Fira Code, JetBrains Mono).
+Google Fonts like **Inter** or **Outfit** are chosen for their high geometric legibility, which is crucial for technical dashboards.
 
-### 2.3. Spatial Layout and Margins
-* **Base Grid Unit**: `4px`
-* **Card Border Radius**: `8px` for primary elements, `6px` for small sub-components.
-* **Container Padding**: `16px` inner padding.
-* **Clickable Area target**: Minimum `36px` width/height for buttons to ensure touch and cursor click ease.
+- **H1 (Main Title)**: Used solely for page headers. The tight line-height ensures titles feel cohesive.
+- **H2 (Section Title)**: Groups major blocks of content.
+- **Body-Md**: The workhorse font token. Sized at 14px to balance readability with high information density.
+- **Code**: `Fira Code` or `JetBrains Mono` for logs and technical readouts.
 
----
+## Layout
 
-## 3. Pure-Markdown Visual Calibration Methodology (VCM)
+The layout is built upon an 8-point spatial grid system.
 
-In order to eliminate environment dependencies and folder clutter associated with binary screenshot mockups, the framework establishes the **Visual Calibration Methodology (VCM)** in pure prose.
+- **Base Grid Unit**: `{spacing.xs}` (4px) or `{spacing.sm}` (8px).
+- **Responsive Sizing**: Layouts must dynamically reflow under three viewport targets without breaking: `1920x1080` (spacious), `1024x768` (dense), and `800x600` (mobile/compact focus).
+- **Margins**: Components must maintain at least `{spacing.md}` between sibling elements.
 
-When validating visual interfaces, the AI agent must perform a **Visual Description Audit (VDA)** by following this step-by-step descriptive checklist:
+## Elevation & Depth
 
-```mermaid
-graph TD
-    A["Agent launches Browser Sandbox"] --> B["Opens UI Page"]
-    B --> C["Extracts computed DOM layout and styles"]
-    C --> D["Runs prose-based Visual Description Audit"]
-    D --> E["Compares computed tokens with DESIGN.md standard"]
-    E --> F["Outputs detailed Markdown audit statement"]
-```
+To build visual hierarchy without overwhelming borders, we rely on background lightening and glassmorphism.
 
-### 3.1. Visual Description Audit (VDA) Specification
-Instead of visual image diffing, the agent creates a descriptive markdown audit log of the target layout. The VDA must objectively verify the following structural aspects:
+- Modals and Overlays must use a backdrop-filter blur.
+- Elevated cards (e.g., `{components.card}`) utilize a semi-transparent `{colors.surface-alt}` to allow subtle background bleeding, creating a premium depth effect.
 
-1. **Alignment and Box Model**:
-   * Inspect container outer margins. Confirm they match the spatial layout padding (e.g., `16px` padding, stable grid multipliers).
-   * Verify that no elements overlap or push others outside the parent boundary box.
-2. **Computed Style Check**:
-   * Query the computed styles of container panels. Verify that backgrounds match the `--surface-panel` HSL token exactly.
-   * Check scrollbar containers. Verify that custom scrollbar background matches its container background, with a discrete lighter thumb.
-3. **Contrast Ratio compliance**:
-   * Verify text color classes. Primary body must be `--text-primary` and helper text must be `--text-muted` to guarantee accessibility contrast.
-4. **Behavior under Viewport Resize**:
-   * Describe how the layout responds when the viewport is resized to `1024x768` and `800x600`.
-   * Confirm that navigation toolbars collapse cleanly or slide into a hamburger menu, and main buttons remain fully accessible without overflow.
+## Shapes
 
----
+Rounding scales follow modern SaaS conventions, eschewing sharp corners.
 
-## 4. UI Component Standards
+- **Buttons & Inputs**: Use `{rounded.md}` (8px) for friendly, approachable interaction zones.
+- **Badges/Tags**: Use `{rounded.sm}` (6px) since their overall height is smaller.
+- **Modals/Dialogs**: Use `{rounded.lg}` (12px) to softly frame large intrusive content.
 
-### 4.1. The Glassmorphism Card (`--card-glass`)
-To keep surfaces feeling premium and state-of-the-art:
-* **CSS Properties**:
-  ```css
-  background: var(--card-glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-  ```
+## Components
 
-### 4.2. Custom Scrollbar Integration
-Native scrollbars dilute a premium dark interface. Enforce this custom standard on all scrollable components:
-```css
-.scroll-container::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.scroll-container::-webkit-scrollbar-track {
-  background: transparent; /* Seamless match with container background */
-}
-.scroll-container::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
-  border-radius: 3px;
-}
-.scroll-container::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
-```
+The YAML front matter lists explicit tokens for components. When building them, you must respect these mapped values.
 
-### 4.3. Native Modals & Overlay Layers
-* Modals must never be standard browser alerts or system boxes.
-* The backdrop overlay must use `hsla(222, 19%, 8%, 0.65)` with a backdrop blur of `4px` to visually separate background elements.
-* Trapped keyboard focus inside modal containers is mandatory.
+- **Buttons**: Minimum `{spacing.xl}` (36px) height is enforced for touch accessibility and click ease. 
+- **Modals**: Native system alerts are forbidden. All modals must trap keyboard focus.
+- **Scrollbars**: Native scrollbars dilute the dark interface. They must be themed with custom CSS to match the `{colors.surface}` track and `{colors.border}` thumb.
 
----
+## Do's and Don'ts
 
-## 5. Visual Review & Verification Checklist
-Before declaring a UI task as completed, the agent must execute and document this visual validation list inside the change plan:
+### Do's
+- **DO verify WCAG Contrast**: Ensure any custom button backgrounds maintain high contrast against `{colors.on-primary}`.
+- **DO use Custom Scrollbars**: Native browser scrollbars break immersion. Always use custom pseudo-elements (`::-webkit-scrollbar`).
+- **DO run a Visual Description Audit (VDA)**: When generating components, simulate a browser render mentally. Write a markdown checklist verifying that paddings equal `{spacing.md}` and colors match the YAML front matter.
+- **DO infer missing elements gracefully**: If a missing visual state (e.g., hover color) is required, calculate it based on the closest token (e.g., 10% lighter than `{colors.primary}`) and document it.
 
-- [ ] **Descriptive Audit**: Has a Visual Description Audit (VDA) been run and logged?
-- [ ] **Contrast Check**: Do all foreground texts have excellent contrast ratios against HSL backgrounds?
-- [ ] **No Overlap**: Are long texts handled dynamically via ellipsis or scroll without colliding?
-- [ ] **Responsive Test**: Was the component verified at `1920x1080`, `1024x768`, and `800x600`?
-- [ ] **Custom Scrollbars**: Are native browser scrollbars styled cleanly using custom track and thumb tokens?
-- [ ] **Interactive Tooltips**: Do all icon-only or non-obvious controls have tooltips?
+### Don'ts
+- **DON'T use generic named colors** like `red` or `blue` in the CSS. Always use the hex references from the YAML.
+- **DON'T overlap text**: Long labels must gracefully truncate with an ellipsis or break lines.
+- **DON'T guess padding values**: Stick strictly to the `{spacing.*}` scale. Avoid magic numbers like 13px or 17px.

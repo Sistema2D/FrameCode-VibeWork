@@ -87,11 +87,12 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 3. Record or update a plan in `Plans/`.
 4. Fill in `BRIEFING.md` with known answers.
 5. Update `MANIFEST.md`, `STACK.md`, `SCOPE.md`, and `README.md`.
-6. Remove non-applicable sections in canonical documents.
-7. Create or update `changelogs/Vx.y.z.md`.
-8. Validate remaining placeholders outside templates.
-9. Update `wiki/index.md` and `wiki/log.md` if the instantiation generates reusable learning.
-10. Complete the plan and move it to the final status folder.
+6. Translate `DESIGN.md` YAML tokens into a physical codebase configuration file (e.g., `tailwind.config.js`, `index.css`, or `theme.ts`) to establish the UI foundation.
+7. Remove non-applicable sections in canonical documents.
+8. Create a changelog fragment in `changelogs/unreleased/{plan-name}.md`.
+9. Validate remaining placeholders outside templates.
+10. Update `wiki/index.md` and `wiki/log.md` if the instantiation generates reusable learning.
+11. Complete the plan and move it to the final status folder.
 
 ## Recommended Validation
 

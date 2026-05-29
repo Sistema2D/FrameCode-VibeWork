@@ -1,3 +1,11 @@
+*Selecione o Idioma / Select Language:*
+- [Português](#português)
+- [English](#english)
+
+---
+
+## Português
+
 > [!NOTE]
 > ### 🛠️ Governança Assistida por IA (FrameCode VibeWork)
 > Este projeto é regido pelo framework de governança documental e memória técnica **FrameCode VibeWork (FCVW)**, localizado integralmente na pasta `/FCVW`.
@@ -6,9 +14,7 @@
 > * O agente lerá automaticamente o arquivo `./AGENTS.md` na raiz.
 > * O agente utilizará a governança, planos e base de conhecimento dentro de `./FCVW/`.
 
----
-
-## Estrutura do Repositório
+### Estrutura do Repositório
 
 ```text
 [project-root]/
@@ -28,17 +34,68 @@
     ├── 📄 PERFORMANCE.md    # Governança e orçamentos de desempenho
     ├── 📂 Plans/            # Planos de alteração e ciclo de vida
     ├── 📂 wiki/             # Memória técnica incremental do projeto (LLM Wiki)
-    └── 📂 snippets/         # Biblioteca de componentes visuais reutilizáveis
+    └── 📂 skills/           # Motor de habilidades avançadas e agentes autônomos
 ```
 
----
+### Correlação e Cenários de Governança
 
-## Como Começar
+```mermaid
+graph TD
+    classDef root fill:#8b5cf6,stroke:#fff,stroke-width:2px,color:#fff
+    classDef core fill:#1a1d24,stroke:#8b5cf6,stroke-width:2px,color:#fff
+    classDef node fill:#20232b,stroke:#3a3c42,stroke-width:1px,color:#d1d5db
+    classDef folder fill:#10b981,stroke:#fff,stroke-width:1px,color:#fff
 
-### 1. Requisitos
+    A[AGENTS.md<br/>Root Entrypoint]:::root --> B(FCVW/CONTEXT_MAP.md<br/>Router):::core
+    
+    subgraph "Fase 0: Instanciação"
+    B --> C1(INSTANTIATION.md)
+    C1 --> C2(BRIEFING.md)
+    C1 --> C3(MANIFEST.md)
+    end
+    
+    subgraph "Fase 1: Workflow de Modificação"
+    B --> P1(PLANNING.md)
+    P1 --> P2[[Plans/]]:::folder
+    P1 --> P3[[changelogs/]]:::folder
+    end
+    
+    subgraph "Fase 2: Arquitetura Core"
+    B --> A1(STACK.md)
+    A1 --> A2(SCOPE.md)
+    A1 --> A3(DATA.md)
+    A1 --> A4(ENVIRONMENT.md)
+    end
+    
+    subgraph "Fase 3: Motor de Inteligência"
+    B --> M1(AI.md)
+    M1 --> M2[[skills/]]:::folder
+    M1 --> M3[[wiki/]]:::folder
+    end
+    
+    subgraph "Fase 4: UX & Resiliência"
+    B --> T1(TESTS.md)
+    T1 --> T2(TROUBLESHOOTING.md)
+    B --> D1(DESIGN.md)
+    end
+    
+    subgraph "Fase 5: Entrega & Segurança"
+    B --> R1(VERSIONING.md)
+    R1 --> R2(RELEASE.md)
+    R1 --> R3(SECURITY.md)
+    R1 --> R4(AUDIT.md)
+    R1 --> R5(PERFORMANCE.md)
+    end
+
+    class C1,C2,C3,P1,A1,A2,A3,A4,T1,T2,D1,M1,R1,R2,R3,R4,R5 node
+```
+
+### Como Começar
+
+#### 1. Requisitos
 * [Adicione os requisitos do seu sistema aqui, ex: Node.js >= 20.0]
 
-### 2. Instalação e Execução
+#### 2. Instalação e Execução
 ```bash
 # Instale as dependências da aplicação
 npm install
@@ -47,9 +104,7 @@ npm install
 npm run dev
 ```
 
----
-
-## Gestão de Conhecimento e Obsidian
+### Gestão de Conhecimento e Obsidian
 
 Para visualizar os gráficos de decisão, o histórico de versões formais, relatórios de troubleshooting e padrões arquiteturais do seu projeto:
 1. Abra o aplicativo **Obsidian**.
@@ -57,5 +112,116 @@ Para visualizar os gráficos de decisão, o histórico de versões formais, rela
 3. Selecione a subpasta `/FCVW` na raiz deste projeto.
 4. Agora você pode navegar pelos planos, conceitos e conexões em um gráfico interativo completo!
 
----
 *Este repositório foi organizado com amor usando o ecossistema assistido do FrameCode VibeWork.*
+
+---
+
+## English
+
+> [!NOTE]
+> ### 🛠️ AI-Assisted Governance (FrameCode VibeWork)
+> This project is governed by the **FrameCode VibeWork (FCVW)** document governance and technical memory framework, located entirely in the `/FCVW` folder.
+>
+> When working with AI assistants (such as Cursor, Windsurf, or agentic workflows):
+> * The agent will automatically read the `./AGENTS.md` file at the root.
+> * The agent will utilize the governance, plans, and knowledge base within `./FCVW/`.
+
+### Repository Structure
+
+```text
+[project-root]/
+├── 📁 src/                  # Main source code of your application (React, Node, Python, etc.)
+├── 📁 public/               # Public static assets of your system
+├── 📄 package.json          # Package and scripts configuration for your app
+├── 📄 .gitignore            # Git versioning filters
+├── 📄 README.md             # This file (describes your application)
+├── 📄 AGENTS.md             # Instruction bridge and rules for AI agents
+├── 📄 .cursorrules          # Operational rules for the Cursor IDE
+├── 📄 .windsurfrules        # Operational rules for the Windsurf IDE
+└── 📂 FCVW/                 # Subfolder containing the VibeWork framework engine
+    ├── 📄 README.md         # Original VibeWork framework documentation
+    ├── 📄 STACK.md          # Technical architecture and project stack
+    ├── 📄 SCOPE.md          # Functional boundaries and product scope
+    ├── 📄 ENVIRONMENT.md    # Environment and secrets governance
+    ├── 📄 PERFORMANCE.md    # Performance budgets and governance
+    ├── 📂 Plans/            # Change plans and lifecycle management
+    ├── 📂 wiki/             # Incremental technical memory of the project (LLM Wiki)
+    └── 📂 skills/           # Advanced skills engine and autonomous agents
+```
+
+### Correlation and Governance Scenarios
+
+```mermaid
+graph TD
+    classDef root fill:#8b5cf6,stroke:#fff,stroke-width:2px,color:#fff
+    classDef core fill:#1a1d24,stroke:#8b5cf6,stroke-width:2px,color:#fff
+    classDef node fill:#20232b,stroke:#3a3c42,stroke-width:1px,color:#d1d5db
+    classDef folder fill:#10b981,stroke:#fff,stroke-width:1px,color:#fff
+
+    A[AGENTS.md<br/>Root Entrypoint]:::root --> B(FCVW/CONTEXT_MAP.md<br/>Router):::core
+    
+    subgraph "Phase 0: Instantiation"
+    B --> C1(INSTANTIATION.md)
+    C1 --> C2(BRIEFING.md)
+    C1 --> C3(MANIFEST.md)
+    end
+    
+    subgraph "Phase 1: Modification Workflow"
+    B --> P1(PLANNING.md)
+    P1 --> P2[[Plans/]]:::folder
+    P1 --> P3[[changelogs/]]:::folder
+    end
+    
+    subgraph "Phase 2: Core Architecture"
+    B --> A1(STACK.md)
+    A1 --> A2(SCOPE.md)
+    A1 --> A3(DATA.md)
+    A1 --> A4(ENVIRONMENT.md)
+    end
+    
+    subgraph "Phase 3: Intelligence Engine"
+    B --> M1(AI.md)
+    M1 --> M2[[skills/]]:::folder
+    M1 --> M3[[wiki/]]:::folder
+    end
+    
+    subgraph "Phase 4: UX & Resilience"
+    B --> T1(TESTS.md)
+    T1 --> T2(TROUBLESHOOTING.md)
+    B --> D1(DESIGN.md)
+    end
+    
+    subgraph "Phase 5: Delivery & Security"
+    B --> R1(VERSIONING.md)
+    R1 --> R2(RELEASE.md)
+    R1 --> R3(SECURITY.md)
+    R1 --> R4(AUDIT.md)
+    R1 --> R5(PERFORMANCE.md)
+    end
+
+    class C1,C2,C3,P1,A1,A2,A3,A4,T1,T2,D1,M1,R1,R2,R3,R4,R5 node
+```
+
+### Getting Started
+
+#### 1. Requirements
+* [Add your system requirements here, e.g.: Node.js >= 20.0]
+
+#### 2. Installation and Execution
+```bash
+# Install application dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+### Knowledge Management and Obsidian
+
+To visualize decision graphs, formal version history, troubleshooting reports, and architectural patterns of your project:
+1. Open the **Obsidian** app.
+2. Choose **"Open folder as vault"**.
+3. Select the `/FCVW` subfolder at the root of this project.
+4. You can now navigate through plans, concepts, and connections in a fully interactive graph!
+
+*This repository was lovingly organized using the FrameCode VibeWork assisted ecosystem.*

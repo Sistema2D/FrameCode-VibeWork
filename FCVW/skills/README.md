@@ -27,6 +27,14 @@ A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do frame
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, publicar release | Checklist condensado de release (~2.700 tokens economizados vs. carregar RELEASE+VERSIONING+AUDIT) |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, concluir turno, finalizar sessão | Automatiza e compacta a síntese de sessão AICC para evitar inchaço de tokens |
 | **project-instantiation** | [`skills/project-instantiation/SKILL.md`](project-instantiation/SKILL.md) | bootstrap, instantiate, inicializar projeto, novo projeto | Guia a IA no bootstrap e renomeação de novos projetos na Fase 0 |
+| **agent-hermes** | [`skills/agent-hermes/SKILL.md`](agent-hermes/SKILL.md) | run perf agent, improve performance, optimize | Agente autônomo agendado para procurar e aplicar otimizações de performance. |
+| **agent-hephaestus** | [`skills/agent-hephaestus/SKILL.md`](agent-hephaestus/SKILL.md) | ux polish, accessibility fix, improve ui | Agente autônomo agendado para encontrar e implementar melhorias de micro-UX e acessibilidade. |
+| **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, fix vulnerability, harden | Agente autônomo agendado para identificar e corrigir vulnerabilidades ou aplicar hardening. |
+| **brainstorming-and-tdd** | [`skills/brainstorming-and-tdd/SKILL.md`](brainstorming-and-tdd/SKILL.md) | starting a new feature, fixing a bug, implementing a plan | Trava o agente no início para extrair especificações e obriga o uso de TDD (Red/Green). |
+| **systematic-debugging** | [`skills/systematic-debugging/SKILL.md`](systematic-debugging/SKILL.md) | debugging, fixing an error, tracking down a bug, stack trace | Força a depuração estruturada baseada em hipóteses, eliminando a tentativa e erro. |
+| **orchestrator** | [`skills/orchestrator/SKILL.md`](orchestrator/SKILL.md) | large refactoring, complex plans, parallel tasks | Habilita a IA a delegar tarefas em paralelo usando subagentes. |
+| **agnix-linter** | [`skills/agnix-linter/SKILL.md`](agnix-linter/SKILL.md) | periodic maintenance, governance audit | Inspeciona e valida a formatação, dead-links e consistência da pasta `FCVW/`. |
+| **memory-rotation** | [`skills/memory-rotation/SKILL.md`](memory-rotation/SKILL.md) | context bloat, clean sessions, rotate memory | Condensa sessões antigas do wiki em conceitos e remove excessos para proteger a janela de tokens. |
 
 ---
 
@@ -51,5 +59,13 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, cut a release | Condensed release checklist (~2,700 tokens saved vs. loading RELEASE+VERSIONING+AUDIT) |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, close session, consolidate shift | Standardizes AICC context compression at session end to prevent token bleed |
 | **project-instantiation** | [`skills/project-instantiation/SKILL.md`](project-instantiation/SKILL.md) | bootstrap, new project, instantiate, initialize, briefing | Steers the JIT bootstrap workflow for new downstream projects securely |
+| **agent-hermes** | [`skills/agent-hermes/SKILL.md`](agent-hermes/SKILL.md) | run perf agent, improve performance, optimize | Autonomous scheduled agent to find and apply performance optimizations. |
+| **agent-hephaestus** | [`skills/agent-hephaestus/SKILL.md`](agent-hephaestus/SKILL.md) | ux polish, accessibility fix, improve ui | Autonomous scheduled agent to find and implement micro-UX and accessibility improvements. |
+| **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, fix vulnerability, harden | Autonomous scheduled agent to identify and fix vulnerabilities or apply security hardening. |
+| **brainstorming-and-tdd** | [`skills/brainstorming-and-tdd/SKILL.md`](brainstorming-and-tdd/SKILL.md) | starting a new feature, fixing a bug, implementing a plan | Halts the agent at the start to extract specs and enforces Red/Green TDD. |
+| **systematic-debugging** | [`skills/systematic-debugging/SKILL.md`](systematic-debugging/SKILL.md) | debugging, fixing an error, tracking down a bug, stack trace | Enforces structured hypothesis-based debugging, eliminating guess and check. |
+| **orchestrator** | [`skills/orchestrator/SKILL.md`](orchestrator/SKILL.md) | large refactoring, complex plans, parallel tasks | Enables the main AI to delegate tasks in parallel using subagents. |
+| **agnix-linter** | [`skills/agnix-linter/SKILL.md`](agnix-linter/SKILL.md) | periodic maintenance, governance audit | Inspects and validates FCVW folder formatting, dead-links, and consistency. |
+| **memory-rotation** | [`skills/memory-rotation/SKILL.md`](memory-rotation/SKILL.md) | context bloat, clean sessions, rotate memory | Condenses old wiki sessions into concepts and purges excess to protect the token window. |
 
 
