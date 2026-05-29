@@ -93,16 +93,15 @@ graph TD
 ### Como Começar
 
 #### 1. Requisitos
-* [Adicione os requisitos do seu sistema aqui, ex: Node.js >= 20.0]
+* Um editor de código moderno com suporte a assistentes de IA (ex: Cursor, Windsurf, VS Code).
+* Copiar o arquivo `AGENTS.md` para a raiz do seu projeto.
+* Manter o diretório `/FCVW` íntegro na estrutura de pastas.
 
-#### 2. Instalação e Execução
-```bash
-# Instale as dependências da aplicação
-npm install
+#### 2. Fluxo Inicial de Uso
+1. **Defina o Contexto:** Descreva as metas e restrições iniciais em `FCVW/BRIEFING.md`.
+2. **Configure as Regras:** Personalize o `FCVW/MANIFEST.md` com os princípios e arquitetura inegociáveis do seu projeto.
+3. **Inicie o Desenvolvimento:** Oriente seu assistente de IA a ler `AGENTS.md` e seguir estritamente o ciclo de governança do framework.
 
-# Inicie o servidor de desenvolvimento
-npm run dev
-```
 
 ### Gestão de Conhecimento e Obsidian
 
@@ -205,16 +204,15 @@ graph TD
 ### Getting Started
 
 #### 1. Requirements
-* [Add your system requirements here, e.g.: Node.js >= 20.0]
+* A modern code editor with support for AI assistants (e.g., Cursor, Windsurf, VS Code).
+* Copy the `AGENTS.md` file to the root of your project.
+* Maintain the integrity of the `/FCVW` directory in your project's folder structure.
 
-#### 2. Installation and Execution
-```bash
-# Install application dependencies
-npm install
+#### 2. Initial Workflow
+1. **Define the Context:** Write down the initial goals and constraints in `FCVW/BRIEFING.md`.
+2. **Configure the Rules:** Customize `FCVW/MANIFEST.md` with the non-negotiable principles and architecture of your project.
+3. **Start Developing:** Instruct your AI assistant to read `AGENTS.md` and strictly follow the framework's governance cycle.
 
-# Start the development server
-npm run dev
-```
 
 ### Knowledge Management and Obsidian
 
