@@ -6,6 +6,8 @@
 
 ## Português
 
+[![Buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=hugomelovek&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00)](https://www.buymeacoffee.com/hugomelovek)
+
 > [!NOTE]
 > ### 🛠️ Governança Assistida por IA (FrameCode VibeWork)
 > Este projeto é regido pelo framework de governança documental e memória técnica **FrameCode VibeWork (FCVW)**, localizado integralmente na pasta `/FCVW`.
@@ -117,6 +119,8 @@ Para visualizar os gráficos de decisão, o histórico de versões formais, rela
 
 ## English
 
+[![Buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=hugomelovek&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00)](https://www.buymeacoffee.com/hugomelovek)
+
 > [!NOTE]
 > ### 🛠️ AI-Assisted Governance (FrameCode VibeWork)
 > This project is governed by the **FrameCode VibeWork (FCVW)** document governance and technical memory framework, located entirely in the `/FCVW` folder.
@@ -223,3 +227,10 @@ To visualize decision graphs, formal version history, troubleshooting reports, a
 4. You can now navigate through plans, concepts, and connections in a fully interactive graph!
 
 *This repository was lovingly organized using the FrameCode VibeWork assisted ecosystem.*
+
+---
+
+### Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Sistema2D/FrameCode-VibeWork&type=Date)](https://star-history.com/#Sistema2D/FrameCode-VibeWork&Date)
+
