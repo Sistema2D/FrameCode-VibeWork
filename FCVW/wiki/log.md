@@ -42,6 +42,19 @@ This repository is intentionally distributed with a clean wiki baseline. Registe
 
 ## Records
 
+## [2026-05-29 14:00] maintenance | README scope wording corrections
+
+- Source: user-requested corrections after README scope freshness review.
+- Executed action: reworded README publishing flow, application-root wording, and token-estimate disclaimer in Portuguese and English.
+- Pages created:
+  - `wiki/sessions/S005-2026-05-29-readme-scope-wording-corrections.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: README wording is better aligned with current scope and release rules.
+- Gaps: token values remain planning estimates until a dedicated recalibration pass is executed.
+
 ## [2026-05-29 13:30] audit | Audit follow-up cleanup
 
 - Source: framework structure audit follow-up request.

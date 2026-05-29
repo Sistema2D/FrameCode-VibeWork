@@ -15,6 +15,7 @@ This repository is intentionally distributed with a clean wiki baseline. New pro
 - [[sessions/S002-2026-05-29-governance-state-reconciliation]] - Session synthesis: governance state reconciliation.
 - [[sessions/S003-2026-05-29-root-and-snippets-deprecation]] - Session synthesis: root and snippets deprecation.
 - [[sessions/S004-2026-05-29-audit-follow-up-cleanup]] - Session synthesis: audit follow-up cleanup.
+- [[sessions/S005-2026-05-29-readme-scope-wording-corrections]] - Session synthesis: README scope wording corrections.
 - [[releases/v0-6-0]] - Release synthesis: V0.6.0.
 - [[README]] - Overview of the `wiki/` folder.
 
@@ -41,7 +42,7 @@ This repository is intentionally distributed with a clean wiki baseline. New pro
 - Validated patterns: none registered.
 - Consolidated decisions: none registered.
 - Release syntheses: 1 registered.
-- Cross-cutting syntheses: 4 session syntheses registered.
+- Cross-cutting syntheses: 5 session syntheses registered.
 - Failure catalog: none registered in `wiki/failures/`; current troubleshooting records live in `FCVW/troubleshooting/`.
 - Prompt catalog: none registered.
 - Open questions: none registered.
