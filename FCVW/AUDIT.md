@@ -114,6 +114,7 @@ Items:
 > This checklist is for **pre-release auditing** (coherence of the repository as a whole). The **task closure** checklist is in `AGENTS.md`.
 
 - [ ] `AGENTS.md` cites all relevant official documents.
+- [ ] The repository root is application-owned: no framework `README.md`, permanent root `docs/`, or framework-owned generated artifacts are present outside `FCVW/`, except bridge/config files such as `AGENTS.md`, `.gitignore`, `.cursorrules`, `.windsurfrules`, and `.github/`.
 - [ ] `STACK.md` records the correct version.
 - [ ] `changelogs/Vx.y.z.md` exists.
 - [ ] The changelog cites related plans.

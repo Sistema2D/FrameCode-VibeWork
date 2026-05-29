@@ -67,6 +67,17 @@ Standardize the closure of versions, preventing publication with incomplete plan
 - [ ] There are no temporary files as source of truth.
 - [ ] Build artifacts were not improperly versioned.
 
+## Framework Documentation Publication
+
+The framework documentation site artifact lives in `FCVW/docs/`.
+
+Rules:
+
+- Do not keep a permanent root `docs/` directory in the framework baseline.
+- If a host requires root `docs/` for publication, generate or export it as a release/deployment artifact from `FCVW/docs/`.
+- Do not treat the generated root export as the source of truth.
+- After publication, verify that `FCVW/docs/index.html` remains the canonical maintained file and that generated deployment artifacts are not confused with application-owned root files.
+
 ## Post-Release Checklist
 
 - [ ] Next gaps were registered in future plans, if applicable.

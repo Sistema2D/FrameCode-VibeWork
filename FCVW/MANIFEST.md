@@ -17,9 +17,9 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.6.0` |
+| Current Version | `V0.7.5` |
 | Manifest Creation Date | `2026-05-15` |
-| Last Update | `2026-05-26` |
+| Last Update | `2026-05-29` |
 | Project Status | `development` |
 
 ---
@@ -60,7 +60,7 @@ A repository that uses FrameCode VibeWork achieves: near-zero context loss betwe
 - AI Interaction Context Compression (AICC) via session syntheses
 - AI Skills Engine (ASE) with on-demand JIT skill loading
 - LLM Wiki (Obsidian-compatible technical memory with Ingest/Query/Lint cycle)
-- Reusable snippets library with visual gallery and CSS tokens
+- Declarative design system centralized in `DESIGN.md`
 - Instantiation workflow for bootstrapping new projects from the framework
 
 ### 4.2 Out of Scope
@@ -136,7 +136,7 @@ The documents below compose the project's governance. The absence of any documen
 | Document | Mandatory | Role | Status |
 |---|---:|---|---|
 | `AGENTS.md` | Yes | Operational guide for AI agents and humans | `existing` |
-| `README.md` | Yes | Presentation, installation, execution, and usage | `existing` |
+| `FCVW/README.md` | Yes | Framework presentation, installation, execution, and usage | `existing` |
 | `INSTANTIATION.md` | Phase 0 | Framework instantiation, renaming, and placeholders | `existing` |
 | `SCOPE.md` | Yes | Functional scope and project boundaries | `existing` |
 | `STACK.md` | Yes | Technical stack, dependencies, and environment | `existing` |
@@ -166,64 +166,14 @@ The documents below compose the project's governance. The absence of any documen
 
 ## 8. Expected Repository Structure
 
-```text
-.
-├── AGENTS.md
-├── MANIFEST.md
-├── README.md
-├── INSTANTIATION.md
-├── SCOPE.md
-├── STACK.md
-├── FILESYSTEM.md
-├── DESIGN.md
-├── WORKFLOW.md
-├── PLANNING.md
-├── VERSIONING.md
-├── TROUBLESHOOTING.md
-├── TESTS.md
-├── SECURITY.md
-├── DATA.md
-├── AI.md
-├── REFACTORING.md
-├── RELEASE.md
-├── AUDIT.md
-├── ARCHITECTURAL_DECISIONS.md
-├── Plans/
-│   ├── pending/
-│   ├── in_progress/
-│   ├── completed/
-│   └── discontinued/
-├── changelogs/
-├── troubleshooting/
-├── decisions/
-├── audits/
-├── briefings/
-├── wiki/
-│   ├── README.md
-│   ├── index.md
-│   ├── log.md
-│   ├── schema.md
-│   ├── templates/
-│   │   └── TEMPLATE_SESSION_SYNTHESIS.md
-│   └── sessions/
-│       └── README.md
-├── governance/
-│   ├── README_FRAMEWORK.md
-│   ├── TEMPLATE_AI_SESSION_SYNTHESIS.md
-│   └── TEMPLATE_PLAN.md
-├── skills/
-│   ├── README.md
-│   └── obsidian-markdown/
-│       └── SKILL.md
-├── .gitignore
-├── src/
-├── tests/
-└── build/
-```
+The detailed repository tree is maintained in `FILESYSTEM.md`, which is the source of truth for structural audits. This manifest only records the ownership rule:
 
-Adapt this structure according to the actual tech stack of the project.
+- the repository root belongs to the application under development;
+- `AGENTS.md` and bridge/configuration files may remain at the root;
+- official framework documents and generated framework documentation remain under `FCVW/`;
+- the root `README.md`, when present, must describe the target application, not the framework.
 
-The completed project documents must reside at the root. The `governance/` folder, when kept in the repository, should contain only reusable empty templates.
+The framework baseline keeps official framework documents inside `FCVW/`, with `AGENTS.md` at the root as the bridge entrypoint. During application instantiation, the root `README.md` must be generated for the target application. The `governance/` folder must contain only reusable empty templates.
 
 ---
 
@@ -279,8 +229,16 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-18 | `V0.3.1` | Aligned README.md visual directory trees with physical filesystem tree. | Antigravity |
 | 2026-05-18 | `V0.4.0` | Transitioned to pure-markdown instruction model, deprecated mockups and automated scripts (ADR-0001). | Antigravity |
 | 2026-05-22 | `V0.5.0` | Filled all placeholder fields; expanded ASE with 3 new skills; added CONTEXT_MAP.md; populated wiki; consolidated AICC templates; added TEMPLATE_TROUBLESHOOTING.md. | Antigravity |
-| 2024-05-25 | `V0.5.2` | Clean up unused css variable | Jules |
+| 2026-05-25 | `V0.5.2` | Clean up unused css variable. | Jules |
 | 2026-05-26 | `V0.6.0` | Expanded framework: added ENVIRONMENT.md, PERFORMANCE.md, project-instantiation & aicc-compact skills, and integrated technical debt ledger. | Antigravity |
+| 2026-05-29 | `V0.7.0` | Released modern internationalized `docs/index.html` and sanitized repository to zero-state distribution. | Sistema2D |
+| 2026-05-29 | `V0.7.1` | Corrected root README getting-started flow to match the framework lifecycle. | Sistema2D |
+| 2026-05-29 | `V0.7.2` | Copied `FCVW/docs/index.html` to root `docs/index.html` for GitHub Pages compatibility. | Sistema2D |
+| 2026-05-29 | `V0.7.3` | Added Star History and Buy Me a Coffee references to the public README. | Sistema2D |
+| 2026-05-29 | `V0.7.4` | Expanded root README with operational routing flowcharts. | Sistema2D |
+| 2026-05-29 | `V0.7.5` | Fixed Mermaid syntax in root README routing flowcharts. | Sistema2D |
+| 2026-05-29 | `V0.7.5` | Reconciled governance metadata, mandatory troubleshooting structure, and current-version documentation. | Codex |
+| 2026-05-29 | `V0.7.5` | Deprecated framework-owned root README, root docs duplicate, and `FCVW/snippets/`; centralized design rules in `DESIGN.md`. | Codex |
 
 ---
 

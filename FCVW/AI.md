@@ -154,7 +154,7 @@ Rules:
 
 ## AI Interaction Context Compression (AICC)
 
-To prevent context bloat, reduce API costs, and guarantee flawless alignment and continuity between sessions, the framework implements the AICC system. Detailed estimates of token consumption and expected savings for each development scenario are mapped in [README.md: Token Consumption by Scenario](README.md#token-consumption-by-scenario).
+To prevent context bloat, reduce API costs, and guarantee flawless alignment and continuity between sessions, the framework implements the AICC system. Detailed estimates of token consumption and expected savings for each development scenario are mapped in [FCVW/README.md: Token Consumption by Scenario](README.md#token-consumption-by-scenario).
 
 ### Ingestion Standard (At Session Start)
 
@@ -252,5 +252,4 @@ To facilitate retrieval and visualization in Obsidian, the AI must use the follo
 
 To create new AI feature specifications, use the template in:
 `governance/TEMPLATE_AI_RESOURCE.md`
-
 

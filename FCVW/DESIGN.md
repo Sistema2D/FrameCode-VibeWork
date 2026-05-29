@@ -109,6 +109,17 @@ This document establishes the official visual identity, component tokens, and us
 
 The YAML front matter above acts as the Single Source of Truth (SSOT) for UI components. AI agents must extract the variables programmatically to generate CSS, Tailwind classes, or React components.
 
+## Design System Source of Truth
+
+`DESIGN.md` is the only canonical design-system source for the framework. The former `FCVW/snippets/` sample-storage model is discontinued.
+
+Rules:
+
+- Do not create or depend on a framework-level snippets directory.
+- Store visual rules, tokens, component contracts, and interaction constraints in this document.
+- Generate downstream CSS, Tailwind, React, or platform-specific components from this document during instantiation or implementation.
+- Keep project-specific examples in the application codebase, not in the generic FCVW framework layer.
+
 ## Colors
 
 The color palette was strictly defined to avoid generic plain colors, utilizing deep dark tones to prevent eye strain while ensuring components "pop" off the background.

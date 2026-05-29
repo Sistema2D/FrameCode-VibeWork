@@ -2,7 +2,7 @@
 
 General scope of the FrameCode VibeWork framework according to its current state.
 
-This document describes the purpose, boundaries, modules, and main components of the framework. It does not replace `README.md`, `STACK.md`, `DESIGN.md`, or `PLANNING.md`; its role is to consolidate the functional scope view to guide future analysis, planning, and evolution.
+This document describes the purpose, boundaries, modules, and main components of the framework. It does not replace `FCVW/README.md`, `STACK.md`, `DESIGN.md`, or `PLANNING.md`; its role is to consolidate the functional scope view to guide future analysis, planning, and evolution.
 
 ## Overview
 
@@ -31,17 +31,13 @@ Provide a structured, traceable, and token-efficient lifecycle for AI-assisted d
 
 ### Governance Layer
 
-The core of the framework. All documents at the root (`AGENTS.md`, `MANIFEST.md`, `PLANNING.md`, `AI.md`, etc.) define the rules, methodology, and boundaries for any change. Plans in `Plans/{status}` govern the lifecycle of every modification. Changelogs in `changelogs/` track formal version history.
+The core of the framework. `AGENTS.md` remains at the repository root as the agent entrypoint; official framework documents reside inside `FCVW/` and define the rules, methodology, and boundaries for any change. Plans in `Plans/{status}` govern the lifecycle of every modification. Changelogs in `changelogs/` track formal version history.
 
 ### AI Skills Engine (ASE)
 
 The `skills/` directory hosts SKILL.md files — high-density procedural checklists loaded JIT by AI agents via `view_file` with `IsSkillFile: true`. Skills are never pre-loaded; they are activated only when the active task explicitly triggers their condition. This keeps the base token window lean.
 
-**Active skills (V0.5.0):**
-- `obsidian-markdown` — LLM Wiki formatting, wikilinks, and frontmatter standardization
-- `git-conventional-commits` — commit conventions, tagging, and release note generation
-- `wiki-lint` — structural validation of the LLM Wiki (orphans, broken links, frontmatter)
-- `release-checklist` — condensed pre-release, publication, and post-release procedure
+The authoritative skill catalog is `FCVW/skills/README.md`. `FCVW/STACK.md` records the current active inventory for quick technical reference.
 
 ### LLM Wiki (Technical Memory)
 
@@ -55,9 +51,9 @@ Session syntheses stored in `wiki/sessions/S{num}-{date}-{description}.md` compr
 
 **Estimated token savings:** ~77% reduction vs. raw chat history ingestion.
 
-### Snippets Library
+### Design System
 
-The `snippets/` directory holds reusable UI components, CSS tokens (`tokens.css`), and a visual gallery (`gallery.html`) for projects that include a frontend. It is optional for projects without a UI layer.
+`DESIGN.md` is the source of truth for visual rules, tokens, component contracts, and interaction standards. Framework-level snippet/sample storage is discontinued; downstream applications generate physical UI assets from `DESIGN.md` when needed.
 
 ### Governance Templates
 
@@ -123,7 +119,7 @@ No build step required. Clone the repository, open in a Markdown editor (Obsidia
 The framework maintains a versioned document layer to guide planning, implementation, validation, release, and continuous learning.
 
 Main components:
-- official documents at the root of the repository;
+- official framework documents in `FCVW/`, with `AGENTS.md` at the repository root as the bridge entrypoint;
 - plans in `Plans/{status}`;
 - changelogs in `changelogs/`;
 - issue records in `troubleshooting/`;
@@ -132,7 +128,7 @@ Main components:
 
 ## Related Documents
 
-- `README.md`: overview, requirements, build, execution, and troubleshooting.
+- `FCVW/README.md`: overview, requirements, build, execution, and troubleshooting for the framework.
 - `STACK.md`: technical stack and architecture.
 - `DESIGN.md`: visual and experience rules.
 - `PLANNING.md`: mandatory methodology for changes.

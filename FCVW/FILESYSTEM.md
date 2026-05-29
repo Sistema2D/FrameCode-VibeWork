@@ -3,8 +3,8 @@ title: "Project Filesystem Architecture"
 type: "concept"
 status: "validated"
 confidence: "high"
-last_reviewed: "2026-05-18"
-related_version: "V0.4.0"
+last_reviewed: "2026-05-29"
+related_version: "V0.7.5"
 sources:
   - "STACK.md"
   - "SCOPE.md"
@@ -29,30 +29,40 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 ```text
 [project-root]/
 |-- .cursorrules
+|-- .github/
 |-- .gitignore
 |-- .windsurfrules
 |-- AGENTS.md
-|-- README.md (Application README)
 \-- FCVW/
     |-- AI.md
     |-- ARCHITECTURAL_DECISIONS.md
     |-- AUDIT.md
+    |-- audits
+    |   |-- README.md
+    |   \-- 2026-05-29-framework-structure-audit.md
     |-- BRIEFING.md
+    |-- briefings
+    |   \-- README.md
+    |-- CONTEXT_MAP.md
     |-- changelogs
-    |   |-- V0.0.0.md
-    |   |-- V0.0.1.md
-    |   |-- V0.1.0.md
-    |   |-- V0.1.1.md
-    |   |-- V0.1.2.md
-    |   |-- V0.1.3.md
-    |   |-- V0.2.0.md
-    |   |-- V0.2.1.md
-    |   |-- V0.3.0.md
-    |   \-- V0.3.1.md
+    |   |-- V0.7.0.md
+    |   |-- V0.7.1.md
+    |   |-- V0.7.2.md
+    |   |-- V0.7.3.md
+    |   |-- V0.7.4.md
+    |   |-- V0.7.5.md
+    |   \-- unreleased/
+    |       |-- README.md
+    |       |-- P2-R2-2026-05-29-governance-state-reconciliation.md
+    |       |-- P2-R3-2026-05-29-root-and-snippets-deprecation.md
+    |       |-- P3-R2-2026-05-29-audit-follow-up-cleanup.md
+    |       \-- P4-R1-2026-05-29-readme-flowchart-alignment.md
     |-- DATA.md
     |-- decisions
     |   \-- ADR-0001-pure-markdown-over-automation-scripts.md
     |-- DESIGN.md
+    |-- docs
+    |   \-- index.html
     |-- ENVIRONMENT.md
     |-- FILESYSTEM.md
     |-- governance
@@ -64,9 +74,11 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |   |-- TEMPLATE_BRIEFING.md
     |   |-- TEMPLATE_DATA_SCHEMA.md
     |   |-- TEMPLATE_ENV.md
+    |   |-- TEMPLATE_MIGRATION_RUNNER.md
     |   |-- TEMPLATE_PLAN.md
     |   |-- TEMPLATE_REFACTORING.md
     |   |-- TEMPLATE_RELEASE.md
+    |   |-- TEMPLATE_TROUBLESHOOTING.md
     |   \-- TEMPLATE_VISUAL_DIFF.md
     |-- INSTANTIATION.md
     |-- LICENSE
@@ -75,46 +87,54 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |-- PLANNING.md
     |-- Plans
     |   |-- completed
-    |   |   |-- 20260515-sync-readme.md
-    |   |   |-- P2-R1-2026-05-17-filesystem-implementation.md
-    |   |   |-- P3-R1-2026-05-17-mockups-system-implementation.md
-    |   |   |-- P3-R1-2026-05-18-token-estimations-readme-integration.md
-    |   |   |-- P3-R1-2026-05-18-update-readme-directory-trees.md
-    |   |   |-- P3-R2-2026-05-18-ai-context-compression-implementation.md
-    |   |   |-- P3-R2-2026-05-18-skills-engine-and-obsidian-markdown-integration.md
-    |   |   |-- P4-R1-2026-05-17-database-schemas-and-token-optimization.md
-    |   |   \-- P5-R1-2025-05-15-add-star-history.md
+    |   |   |-- P2-R2-2026-05-29-governance-state-reconciliation.md
+    |   |   |-- P2-R3-2026-05-29-root-and-snippets-deprecation.md
+    |   |   |-- P3-R2-2026-05-29-audit-follow-up-cleanup.md
+    |   |   \-- P4-R1-2026-05-29-readme-flowchart-alignment.md
+    |   |-- discontinued
     |   |-- in_progress
-    |   |   \-- P2-R2-2026-05-26-fcvw-subfolder-migration.md
     |   \-- pending
     |-- README.md (Framework README)
     |-- REFACTORING.md
     |-- RELEASE.md
+    |-- repository-open-graph-template.png
     |-- SCOPE.md
     |-- SECURITY.md
     |-- skills
+    |   |-- README.md
+    |   |-- agent-aegis
+    |   |   \-- SKILL.md
+    |   |-- agent-hephaestus
+    |   |   \-- SKILL.md
+    |   |-- agent-hermes
+    |   |   \-- SKILL.md
+    |   |-- agnix-linter
+    |   |   \-- SKILL.md
     |   |-- aicc-compact
+    |   |   \-- SKILL.md
+    |   |-- brainstorming-and-tdd
+    |   |   \-- SKILL.md
+    |   |-- git-conventional-commits
+    |   |   \-- SKILL.md
+    |   |-- memory-rotation
     |   |   \-- SKILL.md
     |   |-- obsidian-markdown
     |   |   \-- SKILL.md
+    |   |-- orchestrator
+    |   |   \-- SKILL.md
     |   |-- project-instantiation
     |   |   \-- SKILL.md
-    |   \-- README.md
-    |-- snippets
-    |   |-- gallery.html
-    |   |-- README.md
-    |   |-- tokens.css
-    |   \-- ui
-    |       |-- backgrounds
-    |       |   \-- background-dark.md
-    |       |-- buttons
-    |       |   \-- button-primary.md
-    |       |-- cards
-    |       |   \-- card-glass.md
-    |       \-- modals
-    |           \-- modal-confirmation.md
+    |   |-- release-checklist
+    |   |   \-- SKILL.md
+    |   |-- systematic-debugging
+    |   |   \-- SKILL.md
+    |   \-- wiki-lint
+    |       \-- SKILL.md
     |-- STACK.md
     |-- TESTS.md
+    |-- troubleshooting
+    |   |-- README.md
+    |   \-- 2026-05-29-governance-state-drift.md
     |-- TROUBLESHOOTING.md
     |-- VERSIONING.md
     |-- wiki
@@ -134,15 +154,12 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |   |-- schema.md
     |   |-- sessions
     |   |   |-- README.md
-    |   |   |-- S001-2026-05-18-ai-context-compression-implementation.md
-    |   |   |-- S002-2026-05-18-integrate-token-estimations.md
-    |   |   |-- S003-2026-05-18-implement-skills-engine.md
-    |   |   |-- S004-2026-05-18-align-readme-directory-trees.md
-    |   |   \-- S005-framework-optimization-analysis.md
+    |   |   |-- S001-2026-05-29-readme-flowchart-alignment.md
+    |   |   |-- S002-2026-05-29-governance-state-reconciliation.md
+    |   |   |-- S003-2026-05-29-root-and-snippets-deprecation.md
+    |   |   \-- S004-2026-05-29-audit-follow-up-cleanup.md
     |   |-- sources
     |   |   \-- README.md
-    |   |-- syntheses
-    |   |   \-- S005-framework-optimization-analysis.md
     |   \-- templates
     |       |-- README.md
     |       |-- TEMPLATE_DECISION.md
@@ -165,10 +182,12 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 | Path | Primary Role | Stakeholders / Sources | Git Ignored? |
 |---|---|---|---|
 | `/FCVW/Plans/` | Contains chronological implementation change plans. | [PLANNING.md](PLANNING.md) | No |
+| `/FCVW/audits/` | Stores formal audit records and pre-release review evidence. | [AUDIT.md](AUDIT.md) | No |
+| `/FCVW/briefings/` | Stores Phase 0 discovery and instantiation records. | [BRIEFING.md](BRIEFING.md) / [INSTANTIATION.md](INSTANTIATION.md) | No |
 | `/FCVW/decisions/` | Stores formal Architectural Decision Records (ADRs). | [ARCHITECTURAL_DECISIONS.md](ARCHITECTURAL_DECISIONS.md) | No |
-| `/FCVW/changelogs/` | Formal versions releases notes (`Vx.y.z.md`). | [VERSIONING.md](VERSIONING.md) | No |
+| `/FCVW/changelogs/` | Formal version release notes and unreleased plan fragments. | [VERSIONING.md](VERSIONING.md) | No |
 | `/FCVW/governance/` | Reusable empty blueprint templates. | [INSTANTIATION.md](INSTANTIATION.md) | No |
-| `/FCVW/snippets/` | Shared catalog of premade CSS/JS UI snippets. | [DESIGN.md](DESIGN.md) | No |
+| `/FCVW/troubleshooting/` | Stores issue records, hypotheses, handlings, and validation evidence. | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | No |
 | `/FCVW/wiki/` | Continuous technical learning vault of the project. | [AI.md](AI.md) / `wiki/schema.md` | No |
 | `/FCVW/data/` | Stores local SQLite database and backups. | [DATA.md](DATA.md) | **Yes** (strict) |
 
@@ -177,7 +196,5 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 ## 3. Maintenance and Self-Healing Rules
 
 1. **AI Checkpoints:** Whenever a new feature is requested, the AI must check `FILESYSTEM.md` before writing code to confirm where the new files belong.
-2. **Declarative Layout Integrity:** Visual trees in `FILESYSTEM.md` and `README.md` must be updated manually by the agent whenever files are added or deleted.
+2. **Declarative Layout Integrity:** The detailed visual tree in `FILESYSTEM.md` must be updated manually by the agent whenever files are added or deleted. Summary documents should link to this file instead of duplicating the full tree.
 3. **Audit Closure:** The final step of any plan that alters directories is a manual verification of this document's visual tree.
-
-

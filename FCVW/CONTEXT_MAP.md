@@ -14,7 +14,7 @@ This document is designed to be the **first document read** in any session — b
 |---|---|---|---|
 | **Bugfix / Troubleshooting** | `AGENTS.md §checklist`, `TROUBLESHOOTING.md`, `PLANNING.md` | `troubleshooting/<record>`, `wiki/failures/` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **New Feature** | `AGENTS.md §checklist`, `SCOPE.md`, `PLANNING.md` | `DESIGN.md` (if UI), `AI.md` (if AI), `wiki/index.md` | `SECURITY.md`, `REFACTORING.md`, `RELEASE.md` |
-| **UI / Components** | `AGENTS.md §checklist`, `DESIGN.md`, `snippets/README.md` | `snippets/tokens.css`, `wiki/patterns/` | `DATA.md`, `SECURITY.md`, `RELEASE.md` |
+| **UI / Components** | `AGENTS.md §checklist`, `DESIGN.md` | `wiki/patterns/` | `DATA.md`, `SECURITY.md`, `RELEASE.md` |
 | **Refactoring** | `AGENTS.md §checklist`, `REFACTORING.md`, `PLANNING.md` | `wiki/refactorings/`, `TESTS.md` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **Release** | `AGENTS.md §checklist`, `skill:release-checklist` | `VERSIONING.md`, `AUDIT.md`, `RELEASE.md` | `DESIGN.md`, `REFACTORING.md` |
 | **Briefing / Instantiation** | `AGENTS.md §checklist`, `INSTANTIATION.md`, `BRIEFING.md` | `skill:project-instantiation`, `MANIFEST.md`, `STACK.md` | `REFACTORING.md`, `RELEASE.md` |
@@ -29,12 +29,20 @@ This document is designed to be the **first document read** in any session — b
 
 | Skill | Trigger Keywords | Size Saved vs. Full Docs |
 |---|---|---|
-| `skills/git-conventional-commits/SKILL.md` | commit, tag, push, release notes | Replaces ad-hoc reinstructions |
-| `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages | ~275 lines vs. reading schema.md §12 |
-| `skills/release-checklist/SKILL.md` | release, publish, version bump | ~2.7k tokens vs. RELEASE+VERSIONING+AUDIT |
-| `skills/obsidian-markdown/SKILL.md` | wikilink, frontmatter, Obsidian note | Replaces ad-hoc formatting instructions |
+| `skills/agent-aegis/SKILL.md` | security scan, vulnerability, harden | Focused security-agent checklist |
+| `skills/agent-hephaestus/SKILL.md` | ux polish, accessibility, improve ui | Focused UX/accessibility-agent checklist |
+| `skills/agent-hermes/SKILL.md` | performance, optimize, bottleneck | Focused performance-agent checklist |
+| `skills/agnix-linter/SKILL.md` | governance audit, AI instructions, dead links | Validates FCVW structural consistency |
 | `skills/aicc-compact/SKILL.md` | shift close, compact session, close session, log sync | Reduces close turn overhead |
+| `skills/brainstorming-and-tdd/SKILL.md` | new feature, fixing a bug, implementing a plan | Enforces specification and Red/Green workflow |
+| `skills/git-conventional-commits/SKILL.md` | commit, tag, push, release notes | Replaces ad-hoc reinstructions |
+| `skills/memory-rotation/SKILL.md` | context bloat, clean sessions, rotate memory | Keeps session memory bounded |
+| `skills/obsidian-markdown/SKILL.md` | wikilink, frontmatter, Obsidian note | Replaces ad-hoc formatting instructions |
+| `skills/orchestrator/SKILL.md` | large refactoring, complex plans, parallel tasks | Coordinates subagent-style task decomposition |
 | `skills/project-instantiation/SKILL.md` | bootstrap, new project, instantiate, initialize | Safely sets up workspace |
+| `skills/release-checklist/SKILL.md` | release, publish, version bump | ~2.7k tokens vs. RELEASE+VERSIONING+AUDIT |
+| `skills/systematic-debugging/SKILL.md` | debugging, fixing an error, stack trace | Enforces hypothesis-based debugging |
+| `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages | ~275 lines vs. reading schema.md §12 |
 
 ---
 
@@ -47,7 +55,7 @@ This document is designed to be the **first document read** in any session — b
 
 ---
 
-## Document Size Reference (V0.6.0)
+## Document Size Reference (V0.7.5)
 
 > Use to make informed decisions about what to load. Larger files cost more tokens.
 
@@ -56,7 +64,7 @@ This document is designed to be the **first document read** in any session — b
 | `AGENTS.md` | ~12 KB | Always (first) |
 | `REFACTORING.md` | ~14 KB | On demand |
 | `AI.md` | ~11 KB | On demand (AI sessions) |
-| `README.md` | ~13 KB | Rarely (orientation only) |
+| `FCVW/README.md` | ~13 KB | Rarely (framework orientation only) |
 | `wiki/schema.md` | ~9 KB | Use `skill:wiki-lint` instead |
 | `SECURITY.md` | ~7 KB | On demand (security sessions) |
 | `ENVIRONMENT.md` | ~6 KB | On demand (environment sessions) |

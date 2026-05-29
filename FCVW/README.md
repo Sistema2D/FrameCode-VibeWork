@@ -8,7 +8,7 @@
 
 ## Português
 
-**FrameCode VibeWork** é um framework de governança documental e técnica para desenvolvimento de aplicações assistido por IA. Ele reduz perda de contexto entre sessões ao combinar planos formais, changelogs, auditorias, troubleshooting, decisões arquiteturais, snippets reutilizáveis e uma LLM Wiki mantida em Markdown.
+**FrameCode VibeWork** é um framework de governança documental e técnica para desenvolvimento de aplicações assistido por IA. Ele reduz perda de contexto entre sessões ao combinar planos formais, changelogs, auditorias, troubleshooting, decisões arquiteturais, design system declarativo e uma LLM Wiki mantida em Markdown.
 
 ### Como Funciona
 
@@ -42,9 +42,9 @@ A pasta `wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, 
 
 > **Portabilidade e Reuso:** O conhecimento acumulado na `wiki/` (padrões, decisões, troubleshooting) pode e deve ser portado e reutilizado em novos projetos para acelerar o desenvolvimento assistido por IA e manter a consistência técnica entre diferentes aplicações.
 
-#### 4. Snippets reutilizáveis
+#### 4. Design system declarativo
 
-A pasta `snippets/` guarda componentes e padrões prontos para adaptação, com galeria visual e tokens CSS.
+O arquivo `DESIGN.md` centraliza tokens, regras visuais, contratos de componentes e critérios de experiência. A antiga pasta `snippets/` foi descontinuada; exemplos físicos devem ser gerados na aplicação instanciada quando necessários.
 
 #### 5. Separação entre framework e projeto
 
@@ -54,78 +54,17 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 
 A pasta `skills/` armazena procedimentos técnicos de alta densidade carregados sob demanda pelo agente de IA — nunca pré-carregados no prompt. Isso preserva a janela de contexto enquanto disponibiliza checklists especializados quando necessários.
 
-Habilidades ativas: `obsidian-markdown`, `git-conventional-commits`, `wiki-lint`, `release-checklist`, `aicc-compact`, `project-instantiation`.
+Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `systematic-debugging`, `wiki-lint`.
 
 ### Estrutura De Diretórios
 
-```text
-📁 .
-├── 📄 AGENTS.md
-├── 📄 CONTEXT_MAP.md
-├── 📄 MANIFEST.md
-├── 📄 README.md
-├── 📄 INSTANTIATION.md
-├── 📄 SCOPE.md
-├── 📄 STACK.md
-├── 📄 DESIGN.md
-├── 📄 ENVIRONMENT.md
-├── 📄 WORKFLOW.md
-├── 📄 PLANNING.md
-├── 📄 VERSIONING.md
-├── 📄 TROUBLESHOOTING.md
-├── 📄 TESTS.md
-├── 📄 SECURITY.md
-├── 📄 DATA.md
-├── 📄 AI.md
-├── 📄 REFACTORING.md
-├── 📄 RELEASE.md
-├── 📄 AUDIT.md
-├── 📄 ARCHITECTURAL_DECISIONS.md
-├── 📄 FILESYSTEM.md
-├── 📄 PERFORMANCE.md
-├── 📂 Plans/
-│   ├── 📂 pending/
-│   ├── 📂 in_progress/
-│   ├── 📂 completed/
-│   └── 📂 discontinued/
-├── 📂 changelogs/
-├── 📂 troubleshooting/
-├── 📂 decisions/
-├── 📂 audits/
-├── 📂 briefings/
-├── 📂 wiki/
-│   ├── 📄 schema.md
-│   ├── 📄 index.md
-│   ├── 📄 log.md
-│   ├── 📂 templates/
-│   ├── 📂 sessions/
-│   ├── 📂 patterns/
-│   ├── 📂 decisions/
-│   ├── 📂 releases/
-│   └── 📂 failures/
-├── 📂 skills/
-│   ├── 📄 README.md
-│   ├── 📂 aicc-compact/
-│   ├── 📂 obsidian-markdown/
-│   ├── 📂 git-conventional-commits/
-│   ├── 📂 project-instantiation/
-│   ├── 📂 wiki-lint/
-│   └── 📂 release-checklist/
-├── 📂 snippets/
-└── 📂 governance/
-```
+A estrutura detalhada e auditável do framework é mantida em `FILESYSTEM.md`. Este README registra apenas o mapa operacional resumido:
 
-- `Plans/`: ciclo de vida das alterações.
-- `changelogs/`: histórico formal por versão.
-- `troubleshooting/`: registros de falhas, hipóteses e validações.
-- `decisions/`: ADRs formais.
-- `audits/`: relatórios de auditoria.
-- `briefings/`: registros de descoberta e Fase 0.
-- `wiki/`: memória técnica compatível com Obsidian (padrões, decisões, falhas, releases, sínteses).
-- `skills/`: catálogo de habilidades executáveis do agente de IA — carregadas sob demanda (JIT).
-- `snippets/`: biblioteca de componentes e padrões reutilizáveis.
-- `governance/`: templates genéricos do framework.
-- `CONTEXT_MAP.md`: mapa compacto de carregamento seletivo por tipo de sessão.
+- raiz do repositório: pertence à aplicação em desenvolvimento; mantém `AGENTS.md` e arquivos ponte/configuração.
+- `FCVW/`: fonte canônica dos documentos, governança, memória, planos, changelogs e habilidades do framework.
+- `FCVW/docs/`: artefato publicável da documentação do framework; não substitui uma pasta `docs/` permanente na raiz.
+- `FCVW/FILESYSTEM.md`: fonte de verdade para a árvore completa e para o estado esperado dos diretórios.
+- `FCVW/CONTEXT_MAP.md`: mapa compacto de carregamento seletivo por tipo de sessão.
 
 ### Consumo de Tokens por Cenário
 
@@ -135,7 +74,7 @@ Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framewo
 | :--- | :--- | :---: | :---: | :---: |
 | **Bugfix / Troubleshooting** | `AGENTS.md` + `TROUBLESHOOTING.md` + `PLANNING.md` | ~5.000 tokens | **~1.200 tokens** | **-76%** |
 | **Nova Funcionalidade** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7.000 tokens | **~1.500 tokens** | **-78%** |
-| **Componentes / UI** | `AGENTS.md` + `DESIGN.md` + `snippets/README.md` | ~4.500 tokens | **~1.000 tokens** | **-77%** |
+| **Componentes / UI** | `AGENTS.md` + `DESIGN.md` | ~4.000 tokens | **~900 tokens** | **-77%** |
 | **Refatoração** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8.000 tokens | **~1.800 tokens** | **-77%** |
 | **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2.500 tokens | **~600 tokens** | **-76%** |
@@ -159,7 +98,7 @@ Leia `AGENTS.md` e `INSTANTIATION.md`. A instanciação não depende de script a
 
 #### 3. Executar Fase 0
 
-Preencha `BRIEFING.md`, atualize `MANIFEST.md`, `STACK.md`, `SCOPE.md` e `README.md`, e registre a alteração por plano e changelog.
+Preencha `BRIEFING.md`, atualize `MANIFEST.md`, `STACK.md`, `SCOPE.md` e gere o `README.md` da aplicação na raiz, registrando a alteração por plano e changelog.
 
 #### 4. Trabalhar com IA
 
@@ -169,7 +108,7 @@ Ao solicitar mudanças, peça para o agente seguir `AGENTS.md`. Para consultas, 
 
 ## English
 
-**FrameCode VibeWork** is a technical and document-based governance framework for AI-assisted application development. It reduces context loss between sessions by combining formal plans, changelogs, audits, troubleshooting, architectural decisions, reusable snippets, and an LLM Wiki maintained in Markdown.
+**FrameCode VibeWork** is a technical and document-based governance framework for AI-assisted application development. It reduces context loss between sessions by combining formal plans, changelogs, audits, troubleshooting, architectural decisions, a declarative design system, and an LLM Wiki maintained in Markdown.
 
 ### How It Works
 
@@ -203,9 +142,9 @@ The `wiki/` folder follows the LLM Wiki standard: raw sources, synthesized pages
 
 > **Portability and Reuse:** The knowledge accumulated in the `wiki/` (patterns, decisions, troubleshooting) can and should be ported and reused in new projects to accelerate AI-assisted development and maintain technical consistency across different applications.
 
-#### 4. Reusable Snippets
+#### 4. Declarative Design System
 
-The `snippets/` folder holds components and patterns ready for adaptation, with a visual gallery and CSS tokens.
+`DESIGN.md` centralizes tokens, visual rules, component contracts, and experience criteria. The former `snippets/` folder is discontinued; physical examples should be generated inside the instantiated application when needed.
 
 #### 5. Framework and Project Separation
 
@@ -215,78 +154,17 @@ The `governance/` folder preserves generic templates. Filled project documents r
 
 The `skills/` folder stores high-density technical procedures loaded on-demand by the AI agent — never pre-loaded into the prompt. This preserves the context window while making specialized checklists available when needed.
 
-Active skills: `obsidian-markdown`, `git-conventional-commits`, `wiki-lint`, `release-checklist`, `aicc-compact`, `project-instantiation`.
+Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `systematic-debugging`, `wiki-lint`.
 
 ### Directory Structure
 
-```text
-📁 .
-├── 📄 AGENTS.md
-├── 📄 CONTEXT_MAP.md
-├── 📄 MANIFEST.md
-├── 📄 README.md
-├── 📄 INSTANTIATION.md
-├── 📄 SCOPE.md
-├── 📄 STACK.md
-├── 📄 DESIGN.md
-├── 📄 ENVIRONMENT.md
-├── 📄 WORKFLOW.md
-├── 📄 PLANNING.md
-├── 📄 VERSIONING.md
-├── 📄 TROUBLESHOOTING.md
-├── 📄 TESTS.md
-├── 📄 SECURITY.md
-├── 📄 DATA.md
-├── 📄 AI.md
-├── 📄 REFACTORING.md
-├── 📄 RELEASE.md
-├── 📄 AUDIT.md
-├── 📄 ARCHITECTURAL_DECISIONS.md
-├── 📄 FILESYSTEM.md
-├── 📄 PERFORMANCE.md
-├── 📂 Plans/
-│   ├── 📂 pending/
-│   ├── 📂 in_progress/
-│   ├── 📂 completed/
-│   └── 📂 discontinued/
-├── 📂 changelogs/
-├── 📂 troubleshooting/
-├── 📂 decisions/
-├── 📂 audits/
-├── 📂 briefings/
-├── 📂 wiki/
-│   ├── 📄 schema.md
-│   ├── 📄 index.md
-│   ├── 📄 log.md
-│   ├── 📂 templates/
-│   ├── 📂 sessions/
-│   ├── 📂 patterns/
-│   ├── 📂 decisions/
-│   ├── 📂 releases/
-│   └── 📂 failures/
-├── 📂 skills/
-│   ├── 📄 README.md
-│   ├── 📂 aicc-compact/
-│   ├── 📂 obsidian-markdown/
-│   ├── 📂 git-conventional-commits/
-│   ├── 📂 project-instantiation/
-│   ├── 📂 wiki-lint/
-│   └── 📂 release-checklist/
-├── 📂 snippets/
-└── 📂 governance/
-```
+The detailed and auditable framework structure is maintained in `FILESYSTEM.md`. This README records only the operational summary:
 
-- `Plans/`: lifecycle of changes.
-- `changelogs/`: formal version history.
-- `troubleshooting/`: records of failures, hypotheses, and validations.
-- `decisions/`: formal ADRs.
-- `audits/`: audit reports.
-- `briefings/`: discovery and Phase 0 records.
-- `wiki/`: Obsidian-compatible technical memory (patterns, decisions, failures, releases, syntheses).
-- `skills/`: catalog of executable AI agent skills — loaded on-demand (JIT).
-- `snippets/`: library of reusable components and patterns.
-- `governance/`: generic templates of the framework.
-- `CONTEXT_MAP.md`: compact selective loading map by session type.
+- repository root: owned by the application under development; keeps `AGENTS.md` and bridge/configuration files.
+- `FCVW/`: canonical source for framework documents, governance, memory, plans, changelogs, and skills.
+- `FCVW/docs/`: publishable framework documentation artifact; it does not require a permanent root `docs/` folder.
+- `FCVW/FILESYSTEM.md`: source of truth for the complete tree and expected directory state.
+- `FCVW/CONTEXT_MAP.md`: compact selective loading map by session type.
 
 ### Token Consumption by Scenario
 
@@ -296,7 +174,7 @@ To maximize transparency and API call cost-efficiency with LLMs, the framework m
 | :--- | :--- | :---: | :---: | :---: |
 | **Bugfix / Troubleshooting** | `AGENTS.md` + `TROUBLESHOOTING.md` + `PLANNING.md` | ~5,000 tokens | **~1,200 tokens** | **-76%** |
 | **New Feature** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7,000 tokens | **~1,500 tokens** | **-78%** |
-| **Componentes / UI** | `AGENTS.md` + `DESIGN.md` + `snippets/README.md` | ~4,500 tokens | **~1,000 tokens** | **-77%** |
+| **UI / Components** | `AGENTS.md` + `DESIGN.md` | ~4,000 tokens | **~900 tokens** | **-77%** |
 | **Refactoring** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8,000 tokens | **~1,800 tokens** | **-77%** |
 | **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2,500 tokens | **~600 tokens** | **-76%** |
@@ -320,7 +198,7 @@ Read `AGENTS.md` and `INSTANTIATION.md`. Instantiation does not rely on automati
 
 #### 3. Execute Phase 0
 
-Fill out `BRIEFING.md`, update `MANIFEST.md`, `STACK.md`, `SCOPE.md`, and `README.md`, and record the change via plan and changelog.
+Fill out `BRIEFING.md`, update `MANIFEST.md`, `STACK.md`, `SCOPE.md`, generate the application root `README.md`, and record the change via plan and changelog.
 
 #### 4. Work with AI
 
