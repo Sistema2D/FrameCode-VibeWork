@@ -7,7 +7,7 @@ description: Standardize and edit Obsidian Flavored Markdown notes with wikilink
 
 Standardize and create valid Obsidian Flavored Markdown to guarantee that the LLM Wiki in `/wiki/` scales as an absolute, connected semantic graph.
 
-## 1. Operational Triggers
+## Activation Triggers
 - Trigger 1: Creating or modifying any Markdown note in `/wiki/` (concepts, failures, releases, prompt patterns, decisions).
 - Trigger 2: When validating the internal linking or cross-referencing between root guidelines and wiki notes.
 

@@ -34,7 +34,7 @@ Load this skill (with `view_file` and `IsSkillFile: true`) when:
 
 ### Step 2.2: Placeholder Substitutions
 Go through the following canonical files in the workspace and replace the core placeholders (e.g. `[project-name]`, `[author-name]`):
-- [ ] `README.md` (Raiz)
+- [ ] Generate or update root `README.md` for the target application
 - [ ] `AGENTS.md` (Raiz)
 - [ ] `FCVW/MANIFEST.md`
 
@@ -50,7 +50,8 @@ Go through the following canonical files in the workspace and replace the core p
 ## 3. Post-Bootstrap Audit
 
 Verify the filesystem layout after execution:
-- [ ] The root folder contains `AGENTS.md`, `README.md`, `.gitignore`, `.cursorrules`, and `.windsurfrules`.
+- [ ] The framework baseline root contains `AGENTS.md`, `.gitignore`, `.cursorrules`, and `.windsurfrules`.
+- [ ] The instantiated application root contains a generated `README.md` that describes the application, not the generic framework.
 - [ ] The `/FCVW/` folder is cleanly isolated.
 - [ ] All `.env` configurations are correctly filtered in `.gitignore`.
 - [ ] A clean initial git commit has been formed.

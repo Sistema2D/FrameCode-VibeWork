@@ -5,6 +5,10 @@ description: Analyzes the FCVW/wiki/sessions/ directory. If there are more than 
 
 # 🧠 Memory Rotation & Garbage Collection
 
+## Activation Triggers
+
+Load this skill when `FCVW/wiki/sessions/` has more than 10 session files, or when the task is to clean sessions, rotate memory, reduce context bloat, or consolidate old session syntheses.
+
 ## Context
 When working with AI agents continuously, the `FCVW/wiki/sessions/` folder acts as the active short-term memory (compressed chronological session synthesis). If this folder accumulates dozens of files, reading the latest context or indexing it becomes excessively costly (Context Bloat), degrading AI inference capabilities and increasing latency/costs.
 
@@ -33,3 +37,6 @@ This skill MUST be executed when you detect that the `FCVW/wiki/sessions/` direc
 
 5. **Report**:
    - Notify the user of how many files were deleted and what major concepts were transferred to long-term memory.
+## Activation Triggers
+
+Load this skill when `FCVW/wiki/sessions/` has more than 10 session files, or when the task is to clean sessions, rotate memory, reduce context bloat, or consolidate old session syntheses.
