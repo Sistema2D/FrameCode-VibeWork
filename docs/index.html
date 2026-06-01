@@ -1189,7 +1189,7 @@ SOFTWARE.</pre>
                 } else if (el.namespaceURI === "http://www.w3.org/2000/svg") {
                     el.textContent = translations[lang][key];
                 } else {
-                    el.innerHTML = translations[lang][key];
+                    el.textContent = translations[lang][key];
                 }
             }
         });
