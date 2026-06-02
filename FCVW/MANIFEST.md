@@ -17,7 +17,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.7.5` |
+| Current Version | `V0.7.6` |
 | Manifest Creation Date | `2026-05-15` |
 | Last Update | `2026-05-29` |
 | Project Status | `development` |
