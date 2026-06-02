@@ -1,6 +1,10 @@
-🧹 Code Health Improvement: Remove Unused `--shadow-sm` Token
+🔒 Fix XSS vulnerability in translation rendering
 
-🎯 **What:** Removed the `--shadow-sm` CSS variable from `snippets/tokens.css` as it was defined but not used anywhere.
-💡 **Why:** Reducing dead code improves readability and maintainability.
-✅ **Verification:** Verified by grepping the repository to ensure there are no references to `var(--shadow-sm)`.
-✨ **Result:** Cleaned up unused variables without changing any existing functionality.
+🎯 **What:**
+Fixed a potential Cross-Site Scripting (XSS) vulnerability in `FCVW/docs/index.html` where translation keys were being rendered using `innerHTML`.
+
+⚠️ **Risk:**
+Using `innerHTML` could allow malicious scripts embedded in the translation data to be executed within the user's browser context.
+
+🛡️ **Solution:**
+Replaced `innerHTML` with `textContent` for translation rendering, effectively mitigating the XSS risk without altering expected functionality.
