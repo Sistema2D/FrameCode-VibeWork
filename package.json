@@ -1,0 +1,27 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "*Select Language / Selecione o Idioma:* - [Português](#português) - [English](#english)",
+  "main": "test.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node docs/js/tests/setLanguage.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sistema2D/FrameCode-VibeWork.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Sistema2D/FrameCode-VibeWork/issues"
+  },
+  "homepage": "https://github.com/Sistema2D/FrameCode-VibeWork#readme",
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}
