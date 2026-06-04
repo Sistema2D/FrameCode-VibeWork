@@ -1,4 +1,5 @@
 # FrameCode VibeWork Framework
+<img width="997" height="435" alt="Captura de tela 2026-06-04 151445" src="https://github.com/user-attachments/assets/66e16773-e381-4215-8b8c-58de2d6fc5e2" />
 
 Current framework version: `V0.7.8`
 
