@@ -58,13 +58,13 @@ tags:
    M FCVW/wiki/index.md
    M FCVW/wiki/log.md
    M README.md
-  ?? FCVW/Plans/
-  ?? FCVW/changelogs/unreleased/P4-R1-2026-05-29-readme-flowchart-alignment.md
-  ?? FCVW/wiki/sessions/S001-2026-05-29-readme-flowchart-alignment.md
+  ? FCVW/Plans/
+  ? FCVW/changelogs/unreleased/P4-R1-2026-05-29-readme-flowchart-alignment.md
+  ? FCVW/wiki/sessions/S001-2026-05-29-readme-flowchart-alignment.md
   ```
 - **Tests Executed:** Mermaid diagram validator and preview.
 - **Open Risks / Technical Debt:** STACK.md shows V0.5.2 while MANIFEST.md shows V0.6.0 (out of scope).
 
 ## 5. Next Steps / Agent Handoff
-- [ ] **Handoff Task 1:** Optional: reconcile current version fields across MANIFEST.md and STACK.md.
-- [ ] **Handoff Task 2:** Optional: consolidate unreleased fragments into a formal changelog when preparing a release.
+- [x] **Handoff Task 1:** Current version fields across MANIFEST.md and STACK.md were reconciled in later governance passes.
+- [x] **Handoff Task 2:** Unreleased fragments were consolidated into formal changelogs through `V0.7.7`.

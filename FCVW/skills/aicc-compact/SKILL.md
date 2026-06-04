@@ -32,7 +32,7 @@ Before generating the session synthesis, execute these investigative commands or
 ### 2.1 File Generation
 1. Identify the incremented session number: `S{num}` (e.g., if the last was `S005`, this is `S006`).
 2. Create the file in `FCVW/wiki/sessions/S{num}-{description}.md`.
-3. Copy [`governance/TEMPLATE_AI_SESSION_SYNTHESIS.md`](../../governance/TEMPLATE_AI_SESSION_SYNTHESIS.md) or [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](../../wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md) as the starting base.
+3. Copy [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](../../wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md) as the starting base.
 
 ### 2.2 Text Densification Rules
 - **Telegraphic Style:** Write using short, incomplete sentences. Eliminate adjectives, prepositions, polite conversational padding, and verbose descriptions. Let paths and codes speak.

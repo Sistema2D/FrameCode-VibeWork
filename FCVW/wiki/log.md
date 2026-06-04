@@ -42,6 +42,33 @@ This repository is intentionally distributed with a clean wiki baseline. Registe
 
 ## Records
 
+## [2026-06-04 13:00] maintenance | README and retroactive instantiation
+
+- Source: user request to update the root README and add autonomous retroactive-instantiation instructions.
+- Executed action: refreshed root/framework READMEs, added `RETROACTIVE_INSTANTIATION.md`, added `retroactive-instantiation` skill, updated official indexes, published `V0.7.8`, and refreshed session memory.
+- Pages created:
+  - `wiki/sessions/S008-2026-06-04-readme-retroactive-instantiation.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: agents have a canonical non-destructive workflow for adopting FCVW in existing, advanced, legacy, or partially governed applications.
+- Gaps: local folder still has no `.git` metadata, so Git history and release tags cannot be validated from this checkout.
+
+## [2026-06-04 12:00] maintenance | Global consistency corrections
+
+- Source: global impartial repository audit and correction request.
+- Executed action: normalized version metadata, published `V0.7.7`, corrected AICC template references, repaired refactoring-guide links, fixed docs tests, removed compiled unreleased fragments, and refreshed session memory.
+- Pages created:
+  - `wiki/sessions/S007-2026-06-04-global-consistency-corrections.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+  - `wiki/sessions/S006-2026-06-01-fix-xss-vulnerability.md`
+- Pages obsolete: none.
+- Result: governance, links, tests, and session handoff records are coherent with `V0.7.7`.
+- Gaps: local folder still has no `.git` metadata, so Git history and release tags cannot be validated from this checkout.
+
 ## [2026-05-29 14:00] maintenance | README scope wording corrections
 
 - Source: user-requested corrections after README scope freshness review.

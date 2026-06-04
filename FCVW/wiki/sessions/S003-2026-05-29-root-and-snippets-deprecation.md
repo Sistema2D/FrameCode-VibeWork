@@ -57,5 +57,5 @@ tags:
 - **Open Risks / Technical Debt:** `FCVW/pr_description.txt` remains obsolete; GitHub Pages publication from root `docs/` would require configuration/export if still needed.
 
 ## 5. Next Steps / Agent Handoff
-- [ ] Optional: remove or archive `FCVW/pr_description.txt`.
-- [ ] Optional: define a release publication rule for `FCVW/docs/`.
+- [x] `FCVW/pr_description.txt` was removed in later audit follow-up.
+- [x] Release publication rules for `FCVW/docs/` were documented in later audit follow-up.

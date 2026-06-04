@@ -70,5 +70,5 @@ tags:
 - **Open Risks / Technical Debt:** `FCVW/changelogs/V0.7.5.md` was reconstructed from Git history because no prior formal changelog existed.
 
 ## 5. Next Steps / Agent Handoff
-- [ ] Optional: create historical formal changelogs for `V0.7.0` through `V0.7.4` if release provenance needs full backfill.
+- [x] Historical formal changelogs for `V0.7.0` through `V0.7.4` were created in later audit follow-up.
 - [ ] Optional: promote the governance drift troubleshooting record into `FCVW/wiki/failures/` if the same failure recurs.

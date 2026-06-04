@@ -1,32 +1,33 @@
 # Skills Engine Catalog & Guidelines
 
 *Selecione o Idioma / Select Language:*
-- [PortuguÃªs](#portuguÃªs)
+- [Português](#português)
 - [English](#english)
 
 ---
 
-## PortuguÃªs
+## Português
 
-A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do framework. Ela armazena manuais de procedimentos tÃ©cnicos de alta densidade e checklists operacionais especializados para direcionar a execuÃ§Ã£o do agente de IA de forma eficiente e padronizada.
+A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do framework. Ela armazena manuais de procedimentos técnicos de alta densidade e checklists operacionais especializados para direcionar a execução do agente de IA de forma eficiente e padronizada.
 
 ### Diretrizes de Uso
 
-1. **AtivaÃ§Ã£o por Demanda (Token-Efficient)**: As skills **nunca** devem ser carregadas no prompt inicial da IA. O agente deve ler um arquivo de skill (com `view_file` e `IsSkillFile: true`) apenas quando a tarefa ativamente exigir a execuÃ§Ã£o daquele procedimento.
-2. **Gatilhos Claros**: Cada skill deve declarar explicitamente seus gatilhos operacionais de ativaÃ§Ã£o.
+1. **Ativação por Demanda (Token-Efficient)**: As skills **nunca** devem ser carregadas no prompt inicial da IA. O agente deve ler um arquivo de skill (com `view_file` e `IsSkillFile: true`) apenas quando a tarefa ativamente exigir a execução daquele procedimento.
+2. **Gatilhos Claros**: Cada skill deve declarar explicitamente seus gatilhos operacionais de ativação.
 3. **Estilo de Alta Densidade**: As skills devem usar checklists e comandos diretos, eliminando narrativa filler e conversas prolixas.
-4. **Registro de Uso**: Quando uma skill Ã© ativada, ela deve ser listada na SÃ­ntese de SessÃ£o AICC correspondente em `wiki/sessions/S*.md`.
+4. **Registro de Uso**: Quando uma skill é ativada, ela deve ser listada na Síntese de Sessão AICC correspondente em `wiki/sessions/S*.md`.
 
-### CatÃ¡logo de Skills Ativas
+### Catálogo de Skills Ativas
 
-| Skill | Arquivo | Gatilhos Principais | BenefÃ­cio |
+| Skill | Arquivo | Gatilhos Principais | Benefício |
 |---|---|---|---|
-| **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | formataÃ§Ã£o wiki, wikilinks, frontmatter, notas Obsidian | Padroniza formataÃ§Ã£o e conexÃµes semÃ¢nticas da LLM Wiki |
-| **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publicar versÃ£o | Padroniza mensagens de commit, tags semÃ¢nticas e notas de release |
-| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, auditoria wiki, orphan pages, frontmatter invÃ¡lido | Valida integridade estrutural da wiki (substitui leitura de 335 linhas do schema.md Â§12) |
+| **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | formatação wiki, wikilinks, frontmatter, notas Obsidian | Padroniza formatação e conexões semânticas da LLM Wiki |
+| **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publicar versão | Padroniza mensagens de commit, tags semânticas e notas de release |
+| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, auditoria wiki, orphan pages, frontmatter inválido | Valida integridade estrutural da wiki (substitui leitura de 335 linhas do schema.md §12) |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, publicar release | Checklist condensado de release (~2.700 tokens economizados vs. carregar RELEASE+VERSIONING+AUDIT) |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, concluir turno, finalizar sessão | Automatiza e compacta a síntese de sessão AICC para evitar inchaço de tokens |
 | **project-instantiation** | [`skills/project-instantiation/SKILL.md`](project-instantiation/SKILL.md) | bootstrap, instantiate, inicializar projeto, novo projeto | Guia a IA no bootstrap e renomeação de novos projetos na Fase 0 |
+| **retroactive-instantiation** | [`skills/retroactive-instantiation/SKILL.md`](retroactive-instantiation/SKILL.md) | instanciação retroativa, aplicação existente, legado, migrar framework antigo | Guia adoção não destrutiva do FCVW em aplicações existentes ou parcialmente governadas |
 | **agent-hermes** | [`skills/agent-hermes/SKILL.md`](agent-hermes/SKILL.md) | run perf agent, improve performance, optimize | Agente autônomo agendado para procurar e aplicar otimizações de performance. |
 | **agent-hephaestus** | [`skills/agent-hephaestus/SKILL.md`](agent-hephaestus/SKILL.md) | ux polish, accessibility fix, improve ui | Agente autônomo agendado para encontrar e implementar melhorias de micro-UX e acessibilidade. |
 | **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, fix vulnerability, harden | Agente autônomo agendado para identificar e corrigir vulnerabilidades ou aplicar hardening. |
@@ -55,10 +56,11 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 |---|---|---|---|
 | **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | wiki formatting, wikilinks, frontmatter, Obsidian notes | Standardizes LLM Wiki formatting and semantic connections |
 | **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publish version | Standardizes commit messages, semantic tags, and release notes |
-| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, wiki audit, orphan pages, broken links, invalid frontmatter | Validates wiki structural integrity (replaces reading 335 lines of schema.md Â§12) |
+| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, wiki audit, orphan pages, broken links, invalid frontmatter | Validates wiki structural integrity (replaces reading 335 lines of schema.md §12) |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, cut a release | Condensed release checklist (~2,700 tokens saved vs. loading RELEASE+VERSIONING+AUDIT) |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, close session, consolidate shift | Standardizes AICC context compression at session end to prevent token bleed |
 | **project-instantiation** | [`skills/project-instantiation/SKILL.md`](project-instantiation/SKILL.md) | bootstrap, new project, instantiate, initialize, briefing | Steers the JIT bootstrap workflow for new downstream projects securely |
+| **retroactive-instantiation** | [`skills/retroactive-instantiation/SKILL.md`](retroactive-instantiation/SKILL.md) | retroactive instantiation, existing app, legacy app, framework migration | Guides non-destructive FCVW adoption in existing or partially governed applications |
 | **agent-hermes** | [`skills/agent-hermes/SKILL.md`](agent-hermes/SKILL.md) | run perf agent, improve performance, optimize | Autonomous scheduled agent to find and apply performance optimizations. |
 | **agent-hephaestus** | [`skills/agent-hephaestus/SKILL.md`](agent-hephaestus/SKILL.md) | ux polish, accessibility fix, improve ui | Autonomous scheduled agent to find and implement micro-UX and accessibility improvements. |
 | **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, fix vulnerability, harden | Autonomous scheduled agent to identify and fix vulnerabilities or apply security hardening. |
@@ -67,5 +69,4 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 | **orchestrator** | [`skills/orchestrator/SKILL.md`](orchestrator/SKILL.md) | large refactoring, complex plans, parallel tasks | Enables the main AI to delegate tasks in parallel using subagents. |
 | **agnix-linter** | [`skills/agnix-linter/SKILL.md`](agnix-linter/SKILL.md) | periodic maintenance, governance audit | Inspects and validates FCVW folder formatting, dead-links, and consistency. |
 | **memory-rotation** | [`skills/memory-rotation/SKILL.md`](memory-rotation/SKILL.md) | context bloat, clean sessions, rotate memory | Condenses old wiki sessions into concepts and purges excess to protect the token window. |
-
 
