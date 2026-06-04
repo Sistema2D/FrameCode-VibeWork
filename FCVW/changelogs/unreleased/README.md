@@ -16,3 +16,8 @@ When a formal release is prepared (e.g., triggering the `release-checklist` skil
 1. Read all fragments in this directory.
 2. Consolidate them logically into the official version changelog (`FCVW/changelogs/Vx.y.z.md`).
 3. Delete or archive the fragments in this directory.
+
+## Hygiene Rules
+
+- **Fragment Deletion:** Once a formal release version (e.g., `Vx.y.z.md`) is successfully created, all `.md` fragments in this directory that were consolidated into that release **MUST** be physically deleted.
+- **Dangling Fragments:** Any fragment describing an issue or change already covered by the current active version in `MANIFEST.md` is considered a leftover and must be deleted.
