@@ -1,5 +1,7 @@
 # FrameCode VibeWork Framework
 
+Current framework version: `V0.7.8`
+
 *Select Language / Selecione o Idioma:*
 - [Português](#português)
 - [English](#english)
@@ -8,21 +10,34 @@
 
 ## Português
 
-**FrameCode VibeWork** é um framework de governança documental e técnica para desenvolvimento de aplicações assistido por IA. Ele reduz perda de contexto entre sessões ao combinar planos formais, changelogs, auditorias, troubleshooting, decisões arquiteturais, design system declarativo e uma LLM Wiki mantida em Markdown.
+**FrameCode VibeWork** é um framework de governança documental e técnica para desenvolvimento de aplicações assistido por IA. Ele organiza escopo, planos, changelogs, auditorias, troubleshooting, decisões arquiteturais, design system declarativo, governança de refatoração, habilidades de IA sob demanda e uma LLM Wiki mantida em Markdown.
+
+O objetivo é reduzir perda de contexto entre sessões, impedir mudanças sem rastreabilidade e permitir que agentes de IA trabalhem em aplicações novas, avançadas ou legadas com regras claras.
+
+### Estado Atual
+
+- O framework é stack-agnostic e roda como documentação versionada em Markdown.
+- A pasta `FCVW/` é a fonte canônica dos documentos, planos, changelogs, wiki, skills, templates e guias.
+- A raiz do repositório-base existe para compatibilidade pública do GitHub e contém este README, `AGENTS.md` e arquivos ponte.
+- `FCVW/docs/` contém a documentação publicável canônica e seus testes locais.
+- `docs/` na raiz é mantida apenas por compatibilidade com GitHub Pages no repositório-base.
+- `FCVW/refactoring-guide/` contém o guia operacional de refatoração com inventário, risco, testes, rollback, PR e critérios de parada.
+- `FCVW/RETROACTIVE_INSTANTIATION.md` define a adoção retroativa do framework em aplicações já avançadas ou usando versões antigas do FCVW.
+- `FCVW/FILESYSTEM.md` é a fonte de verdade para a árvore física completa.
 
 ### Como Funciona
 
-O framework usa um ciclo de vida explícito para garantir que mudanças sejam justificadas, planejadas, implementadas, validadas e registradas.
+O framework usa um ciclo explícito para garantir que mudanças sejam justificadas, planejadas, implementadas, validadas e registradas.
 
 ```mermaid
 graph TD
-    A["Fase 0: Briefing"] -->|"Definição de escopo"| B["Manifesto e Escopo"]
+    A["Briefing ou diagnóstico retroativo"] -->|"Definição de escopo"| B["Manifesto, Stack e Escopo"]
     B -->|"Solicitação de mudança"| C["Plano de alteração"]
     C -->|"Execução assistida por IA"| D["Implementação"]
     D -->|"Rastreabilidade"| E["Changelog e versionamento"]
     E -->|"Validação"| F["Auditoria e release"]
     F -->|"Aprendizado"| G["Wiki / memória técnica"]
-    G -->|"Publicação documental"| H["Documentação pública (Wiki + GitHub Pages)"]
+    G -->|"Publicação opcional"| H["Documentação publicável"]
     H -->|"Contexto acumulado"| C
 ```
 
@@ -30,45 +45,55 @@ graph TD
 
 #### 1. Governança por planos
 
-Nenhuma alteração funcional, visual, estrutural ou documental deve ser aplicada sem plano correspondente em `Plans/`.
+Nenhuma alteração funcional, visual, estrutural ou documental deve ser aplicada sem plano correspondente em `FCVW/Plans/`.
 
 #### 2. Rastreabilidade por versão
 
-Toda alteração em arquivo versionado deve ser registrada em `changelogs/Vx.y.z.md`, com plano relacionado, arquivos afetados, validação e riscos residuais.
+Toda alteração em arquivo versionado deve ser registrada em `FCVW/changelogs/Vx.y.z.md` ou em fragmento de `FCVW/changelogs/unreleased/` até a publicação.
 
 #### 3. Memória técnica incremental
 
-A pasta `wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, índice, log, links internos, estados de confiança e lint periódico.
-
-> **Portabilidade e Reuso:** O conhecimento acumulado na `wiki/` (padrões, decisões, troubleshooting) pode e deve ser portado e reutilizado em novos projetos para acelerar o desenvolvimento assistido por IA e manter a consistência técnica entre diferentes aplicações.
+A pasta `FCVW/wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, índice, log, links internos, estados de confiança e sínteses de sessão AICC.
 
 #### 4. Design system declarativo
 
-O arquivo `DESIGN.md` centraliza tokens, regras visuais, contratos de componentes e critérios de experiência. A antiga pasta `snippets/` foi descontinuada; exemplos físicos devem ser gerados na aplicação instanciada quando necessários.
+`FCVW/DESIGN.md` centraliza tokens, regras visuais, contratos de componentes e critérios de experiência. Exemplos físicos devem ser gerados na aplicação instanciada quando necessários.
 
-#### 5. Separação entre framework e projeto
+#### 5. Refatoração governada
 
-A pasta `governance/` preserva templates genéricos. Os documentos preenchidos do projeto ficam na raiz. A instanciação e as regras de renomeação estão em `INSTANTIATION.md`.
+`FCVW/REFACTORING.md`, `FCVW/refactoring-guide/` e os templates de refatoração em `FCVW/governance/` definem quando refatorar, como mapear risco, quais testes caracterizar e quando parar.
 
-#### 6. Motor de Habilidades (ASE)
+#### 6. Separação entre framework e aplicação
 
-A pasta `skills/` armazena procedimentos técnicos de alta densidade carregados sob demanda pelo agente de IA — nunca pré-carregados no prompt. Isso preserva a janela de contexto enquanto disponibiliza checklists especializados quando necessários.
+Templates genéricos ficam em `FCVW/governance/` e `FCVW/wiki/templates/`. Documentos preenchidos com dados reais da aplicação ficam nos documentos canônicos do projeto. A aplicação não deve misturar código de produto com regras reutilizáveis do framework.
 
-Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `systematic-debugging`, `wiki-lint`.
+#### 7. Instanciação nova e retroativa
 
-### Estrutura De Diretórios
+`FCVW/INSTANTIATION.md` cobre projetos novos. `FCVW/RETROACTIVE_INSTANTIATION.md` cobre aplicações existentes, avançadas ou legadas, com defaults autônomos e não destrutivos para agentes de IA.
 
-A estrutura detalhada e auditável do framework é mantida em `FILESYSTEM.md`. Este README registra apenas o mapa operacional resumido:
+#### 8. Motor de Habilidades (ASE)
 
-- raiz do repositório: pertence à aplicação em desenvolvimento; mantém `AGENTS.md` e arquivos ponte/configuração.
-- `FCVW/`: fonte canônica dos documentos, governança, memória, planos, changelogs e habilidades do framework.
-- `FCVW/docs/`: artefato publicável da documentação do framework; não substitui uma pasta `docs/` permanente na raiz.
-- `FCVW/FILESYSTEM.md`: fonte de verdade para a árvore completa e para o estado esperado dos diretórios.
-- `FCVW/CONTEXT_MAP.md`: mapa compacto de carregamento seletivo por tipo de sessão.
+`FCVW/skills/` armazena procedimentos técnicos carregados sob demanda pelo agente de IA, nunca pré-carregados no prompt. Isso mantém baixo consumo de tokens e disponibiliza checklists especializados quando necessário.
+
+Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+
+### Estrutura Operacional Resumida
+
+- `AGENTS.md`: ponto de entrada operacional para humanos e agentes.
+- `FCVW/CONTEXT_MAP.md`: carregamento seletivo por tipo de sessão.
+- `FCVW/BRIEFING.md`: Fase 0 e descoberta inicial.
+- `FCVW/INSTANTIATION.md`: instanciação de novos projetos.
+- `FCVW/RETROACTIVE_INSTANTIATION.md`: adoção retroativa em aplicações existentes.
+- `FCVW/PLANNING.md`: metodologia obrigatória de planos.
+- `FCVW/MANIFEST.md`, `FCVW/STACK.md`, `FCVW/SCOPE.md`: identidade, stack e limites do projeto.
+- `FCVW/REFACTORING.md` e `FCVW/refactoring-guide/`: governança de refatoração.
+- `FCVW/wiki/`: memória técnica, sessões AICC e conhecimento reutilizável.
+- `FCVW/skills/`: habilidades JIT para agentes.
+- `FCVW/FILESYSTEM.md`: árvore física completa e auditável.
 
 ### Consumo de Tokens por Cenário
 
-Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framework mapeia o consumo de tokens estimado para cada cenário de desenvolvimento com base em suas políticas ativas:
+As estimativas abaixo são referências de planejamento para reduzir custo de contexto em chamadas de LLMs. Recalibre após crescimento material dos documentos.
 
 | Cenário Mapeado | Documentos Ingeridos | Custo Inicial (Sem AICC) | Custo por Turno com AICC | Economia com AICC |
 | :--- | :--- | :---: | :---: | :---: |
@@ -76,39 +101,51 @@ Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framewo
 | **Nova Funcionalidade** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7.000 tokens | **~1.500 tokens** | **-78%** |
 | **Componentes / UI** | `AGENTS.md` + `DESIGN.md` | ~4.000 tokens | **~900 tokens** | **-77%** |
 | **Refatoração** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8.000 tokens | **~1.800 tokens** | **-77%** |
-| **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
-| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2.500 tokens | **~600 tokens** | **-76%** |
-
-*Nota: As estimativas consideram o tamanho médio atual dos arquivos de governança do framework. 1 token ≈ 4 caracteres em inglês ou ~3 caracteres em português.*
+| **Instanciação nova** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
+| **Instanciação retroativa** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7.500 tokens | **~1.900 tokens** | **-75%** |
+| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` | ~2.500 tokens | **~600 tokens** | **-76%** |
 
 ### Como Usar
 
-#### 1. Copiar ou clonar
+#### 1. Novo projeto
 
-Use este repositório como base para um novo projeto ou mantenha-o como framework central.
+Clone o framework, leia `AGENTS.md`, carregue `FCVW/INSTANTIATION.md` e execute a Fase 0 em `FCVW/BRIEFING.md`.
 
 ```bash
 git clone https://github.com/Sistema2D/FrameCode-VibeWork.git meu-projeto
 cd meu-projeto
 ```
 
-#### 2. Instanciar
+#### 2. Aplicação existente ou legado
 
-Leia `AGENTS.md` e `INSTANTIATION.md`. A instanciação não depende de script automático: renomeações e substituições devem ser feitas explicitamente, preservando templates em `governance/` e `wiki/templates/`.
+Use `FCVW/RETROACTIVE_INSTANTIATION.md` e a skill `FCVW/skills/retroactive-instantiation/SKILL.md`. A IA deve preservar código, README, configuração, dados e histórico da aplicação, importando ou reparando o FCVW de forma não destrutiva.
 
-#### 3. Executar Fase 0
+#### 3. Refatoração de código
 
-Preencha `BRIEFING.md`, atualize `MANIFEST.md`, `STACK.md`, `SCOPE.md` e gere o `README.md` da aplicação na raiz, registrando a alteração por plano e changelog.
+Use `FCVW/REFACTORING.md` e `FCVW/refactoring-guide/` antes de alterar arquitetura ou módulos existentes. Refatoração deve ser incremental, testável, reversível e governada por plano.
 
-#### 4. Trabalhar com IA
+#### 4. Trabalho diário com IA
 
-Ao solicitar mudanças, peça para o agente seguir `AGENTS.md`. Para consultas, análise e revisão sem edição de arquivos, plano não é obrigatório. Para qualquer alteração, o fluxo de plano e changelog é obrigatório.
+Peça ao agente para seguir `AGENTS.md`. Consultas, análises e revisões sem edição de arquivos não exigem plano. Qualquer alteração exige plano, changelog, validação e síntese de sessão quando aplicável.
 
 ---
 
 ## English
 
-**FrameCode VibeWork** is a technical and document-based governance framework for AI-assisted application development. It reduces context loss between sessions by combining formal plans, changelogs, audits, troubleshooting, architectural decisions, a declarative design system, and an LLM Wiki maintained in Markdown.
+**FrameCode VibeWork** is a document-based and technical governance framework for AI-assisted application development. It organizes scope, plans, changelogs, audits, troubleshooting, architectural decisions, declarative design rules, refactoring governance, on-demand AI skills, and an LLM Wiki maintained in Markdown.
+
+The goal is to reduce context loss between sessions, prevent untraceable changes, and let AI agents work in new, advanced, or legacy applications with clear rules.
+
+### Current State
+
+- The framework is stack-agnostic and runs as versioned Markdown documentation.
+- `FCVW/` is the canonical source for documents, plans, changelogs, wiki, skills, templates, and guides.
+- The baseline repository root exists for GitHub public compatibility and contains this README, `AGENTS.md`, and bridge files.
+- `FCVW/docs/` contains the canonical publishable documentation and local tests.
+- Root `docs/` is kept only for GitHub Pages compatibility in the baseline repository.
+- `FCVW/refactoring-guide/` contains the operational refactoring guide with inventory, risk, tests, rollback, PR, and stopping criteria.
+- `FCVW/RETROACTIVE_INSTANTIATION.md` defines retroactive framework adoption for advanced applications or projects using older FCVW versions.
+- `FCVW/FILESYSTEM.md` is the source of truth for the complete physical tree.
 
 ### How It Works
 
@@ -116,13 +153,13 @@ The framework uses an explicit lifecycle to ensure that changes are justified, p
 
 ```mermaid
 graph TD
-    A["Phase 0: Briefing"] -->|"Scope definition"| B["Manifest and Scope"]
+    A["Briefing or retroactive diagnosis"] -->|"Scope definition"| B["Manifest, Stack, and Scope"]
     B -->|"Change request"| C["Change plan"]
     C -->|"AI-assisted execution"| D["Implementation"]
     D -->|"Traceability"| E["Changelog and versioning"]
     E -->|"Validation"| F["Audit and release"]
     F -->|"Learning"| G["Wiki / technical memory"]
-    G -->|"Documentation publishing"| H["Public documentation (Wiki + GitHub Pages)"]
+    G -->|"Optional publishing"| H["Publishable documentation"]
     H -->|"Accumulated context"| C
 ```
 
@@ -130,45 +167,55 @@ graph TD
 
 #### 1. Governance by Plans
 
-No functional, visual, structural, or document change should be applied without a corresponding plan in `Plans/`.
+No functional, visual, structural, or document change should be applied without a corresponding plan in `FCVW/Plans/`.
 
 #### 2. Version Traceability
 
-Every change in a versioned file must be recorded in `changelogs/Vx.y.z.md`, with related plans, affected files, validation, and residual risks.
+Every change in a versioned file must be recorded in `FCVW/changelogs/Vx.y.z.md` or as a fragment in `FCVW/changelogs/unreleased/` until publication.
 
 #### 3. Incremental Technical Memory
 
-The `wiki/` folder follows the LLM Wiki standard: raw sources, synthesized pages, index, log, internal links, confidence states, and periodic linting.
-
-> **Portability and Reuse:** The knowledge accumulated in the `wiki/` (patterns, decisions, troubleshooting) can and should be ported and reused in new projects to accelerate AI-assisted development and maintain technical consistency across different applications.
+`FCVW/wiki/` follows the LLM Wiki standard: raw sources, synthesized pages, index, log, internal links, confidence states, and AICC session syntheses.
 
 #### 4. Declarative Design System
 
-`DESIGN.md` centralizes tokens, visual rules, component contracts, and experience criteria. The former `snippets/` folder is discontinued; physical examples should be generated inside the instantiated application when needed.
+`FCVW/DESIGN.md` centralizes tokens, visual rules, component contracts, and experience criteria. Physical examples should be generated inside the instantiated application when needed.
 
-#### 5. Framework and Project Separation
+#### 5. Governed Refactoring
 
-The `governance/` folder preserves generic templates. Filled project documents reside at the root. Instantiation and renaming rules are in `INSTANTIATION.md`.
+`FCVW/REFACTORING.md`, `FCVW/refactoring-guide/`, and the refactoring templates in `FCVW/governance/` define when to refactor, how to map risk, which tests to characterize, and when to stop.
 
-#### 6. AI Skills Engine (ASE)
+#### 6. Framework and Application Separation
 
-The `skills/` folder stores high-density technical procedures loaded on-demand by the AI agent — never pre-loaded into the prompt. This preserves the context window while making specialized checklists available when needed.
+Generic templates live in `FCVW/governance/` and `FCVW/wiki/templates/`. Documents filled with real application data live in the canonical project documents. The application should not mix product code with reusable framework rules.
 
-Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `systematic-debugging`, `wiki-lint`.
+#### 7. Fresh and Retroactive Instantiation
 
-### Directory Structure
+`FCVW/INSTANTIATION.md` covers fresh projects. `FCVW/RETROACTIVE_INSTANTIATION.md` covers existing, advanced, or legacy applications with autonomous and non-destructive defaults for AI agents.
 
-The detailed and auditable framework structure is maintained in `FILESYSTEM.md`. This README records only the operational summary:
+#### 8. AI Skills Engine (ASE)
 
-- repository root: owned by the application under development; keeps `AGENTS.md` and bridge/configuration files.
-- `FCVW/`: canonical source for framework documents, governance, memory, plans, changelogs, and skills.
-- `FCVW/docs/`: publishable framework documentation artifact; it does not require a permanent root `docs/` folder.
-- `FCVW/FILESYSTEM.md`: source of truth for the complete tree and expected directory state.
-- `FCVW/CONTEXT_MAP.md`: compact selective loading map by session type.
+`FCVW/skills/` stores technical procedures loaded on demand by the AI agent, never pre-loaded into the prompt. This keeps token consumption low while making specialized checklists available when needed.
+
+Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+
+### Operational Structure
+
+- `AGENTS.md`: operational entrypoint for humans and agents.
+- `FCVW/CONTEXT_MAP.md`: selective loading by session type.
+- `FCVW/BRIEFING.md`: Phase 0 and initial discovery.
+- `FCVW/INSTANTIATION.md`: fresh project instantiation.
+- `FCVW/RETROACTIVE_INSTANTIATION.md`: retroactive adoption in existing applications.
+- `FCVW/PLANNING.md`: mandatory plan methodology.
+- `FCVW/MANIFEST.md`, `FCVW/STACK.md`, `FCVW/SCOPE.md`: project identity, stack, and boundaries.
+- `FCVW/REFACTORING.md` and `FCVW/refactoring-guide/`: refactoring governance.
+- `FCVW/wiki/`: technical memory, AICC sessions, and reusable knowledge.
+- `FCVW/skills/`: JIT skills for agents.
+- `FCVW/FILESYSTEM.md`: complete and auditable physical tree.
 
 ### Token Consumption by Scenario
 
-To maximize transparency and API call cost-efficiency with LLMs, the framework maps the estimated token consumption for each development scenario based on its active policies:
+The estimates below are planning references for reducing context cost in LLM calls. Recalibrate after material growth in the documents.
 
 | Mapped Scenario | Ingested Documents | Initial Load (No AICC) | Continuous Turn Cost (With AICC) | Savings with AICC |
 | :--- | :--- | :---: | :---: | :---: |
@@ -176,33 +223,32 @@ To maximize transparency and API call cost-efficiency with LLMs, the framework m
 | **New Feature** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7,000 tokens | **~1,500 tokens** | **-78%** |
 | **UI / Components** | `AGENTS.md` + `DESIGN.md` | ~4,000 tokens | **~900 tokens** | **-77%** |
 | **Refactoring** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8,000 tokens | **~1,800 tokens** | **-77%** |
-| **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
-| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2,500 tokens | **~600 tokens** | **-76%** |
-
-*Note: Estimates are based on the current average size of the framework's governance files. 1 token ≈ 4 characters in English or ~3 characters in Portuguese.*
+| **Fresh Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
+| **Retroactive Instantiation** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7,500 tokens | **~1,900 tokens** | **-75%** |
+| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` | ~2,500 tokens | **~600 tokens** | **-76%** |
 
 ### How to Use
 
-#### 1. Copy or Clone
+#### 1. New Project
 
-Use this repository as a base for a new project or keep it as a central framework.
+Clone the framework, read `AGENTS.md`, load `FCVW/INSTANTIATION.md`, and execute Phase 0 in `FCVW/BRIEFING.md`.
 
 ```bash
 git clone https://github.com/Sistema2D/FrameCode-VibeWork.git my-project
 cd my-project
 ```
 
-#### 2. Instantiate
+#### 2. Existing or Legacy Application
 
-Read `AGENTS.md` and `INSTANTIATION.md`. Instantiation does not rely on automatic scripts: renaming and replacements must be done explicitly, preserving templates in `governance/` and `wiki/templates/`.
+Use `FCVW/RETROACTIVE_INSTANTIATION.md` and the `FCVW/skills/retroactive-instantiation/SKILL.md` skill. The AI must preserve application code, README, configuration, data, and history while importing or repairing FCVW non-destructively.
 
-#### 3. Execute Phase 0
+#### 3. Code Refactoring
 
-Fill out `BRIEFING.md`, update `MANIFEST.md`, `STACK.md`, `SCOPE.md`, generate the application root `README.md`, and record the change via plan and changelog.
+Use `FCVW/REFACTORING.md` and `FCVW/refactoring-guide/` before changing architecture or existing modules. Refactoring must be incremental, testable, reversible, and governed by a plan.
 
-#### 4. Work with AI
+#### 4. Daily AI Work
 
-When requesting changes, ask the agent to follow `AGENTS.md`. For queries, analysis, and reviews without file editing, a plan is not mandatory. For any modification, the plan and changelog workflow is mandatory.
+Ask the agent to follow `AGENTS.md`. Queries, analyses, and reviews without file editing do not require a plan. Any modification requires a plan, changelog, validation, and session synthesis when applicable.
 
 ---
 
@@ -220,7 +266,7 @@ Se este framework for útil para o seu trabalho, você pode apoiar o desenvolvim
 
 ## Licença / License
 
-Este projeto está licenciado sob a licença MIT. Veja `LICENSE`. / This project is licensed under the MIT license. See `LICENSE`.
+Este projeto está licenciado sob a licença MIT. Veja `FCVW/LICENSE`. / This project is licensed under the MIT license. See `FCVW/LICENSE`.
 
 ## Star History
 

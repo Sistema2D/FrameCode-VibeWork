@@ -38,6 +38,7 @@ Load only the documents relevant to the session context. All files (except this 
 | AI / RAG / wiki | `AGENTS.md`, `FCVW/AI.md`, `FCVW/wiki/schema.md` |
 | Document audit | `AGENTS.md`, `FCVW/MANIFEST.md`, `FCVW/AUDIT.md` |
 | Starting a new project | `AGENTS.md`, `FCVW/INSTANTIATION.md`, `FCVW/BRIEFING.md`, `FCVW/MANIFEST.md` |
+| Retroactive instantiation / migration | `AGENTS.md`, `FCVW/RETROACTIVE_INSTANTIATION.md`, `FCVW/INSTANTIATION.md`, `FCVW/CONTEXT_MAP.md` |
 
 > **Quick reference**: see [`CONTEXT_MAP.md`](FCVW/CONTEXT_MAP.md) for a compact session-type loading table with exact document sizes and skip recommendations.
 
@@ -71,7 +72,7 @@ Mandatory sequence:
 7. Update the plan with completion details and final status.
 8. Move the file to the subfolder corresponding to the final status.
 
-Any change to a versioned file must generate a changelog â€” no exceptions for small adjustments.
+Any change to a versioned file must generate a changelog - no exceptions for small adjustments.
 
 The complete methodology is in `FCVW/PLANNING.md`.
 
@@ -85,8 +86,8 @@ If the query evolves into a modification of code, documentation, configuration, 
 
 Detailed rules are in the domain documents. Summary of responsibility:
 
-- **Scope**: `FCVW/SCOPE.md` â€” functional boundaries and mandatory approval to expand or reduce scope.
-- **UI/UX**: `FCVW/DESIGN.md` â€” consult before any visual modification; explicit approval to change registered rules.
+- **Scope**: `FCVW/SCOPE.md` - functional boundaries and mandatory approval to expand or reduce scope.
+- **UI/UX**: `FCVW/DESIGN.md` - consult before any visual modification; explicit approval to change registered rules.
 - **Implementation**: do not mix opportunistic refactorings with bugfixes; do not revert pre-existing changes outside the active plan; do not version private data.
 - **Documentation**: plans go in `FCVW/Plans/{status}`; `AGENTS.md` must be updated when new official documents are created; templates in `FCVW/governance/` follow structural changes of the VibeWork FrameCode.
 - **Instantiation**: when starting a new project from the framework, consult `FCVW/INSTANTIATION.md`; do not use recursive scripts to rename or replace content in batch without explicit review of the affected files.
@@ -104,6 +105,7 @@ Before executing a request that might modify files:
 - **Memory Rotation**: if the `FCVW/wiki/sessions/` directory has more than 10 files, load the `memory-rotation` skill to condense older sessions into `FCVW/wiki/concepts/` and archive them, keeping only the 3 most recent sessions;
 - **Skills Engine Check**: check if the active task triggers any specialized skills mapped in [skills/README.md](FCVW/skills/README.md). If yes, load that skill using `view_file` with `IsSkillFile: true` to guide execution;
 - **New Project Instantiation**: upon detecting Phase 0, consult `FCVW/INSTANTIATION.md`, apply the documented renaming rules, and replace placeholders only in canonical framework documents, preserving generic templates in `FCVW/governance/` and `FCVW/wiki/templates/`;
+- **Retroactive Instantiation**: when adopting FCVW in an existing, advanced, legacy, or partially governed application, consult `FCVW/RETROACTIVE_INSTANTIATION.md` and the `retroactive-instantiation` skill; preserve application code and history by default;
 - when starting a new project, execute the Phase 0 process described in `FCVW/BRIEFING.md`;
 - locate the corresponding plan in `FCVW/Plans/`;
 - if no plan exists, create one before editing;
@@ -152,5 +154,4 @@ If a necessary change is not covered by the plan, create or update a plan before
 - Were tests executed or has the limitation been recorded?
 - Were temporary files, logs, and private data left out of versioning?
 - Was the final state clearly described to the user?
-
 
