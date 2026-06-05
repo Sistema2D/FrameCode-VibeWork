@@ -17,9 +17,9 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.7.6` |
+| Current Version | `V0.8.0` |
 | Manifest Creation Date | `2026-05-15` |
-| Last Update | `2026-05-29` |
+| Last Update | `2026-06-05` |
 | Project Status | `development` |
 
 ---
@@ -239,6 +239,11 @@ Use this section to record document or structural gaps in the project.
 | 2026-05-29 | `V0.7.5` | Fixed Mermaid syntax in root README routing flowcharts. | Sistema2D |
 | 2026-05-29 | `V0.7.5` | Reconciled governance metadata, mandatory troubleshooting structure, and current-version documentation. | Codex |
 | 2026-05-29 | `V0.7.5` | Deprecated framework-owned root README, root docs duplicate, and `FCVW/snippets/`; centralized design rules in `DESIGN.md`. | Codex |
+| 2026-06-01 | `V0.7.6` | Fixed translation rendering security risk in the documentation page. | Codex |
+| 2026-06-04 | `V0.7.7` | Published global consistency corrections and documentation test alignment. | Codex |
+| 2026-06-04 | `V0.7.8` | Added retroactive-instantiation workflow and refreshed public README routing. | Codex |
+| 2026-06-05 | `V0.7.9` | Removed framework documentation site artifacts and obsolete Node/Jest harness from the baseline. | Codex |
+| 2026-06-05 | `V0.8.0` | Treated GitHub issues #27, #28, and #29 with operational priority/risk rules, application module documentation governance, and centralized agent journals. | Codex |
 
 ---
 

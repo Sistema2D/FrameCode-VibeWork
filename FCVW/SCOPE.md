@@ -19,6 +19,8 @@ Provide a structured, traceable, and token-efficient lifecycle for AI-assisted d
 - Accumulate reusable technical memory in a structured LLM Wiki (Obsidian-compatible)
 - Reduce AI governance token overhead by 70–80% via selective document loading and JIT skills
 - Provide a clear instantiation path for bootstrapping new projects from the framework
+- Define downstream application module documentation rules without storing filled application docs inside `FCVW/`
+- Centralize agent-specific journals inside the governance wiki
 
 ## Limits of Current Scope
 
@@ -42,6 +44,7 @@ The authoritative skill catalog is `FCVW/skills/README.md`. `FCVW/STACK.md` reco
 ### LLM Wiki (Technical Memory)
 
 The `wiki/` directory implements the LLM Wiki standard (inspired by Andrej Karpathy's concept). It contains: raw sources, synthesized knowledge pages, an index, a chronological log, AICC session syntheses, and thematic subfolders (patterns, decisions, failures, releases, etc.).
+Agent-specific journals use `wiki/agents/<agent_name>_journal.md` to avoid fragmented operational memory.
 
 **Key operational cycle:** Ingest → Query → Lint (defined in `wiki/schema.md`)
 
@@ -58,6 +61,7 @@ Session syntheses stored in `wiki/sessions/S{num}-{date}-{description}.md` compr
 ### Governance Templates
 
 The `governance/` directory preserves generic, empty templates for all operational processes: plans, ADRs, session syntheses, briefings, data schemas, refactoring records, and release notes. These templates are never filled with project-specific data — they serve as canonical blanks for instantiation.
+Application module documentation templates are also kept in `governance/`; filled module and flow documents belong to the downstream application root `docs/` folder when applicable.
 
 ## Modules and Components
 
@@ -73,6 +77,7 @@ Content and features:
 - `AI.md` — AICC and ASE operational standards, token efficiency rules
 - `DESIGN.md` — visual rules for projects with UI (HSL palette, glassmorphism, VDA)
 - `VERSIONING.md`, `RELEASE.md`, `AUDIT.md` — release and version lifecycle
+- `APPLICATION_DOCUMENTATION.md` - downstream application module documentation rules
 
 ### Plans Workflow
 
@@ -125,6 +130,7 @@ Main components:
 - issue records in `troubleshooting/`;
 - governance wiki in `wiki/`;
 - reusable empty templates in `governance/`.
+- downstream application module documentation in the application-owned root `docs/` folder, when applicable.
 
 ## Related Documents
 
@@ -137,3 +143,4 @@ Main components:
 - `VERSIONING.md`: version, release, and changelog rules.
 - `MANIFEST.md`: identity and governance synthesis of the project.
 - `CONTEXT_MAP.md`: selective loading map by session type.
+- `APPLICATION_DOCUMENTATION.md`: downstream application module documentation rules and template routing.

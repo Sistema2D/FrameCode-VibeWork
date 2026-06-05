@@ -14,6 +14,7 @@ This document is designed to be the **first document read** in any session — b
 |---|---|---|---|
 | **Bugfix / Troubleshooting** | `AGENTS.md §checklist`, `TROUBLESHOOTING.md`, `PLANNING.md` | `troubleshooting/<record>`, `wiki/failures/` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **New Feature** | `AGENTS.md §checklist`, `SCOPE.md`, `PLANNING.md` | `DESIGN.md` (if UI), `AI.md` (if AI), `wiki/index.md` | `SECURITY.md`, `REFACTORING.md`, `RELEASE.md` |
+| **Application Module Docs** | `AGENTS.md checklist`, `APPLICATION_DOCUMENTATION.md`, `PLANNING.md` | `governance/TEMPLATE_MODULE_DOCUMENTATION.md`, `governance/TEMPLATE_FLOW_DOCUMENTATION.md` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **UI / Components** | `AGENTS.md §checklist`, `DESIGN.md` | `wiki/patterns/` | `DATA.md`, `SECURITY.md`, `RELEASE.md` |
 | **Refactoring** | `AGENTS.md §checklist`, `REFACTORING.md`, `PLANNING.md` | `wiki/refactorings/`, `TESTS.md` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **Release** | `AGENTS.md §checklist`, `skill:release-checklist` | `VERSIONING.md`, `AUDIT.md`, `RELEASE.md` | `DESIGN.md`, `REFACTORING.md` |
@@ -55,7 +56,7 @@ This document is designed to be the **first document read** in any session — b
 
 ---
 
-## Document Size Reference (V0.7.5)
+## Document Size Reference (V0.8.0)
 
 > Use to make informed decisions about what to load. Larger files cost more tokens.
 
@@ -64,6 +65,7 @@ This document is designed to be the **first document read** in any session — b
 | `AGENTS.md` | ~12 KB | Always (first) |
 | `REFACTORING.md` | ~14 KB | On demand |
 | `AI.md` | ~11 KB | On demand (AI sessions) |
+| `APPLICATION_DOCUMENTATION.md` | ~4 KB | On demand (application module docs) |
 | `FCVW/README.md` | ~13 KB | Rarely (framework orientation only) |
 | `wiki/schema.md` | ~9 KB | Use `skill:wiki-lint` instead |
 | `SECURITY.md` | ~7 KB | On demand (security sessions) |

@@ -3,7 +3,7 @@
 ## Application
 
 - Name: `FrameCode VibeWork`
-- Current version: `V0.7.6`
+- Current version: `V0.8.0`
 - Type: `framework / governance template`
 - Target platform: `cross-platform (Windows / Linux / macOS)`
 - Objective: `Document-based governance framework for AI-assisted application development with session context compression and on-demand skills engine.`
@@ -26,6 +26,7 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 - Context compression: `AICC — AI Interaction Context Compression (wiki/sessions/S*.md)`
 - Skills engine: `ASE — AI Skills Engine (skills/*.md, loaded JIT)`
 - Continuous learning: `LLM Wiki Ingest/Query/Lint cycle (wiki/schema.md)`
+- Agent journals: `wiki/agents/<agent_name>_journal.md`
 
 ## Knowledge Base / Wiki
 
@@ -49,6 +50,7 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 | `memory-rotation` | `skills/memory-rotation/SKILL.md` | context bloat, clean sessions, rotate memory |
 | `orchestrator` | `skills/orchestrator/SKILL.md` | large refactoring, complex plans, parallel tasks |
 | `project-instantiation` | `skills/project-instantiation/SKILL.md` | bootstrap, new project, instantiate, initialize |
+| `retroactive-instantiation` | `skills/retroactive-instantiation/SKILL.md` | retroactive instantiation, existing app, legacy app |
 | `wiki-lint` | `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages |
 | `release-checklist` | `skills/release-checklist/SKILL.md` | release, publish, version bump |
 | `systematic-debugging` | `skills/systematic-debugging/SKILL.md` | debugging, fixing an error, tracking down a bug |
@@ -58,6 +60,9 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 - Build script: `Not applicable — no compiled artifacts`
 - Execution script: `Not applicable — open in Markdown editor or agent IDE`
 - Main output: `Populated governance documents, wiki pages, and session syntheses`
+- Public documentation site: `External to this framework baseline`
+- Node package files: `Not applicable in the framework root`
+- Application module docs: `Downstream application-owned docs/ generated from FCVW governance templates`
 
 ## Persistence and Logs
 

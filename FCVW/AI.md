@@ -151,6 +151,8 @@ Rules:
 - Memory must not store secrets unnecessarily.
 - History must respect `DATA.md` and `SECURITY.md`.
 - Learning generated from a conversation must be traceable.
+- Agent-specific journals must use `wiki/agents/<agent_name>_journal.md`.
+- Agent journals are append-only operational memory for durable project-specific learnings, not routine chat transcripts.
 
 ## AI Interaction Context Compression (AICC)
 
@@ -252,4 +254,3 @@ To facilitate retrieval and visualization in Obsidian, the AI must use the follo
 
 To create new AI feature specifications, use the template in:
 `governance/TEMPLATE_AI_RESOURCE.md`
-

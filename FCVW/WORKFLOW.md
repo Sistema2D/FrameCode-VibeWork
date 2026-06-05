@@ -129,15 +129,18 @@ The FrameCode VibeWork framework has its own operational workflow, separate from
 
 1. `AGENTS.md` guides the initial consultation and points to the applicable official documents.
 2. `PLANNING.md` defines the methodology, and each change is recorded in `Plans/{status}`.
-3. The implementation or document change updates the affected official documents.
-4. `VERSIONING.md` guides the expected version and the corresponding changelog in `changelogs/`.
+3. Priority and risk are evaluated before execution; priority drives triage and risk defines review, rollback, validation, blocking, and decomposition.
+4. The implementation or document change updates the affected official documents.
+5. Relevant downstream application module changes update the application-owned documentation defined in `APPLICATION_DOCUMENTATION.md`.
+6. `VERSIONING.md` guides the expected version and the corresponding changelog in `changelogs/`.
 
 ```mermaid
 flowchart TD
     A["AGENTS.md"] --> B["Applicable official documents"]
     B --> C["Plan in Plans/{status}"]
-    C --> D["Documented change"]
-    D --> E["Changelog in changelogs/"]
+    C --> D["Priority/risk gates"]
+    D --> E["Documented change"]
+    E --> F["Changelog in changelogs/"]
 ```
 
 ## 10. Maintenance Observations
@@ -145,3 +148,4 @@ flowchart TD
 `<Record here known maintenance risks, critical dependencies, and areas requiring special attention when making changes.>`
 
 - When evolving the behavior described here, keep this document synchronized within the same change plan/changelog.
+- When changing pages, screens, components, flows, or business rules in a downstream application, keep the application-owned module documentation synchronized in the same plan.

@@ -28,6 +28,7 @@ If the external behavior needs to change, the modification is not just refactori
 
 - `AGENTS.md`: general conduct, precedence of instructions, mandatory plans, and changelog.
 - `PLANNING.md`: plan creation, priority, risk, acceptance criteria, and tests.
+- `PLANNING.md`: operational priority/risk gates for triage, review, rollback, validation, blocking, and decomposition.
 - `VERSIONING.md`: version increment, changelog, rollback.
 - `TROUBLESHOOTING.md`: consult when refactoring is linked to failures or regressions.
 - `DESIGN.md`: consult when refactoring affects the interface or visual components.
@@ -112,6 +113,8 @@ Avoid when: there is no clear success criterion; there is no possible validation
 | R5 | Core architecture, security, migration, critical data, or broad main workflow |
 
 R4 and R5 refactorings must have explicit rollback and expanded regression validation.
+
+Refactoring plans must also record the operational score and gates defined in `PLANNING.md`. High-risk low-priority refactorings must not be executed automatically only because their risk score is high; postpone, decompose, or justify them explicitly.
 
 > For ICR (Candidacy) and IRR (Risk) indices with detailed scoring, consult `wiki/refactorings/complete-guide.md`.
 
@@ -291,4 +294,3 @@ To ensure that temporary shortcuts or non-blocking design flaws do not accumulat
 1. **Mandatory Logging:** Any compromise in design patterns, missing test cases, or temporary workarounds must be logged as a `#tech-debt` item in the wiki using the template: `wiki/templates/TEMPLATE_TECH_DEBT.md`.
 2. **Refactoring Priority Alignment:** Remediation plans for high-severity technical debt must be scheduled into the priority list (P1-P5) in future change plans.
 3. **Continuous Pay-Down:** When modifying a file or module that contains an active `#tech-debt` wiki card, evaluate if part or all of that debt can be safely paid down (refactored) as part of the preparatory work of your active plan, moving the wiki card status to `obsolete` or `superseded` upon completion.
-

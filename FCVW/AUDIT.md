@@ -62,6 +62,8 @@ Items:
 - internal plan status;
 - correct folder;
 - priority and risk defined;
+- operational score, review gate, rollback requirement, and decomposition requirement defined;
+- action taken compatible with priority/risk classification;
 - current and expected version;
 - acceptance criteria;
 - test plan;
@@ -114,14 +116,20 @@ Items:
 > This checklist is for **pre-release auditing** (coherence of the repository as a whole). The **task closure** checklist is in `AGENTS.md`.
 
 - [ ] `AGENTS.md` cites all relevant official documents.
-- [ ] The repository root is application-owned: no framework `README.md`, permanent root `docs/`, or framework-owned generated artifacts are present outside `FCVW/`, except bridge/config files such as `AGENTS.md`, `.gitignore`, `.cursorrules`, `.windsurfrules`, and `.github/`.
+- [ ] The repository root remains clean for framework distribution: bridge/public files such as `README.md`, `AGENTS.md`, `.gitignore`, `.cursorrules`, `.windsurfrules`, and `.github/` may exist, but no permanent root `docs/`, root `package.json`, root `package-lock.json`, root `tests/`, or framework-owned generated site artifacts are present.
+- [ ] The framework baseline does not contain `FCVW/docs/`; public documentation sites belong to external repositories or deployment pipelines.
 - [ ] `STACK.md` records the correct version.
 - [ ] `changelogs/Vx.y.z.md` exists.
 - [ ] The changelog cites related plans.
 - [ ] All completed plans are in `Plans/completed`.
 - [ ] All in-progress plans are in `Plans/in_progress`.
 - [ ] There is no completed plan without validation.
+- [ ] Completed plans include operational priority/risk handling compatible with `PLANNING.md`.
+- [ ] `R4` and `R5` plans include rollback and expanded validation, and `R5` plans record explicit human approval.
+- [ ] High-risk low-priority plans were postponed, decomposed, discontinued, or explicitly justified.
 - [ ] There is no resolved issue without minimum evidence.
+- [ ] Relevant application module, screen, page, component, flow, or business-rule changes updated the application-owned module documentation defined by `APPLICATION_DOCUMENTATION.md`.
+- [ ] Agent journals, when used, live under `wiki/agents/<agent_name>_journal.md` and do not use competing paths.
 - [ ] `DESIGN.md` reflects approved visual changes.
 - [ ] `SCOPE.md` reflects approved functional changes.
 - [ ] `WORKFLOW.md` reflects modified flows.

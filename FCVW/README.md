@@ -22,7 +22,7 @@ graph TD
     D -->|"Rastreabilidade"| E["Changelog e versionamento"]
     E -->|"Validação"| F["Auditoria e release"]
     F -->|"Aprendizado"| G["Wiki / memória técnica"]
-    G -->|"Publicação documental"| H["Documentação publicável opcional"]
+    G -->|"Publicacao externa opcional"| H["Site/documentacao fora do framework"]
     H -->|"Contexto acumulado"| C
 ```
 
@@ -54,7 +54,15 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 
 A pasta `skills/` armazena procedimentos técnicos de alta densidade carregados sob demanda pelo agente de IA — nunca pré-carregados no prompt. Isso preserva a janela de contexto enquanto disponibiliza checklists especializados quando necessários.
 
-Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `systematic-debugging`, `wiki-lint`.
+#### 7. Documentacao de modulos da aplicacao
+
+`APPLICATION_DOCUMENTATION.md` define como a aplicacao instanciada deve manter documentacao propria de modulos, telas, componentes e fluxos em `docs/`, usando templates de `governance/`.
+
+#### 8. Journals de agentes
+
+Journals de agentes devem usar `wiki/agents/<agent_name>_journal.md` para manter a memoria operacional centralizada.
+
+Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
 
 ### Estrutura De Diretórios
 
@@ -62,9 +70,10 @@ A estrutura detalhada e auditável do framework é mantida em `FILESYSTEM.md`. E
 
 - raiz do repositório: pertence à aplicação em desenvolvimento; mantém `AGENTS.md` e arquivos ponte/configuração.
 - `FCVW/`: fonte canônica dos documentos, governança, memória, planos, changelogs e habilidades do framework.
-- `FCVW/docs/`: artefato publicável da documentação do framework; não substitui uma pasta `docs/` permanente na raiz.
+- site/documentacao publica: nao faz parte do baseline fisico do framework; quando necessario, publique em repositorio ou pipeline externo.
 - `FCVW/FILESYSTEM.md`: fonte de verdade para a árvore completa e para o estado esperado dos diretórios.
 - `FCVW/CONTEXT_MAP.md`: mapa compacto de carregamento seletivo por tipo de sessão.
+- `APPLICATION_DOCUMENTATION.md`: regras de documentacao de modulos da aplicacao.
 
 ### Consumo de Tokens por Cenário
 
@@ -122,7 +131,7 @@ graph TD
     D -->|"Traceability"| E["Changelog and versioning"]
     E -->|"Validation"| F["Audit and release"]
     F -->|"Learning"| G["Wiki / technical memory"]
-    G -->|"Documentation publishing"| H["Optional publishable documentation"]
+    G -->|"Optional external publishing"| H["Site/documentation outside the framework"]
     H -->|"Accumulated context"| C
 ```
 
@@ -154,7 +163,15 @@ The `governance/` folder preserves generic templates. Filled project documents r
 
 The `skills/` folder stores high-density technical procedures loaded on-demand by the AI agent — never pre-loaded into the prompt. This preserves the context window while making specialized checklists available when needed.
 
-Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `systematic-debugging`, `wiki-lint`.
+#### 7. Application Module Documentation
+
+`APPLICATION_DOCUMENTATION.md` defines how the instantiated application should keep its own module, screen, component, and flow documentation in `docs/`, using templates from `governance/`.
+
+#### 8. Agent Journals
+
+Agent journals must use `wiki/agents/<agent_name>_journal.md` to keep operational memory centralized.
+
+Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
 
 ### Directory Structure
 
@@ -162,9 +179,10 @@ The detailed and auditable framework structure is maintained in `FILESYSTEM.md`.
 
 - repository root: owned by the application under development; keeps `AGENTS.md` and bridge/configuration files.
 - `FCVW/`: canonical source for framework documents, governance, memory, plans, changelogs, and skills.
-- `FCVW/docs/`: publishable framework documentation artifact; it does not require a permanent root `docs/` folder.
+- public site/documentation: not part of the framework physical baseline; publish it in an external repository or pipeline when needed.
 - `FCVW/FILESYSTEM.md`: source of truth for the complete tree and expected directory state.
 - `FCVW/CONTEXT_MAP.md`: compact selective loading map by session type.
+- `APPLICATION_DOCUMENTATION.md`: application module documentation rules.
 
 ### Token Consumption by Scenario
 
