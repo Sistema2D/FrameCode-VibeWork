@@ -1,7 +1,7 @@
 # FrameCode VibeWork Framework
 <img width="997" height="435" alt="Captura de tela 2026-06-04 151445" src="https://github.com/user-attachments/assets/66e16773-e381-4215-8b8c-58de2d6fc5e2" />
 
-Current framework version: `V0.7.8`
+Current framework version: `V0.8.0`
 
 *Select Language / Selecione o Idioma:*
 - [Português](#português)
@@ -20,10 +20,12 @@ O objetivo é reduzir perda de contexto entre sessões, impedir mudanças sem ra
 - O framework é stack-agnostic e roda como documentação versionada em Markdown.
 - A pasta `FCVW/` é a fonte canônica dos documentos, planos, changelogs, wiki, skills, templates e guias.
 - A raiz do repositório-base existe para compatibilidade pública do GitHub e contém este README, `AGENTS.md` e arquivos ponte.
-- `FCVW/docs/` contém a documentação publicável canônica e seus testes locais.
-- `docs/` na raiz é mantida apenas por compatibilidade com GitHub Pages no repositório-base.
+- A pagina publica/GitHub Pages nao e mantida neste framework; publicacao externa deve ser tratada em outro repositorio ou pipeline.
 - `FCVW/refactoring-guide/` contém o guia operacional de refatoração com inventário, risco, testes, rollback, PR e critérios de parada.
 - `FCVW/RETROACTIVE_INSTANTIATION.md` define a adoção retroativa do framework em aplicações já avançadas ou usando versões antigas do FCVW.
+- `FCVW/APPLICATION_DOCUMENTATION.md` define como documentar modulos, telas, paginas, componentes e fluxos da aplicacao instanciada.
+- `FCVW/PLANNING.md` transforma prioridade e risco em controles operacionais de triagem, validacao, rollback, revisao e decomposicao.
+- `FCVW/wiki/agents/` centraliza journals de agentes com caminho previsivel.
 - `FCVW/FILESYSTEM.md` é a fonte de verdade para a árvore física completa.
 
 ### Como Funciona
@@ -38,7 +40,7 @@ graph TD
     D -->|"Rastreabilidade"| E["Changelog e versionamento"]
     E -->|"Validação"| F["Auditoria e release"]
     F -->|"Aprendizado"| G["Wiki / memória técnica"]
-    G -->|"Publicação opcional"| H["Documentação publicável"]
+    G -->|"Publicacao externa opcional"| H["Site/documentacao fora do framework"]
     H -->|"Contexto acumulado"| C
 ```
 
@@ -86,6 +88,7 @@ Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-li
 - `FCVW/INSTANTIATION.md`: instanciação de novos projetos.
 - `FCVW/RETROACTIVE_INSTANTIATION.md`: adoção retroativa em aplicações existentes.
 - `FCVW/PLANNING.md`: metodologia obrigatória de planos.
+- `FCVW/APPLICATION_DOCUMENTATION.md`: padrao para documentacao de modulos da aplicacao.
 - `FCVW/MANIFEST.md`, `FCVW/STACK.md`, `FCVW/SCOPE.md`: identidade, stack e limites do projeto.
 - `FCVW/REFACTORING.md` e `FCVW/refactoring-guide/`: governança de refatoração.
 - `FCVW/wiki/`: memória técnica, sessões AICC e conhecimento reutilizável.
@@ -142,10 +145,12 @@ The goal is to reduce context loss between sessions, prevent untraceable changes
 - The framework is stack-agnostic and runs as versioned Markdown documentation.
 - `FCVW/` is the canonical source for documents, plans, changelogs, wiki, skills, templates, and guides.
 - The baseline repository root exists for GitHub public compatibility and contains this README, `AGENTS.md`, and bridge files.
-- `FCVW/docs/` contains the canonical publishable documentation and local tests.
-- Root `docs/` is kept only for GitHub Pages compatibility in the baseline repository.
+- The public page/GitHub Pages site is not maintained in this framework; external publication belongs in another repository or pipeline.
 - `FCVW/refactoring-guide/` contains the operational refactoring guide with inventory, risk, tests, rollback, PR, and stopping criteria.
 - `FCVW/RETROACTIVE_INSTANTIATION.md` defines retroactive framework adoption for advanced applications or projects using older FCVW versions.
+- `FCVW/APPLICATION_DOCUMENTATION.md` defines how to document modules, screens, pages, components, and flows in the instantiated application.
+- `FCVW/PLANNING.md` turns priority and risk into operational controls for triage, validation, rollback, review, and decomposition.
+- `FCVW/wiki/agents/` centralizes agent journals with predictable paths.
 - `FCVW/FILESYSTEM.md` is the source of truth for the complete physical tree.
 
 ### How It Works
@@ -160,7 +165,7 @@ graph TD
     D -->|"Traceability"| E["Changelog and versioning"]
     E -->|"Validation"| F["Audit and release"]
     F -->|"Learning"| G["Wiki / technical memory"]
-    G -->|"Optional publishing"| H["Publishable documentation"]
+    G -->|"Optional external publishing"| H["Site/documentation outside the framework"]
     H -->|"Accumulated context"| C
 ```
 
@@ -208,6 +213,7 @@ Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`
 - `FCVW/INSTANTIATION.md`: fresh project instantiation.
 - `FCVW/RETROACTIVE_INSTANTIATION.md`: retroactive adoption in existing applications.
 - `FCVW/PLANNING.md`: mandatory plan methodology.
+- `FCVW/APPLICATION_DOCUMENTATION.md`: application module documentation standard.
 - `FCVW/MANIFEST.md`, `FCVW/STACK.md`, `FCVW/SCOPE.md`: project identity, stack, and boundaries.
 - `FCVW/REFACTORING.md` and `FCVW/refactoring-guide/`: refactoring governance.
 - `FCVW/wiki/`: technical memory, AICC sessions, and reusable knowledge.
