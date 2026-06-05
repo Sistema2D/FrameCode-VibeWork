@@ -23,6 +23,11 @@ context_files: [] # List exact file paths the AI should load to execute this pla
   - [ ] 
 - **Priority:** `P1` (Critical) to `P5` (Optional)
 - **Risk:** `R1` (Very Low) to `R5` (Critical)
+- **Operational Score:** `P{n}-R{n} => impact_weight {6 - P} x risk_weight {R} = {score}`
+- **Review Gate:** `none` / `documentation review` / `technical review` / `human approval required`
+- **Rollback Required:** `No` / `Yes - <rollback summary>`
+- **Decomposition Required:** `No` / `Yes - <split recommendation>`
+- **Application Module Documentation:** `not applicable` / `created at docs/...` / `updated at docs/...`
 - **Current Version:** `Vx.y.z`
 - **Expected Version:** `Vx.y.z`
 - **Status:** `pending`
