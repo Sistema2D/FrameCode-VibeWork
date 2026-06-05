@@ -19,6 +19,9 @@ This repository is intentionally distributed with a clean wiki baseline. New pro
 - [[sessions/S006-2026-06-01-fix-xss-vulnerability]] - Session synthesis: XSS translation rendering fix.
 - [[sessions/S007-2026-06-04-global-consistency-corrections]] - Session synthesis: global consistency corrections.
 - [[sessions/S008-2026-06-04-readme-retroactive-instantiation]] - Session synthesis: README and retroactive instantiation.
+- [[sessions/S009-2026-06-05-remove-framework-docs-artifacts]] - Session synthesis: framework docs artifacts removal.
+- [[sessions/S010-2026-06-05-open-governance-issues]] - Session synthesis: open governance issues treatment.
+- [[agents/README]] - Agent journal path convention.
 - [[releases/v0-6-0]] - Release synthesis: V0.6.0.
 - [[README]] - Overview of the `wiki/` folder.
 
@@ -46,7 +49,7 @@ This repository is intentionally distributed with a clean wiki baseline. New pro
 - Validated patterns: none registered.
 - Consolidated decisions: none registered.
 - Release syntheses: 1 registered.
-- Cross-cutting syntheses: 8 session syntheses registered.
+- Cross-cutting syntheses: 10 session syntheses registered.
 - Failure catalog: none registered in `wiki/failures/`; current troubleshooting records live in `FCVW/troubleshooting/`.
 - Prompt catalog: none registered.
 - Open questions: none registered.

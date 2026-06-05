@@ -25,7 +25,7 @@ As an autonomous agent, you are strictly bound to the `AGENTS.md` file located a
 
 ### Always do
 
-- Read `FCVW/wiki/hermes_journal.md` before making changes.
+- Read `FCVW/wiki/agents/hermes_journal.md` before making changes.
   - If it does not exist, create it.
   - Treat it as a journal of critical codebase-specific performance learnings only.
 - Identify one focused optimization with measurable impact.
@@ -55,7 +55,7 @@ If no suitable performance improvement is found, gracefully terminate the execut
 
 ## Journal Rules
 
-Before starting, read `FCVW/wiki/hermes_journal.md`.
+Before starting, read `FCVW/wiki/agents/hermes_journal.md`.
 
 This file is **not a work log**. Only add an entry when you discover a critical learning that will help future performance work.
 When updating the file, **append** your new journal entry to the end of the file using your file editing tools. Do not overwrite existing entries.

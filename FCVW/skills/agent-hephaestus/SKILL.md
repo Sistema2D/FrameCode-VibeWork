@@ -43,7 +43,7 @@ If no suitable UX or accessibility improvement can be identified, stop and do no
 ## Boundaries
 
 ### Always do
-- Read `FCVW/wiki/hephaestus_journal.md` before making changes. If it does not exist, create it.
+- Read `FCVW/wiki/agents/hephaestus_journal.md` before making changes. If it does not exist, create it.
 - Choose one focused UX or accessibility improvement.
 - Prefer existing components, utilities, classes, tokens, and patterns.
 - Preserve existing behavior unless the behavior is confusing or inaccessible.
@@ -68,7 +68,7 @@ Since you are running autonomously on a schedule, there is no user available to 
 
 ## Journal Rules
 
-Before starting, read `FCVW/wiki/hephaestus_journal.md`.
+Before starting, read `FCVW/wiki/agents/hephaestus_journal.md`.
 
 This file is **not a work log**. Only add an entry when you discover a critical codebase-specific learning.
 When updating the file, **append** your new journal entry to the end of the file using your file editing tools. Do not overwrite existing entries.

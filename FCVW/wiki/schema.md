@@ -23,6 +23,7 @@ wiki/
 ├── failures/
 ├── refactorings/
 ├── audits/
+├── agents/
 ├── releases/
 ├── components/
 ├── prompts/
@@ -54,6 +55,7 @@ Use the minimum template defined in the **Mandatory Frontmatter** section. Do no
 | Failures | `failures/` | Recurring failures, root causes, and solutions |
 | Refactorings | `refactorings/` | Opportunities, learnings, and refactoring criteria |
 | Audits | `audits/` | Recurring findings and patterns derived from reports in `audits/` |
+| Agents | `agents/` | Agent-specific journals named `<agent_name>_journal.md` |
 | Releases | `releases/` | Syntheses of published versions |
 | Components | `components/` | Modules, screens, services, and responsibilities |
 | Prompts | `prompts/` | Useful, tested, or recommended prompts |
@@ -71,7 +73,7 @@ Minimum template:
 ```yaml
 ---
 title: "<page title>"
-type: "concept | decision | pattern | failure | refactoring | audit | release | component | prompt | question | synthesis | source | raw"
+type: "concept | decision | pattern | failure | refactoring | audit | agent | release | component | prompt | question | synthesis | source | raw"
 status: "draft | in_validation | validated | obsolete | superseded | contradictory"
 confidence: "low | medium | high"
 last_reviewed: "YYYY-MM-DD"
@@ -203,7 +205,22 @@ Rules:
 
 ---
 
-## 10. Rules for `index.md`
+## 10. Rules for `agents/`
+
+The `agents/` folder stores agent-specific journals.
+
+Rules:
+
+- use `agents/<agent_name>_journal.md`;
+- keep one predictable journal per agent;
+- append entries rather than overwriting;
+- record durable project-specific learnings, not routine execution narration;
+- do not store secrets, tokens, private logs, or unnecessary personal data;
+- promote reusable knowledge to the proper wiki category and link back to the journal source.
+
+---
+
+## 11. Rules for `index.md`
 
 The `index.md` file must function as a navigable map of the wiki.
 
@@ -223,7 +240,7 @@ The index must be updated whenever a new relevant page is created or when a page
 
 ---
 
-## 11. Rules for `log.md`
+## 12. Rules for `log.md`
 
 The `log.md` file must record chronological wiki events.
 
@@ -242,7 +259,7 @@ Record events such as:
 
 ---
 
-## 12. Wiki Linting
+## 13. Wiki Linting
 
 The AI must execute or recommend a wiki lint when there is:
 
@@ -270,7 +287,7 @@ The lint must verify:
 
 ---
 
-## 13. Contradictions Policy
+## 14. Contradictions Policy
 
 When a new source contradicts an existing page:
 
@@ -283,7 +300,7 @@ When a new source contradicts an existing page:
 
 ---
 
-## 14. Obsolescence Policy
+## 15. Obsolescence Policy
 
 When a page no longer represents the current state:
 
@@ -295,7 +312,7 @@ When a page no longer represents the current state:
 
 ---
 
-## 15. Use by AI Agents
+## 16. Use by AI Agents
 
 The wiki implements three main operations: **Ingest**, **Query**, and **Lint**. Consult the corresponding section for each situation.
 
@@ -313,7 +330,7 @@ The AI must not claim it has consulted, validated, or updated the wiki if this h
 
 ---
 
-## 16. Query Operation
+## 17. Query Operation
 
 Query is the flow of answering questions using the wiki as a primary source before resorting to external search or model influence.
 

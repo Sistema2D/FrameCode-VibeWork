@@ -33,6 +33,7 @@ When the project also has a user/runtime wiki or vault, explicitly differentiate
 - `failures/`: learnings about failures.
 - `refactorings/`: refactoring learnings and opportunities.
 - `audits/`: recurring audit findings.
+- `agents/`: agent-specific journals using `agents/<agent_name>_journal.md`.
 - `releases/`: syntheses of published versions.
 - `components/`: components, modules, and responsibilities.
 - `prompts/`: useful and validated prompts.

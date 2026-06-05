@@ -42,6 +42,37 @@ This repository is intentionally distributed with a clean wiki baseline. Registe
 
 ## Records
 
+## [2026-06-05 15:30] maintenance | Open governance issues treatment
+
+- Source: user request to treat GitHub issues #27, #28, and #29 according to prior triage.
+- Executed action: added operational priority/risk gates, application module documentation governance/templates, centralized agent journals, and prepared `V0.8.0`.
+- Pages created:
+  - `wiki/agents/README.md`
+  - `wiki/sessions/S010-2026-06-05-open-governance-issues.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+  - `wiki/schema.md`
+- Pages obsolete: none.
+- Result: open governance issues are treated locally in the framework baseline.
+- Gaps: remote GitHub issues remain open until these local changes are synchronized to the repository and reviewed.
+
+## [2026-06-05 14:30] maintenance | Framework docs artifacts removal
+
+- Source: user request to remove root `docs/`, move GitHub Pages elsewhere, remove `FCVW/docs/index.html`, and verify package files.
+- Executed action: removed framework docs site artifacts, removed obsolete Node/Jest harness, removed stale PR description, updated official baseline documents, published `V0.7.9`, and refreshed session memory.
+- Pages created:
+  - `wiki/sessions/S009-2026-06-05-remove-framework-docs-artifacts.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete:
+  - `docs/`
+  - `FCVW/docs/`
+  - root Node/Jest docs-test harness
+- Result: framework baseline is pure Markdown again; public documentation publication is external to this repository.
+- Gaps: GitHub issues #27, #28, and #29 remain open for separate governed plans.
+
 ## [2026-06-04 13:00] maintenance | README and retroactive instantiation
 
 - Source: user request to update the root README and add autonomous retroactive-instantiation instructions.

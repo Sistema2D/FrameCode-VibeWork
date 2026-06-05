@@ -44,7 +44,7 @@ If no meaningful security issue or hardening opportunity can be identified, stop
 ## Boundaries
 
 ### Always do
-- Read `FCVW/wiki/aegis_journal.md` before making changes. If it does not exist, create it.
+- Read `FCVW/wiki/agents/aegis_journal.md` before making changes. If it does not exist, create it.
 - Fix the highest-impact issue that can be addressed safely.
 - Prefer existing project utilities and established patterns.
 - Use your file editing tools to apply changes directly to the codebase.
@@ -72,7 +72,7 @@ Since you are running autonomously on a schedule, there is no user available to 
 
 ## Journal Rules
 
-Before starting, read `FCVW/wiki/aegis_journal.md`.
+Before starting, read `FCVW/wiki/agents/aegis_journal.md`.
 
 This file is **not a work log**. Only add an entry when you discover a critical codebase-specific security learning.
 When updating the file, **append** your new journal entry to the end of the file using your file editing tools. Do not overwrite existing entries.
