@@ -97,6 +97,9 @@ Detailed rules are in the domain documents. Summary of responsibility:
 - **Instantiation**: when starting a new project from the framework, consult `FCVW/INSTANTIATION.md`; do not use recursive scripts to rename or replace content in batch without explicit review of the affected files.
 - **Security**: `FCVW/SECURITY.md` — validate path traversal in any workflow that reads or writes paths coming from the UI or backend.
 - **Terminal Restrictions (Sandboxing)**: It is strictly forbidden to install global dependencies (e.g., `-g`) or modify system/environment configurations outside the workspace directory without explicit human approval.
+- **Third-Party Services**: whenever a task requires choosing or integrating a third-party developer service (database, auth, payments, hosting, email, cache, monitoring, analytics, AI, storage, CMS, search, realtime, background jobs, infrastructure, or any external API), research available options, compare them against project constraints, and document the reasoning before implementation. Never recommend or integrate a service from memory alone. Consult `FCVW/AI.md §Third-Party Service Research` for detailed rules.
+- **Code Review / Pull Requests**: every plan execution that results in a branch push must be proposed as a Pull Request. R3+ plans require at least one reviewer before merge. See the "Code Review and Pull Requests" section below for the full workflow.
+- **Multi-Agent Concurrency**: before starting any plan, check `FCVW/Plans/in_progress/` for active plans that may overlap with your scope. If a collision is detected, coordinate via agent journals before proceeding. See the "Multi-Agent Concurrency" section below for the full protocol.
 
 ## Initial Checklist
 
@@ -115,6 +118,7 @@ Before executing a request that might modify files:
 - if no plan exists, create one before editing;
 - classify the plan using priority, risk, operational score, review gate, rollback requirement, and decomposition requirement before starting execution;
 - for bugs, consult `FCVW/troubleshooting/` before proposing a fix;
+- for third-party service selection or integration, consult `FCVW/AI.md §Third-Party Service Research` before recommending or integrating;
 - for visual changes, consult `FCVW/DESIGN.md`;
 - for version, release, or changelog changes, consult `FCVW/VERSIONING.md`;
 - for release, consult `FCVW/RELEASE.md`;
@@ -129,6 +133,7 @@ Before executing a request that might modify files:
 - for reusable learnings, consult `FCVW/wiki/index.md`;
 - for agent-specific journals, use `FCVW/wiki/agents/<agent_name>_journal.md`;
 - **Knowledge Interconnection**: when creating or updating documents in `FCVW/wiki/` or `FCVW/decisions/`, the AI should actively seek to create links between related concepts to feed the connection graph (Obsidian Graph View);
+- for multi-agent coordination, check `FCVW/Plans/in_progress/` for overlapping scope before creating or starting a new plan;
 - confirm which files are within scope;
 - identify pre-existing changes that should not be reverted.
 
@@ -148,6 +153,116 @@ Before executing a request that might modify files:
 
 If a necessary change is not covered by the plan, create or update a plan before implementing.
 
+## Code Review and Pull Requests
+
+Every plan execution that produces a branch with modified files must be submitted as a Pull Request before the changes are considered final. This section defines the workflow for branch creation, PR submission, review, and merge.
+
+### Branch Naming
+
+Use descriptive, hierarchical branch names that identify the type and scope of work:
+
+```text
+<type>/<scope>/<short-description>
+```
+
+Examples:
+
+```text
+feat/auth/login-screen
+fix/api/null-pointer-on-empty-response
+refactor/orders/introduce-parameter-object
+docs/FCVW/service-research-rules
+```
+
+### Pull Request Workflow
+
+1. **Create branch** from the main development branch using the naming convention above.
+2. **Implement changes** according to the plan scope. Commit incrementally with semantic messages.
+3. **Open Pull Request** targeting the main development branch. The PR description must include:
+   - Link to the related plan in `FCVW/Plans/`
+   - Summary of changes
+   - Priority and risk classification
+   - Validation evidence (test results, screenshots, logs)
+   - Rollback procedure (for R4+ plans)
+4. **Request review**:
+   - R1-R2 plans: self-review acceptable (use `skill:governance-validator` for confidence)
+   - R3 plans: at least 1 peer reviewer
+   - R4 plans: at least 2 reviewers, including module owner or technical lead
+   - R5 plans: human approval required before merge (per `PLANNING.md`)
+5. **Address feedback**: make additional commits to the same branch. Do not rebase or force-push after review has started.
+6. **Merge**: after approval, merge using squash or merge commit (team preference). Do not merge if automated tests or validations fail (or have not been run), there are unresolved conflicts, or the scope grew without plan update.
+
+### Code Review Standards
+
+Reviewers must verify:
+
+- The change matches the plan scope exactly.
+- No unplanned functional changes were introduced.
+- External behavior described as preserved is indeed preserved (refactoring only).
+- Tests exist or the limitation is documented in the plan.
+- Security, data, and configuration changes follow `FCVW/SECURITY.md`, `FCVW/DATA.md`, and `FCVW/ENVIRONMENT.md`.
+- The changelog fragment exists in `FCVW/changelogs/unreleased/`.
+- No secrets, credentials, or sensitive data are exposed.
+
+### Refactoring-Specific Rules
+
+For refactoring-specific PR rules (risk classification, mandatory PR content, chained PRs), consult:
+[`FCVW/refactoring-guide/17-branch-and-pull-request-policy.md`](FCVW/refactoring-guide/17-branch-and-pull-request-policy.md)
+
+This document provides: PR size guidance by risk, mandatory PR content fields, approval matrix by risk, merge blocking conditions, and chained PR workflow for incremental refactorings.
+
+## Multi-Agent Concurrency
+
+This section defines the protocol for multiple AI agents or human developers working simultaneously in the same repository. The framework presumes serial single-agent operation by default — when two or more contributors operate concurrently, they must follow this coordination protocol to prevent collisions.
+
+### Core Principle: Plan-Based Signaling
+
+The `Plans/` directory is the coordination bus. The presence of a plan file in `Plans/in_progress/` signals "an agent is working on this scope." Agents must read this directory before starting work and respect active plans.
+
+### Pre-Work Coordination Check
+
+Before creating a new plan or starting execution:
+
+1. **List active plans**: Read all files in `FCVW/Plans/in_progress/`. For each plan, note the **scope**, **affected files**, and **agent/author**.
+2. **Detect collision**: Compare your intended scope against each active plan. A collision exists if:
+   - You intend to modify the same file(s) as an active plan.
+   - You intend to modify the same module, component, or functional area.
+   - Your changes could semantically conflict (e.g., renaming a function another plan is adding callers to).
+3. **Assess overlap**: If a collision is found:
+   - **Low overlap** (different files in the same module): proceed but note the adjacent work in your plan.
+   - **Medium overlap** (same file, different functions): coordinate via agent journal before proceeding.
+   - **High overlap** (same functions, contracts, or data structures): one agent should wait — compare priority (P1 > P2 > ...) and defer the lower-priority plan.
+4. **Signal your plan**: Before starting execution, ensure your plan is in `Plans/in_progress/` with a clearly defined `scope` and `context_files` list so other agents can detect collision with your work.
+
+### Agent Journals as Coordination Channels
+
+Agent journals in `FCVW/wiki/agents/` serve as asynchronous coordination channels:
+
+- **Agent A** working on module X leaves a journal entry at `FCVW/wiki/agents/agent_a_journal.md` describing the active scope, expected duration, and affected files.
+- **Agent B** checking for collisions reads the journal, notes the overlap, and decides whether to defer, split scope, or coordinate.
+- Journals are append-only. Each entry must include a timestamp and the current plan filename.
+
+### Scope Locking Convention
+
+A plan in `Plans/in_progress/` creates an **implicit soft lock** on the files listed in its `context_files` frontmatter. Other agents should not modify those files without explicit coordination. The lock is released when the plan moves to `Plans/completed/` or `Plans/discontinued/`.
+
+This is a convention, not a technical lock — it relies on agents following the protocol. Git provides the hard safety net via merge conflict detection.
+
+### Conflict Resolution
+
+If two agents independently modify the same files and a Git merge conflict occurs:
+
+1. **Do not force-push or overwrite.** Stop and assess.
+2. **Identify the conflicting plan** by checking which other plan touches the conflicted files.
+3. **Communicate** via the respective agent journals documenting the conflict, the attempted resolution, and the outcome.
+4. **Resolve** using standard Git conflict resolution. Preserve both intents when possible.
+5. **Update plans** affected by the conflict to reflect the resolution.
+6. **Record the event** in `troubleshooting/` as a learning for future concurrency.
+
+### Branch Isolation
+
+When working concurrently, each agent should use its own branch per the branch naming convention in "Code Review and Pull Requests." This keeps concurrent work isolated until PR review and merge, reducing the chance of mid-work collisions.
+
 ## Checklist Before Finishing a Change
 
 > This checklist covers technical and document execution. It is the mandatory standard for closing shifts that modify files. For pre-release auditing, consult `FCVW/AUDIT.md`.
@@ -159,7 +274,9 @@ If a necessary change is not covered by the plan, create or update a plan before
 - If there was a visual change, does `FCVW/DESIGN.md` reflect the current state?
 - If there was a bug, was `FCVW/troubleshooting/` consulted or updated?
 - Has the changelog fragment been created in `unreleased/` and does it cite the altered files?
+- Has the Pull Request been reviewed and approved according to the risk classification (R3+ requires at least one reviewer)?
 - **AI Context Compression**: has a new chronological session synthesis been created in [`FCVW/wiki/sessions/`](FCVW/wiki/sessions/) following the template to compress context for the next session?
 - Were tests executed or has the limitation been recorded?
 - Were temporary files, logs, and private data left out of versioning?
 - Was the final state clearly described to the user?
+- Has the plan been moved to `completed/` or `discontinued/`, releasing the soft lock for other agents?

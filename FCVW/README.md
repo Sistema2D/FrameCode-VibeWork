@@ -26,6 +26,51 @@ graph TD
     H -->|"Contexto acumulado"| C
 ```
 
+### Fluxo de Sessão com Carregamento Sob Demanda
+
+O framework organiza o trabalho em **cenários de sessão** — cada um define quais documentos carregar imediatamente, quais carregar sob demanda e quais pular. O diagrama abaixo mapeia todos os 14 cenários com base no `CONTEXT_MAP.md`:
+
+```mermaid
+graph TD
+    Start["Início da Sessão"] --> ReadCM["Ler CONTEXT_MAP.md\ne AGENTS.md §checklist"]
+    ReadCM --> IdentifyType["Identificar tipo de sessão"]
+
+    IdentifyType -->|Bugfix / Troubleshooting| Bugfix["Imediato: TROUBLESHOOTING.md\n+ PLANNING.md\nSob demanda: troubleshooting/, wiki/failures/"]
+    IdentifyType -->|New Feature| Feature["Imediato: SCOPE.md + PLANNING.md\nSob demanda: DESIGN.md (se UI),\nAI.md (se AI), wiki/index.md"]
+    IdentifyType -->|App Module Docs| AppDocs["Imediato: APPLICATION_DOCUMENTATION.md\n+ PLANNING.md\nSob demanda: TEMPLATE_MODULE_DOCUMENTATION.md,\nTEMPLATE_FLOW_DOCUMENTATION.md"]
+    IdentifyType -->|UI / Components| UI["Imediato: DESIGN.md\nSob demanda: wiki/patterns/"]
+    IdentifyType -->|Refactoring| Refact["Imediato: REFACTORING.md\n+ PLANNING.md\nSob demanda: wiki/refactorings/, TESTS.md"]
+    IdentifyType -->|Release| Release["Imediato: skill:release-checklist\nSob demanda: VERSIONING.md,\nAUDIT.md, RELEASE.md"]
+    IdentifyType -->|Briefing / Instanciação| Briefing["Imediato: INSTANTIATION.md\n+ BRIEFING.md\nSob demanda: skill:project-instantiation,\nMANIFEST.md, STACK.md"]
+    IdentifyType -->|Retroactive Inst.| Retro["Imediato: RETROACTIVE_INSTANTIATION.md\n+ INSTANTIATION.md\nSob demanda: CONTEXT_MAP.md"]
+    IdentifyType -->|Wiki / Knowledge| Wiki["Imediato: wiki/schema.md\n+ wiki/index.md\nSob demanda: skill:wiki-lint, wiki/log.md"]
+    IdentifyType -->|Security / Data| Security["Imediato: SECURITY.md + DATA.md\nSob demanda: AI.md, TESTS.md"]
+    IdentifyType -->|Document Audit| Audit["Imediato: MANIFEST.md + AUDIT.md\nSob demanda: skill:governance-validator,\nwiki/index.md, changelogs/"]
+    IdentifyType -->|PR / Code Review| PR["Imediato: AGENTS.md §Code Review\nSob demanda: refactoring-guide/17,\nPLANNING.md (risk gates)"]
+    IdentifyType -->|Deploy / Environment| Deploy["Imediato: ENVIRONMENT.md §5\nSob demanda: RELEASE.md §Deployment,\nskill:release-checklist"]
+    IdentifyType -->|Multi-Agent / Collab.| Multi["Imediato: AGENTS.md §Multi-Agent\nSob demanda: Plans/in_progress/,\nwiki/agents/ (journals)"]
+    IdentifyType -->|Git / Commit / Tag| Git["Imediato: skill:git-conventional-commits\nSob demanda: VERSIONING.md"]
+
+    Bugfix --> Execute["Executar escopo\n+ registrar em changelog"]
+    Feature --> Execute
+    AppDocs --> Execute
+    UI --> Execute
+    Refact --> Execute
+    Release --> Execute
+    Briefing --> Execute
+    Retro --> Execute
+    Wiki --> Execute
+    Security --> Execute
+    Audit --> Execute
+    PR --> Execute
+    Deploy --> Execute
+    Multi --> Execute
+    Git --> Execute
+
+    Execute --> Validate["Validar:\ngovernance-validator\nou testes"]
+    Validate --> Close["Fechar sessão:\nAICC session synthesis"]
+```
+
 ### Pilares
 
 #### 1. Governança por planos
@@ -62,7 +107,7 @@ A pasta `skills/` armazena procedimentos técnicos de alta densidade carregados 
 
 Journals de agentes devem usar `wiki/agents/<agent_name>_journal.md` para manter a memoria operacional centralizada.
 
-Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
 
 ### Estrutura De Diretórios
 
@@ -83,10 +128,18 @@ Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framewo
 | :--- | :--- | :---: | :---: | :---: |
 | **Bugfix / Troubleshooting** | `AGENTS.md` + `TROUBLESHOOTING.md` + `PLANNING.md` | ~5.000 tokens | **~1.200 tokens** | **-76%** |
 | **Nova Funcionalidade** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7.000 tokens | **~1.500 tokens** | **-78%** |
+| **App Module Docs** | `AGENTS.md` + `APPLICATION_DOCUMENTATION.md` + `PLANNING.md` | ~5.000 tokens | **~1.200 tokens** | **-76%** |
 | **Componentes / UI** | `AGENTS.md` + `DESIGN.md` | ~4.000 tokens | **~900 tokens** | **-77%** |
 | **Refatoração** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8.000 tokens | **~1.800 tokens** | **-77%** |
-| **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2.500 tokens | **~600 tokens** | **-76%** |
+| **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
+| **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` | ~5.500 tokens | **~1.300 tokens** | **-76%** |
+| **Security / Data** | `AGENTS.md` + `SECURITY.md` + `DATA.md` | ~6.000 tokens | **~1.400 tokens** | **-77%** |
+| **Document Audit** | `AGENTS.md` + `MANIFEST.md` + `AUDIT.md` | ~6.000 tokens | **~1.400 tokens** | **-77%** |
+| **PR / Code Review** | `AGENTS.md §Code Review` + (se refatoração) `refactoring-guide/17` | ~4.000 tokens | **~1.000 tokens** | **-75%** |
+| **Deploy / Environment** | `AGENTS.md` + `ENVIRONMENT.md §5` + `RELEASE.md §Deployment` | ~5.000 tokens | **~1.200 tokens** | **-76%** |
+| **Multi-Agent / Collaboration** | `AGENTS.md §Multi-Agent` + `Plans/in_progress/` | ~3.500 tokens | **~800 tokens** | **-77%** |
+| **Git / Commit / Tag** | `skill:git-conventional-commits` (JIT) | ~1.500 tokens | **~400 tokens** | **-73%** |
 
 *Nota: As estimativas são valores de referência para planejamento, não medições recalibradas automaticamente após cada mudança documental. Recalibre-as após crescimento material dos documentos de governança. 1 token ≈ 4 caracteres em inglês ou ~3 caracteres em português.*
 
@@ -135,6 +188,51 @@ graph TD
     H -->|"Accumulated context"| C
 ```
 
+### Session Flow with On-Demand Loading
+
+The framework organizes work into **session scenarios** — each defines which documents to load immediately, which to load on demand, and which to skip. The diagram below maps all 14 scenarios based on `CONTEXT_MAP.md`:
+
+```mermaid
+graph TD
+    Start["Session Start"] --> ReadCM["Read CONTEXT_MAP.md\nand AGENTS.md §checklist"]
+    ReadCM --> IdentifyType["Identify session type"]
+
+    IdentifyType -->|Bugfix / Troubleshooting| Bugfix["Immediate: TROUBLESHOOTING.md\n+ PLANNING.md\nOn demand: troubleshooting/, wiki/failures/"]
+    IdentifyType -->|New Feature| Feature["Immediate: SCOPE.md + PLANNING.md\nOn demand: DESIGN.md (if UI),\nAI.md (if AI), wiki/index.md"]
+    IdentifyType -->|App Module Docs| AppDocs["Immediate: APPLICATION_DOCUMENTATION.md\n+ PLANNING.md\nOn demand: TEMPLATE_MODULE_DOCUMENTATION.md,\nTEMPLATE_FLOW_DOCUMENTATION.md"]
+    IdentifyType -->|UI / Components| UI["Immediate: DESIGN.md\nOn demand: wiki/patterns/"]
+    IdentifyType -->|Refactoring| Refact["Immediate: REFACTORING.md\n+ PLANNING.md\nOn demand: wiki/refactorings/, TESTS.md"]
+    IdentifyType -->|Release| Release["Immediate: skill:release-checklist\nOn demand: VERSIONING.md,\nAUDIT.md, RELEASE.md"]
+    IdentifyType -->|Briefing / Instantiation| Briefing["Immediate: INSTANTIATION.md\n+ BRIEFING.md\nOn demand: skill:project-instantiation,\nMANIFEST.md, STACK.md"]
+    IdentifyType -->|Retroactive Inst.| Retro["Immediate: RETROACTIVE_INSTANTIATION.md\n+ INSTANTIATION.md\nOn demand: CONTEXT_MAP.md"]
+    IdentifyType -->|Wiki / Knowledge| Wiki["Immediate: wiki/schema.md\n+ wiki/index.md\nOn demand: skill:wiki-lint, wiki/log.md"]
+    IdentifyType -->|Security / Data| Security["Immediate: SECURITY.md + DATA.md\nOn demand: AI.md, TESTS.md"]
+    IdentifyType -->|Document Audit| Audit["Immediate: MANIFEST.md + AUDIT.md\nOn demand: skill:governance-validator,\nwiki/index.md, changelogs/"]
+    IdentifyType -->|PR / Code Review| PR["Immediate: AGENTS.md §Code Review\nOn demand: refactoring-guide/17,\nPLANNING.md (risk gates)"]
+    IdentifyType -->|Deploy / Environment| Deploy["Immediate: ENVIRONMENT.md §5\nOn demand: RELEASE.md §Deployment,\nskill:release-checklist"]
+    IdentifyType -->|Multi-Agent / Collab.| Multi["Immediate: AGENTS.md §Multi-Agent\nOn demand: Plans/in_progress/,\nwiki/agents/ (journals)"]
+    IdentifyType -->|Git / Commit / Tag| Git["Immediate: skill:git-conventional-commits\nOn demand: VERSIONING.md"]
+
+    Bugfix --> Execute["Execute scope\n+ record in changelog"]
+    Feature --> Execute
+    AppDocs --> Execute
+    UI --> Execute
+    Refact --> Execute
+    Release --> Execute
+    Briefing --> Execute
+    Retro --> Execute
+    Wiki --> Execute
+    Security --> Execute
+    Audit --> Execute
+    PR --> Execute
+    Deploy --> Execute
+    Multi --> Execute
+    Git --> Execute
+
+    Execute --> Validate["Validate:\ngovernance-validator\nor tests"]
+    Validate --> Close["Close session:\nAICC session synthesis"]
+```
+
 ### Pillars
 
 #### 1. Governance by Plans
@@ -171,7 +269,7 @@ The `skills/` folder stores high-density technical procedures loaded on-demand b
 
 Agent journals must use `wiki/agents/<agent_name>_journal.md` to keep operational memory centralized.
 
-Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
 
 ### Directory Structure
 
@@ -192,10 +290,18 @@ To maximize transparency and API call cost-efficiency with LLMs, the framework m
 | :--- | :--- | :---: | :---: | :---: |
 | **Bugfix / Troubleshooting** | `AGENTS.md` + `TROUBLESHOOTING.md` + `PLANNING.md` | ~5,000 tokens | **~1,200 tokens** | **-76%** |
 | **New Feature** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7,000 tokens | **~1,500 tokens** | **-78%** |
+| **App Module Docs** | `AGENTS.md` + `APPLICATION_DOCUMENTATION.md` + `PLANNING.md` | ~5,000 tokens | **~1,200 tokens** | **-76%** |
 | **UI / Components** | `AGENTS.md` + `DESIGN.md` | ~4,000 tokens | **~900 tokens** | **-77%** |
 | **Refactoring** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8,000 tokens | **~1,800 tokens** | **-77%** |
-| **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2,500 tokens | **~600 tokens** | **-76%** |
+| **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
+| **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` | ~5,500 tokens | **~1,300 tokens** | **-76%** |
+| **Security / Data** | `AGENTS.md` + `SECURITY.md` + `DATA.md` | ~6,000 tokens | **~1,400 tokens** | **-77%** |
+| **Document Audit** | `AGENTS.md` + `MANIFEST.md` + `AUDIT.md` | ~6,000 tokens | **~1,400 tokens** | **-77%** |
+| **PR / Code Review** | `AGENTS.md §Code Review` + (if refactoring) `refactoring-guide/17` | ~4,000 tokens | **~1,000 tokens** | **-75%** |
+| **Deploy / Environment** | `AGENTS.md` + `ENVIRONMENT.md §5` + `RELEASE.md §Deployment` | ~5,000 tokens | **~1,200 tokens** | **-76%** |
+| **Multi-Agent / Collaboration** | `AGENTS.md §Multi-Agent` + `Plans/in_progress/` | ~3,500 tokens | **~800 tokens** | **-77%** |
+| **Git / Commit / Tag** | `skill:git-conventional-commits` (JIT) | ~1,500 tokens | **~400 tokens** | **-73%** |
 
 *Note: Estimates are planning reference values, not measurements automatically recalibrated after every documentation change. Recalibrate them after material growth in the governance documents. 1 token ≈ 4 characters in English or ~3 characters in Portuguese.*
 

@@ -3,8 +3,8 @@ title: "Environment and Secrets Governance"
 type: "concept"
 status: "validated"
 confidence: "high"
-last_reviewed: "2026-05-26"
-related_version: "V0.6.0"
+last_reviewed: "2026-06-11"
+related_version: "V0.8.0"
 sources:
   - "SECURITY.md"
   - "DATA.md"
@@ -12,6 +12,7 @@ tags:
   - "environment"
   - "secrets"
   - "governance"
+  - "deployment"
 ---
 
 # Environment and Secrets Governance
@@ -83,7 +84,59 @@ To ensure portability and token efficiency for AI agents:
 
 ---
 
-## 5. Security & Secret Rotation
+## 5. Environment Promotion Workflow
+
+This section defines how changes and releases flow across the three environments (Development → Staging → Production). The goal is to ensure every change is validated in progressively more production-like conditions before reaching end users.
+
+### Environment Roles
+
+| Environment | Role | Access | Data | Validation Required |
+|---|---|---|---|---|
+| **Development** | Active development, debugging, and local testing | Developer local machine | Mock or anonymized data | Build + local tests + plan validation |
+| **Staging** | Pre-production validation, integration testing, audit | Protected team access | Sanitized or synthetic dataset | All development validation + integration tests + audit (`AUDIT.md`) |
+| **Production** | Live end-user service | Restricted ops access | Real user data | All staging validation + rollback plan + human approval |
+
+### Promotion Gate: Development → Staging
+
+A change moves from Development to Staging when:
+
+1. The plan is complete and located in `Plans/completed/`.
+2. All acceptance criteria from the plan are validated.
+3. The change compiles/builds without errors.
+4. Local tests pass (or limitations are documented).
+5. Code review is complete per the risk level (see `AGENTS.md §Code Review and Pull Requests`).
+6. The PR is merged into the main development branch.
+
+The staging deployment can be triggered by the merge event or scheduled — the framework does not prescribe the mechanism, but the validation evidence must exist before considering the promotion complete.
+
+### Promotion Gate: Staging → Production
+
+A change moves from Staging to Production when:
+
+1. The release is prepared and documented per `RELEASE.md`.
+2. The audit per `AUDIT.md` passes.
+3. Staging validation confirms all critical workflows function correctly.
+4. Rollback procedure is documented.
+5. Known gaps are recorded.
+6. Human approval is obtained for the deployment.
+
+### Rollback During Promotion
+
+If a deployed change fails validation in the target environment:
+
+1. **Immediate rollback**: Revert the deployment to the previous stable version in that environment.
+2. **Record the failure**: Create a troubleshooting record in `troubleshooting/` detailing symptoms, impact, and rollback actions.
+3. **Investigate**: Use `skill:systematic-debugging` to determine root cause.
+4. **Plan correction**: Create a new plan to fix the issue, referencing the troubleshooting record.
+5. **Re-promote**: After fix validation, repeat the promotion flow.
+
+### Promotion Without an Environment
+
+Projects with a single environment (e.g., solo developer, no staging) can treat the promotion gates as validation checkpoints: Development gates validate before merge, and Production gates validate before considering the change delivered. The environment column becomes a validation stage rather than a physical deployment target.
+
+---
+
+## 6. Security & Secret Rotation
 
 In the event of a credential leak (detected or suspected):
 
@@ -93,7 +146,7 @@ In the event of a credential leak (detected or suspected):
 
 ---
 
-## 6. AI Agent Checklist
+## 7. AI Agent Checklist
 
 Before completing any task related to environment variables, the AI agent must verify:
 
@@ -102,3 +155,4 @@ Before completing any task related to environment variables, the AI agent must v
 - [ ] **Active Environment Warning**: If I modified `.env.example`, I MUST immediately output a `> [!WARNING]` markdown alert in the chat instructing the human user to manually replicate the new key in their local `.env` file to prevent silent application crashes.
 - [ ] The `.gitignore` file includes strict overrides for all active runtime configuration files.
 - [ ] Local development configurations fallback safely to mocks or sandbox environments.
+- [ ] For promotion between environments, follow the workflow in `FCVW/ENVIRONMENT.md §5`.

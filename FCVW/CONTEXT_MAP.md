@@ -19,9 +19,13 @@ This document is designed to be the **first document read** in any session — b
 | **Refactoring** | `AGENTS.md §checklist`, `REFACTORING.md`, `PLANNING.md` | `wiki/refactorings/`, `TESTS.md` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **Release** | `AGENTS.md §checklist`, `skill:release-checklist` | `VERSIONING.md`, `AUDIT.md`, `RELEASE.md` | `DESIGN.md`, `REFACTORING.md` |
 | **Briefing / Instantiation** | `AGENTS.md §checklist`, `INSTANTIATION.md`, `BRIEFING.md` | `skill:project-instantiation`, `MANIFEST.md`, `STACK.md` | `REFACTORING.md`, `RELEASE.md` |
+| **Retroactive Instantiation / Migration** | `AGENTS.md §checklist`, `RETROACTIVE_INSTANTIATION.md`, `INSTANTIATION.md` | `CONTEXT_MAP.md`, `skill:retroactive-instantiation`, `MANIFEST.md`, `STACK.md` | `DESIGN.md`, `REFACTORING.md`, `RELEASE.md` |
 | **Wiki / Knowledge** | `AGENTS.md §checklist`, `wiki/schema.md`, `wiki/index.md` | `skill:wiki-lint`, `wiki/log.md` | `DESIGN.md`, `DATA.md`, `SECURITY.md` |
 | **Security / Data** | `AGENTS.md §checklist`, `SECURITY.md`, `DATA.md` | `AI.md`, `TESTS.md` | `DESIGN.md`, `REFACTORING.md` |
-| **Document Audit** | `AGENTS.md §checklist`, `MANIFEST.md`, `AUDIT.md` | `wiki/index.md`, `changelogs/` | `DESIGN.md`, `DATA.md` |
+| **Document Audit** | `AGENTS.md §checklist`, `MANIFEST.md`, `AUDIT.md` | `skill:governance-validator`, `wiki/index.md`, `changelogs/` | `DESIGN.md`, `DATA.md` |
+| **Pull Request / Code Review** | `AGENTS.md §Code Review and Pull Requests` | `FCVW/refactoring-guide/17-branch-and-pull-request-policy.md` (if refactoring PR), `PLANNING.md` (risk gates) | Most governance docs |
+| **Deploy / Environment Promotion** | `AGENTS.md §checklist`, `ENVIRONMENT.md §5` | `RELEASE.md §Deployment and Environment Promotion`, `skill:release-checklist` (if release) | `DESIGN.md`, `REFACTORING.md`, `AI.md` |
+| **Multi-Agent / Collaboration** | `AGENTS.md §Multi-Agent Concurrency` | `FCVW/Plans/in_progress/` (check active plans), `wiki/agents/` (agent journals) | Most governance docs unless crossing domain |
 | **Git / Commit / Tag** | `skill:git-conventional-commits` | `VERSIONING.md` | Most governance docs |
 
 ---
@@ -43,6 +47,7 @@ This document is designed to be the **first document read** in any session — b
 | `skills/project-instantiation/SKILL.md` | bootstrap, new project, instantiate, initialize | Safely sets up workspace |
 | `skills/release-checklist/SKILL.md` | release, publish, version bump | ~2.7k tokens vs. RELEASE+VERSIONING+AUDIT |
 | `skills/systematic-debugging/SKILL.md` | debugging, fixing an error, stack trace | Enforces hypothesis-based debugging |
+| `skills/governance-validator/SKILL.md` | validate governance, verify filesystem, check document integrity, pre-audit check, structural audit | Replaces reading FILESYSTEM.md + AUDIT.md + TESTS.md for validation purposes |
 | `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages | ~275 lines vs. reading schema.md §12 |
 
 ---

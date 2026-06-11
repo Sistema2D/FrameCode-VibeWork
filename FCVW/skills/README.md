@@ -36,6 +36,7 @@ A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do frame
 | **orchestrator** | [`skills/orchestrator/SKILL.md`](orchestrator/SKILL.md) | large refactoring, complex plans, parallel tasks | Habilita a IA a delegar tarefas em paralelo usando subagentes. |
 | **agnix-linter** | [`skills/agnix-linter/SKILL.md`](agnix-linter/SKILL.md) | periodic maintenance, governance audit | Inspeciona e valida a formatação, dead-links e consistência da pasta `FCVW/`. |
 | **memory-rotation** | [`skills/memory-rotation/SKILL.md`](memory-rotation/SKILL.md) | context bloat, clean sessions, rotate memory | Condensa sessões antigas do wiki em conceitos e remove excessos para proteger a janela de tokens. |
+| **governance-validator** | [`skills/governance-validator/SKILL.md`](governance-validator/SKILL.md) | validar governança, verificar filesystem, integridade documental, pré-auditoria | Checklist procedural para IA validar acurácia do FILESYSTEM.md e integridade dos documentos de governança. |
 
 ---
 
@@ -69,4 +70,5 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 | **orchestrator** | [`skills/orchestrator/SKILL.md`](orchestrator/SKILL.md) | large refactoring, complex plans, parallel tasks | Enables the main AI to delegate tasks in parallel using subagents. |
 | **agnix-linter** | [`skills/agnix-linter/SKILL.md`](agnix-linter/SKILL.md) | periodic maintenance, governance audit | Inspects and validates FCVW folder formatting, dead-links, and consistency. |
 | **memory-rotation** | [`skills/memory-rotation/SKILL.md`](memory-rotation/SKILL.md) | context bloat, clean sessions, rotate memory | Condenses old wiki sessions into concepts and purges excess to protect the token window. |
+| **governance-validator** | [`skills/governance-validator/SKILL.md`](governance-validator/SKILL.md) | validate governance, verify filesystem, document integrity, pre-audit check | Procedural checklist for AI to validate FILESYSTEM.md accuracy and governance document integrity. |
 

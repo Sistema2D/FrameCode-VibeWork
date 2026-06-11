@@ -3,7 +3,7 @@ title: "Project Filesystem Architecture"
 type: "concept"
 status: "validated"
 confidence: "high"
-last_reviewed: "2026-06-05"
+last_reviewed: "2026-06-11"
 related_version: "V0.8.0"
 sources:
   - "STACK.md"
@@ -41,34 +41,14 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |-- ARCHITECTURAL_DECISIONS.md
     |-- AUDIT.md
     |-- audits
-    |   |-- README.md
-    |   \-- 2026-05-29-framework-structure-audit.md
+    |   \-- README.md                        # Formal audit records (empty baseline)
     |-- BRIEFING.md
     |-- briefings
-    |   \-- README.md
+    |   \-- README.md                        # Briefing records (empty baseline)
     |-- CONTEXT_MAP.md
     |-- changelogs
-    |   |-- V0.7.0.md
-    |   |-- V0.7.1.md
-    |   |-- V0.7.2.md
-    |   |-- V0.7.3.md
-    |   |-- V0.7.4.md
-    |   |-- V0.7.5.md
-    |   |-- V0.7.6.md
-    |   |-- V0.7.7.md
-    |   |-- V0.7.8.md
-    |   |-- V0.7.9.md
-    |   |-- V0.8.0.md
     |   \-- unreleased/
-    |       |-- README.md
-    |       |-- P1-R2-2024-06-01-fix-xss-vulnerability.md
-    |       |-- P2-R2-2026-05-29-governance-state-reconciliation.md
-    |       |-- P2-R3-2026-05-29-root-and-snippets-deprecation.md
-    |       |-- P3-R2-2026-05-29-audit-follow-up-cleanup.md
-    |       |-- P4-R1-2026-05-29-readme-flowchart-alignment.md
-    |       |-- P4-R1-2026-05-29-readme-scope-wording-corrections.md
-    |       |-- translation-fallback-tests.md
-    |       \-- V0.7.5.md
+    |       \-- README.md                    # Unreleased changelog fragments
     |-- DATA.md
     |-- decisions
     |   \-- ADR-0001-pure-markdown-over-automation-scripts.md
@@ -85,6 +65,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |   |-- TEMPLATE_BRIEFING.md
     |   |-- TEMPLATE_DATA_SCHEMA.md
     |   |-- TEMPLATE_ENV.md
+    |   |-- TEMPLATE_FLOW_DOCUMENTATION.md
     |   |-- TEMPLATE_MIGRATION_RUNNER.md
     |   |-- TEMPLATE_MODULE_DOCUMENTATION.md
     |   |-- TEMPLATE_PLAN.md
@@ -99,7 +80,6 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |   |-- TEMPLATE_REFACTORING_PULL_REQUEST.md
     |   |-- TEMPLATE_REFACTORING_RISK_MATRIX.md
     |   |-- TEMPLATE_REFACTORING_ROLLBACK_PLAN.md
-    |   |-- TEMPLATE_FLOW_DOCUMENTATION.md
     |   |-- TEMPLATE_RELEASE.md
     |   |-- TEMPLATE_TROUBLESHOOTING.md
     |   \-- TEMPLATE_VISUAL_DIFF.md
@@ -109,35 +89,16 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |-- PERFORMANCE.md
     |-- PLANNING.md
     |-- Plans
-    |   |-- completed
-    |   |   |-- add_language_detection_tests.md
-    |   |   |-- P1-R2-2024-06-01-fix-xss-vulnerability.md
-    |   |   |-- P1-R4-2026-06-01-fix-xss-vulnerability.md
-    |   |   |-- P2-R2-2026-05-29-governance-state-reconciliation.md
-    |   |   |-- P2-R2-2026-06-04-readme-retroactive-instantiation.md
-    |   |   |-- P2-R3-2026-05-29-root-and-snippets-deprecation.md
-    |   |   |-- P2-R3-2026-06-04-global-consistency-corrections.md
-    |   |   |-- P2-R3-2026-06-05-remove-framework-docs-artifacts.md
-    |   |   |-- P2-R3-2026-06-05-open-governance-issues.md
-    |   |   |-- P3-R2-2026-05-29-add-language-detection-tests.md
-    |   |   |-- P3-R2-2026-05-29-audit-follow-up-cleanup.md
-    |   |   |-- P3-R2-2026-06-04-integrate-refactoring-guide.md
-    |   |   |-- P3-R2-2026-06-04-structural-cleanup.md
-    |   |   |-- P3-R2-2026-06-04-translate-refactoring-guide.md
-    |   |   |-- P3-R2-2026-06-04-translation-fallback-tests.md
-    |   |   |-- P4-R1-2026-05-29-readme-flowchart-alignment.md
-    |   |   |-- P4-R1-2026-05-29-readme-scope-wording-corrections.md
-    |   |   |-- P4-R1-2026-06-04-final-residual-cleanup.md
-    |   |   |-- P4-R1-2026-06-04-governance-history-fix.md
-    |   |   |-- P4-R1-2026-06-04-governance-logical-sync.md
-    |   |   |-- P4-R1-2026-06-04-paradox-resolution.md
-    |   |   |-- P4-R1-2026-06-04-wiki-schema-structural-sync.md
-    |   |   |-- plan_fix_xss.md
-    |   |   \-- translation-fallback-tests.md
-    |   |-- discontinued
-    |   |-- in_progress
-    |   \-- pending
-    |-- README.md (Framework README)
+    |   |-- README.md                        # Plans directory placeholder
+    |   |-- pending/
+    |   |   \-- README.md
+    |   |-- in_progress/
+    |   |   \-- README.md
+    |   |-- completed/
+    |   |   \-- README.md
+    |   \-- discontinued/
+    |       \-- README.md
+    |-- README.md                            # Framework README
     |-- REFACTORING.md
     |-- refactoring-guide
     |   |-- 00-general-governance.md
@@ -169,88 +130,80 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
     |-- SECURITY.md
     |-- skills
     |   |-- README.md
-    |   |-- agent-aegis
+    |   |-- agent-aegis/
     |   |   \-- SKILL.md
-    |   |-- agent-hephaestus
+    |   |-- agent-hephaestus/
     |   |   \-- SKILL.md
-    |   |-- agent-hermes
+    |   |-- agent-hermes/
     |   |   \-- SKILL.md
-    |   |-- agnix-linter
+    |   |-- agnix-linter/
     |   |   \-- SKILL.md
-    |   |-- aicc-compact
+    |   |-- aicc-compact/
     |   |   \-- SKILL.md
-    |   |-- brainstorming-and-tdd
+    |   |-- brainstorming-and-tdd/
     |   |   \-- SKILL.md
-    |   |-- git-conventional-commits
+    |   |-- git-conventional-commits/
     |   |   \-- SKILL.md
-    |   |-- memory-rotation
+    |   |-- governance-validator/
+    |   |   \-- SKILL.md                    # FILESYSTEM.md accuracy + document integrity validation
+    |   |-- memory-rotation/
     |   |   \-- SKILL.md
-    |   |-- obsidian-markdown
+    |   |-- obsidian-markdown/
     |   |   \-- SKILL.md
-    |   |-- orchestrator
+    |   |-- orchestrator/
     |   |   \-- SKILL.md
-    |   |-- project-instantiation
+    |   |-- project-instantiation/
     |   |   \-- SKILL.md
-    |   |-- release-checklist
+    |   |-- release-checklist/
     |   |   \-- SKILL.md
-    |   |-- retroactive-instantiation
+    |   |-- retroactive-instantiation/
     |   |   \-- SKILL.md
-    |   |-- systematic-debugging
+    |   |-- systematic-debugging/
     |   |   \-- SKILL.md
-    |   \-- wiki-lint
+    |   \-- wiki-lint/
     |       \-- SKILL.md
     |-- STACK.md
     |-- TESTS.md
     |-- troubleshooting
-    |   |-- README.md
-    |   \-- 2026-05-29-governance-state-drift.md
+    |   \-- README.md                        # Issue records (empty baseline)
     |-- TROUBLESHOOTING.md
     |-- VERSIONING.md
     |-- wiki
-    |   |-- agents
-    |   |   \-- README.md
-    |   |-- audits
-    |   |   \-- README.md
-    |   |-- components
-    |   |   \-- README.md
-    |   |-- concepts
-    |   |   \-- README.md
-    |   |-- decisions
-    |   |   \-- README.md
-    |   |-- failures
-    |   |   \-- README.md
-    |   |-- inbox
-    |   |   \-- README.md
-    |   |-- index.md
-    |   |-- log.md
-    |   |-- patterns
-    |   |   \-- README.md
-    |   |-- prompts
-    |   |   \-- README.md
-    |   |-- questions
-    |   |   \-- README.md
-    |   |-- raw
-    |   |   \-- README.md
-    |   |-- refactorings
-    |   |   \-- README.md
-    |   |-- releases
-    |   |   \-- v0-6-0.md
     |   |-- README.md
     |   |-- schema.md
-    |   |-- sessions
-    |   |   |-- README.md
-    |   |   |-- S001-2026-05-29-readme-flowchart-alignment.md
-    |   |   |-- S002-2026-05-29-governance-state-reconciliation.md
-    |   |   |-- S003-2026-05-29-root-and-snippets-deprecation.md
-    |   |   |-- S004-2026-05-29-audit-follow-up-cleanup.md
-    |   |   |-- S005-2026-05-29-readme-scope-wording-corrections.md
-    |   |   |-- S006-2024-06-01-fix-xss-vulnerability.md
-    |   |   |-- S009-2026-06-05-remove-framework-docs-artifacts.md
-    |   |   |-- S010-2026-06-05-open-governance-issues.md
-    |   |   \-- S001.md
-    |   |-- sources
+    |   |-- index.md
+    |   |-- log.md
+    |   |-- agents/
+    |   |   \-- README.md                    # Agent-specific journals
+    |   |-- audits/
     |   |   \-- README.md
-    |   \-- templates
+    |   |-- components/
+    |   |   \-- README.md
+    |   |-- concepts/
+    |   |   \-- README.md
+    |   |-- decisions/
+    |   |   \-- README.md
+    |   |-- failures/
+    |   |   \-- README.md
+    |   |-- inbox/
+    |   |   \-- README.md
+    |   |-- patterns/
+    |   |   \-- README.md
+    |   |-- prompts/
+    |   |   \-- README.md
+    |   |-- questions/
+    |   |   \-- README.md
+    |   |-- raw/
+    |   |   \-- README.md
+    |   |-- refactorings/
+    |   |   \-- README.md
+    |   |-- releases/
+    |   |   \-- README.md                    # Release syntheses (empty baseline)
+    |   |-- sessions/
+    |   |   \-- README.md                    # AICC session syntheses (empty baseline)
+    |   |-- sources/
+    |   |   \-- README.md
+    |   \-- templates/
     |       |-- README.md
     |       |-- TEMPLATE_DECISION.md
     |       |-- TEMPLATE_FAILURE.md
@@ -290,3 +243,4 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 1. **AI Checkpoints:** Whenever a new feature is requested, the AI must check `FILESYSTEM.md` before writing code to confirm where the new files belong.
 2. **Declarative Layout Integrity:** The detailed visual tree in `FILESYSTEM.md` must be updated manually by the agent whenever files are added or deleted. Summary documents should link to this file instead of duplicating the full tree.
 3. **Audit Closure:** The final step of any plan that alters directories is a manual verification of this document's visual tree.
+4. **Baseline Accuracy:** This document must always reflect the actual on-disk state. If a directory is empty (only a `README.md` placeholder), the tree must show only the placeholder. Do not list files that do not exist.

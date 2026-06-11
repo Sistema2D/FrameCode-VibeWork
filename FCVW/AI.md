@@ -192,6 +192,45 @@ skills_invoked:
   - "skills/obsidian-markdown/SKILL.md"
 ```
 
+## Third-Party Service Research
+
+To prevent the AI agent from recommending outdated, insecure, or inappropriate third-party services based solely on training memory, the following rules apply whenever a task involves selecting or integrating an external service (database, auth, payments, hosting, email, cache, monitoring, analytics, AI, storage, CMS, search, realtime, background jobs, infrastructure, SMS, video, webhooks, or any external API).
+
+### Mandatory Research
+
+Before recommending or integrating any third-party service, the AI agent must:
+
+1. **Discover available options**: Use available research tools to identify potential providers for the required capability. Do not rely on memory alone.
+2. **Compare against constraints**: Evaluate each option against the project's explicit constraints documented in `STACK.md`, `SCOPE.md`, `PERFORMANCE.md`, `SECURITY.md`, and `DATA.md`. Consider: free-tier limits, pricing model, data residency, latency, maintenance burden, community health, API stability, and compatibility with the existing stack.
+3. **Document reasoning**: Record the selected service, the alternatives considered, and the rationale for the choice. This documentation lives in the active plan, an ADR in `decisions/`, or a wiki page in `wiki/decisions/`.
+4. **Install and configure**: Follow the service's official documentation for setup. Use the project's `.env.example` to document required environment variables (following `ENVIRONMENT.md` rules). Never hardcode credentials.
+
+### Prohibited Behavior
+
+- **Never** recommend a service based solely on the AI's training data without verifying current status, pricing, documentation, and compatibility.
+- **Never** assume a specific SDK version, endpoint, or API contract without checking the official documentation.
+- **Never** fall back to placeholder or faux services without explicit user consent and a plan to replace them.
+- **Never** skip research because the service seems "obvious" or "standard" — common services change terms, pricing, and APIs frequently.
+
+### Integration Protocol
+
+When a third-party service requires API credentials:
+
+1. Create the target environment variable in `.env.local` (e.g., `SERVICE_API_KEY=`).
+2. Update `.env.example` with the new variable name, type, and placeholder value.
+3. Instruct the user to paste the secret into `.env.local` (per the Secret Handshake protocol in `SECURITY.md`).
+4. Do not proceed with integration until the user confirms credentials are in place.
+
+### Exceptions
+
+Research may be skipped only when:
+
+- The service is already integrated and documented in the project (verify via `STACK.md`, existing configuration, or imports).
+- The user explicitly specifies the exact provider, version, and configuration to use.
+- The task is a direct bugfix or upgrade of an already-integrated service.
+
+In all exceptions, verify the existing integration is still current and supported before proceeding.
+
 ## AI Quality Evaluation
 
 Recommended criteria:

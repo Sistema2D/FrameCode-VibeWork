@@ -17,9 +17,9 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.8.0` |
+| Current Version | `V0.9.0` |
 | Manifest Creation Date | `2026-05-15` |
-| Last Update | `2026-06-05` |
+| Last Update | `2026-06-11` |
 | Project Status | `development` |
 
 ---
@@ -200,6 +200,7 @@ No functional, visual, or structural change should be performed without followin
 | Secrets accidentally committed | Low | Critical | No automation scripts; AI.md data rules; manual review | `SECURITY.md`, `AI.md` |
 | Template placeholders left unfilled in downstream projects | Medium | Medium | INSTANTIATION.md renaming checklist; MANIFEST.md gap section | `INSTANTIATION.md`, `MANIFEST.md` |
 | Wiki knowledge becoming stale | Medium | Medium | Wiki Lint on every minor/major release; log.md tracking | `wiki/schema.md`, `skills/wiki-lint/SKILL.md` |
+| FILESYSTEM.md drift / governance document integrity decay | Medium | Medium | On-demand governance-validator skill before releases and structural audits | `skills/governance-validator/SKILL.md`, `FILESYSTEM.md` |
 
 ---
 
@@ -209,7 +210,20 @@ Use this section to record document or structural gaps in the project.
 
 | Gap | Impact | Priority | Related Plan | Status |
 |---|---|---|---|---|
-| No structural gaps identified at V0.5.0. | — | — | — | — |
+| FILESYSTEM.md visual tree listed files that did not exist on disk (changelogs/V*.md, Plans/*.md, troubleshooting records, wiki/sessions/S*.md, audits, briefings). Reconciled in V0.8.0 structural audit. | Medium — agents trusting FILESYSTEM.md would encounter read failures | P2 | structural-reconciliation-2026-06-11 | resolved |
+| Plans/ directory did not exist on disk despite being foundational to PLANNING.md workflow. Created with placeholder README.md files. | High — framework cannot operate without Plans/ | P1 | structural-reconciliation-2026-06-11 | resolved |
+| wiki/releases/ directory did not exist on disk. Created with README.md placeholder. | Low — releases directory not critical for baseline operation | P4 | structural-reconciliation-2026-06-11 | resolved |
+| wiki/index.md referenced 10 AICC session syntheses (S001-S010) that do not exist in the clean baseline. References removed. | Medium — broken wikilinks cause agent confusion | P2 | structural-reconciliation-2026-06-11 | resolved |
+| No automated validation for FILESYSTEM.md accuracy against physical disk state. | Medium — discrepancies can recur unnoticed | P3 | governance-validator-skill-2026-06-11 | resolved |
+| No automated test harness for governance document integrity (links, frontmatter, cross-references). | Medium — governance quality relies entirely on manual review | P3 | governance-validator-skill-2026-06-11 | resolved |
+
+### Mitigation (V0.8.0)
+
+Both gaps are addressed by the new ASE skill `skills/governance-validator/SKILL.md`, which provides a high-density procedural checklist for AI agents to manually validate:
+- FILESYSTEM.md accuracy vs. physical disk state (Validation 1)
+- Governance document integrity — frontmatter, links, cross-references, table format (Validation 2)
+
+The skill is pure Markdown, loaded on-demand (JIT), never pre-loaded, and replaces reading ~40+ pages of governance documents for validation purposes. This respects ADR-0001 (no automation scripts) and the ASE token-efficiency principle.
 
 ---
 
@@ -244,6 +258,13 @@ Use this section to record document or structural gaps in the project.
 | 2026-06-04 | `V0.7.8` | Added retroactive-instantiation workflow and refreshed public README routing. | Codex |
 | 2026-06-05 | `V0.7.9` | Removed framework documentation site artifacts and obsolete Node/Jest harness from the baseline. | Codex |
 | 2026-06-05 | `V0.8.0` | Treated GitHub issues #27, #28, and #29 with operational priority/risk rules, application module documentation governance, and centralized agent journals. | Codex |
+| 2026-06-11 | `V0.8.0` | Structural reconciliation: reconciled FILESYSTEM.md with actual baseline state, created Plans/ directory, updated MANIFEST.md §13 gaps, fixed wiki/index.md broken references, created wiki/releases/. | Buffy |
+| 2026-06-11 | `V0.8.0` | Governance validator skill: created skills/governance-validator/SKILL.md to close two open structural gaps — FILESYSTEM.md accuracy validation and governance document integrity checks. Updated skills/README.md, CONTEXT_MAP.md. | Buffy |
+| 2026-06-11 | `V0.8.0` | Service research mandate (GAP-1.3): added mandatory third-party service research rules to AGENTS.md and AI.md. Created plan P1-R4-service-research. | Buffy |
+| 2026-06-11 | `V0.8.0` | PR/branch/code review workflow (GAP-2.2): added PR workflow, branch naming, review standards to AGENTS.md and CONTEXT_MAP.md. Created plan P2-R3-pr-branch. | Buffy |
+| 2026-06-11 | `V0.8.0` | Environment promotion workflow (GAP-3.2): added promotion gates, deploy rollback, environment workflow to ENVIRONMENT.md, RELEASE.md, CONTEXT_MAP.md. Created plan P2-R3-environments. | Buffy |
+| 2026-06-11 | `V0.8.0` | Multi-agent concurrency protocol (GAP-5.1): added coordination protocol, scope locking, conflict resolution to AGENTS.md and CONTEXT_MAP.md. Created plan P2-R4-multi-agent. | Buffy |
+| 2026-06-11 | `V0.9.0` | Consolidated 4 changelog fragments into formal V0.9.0 release. Created FCVW/changelogs/V0.9.0.md. Updated STACK.md and MANIFEST.md version references. | Buffy |
 
 ---
 

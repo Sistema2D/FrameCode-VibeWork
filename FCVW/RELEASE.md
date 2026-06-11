@@ -15,7 +15,9 @@ Standardize the closure of versions, preventing publication with incomplete plan
 - `planned`: expected version, with no completed changes yet.
 - `in_preparation`: changes being grouped and documented.
 - `in_validation`: implementation completed, tests in progress.
-- `published`: finalized version.
+- `in_staging`: staged for pre-production validation (see `ENVIRONMENT.md §5`).
+- `in_production`: deployed to production environment.
+- `published`: finalized version and changelog released.
 - `canceled`: planned version that will not be published.
 
 ## Recommended Workflow
@@ -78,6 +80,44 @@ Rules:
 - Do not keep root Node/Jest package files only to test a removed documentation site.
 - If GitHub Pages or another host is needed, publish the public page from another repository or from a deployment pipeline outside this framework baseline.
 - Treat generated publication output as external release infrastructure, not as a canonical FCVW source.
+
+## Deployment and Environment Promotion
+
+A release is not complete until the changes are deployed and validated in the target environments. This section connects the release workflow to the environment promotion gates defined in `ENVIRONMENT.md §5`.
+
+### Promotion Workflow
+
+```text
+Release prepared  →  Deploy to Staging  →  Validate  →  Deploy to Production  →  Changelog published
+```
+
+1. **Prepare release**: Execute the standard release workflow (plans completed, changelog assembled, audit passed).
+2. **Deploy to Staging**: Deploy the release candidate to the staging environment per `ENVIRONMENT.md §5 — Promotion Gate: Development → Staging`.
+3. **Validate in Staging**: Run integration tests, verify critical workflows, confirm no regressions. Record results.
+4. **Obtain approval**: Human approval for production deployment, especially for R4+ changes.
+5. **Deploy to Production**: Promote the release to the production environment per `ENVIRONMENT.md §5 — Promotion Gate: Staging → Production`.
+6. **Verify in Production**: Confirm the application starts, main workflows function, and no critical errors appear.
+7. **Publish changelog**: Set the changelog status to `published` after successful production deployment.
+
+### Deploy Rollback
+
+If a deployment to any environment causes critical failures:
+
+1. **Revert immediately**: Restore the previous stable version in the affected environment.
+2. **Record**: Create a troubleshooting record in `troubleshooting/` with symptoms, impact, and rollback actions taken.
+3. **Assess**: Determine if the fix requires a patch release or can be included in the next planned release.
+4. **Plan fix**: Create a plan to correct the issue. If the fix is urgent, classify as P1.
+5. **Re-deploy**: After the fix is validated, repeat the promotion workflow from Staging.
+
+The rollback procedure must be documented in the release plan before any R4+ deployment.
+
+### Environments Without Physical Separation
+
+Projects that do not maintain separate staging and production environments (e.g., solo developer deploying directly) should treat the promotion gates as sequential validation checkpoints:
+
+1. **Development validation** = build + test + code review (same as before)
+2. **Staging validation** = run the full release checklist and audit in a separate workspace or branch before deploying
+3. **Production deployment** = deploy only after both validation stages pass
 
 ## Post-Release Checklist
 
