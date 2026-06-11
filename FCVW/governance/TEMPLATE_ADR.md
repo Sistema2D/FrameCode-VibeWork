@@ -3,7 +3,7 @@
 Use this template to record technical decisions that affect the structure of the project.
 
 ```markdown
-# ADR-XXXX — <Decision Title>
+# ADR-XXXX — <title>
 
 ## Status
 
