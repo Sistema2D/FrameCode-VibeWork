@@ -27,9 +27,9 @@ tags:
 > Telegraphic, high-density summary of changes. Avoid conversational padding.
 
 - **Files Read:**
-  - [`filename.ext`](file:///path/to/filename.ext)
+  - `path/to/filename.ext`
 - **Files Modified/Created:**
-  - [`filename.ext`](file:///path/to/filename.ext)
+  - `path/to/filename.ext`
 - **Modifications Summary:**
   - **Logic:** <What changes were made to the core logic, parameters, or functions>
   - **Documentation/Governance:** <Plans updated, changelogs registered, wiki modified>
