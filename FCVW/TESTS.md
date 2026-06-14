@@ -34,6 +34,9 @@ This document does not replace individual plans in `Plans/`. Each plan must brin
 | Security | Token, CORS, permissions, paths, secrets, logs, and destructive actions |
 | Build/release | Clean build, initial execution, displayed version, changelog, and output files |
 | Refactoring | Non-regression tests, before/after behavior comparison, and residual risk metrics |
+| Code hygiene / anti-monolith | Similar-code search, module boundary review, dead/stale candidate evidence, before/after behavior comparison, and deferred debt record |
+| Agent/skill creation | Recurrence evidence, coverage-gap review, token/risk ROI estimate, narrow-scope check, validation replay, and catalog consistency |
+| Skill/agent self-improvement | Failure/drift evidence, scope-preservation review, before/after trigger check, token/risk ROI estimate, and replay against the source task |
 
 ## Validation Matrix by Risk
 
@@ -89,6 +92,10 @@ Minimum validation:
 ## General Checklist Before Concluding a Plan
 
 - [ ] Tested scope matches the plan's scope.
+- [ ] Anti-Monolith Gate was recorded when a new or expanded non-trivial artifact was created.
+- [ ] Code Hygiene Scan was recorded when duplication, cleanup, stale files, dead code, or monolith remediation was involved.
+- [ ] Agent/Skill Creation Gate was recorded when a new skill, agent profile, command pack, or reusable operational procedure was created.
+- [ ] Skill/Agent Self-Improvement Gate was recorded when a skill, agent profile, trigger list, or agent operating rule changed.
 - [ ] Expected behavior was validated.
 - [ ] Invalid inputs were evaluated when applicable.
 - [ ] Errors are handled safely.

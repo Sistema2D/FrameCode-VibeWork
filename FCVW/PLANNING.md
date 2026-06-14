@@ -110,6 +110,26 @@ The score helps triage and compare pending plans, but it must not be used as the
 - Plans `R5` require explicit human approval before being considered completed.
 - Plans with high risk and low priority (`P4/P5-R4/R5`) must document why they are not postponed, decomposed, or discontinued.
 - If risk comes from broad scope, split the work into smaller plans unless a single plan has a clearer validation path.
+- Plans that create or expand modules, components, routes, services, prompt packs, workflows, or catch-all utility files must record an Anti-Monolith Gate or state why it is not applicable.
+- Plans that touch duplication, stale files, dead code, unnecessary files, retroactive cleanup, or monolith remediation must record a Code Hygiene Scan.
+- Plans that create skills, agent profiles, specialist roles, or reusable operational procedures must record an Agent/Skill Creation Gate.
+- Plans that modify existing skills, agent profiles, triggers, or agent operating rules must record a Skill/Agent Self-Improvement Gate.
+
+### Structural and AI-Asset Gates
+
+The following gates prevent agents from creating code debt or governance sprawl while implementing a feature:
+
+| Gate | Trigger | Required evidence |
+|---|---|---|
+| Anti-Monolith Gate | New or expanded artifact with non-trivial responsibility. | `skills/anti-monolith-guard/SKILL.md` loaded; responsibility, non-responsibilities, size budget, split decision, and validation recorded. |
+| Code Hygiene Scan | Duplication, repeated snippets, stale files, dead code, cleanup, or retroactive refactoring. | `skills/code-hygiene-refactor/SKILL.md` loaded; scan level, findings, selected cleanup batch, and deferred debt recorded. |
+| Agent/Skill Creation Gate | New skill, agent profile, specialist role, command pack, template-driven operational procedure. | `skills/agent-factory/SKILL.md` loaded; recurrence, coverage gap, token/risk ROI, narrow scope, validation task, and create/defer decision recorded. |
+| Skill/Agent Self-Improvement Gate | Existing skill, agent profile, trigger list, or agent operating rule changes. | `skills/self-improvement/SKILL.md` loaded; evidence, metric passed, scope preservation, token/risk ROI, validation replay, and patch/defer decision recorded. |
+| Split-before-edit | Gate fails or artifact has mixed responsibility. | Plan split, scope reduced, or temporary exception documented with rollback and follow-up debt. |
+
+If a gate blocks implementation, the agent must not proceed by writing the monolith and promising a future cleanup. The plan must be split first, or the exception must be explicit, temporary, and validated.
+
+If an agent/skill gate blocks creation or modification, the agent must not create the asset anyway. Use the smallest valid alternative: inline checklist, existing template, existing skill patch, or explicit deferment.
 
 ## Folders Organization
 

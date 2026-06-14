@@ -3,8 +3,8 @@ title: "Project Filesystem Architecture"
 type: "concept"
 status: "validated"
 confidence: "high"
-last_reviewed: "2026-06-11"
-related_version: "V0.8.0"
+last_reviewed: "2026-06-14"
+related_version: "V0.10.2"
 sources:
   - "STACK.md"
   - "SCOPE.md"
@@ -28,193 +28,230 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 <!-- START_TREE -->
 ```text
 [project-root]/
-|-- .cursorrules
 |-- .github/
 |   \-- FUNDING.yml
+|-- FCVW/
+|   |-- audits/
+|   |   \-- README.md
+|   |-- briefings/
+|   |   \-- README.md
+|   |-- changelogs/
+|   |   |-- unreleased/
+|   |   |   \-- README.md
+|   |   |-- V0.10.0.md
+|   |   |-- V0.10.1.md
+|   |   |-- V0.10.2.md
+|   |   |-- V0.9.0.md
+|   |   \-- V0.9.1.md
+|   |-- decisions/
+|   |   \-- ADR-0001-pure-markdown-over-automation-scripts.md
+|   |-- governance/
+|   |   |-- README_FRAMEWORK.md
+|   |   |-- TEMPLATE_ADR.md
+|   |   |-- TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md
+|   |   |-- TEMPLATE_AI_RESOURCE.md
+|   |   |-- TEMPLATE_AI_SESSION_SYNTHESIS.md
+|   |   |-- TEMPLATE_API_SPEC.md
+|   |   |-- TEMPLATE_APP_DOCS_README.md
+|   |   |-- TEMPLATE_BRIEFING.md
+|   |   |-- TEMPLATE_CODE_HYGIENE_REPORT.md
+|   |   |-- TEMPLATE_DATA_SCHEMA.md
+|   |   |-- TEMPLATE_ENV.md
+|   |   |-- TEMPLATE_FLOW_DOCUMENTATION.md
+|   |   |-- TEMPLATE_MIGRATION_RUNNER.md
+|   |   |-- TEMPLATE_MODULE_DOCUMENTATION.md
+|   |   |-- TEMPLATE_MONOLITH_GATE.md
+|   |   |-- TEMPLATE_PLAN.md
+|   |   |-- TEMPLATE_REFACTORING.md
+|   |   |-- TEMPLATE_REFACTORING_ADR.md
+|   |   |-- TEMPLATE_REFACTORING_CHARACTERIZATION_TEST_PLAN.md
+|   |   |-- TEMPLATE_REFACTORING_DEPENDENCY_MAP.md
+|   |   |-- TEMPLATE_REFACTORING_INCREMENTAL_PLAN.md
+|   |   |-- TEMPLATE_REFACTORING_MODULE_INVENTORY.md
+|   |   |-- TEMPLATE_REFACTORING_OPENING.md
+|   |   |-- TEMPLATE_REFACTORING_POST_VALIDATION_REPORT.md
+|   |   |-- TEMPLATE_REFACTORING_PULL_REQUEST.md
+|   |   |-- TEMPLATE_REFACTORING_RISK_MATRIX.md
+|   |   |-- TEMPLATE_REFACTORING_ROLLBACK_PLAN.md
+|   |   |-- TEMPLATE_RELEASE.md
+|   |   |-- TEMPLATE_SELF_IMPROVEMENT_REPORT.md
+|   |   |-- TEMPLATE_TROUBLESHOOTING.md
+|   |   \-- TEMPLATE_VISUAL_DIFF.md
+|   |-- Plans/
+|   |   |-- completed/
+|   |   |   |-- P1-R4-2026-06-11-service-research-mandate.md
+|   |   |   |-- P2-R3-2026-06-11-environment-promotion-workflow.md
+|   |   |   |-- P2-R3-2026-06-11-pr-branch-workflow.md
+|   |   |   |-- P2-R3-2026-06-13-anti-monolith-code-hygiene.md
+|   |   |   |-- P2-R3-2026-06-13-framework-agent-self-improvement-template-site.md
+|   |   |   |-- P2-R4-2026-06-11-multi-agent-concurrency.md
+|   |   |   |-- P3-R2-2026-06-13-v0101-cleanup-optimization.md
+|   |   |   |-- P3-R2-2026-06-14-final-compliance-qa.md
+|   |   |   \-- README.md
+|   |   |-- discontinued/
+|   |   |   \-- README.md
+|   |   |-- in_progress/
+|   |   |   \-- README.md
+|   |   |-- pending/
+|   |   |   \-- README.md
+|   |   \-- README.md
+|   |-- refactoring-guide/
+|   |   |-- 00-general-governance.md
+|   |   |-- 01-decision-guide.md
+|   |   |-- 02-composing-methods.md
+|   |   |-- 03-moving-features-between-objects.md
+|   |   |-- 04-organizing-data.md
+|   |   |-- 05-simplifying-conditional-expressions.md
+|   |   |-- 06-making-method-calls-simpler.md
+|   |   |-- 07-dealing-with-generalization.md
+|   |   |-- 08-code-smells-map.md
+|   |   |-- 09-pr-checklist.md
+|   |   |-- 10-code-inventory-and-classification.md
+|   |   |-- 11-refactoring-risk-matrix.md
+|   |   |-- 12-testing-strategy-before-refactoring.md
+|   |   |-- 13-ci-cd-pipeline-and-quality-gates.md
+|   |   |-- 14-rollback-plan.md
+|   |   |-- 15-incremental-refactoring-plan.md
+|   |   |-- 16-dependency-and-impact-map.md
+|   |   |-- 17-branch-and-pull-request-policy.md
+|   |   |-- 18-behavioral-refactoring-vs-rewrite.md
+|   |   |-- 19-stopping-criteria.md
+|   |   |-- 20-templates.md
+|   |   |-- MANIFEST.md
+|   |   \-- README.md
+|   |-- skills/
+|   |   |-- agent-aegis/
+|   |   |   \-- SKILL.md
+|   |   |-- agent-factory/
+|   |   |   \-- SKILL.md
+|   |   |-- agent-hephaestus/
+|   |   |   \-- SKILL.md
+|   |   |-- agent-hermes/
+|   |   |   \-- SKILL.md
+|   |   |-- agnix-linter/
+|   |   |   \-- SKILL.md
+|   |   |-- aicc-compact/
+|   |   |   \-- SKILL.md
+|   |   |-- anti-monolith-guard/
+|   |   |   \-- SKILL.md
+|   |   |-- brainstorming-and-tdd/
+|   |   |   \-- SKILL.md
+|   |   |-- code-hygiene-refactor/
+|   |   |   \-- SKILL.md
+|   |   |-- git-conventional-commits/
+|   |   |   \-- SKILL.md
+|   |   |-- governance-validator/
+|   |   |   \-- SKILL.md
+|   |   |-- memory-rotation/
+|   |   |   \-- SKILL.md
+|   |   |-- obsidian-markdown/
+|   |   |   \-- SKILL.md
+|   |   |-- orchestrator/
+|   |   |   \-- SKILL.md
+|   |   |-- project-instantiation/
+|   |   |   \-- SKILL.md
+|   |   |-- release-checklist/
+|   |   |   \-- SKILL.md
+|   |   |-- retroactive-instantiation/
+|   |   |   \-- SKILL.md
+|   |   |-- self-improvement/
+|   |   |   \-- SKILL.md
+|   |   |-- systematic-debugging/
+|   |   |   \-- SKILL.md
+|   |   |-- wiki-lint/
+|   |   |   \-- SKILL.md
+|   |   \-- README.md
+|   |-- troubleshooting/
+|   |   \-- README.md
+|   |-- wiki/
+|   |   |-- agents/
+|   |   |   \-- README.md
+|   |   |-- audits/
+|   |   |   \-- README.md
+|   |   |-- components/
+|   |   |   \-- README.md
+|   |   |-- concepts/
+|   |   |   \-- README.md
+|   |   |-- decisions/
+|   |   |   \-- README.md
+|   |   |-- failures/
+|   |   |   \-- README.md
+|   |   |-- inbox/
+|   |   |   \-- README.md
+|   |   |-- patterns/
+|   |   |   \-- README.md
+|   |   |-- prompts/
+|   |   |   \-- README.md
+|   |   |-- questions/
+|   |   |   \-- README.md
+|   |   |-- raw/
+|   |   |   \-- README.md
+|   |   |-- refactorings/
+|   |   |   |-- agent-skill-self-improvement-governance.md
+|   |   |   |-- anti-monolith-and-code-hygiene-gates.md
+|   |   |   \-- README.md
+|   |   |-- releases/
+|   |   |   |-- README.md
+|   |   |   \-- v0-8-0-summary.md
+|   |   |-- sessions/
+|   |   |   |-- README.md
+|   |   |   |-- S001-2026-06-11-governance-gaps-closure.md
+|   |   |   |-- S002-2026-06-13-anti-monolith-code-hygiene.md
+|   |   |   |-- S003-2026-06-13-agent-self-improvement-template-site.md
+|   |   |   |-- S004-2026-06-13-v0101-cleanup-optimization.md
+|   |   |   \-- S005-2026-06-14-final-compliance-qa.md
+|   |   |-- sources/
+|   |   |   \-- README.md
+|   |   |-- syntheses/
+|   |   |   \-- README.md
+|   |   |-- templates/
+|   |   |   |-- README.md
+|   |   |   |-- TEMPLATE_DECISION.md
+|   |   |   |-- TEMPLATE_FAILURE.md
+|   |   |   |-- TEMPLATE_GENERAL_NOTE.md
+|   |   |   |-- TEMPLATE_LINT.md
+|   |   |   |-- TEMPLATE_PATTERN.md
+|   |   |   |-- TEMPLATE_QUESTION.md
+|   |   |   |-- TEMPLATE_RELEASE_SYNTHESIS.md
+|   |   |   |-- TEMPLATE_SESSION_SYNTHESIS.md
+|   |   |   \-- TEMPLATE_TECH_DEBT.md
+|   |   |-- index.md
+|   |   |-- log.md
+|   |   |-- README.md
+|   |   \-- schema.md
+|   |-- AI.md
+|   |-- APPLICATION_DOCUMENTATION.md
+|   |-- ARCHITECTURAL_DECISIONS.md
+|   |-- AUDIT.md
+|   |-- BRIEFING.md
+|   |-- CONTEXT_MAP.md
+|   |-- DATA.md
+|   |-- DESIGN.md
+|   |-- ENVIRONMENT.md
+|   |-- FILESYSTEM.md
+|   |-- INSTANTIATION.md
+|   |-- LICENSE
+|   |-- MANIFEST.md
+|   |-- PERFORMANCE.md
+|   |-- PLANNING.md
+|   |-- README.md
+|   |-- REFACTORING.md
+|   |-- RELEASE.md
+|   |-- repository-open-graph-template.png
+|   |-- RETROACTIVE_INSTANTIATION.md
+|   |-- SCOPE.md
+|   |-- SECURITY.md
+|   |-- STACK.md
+|   |-- TESTS.md
+|   |-- TROUBLESHOOTING.md
+|   |-- VERSIONING.md
+|   \-- WORKFLOW.md
+|-- .cursorrules
 |-- .gitignore
 |-- .windsurfrules
 |-- AGENTS.md
 |-- README.md
-\-- FCVW/
-    |-- AI.md
-    |-- APPLICATION_DOCUMENTATION.md
-    |-- ARCHITECTURAL_DECISIONS.md
-    |-- AUDIT.md
-    |-- audits
-    |   \-- README.md                        # Formal audit records (empty baseline)
-    |-- BRIEFING.md
-    |-- briefings
-    |   \-- README.md                        # Briefing records (empty baseline)
-    |-- CONTEXT_MAP.md
-    |-- changelogs
-    |   \-- unreleased/
-    |       \-- README.md                    # Unreleased changelog fragments
-    |-- DATA.md
-    |-- decisions
-    |   \-- ADR-0001-pure-markdown-over-automation-scripts.md
-    |-- DESIGN.md
-    |-- ENVIRONMENT.md
-    |-- FILESYSTEM.md
-    |-- governance
-    |   |-- README_FRAMEWORK.md
-    |   |-- TEMPLATE_ADR.md
-    |   |-- TEMPLATE_APP_DOCS_README.md
-    |   |-- TEMPLATE_API_SPEC.md
-    |   |-- TEMPLATE_AI_RESOURCE.md
-    |   |-- TEMPLATE_AI_SESSION_SYNTHESIS.md
-    |   |-- TEMPLATE_BRIEFING.md
-    |   |-- TEMPLATE_DATA_SCHEMA.md
-    |   |-- TEMPLATE_ENV.md
-    |   |-- TEMPLATE_FLOW_DOCUMENTATION.md
-    |   |-- TEMPLATE_MIGRATION_RUNNER.md
-    |   |-- TEMPLATE_MODULE_DOCUMENTATION.md
-    |   |-- TEMPLATE_PLAN.md
-    |   |-- TEMPLATE_REFACTORING.md
-    |   |-- TEMPLATE_REFACTORING_ADR.md
-    |   |-- TEMPLATE_REFACTORING_CHARACTERIZATION_TEST_PLAN.md
-    |   |-- TEMPLATE_REFACTORING_DEPENDENCY_MAP.md
-    |   |-- TEMPLATE_REFACTORING_INCREMENTAL_PLAN.md
-    |   |-- TEMPLATE_REFACTORING_MODULE_INVENTORY.md
-    |   |-- TEMPLATE_REFACTORING_OPENING.md
-    |   |-- TEMPLATE_REFACTORING_POST_VALIDATION_REPORT.md
-    |   |-- TEMPLATE_REFACTORING_PULL_REQUEST.md
-    |   |-- TEMPLATE_REFACTORING_RISK_MATRIX.md
-    |   |-- TEMPLATE_REFACTORING_ROLLBACK_PLAN.md
-    |   |-- TEMPLATE_RELEASE.md
-    |   |-- TEMPLATE_TROUBLESHOOTING.md
-    |   \-- TEMPLATE_VISUAL_DIFF.md
-    |-- INSTANTIATION.md
-    |-- LICENSE
-    |-- MANIFEST.md
-    |-- PERFORMANCE.md
-    |-- PLANNING.md
-    |-- Plans
-    |   |-- README.md                        # Plans directory placeholder
-    |   |-- pending/
-    |   |   \-- README.md
-    |   |-- in_progress/
-    |   |   \-- README.md
-    |   |-- completed/
-    |   |   \-- README.md
-    |   \-- discontinued/
-    |       \-- README.md
-    |-- README.md                            # Framework README
-    |-- REFACTORING.md
-    |-- refactoring-guide
-    |   |-- 00-general-governance.md
-    |   |-- 01-decision-guide.md
-    |   |-- 02-composing-methods.md
-    |   |-- 03-moving-features-between-objects.md
-    |   |-- 04-organizing-data.md
-    |   |-- 05-simplifying-conditional-expressions.md
-    |   |-- 06-making-method-calls-simpler.md
-    |   |-- 07-dealing-with-generalization.md
-    |   |-- 08-code-smells-map.md
-    |   |-- 09-pr-checklist.md
-    |   |-- 10-code-inventory-and-classification.md
-    |   |-- 11-refactoring-risk-matrix.md
-    |   |-- 12-testing-strategy-before-refactoring.md
-    |   |-- 13-ci-cd-pipeline-and-quality-gates.md
-    |   |-- 14-rollback-plan.md
-    |   |-- 15-incremental-refactoring-plan.md
-    |   |-- 16-dependency-and-impact-map.md
-    |   |-- 17-branch-and-pull-request-policy.md
-    |   |-- 18-behavioral-refactoring-vs-rewrite.md
-    |   |-- 19-stopping-criteria.md
-    |   |-- 20-templates.md
-    |   |-- MANIFEST.md
-    |   \-- README.md
-    |-- RELEASE.md
-    |-- repository-open-graph-template.png
-    |-- SCOPE.md
-    |-- SECURITY.md
-    |-- skills
-    |   |-- README.md
-    |   |-- agent-aegis/
-    |   |   \-- SKILL.md
-    |   |-- agent-hephaestus/
-    |   |   \-- SKILL.md
-    |   |-- agent-hermes/
-    |   |   \-- SKILL.md
-    |   |-- agnix-linter/
-    |   |   \-- SKILL.md
-    |   |-- aicc-compact/
-    |   |   \-- SKILL.md
-    |   |-- brainstorming-and-tdd/
-    |   |   \-- SKILL.md
-    |   |-- git-conventional-commits/
-    |   |   \-- SKILL.md
-    |   |-- governance-validator/
-    |   |   \-- SKILL.md                    # FILESYSTEM.md accuracy + document integrity validation
-    |   |-- memory-rotation/
-    |   |   \-- SKILL.md
-    |   |-- obsidian-markdown/
-    |   |   \-- SKILL.md
-    |   |-- orchestrator/
-    |   |   \-- SKILL.md
-    |   |-- project-instantiation/
-    |   |   \-- SKILL.md
-    |   |-- release-checklist/
-    |   |   \-- SKILL.md
-    |   |-- retroactive-instantiation/
-    |   |   \-- SKILL.md
-    |   |-- systematic-debugging/
-    |   |   \-- SKILL.md
-    |   \-- wiki-lint/
-    |       \-- SKILL.md
-    |-- STACK.md
-    |-- TESTS.md
-    |-- troubleshooting
-    |   \-- README.md                        # Issue records (empty baseline)
-    |-- TROUBLESHOOTING.md
-    |-- VERSIONING.md
-    |-- wiki
-    |   |-- README.md
-    |   |-- schema.md
-    |   |-- index.md
-    |   |-- log.md
-    |   |-- agents/
-    |   |   \-- README.md                    # Agent-specific journals
-    |   |-- audits/
-    |   |   \-- README.md
-    |   |-- components/
-    |   |   \-- README.md
-    |   |-- concepts/
-    |   |   \-- README.md
-    |   |-- decisions/
-    |   |   \-- README.md
-    |   |-- failures/
-    |   |   \-- README.md
-    |   |-- inbox/
-    |   |   \-- README.md
-    |   |-- patterns/
-    |   |   \-- README.md
-    |   |-- prompts/
-    |   |   \-- README.md
-    |   |-- questions/
-    |   |   \-- README.md
-    |   |-- raw/
-    |   |   \-- README.md
-    |   |-- refactorings/
-    |   |   \-- README.md
-    |   |-- releases/
-    |   |   \-- README.md                    # Release syntheses (empty baseline)
-    |   |-- sessions/
-    |   |   \-- README.md                    # AICC session syntheses (empty baseline)
-    |   |-- sources/
-    |   |   \-- README.md
-    |   \-- templates/
-    |       |-- README.md
-    |       |-- TEMPLATE_DECISION.md
-    |       |-- TEMPLATE_FAILURE.md
-    |       |-- TEMPLATE_GENERAL_NOTE.md
-    |       |-- TEMPLATE_LINT.md
-    |       |-- TEMPLATE_PATTERN.md
-    |       |-- TEMPLATE_QUESTION.md
-    |       |-- TEMPLATE_RELEASE_SYNTHESIS.md
-    |       |-- TEMPLATE_SESSION_SYNTHESIS.md
-    |       \-- TEMPLATE_TECH_DEBT.md
-    \-- WORKFLOW.md
+\-- relatorio_auditoria_fcvw.md
 ```
 <!-- END_TREE -->
 

@@ -91,6 +91,8 @@ Avoid when: there is no clear success criterion; there is no possible validation
 | RF8 | Visual internal | Reorganizes UI code without changing approved appearance |
 | RF9 | Data | Reorganizes data access without changing persisted content |
 | RF10 | Build/infrastructure | Organizes scripts, pipelines, or configuration |
+| RF11 | Code hygiene | Removes duplication, stale files, dead code, and unnecessary artifacts with behavior preserved |
+| RF12 | Monolith extraction | Splits mixed-responsibility files or modules into bounded artifacts |
 
 ## 11. Priority Scale
 
@@ -125,6 +127,7 @@ Refactoring plans must also record the operational score and gates defined in `P
 | Duplicated code | same logic in two or more points | extract function, create utility |
 | Long method | extensive routine difficult to understand | extract method, decompose condition |
 | Large class | too many responsibilities | extract class, divide module |
+| Monolithic file/module | UI, state, validation, persistence, integration, and formatting concentrated together | load `anti-monolith-guard`, define boundary, split by responsibility |
 | Primitive obsession | implicit rules in strings/numbers | create type, enum, or semantic constant |
 | Divergent change | module changes for different reasons | separate responsibilities |
 | Shotgun surgery | one change requires many adjustments | centralize rule or contract |
@@ -294,3 +297,42 @@ To ensure that temporary shortcuts or non-blocking design flaws do not accumulat
 1. **Mandatory Logging:** Any compromise in design patterns, missing test cases, or temporary workarounds must be logged as a `#tech-debt` item in the wiki using the template: `wiki/templates/TEMPLATE_TECH_DEBT.md`.
 2. **Refactoring Priority Alignment:** Remediation plans for high-severity technical debt must be scheduled into the priority list (P1-P5) in future change plans.
 3. **Continuous Pay-Down:** When modifying a file or module that contains an active `#tech-debt` wiki card, evaluate if part or all of that debt can be safely paid down (refactored) as part of the preparatory work of your active plan, moving the wiki card status to `obsolete` or `superseded` upon completion.
+
+---
+
+## 25. Anti-Monolith and Code Hygiene Gates
+
+Agents must not treat refactoring guidance as passive reading. The following skills are active gates:
+
+- Load `skills/anti-monolith-guard/SKILL.md` before creating or expanding a non-trivial module, component, route, service, prompt pack, workflow, or catch-all utility file.
+- Load `skills/code-hygiene-refactor/SKILL.md` when the work involves duplication, stale files, dead code, unnecessary files, cleanup, retroactive refactoring, or monolith remediation.
+- Load `skills/agent-factory/SKILL.md` before creating a new skill or agent profile as a refactoring response.
+- Load `skills/self-improvement/SKILL.md` before changing any existing skill, agent profile, trigger, or reusable operational rule.
+
+### Anti-Monolith Gate
+
+Before editing, record:
+
+- target artifact and responsibility;
+- explicit non-responsibilities;
+- inputs, outputs, collaborators, state, and side effects;
+- size budget and split decision;
+- similar-code search result;
+- validation evidence.
+
+If the artifact would mix responsibilities or cross the configured block threshold, split before implementation. A temporary exception is allowed only when it is safer than splitting immediately, has a rollback note, and creates a follow-up debt record.
+
+### Code Hygiene Scan
+
+Before cleanup or retroactive refactoring, classify findings as:
+
+- duplicate code;
+- large/monolithic file;
+- dead code candidate;
+- stale file or duplicate source of truth;
+- catch-all utility;
+- repeated prompt or agent instruction;
+- hidden dependency;
+- missing characterization test.
+
+The agent must choose one small reversible cleanup batch, validate behavior, and defer the rest explicitly. Broad "clean everything" refactors are invalid unless decomposed into smaller plans.

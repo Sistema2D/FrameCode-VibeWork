@@ -17,9 +17,9 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.9.0` |
+| Current Version | `V0.10.2` |
 | Manifest Creation Date | `2026-05-15` |
-| Last Update | `2026-06-11` |
+| Last Update | `2026-06-14` |
 | Project Status | `development` |
 
 ---
@@ -62,6 +62,9 @@ A repository that uses FrameCode VibeWork achieves: near-zero context loss betwe
 - LLM Wiki (Obsidian-compatible technical memory with Ingest/Query/Lint cycle)
 - Declarative design system centralized in `DESIGN.md`
 - Instantiation workflow for bootstrapping new projects from the framework
+- Anti-monolith and code hygiene gates for AI-generated codebases
+- Retroactive cleanup triage for existing applications adopting the framework
+- Controlled creation and self-improvement gates for AI skills and agent profiles
 
 ### 4.2 Out of Scope
 
@@ -108,6 +111,7 @@ Mark or describe the planned roles:
   - [x] Continuous learning (Ingest/Query/Lint cycle described in `wiki/schema.md`).
   - [x] AI Interaction Context Compression (AICC).
   - [x] AI Skills Engine (ASE) with trigger activation.
+  - [x] Controlled skill/agent creation and self-improvement gates.
   - [ ] Other: `<describe>`.
 
 ### 6.2 AI Boundaries
@@ -201,6 +205,8 @@ No functional, visual, or structural change should be performed without followin
 | Template placeholders left unfilled in downstream projects | Medium | Medium | INSTANTIATION.md renaming checklist; MANIFEST.md gap section | `INSTANTIATION.md`, `MANIFEST.md` |
 | Wiki knowledge becoming stale | Medium | Medium | Wiki Lint on every minor/major release; log.md tracking | `wiki/schema.md`, `skills/wiki-lint/SKILL.md` |
 | FILESYSTEM.md drift / governance document integrity decay | Medium | Medium | On-demand governance-validator skill before releases and structural audits | `skills/governance-validator/SKILL.md`, `FILESYSTEM.md` |
+| AI-generated monoliths, duplication, stale files, and unnecessary artifacts | High | High | Mandatory `anti-monolith-guard` and `code-hygiene-refactor` gates before large changes, cleanup, and retroactive refactoring | `REFACTORING.md`, `PLANNING.md`, `skills/anti-monolith-guard/SKILL.md`, `skills/code-hygiene-refactor/SKILL.md` |
+| Arbitrary skill/agent proliferation or irrelevant self-improvement | Medium | High | Mandatory `agent-factory` and `self-improvement` gates with recurrence, coverage, token/risk ROI, scope, and validation metrics | `AI.md`, `PLANNING.md`, `skills/agent-factory/SKILL.md`, `skills/self-improvement/SKILL.md` |
 
 ---
 
@@ -216,6 +222,9 @@ Use this section to record document or structural gaps in the project.
 | wiki/index.md referenced 10 AICC session syntheses (S001-S010) that do not exist in the clean baseline. References removed. | Medium — broken wikilinks cause agent confusion | P2 | structural-reconciliation-2026-06-11 | resolved |
 | No automated validation for FILESYSTEM.md accuracy against physical disk state. | Medium — discrepancies can recur unnoticed | P3 | governance-validator-skill-2026-06-11 | resolved |
 | No automated test harness for governance document integrity (links, frontmatter, cross-references). | Medium — governance quality relies entirely on manual review | P3 | governance-validator-skill-2026-06-11 | resolved |
+
+| Refactoring guidance existed, but there was no mandatory gate preventing agents from creating monolithic files or duplicating code during implementation. | High - AI-generated applications accumulated oversized files, repeated snippets, stale files, and cleanup debt | P2 | P2-R3-2026-06-13-anti-monolith-code-hygiene | resolved |
+| Skills and agent profiles could be created or adjusted without measurable recurrence, coverage-gap, token/risk ROI, scope, and validation criteria. | High - agents could create redundant specialists, noisy skills, and irrelevant self-improvement churn | P2 | P2-R3-2026-06-13-framework-agent-self-improvement-template-site | resolved |
 
 ### Mitigation (V0.8.0)
 
@@ -265,6 +274,10 @@ The skill is pure Markdown, loaded on-demand (JIT), never pre-loaded, and replac
 | 2026-06-11 | `V0.8.0` | Environment promotion workflow (GAP-3.2): added promotion gates, deploy rollback, environment workflow to ENVIRONMENT.md, RELEASE.md, CONTEXT_MAP.md. Created plan P2-R3-environments. | Buffy |
 | 2026-06-11 | `V0.8.0` | Multi-agent concurrency protocol (GAP-5.1): added coordination protocol, scope locking, conflict resolution to AGENTS.md and CONTEXT_MAP.md. Created plan P2-R4-multi-agent. | Buffy |
 | 2026-06-11 | `V0.9.0` | Consolidated 4 changelog fragments into formal V0.9.0 release. Created FCVW/changelogs/V0.9.0.md. Updated STACK.md and MANIFEST.md version references. | Buffy |
+| 2026-06-13 | `V0.9.1` | Added anti-monolith and code hygiene gates, created two ASE skills and two governance templates, made domain agents tool-aware, updated retroactive instantiation and validation rules. | Codex |
+| 2026-06-13 | `V0.10.0` | Added controlled agent/skill factory and self-improvement gates, created clean template baseline, repaired AI-usability issues, and refreshed the web site content. | Codex |
+| 2026-06-14 | `V0.10.1` | Removed raw HTML from Markdown READMEs, reduced static site data from embedded content to a manifest, and sanitized the clean template manifest. | Codex |
+| 2026-06-14 | `V0.10.2` | Final compliance QA: removed false broken wikilinks from wiki examples, restored resolvable site mirror structure, and refreshed validation artifacts. | Codex |
 
 ---
 

@@ -23,6 +23,8 @@ Use this workflow when you have an existing project (with code, history, partial
 1. **Map existing structure**: Inventory all directories, configuration files, documentation, and data schemas.
 2. **Identify governance gaps**: Compare against `FCVW/MANIFEST.md §7` — which official documents are missing?
 3. **Record baseline**: Create a record in `FCVW/briefings/` describing the pre-adoption state.
+4. **Run hygiene triage**: Load `skills/code-hygiene-refactor/SKILL.md` and identify duplicate snippets, stale files, dead code candidates, catch-all modules, and monolithic files without modifying application code.
+5. **Run anti-monolith triage**: Load `skills/anti-monolith-guard/SKILL.md` for any large or mixed-responsibility area that will receive new FCVW-driven changes.
 
 ### Phase 2 — Framework Integration
 
@@ -39,12 +41,14 @@ Use this workflow when you have an existing project (with code, history, partial
 3. **Fill STACK.md**: Document existing technology stack.
 4. **Create initial wiki pages** only for reusable learnings already accumulated.
 5. **Mark historical artifacts**: Existing documentation not yet migrated to FCVW can be marked as `pre-fcvw` or left in place with a note.
+6. **Create hygiene backlog**: Record high-value cleanup candidates as `#tech-debt`, `wiki/refactorings/`, or future plans. Do not refactor during adoption unless explicitly requested.
 
 ### Phase 4 — First Plan
 
 1. Create a P3-R2 plan documenting the retroactive instantiation itself.
 2. The plan scope covers: copied files, filled metadata, created wiki records.
 3. Validate that existing workflows (build, test, deploy) continue to function.
+4. The first post-adoption implementation plan that touches an identified monolith must pass the Anti-Monolith Gate before editing.
 
 ## Important Restrictions
 
@@ -52,6 +56,8 @@ Use this workflow when you have an existing project (with code, history, partial
 - **Do not** rebase or rewrite Git history.
 - **Do not** delete existing documentation without explicit project owner approval.
 - **Do not** move or restructure existing source code to fit a preconceived tree.
+- **Do not** normalize monoliths during framework adoption unless the user explicitly requested active refactoring and a separate plan exists.
+- **Do not** add new behavior to an identified monolith without first passing `anti-monolith-guard`.
 
 ## Relationship with Other Skills
 

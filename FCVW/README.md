@@ -1,5 +1,7 @@
 # FrameCode VibeWork Framework
 
+Current framework version: `V0.10.2`
+
 *Select Language / Selecione o Idioma:*
 - [Português](#português)
 - [English](#english)
@@ -28,7 +30,7 @@ graph TD
 
 ### Fluxo de Sessão com Carregamento Sob Demanda
 
-O framework organiza o trabalho em **cenários de sessão** — cada um define quais documentos carregar imediatamente, quais carregar sob demanda e quais pular. O diagrama abaixo mapeia todos os 14 cenários com base no `CONTEXT_MAP.md`:
+O framework organiza o trabalho em **cenários de sessão** — cada um define quais documentos carregar imediatamente, quais carregar sob demanda e quais pular. O diagrama abaixo mapeia os 17 cenários com base no `CONTEXT_MAP.md`:
 
 ```mermaid
 graph TD
@@ -40,6 +42,8 @@ graph TD
     IdentifyType -->|App Module Docs| AppDocs["Imediato: APPLICATION_DOCUMENTATION.md\n+ PLANNING.md\nSob demanda: TEMPLATE_MODULE_DOCUMENTATION.md,\nTEMPLATE_FLOW_DOCUMENTATION.md"]
     IdentifyType -->|UI / Components| UI["Imediato: DESIGN.md\nSob demanda: wiki/patterns/"]
     IdentifyType -->|Refactoring| Refact["Imediato: REFACTORING.md\n+ PLANNING.md\nSob demanda: wiki/refactorings/, TESTS.md"]
+    IdentifyType -->|Agent / Skill Creation| AssetCreate["Imediato: AI.md + PLANNING.md\n+ skill:agent-factory\nSob demanda: proposal template"]
+    IdentifyType -->|Skill / Agent Self-Improvement| AssetImprove["Imediato: AI.md + PLANNING.md\n+ skill:self-improvement\nSob demanda: AUDIT.md, report template"]
     IdentifyType -->|Release| Release["Imediato: skill:release-checklist\nSob demanda: VERSIONING.md,\nAUDIT.md, RELEASE.md"]
     IdentifyType -->|Briefing / Instanciação| Briefing["Imediato: INSTANTIATION.md\n+ BRIEFING.md\nSob demanda: skill:project-instantiation,\nMANIFEST.md, STACK.md"]
     IdentifyType -->|Retroactive Inst.| Retro["Imediato: RETROACTIVE_INSTANTIATION.md\n+ INSTANTIATION.md\nSob demanda: CONTEXT_MAP.md"]
@@ -56,6 +60,8 @@ graph TD
     AppDocs --> Execute
     UI --> Execute
     Refact --> Execute
+    AssetCreate --> Execute
+    AssetImprove --> Execute
     Release --> Execute
     Briefing --> Execute
     Retro --> Execute
@@ -99,15 +105,19 @@ A pasta `governance/` preserva templates genéricos. Os documentos preenchidos d
 
 A pasta `skills/` armazena procedimentos técnicos de alta densidade carregados sob demanda pelo agente de IA — nunca pré-carregados no prompt. Isso preserva a janela de contexto enquanto disponibiliza checklists especializados quando necessários.
 
-#### 7. Documentacao de modulos da aplicacao
+#### 7. Criação e melhoria controlada de skills/agentes
+
+Novas skills e perfis de agente só podem ser criados via `agent-factory`, com métricas de recorrência, cobertura, ROI de tokens/risco, escopo estreito e validação. Ajustes em skills ou agentes existentes exigem `self-improvement` com evidência de falha, drift ou economia relevante.
+
+#### 8. Documentacao de modulos da aplicacao
 
 `APPLICATION_DOCUMENTATION.md` define como a aplicacao instanciada deve manter documentacao propria de modulos, telas, componentes e fluxos em `docs/`, usando templates de `governance/`.
 
-#### 8. Journals de agentes
+#### 9. Journals de agentes
 
 Journals de agentes devem usar `wiki/agents/<agent_name>_journal.md` para manter a memoria operacional centralizada.
 
-Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+Habilidades ativas: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
 
 ### Estrutura De Diretórios
 
@@ -131,6 +141,8 @@ Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framewo
 | **App Module Docs** | `AGENTS.md` + `APPLICATION_DOCUMENTATION.md` + `PLANNING.md` | ~5.000 tokens | **~1.200 tokens** | **-76%** |
 | **Componentes / UI** | `AGENTS.md` + `DESIGN.md` | ~4.000 tokens | **~900 tokens** | **-77%** |
 | **Refatoração** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8.000 tokens | **~1.800 tokens** | **-77%** |
+| **Criação de Skill/Agente** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:agent-factory` | ~5.500 tokens | **~1.200 tokens** | **-78%** |
+| **Self-Improvement de Skill/Agente** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5.500 tokens | **~1.200 tokens** | **-78%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2.500 tokens | **~600 tokens** | **-76%** |
 | **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
 | **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` | ~5.500 tokens | **~1.300 tokens** | **-76%** |
@@ -190,7 +202,7 @@ graph TD
 
 ### Session Flow with On-Demand Loading
 
-The framework organizes work into **session scenarios** — each defines which documents to load immediately, which to load on demand, and which to skip. The diagram below maps all 14 scenarios based on `CONTEXT_MAP.md`:
+The framework organizes work into **session scenarios** — each defines which documents to load immediately, which to load on demand, and which to skip. The diagram below maps the 17 scenarios based on `CONTEXT_MAP.md`:
 
 ```mermaid
 graph TD
@@ -202,6 +214,8 @@ graph TD
     IdentifyType -->|App Module Docs| AppDocs["Immediate: APPLICATION_DOCUMENTATION.md\n+ PLANNING.md\nOn demand: TEMPLATE_MODULE_DOCUMENTATION.md,\nTEMPLATE_FLOW_DOCUMENTATION.md"]
     IdentifyType -->|UI / Components| UI["Immediate: DESIGN.md\nOn demand: wiki/patterns/"]
     IdentifyType -->|Refactoring| Refact["Immediate: REFACTORING.md\n+ PLANNING.md\nOn demand: wiki/refactorings/, TESTS.md"]
+    IdentifyType -->|Agent / Skill Creation| AssetCreate["Immediate: AI.md + PLANNING.md\n+ skill:agent-factory\nOn demand: proposal template"]
+    IdentifyType -->|Skill / Agent Self-Improvement| AssetImprove["Immediate: AI.md + PLANNING.md\n+ skill:self-improvement\nOn demand: AUDIT.md, report template"]
     IdentifyType -->|Release| Release["Immediate: skill:release-checklist\nOn demand: VERSIONING.md,\nAUDIT.md, RELEASE.md"]
     IdentifyType -->|Briefing / Instantiation| Briefing["Immediate: INSTANTIATION.md\n+ BRIEFING.md\nOn demand: skill:project-instantiation,\nMANIFEST.md, STACK.md"]
     IdentifyType -->|Retroactive Inst.| Retro["Immediate: RETROACTIVE_INSTANTIATION.md\n+ INSTANTIATION.md\nOn demand: CONTEXT_MAP.md"]
@@ -218,6 +232,8 @@ graph TD
     AppDocs --> Execute
     UI --> Execute
     Refact --> Execute
+    AssetCreate --> Execute
+    AssetImprove --> Execute
     Release --> Execute
     Briefing --> Execute
     Retro --> Execute
@@ -261,15 +277,19 @@ The `governance/` folder preserves generic templates. Filled project documents r
 
 The `skills/` folder stores high-density technical procedures loaded on-demand by the AI agent — never pre-loaded into the prompt. This preserves the context window while making specialized checklists available when needed.
 
-#### 7. Application Module Documentation
+#### 7. Controlled Skill/Agent Creation and Improvement
+
+New skills and agent profiles can only be created through `agent-factory`, with recurrence, coverage, token/risk ROI, narrow-scope, and validation metrics. Changes to existing skills or agents require `self-improvement` with failure, drift, or meaningful-savings evidence.
+
+#### 8. Application Module Documentation
 
 `APPLICATION_DOCUMENTATION.md` defines how the instantiated application should keep its own module, screen, component, and flow documentation in `docs/`, using templates from `governance/`.
 
-#### 8. Agent Journals
+#### 9. Agent Journals
 
 Agent journals must use `wiki/agents/<agent_name>_journal.md` to keep operational memory centralized.
 
-Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+Active skills: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
 
 ### Directory Structure
 
@@ -293,6 +313,8 @@ To maximize transparency and API call cost-efficiency with LLMs, the framework m
 | **App Module Docs** | `AGENTS.md` + `APPLICATION_DOCUMENTATION.md` + `PLANNING.md` | ~5,000 tokens | **~1,200 tokens** | **-76%** |
 | **UI / Components** | `AGENTS.md` + `DESIGN.md` | ~4,000 tokens | **~900 tokens** | **-77%** |
 | **Refactoring** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8,000 tokens | **~1,800 tokens** | **-77%** |
+| **Skill/Agent Creation** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:agent-factory` | ~5,500 tokens | **~1,200 tokens** | **-78%** |
+| **Skill/Agent Self-Improvement** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5,500 tokens | **~1,200 tokens** | **-78%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2,500 tokens | **~600 tokens** | **-76%** |
 | **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
 | **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` | ~5,500 tokens | **~1,300 tokens** | **-76%** |
@@ -340,7 +362,7 @@ O conceito de LLM Wiki usado como inspiração para a memória técnica incremen
 
 Se este framework for útil para o seu trabalho, você pode apoiar o desenvolvimento pelo Buy Me a Coffee: / If this framework is useful for your work, you can support development via Buy Me a Coffee:
 
-<a href="https://www.buymeacoffee.com/hugomelovek"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=hugomelovek&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" /></a>
+[Support development on Buy Me a Coffee](https://www.buymeacoffee.com/hugomelovek)
 
 ## Licença / License
 

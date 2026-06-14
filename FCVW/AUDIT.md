@@ -29,6 +29,10 @@ Items:
 - related documents cited correctly;
 - consistent filenames;
 - duplicate rules without conflict;
+- anti-monolith and code hygiene gates present when plans create or expand non-trivial modules;
+- agent/skill creation gates present when plans add new skills, agent profiles, specialist roles, or reusable operational procedures;
+- self-improvement gates present when plans modify skills, agent profiles, triggers, or agent operating rules;
+- no plan closes with unresolved duplication, stale files, or dead-code cleanup claims without evidence or deferral;
 - absence of contradictory instructions;
 - updated templates.
 
@@ -125,6 +129,12 @@ Items:
 - [ ] All in-progress plans are in `Plans/in_progress`.
 - [ ] There is no completed plan without validation.
 - [ ] Completed plans include operational priority/risk handling compatible with `PLANNING.md`.
+- [ ] Plans that created or expanded modules, components, routes, services, prompt packs, or workflows recorded the Anti-Monolith Gate or justified non-applicability.
+- [ ] Plans involving duplication, cleanup, stale files, dead code, or monolith remediation recorded a Code Hygiene Scan.
+- [ ] Plans that created skills, agent profiles, command packs, or reusable operational procedures recorded recurrence, coverage gap, token/risk ROI, scope boundary, and validation task.
+- [ ] Plans that changed skills, agent profiles, triggers, or agent operating rules recorded failure/drift evidence, metric passed, scope preservation, token/risk ROI, and validation replay.
+- [ ] `skills/README.md`, `CONTEXT_MAP.md`, and `STACK.md` list every active skill/profile exactly once.
+- [ ] No new agent or skill is persona-only, style-only, broader than its trigger family, or overlapping another asset by more than 50%.
 - [ ] `R4` and `R5` plans include rollback and expanded validation, and `R5` plans record explicit human approval.
 - [ ] High-risk low-priority plans were postponed, decomposed, discontinued, or explicitly justified.
 - [ ] There is no resolved issue without minimum evidence.
