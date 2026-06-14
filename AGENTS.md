@@ -34,6 +34,9 @@ Load only the documents relevant to the session context. All files (except this 
 | Application module documentation | `AGENTS.md`, `FCVW/APPLICATION_DOCUMENTATION.md`, `FCVW/PLANNING.md` |
 | UI implementation / components | `AGENTS.md`, `FCVW/DESIGN.md` |
 | Refactoring | `AGENTS.md`, `FCVW/REFACTORING.md`, `FCVW/PLANNING.md` |
+| Code hygiene / anti-monolith | `AGENTS.md`, `FCVW/REFACTORING.md`, `FCVW/PLANNING.md`, `FCVW/skills/anti-monolith-guard/SKILL.md`, `FCVW/skills/code-hygiene-refactor/SKILL.md` |
+| Agent / skill creation | `AGENTS.md`, `FCVW/AI.md`, `FCVW/PLANNING.md`, `FCVW/skills/agent-factory/SKILL.md` |
+| Skill / agent self-improvement | `AGENTS.md`, `FCVW/AI.md`, `FCVW/PLANNING.md`, `FCVW/AUDIT.md`, `FCVW/skills/self-improvement/SKILL.md` |
 | Release | `FCVW/CONTEXT_MAP.md`, `FCVW/skills/` (release-checklist load JIT) |
 | Security / data | `AGENTS.md`, `FCVW/SECURITY.md`, `FCVW/DATA.md`, `FCVW/ENVIRONMENT.md` |
 | AI / RAG / wiki | `AGENTS.md`, `FCVW/AI.md`, `FCVW/wiki/schema.md` |
@@ -91,6 +94,9 @@ Detailed rules are in the domain documents. Summary of responsibility:
 - **Scope**: `FCVW/SCOPE.md` - functional boundaries and mandatory approval to expand or reduce scope.
 - **UI/UX**: `FCVW/DESIGN.md` - consult before any visual modification; explicit approval to change registered rules.
 - **Implementation**: do not mix opportunistic refactorings with bugfixes; do not revert pre-existing changes outside the active plan; do not version private data.
+- **Anti-monolith and code hygiene**: before creating or extending large modules, components, routes, services, prompts, or catch-all utility files, load `FCVW/skills/anti-monolith-guard/SKILL.md`. When duplication, stale files, dead code, repeated snippets, or retroactive cleanup are involved, load `FCVW/skills/code-hygiene-refactor/SKILL.md`. If a gate fails, split the plan before editing.
+- **Agent/skill factory**: do not create new skills, agent profiles, specialist personas, or command packs by convenience. Load `FCVW/skills/agent-factory/SKILL.md`, prove recurrence, coverage gap, token/risk ROI, narrow scope, and validation before adding the asset.
+- **Skill/agent self-improvement**: do not adjust existing skills or agent profiles for style-only preferences. Load `FCVW/skills/self-improvement/SKILL.md` and record evidence, metric passed, scope preservation, and validation replay before editing any skill/profile.
 - **Documentation**: plans go in `FCVW/Plans/{status}`; `AGENTS.md` must be updated when new official documents are created; templates in `FCVW/governance/` follow structural changes of the VibeWork FrameCode.
 - **Application module documentation**: when a change affects relevant pages, screens, modules, components, flows, or business rules in a downstream application, consult `FCVW/APPLICATION_DOCUMENTATION.md` and update the application-owned documentation path defined there.
 - **Agent journals**: agent-specific journals must live under `FCVW/wiki/agents/<agent_name>_journal.md`; do not create competing journal paths.
@@ -111,6 +117,10 @@ Before executing a request that might modify files:
 - **AI Context Ingestion**: read the latest compressed session context in [`FCVW/wiki/sessions/`](FCVW/wiki/sessions/) to immediately align with previous changes and active next steps;
 - **Memory Rotation**: if the `FCVW/wiki/sessions/` directory has more than 10 files, load the `memory-rotation` skill to condense older sessions into `FCVW/wiki/concepts/` and archive them, keeping only the 3 most recent sessions;
 - **Skills Engine Check**: check if the active task triggers any specialized skills mapped in [skills/README.md](FCVW/skills/README.md). If yes, load that skill using `view_file` with `IsSkillFile: true` to guide execution;
+- **Agent/Skill Creation Gate**: if the task creates a new skill, agent profile, command pack, specialist role, or reusable operational procedure, load `agent-factory` and record the creation gate before adding files;
+- **Self-Improvement Gate**: if the task changes an existing skill, agent profile, trigger list, or agent operating rule, load `self-improvement` and record the improvement gate before editing;
+- **Anti-Monolith Gate**: if the task creates or extends a module, component, route, service, workflow, prompt pack, or file likely to grow beyond one responsibility, load `anti-monolith-guard` and record the gate result in the active plan before editing;
+- **Code Hygiene Scan**: if the task mentions duplication, similar snippets, cleanup, stale files, dead code, retroactive refactoring, unnecessary files, or monolith remediation, load `code-hygiene-refactor` and record a hygiene scan before editing;
 - **New Project Instantiation**: upon detecting Phase 0, consult `FCVW/INSTANTIATION.md`, apply the documented renaming rules, and replace placeholders only in canonical framework documents, preserving generic templates in `FCVW/governance/` and `FCVW/wiki/templates/`;
 - **Retroactive Instantiation**: when adopting FCVW in an existing, advanced, legacy, or partially governed application, consult `FCVW/RETROACTIVE_INSTANTIATION.md` and the `retroactive-instantiation` skill; preserve application code and history by default;
 - when starting a new project, execute the Phase 0 process described in `FCVW/BRIEFING.md`;
@@ -274,6 +284,10 @@ When working concurrently, each agent should use its own branch per the branch n
 - If there was a visual change, does `FCVW/DESIGN.md` reflect the current state?
 - If there was a bug, was `FCVW/troubleshooting/` consulted or updated?
 - Has the changelog fragment been created in `unreleased/` and does it cite the altered files?
+- If a new or expanded module/file was created, was the Anti-Monolith Gate recorded or explicitly marked not applicable?
+- If duplication, stale files, dead code, cleanup, or retroactive refactoring was involved, was the Code Hygiene Scan recorded?
+- If a skill, agent profile, or reusable operational procedure was created, was the Agent/Skill Creation Gate recorded with metrics?
+- If a skill, agent profile, or trigger was changed, was the Self-Improvement Gate recorded with evidence and validation replay?
 - Has the Pull Request been reviewed and approved according to the risk classification (R3+ requires at least one reviewer)?
 - **AI Context Compression**: has a new chronological session synthesis been created in [`FCVW/wiki/sessions/`](FCVW/wiki/sessions/) following the template to compress context for the next session?
 - Were tests executed or has the limitation been recorded?

@@ -1,8 +1,8 @@
 # FrameCode VibeWork Framework
-<img width="953" height="240" alt="Captura de tela 2026-06-05 165409" src="https://github.com/user-attachments/assets/267c4aaa-db8b-469b-8ffc-751adfa3d86a" />
+![FrameCode VibeWork cover](https://github.com/user-attachments/assets/267c4aaa-db8b-469b-8ffc-751adfa3d86a)
 
 
-Current framework version: `V0.8.0`
+Current framework version: `V0.10.2`
 
 *Select Language / Selecione o Idioma:*
 - [Português](#português)
@@ -26,6 +26,7 @@ O objetivo é reduzir perda de contexto entre sessões, impedir mudanças sem ra
 - `FCVW/RETROACTIVE_INSTANTIATION.md` define a adoção retroativa do framework em aplicações já avançadas ou usando versões antigas do FCVW.
 - `FCVW/APPLICATION_DOCUMENTATION.md` define como documentar modulos, telas, paginas, componentes e fluxos da aplicacao instanciada.
 - `FCVW/PLANNING.md` transforma prioridade e risco em controles operacionais de triagem, validacao, rollback, revisao e decomposicao.
+- `FCVW/skills/agent-factory/` e `FCVW/skills/self-improvement/` controlam criação e evolução de skills/agentes por métricas.
 - `FCVW/wiki/agents/` centraliza journals de agentes com caminho previsivel.
 - `FCVW/FILESYSTEM.md` é a fonte de verdade para a árvore física completa.
 
@@ -79,7 +80,11 @@ Templates genéricos ficam em `FCVW/governance/` e `FCVW/wiki/templates/`. Docum
 
 `FCVW/skills/` armazena procedimentos técnicos carregados sob demanda pelo agente de IA, nunca pré-carregados no prompt. Isso mantém baixo consumo de tokens e disponibiliza checklists especializados quando necessário.
 
-Habilidades ativas: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+#### 9. Criação e melhoria controlada
+
+Novas skills e perfis de agente exigem `agent-factory` com recorrência, gap de cobertura, ROI de tokens/risco, escopo estreito e validação. Ajustes em skills/agentes exigem `self-improvement` com evidência de falha, drift ou economia relevante.
+
+Habilidades ativas: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
 
 ### Estrutura Operacional Resumida
 
@@ -106,6 +111,8 @@ As estimativas abaixo são referências de planejamento para reduzir custo de co
 | **Nova Funcionalidade** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7.000 tokens | **~1.500 tokens** | **-78%** |
 | **Componentes / UI** | `AGENTS.md` + `DESIGN.md` | ~4.000 tokens | **~900 tokens** | **-77%** |
 | **Refatoração** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8.000 tokens | **~1.800 tokens** | **-77%** |
+| **Criação de Skill/Agente** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:agent-factory` | ~5.500 tokens | **~1.200 tokens** | **-78%** |
+| **Self-Improvement de Skill/Agente** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5.500 tokens | **~1.200 tokens** | **-78%** |
 | **Instanciação nova** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
 | **Instanciação retroativa** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7.500 tokens | **~1.900 tokens** | **-75%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` | ~2.500 tokens | **~600 tokens** | **-76%** |
@@ -151,6 +158,7 @@ The goal is to reduce context loss between sessions, prevent untraceable changes
 - `FCVW/RETROACTIVE_INSTANTIATION.md` defines retroactive framework adoption for advanced applications or projects using older FCVW versions.
 - `FCVW/APPLICATION_DOCUMENTATION.md` defines how to document modules, screens, pages, components, and flows in the instantiated application.
 - `FCVW/PLANNING.md` turns priority and risk into operational controls for triage, validation, rollback, review, and decomposition.
+- `FCVW/skills/agent-factory/` and `FCVW/skills/self-improvement/` control skill/agent creation and evolution with metrics.
 - `FCVW/wiki/agents/` centralizes agent journals with predictable paths.
 - `FCVW/FILESYSTEM.md` is the source of truth for the complete physical tree.
 
@@ -204,7 +212,11 @@ Generic templates live in `FCVW/governance/` and `FCVW/wiki/templates/`. Documen
 
 `FCVW/skills/` stores technical procedures loaded on demand by the AI agent, never pre-loaded into the prompt. This keeps token consumption low while making specialized checklists available when needed.
 
-Active skills: `agent-aegis`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `brainstorming-and-tdd`, `git-conventional-commits`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `systematic-debugging`, `wiki-lint`.
+#### 9. Controlled Creation and Improvement
+
+New skills and agent profiles require `agent-factory` with recurrence, coverage gap, token/risk ROI, narrow scope, and validation. Skill/agent changes require `self-improvement` with failure, drift, or meaningful-savings evidence.
+
+Active skills: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
 
 ### Operational Structure
 
@@ -231,6 +243,8 @@ The estimates below are planning references for reducing context cost in LLM cal
 | **New Feature** | `AGENTS.md` + `SCOPE.md` + `PLANNING.md` + `DESIGN.md` | ~7,000 tokens | **~1,500 tokens** | **-78%** |
 | **UI / Components** | `AGENTS.md` + `DESIGN.md` | ~4,000 tokens | **~900 tokens** | **-77%** |
 | **Refactoring** | `AGENTS.md` + `REFACTORING.md` + `PLANNING.md` | ~8,000 tokens | **~1,800 tokens** | **-77%** |
+| **Skill/Agent Creation** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:agent-factory` | ~5,500 tokens | **~1,200 tokens** | **-78%** |
+| **Skill/Agent Self-Improvement** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5,500 tokens | **~1,200 tokens** | **-78%** |
 | **Fresh Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
 | **Retroactive Instantiation** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7,500 tokens | **~1,900 tokens** | **-75%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` | ~2,500 tokens | **~600 tokens** | **-76%** |
@@ -270,7 +284,7 @@ O conceito de LLM Wiki usado como inspiração para a memória técnica incremen
 
 Se este framework for útil para o seu trabalho, você pode apoiar o desenvolvimento pelo Buy Me a Coffee: / If this framework is useful for your work, you can support development via Buy Me a Coffee:
 
-<a href="https://www.buymeacoffee.com/hugomelovek"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=hugomelovek&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" /></a>
+[Support development on Buy Me a Coffee](https://www.buymeacoffee.com/hugomelovek)
 
 ## Licença / License
 
