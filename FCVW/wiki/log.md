@@ -2,7 +2,7 @@
 
 Chronological log of relevant wiki events.
 
-This repository is intentionally distributed with a clean wiki baseline. Register events from your own project lifecycle.
+Clean distributions should use `Template limpo/` as the empty baseline. This working framework repository may record framework-evolution events.
 
 ---
 
@@ -41,6 +41,60 @@ This repository is intentionally distributed with a clean wiki baseline. Registe
 ---
 
 ## Records
+
+## [2026-06-14 10:30] audit | Final compliance QA
+
+- Source: user-requested final compliance and QA review.
+- Executed action: removed false broken wikilinks from wiki examples/templates, restored resolvable site mirror subdirectories, updated version references, and refreshed validation artifacts.
+- Pages created:
+  - `wiki/sessions/S005-2026-06-14-final-compliance-qa.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: final compliance checks now pass across framework, clean template, and static site mirror.
+- Gaps: none material in the audited scope.
+
+## [2026-06-14 09:00] maintenance | V0.10.1 cleanup optimization
+
+- Source: follow-up audit of V0.10.0 scope.
+- Executed action: removed raw HTML from Markdown READMEs, reduced static site content from embedded Markdown bodies to a manifest, and sanitized the clean template manifest.
+- Pages created:
+  - `wiki/sessions/S004-2026-06-13-v0101-cleanup-optimization.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: Markdown purity, static site size, and clean-template quality improved without changing framework philosophy.
+- Gaps: browser verification should use a local HTTP server because `file://` may be blocked.
+
+## [2026-06-13 18:00] governance | Agent factory, self-improvement, clean template, and site
+
+- Source: user-requested framework audit and refinement.
+- Executed action: added controlled creation and self-improvement gates for skills/agents, repaired AI-usability template issues, generated clean template, and refreshed the public web page.
+- Pages created:
+  - `wiki/refactorings/agent-skill-self-improvement-governance.md`
+  - `wiki/sessions/S003-2026-06-13-agent-self-improvement-template-site.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: skill/agent growth now requires recurrence, coverage, token/risk ROI, scope, and validation metrics.
+- Gaps: framework validation remains Markdown-only and declarative by ADR-0001.
+
+## [2026-06-13 16:00] refactoring | Anti-monolith and code hygiene gates
+
+- Source: user request to make the framework block monolith creation and actively clean duplication, stale files, dead code, and unnecessary artifacts.
+- Executed action: added anti-monolith and code hygiene skills, updated planning/refactoring/retroactive instantiation gates, made domain agents tool-aware, and recorded V0.9.1.
+- Pages created:
+  - `wiki/refactorings/anti-monolith-and-code-hygiene-gates.md`
+  - `wiki/sessions/S002-2026-06-13-anti-monolith-code-hygiene.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: agents now have Markdown-only gates before large module creation and cleanup/refactoring work.
+- Gaps: historical encoding artifacts remain in older documents.
 
 ## [2026-06-05 15:30] maintenance | Open governance issues treatment
 

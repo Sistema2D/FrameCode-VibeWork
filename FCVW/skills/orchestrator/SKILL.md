@@ -1,24 +1,59 @@
-# Orchestrator (Subagent-Driven Development)
+---
+name: "orchestrator"
+version: "1.1.0"
+trigger_keywords: ["large refactoring", "complex plans", "parallel tasks", "dispatching agents", "multi-agent", "orchestrate"]
+session_types: ["refactoring", "maintenance", "document_audit", "multi_agent"]
+---
 
-*Activation Triggers:* large refactoring, complex plans, parallel tasks, dispatching agents.
+# SKILL: Orchestrator
 
-This skill upgrades the main AI agent to act as a "Tech Lead" rather than a solo developer, utilizing the concept of Subagent-Driven Development.
+## Purpose
 
-## Core Directives
+Coordinate complex plans without pretending unavailable tools exist. The orchestrator is functional in two modes:
 
-When faced with a large `FCVW/Plans/in_progress/` plan that involves multiple distinct domains (e.g., frontend UI, backend API, and security hardening), **do not try to implement everything sequentially yourself.**
+- **Delegated mode:** use subagent tools only when the current environment explicitly provides them.
+- **Sequential mode:** if no subagent tool exists, split the work into bounded task blocks and execute them one at a time under the active plan.
 
-Instead, delegate portions of the work to specialized subagents.
+## Activation Triggers
 
-### Workflow for Delegation:
+Load this skill when a plan spans multiple domains, has R3+ risk, mentions parallel work, or requires coordination between security, UX, performance, refactoring, docs, tests, and release.
 
-1. **Analyze the Plan:** Break down the active FCVW plan into atomic tasks that can be executed independently.
-2. **Invoke Subagents:** Use your agentic IDE's subagent tools (e.g., `invoke_subagent`) to spawn child processes.
-   - Example: Spawn `agent-hephaestus` to implement the UI components.
-   - Example: Spawn `agent-aegis` to review the backend code for vulnerabilities.
-   - Example: Spawn `agent-hermes` to optimize the database query.
-3. **Provide Context:** When invoking a subagent, explicitly tell it which file to work on and provide a strict mandate. Remind the subagent to read its specific `SKILL.md` file in `FCVW/skills/`.
-4. **Audit & Merge:** While subagents run in parallel, you must act as the code reviewer. Once they complete their tasks, review their diffs. If the code meets the FCVW governance and the plan's acceptance criteria, integrate it. If not, reject it and command the subagent to fix it.
-5. **Completion:** Only move the FCVW plan to `completed/` when all subagent tasks are verified and passing tests.
+## Hard Rules
 
-By acting as an Orchestrator, you ensure higher quality code, parallel execution, and strict adherence to specialized domain rules.
+- Do not invent tool names such as `invoke_subagent` if the environment does not expose them.
+- Do not open parallel edits against the same soft-locked files.
+- Every delegated or sequential task must cite the active plan and affected files.
+- Domain agents must load their own `SKILL.md` before acting.
+- The main agent remains responsible for review, validation, changelog, and plan closure.
+
+## Workflow
+
+1. Read the active plan and identify independent work packages.
+2. Check `Plans/in_progress/` for scope collisions.
+3. Select execution mode:
+   - delegated mode when subagent tools are available;
+   - sequential mode otherwise.
+4. For each work package, define:
+   - exact files in scope;
+   - required skill;
+   - behavior to preserve;
+   - validation evidence;
+   - rollback note.
+5. Execute or delegate the smallest safe package first.
+6. Review each result against the plan acceptance criteria.
+7. Do not close the plan until all packages are validated or explicitly deferred.
+
+## Output Required
+
+Add this block to the active plan:
+
+```markdown
+## Orchestration
+
+- Skill loaded: `skills/orchestrator/SKILL.md`
+- Execution mode: `delegated` / `sequential`
+- Work packages:
+  - `<package>`: `<skill>`, `<files>`, `<validation>`
+- Collision check:
+- Deferred packages:
+```

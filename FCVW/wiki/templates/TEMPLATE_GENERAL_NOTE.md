@@ -32,7 +32,7 @@ tags:
 
 ## Relations
 
-- Related to: [[<related-page>]]
+- Related to: `<related-page>`
 
 ## Limitations
 

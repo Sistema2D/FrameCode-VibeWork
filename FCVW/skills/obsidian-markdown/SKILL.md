@@ -87,6 +87,6 @@ To enable link clicks inside a Mermaid node, declare: `class NodeName internal-l
 ## 7. Definition of Done Checklist for Notes
 - [ ] Properties block is complete and valid YAML at the top.
 - [ ] Heading hierarchy is logical and uses a single `# H1` matching the title.
-- [ ] Internal vault connections use `[[wikilinks]]`. External connections use `[text](url)`.
+- [ ] Internal vault connections use `[[wikilinks]]`. External connections use literal Markdown link syntax such as ``[label](https://example.com)``.
 - [ ] Highlights use `==double equal signs==`.
 - [ ] No placeholder syntax remains.

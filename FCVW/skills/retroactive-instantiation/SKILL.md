@@ -35,12 +35,14 @@ This skill is only the JIT trigger and compact checklist. Do not duplicate or ov
    - Case C: partial or inconsistent FCVW present.
 3. Create or update `FCVW/Plans/in_progress/P2-R4-{date}-retroactive-instantiation.md`.
 4. Preserve application files first: source code, root README, runtime configs, data, tests, deployment files, and existing docs.
-5. Import, repair, or migrate FCVW under `FCVW/` using non-destructive merges.
-6. Fill project documents from evidence; use `To be defined` for missing facts.
-7. Preserve historical plans, changelogs, troubleshooting records, decisions, audits, and wiki pages.
-8. Add a changelog fragment, validation evidence, wiki log entry, session synthesis, and filesystem update.
-9. Run safe local tests and structural checks; record limitations instead of inventing results.
-10. Move the plan to the final status folder only after validation is recorded.
+5. Load `skills/code-hygiene-refactor/SKILL.md` and record a non-destructive hygiene triage: duplicates, stale files, dead code candidates, catch-all modules, and monolith candidates.
+6. Load `skills/anti-monolith-guard/SKILL.md` for every identified monolith that will receive new changes.
+7. Import, repair, or migrate FCVW under `FCVW/` using non-destructive merges.
+8. Fill project documents from evidence; use `To be defined` for missing facts.
+9. Preserve historical plans, changelogs, troubleshooting records, decisions, audits, and wiki pages.
+10. Add a changelog fragment, validation evidence, wiki log entry, session synthesis, and filesystem update.
+11. Run safe local tests and structural checks; record limitations instead of inventing results.
+12. Move the plan to the final status folder only after validation is recorded.
 
 ## Hard Rules
 
@@ -49,4 +51,5 @@ This skill is only the JIT trigger and compact checklist. Do not duplicate or ov
 - Do not copy secrets or private data into FCVW records.
 - Do not claim historical FCVW governance for work that happened before FCVW adoption.
 - Do not refactor application code during retroactive instantiation unless the user explicitly requested it.
-
+- Do not add new behavior to an identified monolith until `anti-monolith-guard` passes.
+- Do not delete duplicate, stale, or dead-code candidates without validation and a separate cleanup scope.

@@ -45,4 +45,4 @@ tags:
 
 ## Related Pages
 
-- [[<page>]]
+- `<page>`

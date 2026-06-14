@@ -43,4 +43,4 @@ tags:
 
 ## Relations
 
-- [[<pattern-or-component>]]
+- `<pattern-or-component>`

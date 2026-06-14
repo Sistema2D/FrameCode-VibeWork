@@ -43,7 +43,7 @@ Verify that all governance documents are internally consistent and structurally 
 
 #### Internal Link Integrity
 
-- [ ] All `[text](path)` relative links under `FCVW/` resolve to existing files. Check links in:
+- [ ] All literal Markdown relative links such as ``[label](relative/path.md)`` under `FCVW/` resolve to existing files. Check links in:
   - `AGENTS.md`
   - `FCVW/README.md`
   - `FCVW/CONTEXT_MAP.md`

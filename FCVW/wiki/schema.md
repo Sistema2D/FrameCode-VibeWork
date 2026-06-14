@@ -182,9 +182,9 @@ Source not available. Page based on contextual synthesis.
 Use Obsidian-style links when possible:
 
 ```markdown
-[[patterns/atomic-writing-pattern]]
-[[failures/reproduction-error-example]]
-[[decisions/stack-choice-example]]
+`patterns/<pattern-name>`
+`failures/<failure-name>`
+`decisions/<decision-name>`
 ```
 
 Whenever a page cites another existing concept, failure, decision, or pattern, it must create an internal link to it.
