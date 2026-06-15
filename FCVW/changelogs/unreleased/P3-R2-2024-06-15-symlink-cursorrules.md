@@ -1,0 +1,1 @@
+- Converted `.windsurfrules` into a symlink to `.cursorrules` to prevent rule duplication and maintain consistency.
