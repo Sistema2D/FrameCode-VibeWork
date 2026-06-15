@@ -64,5 +64,5 @@ YYYY-MM-DD
 - <Vx.y.z>
 
 ## Related ADRs
-- <ADR-XXXX>
+- [ADR-XXXX](ADR-XXXX-short-description.md)
 ```
