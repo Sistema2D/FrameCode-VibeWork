@@ -10,6 +10,8 @@ Clean distributions should start from the template baseline. This working framew
 
 - [[schema]] - Structural and operational rules of the wiki.
 - [[log]] - Chronological log of wiki events.
+- [[taxonomy]] - Canonical wiki tags, themes, and thematic frontmatter colors.
+- [[metrics]] - Freshness, promotion, duplication, release synthesis, and cost-control metrics.
 - [[sessions/README]] - Session synthesis rules and naming convention.
 - [[agents/README]] - Agent journal path convention.
 - [[releases/README]] - Release syntheses (empty baseline).
@@ -20,6 +22,8 @@ Clean distributions should start from the template baseline. This working framew
 - [[sessions/S004-2026-06-13-v0101-cleanup-optimization]] - Session synthesis for V0.10.1 cleanup and site optimization.
 - [[sessions/S005-2026-06-14-final-compliance-qa]] - Session synthesis for V0.10.2 final compliance QA.
 - [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]] - Session synthesis for V0.10.3 release governance and JIT trigger fixes.
+- [[sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance]] - Session synthesis for V0.11.0 wiki continuous learning governance.
+- [[releases/v0-11-0-summary]] - Release synthesis for V0.11.0 continuous wiki curation.
 - [[README]] - Overview of the `wiki/` folder.
 
 ## Preferred Formal Sources
@@ -45,8 +49,8 @@ Clean distributions should start from the template baseline. This working framew
 
 - Validated patterns: none registered.
 - Consolidated decisions: none registered.
-- Release syntheses: none registered in `wiki/releases/`.
-- Cross-cutting syntheses: [[refactorings/anti-monolith-and-code-hygiene-gates]], [[refactorings/agent-skill-self-improvement-governance]], [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]].
+- Release syntheses: [[releases/v0-11-0-summary]].
+- Cross-cutting syntheses: [[taxonomy]], [[metrics]], [[refactorings/anti-monolith-and-code-hygiene-gates]], [[refactorings/agent-skill-self-improvement-governance]], [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]], [[sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance]].
 - Failure catalog: none registered in `wiki/failures/`.
 - Prompt catalog: none registered.
 - Open questions: none registered.

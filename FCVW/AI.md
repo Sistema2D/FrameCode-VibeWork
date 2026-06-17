@@ -66,6 +66,11 @@ Rules:
 - avoid overwriting knowledge without backup;
 - mark AI-generated content when applicable;
 - allow human review when the content is critical.
+- use `skills/wiki-curator/SKILL.md` when knowledge must be promoted, revised, grouped, deduplicated, tagged, or scheduled for review;
+- prefer updating or superseding an existing wiki page before creating a new one;
+- track freshness, promotion precision, duplication, release synthesis coverage, taxonomy coverage, and cost control using `wiki/metrics.md`;
+- organize curated wiki pages with canonical tags, `theme`, and `theme_color` from `wiki/taxonomy.md`;
+- use one fixed optimized curation mode only: JIT loading of index/log/schema/taxonomy/metrics plus directly triggered source records. Do not expose customizable curation cost modes.
 
 ### Agent with Tools
 
@@ -159,6 +164,7 @@ Rules:
 - Learning generated from a conversation must be traceable.
 - Agent-specific journals must use `wiki/agents/<agent_name>_journal.md`.
 - Agent journals are append-only operational memory for durable project-specific learnings, not routine chat transcripts.
+- Reusable journal learnings must be promoted or linked through `wiki-curator` instead of remaining isolated in chronological notes.
 
 ## AI Interaction Context Compression (AICC)
 
@@ -192,6 +198,7 @@ To deliver highly-specialized command sets and instruction procedures without in
 - **Handoff Tracking:** Every skill file loaded during a session must be formally recorded under the `skills_invoked` section in the AICC Session Synthesis `S*.md` file.
 - **Controlled Extension:** New skills and agent profiles are allowed only through `skills/agent-factory/SKILL.md`; convenience, naming, or persona-only additions are invalid.
 - **Evidence-Based Self-Improvement:** Existing skills and agent profiles can be changed only through `skills/self-improvement/SKILL.md` when evidence proves failure, drift, validation gap, or meaningful token/risk reduction.
+- **Wiki Curation:** `skills/wiki-curator/SKILL.md` owns continuous wiki learning tasks. Use it after releases, recurring troubleshooting, grouped notes, or explicit wiki-maintenance requests.
 
 ### 2. Agent and Skill Creation Metrics
 
@@ -293,6 +300,7 @@ To optimize execution speed, minimize financial API token costs, and prevent con
 ### 2. Context Boundaries & Pruning
 * **Strict Domain Isolation:** Never open, read, or search files that are outside the active session type mapped in the table in `AGENTS.md` (e.g., in a bugfix session, do not open `DESIGN.md` or `DATA.md`).
 * **Chunked View Limits:** Do not view entire large files. Limit reads using targeted line range parameters (`StartLine` and `EndLine`) to inspect only the required context.
+* **Fixed Wiki Curation Mode:** When curating wiki knowledge, use the standard optimized mode in `skills/wiki-curator/SKILL.md`. Load only routing documents, wiki index/log/schema/taxonomy/metrics, and directly triggered source records unless `wiki-lint` finds an anomaly.
 
 ### 3. Log and Terminal Compaction
 * **Silent Execution Flags:** When executing terminal commands, always use the shortest possible status flags (e.g., `git status -s` instead of `git status`) and suppress verbose outputs.
@@ -324,6 +332,8 @@ To facilitate retrieval and visualization in Obsidian, the AI must use the follo
 - `#tech-debt`: Technical debts identified during development.
 - `#refactor-plan`: Plans and results of refactorings.
 - `#user-feedback`: Insights and direct requests from the user.
+
+Canonical themes, thematic colors, optional frontmatter fields, and extended tag guidance live in `wiki/taxonomy.md`. Freshness and curation metrics live in `wiki/metrics.md`.
 
 ## Models and Templates
 

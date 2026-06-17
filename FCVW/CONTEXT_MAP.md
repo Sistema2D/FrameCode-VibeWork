@@ -23,7 +23,7 @@ This document is designed to be the **first auxiliary document consulted after `
 | **Release / Version / Changelog** | `AGENTS.md §checklist`, `skill:release-checklist` | `VERSIONING.md`, `AUDIT.md`, `RELEASE.md`, `skill:governance-validator` | `DESIGN.md`, `REFACTORING.md` |
 | **Briefing / Instantiation** | `AGENTS.md §checklist`, `INSTANTIATION.md`, `BRIEFING.md` | `skill:project-instantiation`, `MANIFEST.md`, `STACK.md` | `REFACTORING.md`, `RELEASE.md` |
 | **Retroactive Instantiation / Migration** | `AGENTS.md §checklist`, `RETROACTIVE_INSTANTIATION.md`, `INSTANTIATION.md` | `CONTEXT_MAP.md`, `skill:retroactive-instantiation`, `MANIFEST.md`, `STACK.md` | `DESIGN.md`, `REFACTORING.md`, `RELEASE.md` |
-| **Wiki / Knowledge** | `AGENTS.md §checklist`, `wiki/schema.md`, `wiki/index.md` | `skill:wiki-lint`, `wiki/log.md` | `DESIGN.md`, `DATA.md`, `SECURITY.md` |
+| **Wiki / Knowledge** | `AGENTS.md §checklist`, `wiki/schema.md`, `wiki/index.md` | `skill:wiki-curator`, `skill:wiki-lint`, `wiki/log.md`, `wiki/taxonomy.md`, `wiki/metrics.md` | `DESIGN.md`, `DATA.md`, `SECURITY.md` |
 | **Security / Data** | `AGENTS.md §checklist`, `SECURITY.md`, `DATA.md` | `AI.md`, `TESTS.md`, `skill:agent-aegis` | `DESIGN.md`, `REFACTORING.md` |
 | **Document Audit** | `AGENTS.md §checklist`, `MANIFEST.md`, `AUDIT.md` | `skill:governance-validator`, `skill:agnix-linter`, `wiki/index.md`, `changelogs/` | `DESIGN.md`, `DATA.md` |
 | **Pull Request / Code Review** | `AGENTS.md §Code Review and Pull Requests` | `FCVW/refactoring-guide/17-branch-and-pull-request-policy.md` (if refactoring PR), `PLANNING.md` (risk gates) | Most governance docs |
@@ -55,6 +55,7 @@ This document is designed to be the **first auxiliary document consulted after `
 | `skills/release-checklist/SKILL.md` | release, publish, version bump, changelog, publicar versão | ~2.7k tokens vs. RELEASE+VERSIONING+AUDIT |
 | `skills/self-improvement/SKILL.md` | improve skill, improve agent, skill failed, gatilho falhou | Evidence-based gate for modifying skills and agent profiles |
 | `skills/systematic-debugging/SKILL.md` | debugging, fixing an error, stack trace | Enforces hypothesis-based debugging |
+| `skills/wiki-curator/SKILL.md` | curate wiki, continuous learning, agrupar notas, frontmatter colors | Promotes and clusters wiki knowledge in fixed optimized mode |
 | `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages | ~275 lines vs. reading schema.md §12 |
 
 ---
@@ -68,7 +69,7 @@ This document is designed to be the **first auxiliary document consulted after `
 
 ---
 
-## Document Size Reference (V0.10.3)
+## Document Size Reference (V0.11.0)
 
 > Use to make informed decisions about what to load. Larger files cost more tokens.
 
@@ -81,10 +82,11 @@ This document is designed to be the **first auxiliary document consulted after `
 | `skills/code-hygiene-refactor/SKILL.md` | ~4 KB | Use for cleanup/refactoring triage |
 | `skills/agent-factory/SKILL.md` | ~4 KB | Use for controlled skill/agent creation |
 | `skills/self-improvement/SKILL.md` | ~4 KB | Use for evidence-based skill/agent changes |
+| `skills/wiki-curator/SKILL.md` | ~4 KB | Use for wiki curation, clustering, taxonomy, and metrics |
 | `AI.md` | ~11 KB | On demand (AI sessions) |
 | `APPLICATION_DOCUMENTATION.md` | ~4 KB | On demand (application module docs) |
 | `FCVW/README.md` | ~13 KB | Rarely (framework orientation only) |
-| `wiki/schema.md` | ~9 KB | Use `skill:wiki-lint` instead |
+| `wiki/schema.md` | ~11 KB | Use `skill:wiki-lint` or `skill:wiki-curator` instead |
 | `SECURITY.md` | ~7 KB | On demand (security sessions) |
 | `ENVIRONMENT.md` | ~6 KB | On demand (environment sessions) |
 | `PERFORMANCE.md` | ~5 KB | On demand (performance sessions) |

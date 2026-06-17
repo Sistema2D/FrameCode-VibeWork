@@ -4,7 +4,7 @@ This folder stores the cumulative technical memory of the project's governance i
 
 The wiki does not replace the official documents of the repository, such as `AGENTS.md`, `PLANNING.md`, `VERSIONING.md`, `TROUBLESHOOTING.md`, `AUDIT.md`, `REFACTORING.md`, `AI.md`, or `DESIGN.md`.
 
-It works as a continuous learning layer: it records validated patterns, recurring failures, consolidated decisions, refactorings, audits, releases, components, useful prompts, open questions, and reusable syntheses.
+It works as a continuous learning layer: it records validated patterns, recurring failures, consolidated decisions, refactorings, audits, releases, components, useful prompts, open questions, reusable syntheses, and curated topic clusters.
 
 When the project also has a user/runtime wiki or vault, explicitly differentiate that structure from this governance wiki.
 
@@ -18,12 +18,15 @@ When the project also has a user/runtime wiki or vault, explicitly differentiate
 6. The wiki must be consulted before making relevant changes.
 7. The wiki must be updated after changes that generate reusable learning.
 8. The wiki must not store secrets, tokens, private logs, or unnecessary personal data.
+9. Wiki curation must use the fixed optimized mode in `skills/wiki-curator/SKILL.md`.
 
 ## Main Files
 
 - `schema.md`: structural rules of the wiki.
 - `index.md`: navigable index of knowledge.
 - `log.md`: chronological log of ingestions, syntheses, audits, and linting.
+- `taxonomy.md`: canonical tags, themes, and thematic frontmatter colors.
+- `metrics.md`: freshness, promotion, duplication, release synthesis, and cost-control metrics.
 - `inbox/`: unprocessed inputs.
 - `raw/`: immutable raw sources.
 - `sources/`: normalized or described sources.

@@ -17,7 +17,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.10.3` |
+| Current Version | `V0.11.0` |
 | Manifest Creation Date | `2026-05-15` |
 | Last Update | `2026-06-17` |
 | Project Status | `development` |
@@ -59,12 +59,13 @@ A repository that uses FrameCode VibeWork achieves: near-zero context loss betwe
 - Document-based governance system (Plans, changelogs, ADRs, audits)
 - AI Interaction Context Compression (AICC) via session syntheses
 - AI Skills Engine (ASE) with on-demand JIT skill loading
-- LLM Wiki (Obsidian-compatible technical memory with Ingest/Query/Lint cycle)
+- LLM Wiki (Obsidian-compatible technical memory with Ingest/Query/Curate/Lint cycle)
 - Declarative design system centralized in `DESIGN.md`
 - Instantiation workflow for bootstrapping new projects from the framework
 - Anti-monolith and code hygiene gates for AI-generated codebases
 - Retroactive cleanup triage for existing applications adopting the framework
 - Controlled creation and self-improvement gates for AI skills and agent profiles
+- Continuous wiki curation with canonical taxonomy, thematic frontmatter colors, and freshness metrics
 
 ### 4.2 Out of Scope
 
@@ -108,10 +109,11 @@ Mark or describe the planned roles:
   - [ ] Classification or data extraction.
   - [ ] Agents with tools.
   - [ ] Task automation.
-  - [x] Continuous learning (Ingest/Query/Lint cycle described in `wiki/schema.md`).
+  - [x] Continuous learning (Ingest/Query/Curate/Lint cycle described in `wiki/schema.md`).
   - [x] AI Interaction Context Compression (AICC).
   - [x] AI Skills Engine (ASE) with trigger activation.
   - [x] Controlled skill/agent creation and self-improvement gates.
+  - [x] Fixed optimized wiki curation mode via `skills/wiki-curator/SKILL.md`.
   - [ ] Other: `<describe>`.
 
 ### 6.2 AI Boundaries
@@ -163,6 +165,8 @@ The documents below compose the project's governance. The absence of any documen
 | `BRIEFING.md` | Phase 0 | Discovery and initial project briefing | `existing` |
 | `CONTEXT_MAP.md` | When AI | Selective context loading map by session type | `existing` |
 | `wiki/schema.md` | When vault/RAG | Operational rules of the wiki in LLM Wiki standard | `existing` |
+| `wiki/taxonomy.md` | When wiki curation | Canonical wiki tags, themes, and thematic colors | `existing` |
+| `wiki/metrics.md` | When wiki curation | Freshness, promotion, duplication, and curation cost metrics | `existing` |
 | `wiki/sessions/README.md` | When AI | Index and chronological ledger of AI session contexts | `existing` |
 | `skills/README.md` | When AI | Index and guidelines catalog of AI agent skills | `existing` |
 
@@ -204,6 +208,7 @@ No functional, visual, or structural change should be performed without followin
 | Secrets accidentally committed | Low | Critical | No automation scripts; AI.md data rules; manual review | `SECURITY.md`, `AI.md` |
 | Template placeholders left unfilled in downstream projects | Medium | Medium | INSTANTIATION.md renaming checklist; MANIFEST.md gap section | `INSTANTIATION.md`, `MANIFEST.md` |
 | Wiki knowledge becoming stale | Medium | Medium | Wiki Lint on every minor/major release; log.md tracking | `wiki/schema.md`, `skills/wiki-lint/SKILL.md` |
+| Wiki knowledge accumulating duplicates, stale tags, or ungrouped notes | Medium | Medium | `wiki-curator` promotion/merge loop, `wiki/taxonomy.md`, and `wiki/metrics.md` | `skills/wiki-curator/SKILL.md`, `wiki/taxonomy.md`, `wiki/metrics.md` |
 | FILESYSTEM.md drift / governance document integrity decay | Medium | Medium | On-demand governance-validator skill before releases and structural audits | `skills/governance-validator/SKILL.md`, `FILESYSTEM.md` |
 | AI-generated monoliths, duplication, stale files, and unnecessary artifacts | High | High | Mandatory `anti-monolith-guard` and `code-hygiene-refactor` gates before large changes, cleanup, and retroactive refactoring | `REFACTORING.md`, `PLANNING.md`, `skills/anti-monolith-guard/SKILL.md`, `skills/code-hygiene-refactor/SKILL.md` |
 | Arbitrary skill/agent proliferation or irrelevant self-improvement | Medium | High | Mandatory `agent-factory` and `self-improvement` gates with recurrence, coverage, token/risk ROI, scope, and validation metrics | `AI.md`, `PLANNING.md`, `skills/agent-factory/SKILL.md`, `skills/self-improvement/SKILL.md` |
@@ -279,6 +284,7 @@ The skill is pure Markdown, loaded on-demand (JIT), never pre-loaded, and replac
 | 2026-06-14 | `V0.10.1` | Removed raw HTML from Markdown READMEs, reduced static site data from embedded content to a manifest, and sanitized the clean template manifest. | Codex |
 | 2026-06-14 | `V0.10.2` | Final compliance QA: removed false broken wikilinks from wiki examples, restored resolvable site mirror structure, and refreshed validation artifacts. | Codex |
 | 2026-06-17 | `V0.10.3` | Patched release-governance coherence, Portuguese JIT triggers, plan-state validation, and large-file version references for the draft PR review. | Codex |
+| 2026-06-17 | `V0.11.0` | Added continuous wiki curation governance, fixed optimized curation cost mode, thematic taxonomy, metrics, and `wiki-curator` skill. | Codex |
 
 ---
 

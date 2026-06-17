@@ -1,6 +1,6 @@
 # Versioning and Changelogs
 
-> **Current version: `V0.10.3`** - see [`changelogs/V0.10.3.md`](changelogs/V0.10.3.md)
+> **Current version: `V0.11.0`** - see [`changelogs/V0.11.0.md`](changelogs/V0.11.0.md)
 
 This document defines the versioning, release, and changelog rules of the application.
 

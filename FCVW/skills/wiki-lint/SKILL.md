@@ -36,7 +36,7 @@ Every file in `wiki/` **except** `README.md`, `schema.md`, `index.md`, `log.md`,
 ```yaml
 ---
 title: "..."
-type: "concept | decision | pattern | failure | refactoring | audit | release | component | prompt | question | synthesis | source | raw"
+type: "concept | decision | pattern | failure | refactoring | audit | agent | release | session | component | prompt | question | synthesis | source | raw"
 status: "draft | in_validation | validated | obsolete | superseded | contradictory"
 confidence: "low | medium | high"
 last_reviewed: "YYYY-MM-DD"

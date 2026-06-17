@@ -37,6 +37,7 @@ This document does not replace individual plans in `Plans/`. Each plan must brin
 | Code hygiene / anti-monolith | Similar-code search, module boundary review, dead/stale candidate evidence, before/after behavior comparison, and deferred debt record |
 | Agent/skill creation | Recurrence evidence, coverage-gap review, token/risk ROI estimate, narrow-scope check, validation replay, and catalog consistency |
 | Skill/agent self-improvement | Failure/drift evidence, scope-preservation review, before/after trigger check, token/risk ROI estimate, and replay against the source task |
+| Wiki curation | Promotion criteria, source coverage, taxonomy/theme metadata, duplication or supersession check, freshness metrics, index/log sync, and fixed optimized cost mode evidence |
 
 ## Validation Matrix by Risk
 
@@ -196,6 +197,8 @@ Applicable to web, native desktop, mobile, TUI, or hybrid interfaces.
 - Retrieved context is displayed when applicable.
 - Sources are traceable when applicable.
 - AI does not execute actions outside allowed scope.
+- Wiki curation uses `wiki-curator` in fixed optimized mode and does not perform broad wiki crawls unless `wiki-lint` or the user explicitly requires it.
+- Curated wiki pages use canonical tags, themes, and review metrics when applicable.
 - Prompt injection in retrieved data is treated as untrusted content.
 
 ### Automated Prompt Evaluation (LLM Regression)
