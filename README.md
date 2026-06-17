@@ -2,7 +2,7 @@
 ![FrameCode VibeWork cover](https://github.com/user-attachments/assets/267c4aaa-db8b-469b-8ffc-751adfa3d86a)
 
 
-Current framework version: `V0.10.3`
+Current framework version: `V0.11.0`
 
 *Select Language / Selecione o Idioma:*
 - [Português](#português)
@@ -58,7 +58,7 @@ Toda alteração em arquivo versionado deve ser registrada em `FCVW/changelogs/V
 
 #### 3. Memória técnica incremental
 
-A pasta `FCVW/wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, índice, log, links internos, estados de confiança e sínteses de sessão AICC.
+A pasta `FCVW/wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, índice, log, links internos, estados de confiança, sínteses de sessão AICC e curadoria contínua via `wiki-curator`.
 
 #### 4. Design system declarativo
 
@@ -84,7 +84,7 @@ Templates genéricos ficam em `FCVW/governance/` e `FCVW/wiki/templates/`. Docum
 
 Novas skills e perfis de agente exigem `agent-factory` com recorrência, gap de cobertura, ROI de tokens/risco, escopo estreito e validação. Ajustes em skills/agentes exigem `self-improvement` com evidência de falha, drift ou economia relevante.
 
-Habilidades ativas: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
+Habilidades ativas: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-curator`, `wiki-lint`.
 
 ### Estrutura Operacional Resumida
 
@@ -116,6 +116,7 @@ As estimativas abaixo são referências de planejamento para reduzir custo de co
 | **Instanciação nova** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
 | **Instanciação retroativa** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7.500 tokens | **~1.900 tokens** | **-75%** |
 | **Release** | `AGENTS.md` + `skill:release-checklist` | ~4.000 tokens | **~900 tokens** | **-77%** |
+| **Curadoria da Wiki** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` + `skill:wiki-curator` | ~5.800 tokens | **~1.300 tokens** | **-78%** |
 
 ### Como Usar
 
@@ -190,7 +191,7 @@ Every change in a versioned file must be recorded in `FCVW/changelogs/Vx.y.z.md`
 
 #### 3. Incremental Technical Memory
 
-`FCVW/wiki/` follows the LLM Wiki standard: raw sources, synthesized pages, index, log, internal links, confidence states, and AICC session syntheses.
+`FCVW/wiki/` follows the LLM Wiki standard: raw sources, synthesized pages, index, log, internal links, confidence states, AICC session syntheses, and continuous curation through `wiki-curator`.
 
 #### 4. Declarative Design System
 
@@ -216,7 +217,7 @@ Generic templates live in `FCVW/governance/` and `FCVW/wiki/templates/`. Documen
 
 New skills and agent profiles require `agent-factory` with recurrence, coverage gap, token/risk ROI, narrow scope, and validation. Skill/agent changes require `self-improvement` with failure, drift, or meaningful-savings evidence.
 
-Active skills: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
+Active skills: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-curator`, `wiki-lint`.
 
 ### Operational Structure
 
@@ -248,6 +249,7 @@ The estimates below are planning references for reducing context cost in LLM cal
 | **Fresh Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
 | **Retroactive Instantiation** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7,500 tokens | **~1,900 tokens** | **-75%** |
 | **Release** | `AGENTS.md` + `skill:release-checklist` | ~4,000 tokens | **~900 tokens** | **-77%** |
+| **Wiki Curation** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` + `skill:wiki-curator` | ~5,800 tokens | **~1,300 tokens** | **-78%** |
 
 ### How to Use
 

@@ -42,6 +42,40 @@ Clean distributions should use `Template limpo/` as the empty baseline when gene
 
 ## Records
 
+## [2026-06-17 12:30] release | V0.11.0 wiki continuous learning governance
+
+- Source: user-requested GitHub-sourced framework improvement for continuous wiki learning with fixed optimized cost mode.
+- Executed action: created `wiki-curator`, added wiki taxonomy and metrics pages, extended wiki schema and AI governance for Curate operation, synchronized indexes/catalogs, and prepared V0.11.0 release records.
+- Pages created:
+  - `wiki/taxonomy.md`
+  - `wiki/metrics.md`
+  - `wiki/releases/v0-11-0-summary.md`
+  - `wiki/sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance.md`
+- Pages updated:
+  - `wiki/index.md`
+  - `wiki/log.md`
+  - `wiki/schema.md`
+- Pages obsolete: none.
+- Result: wiki learning loop now supports promotion, revision, clustering, thematic frontmatter colors, freshness metrics, and one fixed optimized cost mode.
+- Gaps: historical pages were not bulk-retagged; future `wiki-curator` sessions should update metadata when those pages are substantively touched.
+
+## [2026-06-17 12:35] lint | Wiki Structural Lint
+
+- Source: Manual lint execution (trigger: minor release V0.11.0).
+- Executed action: Full structural validation per wiki/schema.md and wiki-lint skill.
+- Checks performed: frontmatter, orphans, broken links, index coverage, status accuracy, release synthesis coverage, taxonomy metadata.
+- Findings:
+  - Orphan pages: none introduced by V0.11.0.
+  - Broken links: none introduced by V0.11.0.
+  - Missing frontmatter: none in new pages.
+  - Status mismatches: none in new pages.
+  - Knowledge gaps: historical changelogs before V0.11.0 do not all have release syntheses; not changed in this release.
+- Pages created: `wiki/taxonomy.md`, `wiki/metrics.md`, `wiki/releases/v0-11-0-summary.md`, `wiki/sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance.md`.
+- Pages updated: `wiki/index.md`, `wiki/log.md`, `wiki/schema.md`.
+- Pages obsoleted: none.
+- Result: issues found and resolved for V0.11.0 scope; historical release synthesis gap recorded.
+- Gaps: old releases can be synthesized later if a dedicated historical-curation plan is opened.
+
 ## [2026-06-17 09:00] release | V0.10.3 release governance JIT fixes
 
 - Source: user-requested correction patch after V0.10.2 release review.

@@ -4,7 +4,7 @@ type: "concept"
 status: "validated"
 confidence: "high"
 last_reviewed: "2026-06-17"
-related_version: "V0.10.3"
+related_version: "V0.11.0"
 sources:
   - "STACK.md"
   - "SCOPE.md"
@@ -42,6 +42,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |-- V0.10.1.md
 |   |   |-- V0.10.2.md
 |   |   |-- V0.10.3.md
+|   |   |-- V0.11.0.md
 |   |   |-- V0.9.0.md
 |   |   \-- V0.9.1.md
 |   |-- decisions/
@@ -83,6 +84,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |   |-- P1-R4-2026-06-11-service-research-mandate.md
 |   |   |   |-- P2-R1-2026-06-17-v0103-github-release-publication.md
 |   |   |   |-- P2-R2-2026-06-17-v0103-release-governance-jit-fixes.md
+|   |   |   |-- P2-R2-2026-06-17-v0110-wiki-continuous-learning-governance.md
 |   |   |   |-- P2-R3-2026-06-11-environment-promotion-workflow.md
 |   |   |   |-- P2-R3-2026-06-11-pr-branch-workflow.md
 |   |   |   |-- P2-R3-2026-06-13-anti-monolith-code-hygiene.md
@@ -161,6 +163,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |   \-- SKILL.md
 |   |   |-- systematic-debugging/
 |   |   |   \-- SKILL.md
+|   |   |-- wiki-curator/
+|   |   |   \-- SKILL.md
 |   |   |-- wiki-lint/
 |   |   |   \-- SKILL.md
 |   |   \-- README.md
@@ -195,6 +199,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |   \-- README.md
 |   |   |-- releases/
 |   |   |   |-- README.md
+|   |   |   |-- v0-11-0-summary.md
 |   |   |   \-- v0-8-0-summary.md
 |   |   |-- sessions/
 |   |   |   |-- README.md
@@ -203,7 +208,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |   |-- S003-2026-06-13-agent-self-improvement-template-site.md
 |   |   |   |-- S004-2026-06-13-v0101-cleanup-optimization.md
 |   |   |   |-- S005-2026-06-14-final-compliance-qa.md
-|   |   |   \-- S006-2026-06-17-v0103-release-governance-jit-fixes.md
+|   |   |   |-- S006-2026-06-17-v0103-release-governance-jit-fixes.md
+|   |   |   \-- S007-2026-06-17-v0110-wiki-continuous-learning-governance.md
 |   |   |-- sources/
 |   |   |   \-- README.md
 |   |   |-- syntheses/
@@ -221,8 +227,10 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |   \-- TEMPLATE_TECH_DEBT.md
 |   |   |-- index.md
 |   |   |-- log.md
+|   |   |-- metrics.md
 |   |   |-- README.md
-|   |   \-- schema.md
+|   |   |-- schema.md
+|   |   \-- taxonomy.md
 |   |-- AI.md
 |   |-- APPLICATION_DOCUMENTATION.md
 |   |-- ARCHITECTURAL_DECISIONS.md

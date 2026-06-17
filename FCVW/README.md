@@ -1,6 +1,6 @@
 # FrameCode VibeWork Framework
 
-Current framework version: `V0.10.3`
+Current framework version: `V0.11.0`
 
 *Select Language / Selecione o Idioma:*
 - [Português](#português)
@@ -47,7 +47,7 @@ graph TD
     IdentifyType -->|Release| Release["Imediato: skill:release-checklist\nSob demanda: VERSIONING.md,\nAUDIT.md, RELEASE.md"]
     IdentifyType -->|Briefing / Instanciação| Briefing["Imediato: INSTANTIATION.md\n+ BRIEFING.md\nSob demanda: skill:project-instantiation,\nMANIFEST.md, STACK.md"]
     IdentifyType -->|Retroactive Inst.| Retro["Imediato: RETROACTIVE_INSTANTIATION.md\n+ INSTANTIATION.md\nSob demanda: CONTEXT_MAP.md"]
-    IdentifyType -->|Wiki / Knowledge| Wiki["Imediato: wiki/schema.md\n+ wiki/index.md\nSob demanda: skill:wiki-lint, wiki/log.md"]
+    IdentifyType -->|Wiki / Knowledge| Wiki["Imediato: wiki/schema.md\n+ wiki/index.md\nSob demanda: skill:wiki-curator,\nskill:wiki-lint, wiki/log.md"]
     IdentifyType -->|Security / Data| Security["Imediato: SECURITY.md + DATA.md\nSob demanda: AI.md, TESTS.md"]
     IdentifyType -->|Document Audit| Audit["Imediato: MANIFEST.md + AUDIT.md\nSob demanda: skill:governance-validator,\nwiki/index.md, changelogs/"]
     IdentifyType -->|PR / Code Review| PR["Imediato: AGENTS.md §Code Review\nSob demanda: refactoring-guide/17,\nPLANNING.md (risk gates)"]
@@ -89,7 +89,7 @@ Toda alteração em arquivo versionado deve ser registrada em `changelogs/Vx.y.z
 
 #### 3. Memória técnica incremental
 
-A pasta `wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, índice, log, links internos, estados de confiança e lint periódico.
+A pasta `wiki/` segue o padrão LLM Wiki: fontes brutas, páginas sintetizadas, índice, log, links internos, estados de confiança, lint periódico e curadoria contínua via `wiki-curator`.
 
 > **Portabilidade e Reuso:** O conhecimento acumulado na `wiki/` (padrões, decisões, troubleshooting) pode e deve ser portado e reutilizado em novos projetos para acelerar o desenvolvimento assistido por IA e manter a consistência técnica entre diferentes aplicações.
 
@@ -117,7 +117,7 @@ Novas skills e perfis de agente só podem ser criados via `agent-factory`, com m
 
 Journals de agentes devem usar `wiki/agents/<agent_name>_journal.md` para manter a memoria operacional centralizada.
 
-Habilidades ativas: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
+Habilidades ativas: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-curator`, `wiki-lint`.
 
 ### Estrutura De Diretórios
 
@@ -145,7 +145,7 @@ Para maximizar a transparência de custos de chamadas de APIs de LLMs, o framewo
 | **Self-Improvement de Skill/Agente** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5.500 tokens | **~1.200 tokens** | **-78%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2.500 tokens | **~600 tokens** | **-76%** |
 | **Briefing / Instanciação** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
-| **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` | ~5.500 tokens | **~1.300 tokens** | **-76%** |
+| **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` + `skill:wiki-curator` (JIT) | ~5.800 tokens | **~1.300 tokens** | **-78%** |
 | **Security / Data** | `AGENTS.md` + `SECURITY.md` + `DATA.md` | ~6.000 tokens | **~1.400 tokens** | **-77%** |
 | **Document Audit** | `AGENTS.md` + `MANIFEST.md` + `AUDIT.md` | ~6.000 tokens | **~1.400 tokens** | **-77%** |
 | **PR / Code Review** | `AGENTS.md §Code Review` + (se refatoração) `refactoring-guide/17` | ~4.000 tokens | **~1.000 tokens** | **-75%** |
@@ -219,7 +219,7 @@ graph TD
     IdentifyType -->|Release| Release["Immediate: skill:release-checklist\nOn demand: VERSIONING.md,\nAUDIT.md, RELEASE.md"]
     IdentifyType -->|Briefing / Instantiation| Briefing["Immediate: INSTANTIATION.md\n+ BRIEFING.md\nOn demand: skill:project-instantiation,\nMANIFEST.md, STACK.md"]
     IdentifyType -->|Retroactive Inst.| Retro["Immediate: RETROACTIVE_INSTANTIATION.md\n+ INSTANTIATION.md\nOn demand: CONTEXT_MAP.md"]
-    IdentifyType -->|Wiki / Knowledge| Wiki["Immediate: wiki/schema.md\n+ wiki/index.md\nOn demand: skill:wiki-lint, wiki/log.md"]
+    IdentifyType -->|Wiki / Knowledge| Wiki["Immediate: wiki/schema.md\n+ wiki/index.md\nOn demand: skill:wiki-curator,\nskill:wiki-lint, wiki/log.md"]
     IdentifyType -->|Security / Data| Security["Immediate: SECURITY.md + DATA.md\nOn demand: AI.md, TESTS.md"]
     IdentifyType -->|Document Audit| Audit["Immediate: MANIFEST.md + AUDIT.md\nOn demand: skill:governance-validator,\nwiki/index.md, changelogs/"]
     IdentifyType -->|PR / Code Review| PR["Immediate: AGENTS.md §Code Review\nOn demand: refactoring-guide/17,\nPLANNING.md (risk gates)"]
@@ -261,7 +261,7 @@ Every change in a versioned file must be recorded in `changelogs/Vx.y.z.md`, wit
 
 #### 3. Incremental Technical Memory
 
-The `wiki/` folder follows the LLM Wiki standard: raw sources, synthesized pages, index, log, internal links, confidence states, and periodic linting.
+The `wiki/` folder follows the LLM Wiki standard: raw sources, synthesized pages, index, log, internal links, confidence states, periodic linting, and continuous curation through `wiki-curator`.
 
 > **Portability and Reuse:** The knowledge accumulated in the `wiki/` (patterns, decisions, troubleshooting) can and should be ported and reused in new projects to accelerate AI-assisted development and maintain technical consistency across different applications.
 
@@ -289,7 +289,7 @@ New skills and agent profiles can only be created through `agent-factory`, with 
 
 Agent journals must use `wiki/agents/<agent_name>_journal.md` to keep operational memory centralized.
 
-Active skills: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-lint`.
+Active skills: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes`, `agnix-linter`, `aicc-compact`, `anti-monolith-guard`, `brainstorming-and-tdd`, `code-hygiene-refactor`, `git-conventional-commits`, `governance-validator`, `memory-rotation`, `obsidian-markdown`, `orchestrator`, `project-instantiation`, `release-checklist`, `retroactive-instantiation`, `self-improvement`, `systematic-debugging`, `wiki-curator`, `wiki-lint`.
 
 ### Directory Structure
 
@@ -317,7 +317,7 @@ To maximize transparency and API call cost-efficiency with LLMs, the framework m
 | **Skill/Agent Self-Improvement** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5,500 tokens | **~1,200 tokens** | **-78%** |
 | **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` (JIT) | ~2,500 tokens | **~600 tokens** | **-76%** |
 | **Briefing / Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
-| **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` | ~5,500 tokens | **~1,300 tokens** | **-76%** |
+| **Wiki / Knowledge** | `AGENTS.md` + `wiki/schema.md` + `wiki/index.md` + `skill:wiki-curator` (JIT) | ~5,800 tokens | **~1,300 tokens** | **-78%** |
 | **Security / Data** | `AGENTS.md` + `SECURITY.md` + `DATA.md` | ~6,000 tokens | **~1,400 tokens** | **-77%** |
 | **Document Audit** | `AGENTS.md` + `MANIFEST.md` + `AUDIT.md` | ~6,000 tokens | **~1,400 tokens** | **-77%** |
 | **PR / Code Review** | `AGENTS.md §Code Review` + (if refactoring) `refactoring-guide/17` | ~4,000 tokens | **~1,000 tokens** | **-75%** |

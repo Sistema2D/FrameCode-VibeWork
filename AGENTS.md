@@ -39,7 +39,7 @@ Load only the documents relevant to the session context. This `AGENTS.md` file i
 | Skill / agent self-improvement | `AGENTS.md`, `FCVW/AI.md`, `FCVW/PLANNING.md`, `FCVW/AUDIT.md`, `FCVW/skills/self-improvement/SKILL.md` |
 | Release | `AGENTS.md`, `FCVW/skills/release-checklist/SKILL.md`, `FCVW/VERSIONING.md` (on demand) |
 | Security / data | `AGENTS.md`, `FCVW/SECURITY.md`, `FCVW/DATA.md`, `FCVW/ENVIRONMENT.md` |
-| AI / RAG / wiki | `AGENTS.md`, `FCVW/AI.md`, `FCVW/wiki/schema.md` |
+| AI / RAG / wiki | `AGENTS.md`, `FCVW/AI.md`, `FCVW/wiki/schema.md`, `FCVW/skills/wiki-curator/SKILL.md` (for curation tasks) |
 | Document audit | `AGENTS.md`, `FCVW/MANIFEST.md`, `FCVW/AUDIT.md` |
 | Starting a new project | `AGENTS.md`, `FCVW/INSTANTIATION.md`, `FCVW/BRIEFING.md`, `FCVW/MANIFEST.md` |
 | Retroactive instantiation / migration | `AGENTS.md`, `FCVW/RETROACTIVE_INSTANTIATION.md`, `FCVW/INSTANTIATION.md`, `FCVW/CONTEXT_MAP.md` |
@@ -97,6 +97,7 @@ Detailed rules are in the domain documents. Summary of responsibility:
 - **Anti-monolith and code hygiene**: before creating or extending large modules, components, routes, services, prompts, or catch-all utility files, load `FCVW/skills/anti-monolith-guard/SKILL.md`. When duplication, stale files, dead code, repeated snippets, or retroactive cleanup are involved, load `FCVW/skills/code-hygiene-refactor/SKILL.md`. If a gate fails, split the plan before editing.
 - **Agent/skill factory**: do not create new skills, agent profiles, specialist personas, or command packs by convenience. Load `FCVW/skills/agent-factory/SKILL.md`, prove recurrence, coverage gap, token/risk ROI, narrow scope, and validation before adding the asset.
 - **Skill/agent self-improvement**: do not adjust existing skills or agent profiles for style-only preferences. Load `FCVW/skills/self-improvement/SKILL.md` and record evidence, metric passed, scope preservation, and validation replay before editing any skill/profile.
+- **Wiki continuous learning**: when knowledge must be promoted, revised, grouped, tagged, linked, or scheduled for review, load `FCVW/skills/wiki-curator/SKILL.md`. Use the fixed optimized curation mode; do not expose customizable cost modes.
 - **Documentation**: plans go in `FCVW/Plans/{status}`; `AGENTS.md` must be updated when new official documents are created; templates in `FCVW/governance/` follow structural changes of the VibeWork FrameCode.
 - **Application module documentation**: when a change affects relevant pages, screens, modules, components, flows, or business rules in a downstream application, consult `FCVW/APPLICATION_DOCUMENTATION.md` and update the application-owned documentation path defined there.
 - **Agent journals**: agent-specific journals must live under `FCVW/wiki/agents/<agent_name>_journal.md`; do not create competing journal paths.
@@ -134,7 +135,7 @@ Before executing a request that might modify files:
 - for release, consult `FCVW/RELEASE.md`;
 - for security, consult `FCVW/SECURITY.md`;
 - for persistence, consult `FCVW/DATA.md`;
-- for AI, RAG, memory, or continuous learning, consult `FCVW/AI.md` and `FCVW/wiki/schema.md`;
+- for AI, RAG, memory, or continuous learning, consult `FCVW/AI.md`, `FCVW/wiki/schema.md`, and `FCVW/skills/wiki-curator/SKILL.md` when wiki curation, knowledge promotion, grouping, tagging, thematic colors, or review metrics are involved;
 - for refactoring, consult `FCVW/REFACTORING.md`;
 - for architectural decisions, consult `FCVW/ARCHITECTURAL_DECISIONS.md`;
 - for auditing or release closure, consult `FCVW/AUDIT.md`;

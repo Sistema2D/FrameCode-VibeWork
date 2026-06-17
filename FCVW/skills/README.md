@@ -25,6 +25,7 @@ A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do frame
 | **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | formatação wiki, wikilinks, frontmatter, notas Obsidian | Padroniza formatação e conexões semânticas da LLM Wiki |
 | **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publicar versão | Padroniza mensagens de commit, tags semânticas e notas de release |
 | **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, auditoria wiki, orphan pages, frontmatter inválido | Valida integridade estrutural da wiki |
+| **wiki-curator** | [`skills/wiki-curator/SKILL.md`](wiki-curator/SKILL.md) | curadoria wiki, agrupar notas, continuous learning, frontmatter colors | Promove, revisa, agrupa e etiqueta conhecimento da wiki em modo fixo otimizado |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, changelog, publicar versão, bump de versão, notas de versão | Checklist condensado de release |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, concluir turno, finalizar sessão | Automatiza e compacta a síntese de sessão AICC para evitar inchaço de tokens |
 | **anti-monolith-guard** | [`skills/anti-monolith-guard/SKILL.md`](anti-monolith-guard/SKILL.md) | monolith, monolito, large file, new module, module boundary | Bloqueia arquivos e módulos com responsabilidades misturadas antes da edição |
@@ -64,6 +65,7 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 | **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | wiki formatting, wikilinks, frontmatter, Obsidian notes | Standardizes LLM Wiki formatting and semantic connections |
 | **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publish version | Standardizes commit messages, semantic tags, and release notes |
 | **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, wiki audit, orphan pages, broken links, invalid frontmatter | Validates wiki structural integrity |
+| **wiki-curator** | [`skills/wiki-curator/SKILL.md`](wiki-curator/SKILL.md) | curate wiki, continuous learning, group notes, frontmatter colors | Promotes, revises, clusters, and tags wiki knowledge in fixed optimized mode |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, changelog, publicar versão | Condensed release checklist |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, close session, consolidate shift | Standardizes AICC context compression |
 | **anti-monolith-guard** | [`skills/anti-monolith-guard/SKILL.md`](anti-monolith-guard/SKILL.md) | monolith, large file, new module, module boundary | Blocks mixed-responsibility artifacts before implementation |

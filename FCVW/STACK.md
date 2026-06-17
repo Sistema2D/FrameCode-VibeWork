@@ -3,7 +3,7 @@
 ## Application
 
 - Name: `FrameCode VibeWork`
-- Current version: `V0.10.3`
+- Current version: `V0.11.0`
 - Type: `framework / governance template`
 - Target platform: `cross-platform (Windows / Linux / macOS)`
 - Objective: `Document-based governance framework for AI-assisted application development with session context compression and on-demand skills engine.`
@@ -25,7 +25,7 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 - AI roles: `Plan author, implementer, wiki curator, session synthesizer, skill executor`
 - Context compression: `AICC — AI Interaction Context Compression (wiki/sessions/S*.md)`
 - Skills engine: `ASE — AI Skills Engine (skills/*.md, loaded JIT)`
-- Continuous learning: `LLM Wiki Ingest/Query/Lint cycle (wiki/schema.md)`
+- Continuous learning: `LLM Wiki Ingest/Query/Curate/Lint cycle (wiki/schema.md, skills/wiki-curator/SKILL.md)`
 - Agent journals: `wiki/agents/<agent_name>_journal.md`
 
 ## Knowledge Base / Wiki
@@ -56,6 +56,7 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 | `project-instantiation` | `skills/project-instantiation/SKILL.md` | bootstrap, new project, instantiate, initialize |
 | `retroactive-instantiation` | `skills/retroactive-instantiation/SKILL.md` | retroactive instantiation, existing app, legacy app |
 | `self-improvement` | `skills/self-improvement/SKILL.md` | improve skill, improve agent, skill failed, gatilho falhou |
+| `wiki-curator` | `skills/wiki-curator/SKILL.md` | curate wiki, continuous learning, agrupar notas, frontmatter colors |
 | `wiki-lint` | `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages |
 | `release-checklist` | `skills/release-checklist/SKILL.md` | release, publish, version bump, changelog, publicar versão |
 | `systematic-debugging` | `skills/systematic-debugging/SKILL.md` | debugging, fixing an error, tracking down a bug |

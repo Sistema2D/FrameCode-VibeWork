@@ -32,6 +32,7 @@ Items:
 - anti-monolith and code hygiene gates present when plans create or expand non-trivial modules;
 - agent/skill creation gates present when plans add new skills, agent profiles, specialist roles, or reusable operational procedures;
 - self-improvement gates present when plans modify skills, agent profiles, triggers, or agent operating rules;
+- wiki-curation evidence present when plans promote, revise, group, retag, or schedule wiki knowledge;
 - no plan closes with unresolved duplication, stale files, or dead-code cleanup claims without evidence or deferral;
 - absence of contradictory instructions;
 - updated templates.
@@ -112,6 +113,7 @@ Items:
 - retrieved context;
 - boundaries of action;
 - memory and learning;
+- wiki curation cost mode, taxonomy, freshness metrics, and source coverage;
 - sensitive data;
 - conflicting instructions.
 
@@ -134,6 +136,7 @@ Items:
 - [ ] Plans that created skills, agent profiles, command packs, or reusable operational procedures recorded recurrence, coverage gap, token/risk ROI, scope boundary, and validation task.
 - [ ] Plans that changed skills, agent profiles, triggers, or agent operating rules recorded failure/drift evidence, metric passed, scope preservation, token/risk ROI, and validation replay.
 - [ ] `skills/README.md`, `CONTEXT_MAP.md`, and `STACK.md` list every active skill/profile exactly once.
+- [ ] Wiki curation changes use `skills/wiki-curator/SKILL.md`, `wiki/taxonomy.md`, and `wiki/metrics.md` when tags, themes, grouping, freshness, or promotion are affected.
 - [ ] No new agent or skill is persona-only, style-only, broader than its trigger family, or overlapping another asset by more than 50%.
 - [ ] `R4` and `R5` plans include rollback and expanded validation, and `R5` plans record explicit human approval.
 - [ ] High-risk low-priority plans were postponed, decomposed, discontinued, or explicitly justified.
@@ -147,7 +150,7 @@ Items:
 - [ ] `SECURITY.md` reflects security changes.
 - [ ] `AI.md` reflects AI changes.
 - [ ] `TESTS.md` was used for validation compatible with risk.
-- [ ] The governance wiki was updated when the audit generated reusable learning.
+- [ ] The governance wiki was updated when the audit generated reusable learning, and `wiki/index.md` / `wiki/log.md` were synchronized.
 - [ ] There are no temporary files being used as official source.
 
 ## Quick Audit Checklist for AI Agents

@@ -14,6 +14,8 @@ wiki/
 ├── schema.md
 ├── index.md
 ├── log.md
+├── taxonomy.md
+├── metrics.md
 ├── inbox/
 ├── raw/
 ├── sources/
@@ -57,6 +59,7 @@ Use the minimum template defined in the **Mandatory Frontmatter** section. Do no
 | Audits | `audits/` | Recurring findings and patterns derived from reports in `audits/` |
 | Agents | `agents/` | Agent-specific journals named `<agent_name>_journal.md` |
 | Releases | `releases/` | Syntheses of published versions |
+| Sessions | `sessions/` | AICC session syntheses and chronological handoffs |
 | Components | `components/` | Modules, screens, services, and responsibilities |
 | Prompts | `prompts/` | Useful, tested, or recommended prompts |
 | Questions | `questions/` | Open questions and hypotheses to investigate |
@@ -73,7 +76,7 @@ Minimum template:
 ```yaml
 ---
 title: "<page title>"
-type: "concept | decision | pattern | failure | refactoring | audit | agent | release | component | prompt | question | synthesis | source | raw"
+type: "concept | decision | pattern | failure | refactoring | audit | agent | release | session | component | prompt | question | synthesis | source | raw"
 status: "draft | in_validation | validated | obsolete | superseded | contradictory"
 confidence: "low | medium | high"
 last_reviewed: "YYYY-MM-DD"
@@ -84,6 +87,23 @@ tags:
   - "<tag>"
 ---
 ```
+
+Optional curation fields:
+
+```yaml
+theme: "planning-governance | release-governance | knowledge-governance | ai-operations | quality-validation | security-data | design-ux | refactoring-hygiene | environment-deploy | project-instantiation"
+theme_color: "blue | indigo | teal | violet | green | red | amber | orange | slate | cyan"
+next_review: "YYYY-MM-DD"
+review_cadence: "none | monthly | quarterly | semiannual | annual"
+canonical_page: "wiki/<folder>/<page>.md"
+supersedes:
+  - "wiki/<folder>/<older-page>.md"
+superseded_by: "wiki/<folder>/<newer-page>.md"
+related_pages:
+  - "wiki/<folder>/<related-page>.md"
+```
+
+Use optional fields for curated pages when they improve grouping, freshness tracking, or visualization. Canonical values are defined in `taxonomy.md`; freshness targets are defined in `metrics.md`.
 
 ---
 
@@ -146,6 +166,7 @@ Content should be promoted to the wiki when it meets at least one criterion:
 - The open question guides future decisions.
 - The synthesis reduces rework in next interactions.
 - The knowledge improves the AI's ability to act in the project.
+- A release, troubleshooting record, audit, or session creates knowledge that should be connected to existing wiki topics.
 
 Pontuais, trivial, or non-reusable content should remain only in original records.
 
@@ -285,6 +306,8 @@ The lint must verify:
 - lack of update in `index.md`;
 - lack of record in `log.md`.
 
+For continuous curation tasks that go beyond structural linting, use `skills/wiki-curator/SKILL.md`.
+
 ---
 
 ## 14. Contradictions Policy
@@ -314,7 +337,7 @@ When a page no longer represents the current state:
 
 ## 16. Use by AI Agents
 
-The wiki implements three main operations: **Ingest**, **Query**, and **Lint**. Consult the corresponding section for each situation.
+The wiki implements four main operations: **Ingest**, **Query**, **Curate**, and **Lint**. Consult the corresponding section for each situation.
 
 Before executing relevant actions, the AI must consult:
 
@@ -327,6 +350,10 @@ Before executing relevant actions, the AI must consult:
 After executing an action that generates reusable learning, the AI must evaluate whether to update the wiki.
 
 The AI must not claim it has consulted, validated, or updated the wiki if this has not been done.
+
+### Standard Optimized Curation Mode
+
+Wiki curation uses one fixed optimized mode, not customizable modes. The agent should load `wiki/index.md`, `wiki/log.md`, `wiki/schema.md`, `wiki/taxonomy.md`, `wiki/metrics.md`, and only the source records that directly triggered the curation. Broad wiki crawls are reserved for `wiki-lint` findings or explicit user requests.
 
 ---
 
@@ -349,3 +376,28 @@ Query is the flow of answering questions using the wiki as a primary source befo
 - Open questions that cannot be answered with available sources must go to `wiki/questions/`.
 - Record the query event in `log.md` when it generates a new page or updates an existing one.
 - Do not fabricate information when the wiki lacks sufficient source; explicitly state the gap.
+
+---
+
+## 18. Curate Operation
+
+Curate is the flow of continuously improving wiki knowledge after plans, releases, troubleshooting, audits, decisions, grouped notes, or explicit wiki-maintenance requests.
+
+### Workflow
+
+1. Load `skills/wiki-curator/SKILL.md`.
+2. Identify source records that triggered curation.
+3. Search `wiki/index.md` and targeted pages for an existing canonical topic.
+4. Update, merge, supersede, or create pages according to the promotion rule.
+5. Apply tags, `theme`, `theme_color`, review cadence, and related links using `taxonomy.md`.
+6. Update curation metrics using `metrics.md`.
+7. Update `wiki/index.md` and append a compact event to `wiki/log.md`.
+8. Run `wiki-lint` when required by release type or page-count threshold.
+
+### Rules
+
+- Prefer page updates over duplicate pages.
+- Preserve raw sources.
+- Do not bulk-retag historical pages without a substantive reason.
+- Use `superseded_by`, `supersedes`, or `canonical_page` for overlapping notes.
+- Record remaining gaps instead of expanding the read scope beyond the fixed optimized mode.
