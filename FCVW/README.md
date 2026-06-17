@@ -1,6 +1,6 @@
 # FrameCode VibeWork Framework
 
-Current framework version: `V0.10.2`
+Current framework version: `V0.10.3`
 
 *Select Language / Selecione o Idioma:*
 - [Português](#português)

@@ -81,6 +81,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |-- Plans/
 |   |   |-- completed/
 |   |   |   |-- P1-R4-2026-06-11-service-research-mandate.md
+|   |   |   |-- P2-R1-2026-06-17-v0103-github-release-publication.md
 |   |   |   |-- P2-R2-2026-06-17-v0103-release-governance-jit-fixes.md
 |   |   |   |-- P2-R3-2026-06-11-environment-promotion-workflow.md
 |   |   |   |-- P2-R3-2026-06-11-pr-branch-workflow.md

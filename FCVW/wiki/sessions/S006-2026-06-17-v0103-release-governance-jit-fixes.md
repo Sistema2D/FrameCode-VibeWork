@@ -69,9 +69,8 @@ Patch session created after V0.10.2 review found release-governance inconsistenc
 ## Residual Risks
 
 - No scripts or automated linters were introduced by design.
-- GitHub Release/tag publication was not performed; marked `not_applicable`.
+- GitHub Release/tag publication was requested after PR #35 merge and tracked in `Plans/completed/P2-R1-2026-06-17-v0103-github-release-publication.md`.
 
 ## Next Steps
 
-- Merge PR #35 after final diff and validation checks pass.
-- After merge, optionally create a GitHub Release/tag if the project decides to publish external release artifacts.
+- PR #35 merged and GitHub Release `v0.10.3` prepared for publication.

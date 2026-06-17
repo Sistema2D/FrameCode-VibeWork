@@ -53,7 +53,7 @@ Clean distributions should use `Template limpo/` as the empty baseline when gene
   - `wiki/log.md`
 - Pages obsolete: none.
 - Result: governance release flow and skill activation coverage improved without adding scripts or runtime dependencies.
-- Gaps: GitHub Release/tag was not published; changelog records `GitHub Release Status: not_applicable`.
+- Gaps: none material; GitHub Release/tag publication is tracked in `Plans/completed/P2-R1-2026-06-17-v0103-github-release-publication.md`.
 
 ## [2026-06-14 10:30] audit | Final compliance QA
 
