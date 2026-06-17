@@ -1,10 +1,10 @@
 # Governance Validator
 
-*Activation Triggers:* validate governance, verify filesystem, check document integrity, pre-audit check, structural audit
+*Activation Triggers:* validate governance, verify filesystem, check document integrity, pre-audit check, structural audit, validar governança, verificar filesystem, integridade documental, pré-auditoria, auditoria estrutural
 
 ## Purpose
 
-Validate two critical governance invariants using only manual AI-driven inspection — no scripts, no automation. Loaded on-demand before releases, structural audits, or when discrepancies are suspected.
+Validate critical governance invariants using only manual AI-driven inspection — no scripts, no automation. Loaded on-demand before releases, structural audits, or when discrepancies are suspected.
 
 ## Validation 1 — FILESYSTEM.md Accuracy
 
@@ -61,6 +61,15 @@ Verify that all governance documents are internally consistent and structurally 
 - [ ] **AGENTS.md references**: Every `FCVW/` document referenced in `AGENTS.md` (selective loading table, operational rules, checklist) exists and has not been renamed.
 - [ ] **CONTEXT_MAP.md accuracy**: Session types listed match the actual operational documents.
 
+#### Plan State Coherence
+
+- [ ] Every plan in `FCVW/Plans/pending/` has internal field `Status: pending`.
+- [ ] Every plan in `FCVW/Plans/in_progress/` has internal field `Status: in_progress`.
+- [ ] Every plan in `FCVW/Plans/completed/` has internal field `Status: completed`.
+- [ ] Every plan in `FCVW/Plans/discontinued/` has internal field `Status: discontinued`.
+- [ ] A completed plan has a `Completion Date`, validation evidence, and a corresponding changelog entry unless explicitly justified.
+- [ ] A plan cited by a published changelog exists and is not still marked `pending` or `in_progress`.
+
 #### Table & Format Integrity
 
 - [ ] No broken markdown tables (uneven column counts, missing separators).
@@ -70,7 +79,7 @@ Verify that all governance documents are internally consistent and structurally 
 ### Correction Protocol
 
 For each issue found:
-1. Fix the broken link, frontmatter, or reference directly.
+1. Fix the broken link, frontmatter, plan status, or reference directly.
 2. If a document was renamed, update all cross-references.
 3. If a file is orphaned (no longer referenced), either add it to the appropriate index or deprecate it.
 4. Record all corrections in the active plan and changelog.
@@ -80,9 +89,11 @@ For each issue found:
 ## Token Optimization Note
 
 Use instead of loading FILESYSTEM.md + AUDIT.md + TESTS.md for validation checks. Load on-demand only when:
+
 - Preparing a release (`skill:release-checklist` is already the primary)
 - Running a structural audit (`skill:agnix-linter` covers formatting)
 - Suspicion of FILESYSTEM.md drift
 - Before closing a plan that alters directory structure
+- Verifying that plan status fields match their `Plans/{status}` directories
 
 Do not load this skill during routine development work.
