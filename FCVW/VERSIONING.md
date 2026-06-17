@@ -1,6 +1,6 @@
 # Versioning and Changelogs
 
-> **Current version: `V0.10.2`** - see [`changelogs/V0.10.2.md`](changelogs/V0.10.2.md)
+> **Current version: `V0.10.3`** - see [`changelogs/V0.10.3.md`](changelogs/V0.10.3.md)
 
 This document defines the versioning, release, and changelog rules of the application.
 
@@ -82,6 +82,8 @@ The file must be created or updated before closing the plan.
 
 No version should be considered completed without a corresponding changelog.
 
+The `release-checklist` skill must be loaded whenever a task creates or edits `changelogs/Vx.y.z.md`, bumps a version field, marks a changelog as `published`, prepares a tag, or publishes a GitHub release.
+
 ## Naming Pattern
 
 ```text
@@ -106,6 +108,10 @@ YYYY-MM-DD
 ## Release Status
 
 `in_preparation`
+
+## GitHub Release Status
+
+`not_applicable | pending | published`
 
 ## Release Type
 
@@ -175,6 +181,16 @@ YYYY-MM-DD
 - `published`: release completed and recorded as official version.
 - `canceled`: release planned, but not published.
 
+## GitHub Release Status
+
+Use this field to avoid ambiguity between a formal changelog publication and an external GitHub Release/tag publication:
+
+- `not_applicable`: the changelog is published, but no GitHub Release/tag was required or performed.
+- `pending`: the GitHub Release/tag is expected but not yet completed.
+- `published`: the GitHub Release/tag was created and verified.
+
+Do not mark GitHub release status as `published` without evidence of tag/release creation.
+
 ## Release Types
 
 - `major`: increment of `x`.
@@ -188,12 +204,14 @@ Each relevant changelog item must point to one or more plans in `Plans/`.
 - Completed plans must be cited by filename.
 - In-progress plans must not be treated as completed.
 - Discontinued plans only enter the changelog if they affected decisions, files, or scope.
+- The plan's internal **Status** field must match the directory where the plan resides.
 
 ## Criteria to Publish a Version
 
 A version can only be marked as `published` when:
 
 - all included plans are in `Plans/completed/`;
+- all included plans have internal `Status: completed`;
 - the changelog exists and lists created, modified, and removed items;
 - the validation defined in the plans has been executed or the limitation is documented;
 - version references in code, documentation, and build are coherent;
@@ -209,6 +227,8 @@ When a release alters code, persisted data, build, migration, or API contracts, 
 - Does the `changelogs/Vx.y.z.md` file exist?
 - Does the filename correspond to the **Version** field?
 - Do all cited plans exist and reside in `Plans/completed/`?
+- Do all cited completed plans have internal `Status: completed`?
 - Were created, modified, and removed files listed?
 - Were justifications and validations recorded?
 - Are known gaps explicit?
+- Is `GitHub Release Status` present and accurate?
