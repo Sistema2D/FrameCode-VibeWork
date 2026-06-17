@@ -1,7 +1,7 @@
 ---
 name: "self-improvement"
-version: "1.0.0"
-trigger_keywords: ["self improvement", "improve skill", "improve agent", "adjust skill", "adjust agent", "skill failed", "agent failed", "melhorar skill", "melhorar agente", "auto melhoria"]
+version: "1.0.1"
+trigger_keywords: ["self improvement", "improve skill", "improve agent", "adjust skill", "adjust agent", "adjust trigger", "trigger failed", "skill failed", "agent failed", "prompt improvement", "ambiguous rule", "melhorar skill", "melhorar agente", "ajuste de gatilho", "gatilho falhou", "skill não acionou", "agente não acionou", "auto melhoria", "melhoria de prompt", "regra ambígua"]
 session_types: ["ai_governance", "document_audit", "maintenance", "refactoring"]
 ---
 
@@ -13,13 +13,14 @@ Control updates to existing skills and agent profiles so the framework improves 
 
 ## Activation Triggers
 
-Load this skill before changing any `skills/*/SKILL.md`, agent profile, skill catalog, or agent-specific operating rule when:
+Load this skill before changing any `skills/*/SKILL.md`, agent profile, skill catalog, trigger list, or agent-specific operating rule when:
 
-- a skill or agent failed, was ambiguous, or produced avoidable rework;
+- a skill or agent failed, was ambiguous, did not activate, or produced avoidable rework;
 - two or more sessions repeated the same clarification or mistake;
 - a validation gap allowed hallucination, duplication, monolith creation, unsafe cleanup, or context loss;
 - a new framework rule makes an existing skill incomplete or contradictory;
-- a proposed edit claims token savings, better triggers, or safer execution for existing assets.
+- a proposed edit claims token savings, better triggers, or safer execution for existing assets;
+- the task uses Portuguese equivalents such as melhorar skill, melhorar agente, ajuste de gatilho, gatilho falhou, skill não acionou, agente não acionou, auto melhoria, melhoria de prompt, or regra ambígua.
 
 ## Improvement Gate
 

@@ -1,7 +1,7 @@
 ---
 name: "agent-hephaestus"
-version: "1.1.0"
-trigger_keywords: ["ux polish", "accessibility fix", "improve ui", "visual consistency", "interaction clarity", "microcopy"]
+version: "1.1.1"
+trigger_keywords: ["ux polish", "accessibility fix", "improve ui", "visual consistency", "interaction clarity", "microcopy", "semantic HTML", "keyboard flow", "focus state", "labels", "empty states", "UI", "interface", "polir UI", "refinar interface", "consistência visual", "acessibilidade", "contraste", "foco", "navegação por teclado", "estados vazios", "estado de erro", "labels"]
 session_types: ["ui", "accessibility", "maintenance"]
 ---
 
@@ -13,7 +13,7 @@ UX/UI-focused agent profile for one small, safe, high-value accessibility, usabi
 
 ## Activation Triggers
 
-Load when the task involves UX polish, accessibility, semantic HTML, keyboard flow, focus state, labels, empty states, interaction clarity, visual consistency, or UI microcopy.
+Load when the task involves UX polish, accessibility, semantic HTML, keyboard flow, focus state, labels, empty states, interaction clarity, visual consistency, UI microcopy, or the Portuguese equivalents: UI, interface, polir UI, refinar interface, consistência visual, acessibilidade, contraste, foco, navegação por teclado, estados vazios, estado de erro, labels, or microcopy.
 
 ## Mission
 

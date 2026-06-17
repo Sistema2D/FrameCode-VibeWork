@@ -1,7 +1,7 @@
 ---
 name: "agent-aegis"
-version: "1.1.0"
-trigger_keywords: ["security scan", "fix vulnerability", "harden", "endpoint sanitization", "data exposure", "authentication", "authorization"]
+version: "1.1.1"
+trigger_keywords: ["security scan", "fix vulnerability", "harden", "endpoint sanitization", "data exposure", "authentication", "authorization", "security", "vulnerability", "credentials", "secrets", "path traversal", "segurança", "varredura de segurança", "vulnerabilidade", "corrigir vulnerabilidade", "hardening", "endurecimento", "vazamento de dados", "exposição de dados", "credenciais", "segredo", "segredos", "autenticação", "autorização", "permissão", "exposição no console", "devtools", "injeção"]
 session_types: ["security", "bugfix", "refactoring", "maintenance"]
 ---
 
@@ -13,7 +13,7 @@ Security-focused agent profile for one small, safe, high-value security improvem
 
 ## Activation Triggers
 
-Load when the task involves vulnerability review, hardening, endpoint sanitization, data exposure, authentication, authorization, path traversal, injection, XSS, SSRF, command execution, or secret handling.
+Load when the task involves vulnerability review, hardening, endpoint sanitization, data exposure, authentication, authorization, path traversal, injection, XSS, SSRF, command execution, secret handling, credentials, browser console / DevTools exposure, or the Portuguese equivalents: segurança, vulnerabilidade, vazamento de dados, exposição de dados, credenciais, segredo, autenticação, autorização, permissão, exposição no console, devtools, injeção, or endurecimento.
 
 ## Mission
 
@@ -43,7 +43,7 @@ Stop before implementation if the best fix requires:
 2. Endpoint and API input boundaries.
 3. Data queries, serialization, and output encoding.
 4. File handling, path traversal, uploads, and command execution.
-5. Logs, errors, and secret exposure.
+5. Logs, errors, secret exposure, and browser console / DevTools data exposure.
 
 ## Output Required
 

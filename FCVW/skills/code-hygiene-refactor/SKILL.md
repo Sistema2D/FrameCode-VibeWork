@@ -1,7 +1,7 @@
 ---
 name: "code-hygiene-refactor"
-version: "1.0.0"
-trigger_keywords: ["code hygiene", "higiene de codigo", "cleanup", "deduplicate", "duplication", "duplicate code", "dead code", "unused files", "stale files", "refactor actively", "retroactive cleanup", "technical debt"]
+version: "1.0.1"
+trigger_keywords: ["code hygiene", "higiene de codigo", "higiene de código", "cleanup", "limpeza", "deduplicate", "duplication", "duplicação", "duplicate code", "código duplicado", "dead code", "código morto", "unused files", "stale files", "arquivo obsoleto", "arquivo morto", "refactor actively", "refatoração", "retroactive cleanup", "technical debt", "dívida técnica", "monolith", "monolito", "sobras de implementação"]
 session_types: ["refactoring", "retroactive_instantiation", "document_audit", "maintenance"]
 ---
 
@@ -15,7 +15,7 @@ Drive active cleanup of duplication, stale files, unnecessary code, oversized mo
 
 Load this skill when:
 
-- a user reports duplication, monoliths, repeated snippets, stale files, or unnecessary files;
+- a user reports duplication, monoliths, repeated snippets, stale files, unnecessary files, dead code, technical debt, cleanup, or the Portuguese equivalents: higiene de código, limpeza, duplicação, código duplicado, arquivo obsoleto, arquivo morto, código morto, refatoração, dívida técnica, monolito, or sobras de implementação;
 - retroactive instantiation is applied to an existing project;
 - a file is large, low-cohesion, or repeatedly changed;
 - a plan touches code with known `#tech-debt`;

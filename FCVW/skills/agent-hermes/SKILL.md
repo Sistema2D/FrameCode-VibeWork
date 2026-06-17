@@ -1,7 +1,7 @@
 ---
 name: "agent-hermes"
-version: "1.1.0"
-trigger_keywords: ["performance", "optimize", "bottleneck", "latency", "bundle", "runtime efficiency", "caching"]
+version: "1.1.1"
+trigger_keywords: ["performance", "optimize", "optimization", "bottleneck", "latency", "bundle", "runtime efficiency", "caching", "slow startup", "desempenho", "otimizar", "otimização", "lentidão", "gargalo", "tempo de carregamento", "latência", "cache", "inicialização lenta"]
 session_types: ["performance", "maintenance", "refactoring"]
 ---
 
@@ -13,7 +13,7 @@ Performance-focused agent profile for one small, safe, measurable optimization. 
 
 ## Activation Triggers
 
-Load when the task involves measurable bottlenecks, runtime efficiency, bundle size, caching, latency, repeated expensive work, slow startup, or performance regressions.
+Load when the task involves measurable bottlenecks, runtime efficiency, bundle size, caching, latency, repeated expensive work, slow startup, performance regressions, or the Portuguese equivalents: desempenho, otimizar, otimização, lentidão, gargalo, tempo de carregamento, latência, cache, bundle, or inicialização lenta.
 
 ## Mission
 

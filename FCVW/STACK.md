@@ -3,7 +3,7 @@
 ## Application
 
 - Name: `FrameCode VibeWork`
-- Current version: `V0.10.2`
+- Current version: `V0.10.3`
 - Type: `framework / governance template`
 - Target platform: `cross-platform (Windows / Linux / macOS)`
 - Objective: `Document-based governance framework for AI-assisted application development with session context compression and on-demand skills engine.`
@@ -39,25 +39,25 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 
 | Skill | Path | Trigger |
 |---|---|---|
-| `agent-aegis` | `skills/agent-aegis/SKILL.md` | security scan, fix vulnerability, harden |
+| `agent-aegis` | `skills/agent-aegis/SKILL.md` | security scan, vulnerability, harden, segurança, vazamento de dados |
 | `agent-factory` | `skills/agent-factory/SKILL.md` | create skill, create agent, specialized agent |
-| `agent-hephaestus` | `skills/agent-hephaestus/SKILL.md` | ux polish, accessibility fix, improve ui |
-| `agent-hermes` | `skills/agent-hermes/SKILL.md` | run perf agent, improve performance, optimize |
+| `agent-hephaestus` | `skills/agent-hephaestus/SKILL.md` | ux polish, accessibility, improve ui, interface, acessibilidade |
+| `agent-hermes` | `skills/agent-hermes/SKILL.md` | performance, optimize, bottleneck, desempenho, lentidão |
 | `agnix-linter` | `skills/agnix-linter/SKILL.md` | periodic maintenance, governance audit |
 | `aicc-compact` | `skills/aicc-compact/SKILL.md` | shift close, compact session, close session |
 | `anti-monolith-guard` | `skills/anti-monolith-guard/SKILL.md` | monolith, large file, new module, module boundary |
 | `brainstorming-and-tdd` | `skills/brainstorming-and-tdd/SKILL.md` | starting a new feature, fixing a bug, implementing a plan |
-| `code-hygiene-refactor` | `skills/code-hygiene-refactor/SKILL.md` | code hygiene, duplication, cleanup, dead code |
+| `code-hygiene-refactor` | `skills/code-hygiene-refactor/SKILL.md` | code hygiene, duplication, cleanup, dead code, higiene de código |
 | `obsidian-markdown` | `skills/obsidian-markdown/SKILL.md` | wiki formatting, wikilinks, Obsidian notes |
 | `git-conventional-commits` | `skills/git-conventional-commits/SKILL.md` | commit, tag, push, release notes |
-| `governance-validator` | `skills/governance-validator/SKILL.md` | validate governance, verify filesystem, document integrity |
+| `governance-validator` | `skills/governance-validator/SKILL.md` | validate governance, verify filesystem, document integrity, plan state coherence |
 | `memory-rotation` | `skills/memory-rotation/SKILL.md` | context bloat, clean sessions, rotate memory |
 | `orchestrator` | `skills/orchestrator/SKILL.md` | large refactoring, complex plans, parallel tasks |
 | `project-instantiation` | `skills/project-instantiation/SKILL.md` | bootstrap, new project, instantiate, initialize |
 | `retroactive-instantiation` | `skills/retroactive-instantiation/SKILL.md` | retroactive instantiation, existing app, legacy app |
-| `self-improvement` | `skills/self-improvement/SKILL.md` | improve skill, improve agent, skill failed |
+| `self-improvement` | `skills/self-improvement/SKILL.md` | improve skill, improve agent, skill failed, gatilho falhou |
 | `wiki-lint` | `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages |
-| `release-checklist` | `skills/release-checklist/SKILL.md` | release, publish, version bump |
+| `release-checklist` | `skills/release-checklist/SKILL.md` | release, publish, version bump, changelog, publicar versão |
 | `systematic-debugging` | `skills/systematic-debugging/SKILL.md` | debugging, fixing an error, tracking down a bug |
 
 ## Build and Execution
