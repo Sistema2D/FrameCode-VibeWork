@@ -1,7 +1,7 @@
 ---
 name: "release-checklist"
-version: "1.0.0"
-trigger_keywords: ["release", "publish", "v0.", "v1.", "version bump", "tag release", "minor release", "major release", "patch release", "cut a release"]
+version: "1.0.1"
+trigger_keywords: ["release", "publish", "v0.", "v1.", "version bump", "tag release", "minor release", "major release", "patch release", "cut a release", "changelog", "release notes", "GitHub release", "publicação", "publicar versão", "bump de versão", "nova versão", "notas de versão", "tag", "publicar release"]
 session_types: ["release"]
 ---
 
@@ -12,11 +12,14 @@ Condensed operational checklist for executing a FrameCode VibeWork release. Repl
 ## Activation Triggers
 
 Load this skill (with `view_file` and `IsSkillFile: true`) when the task involves:
+
 - Bumping a version number (patch, minor, or major)
-- Creating a `changelogs/Vx.y.z.md`
-- Publishing a GitHub release
+- Creating or editing any `changelogs/Vx.y.z.md`
+- Marking a changelog as `published`
+- Changing `Current Version` in `MANIFEST.md`, `STACK.md`, root `README.md`, `FCVW/README.md`, or `VERSIONING.md`
+- Publishing a GitHub release or preparing a release tag
 - Executing pre-release audit or validation
-- User says "release", "publish", or references a specific version number
+- User says "release", "publish", "publicação", "publicar versão", "bump de versão", "nova versão", "changelog", "notas de versão", or references a specific version number
 
 ## 1. Version Decision
 
@@ -33,10 +36,11 @@ Determine the bump type before starting:
 ### 2.1 Audit
 
 - [ ] All files modified in this release are listed in `changelogs/Vx.y.z.md`
-- [ ] No placeholder fields (`<...>`) remain in modified documents
+- [ ] No placeholder fields (`<...>`) remain in modified documents, except intentional templates
 - [ ] No broken internal links introduced in this release
 - [ ] `MANIFEST.md` version field matches the new version
 - [ ] Related plan in `Plans/completed/` or `Plans/discontinued/`
+- [ ] Changelog publication status and GitHub release publication status are recorded separately
 
 ### 2.2 Wiki Lint (Required for MINOR and MAJOR releases)
 
@@ -56,31 +60,80 @@ Create `changelogs/V{MAJOR}.{MINOR}.{PATCH}.md` using the structure:
 # Changelog V{MAJOR}.{MINOR}.{PATCH}
 
 ## Version
+
 `V{MAJOR}.{MINOR}.{PATCH}`
 
 ## Date
+
 YYYY-MM-DD
 
 ## Release Status
+
 `published`
 
+## GitHub Release Status
+
+`not_applicable | pending | published`
+
 ## Release Type
+
 `patch | minor | major`
 
 ## Summary
+
 - <bullet: what changed and why>
 
 ## Related Plans
+
 - `<plan filename>`
 
+## Items Created
+
+- `<file>`
+
 ## Items Modified
-- `<file>` (<created | modified | deleted>)
+
+- `<file>`
+
+## Items Removed
+
+- `<file>` or `None`
 
 ## Justifications
+
 - <why these changes were necessary>
 
+## Affected Files
+
+- `<file>`
+
+## Functional Impact
+
+- <impact or none>
+
+## Visual Impact
+
+- <impact or none>
+
+## Technical Impact
+
+- <impact or none>
+
+## Evaluated Risks and Regressions
+
+- <risk and mitigation>
+
 ## Validation Executed
+
 - <what was verified>
+
+## Known Gaps
+
+- <gap or none>
+
+## Rollback Observations
+
+- <rollback or not applicable>
 ```
 
 ## 4. Publication Sequence
@@ -101,29 +154,34 @@ git push origin main --tags
 # 5. Create GitHub release from tag using changelogs/V*.md content
 ```
 
+If tag or GitHub release creation is not performed, record `GitHub Release Status: not_applicable` or `pending` rather than implying external publication.
+
 ## 5. Post-Release Checklist
 
-- [ ] GitHub release page created with tag `v{x}.{y}.{z}`
+- [ ] GitHub release page created with tag `v{x}.{y}.{z}`, or `GitHub Release Status` explicitly states `not_applicable` / `pending`
 - [ ] Release notes match `changelogs/V{x}.{y}.{z}.md` content
-- [ ] `wiki/releases/v{x}-{y}-{z}.md` created (use `wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md`)
-- [ ] `wiki/index.md` → Releases section updated with link to new release page
+- [ ] `wiki/releases/v{x}-{y}-{z}.md` created when release learning is reusable (use `wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md`)
+- [ ] `wiki/index.md` → Releases section updated when a release synthesis is created
 - [ ] `wiki/log.md` → release event recorded
 - [ ] AICC session synthesis (`wiki/sessions/S{num}.md`) created for this session
-- [ ] `MANIFEST.md` update history entry added
+- [ ] `MANIFEST.md` update history entry added when applicable
 
 ## 6. Release Type Guidance
 
 ### Patch Release
+
 - Scope: only bugfixes, doc corrections, broken links, frontmatter fixes
 - Wiki lint: optional (run if wiki was modified)
 - Announcement: not required
 
 ### Minor Release
+
 - Scope: new features, new skills, new wiki content, new templates
 - Wiki lint: mandatory
 - Announcement: recommended (GitHub release + update README if needed)
 
 ### Major Release
+
 - Scope: breaking changes, major architectural pivots, schema changes
 - Wiki lint: mandatory
 - Announcement: required
