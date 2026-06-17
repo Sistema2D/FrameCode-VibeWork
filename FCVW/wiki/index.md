@@ -19,6 +19,7 @@ Clean distributions should start from the template baseline. This working framew
 - [[sessions/S003-2026-06-13-agent-self-improvement-template-site]] - Session synthesis for V0.10.0 governance, template, and site patch.
 - [[sessions/S004-2026-06-13-v0101-cleanup-optimization]] - Session synthesis for V0.10.1 cleanup and site optimization.
 - [[sessions/S005-2026-06-14-final-compliance-qa]] - Session synthesis for V0.10.2 final compliance QA.
+- [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]] - Session synthesis for V0.10.3 release governance and JIT trigger fixes.
 - [[README]] - Overview of the `wiki/` folder.
 
 ## Preferred Formal Sources
@@ -44,8 +45,8 @@ Clean distributions should start from the template baseline. This working framew
 
 - Validated patterns: none registered.
 - Consolidated decisions: none registered.
-- Release syntheses: none registered.
-- Cross-cutting syntheses: [[refactorings/anti-monolith-and-code-hygiene-gates]], [[refactorings/agent-skill-self-improvement-governance]].
+- Release syntheses: none registered in `wiki/releases/`.
+- Cross-cutting syntheses: [[refactorings/anti-monolith-and-code-hygiene-gates]], [[refactorings/agent-skill-self-improvement-governance]], [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]].
 - Failure catalog: none registered in `wiki/failures/`.
 - Prompt catalog: none registered.
 - Open questions: none registered.
@@ -54,6 +55,6 @@ Clean distributions should start from the template baseline. This working framew
 
 ## Usage Note
 
-> **Clean Baseline Notice**: `Template limpo/` is the clean distribution baseline. The working framework repository can keep framework-evolution records when they are useful evidence for future maintenance.
+> **Clean Baseline Notice**: `Template limpo/` is the clean distribution baseline when generated or distributed outside the canonical framework tree. The working framework repository can keep framework-evolution records when they are useful evidence for future maintenance.
 
 Create new pages only when there is reusable evidence from real project execution, and keep `index.md` and `log.md` synchronized with new records.
