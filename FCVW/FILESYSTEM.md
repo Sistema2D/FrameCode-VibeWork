@@ -3,8 +3,8 @@ title: "Project Filesystem Architecture"
 type: "concept"
 status: "validated"
 confidence: "high"
-last_reviewed: "2026-06-14"
-related_version: "V0.10.2"
+last_reviewed: "2026-06-17"
+related_version: "V0.10.3"
 sources:
   - "STACK.md"
   - "SCOPE.md"
@@ -41,6 +41,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |-- V0.10.0.md
 |   |   |-- V0.10.1.md
 |   |   |-- V0.10.2.md
+|   |   |-- V0.10.3.md
 |   |   |-- V0.9.0.md
 |   |   \-- V0.9.1.md
 |   |-- decisions/
@@ -80,6 +81,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |-- Plans/
 |   |   |-- completed/
 |   |   |   |-- P1-R4-2026-06-11-service-research-mandate.md
+|   |   |   |-- P2-R2-2026-06-17-v0103-release-governance-jit-fixes.md
 |   |   |   |-- P2-R3-2026-06-11-environment-promotion-workflow.md
 |   |   |   |-- P2-R3-2026-06-11-pr-branch-workflow.md
 |   |   |   |-- P2-R3-2026-06-13-anti-monolith-code-hygiene.md
@@ -199,7 +201,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |   |-- S002-2026-06-13-anti-monolith-code-hygiene.md
 |   |   |   |-- S003-2026-06-13-agent-self-improvement-template-site.md
 |   |   |   |-- S004-2026-06-13-v0101-cleanup-optimization.md
-|   |   |   \-- S005-2026-06-14-final-compliance-qa.md
+|   |   |   |-- S005-2026-06-14-final-compliance-qa.md
+|   |   |   \-- S006-2026-06-17-v0103-release-governance-jit-fixes.md
 |   |   |-- sources/
 |   |   |   \-- README.md
 |   |   |-- syntheses/

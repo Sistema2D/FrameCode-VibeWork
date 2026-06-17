@@ -35,6 +35,8 @@ Patch session created after V0.10.2 review found release-governance inconsistenc
 - `FCVW/changelogs/V0.10.2.md`
 - `FCVW/changelogs/V0.10.3.md`
 - `FCVW/Plans/completed/P2-R2-2026-06-17-v0103-release-governance-jit-fixes.md`
+- `FCVW/Plans/completed/P2-R3-2026-06-13-framework-agent-self-improvement-template-site.md`
+- `FCVW/Plans/completed/P3-R2-2026-06-13-v0101-cleanup-optimization.md`
 - `FCVW/Plans/completed/P3-R2-2026-06-14-final-compliance-qa.md`
 - `FCVW/skills/*/SKILL.md` for Aegis, Hermes, Hephaestus, Code Hygiene, Release Checklist, Self-Improvement, Governance Validator
 - `FCVW/skills/README.md`
@@ -43,7 +45,7 @@ Patch session created after V0.10.2 review found release-governance inconsistenc
 
 ## Changes
 
-- Corrected V0.10.2 plan status from `in_progress` to `completed`.
+- Corrected completed plan statuses from `in_progress` to `completed`.
 - Added plan-state coherence validation to `governance-validator`.
 - Expanded PT-BR triggers for key skills to improve JIT activation in Portuguese prompts.
 - Strengthened `release-checklist` activation conditions for changelog/version edits.
@@ -51,6 +53,7 @@ Patch session created after V0.10.2 review found release-governance inconsistenc
 - Normalized V0.10.2 changelog to formal schema.
 - Created V0.10.3 changelog and plan.
 - Clarified AGENTS/CONTEXT_MAP loading order.
+- Completed post-review updates for the large files that were listed by the plan/changelog but initially absent from the PR diff: root `README.md`, root `AGENTS.md`, `FCVW/MANIFEST.md`, and `FCVW/FILESYSTEM.md`.
 
 ## Validations
 
@@ -58,6 +61,9 @@ Patch session created after V0.10.2 review found release-governance inconsistenc
 - Manual changelog schema review.
 - Manual trigger catalog review.
 - Manual version coherence review.
+- Manual large-file PR diff review against the branch tree.
+- `git diff --check`.
+- Structural spot checks for version references, plan-state coherence, FILESYSTEM required entries, skill catalog consistency, and Markdown code fences.
 - Manual Markdown-only policy review.
 
 ## Residual Risks
@@ -67,5 +73,5 @@ Patch session created after V0.10.2 review found release-governance inconsistenc
 
 ## Next Steps
 
-- Review PR diff before merge.
+- Merge PR #35 after final diff and validation checks pass.
 - After merge, optionally create a GitHub Release/tag if the project decides to publish external release artifacts.

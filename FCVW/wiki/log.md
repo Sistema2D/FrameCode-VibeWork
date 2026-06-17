@@ -45,7 +45,7 @@ Clean distributions should use `Template limpo/` as the empty baseline when gene
 ## [2026-06-17 09:00] release | V0.10.3 release governance JIT fixes
 
 - Source: user-requested correction patch after V0.10.2 release review.
-- Executed action: corrected completed plan status, normalized V0.10.2 changelog schema, created V0.10.3 changelog, expanded Portuguese JIT triggers, strengthened release-checklist activation, and added plan-state coherence checks.
+- Executed action: corrected completed plan statuses, normalized V0.10.2 changelog schema, created V0.10.3 changelog, expanded Portuguese JIT triggers, strengthened release-checklist activation, added plan-state coherence checks, and aligned large root/governance files with the V0.10.3 branch state.
 - Pages created:
   - `wiki/sessions/S006-2026-06-17-v0103-release-governance-jit-fixes.md`
 - Pages updated:

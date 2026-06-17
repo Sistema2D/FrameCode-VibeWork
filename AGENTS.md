@@ -25,7 +25,7 @@ Follow the instructions in 'AGENTS.md' and: <action>
 
 ## Selective Loading by Session Type
 
-Load only the documents relevant to the session context. All files (except this AGENTS.md and editor configs) reside inside the `FCVW/` folder.
+Load only the documents relevant to the session context. This `AGENTS.md` file is the primary entrypoint; `FCVW/CONTEXT_MAP.md` is the first auxiliary map for token-efficient document selection. All files (except this AGENTS.md and editor configs) reside inside the `FCVW/` folder.
 
 | Session Type | Priority Documents |
 |---|---|
@@ -37,7 +37,7 @@ Load only the documents relevant to the session context. All files (except this 
 | Code hygiene / anti-monolith | `AGENTS.md`, `FCVW/REFACTORING.md`, `FCVW/PLANNING.md`, `FCVW/skills/anti-monolith-guard/SKILL.md`, `FCVW/skills/code-hygiene-refactor/SKILL.md` |
 | Agent / skill creation | `AGENTS.md`, `FCVW/AI.md`, `FCVW/PLANNING.md`, `FCVW/skills/agent-factory/SKILL.md` |
 | Skill / agent self-improvement | `AGENTS.md`, `FCVW/AI.md`, `FCVW/PLANNING.md`, `FCVW/AUDIT.md`, `FCVW/skills/self-improvement/SKILL.md` |
-| Release | `FCVW/CONTEXT_MAP.md`, `FCVW/skills/` (release-checklist load JIT) |
+| Release | `AGENTS.md`, `FCVW/skills/release-checklist/SKILL.md`, `FCVW/VERSIONING.md` (on demand) |
 | Security / data | `AGENTS.md`, `FCVW/SECURITY.md`, `FCVW/DATA.md`, `FCVW/ENVIRONMENT.md` |
 | AI / RAG / wiki | `AGENTS.md`, `FCVW/AI.md`, `FCVW/wiki/schema.md` |
 | Document audit | `AGENTS.md`, `FCVW/MANIFEST.md`, `FCVW/AUDIT.md` |

@@ -17,9 +17,9 @@ This file centralizes the identity, state, main rules, and official documents of
 | Target Platform | `cross-platform (Windows / Linux / macOS)` |
 | Main Lead | `Hugo Araújo de Melo` |
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
-| Current Version | `V0.10.2` |
+| Current Version | `V0.10.3` |
 | Manifest Creation Date | `2026-05-15` |
-| Last Update | `2026-06-14` |
+| Last Update | `2026-06-17` |
 | Project Status | `development` |
 
 ---
@@ -172,12 +172,12 @@ The documents below compose the project's governance. The absence of any documen
 
 The detailed repository tree is maintained in `FILESYSTEM.md`, which is the source of truth for structural audits. This manifest only records the ownership rule:
 
-- the repository root belongs to the application under development;
-- `AGENTS.md` and bridge/configuration files may remain at the root;
+- in instantiated applications, the repository root belongs to the application under development;
+- in the framework baseline repository, the root may keep the public `README.md`, `AGENTS.md`, and bridge/configuration files for GitHub compatibility;
 - official framework documents and generated framework documentation remain under `FCVW/`;
-- the root `README.md`, when present, must describe the target application, not the framework.
+- during downstream application instantiation, the root `README.md` must be generated for the target application, not copied as the framework README.
 
-The framework baseline keeps official framework documents inside `FCVW/`, with `AGENTS.md` at the root as the bridge entrypoint. During application instantiation, the root `README.md` must be generated for the target application. The `governance/` folder must contain only reusable empty templates.
+The framework baseline keeps official framework documents inside `FCVW/`, with `AGENTS.md` at the root as the primary bridge entrypoint and `CONTEXT_MAP.md` as the first auxiliary loading map. During application instantiation, the root `README.md` belongs to the target application. The `governance/` folder must contain only reusable empty templates.
 
 ---
 
@@ -278,6 +278,7 @@ The skill is pure Markdown, loaded on-demand (JIT), never pre-loaded, and replac
 | 2026-06-13 | `V0.10.0` | Added controlled agent/skill factory and self-improvement gates, created clean template baseline, repaired AI-usability issues, and refreshed the web site content. | Codex |
 | 2026-06-14 | `V0.10.1` | Removed raw HTML from Markdown READMEs, reduced static site data from embedded content to a manifest, and sanitized the clean template manifest. | Codex |
 | 2026-06-14 | `V0.10.2` | Final compliance QA: removed false broken wikilinks from wiki examples, restored resolvable site mirror structure, and refreshed validation artifacts. | Codex |
+| 2026-06-17 | `V0.10.3` | Patched release-governance coherence, Portuguese JIT triggers, plan-state validation, and large-file version references for the draft PR review. | Codex |
 
 ---
 

@@ -2,7 +2,7 @@
 ![FrameCode VibeWork cover](https://github.com/user-attachments/assets/267c4aaa-db8b-469b-8ffc-751adfa3d86a)
 
 
-Current framework version: `V0.10.2`
+Current framework version: `V0.10.3`
 
 *Select Language / Selecione o Idioma:*
 - [Português](#português)
@@ -89,7 +89,7 @@ Habilidades ativas: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-h
 ### Estrutura Operacional Resumida
 
 - `AGENTS.md`: ponto de entrada operacional para humanos e agentes.
-- `FCVW/CONTEXT_MAP.md`: carregamento seletivo por tipo de sessão.
+- `FCVW/CONTEXT_MAP.md`: primeiro mapa auxiliar depois de `AGENTS.md`, com carregamento seletivo por tipo de sessão.
 - `FCVW/BRIEFING.md`: Fase 0 e descoberta inicial.
 - `FCVW/INSTANTIATION.md`: instanciação de novos projetos.
 - `FCVW/RETROACTIVE_INSTANTIATION.md`: adoção retroativa em aplicações existentes.
@@ -115,7 +115,7 @@ As estimativas abaixo são referências de planejamento para reduzir custo de co
 | **Self-Improvement de Skill/Agente** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5.500 tokens | **~1.200 tokens** | **-78%** |
 | **Instanciação nova** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8.500 tokens | **~2.000 tokens** | **-76%** |
 | **Instanciação retroativa** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7.500 tokens | **~1.900 tokens** | **-75%** |
-| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` | ~2.500 tokens | **~600 tokens** | **-76%** |
+| **Release** | `AGENTS.md` + `skill:release-checklist` | ~4.000 tokens | **~900 tokens** | **-77%** |
 
 ### Como Usar
 
@@ -221,7 +221,7 @@ Active skills: `agent-aegis`, `agent-factory`, `agent-hephaestus`, `agent-hermes
 ### Operational Structure
 
 - `AGENTS.md`: operational entrypoint for humans and agents.
-- `FCVW/CONTEXT_MAP.md`: selective loading by session type.
+- `FCVW/CONTEXT_MAP.md`: first auxiliary map after `AGENTS.md`, with selective loading by session type.
 - `FCVW/BRIEFING.md`: Phase 0 and initial discovery.
 - `FCVW/INSTANTIATION.md`: fresh project instantiation.
 - `FCVW/RETROACTIVE_INSTANTIATION.md`: retroactive adoption in existing applications.
@@ -247,7 +247,7 @@ The estimates below are planning references for reducing context cost in LLM cal
 | **Skill/Agent Self-Improvement** | `AGENTS.md` + `AI.md` + `PLANNING.md` + `skill:self-improvement` | ~5,500 tokens | **~1,200 tokens** | **-78%** |
 | **Fresh Instantiation** | `AGENTS.md` + `INSTANTIATION.md` + `BRIEFING.md` + `MANIFEST.md` | ~8,500 tokens | **~2,000 tokens** | **-76%** |
 | **Retroactive Instantiation** | `AGENTS.md` + `RETROACTIVE_INSTANTIATION.md` + `skill:retroactive-instantiation` | ~7,500 tokens | **~1,900 tokens** | **-75%** |
-| **Release** | `CONTEXT_MAP.md` + `skill:release-checklist` | ~2,500 tokens | **~600 tokens** | **-76%** |
+| **Release** | `AGENTS.md` + `skill:release-checklist` | ~4,000 tokens | **~900 tokens** | **-77%** |
 
 ### How to Use
 
