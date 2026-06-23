@@ -1,4 +1,17 @@
+<div align="center">
+
 # FrameCode VibeWork Framework
+
+**Markdown governance framework for AI-assisted software development**
+
+[![Framework](https://img.shields.io/badge/Framework-v0.12.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork)
+[![Release](https://img.shields.io/badge/Release-v0.12.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases)
+[![License](https://img.shields.io/badge/License-Apache%202.0-6f42c1?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Contact](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
+
+</div>
+
+---
 
 Current framework version: `V0.12.0`
 
