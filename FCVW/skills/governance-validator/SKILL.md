@@ -50,6 +50,11 @@ Verify that all governance documents are internally consistent and structurally 
   - `FCVW/STACK.md`
   - `FCVW/MANIFEST.md`
   - `FCVW/PLANNING.md`
+  - `FCVW/AUTOMATION.md`
+  - `FCVW/HOOKS.md`
+  - `FCVW/WATCHERS.md`
+  - `FCVW/DAEMONS.md`
+  - `FCVW/GOVERNANCE_GATES.md`
 - [ ] All Obsidian-style `[[wikilink]]` references in `wiki/` point to existing files or known valid targets.
 - [ ] No `FCVW/` document links to a path that was removed or relocated.
 
@@ -60,6 +65,15 @@ Verify that all governance documents are internally consistent and structurally 
 - [ ] **Skill catalog**: Every skill in `skills/README.md` has a corresponding `skills/<name>/SKILL.md` file. No `SKILL.md` exists without a catalog entry.
 - [ ] **AGENTS.md references**: Every `FCVW/` document referenced in `AGENTS.md` (selective loading table, operational rules, checklist) exists and has not been renamed.
 - [ ] **CONTEXT_MAP.md accuracy**: Session types listed match the actual operational documents.
+
+#### Declarative Automation Integrity
+
+- [ ] `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, and `GOVERNANCE_GATES.md` exist when referenced by `AGENTS.md`, `CONTEXT_MAP.md`, `STACK.md`, or `MANIFEST.md`.
+- [ ] No declarative automation document instructs agents to create or execute scripts under Scenario 1.
+- [ ] Hook, watcher, daemon, and gate documents clearly state that they are Markdown-only contracts.
+- [ ] Every new template listed under `governance/` exists in `FILESYSTEM.md`.
+- [ ] No automation contract bypasses `PLANNING.md`, `SECURITY.md`, `AI.md`, ADR-0001, or ADR-0002.
+- [ ] SantanderAI credits, when present, are framed as conceptual or architectural inspiration and do not imply copied code.
 
 #### Plan State Coherence
 
@@ -95,5 +109,6 @@ Use instead of loading FILESYSTEM.md + AUDIT.md + TESTS.md for validation checks
 - Suspicion of FILESYSTEM.md drift
 - Before closing a plan that alters directory structure
 - Verifying that plan status fields match their `Plans/{status}` directories
+- Verifying declarative automation integrity after hook, watcher, daemon, or gate contract changes
 
 Do not load this skill during routine development work.
