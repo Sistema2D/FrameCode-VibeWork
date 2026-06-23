@@ -17,6 +17,26 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 - Visualization (optional): `Obsidian` — graph view for wiki wikilinks
 - Distribution: `GitHub template / git clone`
 - ADR-0001: Pure Markdown Instruction Model — no automation scripts in the framework
+- ADR-0002: Declarative Automation Contracts — hooks, watchers, daemons, and gates are Markdown-only contracts in Scenario 1
+
+## Declarative Automation Contracts
+
+The framework may describe hooks, watchers, daemons, maintenance loops, and governance gates as Markdown-only operational contracts.
+
+These contracts do not introduce:
+
+- executable scripts;
+- installed Git hooks;
+- background processes;
+- package dependencies;
+- CI/CD workflows;
+- API-key integrations;
+- provider SDKs;
+- local command-execution loops.
+
+They are executed manually or by AI agents following `AGENTS.md`, `AUTOMATION.md`, and the applicable governance skills.
+
+This layer credits conceptual architectural inspiration from public SantanderAI repositories at `https://github.com/SantanderAI`, without copying source code.
 
 ## AI / LLM Integration
 
@@ -69,6 +89,7 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 - Public documentation site: `External to this framework baseline`
 - Node package files: `Not applicable in the framework root`
 - Application module docs: `Downstream application-owned docs/ generated from FCVW governance templates`
+- Declarative automation: `Markdown-only contracts in AUTOMATION.md, HOOKS.md, WATCHERS.md, DAEMONS.md, and GOVERNANCE_GATES.md`
 
 ## Persistence and Logs
 
@@ -87,6 +108,7 @@ The primary "stack" of this framework is pure Markdown and Git. No runtime depen
 - Reusable empty templates: `governance/` folder.
 - Technical memory of governance: `wiki/` folder.
 - Formal records: `Plans/`, `changelogs/`, `troubleshooting/`.
+- Declarative automation records: `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, and `GOVERNANCE_GATES.md`.
 - Instantiation and renaming: `INSTANTIATION.md`.
 - Versioning exclusions: `.gitignore`.
 - Mandatory changelog: every change in a versioned file must be registered in `changelogs/Vx.y.z.md`.

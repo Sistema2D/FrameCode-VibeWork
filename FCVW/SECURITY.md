@@ -27,6 +27,7 @@ Reduce risks of data leakage, unauthorized execution, destructive modifications,
 - `DATA.md`: details persistence, migration, backup, and retention.
 - `AI.md`: details limits of model usage, context, and RAG.
 - `TESTS.md`: defines security validations.
+- `AUTOMATION.md`: defines Markdown-only automation boundaries for Scenario 1.
 
 ## Common Attack Surfaces
 
@@ -37,6 +38,7 @@ The main attack surfaces to consider in the project are described in the subsect
 - **Logs**: secrets, sensitive data, or personal information inadvertently recorded.
 - **AI and prompt injection**: retrieved content containing malicious instructions; agent executing unsolicited commands.
 - **Command execution**: destructive commands, user input interpolation in shell, elevated privileges.
+- **Declarative automation ambiguity**: Markdown contracts named hooks, watchers, or daemons being misread as permission to install or execute automation.
 
 ## Current Project Controls
 
@@ -134,6 +136,20 @@ Rules:
 - Prefer secure APIs to shell commands.
 - Record relevant commands in plan, validation, or troubleshooting.
 
+### Declarative Automation Security
+
+Scenario 1 automation contracts are Markdown-only governance artifacts. They must not authorize or imply execution.
+
+Rules:
+
+- `HOOKS.md` must not be interpreted as installed `.git/hooks` content.
+- `WATCHERS.md` must not be interpreted as a coded file-system watcher.
+- `DAEMONS.md` must not be interpreted as a background process, scheduled task, or local service.
+- `GOVERNANCE_GATES.md` must not be interpreted as an automated enforcement engine.
+- Automation contracts must not authorize command execution, local services, global dependency installation, CI/CD workflows, package manifests, provider SDKs, or API-key collection.
+- If an automation contract appears to require execution, stop and classify the requirement as Scenario 2.
+- Any SantanderAI-inspired pattern must be credited as conceptual or architectural inspiration unless copied material is explicitly licensed and documented.
+
 ## Sensitive Data
 
 Consider sensitive:
@@ -217,6 +233,7 @@ Change that involves command execution, elevated privileges, sensitive data, ext
 - [ ] Is there input validation?
 - [ ] Is there rollback or backup?
 - [ ] Were logs reviewed not to expose sensitive data?
+- [ ] If declarative automation is involved, is it explicitly Markdown-only and non-executable?
 
 ## Security Analysis Template
 

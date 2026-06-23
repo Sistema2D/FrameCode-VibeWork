@@ -17,6 +17,7 @@ A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do frame
 3. **Estilo de Alta Densidade**: As skills devem usar checklists e comandos diretos, eliminando narrativa filler e conversas prolixas.
 4. **Registro de Uso**: Quando uma skill é ativada, ela deve ser listada na Síntese de Sessão AICC correspondente em `wiki/sessions/S*.md`.
 5. **Crescimento Controlado**: novas skills e perfis de agente exigem `agent-factory`, métricas de recorrência/cobertura/ROI e validação. Ajustes em skills ou agentes exigem `self-improvement` e evidência de falha, drift ou economia relevante.
+6. **Automação Declarativa**: tarefas envolvendo hooks, watchers, daemons, loops de manutenção ou governance gates devem usar `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md` e as skills existentes. Não criar uma nova skill de automação sem passar pelo `agent-factory`.
 
 ### Catálogo de Skills Ativas
 
@@ -24,7 +25,7 @@ A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do frame
 |---|---|---|---|
 | **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | formatação wiki, wikilinks, frontmatter, notas Obsidian | Padroniza formatação e conexões semânticas da LLM Wiki |
 | **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publicar versão | Padroniza mensagens de commit, tags semânticas e notas de release |
-| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, auditoria wiki, orphan pages, frontmatter inválido | Valida integridade estrutural da wiki |
+| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, auditoria wiki, orphan pages, frontmatter inválido, automation knowledge gaps | Valida integridade estrutural da wiki e lacunas de conhecimento geradas por automação declarativa |
 | **wiki-curator** | [`skills/wiki-curator/SKILL.md`](wiki-curator/SKILL.md) | curadoria wiki, agrupar notas, continuous learning, frontmatter colors | Promove, revisa, agrupa e etiqueta conhecimento da wiki em modo fixo otimizado |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, changelog, publicar versão, bump de versão, notas de versão | Checklist condensado de release |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, concluir turno, finalizar sessão | Automatiza e compacta a síntese de sessão AICC para evitar inchaço de tokens |
@@ -34,15 +35,30 @@ A pasta `/skills/` atua como o **Motor de Habilidades (Skills Engine)** do frame
 | **retroactive-instantiation** | [`skills/retroactive-instantiation/SKILL.md`](retroactive-instantiation/SKILL.md) | instanciação retroativa, aplicação existente, legado, migrar framework antigo | Guia adoção não destrutiva do FCVW em aplicações existentes ou parcialmente governadas |
 | **agent-hermes** | [`skills/agent-hermes/SKILL.md`](agent-hermes/SKILL.md) | performance, desempenho, otimizar, lentidão, gargalo, latência | Perfil de agente sob demanda para uma melhoria de performance pequena, segura e validável |
 | **agent-hephaestus** | [`skills/agent-hephaestus/SKILL.md`](agent-hephaestus/SKILL.md) | ux polish, UI, interface, acessibilidade, contraste, navegação por teclado | Perfil de agente sob demanda para uma melhoria pequena de UX, acessibilidade ou consistência visual |
-| **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, segurança, vulnerabilidade, vazamento de dados, credenciais, autenticação | Perfil de agente sob demanda para uma correção ou hardening de segurança pequeno e verificável |
-| **agent-factory** | [`skills/agent-factory/SKILL.md`](agent-factory/SKILL.md) | create skill, create agent, specialized agent, criar skill | Gate mensurável para criar novas skills e perfis de agente sem proliferação arbitrária |
-| **self-improvement** | [`skills/self-improvement/SKILL.md`](self-improvement/SKILL.md) | improve skill, improve agent, skill failed, gatilho falhou, skill não acionou, auto melhoria | Gate baseado em evidência para ajustar skills e agentes sem mudanças irrelevantes |
+| **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, segurança, vulnerabilidade, vazamento de dados, credenciais, autenticação, automação declarativa | Perfil de agente sob demanda para uma correção ou hardening de segurança pequeno e verificável |
+| **agent-factory** | [`skills/agent-factory/SKILL.md`](agent-factory/SKILL.md) | create skill, create agent, specialized agent, criar skill, nova automação reutilizável | Gate mensurável para criar novas skills e perfis de agente sem proliferação arbitrária |
+| **self-improvement** | [`skills/self-improvement/SKILL.md`](self-improvement/SKILL.md) | improve skill, improve agent, skill failed, gatilho falhou, skill não acionou, auto melhoria, rule drift | Gate baseado em evidência para ajustar skills e agentes sem mudanças irrelevantes |
 | **brainstorming-and-tdd** | [`skills/brainstorming-and-tdd/SKILL.md`](brainstorming-and-tdd/SKILL.md) | starting a new feature, fixing a bug, implementing a plan | Trava o agente no início para extrair especificações e obriga o uso de TDD |
 | **systematic-debugging** | [`skills/systematic-debugging/SKILL.md`](systematic-debugging/SKILL.md) | debugging, fixing an error, tracking down a bug, stack trace | Força a depuração estruturada baseada em hipóteses |
 | **orchestrator** | [`skills/orchestrator/SKILL.md`](orchestrator/SKILL.md) | large refactoring, complex plans, parallel tasks | Habilita a IA a coordenar tarefas complexas em modo delegado ou sequencial |
 | **agnix-linter** | [`skills/agnix-linter/SKILL.md`](agnix-linter/SKILL.md) | periodic maintenance, governance audit, auditoria estrutural | Inspeciona e valida formatação, dead-links e consistência da pasta `FCVW/` |
 | **memory-rotation** | [`skills/memory-rotation/SKILL.md`](memory-rotation/SKILL.md) | context bloat, clean sessions, rotate memory | Condensa sessões antigas do wiki em conceitos e remove excessos para proteger a janela de tokens |
-| **governance-validator** | [`skills/governance-validator/SKILL.md`](governance-validator/SKILL.md) | validar governança, verificar filesystem, integridade documental, plan state coherence | Checklist para validar acurácia do FILESYSTEM.md, integridade documental e coerência de status dos planos |
+| **governance-validator** | [`skills/governance-validator/SKILL.md`](governance-validator/SKILL.md) | validar governança, verificar filesystem, integridade documental, plan state coherence, declarative automation integrity | Checklist para validar acurácia do FILESYSTEM.md, integridade documental, coerência de status dos planos e contratos Markdown-only |
+
+### Automação Declarativa sem Skill Nova
+
+O cenário 1 não cria uma skill dedicada de automação declarativa. A responsabilidade é distribuída assim:
+
+| Necessidade | Documento/skill dono |
+|---|---|
+| Entender limites Markdown-only | `AUTOMATION.md` |
+| Avaliar pseudo-hooks | `HOOKS.md` + `governance-validator` |
+| Avaliar watcher rules | `WATCHERS.md` + `governance-validator` |
+| Avaliar daemon loops manuais/agentic | `DAEMONS.md` + `AI.md` + `SECURITY.md` |
+| Avaliar gates | `GOVERNANCE_GATES.md` + skill dona do gate |
+| Criar nova skill futuramente | `agent-factory` |
+| Alterar skill existente | `self-improvement` |
+| Validar lacunas de wiki | `wiki-lint` |
 
 ---
 
@@ -57,6 +73,7 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 3. **High-Density Style**: Skills must utilize direct checklists and commands, eliminating filler narrative and verbose talk.
 4. **Usage Registry**: When a skill is activated, it must be recorded in the corresponding AICC Session Synthesis inside `wiki/sessions/S*.md`.
 5. **Controlled Growth**: new skills and agent profiles require `agent-factory`, recurrence/coverage/ROI metrics, and validation. Changes to skills or agents require `self-improvement` and evidence of failure, drift, or meaningful savings.
+6. **Declarative Automation**: tasks involving hooks, watchers, daemons, maintenance loops, or governance gates should use `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md`, and existing skills. Do not create a new automation skill without passing `agent-factory`.
 
 ### Active Skills Catalog
 
@@ -64,7 +81,7 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 |---|---|---|---|
 | **obsidian-markdown** | [`skills/obsidian-markdown/SKILL.md`](obsidian-markdown/SKILL.md) | wiki formatting, wikilinks, frontmatter, Obsidian notes | Standardizes LLM Wiki formatting and semantic connections |
 | **git-conventional-commits** | [`skills/git-conventional-commits/SKILL.md`](git-conventional-commits/SKILL.md) | commit, tag, push, release notes, publish version | Standardizes commit messages, semantic tags, and release notes |
-| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, wiki audit, orphan pages, broken links, invalid frontmatter | Validates wiki structural integrity |
+| **wiki-lint** | [`skills/wiki-lint/SKILL.md`](wiki-lint/SKILL.md) | lint wiki, wiki audit, orphan pages, broken links, invalid frontmatter, automation knowledge gaps | Validates wiki structural integrity and declarative automation knowledge gaps |
 | **wiki-curator** | [`skills/wiki-curator/SKILL.md`](wiki-curator/SKILL.md) | curate wiki, continuous learning, group notes, frontmatter colors | Promotes, revises, clusters, and tags wiki knowledge in fixed optimized mode |
 | **release-checklist** | [`skills/release-checklist/SKILL.md`](release-checklist/SKILL.md) | release, publish, version bump, changelog, publicar versão | Condensed release checklist |
 | **aicc-compact** | [`skills/aicc-compact/SKILL.md`](aicc-compact/SKILL.md) | shift close, compact session, close session, consolidate shift | Standardizes AICC context compression |
@@ -74,12 +91,27 @@ The `/skills/` directory serves as the framework's **Skills Engine**. It houses 
 | **retroactive-instantiation** | [`skills/retroactive-instantiation/SKILL.md`](retroactive-instantiation/SKILL.md) | retroactive instantiation, existing app, legacy app, framework migration | Guides non-destructive FCVW adoption |
 | **agent-hermes** | [`skills/agent-hermes/SKILL.md`](agent-hermes/SKILL.md) | performance, optimize, bottleneck, desempenho, lentidão | On-demand agent profile for validated performance improvement |
 | **agent-hephaestus** | [`skills/agent-hephaestus/SKILL.md`](agent-hephaestus/SKILL.md) | ux polish, accessibility, improve ui, interface, acessibilidade | On-demand agent profile for UX/accessibility improvements |
-| **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, vulnerability, harden, segurança, vazamento de dados | On-demand agent profile for security fixes or hardening |
-| **agent-factory** | [`skills/agent-factory/SKILL.md`](agent-factory/SKILL.md) | create skill, create agent, specialized agent, criar skill | Measurable gate for creating new skills and agent profiles |
-| **self-improvement** | [`skills/self-improvement/SKILL.md`](self-improvement/SKILL.md) | improve skill, improve agent, skill failed, gatilho falhou | Evidence-based gate for adjusting skills and agents |
+| **agent-aegis** | [`skills/agent-aegis/SKILL.md`](agent-aegis/SKILL.md) | security scan, vulnerability, harden, segurança, vazamento de dados, declarative automation | On-demand agent profile for security fixes or hardening |
+| **agent-factory** | [`skills/agent-factory/SKILL.md`](agent-factory/SKILL.md) | create skill, create agent, specialized agent, criar skill, reusable automation | Measurable gate for creating new skills and agent profiles |
+| **self-improvement** | [`skills/self-improvement/SKILL.md`](self-improvement/SKILL.md) | improve skill, improve agent, skill failed, gatilho falhou, rule drift | Evidence-based gate for adjusting skills and agents |
 | **brainstorming-and-tdd** | [`skills/brainstorming-and-tdd/SKILL.md`](brainstorming-and-tdd/SKILL.md) | starting a new feature, fixing a bug, implementing a plan | Halts the agent at the start to extract specs and enforces Red/Green TDD |
 | **systematic-debugging** | [`skills/systematic-debugging/SKILL.md`](systematic-debugging/SKILL.md) | debugging, fixing an error, tracking down a bug, stack trace | Enforces structured hypothesis-based debugging |
 | **orchestrator** | [`skills/orchestrator/SKILL.md`](orchestrator/SKILL.md) | large refactoring, complex plans, parallel tasks | Coordinates complex task decomposition |
 | **agnix-linter** | [`skills/agnix-linter/SKILL.md`](agnix-linter/SKILL.md) | periodic maintenance, governance audit | Inspects FCVW formatting, dead-links, and consistency |
 | **memory-rotation** | [`skills/memory-rotation/SKILL.md`](memory-rotation/SKILL.md) | context bloat, clean sessions, rotate memory | Condenses old wiki sessions into concepts |
-| **governance-validator** | [`skills/governance-validator/SKILL.md`](governance-validator/SKILL.md) | validate governance, verify filesystem, document integrity, plan state coherence | Validates FILESYSTEM.md accuracy, governance integrity, and plan state consistency |
+| **governance-validator** | [`skills/governance-validator/SKILL.md`](governance-validator/SKILL.md) | validate governance, verify filesystem, document integrity, plan state coherence, declarative automation integrity | Validates FILESYSTEM.md accuracy, governance integrity, plan state consistency, and Markdown-only automation contracts |
+
+### Declarative Automation without a New Skill
+
+Scenario 1 does not create a dedicated declarative automation skill. Responsibility is distributed as follows:
+
+| Need | Owning document/skill |
+|---|---|
+| Understand Markdown-only boundaries | `AUTOMATION.md` |
+| Evaluate pseudo-hooks | `HOOKS.md` + `governance-validator` |
+| Evaluate watcher rules | `WATCHERS.md` + `governance-validator` |
+| Evaluate manual/agentic daemon loops | `DAEMONS.md` + `AI.md` + `SECURITY.md` |
+| Evaluate gates | `GOVERNANCE_GATES.md` + owning gate skill |
+| Create a future new skill | `agent-factory` |
+| Change an existing skill | `self-improvement` |
+| Validate wiki gaps | `wiki-lint` |

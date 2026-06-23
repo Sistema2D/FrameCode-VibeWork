@@ -143,9 +143,36 @@ flowchart TD
     E --> F["Changelog in changelogs/"]
 ```
 
-## 10. Maintenance Observations
+## 10. Declarative Automation Workflow
+
+Scenario 1 declarative automation is part of document governance, not application runtime.
+
+1. Identify the event, operation, or recurring maintenance need.
+2. Consult `AUTOMATION.md` to confirm Scenario 1 boundaries.
+3. Apply the relevant contract:
+   - `HOOKS.md` for pseudo-hook checklists;
+   - `WATCHERS.md` for event/reaction rules;
+   - `DAEMONS.md` for manual/agentic maintenance loops;
+   - `GOVERNANCE_GATES.md` for gate trigger mapping.
+4. Record findings and blocking conditions in the active plan.
+5. Update changelog when any versioned file changes.
+6. Stop if the action requires executable scripts, installed hooks, coded watchers, background daemons, CI/CD workflows, package manifests, API keys, provider SDKs, or command-execution loops.
+
+```mermaid
+flowchart TD
+    A["Automation-related request"] --> B["AUTOMATION.md boundary check"]
+    B --> C["Select contract: hooks / watchers / daemons / gates"]
+    C --> D["Evaluate Markdown checklist"]
+    D --> E{"Blocking condition?"}
+    E -- "Yes" --> F["Stop and record in active plan"]
+    E -- "No" --> G["Proceed within plan scope"]
+    G --> H["Record evidence and changelog"]
+```
+
+## 11. Maintenance Observations
 
 `<Record here known maintenance risks, critical dependencies, and areas requiring special attention when making changes.>`
 
 - When evolving the behavior described here, keep this document synchronized within the same change plan/changelog.
 - When changing pages, screens, components, flows, or business rules in a downstream application, keep the application-owned module documentation synchronized in the same plan.
+- When evolving declarative automation contracts, preserve ADR-0001 and ADR-0002 boundaries: no executable automation in Scenario 1.
