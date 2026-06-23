@@ -42,6 +42,18 @@ Clean distributions should use `Template limpo/` as the empty baseline when gene
 
 ## Records
 
+## [2026-06-23 12:00] ingest | SantanderAI declarative automation inspiration
+
+- Source: `https://github.com/SantanderAI`
+- Executed action: recorded conceptual external inspiration for FCVW Scenario 1 declarative automation contracts.
+- Pages created:
+  - `wiki/sources/santanderai-declarative-automation-inspiration.md`
+- Pages updated:
+  - `wiki/log.md`
+- Pages obsolete: none.
+- Result: source credit recorded as conceptual/architectural inspiration only; no source code copied.
+- Gaps: none in the source-credit scope.
+
 ## [2026-06-17 12:30] release | V0.11.0 wiki continuous learning governance
 
 - Source: user-requested GitHub-sourced framework improvement for continuous wiki learning with fixed optimized cost mode.
