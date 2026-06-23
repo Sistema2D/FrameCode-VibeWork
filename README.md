@@ -4,9 +4,10 @@
 
 **Markdown governance framework for AI-assisted software development**
 
-[![Release](https://img.shields.io/badge/Release-v0.12.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases)
+[![Release](https://img.shields.io/badge/$Café-$Coffee-6f42c1?style=flat-square)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache%202.0-6f42c1?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Contact](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
+[![Release](https://img.shields.io/badge/Release-v0.12.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases)
 
 </div>
 
