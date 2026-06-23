@@ -17,6 +17,7 @@ Clean distributions should start from the template baseline. This working framew
 - [[releases/README]] - Release syntheses (empty baseline).
 - [[refactorings/anti-monolith-and-code-hygiene-gates]] - Active gates against monoliths, duplication, stale files, and cleanup debt.
 - [[refactorings/agent-skill-self-improvement-governance]] - Controlled creation and evidence-based improvement of skills and agent profiles.
+- [[sources/santanderai-declarative-automation-inspiration]] - Conceptual source note for SantanderAI-inspired declarative automation patterns.
 - [[sessions/S002-2026-06-13-anti-monolith-code-hygiene]] - Session synthesis for V0.9.1 governance patch.
 - [[sessions/S003-2026-06-13-agent-self-improvement-template-site]] - Session synthesis for V0.10.0 governance, template, and site patch.
 - [[sessions/S004-2026-06-13-v0101-cleanup-optimization]] - Session synthesis for V0.10.1 cleanup and site optimization.
@@ -30,6 +31,11 @@ Clean distributions should start from the template baseline. This working framew
 
 - `AGENTS.md`
 - `CONTEXT_MAP.md`
+- `AUTOMATION.md`
+- `HOOKS.md`
+- `WATCHERS.md`
+- `DAEMONS.md`
+- `GOVERNANCE_GATES.md`
 - `INSTANTIATION.md`
 - `RETROACTIVE_INSTANTIATION.md`
 - `MANIFEST.md`
@@ -42,6 +48,7 @@ Clean distributions should start from the template baseline. This working framew
 - `troubleshooting/`
 - `decisions/`
 - `audits/`
+- `wiki/sources/`
 
 ---
 
@@ -49,6 +56,7 @@ Clean distributions should start from the template baseline. This working framew
 
 - Validated patterns: none registered.
 - Consolidated decisions: none registered.
+- Source notes: [[sources/santanderai-declarative-automation-inspiration]].
 - Release syntheses: [[releases/v0-11-0-summary]].
 - Cross-cutting syntheses: [[taxonomy]], [[metrics]], [[refactorings/anti-monolith-and-code-hygiene-gates]], [[refactorings/agent-skill-self-improvement-governance]], [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]], [[sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance]].
 - Failure catalog: none registered in `wiki/failures/`.
