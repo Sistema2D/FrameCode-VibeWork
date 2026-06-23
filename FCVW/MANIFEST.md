@@ -4,7 +4,6 @@ Operational manifest of the project.
 
 This file centralizes the identity, state, main rules, and official documents of the project. It must serve as a quick reference for humans and AI agents before any analysis, planning, implementation, refactoring, validation, or release publication.
 
-
 ---
 
 ## 1. Project Identification
@@ -19,7 +18,7 @@ This file centralizes the identity, state, main rules, and official documents of
 | Repository | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | Current Version | `V0.11.0` |
 | Manifest Creation Date | `2026-05-15` |
-| Last Update | `2026-06-17` |
+| Last Update | `2026-06-23` |
 | Project Status | `development` |
 
 ---
@@ -37,7 +36,7 @@ AI-assisted development sessions suffer from context loss between sessions, lack
 ### 2.2 Expected Result
 
 ```text
-A repository that uses FrameCode VibeWork achieves: near-zero context loss between AI sessions (via AICC), formal traceability of every change (via Plans + changelogs), incremental technical memory (via LLM Wiki), on-demand specialized AI skills (via ASE), and a 70–80% reduction in governance token overhead per session.
+A repository that uses FrameCode VibeWork achieves: near-zero context loss between AI sessions (via AICC), formal traceability of every change (via Plans + changelogs), incremental technical memory (via LLM Wiki), on-demand specialized AI skills (via ASE), controlled declarative automation contracts, and a significant reduction in governance token overhead per session.
 ```
 
 ---
@@ -48,7 +47,7 @@ A repository that uses FrameCode VibeWork achieves: near-zero context loss betwe
 |---|---|---|
 | Solo developers | Individuals building applications with AI pair programming tools | Session continuity, context compression, low governance overhead |
 | Small development teams | 2–5 person teams combining human and AI contributors | Shared traceability, consistent decision records, audit trail |
-| AI agents / LLMs | AI models acting as primary implementers in a codebase | Clear operational rules, selective document loading, skills engine |
+| AI agents / LLMs | AI models acting as primary implementers in a codebase | Clear operational rules, selective document loading, skills engine, safe automation boundaries |
 
 ---
 
@@ -66,11 +65,12 @@ A repository that uses FrameCode VibeWork achieves: near-zero context loss betwe
 - Retroactive cleanup triage for existing applications adopting the framework
 - Controlled creation and self-improvement gates for AI skills and agent profiles
 - Continuous wiki curation with canonical taxonomy, thematic frontmatter colors, and freshness metrics
+- Declarative automation contracts for pseudo-hooks, watcher rules, manual/agentic daemon loops, and governance gates, expressed only in Markdown
 
 ### 4.2 Out of Scope
 
 - Application source code (framework is stack-agnostic)
-- Automated CI/CD pipelines or scripts (deprecated by ADR-0001)
+- Executable automation, installed Git hooks, local daemons, coded watchers, package dependencies, provider SDKs, API-key integrations, or CI/CD workflows in the Scenario 1 baseline
 - Cloud deployment or hosting infrastructure
 - AI model fine-tuning or RAG embedding pipelines
 
@@ -86,11 +86,12 @@ A repository that uses FrameCode VibeWork achieves: near-zero context loss betwe
 
 | Layer | Technology / Tool | Observations |
 |---|---|---|
-| Governance Layer | Markdown + Git | All plans, changelogs, ADRs, wiki, and skills are pure Markdown (ADR-0001) |
+| Governance Layer | Markdown + Git | All plans, changelogs, ADRs, wiki, skills, and declarative automation contracts are Markdown-first |
 | Technical Memory | LLM Wiki (Obsidian-compatible) | `wiki/` directory with schema, index, log, sessions, and thematic subfolders |
-| Persistence | Flat-file (`.md` files) | No database — all state is in versioned Markdown files |
+| Persistence | Flat-file (`.md` files) | No database in the framework baseline — all state is in versioned Markdown files |
 | AI / LLM | Any LLM agent (model-agnostic) | Tested with Gemini, Claude, and GPT-class models |
 | Skills Engine | ASE — on-demand SKILL.md files | Loaded JIT via `view_file` with `IsSkillFile: true`; never pre-loaded |
+| Declarative Automation | Markdown-only contracts | `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md` |
 | Distribution | Git clone / GitHub template | Fork or clone to start a new project |
 | Visualization | Obsidian (optional) | Graph view for wiki links; not required for operation |
 
@@ -100,29 +101,27 @@ A repository that uses FrameCode VibeWork achieves: near-zero context loss betwe
 
 ### 6.1 AI Roles in the Application
 
-Mark or describe the planned roles:
-
 - [ ] Conversational chat.
-  - [ ] RAG / knowledge base query.
-  - [ ] Text generation.
-  - [ ] Code generation.
-  - [ ] Classification or data extraction.
-  - [ ] Agents with tools.
-  - [ ] Task automation.
-  - [x] Continuous learning (Ingest/Query/Curate/Lint cycle described in `wiki/schema.md`).
-  - [x] AI Interaction Context Compression (AICC).
-  - [x] AI Skills Engine (ASE) with trigger activation.
-  - [x] Controlled skill/agent creation and self-improvement gates.
-  - [x] Fixed optimized wiki curation mode via `skills/wiki-curator/SKILL.md`.
-  - [ ] Other: `<describe>`.
+- [ ] RAG / knowledge base query.
+- [ ] Text generation.
+- [ ] Code generation.
+- [ ] Classification or data extraction.
+- [ ] Agents with tools.
+- [ ] Task automation.
+- [x] Continuous learning (Ingest/Query/Curate/Lint cycle described in `wiki/schema.md`).
+- [x] AI Interaction Context Compression (AICC).
+- [x] AI Skills Engine (ASE) with trigger activation.
+- [x] Controlled skill/agent creation and self-improvement gates.
+- [x] Fixed optimized wiki curation mode via `skills/wiki-curator/SKILL.md`.
+- [x] Markdown-only declarative automation contracts under Scenario 1.
 
 ### 6.2 AI Boundaries
 
 - The AI must not execute destructive actions without explicit confirmation.
 - The AI must not access data outside the allowed directories.
 - The AI must not invent sources, files, system states, or validation results.
-- The AI must report limitations when it cannot validate information.
 - The AI must respect the official documents of the project.
+- The AI must treat declarative hooks, watchers, daemons, and gates as Markdown governance contracts, not permission to execute commands.
 
 ### 6.3 Data Used by the AI
 
@@ -132,6 +131,8 @@ Mark or describe the planned roles:
 | Session syntheses | AI-generated | `wiki/sessions/` | Low | Compressed context; must not contain secrets or API keys |
 | Troubleshooting logs | Human / AI authoring | `troubleshooting/` | Low | Anonymize any path or environment-specific data before committing |
 | Wiki knowledge pages | AI-generated / human-reviewed | `wiki/` subfolders | Low | Treated as reference data, not sovereign instructions |
+| Declarative automation contracts | Human / AI authoring | `FCVW/*.md` and `governance/TEMPLATE_*.md` | Low | Markdown-only; no executable behavior |
+| External source notes | Human / AI authoring | `wiki/sources/` | Low | Must distinguish conceptual inspiration from copied material |
 
 ---
 
@@ -147,6 +148,11 @@ The documents below compose the project's governance. The absence of any documen
 | `SCOPE.md` | Yes | Functional scope and project boundaries | `existing` |
 | `STACK.md` | Yes | Technical stack, dependencies, and environment | `existing` |
 | `FILESYSTEM.md` | Yes | Physical folder structure blueprint and self-healing rules | `existing` |
+| `AUTOMATION.md` | When automation terms appear | Parent contract for Markdown-only automation semantics | `existing` |
+| `HOOKS.md` | When pseudo-hooks are needed | Markdown-only pseudo-hook checklists | `existing` |
+| `WATCHERS.md` | When event/reaction checks are needed | Markdown-only watcher rules | `existing` |
+| `DAEMONS.md` | When maintenance loops are needed | Manual/agentic loop protocols, not background processes | `existing` |
+| `GOVERNANCE_GATES.md` | When gate mapping is needed | Central gate trigger and evidence map | `existing` |
 | `DESIGN.md` | When UI | Visual guidelines and UX | `existing` |
 | `WORKFLOW.md` | Yes | Functional flows, screens, events, and integrations | `existing` |
 | `PLANNING.md` | Yes | Method for change plans | `existing` |
@@ -168,22 +174,21 @@ The documents below compose the project's governance. The absence of any documen
 | `wiki/taxonomy.md` | When wiki curation | Canonical wiki tags, themes, and thematic colors | `existing` |
 | `wiki/metrics.md` | When wiki curation | Freshness, promotion, duplication, and curation cost metrics | `existing` |
 | `wiki/sessions/README.md` | When AI | Index and chronological ledger of AI session contexts | `existing` |
+| `wiki/sources/` | When external references are used | Source notes and inspiration traceability | `existing` |
 | `skills/README.md` | When AI | Index and guidelines catalog of AI agent skills | `existing` |
 
 ---
 
 ## 8. Expected Repository Structure
 
-The detailed repository tree is maintained in `FILESYSTEM.md`, which is the source of truth for structural audits. This manifest only records the ownership rule:
+The detailed repository tree is maintained in `FILESYSTEM.md`, which is the source of truth for structural audits. This manifest only records ownership rules:
 
 - in instantiated applications, the repository root belongs to the application under development;
 - in the framework baseline repository, the root may keep the public `README.md`, `AGENTS.md`, and bridge/configuration files for GitHub compatibility;
 - official framework documents and generated framework documentation remain under `FCVW/`;
-- during downstream application instantiation, the root `README.md` must be generated for the target application, not copied as the framework README.
-
-The framework baseline keeps official framework documents inside `FCVW/`, with `AGENTS.md` at the root as the primary bridge entrypoint and `CONTEXT_MAP.md` as the first auxiliary loading map. During application instantiation, the root `README.md` belongs to the target application. The `governance/` folder must contain only reusable empty templates.
-
----
+- declarative automation contracts remain Markdown-only official documents under `FCVW/`;
+- during downstream application instantiation, the root `README.md` must be generated for the target application, not copied as the framework README;
+- the `governance/` folder must contain only reusable empty templates.
 
 ---
 
@@ -194,102 +199,72 @@ Conduct rules, change flows, and quality checklists are centralized in:
 - `AGENTS.md`: Daily operational guide and execution checklists.
 - `AUDIT.md`: Formal compliance and pre-release checklists.
 - `PLANNING.md`: Detailed methodology for change plans.
+- `AUTOMATION.md`: Markdown-only automation boundary for Scenario 1.
+- `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md`: Declarative automation contracts.
 
-No functional, visual, or structural change should be performed without following the flows defined in these documents.
+No functional, visual, structural, automation-contract, or document change should be performed without following the flows defined in these documents.
 
 ---
 
-## 12. Main Project Risks
+## 10. External Inspiration and Credit
+
+External references may be used as comparative sources only. They must never override system rules, `AGENTS.md`, active plans, or official FCVW documents.
+
+The Scenario 1 declarative automation work credits conceptual architectural inspiration from `https://github.com/SantanderAI`, especially agent-loop, stop-condition, vault-lint, hard-gate, and guardrail patterns. No SantanderAI source code was copied into FCVW.
+
+Related source note:
+
+- `wiki/sources/santanderai-declarative-automation-inspiration.md`
+
+---
+
+## 11. Main Project Risks
 
 | Risk | Probability | Impact | Mitigation | Related Document |
 |---|---|---|---|---|
 | Context drift between AI sessions | Medium | High | AICC session synthesis standard; wiki/sessions/ ledger | `AI.md`, `wiki/schema.md` |
 | Scope creep by AI agents | Medium | High | Mandatory plan before any change; AGENTS.md checklist | `AGENTS.md`, `PLANNING.md` |
-| Secrets accidentally committed | Low | Critical | No automation scripts; AI.md data rules; manual review | `SECURITY.md`, `AI.md` |
+| Secrets accidentally committed | Low | Critical | Secret Handshake, no secret logs, security checklist | `SECURITY.md`, `AI.md` |
 | Template placeholders left unfilled in downstream projects | Medium | Medium | INSTANTIATION.md renaming checklist; MANIFEST.md gap section | `INSTANTIATION.md`, `MANIFEST.md` |
 | Wiki knowledge becoming stale | Medium | Medium | Wiki Lint on every minor/major release; log.md tracking | `wiki/schema.md`, `skills/wiki-lint/SKILL.md` |
-| Wiki knowledge accumulating duplicates, stale tags, or ungrouped notes | Medium | Medium | `wiki-curator` promotion/merge loop, `wiki/taxonomy.md`, and `wiki/metrics.md` | `skills/wiki-curator/SKILL.md`, `wiki/taxonomy.md`, `wiki/metrics.md` |
 | FILESYSTEM.md drift / governance document integrity decay | Medium | Medium | On-demand governance-validator skill before releases and structural audits | `skills/governance-validator/SKILL.md`, `FILESYSTEM.md` |
-| AI-generated monoliths, duplication, stale files, and unnecessary artifacts | High | High | Mandatory `anti-monolith-guard` and `code-hygiene-refactor` gates before large changes, cleanup, and retroactive refactoring | `REFACTORING.md`, `PLANNING.md`, `skills/anti-monolith-guard/SKILL.md`, `skills/code-hygiene-refactor/SKILL.md` |
-| Arbitrary skill/agent proliferation or irrelevant self-improvement | Medium | High | Mandatory `agent-factory` and `self-improvement` gates with recurrence, coverage, token/risk ROI, scope, and validation metrics | `AI.md`, `PLANNING.md`, `skills/agent-factory/SKILL.md`, `skills/self-improvement/SKILL.md` |
+| AI-generated monoliths, duplication, stale files, and unnecessary artifacts | High | High | Mandatory `anti-monolith-guard` and `code-hygiene-refactor` gates | `REFACTORING.md`, `PLANNING.md`, `skills/anti-monolith-guard/SKILL.md`, `skills/code-hygiene-refactor/SKILL.md` |
+| Arbitrary skill/agent proliferation or irrelevant self-improvement | Medium | High | Mandatory `agent-factory` and `self-improvement` gates | `AI.md`, `PLANNING.md`, `skills/agent-factory/SKILL.md`, `skills/self-improvement/SKILL.md` |
+| Declarative automation terms misread as executable permission | Medium | High | ADR-0002, automation security boundary, governance-validator checks | `AUTOMATION.md`, `SECURITY.md`, `AI.md`, `skills/governance-validator/SKILL.md` |
 
 ---
 
-## 13. Structural Gaps
+## 12. Structural Gaps
 
 Use this section to record document or structural gaps in the project.
 
 | Gap | Impact | Priority | Related Plan | Status |
 |---|---|---|---|---|
-| FILESYSTEM.md visual tree listed files that did not exist on disk (changelogs/V*.md, Plans/*.md, troubleshooting records, wiki/sessions/S*.md, audits, briefings). Reconciled in V0.8.0 structural audit. | Medium — agents trusting FILESYSTEM.md would encounter read failures | P2 | structural-reconciliation-2026-06-11 | resolved |
-| Plans/ directory did not exist on disk despite being foundational to PLANNING.md workflow. Created with placeholder README.md files. | High — framework cannot operate without Plans/ | P1 | structural-reconciliation-2026-06-11 | resolved |
-| wiki/releases/ directory did not exist on disk. Created with README.md placeholder. | Low — releases directory not critical for baseline operation | P4 | structural-reconciliation-2026-06-11 | resolved |
-| wiki/index.md referenced 10 AICC session syntheses (S001-S010) that do not exist in the clean baseline. References removed. | Medium — broken wikilinks cause agent confusion | P2 | structural-reconciliation-2026-06-11 | resolved |
-| No automated validation for FILESYSTEM.md accuracy against physical disk state. | Medium — discrepancies can recur unnoticed | P3 | governance-validator-skill-2026-06-11 | resolved |
-| No automated test harness for governance document integrity (links, frontmatter, cross-references). | Medium — governance quality relies entirely on manual review | P3 | governance-validator-skill-2026-06-11 | resolved |
-
-| Refactoring guidance existed, but there was no mandatory gate preventing agents from creating monolithic files or duplicating code during implementation. | High - AI-generated applications accumulated oversized files, repeated snippets, stale files, and cleanup debt | P2 | P2-R3-2026-06-13-anti-monolith-code-hygiene | resolved |
-| Skills and agent profiles could be created or adjusted without measurable recurrence, coverage-gap, token/risk ROI, scope, and validation criteria. | High - agents could create redundant specialists, noisy skills, and irrelevant self-improvement churn | P2 | P2-R3-2026-06-13-framework-agent-self-improvement-template-site | resolved |
-
-### Mitigation (V0.8.0)
-
-Both gaps are addressed by the new ASE skill `skills/governance-validator/SKILL.md`, which provides a high-density procedural checklist for AI agents to manually validate:
-- FILESYSTEM.md accuracy vs. physical disk state (Validation 1)
-- Governance document integrity — frontmatter, links, cross-references, table format (Validation 2)
-
-The skill is pure Markdown, loaded on-demand (JIT), never pre-loaded, and replaces reading ~40+ pages of governance documents for validation purposes. This respects ADR-0001 (no automation scripts) and the ASE token-efficiency principle.
+| FILESYSTEM.md visual tree listed files that did not exist on disk. | Medium — agents trusting FILESYSTEM.md would encounter read failures | P2 | structural-reconciliation-2026-06-11 | resolved |
+| Plans/ directory did not exist on disk despite being foundational to PLANNING.md workflow. | High — framework cannot operate without Plans/ | P1 | structural-reconciliation-2026-06-11 | resolved |
+| wiki/releases/ directory did not exist on disk. | Low — releases directory not critical for baseline operation | P4 | structural-reconciliation-2026-06-11 | resolved |
+| No automated validation for FILESYSTEM.md accuracy against physical disk state. | Medium — discrepancies can recur unnoticed | P3 | governance-validator-skill-2026-06-11 | resolved as manual AI-driven validation |
+| No automated test harness for governance document integrity. | Medium — governance quality relies on manual/AI review | P3 | governance-validator-skill-2026-06-11 | resolved as Markdown-only skill validation |
+| Declarative automation concepts existed as needs but had no Markdown-only contract boundary. | Medium — agents could interpret hooks/watchers/daemons as executable automation | P2 | P2-R3-2026-06-23-declarative-automation-contracts | in_progress |
 
 ---
 
-## 14. Manifest Update History
+## 13. Manifest Update History
 
 | Date | Project Version | Change in Manifest | Author |
 |---|---|---|---|
 | 2026-05-15 | `V0.0.0` | Manifest creation. | Hugo Araújo de Melo |
-| 2026-05-15 | `V0.0.1` | Added Star History to README. | Antigravity |
-| 2026-05-17 | `V0.1.0` | Repository internationalization: translated all files and structures to English. | Antigravity |
-| 2026-05-17 | `V0.1.1` | Implemented FILESYSTEM.md and sync-filesystem.ps1 script. | Antigravity |
-| 2026-05-17 | `V0.1.2` | Implemented mockup calibration system and TEMPLATE_VISUAL_DIFF.md. | Antigravity |
-| 2026-05-17 | `V0.1.3` | Implemented database schema update protocols and token optimization. | Antigravity |
-| 2026-05-18 | `V0.2.0` | Implemented AI Interaction Context Compression (AICC) system. | Antigravity |
-| 2026-05-18 | `V0.2.1` | Added bilingual token consumption estimates to README.md and AI.md. | Antigravity |
-| 2026-05-18 | `V0.3.0` | Implemented AI Skills Engine (ASE) and integrated obsidian-markdown skill. | Antigravity |
-| 2026-05-18 | `V0.3.1` | Aligned README.md visual directory trees with physical filesystem tree. | Antigravity |
 | 2026-05-18 | `V0.4.0` | Transitioned to pure-markdown instruction model, deprecated mockups and automated scripts (ADR-0001). | Antigravity |
-| 2026-05-22 | `V0.5.0` | Filled all placeholder fields; expanded ASE with 3 new skills; added CONTEXT_MAP.md; populated wiki; consolidated AICC templates; added TEMPLATE_TROUBLESHOOTING.md. | Antigravity |
-| 2026-05-25 | `V0.5.2` | Clean up unused css variable. | Jules |
-| 2026-05-26 | `V0.6.0` | Expanded framework: added ENVIRONMENT.md, PERFORMANCE.md, project-instantiation & aicc-compact skills, and integrated technical debt ledger. | Antigravity |
-| 2026-05-29 | `V0.7.0` | Released modern internationalized `docs/index.html` and sanitized repository to zero-state distribution. | Sistema2D |
-| 2026-05-29 | `V0.7.1` | Corrected root README getting-started flow to match the framework lifecycle. | Sistema2D |
-| 2026-05-29 | `V0.7.2` | Copied `FCVW/docs/index.html` to root `docs/index.html` for GitHub Pages compatibility. | Sistema2D |
-| 2026-05-29 | `V0.7.3` | Added Star History and Buy Me a Coffee references to the public README. | Sistema2D |
-| 2026-05-29 | `V0.7.4` | Expanded root README with operational routing flowcharts. | Sistema2D |
-| 2026-05-29 | `V0.7.5` | Fixed Mermaid syntax in root README routing flowcharts. | Sistema2D |
-| 2026-05-29 | `V0.7.5` | Reconciled governance metadata, mandatory troubleshooting structure, and current-version documentation. | Codex |
-| 2026-05-29 | `V0.7.5` | Deprecated framework-owned root README, root docs duplicate, and `FCVW/snippets/`; centralized design rules in `DESIGN.md`. | Codex |
-| 2026-06-01 | `V0.7.6` | Fixed translation rendering security risk in the documentation page. | Codex |
-| 2026-06-04 | `V0.7.7` | Published global consistency corrections and documentation test alignment. | Codex |
-| 2026-06-04 | `V0.7.8` | Added retroactive-instantiation workflow and refreshed public README routing. | Codex |
-| 2026-06-05 | `V0.7.9` | Removed framework documentation site artifacts and obsolete Node/Jest harness from the baseline. | Codex |
-| 2026-06-05 | `V0.8.0` | Treated GitHub issues #27, #28, and #29 with operational priority/risk rules, application module documentation governance, and centralized agent journals. | Codex |
-| 2026-06-11 | `V0.8.0` | Structural reconciliation: reconciled FILESYSTEM.md with actual baseline state, created Plans/ directory, updated MANIFEST.md §13 gaps, fixed wiki/index.md broken references, created wiki/releases/. | Buffy |
-| 2026-06-11 | `V0.8.0` | Governance validator skill: created skills/governance-validator/SKILL.md to close two open structural gaps — FILESYSTEM.md accuracy validation and governance document integrity checks. Updated skills/README.md, CONTEXT_MAP.md. | Buffy |
-| 2026-06-11 | `V0.8.0` | Service research mandate (GAP-1.3): added mandatory third-party service research rules to AGENTS.md and AI.md. Created plan P1-R4-service-research. | Buffy |
-| 2026-06-11 | `V0.8.0` | PR/branch/code review workflow (GAP-2.2): added PR workflow, branch naming, review standards to AGENTS.md and CONTEXT_MAP.md. Created plan P2-R3-pr-branch. | Buffy |
-| 2026-06-11 | `V0.8.0` | Environment promotion workflow (GAP-3.2): added promotion gates, deploy rollback, environment workflow to ENVIRONMENT.md, RELEASE.md, CONTEXT_MAP.md. Created plan P2-R3-environments. | Buffy |
-| 2026-06-11 | `V0.8.0` | Multi-agent concurrency protocol (GAP-5.1): added coordination protocol, scope locking, conflict resolution to AGENTS.md and CONTEXT_MAP.md. Created plan P2-R4-multi-agent. | Buffy |
-| 2026-06-11 | `V0.9.0` | Consolidated 4 changelog fragments into formal V0.9.0 release. Created FCVW/changelogs/V0.9.0.md. Updated STACK.md and MANIFEST.md version references. | Buffy |
-| 2026-06-13 | `V0.9.1` | Added anti-monolith and code hygiene gates, created two ASE skills and two governance templates, made domain agents tool-aware, updated retroactive instantiation and validation rules. | Codex |
-| 2026-06-13 | `V0.10.0` | Added controlled agent/skill factory and self-improvement gates, created clean template baseline, repaired AI-usability issues, and refreshed the web site content. | Codex |
-| 2026-06-14 | `V0.10.1` | Removed raw HTML from Markdown READMEs, reduced static site data from embedded content to a manifest, and sanitized the clean template manifest. | Codex |
-| 2026-06-14 | `V0.10.2` | Final compliance QA: removed false broken wikilinks from wiki examples, restored resolvable site mirror structure, and refreshed validation artifacts. | Codex |
-| 2026-06-17 | `V0.10.3` | Patched release-governance coherence, Portuguese JIT triggers, plan-state validation, and large-file version references for the draft PR review. | Codex |
-| 2026-06-17 | `V0.11.0` | Added continuous wiki curation governance, fixed optimized curation cost mode, thematic taxonomy, metrics, and `wiki-curator` skill. | Codex |
+| 2026-06-11 | `V0.8.0` | Structural reconciliation and governance-validator skill added. | Buffy |
+| 2026-06-13 | `V0.9.1` | Added anti-monolith and code hygiene gates. | Codex |
+| 2026-06-13 | `V0.10.0` | Added controlled agent/skill factory and self-improvement gates. | Codex |
+| 2026-06-17 | `V0.11.0` | Added continuous wiki curation governance and `wiki-curator` skill. | Codex |
+| 2026-06-23 | `V0.12.0` | Added Markdown-only declarative automation contract registry and SantanderAI conceptual inspiration credit. | GPT-5.5 Thinking |
 
 ---
 
-## 15. Governance Statement
+## 14. Governance Statement
 
-This project must be conducted with traceability, validation, scope control, security, updated documentation, and coherent versioning.
+This project must be conducted with traceability, validation, scope control, security, updated documentation, coherent versioning, and strict Scenario 1 automation boundaries.
 
-No human or AI agent should treat governance documents as optional when the requested action involves changing code, documentation, configuration, design, tests, versioned data, build, release, security, or functional behavior.
+No human or AI agent should treat governance documents as optional when the requested action involves changing code, documentation, configuration, design, tests, versioned data, build, release, security, functional behavior, declarative automation contracts, or AI operating rules.
