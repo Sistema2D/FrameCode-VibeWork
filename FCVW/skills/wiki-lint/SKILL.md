@@ -1,6 +1,6 @@
 ---
 name: "wiki-lint"
-version: "1.0.0"
+version: "1.0.1"
 trigger_keywords: ["wiki lint", "lint wiki", "wiki check", "orphan pages", "broken links", "wiki validation", "wiki audit", "wiki frontmatter"]
 session_types: ["document_audit", "release", "wiki_maintenance"]
 ---
@@ -17,6 +17,7 @@ Load this skill (with `view_file` and `IsSkillFile: true`) when the task involve
 - Detecting a contradiction between wiki pages or official documents
 - User explicitly requests "wiki lint", "wiki audit", or "wiki check"
 - Adding 3 or more new wiki pages in a single session
+- Adding or changing declarative automation contracts that may produce reusable knowledge
 
 ## 1. Pre-Lint Context Load
 
@@ -98,6 +99,17 @@ For each file in `decisions/`, check if a corresponding page exists in `wiki/dec
 ### 3.4 Unresolved Questions
 
 Review `wiki/questions/` for pages with `status: draft` older than 30 days. Flag for follow-up.
+
+### 3.5 Declarative Automation Knowledge Gaps
+
+When `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md`, or their templates change, check whether the change generated reusable knowledge that should be promoted to:
+
+- `wiki/patterns/` — reusable Markdown-only maintenance patterns;
+- `wiki/decisions/` — automation boundary or governance decisions;
+- `wiki/refactorings/` — governance refactoring patterns;
+- `wiki/failures/` — recurring mistakes avoided by hooks/watchers/gates.
+
+If the change credits an external reference such as `https://github.com/SantanderAI`, verify whether a `wiki/sources/` note is appropriate. Credit must remain conceptual unless copied material is explicitly licensed and documented.
 
 ## 4. Lint Report Format
 
