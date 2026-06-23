@@ -3,23 +3,27 @@ title: "Project Filesystem Architecture"
 type: "concept"
 status: "validated"
 confidence: "high"
-last_reviewed: "2026-06-17"
-related_version: "V0.11.0"
+last_reviewed: "2026-06-23"
+related_version: "V0.12.0"
 sources:
   - "STACK.md"
   - "SCOPE.md"
   - "DESIGN.md"
   - "decisions/ADR-0001-pure-markdown-over-automation-scripts.md"
+  - "decisions/ADR-0002-declarative-automation-contracts.md"
 tags:
   - "filesystem"
   - "architecture"
+  - "declarative-automation"
 ---
 
 # Project Filesystem Architecture
 
 This document defines the physical directory structure of the application. It serves as the single source of truth for the file organization, ensuring absolute consistency between design rules, stack requirements, and physical implementation.
 
-In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-scripts.md), this directory layout is maintained purely declaratively in Markdown and verified manually by agents, eliminating dependencies on local environment scripts.
+In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-scripts.md), this directory layout is maintained declaratively in Markdown and verified manually by agents, eliminating dependencies on local environment scripts.
+
+In accordance with [ADR-0002](decisions/ADR-0002-declarative-automation-contracts.md), hook, watcher, daemon, and governance-gate artifacts are represented as Markdown-only contracts, not executable automation.
 
 ---
 
@@ -37,6 +41,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   \-- README.md
 |   |-- changelogs/
 |   |   |-- unreleased/
+|   |   |   |-- P2-R3-2026-06-23-declarative-automation-contracts.md
 |   |   |   \-- README.md
 |   |   |-- V0.10.0.md
 |   |   |-- V0.10.1.md
@@ -46,7 +51,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |-- V0.9.0.md
 |   |   \-- V0.9.1.md
 |   |-- decisions/
-|   |   \-- ADR-0001-pure-markdown-over-automation-scripts.md
+|   |   |-- ADR-0001-pure-markdown-over-automation-scripts.md
+|   |   \-- ADR-0002-declarative-automation-contracts.md
 |   |-- governance/
 |   |   |-- README_FRAMEWORK.md
 |   |   |-- TEMPLATE_ADR.md
@@ -55,11 +61,15 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |-- TEMPLATE_AI_SESSION_SYNTHESIS.md
 |   |   |-- TEMPLATE_API_SPEC.md
 |   |   |-- TEMPLATE_APP_DOCS_README.md
+|   |   |-- TEMPLATE_AUTOMATION_CONTRACT.md
 |   |   |-- TEMPLATE_BRIEFING.md
 |   |   |-- TEMPLATE_CODE_HYGIENE_REPORT.md
+|   |   |-- TEMPLATE_DAEMON_LOOP.md
 |   |   |-- TEMPLATE_DATA_SCHEMA.md
 |   |   |-- TEMPLATE_ENV.md
 |   |   |-- TEMPLATE_FLOW_DOCUMENTATION.md
+|   |   |-- TEMPLATE_GOVERNANCE_GATE_REPORT.md
+|   |   |-- TEMPLATE_HOOK_CHECK.md
 |   |   |-- TEMPLATE_MIGRATION_RUNNER.md
 |   |   |-- TEMPLATE_MODULE_DOCUMENTATION.md
 |   |   |-- TEMPLATE_MONOLITH_GATE.md
@@ -78,7 +88,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |-- TEMPLATE_RELEASE.md
 |   |   |-- TEMPLATE_SELF_IMPROVEMENT_REPORT.md
 |   |   |-- TEMPLATE_TROUBLESHOOTING.md
-|   |   \-- TEMPLATE_VISUAL_DIFF.md
+|   |   |-- TEMPLATE_VISUAL_DIFF.md
+|   |   \-- TEMPLATE_WATCHER_RULE.md
 |   |-- Plans/
 |   |   |-- completed/
 |   |   |   |-- P1-R4-2026-06-11-service-research-mandate.md
@@ -96,6 +107,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |-- discontinued/
 |   |   |   \-- README.md
 |   |   |-- in_progress/
+|   |   |   |-- P2-R3-2026-06-23-declarative-automation-contracts.md
 |   |   |   \-- README.md
 |   |   |-- pending/
 |   |   |   \-- README.md
@@ -211,7 +223,8 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |   |   |-- S006-2026-06-17-v0103-release-governance-jit-fixes.md
 |   |   |   \-- S007-2026-06-17-v0110-wiki-continuous-learning-governance.md
 |   |   |-- sources/
-|   |   |   \-- README.md
+|   |   |   |-- README.md
+|   |   |   \-- santanderai-declarative-automation-inspiration.md
 |   |   |-- syntheses/
 |   |   |   \-- README.md
 |   |   |-- templates/
@@ -235,12 +248,16 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |-- APPLICATION_DOCUMENTATION.md
 |   |-- ARCHITECTURAL_DECISIONS.md
 |   |-- AUDIT.md
+|   |-- AUTOMATION.md
 |   |-- BRIEFING.md
 |   |-- CONTEXT_MAP.md
+|   |-- DAEMONS.md
 |   |-- DATA.md
 |   |-- DESIGN.md
 |   |-- ENVIRONMENT.md
 |   |-- FILESYSTEM.md
+|   |-- GOVERNANCE_GATES.md
+|   |-- HOOKS.md
 |   |-- INSTANTIATION.md
 |   |-- LICENSE
 |   |-- MANIFEST.md
@@ -257,6 +274,7 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 |   |-- TESTS.md
 |   |-- TROUBLESHOOTING.md
 |   |-- VERSIONING.md
+|   |-- WATCHERS.md
 |   \-- WORKFLOW.md
 |-- .cursorrules
 |-- .gitignore
@@ -273,23 +291,30 @@ In accordance with [ADR-0001](decisions/ADR-0001-pure-markdown-over-automation-s
 
 | Path | Primary Role | Stakeholders / Sources | Git Ignored? |
 |---|---|---|---|
-| `/FCVW/Plans/` | Contains chronological implementation change plans. | [PLANNING.md](PLANNING.md) | No |
-| `/FCVW/audits/` | Stores formal audit records and pre-release review evidence. | [AUDIT.md](AUDIT.md) | No |
-| `/FCVW/briefings/` | Stores Phase 0 discovery and instantiation records. | [BRIEFING.md](BRIEFING.md) / [INSTANTIATION.md](INSTANTIATION.md) | No |
-| `/FCVW/decisions/` | Stores formal Architectural Decision Records (ADRs). | [ARCHITECTURAL_DECISIONS.md](ARCHITECTURAL_DECISIONS.md) | No |
-| `/FCVW/changelogs/` | Formal version release notes and unreleased plan fragments. | [VERSIONING.md](VERSIONING.md) | No |
-| `/FCVW/governance/` | Reusable empty blueprint templates. | [INSTANTIATION.md](INSTANTIATION.md) | No |
-| `/FCVW/APPLICATION_DOCUMENTATION.md` | Rules for downstream application-owned module documentation. | [AGENTS.md](../AGENTS.md) | No |
-| `/FCVW/troubleshooting/` | Stores issue records, hypotheses, handlings, and validation evidence. | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | No |
-| `/FCVW/wiki/` | Continuous technical learning vault of the project. | [AI.md](AI.md) / `wiki/schema.md` | No |
-| `/FCVW/wiki/agents/` | Agent-specific journals and journal path convention. | [AI.md](AI.md) / `wiki/schema.md` | No |
-| `/FCVW/data/` | Stores local SQLite database and backups. | [DATA.md](DATA.md) | **Yes** (strict) |
+| `/FCVW/Plans/` | Contains chronological implementation change plans. | `PLANNING.md` | No |
+| `/FCVW/audits/` | Stores formal audit records and pre-release review evidence. | `AUDIT.md` | No |
+| `/FCVW/briefings/` | Stores Phase 0 discovery and instantiation records. | `BRIEFING.md` / `INSTANTIATION.md` | No |
+| `/FCVW/decisions/` | Stores formal Architectural Decision Records (ADRs). | `ARCHITECTURAL_DECISIONS.md` | No |
+| `/FCVW/changelogs/` | Formal version release notes and unreleased plan fragments. | `VERSIONING.md` | No |
+| `/FCVW/governance/` | Reusable empty blueprint templates. | `INSTANTIATION.md` | No |
+| `/FCVW/wiki/` | Continuous technical learning vault of the project. | `AI.md` / `wiki/schema.md` | No |
+| `/FCVW/wiki/sources/` | External source notes and conceptual inspiration records. | `wiki/schema.md` / `wiki-lint` | No |
+| `/FCVW/AUTOMATION.md` | Parent contract for Markdown-only declarative automation. | `AGENTS.md` / ADR-0002 | No |
+| `/FCVW/HOOKS.md` | Defines pseudo-hook checklists without installing Git hooks. | `AUTOMATION.md` / `PLANNING.md` | No |
+| `/FCVW/WATCHERS.md` | Defines event/reaction watcher rules without coded watchers. | `AUTOMATION.md` / `governance-validator` | No |
+| `/FCVW/DAEMONS.md` | Defines manual/agentic maintenance loops without background processes. | `AUTOMATION.md` / `AI.md` / `SECURITY.md` | No |
+| `/FCVW/GOVERNANCE_GATES.md` | Maps gate triggers, evidence, owners, and blocking conditions. | `PLANNING.md` / `skills/` | No |
+| `/FCVW/APPLICATION_DOCUMENTATION.md` | Rules for downstream application-owned module documentation. | `AGENTS.md` | No |
+| `/FCVW/troubleshooting/` | Stores issue records, hypotheses, handlings, and validation evidence. | `TROUBLESHOOTING.md` | No |
+| `/FCVW/data/` | Stores local SQLite database and backups when an instantiated app needs persistence. | `DATA.md` | **Yes** (strict) |
 
 ---
 
 ## 3. Maintenance and Self-Healing Rules
 
 1. **AI Checkpoints:** Whenever a new feature is requested, the AI must check `FILESYSTEM.md` before writing code to confirm where the new files belong.
-2. **Declarative Layout Integrity:** The detailed visual tree in `FILESYSTEM.md` must be updated manually by the agent whenever files are added or deleted. Summary documents should link to this file instead of duplicating the full tree.
-3. **Audit Closure:** The final step of any plan that alters directories is a manual verification of this document's visual tree.
-4. **Baseline Accuracy:** This document must always reflect the actual on-disk state. If a directory is empty (only a `README.md` placeholder), the tree must show only the placeholder. Do not list files that do not exist.
+2. **Declarative Layout Integrity:** The detailed visual tree in `FILESYSTEM.md` must be updated manually by the agent whenever files are added, moved, renamed, or deleted. Summary documents should link to this file instead of duplicating the full tree.
+3. **Automation Boundary Integrity:** Hook, watcher, daemon, and gate files must remain Markdown-only contracts under Scenario 1. They must not introduce scripts, installed hooks, coded watchers, background daemons, package manifests, CI/CD workflows, provider SDKs, or API-key flows.
+4. **Audit Closure:** The final step of any plan that alters directories is a manual verification of this document's visual tree.
+5. **Baseline Accuracy:** This document must always reflect the actual on-disk state. If a directory is empty (only a `README.md` placeholder), the tree must show only the placeholder. Do not list files that do not exist.
+6. **Credit Traceability:** External conceptual inspiration, such as SantanderAI public repositories, must be recorded in relevant documents or `wiki/sources/` without implying copied code.
