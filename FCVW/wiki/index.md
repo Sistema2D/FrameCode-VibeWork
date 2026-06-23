@@ -14,16 +14,24 @@ Clean distributions should start from the template baseline. This working framew
 - [[metrics]] - Freshness, promotion, duplication, release synthesis, and cost-control metrics.
 - [[sessions/README]] - Session synthesis rules and naming convention.
 - [[agents/README]] - Agent journal path convention.
-- [[releases/README]] - Release syntheses (empty baseline).
+- [[releases/README]] - Release syntheses directory.
 - [[refactorings/anti-monolith-and-code-hygiene-gates]] - Active gates against monoliths, duplication, stale files, and cleanup debt.
 - [[refactorings/agent-skill-self-improvement-governance]] - Controlled creation and evidence-based improvement of skills and agent profiles.
 - [[sources/santanderai-declarative-automation-inspiration]] - Conceptual source note for SantanderAI-inspired declarative automation patterns.
-- [[sessions/S002-2026-06-13-anti-monolith-code-hygiene]] - Session synthesis for V0.9.1 governance patch.
-- [[sessions/S003-2026-06-13-agent-self-improvement-template-site]] - Session synthesis for V0.10.0 governance, template, and site patch.
-- [[sessions/S004-2026-06-13-v0101-cleanup-optimization]] - Session synthesis for V0.10.1 cleanup and site optimization.
-- [[sessions/S005-2026-06-14-final-compliance-qa]] - Session synthesis for V0.10.2 final compliance QA.
-- [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]] - Session synthesis for V0.10.3 release governance and JIT trigger fixes.
-- [[sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance]] - Session synthesis for V0.11.0 wiki continuous learning governance.
+- [[sessions/S001-2026-06-11-governance-gaps-closure]] - Session synthesis for V0.9.0 governance gap closure.
+- [[sessions/S002-2026-06-13-anti-monolith-code-hygiene]] - Session synthesis for V0.9.1 anti-monolith and code hygiene patch.
+- [[sessions/S003-2026-06-13-agent-self-improvement-template-site]] - Session synthesis for V0.10.0 agent self-improvement, template, and site refresh.
+- [[sessions/S004-2026-06-13-v0101-cleanup-optimization]] - Session synthesis for V0.10.1 cleanup optimization.
+- [[sessions/S005-2026-06-14-final-compliance-qa]] - Session synthesis for V0.10.2 final compliance and QA.
+- [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]] - Session synthesis for V0.10.3 release governance and JIT fixes.
+- [[sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance]] - Session synthesis for V0.11.0 wiki continuous-learning governance.
+- [[releases/v0-8-0-summary]] - Release synthesis for V0.8.0 governance gaps closure.
+- [[releases/v0-9-0-summary]] - Release synthesis for V0.9.0 governance gap closure.
+- [[releases/v0-9-1-summary]] - Release synthesis for V0.9.1 anti-monolith and code hygiene patch.
+- [[releases/v0-10-0-summary]] - Release synthesis for V0.10.0 agent self-improvement and template refresh.
+- [[releases/v0-10-1-summary]] - Release synthesis for V0.10.1 cleanup optimization.
+- [[releases/v0-10-2-summary]] - Release synthesis for V0.10.2 final compliance and QA.
+- [[releases/v0-10-3-summary]] - Release synthesis for V0.10.3 release governance JIT fixes.
 - [[releases/v0-11-0-summary]] - Release synthesis for V0.11.0 continuous wiki curation.
 - [[README]] - Overview of the `wiki/` folder.
 
@@ -57,11 +65,10 @@ Clean distributions should start from the template baseline. This working framew
 - Validated patterns: none registered.
 - Consolidated decisions: none registered.
 - Source notes: [[sources/santanderai-declarative-automation-inspiration]].
-- Release syntheses: [[releases/v0-11-0-summary]].
+- Release syntheses: [[releases/v0-8-0-summary]], [[releases/v0-9-0-summary]], [[releases/v0-9-1-summary]], [[releases/v0-10-0-summary]], [[releases/v0-10-1-summary]], [[releases/v0-10-2-summary]], [[releases/v0-10-3-summary]], [[releases/v0-11-0-summary]].
 - Cross-cutting syntheses: [[taxonomy]], [[metrics]], [[refactorings/anti-monolith-and-code-hygiene-gates]], [[refactorings/agent-skill-self-improvement-governance]], [[sessions/S006-2026-06-17-v0103-release-governance-jit-fixes]], [[sessions/S007-2026-06-17-v0110-wiki-continuous-learning-governance]].
 - Failure catalog: none registered in `wiki/failures/`.
 - Prompt catalog: none registered.
-- Open questions: none registered.
 
 ---
 
