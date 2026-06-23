@@ -3,6 +3,7 @@ context_files:
   - "AGENTS.md"
   - "FCVW/PLANNING.md"
   - "FCVW/decisions/ADR-0001-pure-markdown-over-automation-scripts.md"
+  - "FCVW/decisions/ADR-0002-declarative-automation-contracts.md"
   - "FCVW/CONTEXT_MAP.md"
   - "FCVW/STACK.md"
   - "FCVW/MANIFEST.md"
@@ -10,6 +11,11 @@ context_files:
   - "FCVW/AI.md"
   - "FCVW/SECURITY.md"
   - "FCVW/WORKFLOW.md"
+  - "FCVW/AUTOMATION.md"
+  - "FCVW/HOOKS.md"
+  - "FCVW/WATCHERS.md"
+  - "FCVW/DAEMONS.md"
+  - "FCVW/GOVERNANCE_GATES.md"
   - "FCVW/skills/governance-validator/SKILL.md"
   - "FCVW/skills/wiki-lint/SKILL.md"
   - "FCVW/skills/agent-factory/SKILL.md"
@@ -18,14 +24,14 @@ context_files:
 # P2-R3-2026-06-23-declarative-automation-contracts
 
 - **Description:** Add Markdown-only declarative automation contracts for pseudo-hooks, watcher rules, daemon loops, and governance gates while preserving ADR-0001's pure Markdown baseline.
-- **Justification:** The framework already depends on manual/agentic validation loops, but recurring maintenance risks such as filesystem drift, missing changelogs, plan-state mismatch, wiki lint gaps, and unsafe interpretation of automation terminology need explicit operational contracts without introducing executable automation.
+- **Justification:** The framework already depends on manual/agentic validation loops, but recurring maintenance risks such as filesystem drift, missing changelog fragments, plan-state mismatch, wiki lint gaps, and unsafe interpretation of automation terminology need explicit operational contracts without introducing executable automation.
 - **Objective:** Provide clear Markdown contracts that let humans and AI agents reason about hooks, watchers, daemons, and gates without adding scripts, installed Git hooks, package dependencies, CI/CD workflows, or background processes.
 - **Scope:**
   - Included:
     - Create declarative automation official documents.
     - Create reusable Markdown templates for future contracts.
     - Add an ADR clarifying that automation remains Markdown-only in Scenario 1.
-    - Update central navigation, stack, manifest, workflow, AI, security, filesystem, and validation skills.
+    - Update central navigation, stack, manifest, workflow, AI, security, filesystem, wiki index/log, and validation skills.
     - Credit SantanderAI as architectural inspiration where applicable.
   - Excluded:
     - No executable scripts.
@@ -57,6 +63,9 @@ context_files:
   - `FCVW/skills/governance-validator/SKILL.md`
   - `FCVW/skills/wiki-lint/SKILL.md`
   - `FCVW/skills/README.md`
+  - `FCVW/wiki/index.md`
+  - `FCVW/wiki/log.md`
+  - `FCVW/wiki/sources/santanderai-declarative-automation-inspiration.md`
   - `FCVW/changelogs/unreleased/P2-R3-2026-06-23-declarative-automation-contracts.md`
 - **Implementation plan:**
   1. Create ADR-0002 to clarify Markdown-only automation contracts.
@@ -67,21 +76,21 @@ context_files:
   6. Update filesystem source of truth and changelog fragment.
   7. Validate that no executable automation was introduced and that internal references are coherent.
 - **Acceptance criteria:**
-  - [ ] New automation documents clearly state they are Markdown-only contracts.
-  - [ ] SantanderAI credit is recorded as inspiration, not as copied code.
-  - [ ] No executable scripts, installed hooks, package files, daemons, CI workflows, or dependencies are introduced.
-  - [ ] `AGENTS.md` and `CONTEXT_MAP.md` expose the new session type and loading path.
-  - [ ] `STACK.md` and `MANIFEST.md` preserve the pure Markdown baseline.
-  - [ ] `SECURITY.md` and `AI.md` prevent executable interpretation of automation contracts.
-  - [ ] `FILESYSTEM.md` lists all new files.
-  - [ ] Validation skills cover declarative automation integrity.
-  - [ ] Changelog fragment exists.
+  - [x] New automation documents clearly state they are Markdown-only contracts.
+  - [x] SantanderAI credit is recorded as inspiration, not as copied code.
+  - [x] No executable scripts, installed hooks, package files, daemons, CI workflows, or dependencies are introduced.
+  - [x] `AGENTS.md` and `CONTEXT_MAP.md` expose the new session type and loading path.
+  - [x] `STACK.md` and `MANIFEST.md` preserve the pure Markdown baseline.
+  - [x] `SECURITY.md` and `AI.md` prevent executable interpretation of automation contracts.
+  - [x] `FILESYSTEM.md` lists all new files.
+  - [x] Validation skills cover declarative automation integrity.
+  - [x] Changelog fragment exists.
 - **Test plan:**
-  - [ ] Manual governance review against ADR-0001 and ADR-0002.
-  - [ ] Manual search for prohibited executable artifacts: `scripts/`, `.githooks/`, `.github/workflows/`, `package.json`, `pyproject.toml`, executable hook files.
-  - [ ] Manual link/reference review of new documents.
-  - [ ] Manual verification that new files appear in `FILESYSTEM.md`.
-  - [ ] Manual validation that skill changes use existing self-improvement gate rather than uncontrolled skill creation.
+  - [x] Manual governance review against ADR-0001 and ADR-0002.
+  - [x] Manual search for prohibited executable artifacts: `scripts/`, `.githooks/`, `.github/workflows/`, `package.json`, `pyproject.toml`, executable hook files.
+  - [x] Manual link/reference review of new documents.
+  - [x] Manual verification that new files appear in `FILESYSTEM.md`.
+  - [x] Manual validation that skill changes use existing self-improvement gate rather than uncontrolled skill creation.
 - **Priority:** `P2`
 - **Risk:** `R3`
 - **Operational Score:** `P2-R3 => impact_weight 4 x risk_weight 3 = 12`
@@ -93,10 +102,11 @@ context_files:
 - **Expected Version:** `V0.12.0`
 - **Status:** `in_progress`
 - **Creation Date:** 2026-06-23
-- **Completion Date:** Not applicable.
+- **Completion Date:** Pending PR review/merge.
 - **Technical observations:**
   - Scenario 1 preserves ADR-0001 by using Markdown-only operational contracts.
   - SantanderAI repositories are credited only as architectural inspiration for loop, vault/lint, and gate patterns; no code is copied.
+  - The branch remains in progress until PR review because the plan is classified `R3`.
 
 ## Agent/Skill Creation Gate
 
@@ -122,7 +132,7 @@ context_files:
 - Validation replay: verify that new documents exist, are listed, and explicitly prohibit scripts, installed hooks, daemons, and CI/CD.
 - Decision: `patch`
 
-## Validation Executed (Fill on completion)
+## Validation Executed
 
 ### Environment
 - OS: GitHub repository edit via connector
@@ -131,11 +141,11 @@ context_files:
 ### Tests
 | Test | Result | Evidence |
 |---|---|---|
-| ADR consistency review | pending | Pending completion |
-| Prohibited artifact review | pending | Pending completion |
-| Filesystem listing review | pending | Pending completion |
-| Link/reference review | pending | Pending completion |
-| Skill gate review | pending | Pending completion |
+| ADR consistency review | passed | ADR-0002 explicitly preserves ADR-0001 and classifies executable automation as Scenario 2. |
+| Prohibited artifact review | passed | Final branch comparison shows no added `scripts/`, `.githooks/`, `.github/workflows/`, `package.json`, `pyproject.toml`, SDK, CLI, or daemon files. |
+| Filesystem listing review | passed | `FILESYSTEM.md` updated with new official docs, templates, ADR, plan, changelog, and SantanderAI source note. |
+| Link/reference review | passed with warnings | References were synchronized across `AGENTS.md`, `CONTEXT_MAP.md`, `STACK.md`, `MANIFEST.md`, `WORKFLOW.md`, `AI.md`, `SECURITY.md`, `wiki/index.md`, and `wiki/log.md`. Full reviewer pass still recommended before merge due R3 scope. |
+| Skill gate review | passed | New skill creation deferred; existing skills patched through self-improvement gate. |
 
 ### Final Result
-`pending`
+`ready for documentation review`
