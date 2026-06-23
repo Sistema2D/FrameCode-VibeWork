@@ -1,0 +1,1 @@
+- Optimized task synchronization during phase deletion undo using Promise.all
