@@ -37,6 +37,7 @@ Load only the documents relevant to the session context. This `AGENTS.md` file i
 | Code hygiene / anti-monolith | `AGENTS.md`, `FCVW/REFACTORING.md`, `FCVW/PLANNING.md`, `FCVW/skills/anti-monolith-guard/SKILL.md`, `FCVW/skills/code-hygiene-refactor/SKILL.md` |
 | Agent / skill creation | `AGENTS.md`, `FCVW/AI.md`, `FCVW/PLANNING.md`, `FCVW/skills/agent-factory/SKILL.md` |
 | Skill / agent self-improvement | `AGENTS.md`, `FCVW/AI.md`, `FCVW/PLANNING.md`, `FCVW/AUDIT.md`, `FCVW/skills/self-improvement/SKILL.md` |
+| Declarative automation / maintenance | `AGENTS.md`, `FCVW/AUTOMATION.md`, `FCVW/HOOKS.md`, `FCVW/WATCHERS.md`, `FCVW/DAEMONS.md`, `FCVW/GOVERNANCE_GATES.md`, `FCVW/PLANNING.md` |
 | Release | `AGENTS.md`, `FCVW/skills/release-checklist/SKILL.md`, `FCVW/VERSIONING.md` (on demand) |
 | Security / data | `AGENTS.md`, `FCVW/SECURITY.md`, `FCVW/DATA.md`, `FCVW/ENVIRONMENT.md` |
 | AI / RAG / wiki | `AGENTS.md`, `FCVW/AI.md`, `FCVW/wiki/schema.md`, `FCVW/skills/wiki-curator/SKILL.md` (for curation tasks) |
@@ -98,6 +99,7 @@ Detailed rules are in the domain documents. Summary of responsibility:
 - **Agent/skill factory**: do not create new skills, agent profiles, specialist personas, or command packs by convenience. Load `FCVW/skills/agent-factory/SKILL.md`, prove recurrence, coverage gap, token/risk ROI, narrow scope, and validation before adding the asset.
 - **Skill/agent self-improvement**: do not adjust existing skills or agent profiles for style-only preferences. Load `FCVW/skills/self-improvement/SKILL.md` and record evidence, metric passed, scope preservation, and validation replay before editing any skill/profile.
 - **Wiki continuous learning**: when knowledge must be promoted, revised, grouped, tagged, linked, or scheduled for review, load `FCVW/skills/wiki-curator/SKILL.md`. Use the fixed optimized curation mode; do not expose customizable cost modes.
+- **Declarative automation**: when a task mentions hooks, watchers, daemons, automation, maintenance loops, governance gates, or recurring checks, consult `FCVW/AUTOMATION.md`, `FCVW/HOOKS.md`, `FCVW/WATCHERS.md`, `FCVW/DAEMONS.md`, and `FCVW/GOVERNANCE_GATES.md`. Under Scenario 1, these are Markdown-only contracts and must not create scripts, installed Git hooks, background processes, CI/CD workflows, package manifests, provider SDKs, or API-key integrations.
 - **Documentation**: plans go in `FCVW/Plans/{status}`; `AGENTS.md` must be updated when new official documents are created; templates in `FCVW/governance/` follow structural changes of the VibeWork FrameCode.
 - **Application module documentation**: when a change affects relevant pages, screens, modules, components, flows, or business rules in a downstream application, consult `FCVW/APPLICATION_DOCUMENTATION.md` and update the application-owned documentation path defined there.
 - **Agent journals**: agent-specific journals must live under `FCVW/wiki/agents/<agent_name>_journal.md`; do not create competing journal paths.
@@ -118,6 +120,7 @@ Before executing a request that might modify files:
 - **AI Context Ingestion**: read the latest compressed session context in [`FCVW/wiki/sessions/`](FCVW/wiki/sessions/) to immediately align with previous changes and active next steps;
 - **Memory Rotation**: if the `FCVW/wiki/sessions/` directory has more than 10 files, load the `memory-rotation` skill to condense older sessions into `FCVW/wiki/concepts/` and archive them, keeping only the 3 most recent sessions;
 - **Skills Engine Check**: check if the active task triggers any specialized skills mapped in [skills/README.md](FCVW/skills/README.md). If yes, load that skill using `view_file` with `IsSkillFile: true` to guide execution;
+- **Declarative Automation Check**: if the task mentions hooks, watchers, daemons, automation, recurring maintenance, stop conditions, or governance gates, consult `FCVW/AUTOMATION.md` first and block executable automation under Scenario 1;
 - **Agent/Skill Creation Gate**: if the task creates a new skill, agent profile, command pack, specialist role, or reusable operational procedure, load `agent-factory` and record the creation gate before adding files;
 - **Self-Improvement Gate**: if the task changes an existing skill, agent profile, trigger list, or agent operating rule, load `self-improvement` and record the improvement gate before editing;
 - **Anti-Monolith Gate**: if the task creates or extends a module, component, route, service, workflow, prompt pack, or file likely to grow beyond one responsibility, load `anti-monolith-guard` and record the gate result in the active plan before editing;
@@ -285,6 +288,7 @@ When working concurrently, each agent should use its own branch per the branch n
 - If there was a visual change, does `FCVW/DESIGN.md` reflect the current state?
 - If there was a bug, was `FCVW/troubleshooting/` consulted or updated?
 - Has the changelog fragment been created in `unreleased/` and does it cite the altered files?
+- If declarative automation contracts were added or changed, was `FCVW/AUTOMATION.md` consulted and was Scenario 1 compliance recorded?
 - If a new or expanded module/file was created, was the Anti-Monolith Gate recorded or explicitly marked not applicable?
 - If duplication, stale files, dead code, cleanup, or retroactive refactoring was involved, was the Code Hygiene Scan recorded?
 - If a skill, agent profile, or reusable operational procedure was created, was the Agent/Skill Creation Gate recorded with metrics?
