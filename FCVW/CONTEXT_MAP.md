@@ -20,6 +20,7 @@ This document is designed to be the **first auxiliary document consulted after `
 | **Code Hygiene / Anti-Monolith** | `AGENTS.md §checklist`, `REFACTORING.md`, `PLANNING.md`, `skill:anti-monolith-guard`, `skill:code-hygiene-refactor` | `TESTS.md`, `APPLICATION_DOCUMENTATION.md`, `wiki/refactorings/` | `DESIGN.md`, `DATA.md`, `RELEASE.md` |
 | **Agent / Skill Creation** | `AGENTS.md §checklist`, `AI.md §AI Skills Engine`, `PLANNING.md`, `skill:agent-factory` | `governance/TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md`, `skills/README.md`, `STACK.md` | Unrelated domain docs, release docs |
 | **Skill / Agent Self-Improvement** | `AGENTS.md §checklist`, `AI.md §AI Skills Engine`, `PLANNING.md`, `skill:self-improvement` | `AUDIT.md`, `governance/TEMPLATE_SELF_IMPROVEMENT_REPORT.md`, `skills/README.md`, `STACK.md` | Unrelated feature docs |
+| **Declarative Automation / Maintenance** | `AGENTS.md §checklist`, `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `GOVERNANCE_GATES.md`, `PLANNING.md` | `DAEMONS.md`, `ADR-0002`, `skill:governance-validator`, `skill:wiki-lint`, `skill:agent-factory`, `skill:self-improvement` | Runtime docs, `DATA.md`, `DESIGN.md`, `RELEASE.md` unless crossing domain |
 | **Release / Version / Changelog** | `AGENTS.md §checklist`, `skill:release-checklist` | `VERSIONING.md`, `AUDIT.md`, `RELEASE.md`, `skill:governance-validator` | `DESIGN.md`, `REFACTORING.md` |
 | **Briefing / Instantiation** | `AGENTS.md §checklist`, `INSTANTIATION.md`, `BRIEFING.md` | `skill:project-instantiation`, `MANIFEST.md`, `STACK.md` | `REFACTORING.md`, `RELEASE.md` |
 | **Retroactive Instantiation / Migration** | `AGENTS.md §checklist`, `RETROACTIVE_INSTANTIATION.md`, `INSTANTIATION.md` | `CONTEXT_MAP.md`, `skill:retroactive-instantiation`, `MANIFEST.md`, `STACK.md` | `DESIGN.md`, `REFACTORING.md`, `RELEASE.md` |
@@ -29,7 +30,7 @@ This document is designed to be the **first auxiliary document consulted after `
 | **Pull Request / Code Review** | `AGENTS.md §Code Review and Pull Requests` | `FCVW/refactoring-guide/17-branch-and-pull-request-policy.md` (if refactoring PR), `PLANNING.md` (risk gates) | Most governance docs |
 | **Deploy / Environment Promotion** | `AGENTS.md §checklist`, `ENVIRONMENT.md §5` | `RELEASE.md §Deployment and Environment Promotion`, `skill:release-checklist` (if release) | `DESIGN.md`, `REFACTORING.md`, `AI.md` |
 | **Multi-Agent / Collaboration** | `AGENTS.md §Multi-Agent Concurrency` | `FCVW/Plans/in_progress/` (check active plans), `wiki/agents/` (agent journals) | Most governance docs unless crossing domain |
-| **Git / Commit / Tag** | `skill:git-conventional-commits` | `VERSIONING.md`, `skill:release-checklist` (if version/tag/release) | Most governance docs |
+| **Git / Commit / Tag** | `skill:git-conventional-commits` | `VERSIONING.md`, `skill:release-checklist` (if version/tag/release), `HOOKS.md` (if pseudo-hook checklist is requested) | Most governance docs |
 
 ---
 
@@ -47,7 +48,7 @@ This document is designed to be the **first auxiliary document consulted after `
 | `skills/brainstorming-and-tdd/SKILL.md` | new feature, fixing a bug, implementing a plan | Enforces specification and Red/Green workflow |
 | `skills/code-hygiene-refactor/SKILL.md` | code hygiene, duplication, stale files, dead code, higiene de código | Guides active cleanup without scripts |
 | `skills/git-conventional-commits/SKILL.md` | commit, tag, push, release notes | Replaces ad-hoc reinstructions |
-| `skills/governance-validator/SKILL.md` | validate governance, verify filesystem, document integrity, plan state coherence | Validates governance integrity and plan-state consistency |
+| `skills/governance-validator/SKILL.md` | validate governance, verify filesystem, document integrity, plan state coherence, declarative automation integrity | Validates governance integrity, plan-state consistency, and Markdown-only automation contracts |
 | `skills/memory-rotation/SKILL.md` | context bloat, clean sessions, rotate memory | Keeps session memory bounded |
 | `skills/obsidian-markdown/SKILL.md` | wikilink, frontmatter, Obsidian note | Replaces ad-hoc formatting instructions |
 | `skills/orchestrator/SKILL.md` | large refactoring, complex plans, parallel tasks | Coordinates subagent-style task decomposition |
@@ -56,7 +57,7 @@ This document is designed to be the **first auxiliary document consulted after `
 | `skills/self-improvement/SKILL.md` | improve skill, improve agent, skill failed, gatilho falhou | Evidence-based gate for modifying skills and agent profiles |
 | `skills/systematic-debugging/SKILL.md` | debugging, fixing an error, stack trace | Enforces hypothesis-based debugging |
 | `skills/wiki-curator/SKILL.md` | curate wiki, continuous learning, agrupar notas, frontmatter colors | Promotes and clusters wiki knowledge in fixed optimized mode |
-| `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages | ~275 lines vs. reading schema.md §12 |
+| `skills/wiki-lint/SKILL.md` | lint, wiki audit, orphan pages, declarative automation knowledge gaps | ~275 lines vs. reading schema.md §12 |
 
 ---
 
@@ -77,6 +78,11 @@ This document is designed to be the **first auxiliary document consulted after `
 |---|---|---|
 | `AGENTS.md` | ~12 KB | Always first |
 | `CONTEXT_MAP.md` | ~3 KB | First auxiliary document after AGENTS.md |
+| `AUTOMATION.md` | ~3 KB | Use for hooks/watchers/daemons/gates in Scenario 1 |
+| `HOOKS.md` | ~4 KB | Use for pseudo-hook checklists |
+| `WATCHERS.md` | ~3 KB | Use for event/reaction governance rules |
+| `DAEMONS.md` | ~4 KB | Use for manual/agentic maintenance loops |
+| `GOVERNANCE_GATES.md` | ~3 KB | Use for gate trigger mapping |
 | `REFACTORING.md` | ~14 KB | On demand |
 | `skills/anti-monolith-guard/SKILL.md` | ~4 KB | Use for module/file growth gates |
 | `skills/code-hygiene-refactor/SKILL.md` | ~4 KB | Use for cleanup/refactoring triage |
@@ -107,5 +113,7 @@ This document is designed to be the **first auxiliary document consulted after `
 
 - `AGENTS.md` — full operational guide, checklists, and document index
 - `AI.md §Token Efficiency` — detailed token optimization rules
+- `AUTOMATION.md` — Markdown-only automation contract parent document
+- `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md` — declarative automation contracts
 - `skills/README.md` — skills catalog and usage guidelines
 - `wiki/sessions/` — AICC session syntheses (latest = current context)
