@@ -211,8 +211,14 @@ In accordance with [ADR-0002](decisions/ADR-0002-declarative-automation-contract
 |   |   |   \-- README.md
 |   |   |-- releases/
 |   |   |   |-- README.md
-|   |   |   |-- v0-11-0-summary.md
-|   |   |   \-- v0-8-0-summary.md
+|   |   |   |-- v0-8-0-summary.md
+|   |   |   |-- v0-9-0-summary.md
+|   |   |   |-- v0-9-1-summary.md
+|   |   |   |-- v0-10-0-summary.md
+|   |   |   |-- v0-10-1-summary.md
+|   |   |   |-- v0-10-2-summary.md
+|   |   |   |-- v0-10-3-summary.md
+|   |   |   \-- v0-11-0-summary.md
 |   |   |-- sessions/
 |   |   |   |-- README.md
 |   |   |   |-- S001-2026-06-11-governance-gaps-closure.md
