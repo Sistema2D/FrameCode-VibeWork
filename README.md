@@ -1,7 +1,5 @@
 # FrameCode VibeWork Framework
 
-![FrameCode VibeWork cover](https://github.com/user-attachments/assets/267c4aaa-db8b-469b-8ffc-751adfa3d86a)
-
 Current framework version: `V0.12.0`
 
 *Select Language / Selecione o Idioma:*
