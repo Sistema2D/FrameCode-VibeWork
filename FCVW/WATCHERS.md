@@ -28,9 +28,10 @@ Each watcher rule has:
 | Versioned file changed | Repository diff | Confirm changelog fragment exists | `VERSIONING.md` / `AGENTS.md` | Yes |
 | New skill or agent profile proposed | Scope review | Run Agent/Skill Creation Gate | `agent-factory` | Yes |
 | Existing skill or agent rule changed | Scope review | Run Skill/Agent Self-Improvement Gate | `self-improvement` | Yes |
-| 3 or more wiki pages changed | Wiki diff | Run wiki lint and index coverage check | `wiki-lint` | Yes |
+| Wiki page added or changed | Repository diff or manual inspection | Run wiki lint, update `wiki/index.md` and `FILESYSTEM.md` as needed | `wiki-lint` | Yes |
 | ADR created | Decisions review | Check wiki decision promotion and related references | `wiki-lint` | Warning |
 | Release changelog changed | Release review | Check release synthesis and version coherence | `release-checklist` | Yes |
+| Release summary added or changed | Repository diff | Update `wiki/index.md`, run wiki lint, and verify version coherence | `release-checklist` | Yes |
 | Secret-like value detected | Manual or AI inspection | Stop and apply `SECURITY.md` | `SECURITY.md` / `agent-aegis` | Yes |
 | Automation terminology appears | Document review | Confirm Markdown-only Scenario 1 compliance | `AUTOMATION.md` | Yes |
 | External inspiration credited | Document review | Confirm credit is conceptual and not copied code | `AUTOMATION.md` / `ADR-0002` | Warning |
