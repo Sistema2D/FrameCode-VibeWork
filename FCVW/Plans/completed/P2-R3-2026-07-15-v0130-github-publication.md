@@ -1,7 +1,7 @@
 ---
 schema: "fcvw/plan@2"
 id: "P2-R3-2026-07-15-v0130-github-publication"
-status: "in_progress"
+status: "completed"
 priority: "P2"
 risk: "R3"
 created_at: "2026-07-15"
@@ -68,14 +68,14 @@ The remote default branch is at V0.12.0 while the locally validated framework co
 
 ## Acceptance criteria
 
-- [ ] Remote changes are based on current `origin/main`, not a stale local checkout.
-- [ ] `.github/` and Git history remain untouched.
-- [ ] V0.13.0 source contains no comparison fixture, application history, production data, or unexpected root entry.
-- [ ] Validator tests and `clean-template` profile pass.
-- [ ] Diff hygiene and version/release surfaces pass.
-- [ ] PR is merged into `main` without force push.
-- [ ] Tag and GitHub Release `v0.13.0` point to the merged release commit.
-- [ ] Clean ZIP and `.sha256` assets are published and remotely verified.
+- [x] Remote changes are based on current `origin/main`, not a stale local checkout.
+- [x] `.github/` and Git history remain untouched.
+- [x] V0.13.0 source contains no comparison fixture, application history, production data, or unexpected root entry.
+- [x] Validator tests and `clean-template` profile pass.
+- [x] Diff hygiene and version/release surfaces pass.
+- [x] PR is merged into `main` without force push.
+- [x] Tag and GitHub Release `v0.13.0` point to the merged release commit.
+- [x] Clean ZIP and `.sha256` assets are published and remotely verified.
 
 ## Regression impact
 
@@ -95,11 +95,11 @@ The remote default branch is at V0.12.0 while the locally validated framework co
 
 ### Regression checks required
 
-- [ ] Compare imported baseline with the remote working tree and preserve `.github/`.
-- [ ] Run all validator regression fixtures and the clean-template profile.
-- [ ] Confirm Git history retains removed records and no working-tree application contamination remains.
-- [ ] Validate clean artifact contents independently before upload.
-- [ ] Verify release tag, merge commit, asset size, and SHA-256 after publication.
+- [x] Compare imported baseline with the remote working tree and preserve `.github/`.
+- [x] Run all validator regression fixtures and the clean-template profile.
+- [x] Confirm Git history retains removed records and no working-tree application contamination remains.
+- [x] Validate clean artifact contents independently before upload.
+- [x] Verify release tag, merge commit, asset size, and SHA-256 after publication.
 
 ### Regression evidence
 
@@ -109,7 +109,7 @@ The remote default branch is at V0.12.0 while the locally validated framework co
 | Imported framework | pass | 14 tests and clean-template validation: 0 errors, 0 findings |
 | Git infrastructure preservation | pass | `.git/` and `.github/` excluded from replacement scope |
 | Historical preservation | pass | removed working-tree records remain recoverable through Git history and published earlier tags |
-| Publication transaction | in_progress | branch, PR, merge, tag, and release evidence to be verified before closeout |
+| Publication transaction | pass | PR #40, merged release commit, `v0.13.0`, ZIP, and SHA-256 evidence linked from the GitHub Release |
 
 ### Limitations and residual risk
 
@@ -148,7 +148,14 @@ Before merge, close the PR and delete only the release branch. After merge but b
 | GitHub orientation | pass | authenticated as `Sistema2D`; public non-archived repo; default `main` |
 | Remote release/PR state | pass | latest `v0.12.0`; no open PRs |
 | Pre-publication imported baseline | pass | 14 tests; clean-template 0 errors and 0 findings |
+| Pull request | pass | PR #40 created from isolated branch; `.github/` unchanged |
+| Release transaction | pass | squash merge, `v0.13.0`, clean ZIP, checksum attachment, and remote verification |
 
 ## Gaps and residual risk
 
-- External publication transaction remains in progress.
+- The exact archive SHA-256 is stored in the GitHub Release notes and checksum asset, not inside the archive whose bytes it identifies.
+- Downstream V0.12 adopters must preserve project-owned records while applying `MIGRATIONS.md`; the clean repository history remains available through Git and prior tags.
+
+## Status
+
+`completed`

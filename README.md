@@ -6,7 +6,7 @@
 
 Planejamento rastreável · execução com escopo · proteção contra regressões · memória técnica controlada
 
-Framework **V0.13.0** · estado **in preparation** · licença **Apache-2.0**
+Framework **V0.13.0** · estado **published** · licença **Apache-2.0**
 
 </div>
 
@@ -230,7 +230,7 @@ FCVW separa dois namespaces:
 
 Uma mudança de governança do FCVW não incrementa automaticamente a versão da aplicação. `published` só é usado depois de publicação real. Tags, push, deploy e release externo exigem autoridade explícita e evidência separada.
 
-O baseline atual [V0.13.0](FCVW/framework-releases/V0.13.0.md) permanece **in preparation**: a árvore local está validada, mas esta pasta não é um worktree Git válido e não possui artefato distribuível, checksum ou publicação externa registrada.
+O baseline atual [V0.13.0](FCVW/framework-releases/V0.13.0.md) está **published**. O tag, o pacote limpo e seu checksum SHA-256 são publicados na [GitHub Release v0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0).
 
 ## Mapa do repositório
 
@@ -290,6 +290,6 @@ FrameCode VibeWork is a portable Markdown-first governance layer for human and A
 
 Start with [AGENTS.md](AGENTS.md). Route the task through [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md), instantiate project-owned profiles with [INSTANTIATION.md](FCVW/INSTANTIATION.md) or adopt non-destructively through [RETROACTIVE_INSTANTIATION.md](FCVW/RETROACTIVE_INSTANTIATION.md). New plans use `fcvw/plan@2` and cannot close on new behavior alone; relevant existing behavior must be replayed or an explicit limitation and residual risk must be recorded.
 
-The optional standard-library validator checks deterministic governance invariants. It does not replace application runtime tests or grant authority for commits, tags, pushes, deployments, or publication. Framework V0.13.0 is currently **in preparation**, not published.
+The optional standard-library validator checks deterministic governance invariants. It does not replace application runtime tests or grant authority for commits, tags, pushes, deployments, or publication. Framework V0.13.0 is **published** with its clean asset and SHA-256 evidence in the [GitHub Release](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0).
 
 License: [Apache License 2.0](LICENSE). Attribution: [NOTICE](NOTICE).
