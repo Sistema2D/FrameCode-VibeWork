@@ -1,36 +1,59 @@
-# Systematic Debugging
+---
+schema: "fcvw/skill@1"
+name: "systematic-debugging"
+description: "Use evidence and hypotheses to diagnose failures before fixing them."
+version: "1.2.0"
+trigger_keywords:
+  - "debug"
+  - "stack trace"
+  - "root cause"
+  - "diagnose"
+  - "depurar"
+session_types:
+  - "bugfix"
+  - "troubleshooting"
+---
 
-*Activation Triggers:* debugging, fixing an error, tracking down a bug, stack trace analysis.
+# Systematic debugging
 
-This skill forces a structured, scientific approach to fixing bugs, eliminating the "guess and check" anti-pattern commonly exhibited by AI agents.
+## Purpose
 
-## Core Directives
+Find the smallest evidence-supported cause of a failure and distinguish diagnosis from implementation authorization.
 
-When faced with a bug or an error log, **do not immediately modify code.**
+## Use conditions
 
-1. **Reproduction & Observation:**
-   - Run the code or write a test to reliably reproduce the error.
-   - Analyze the stack trace or output. If necessary, use debugging tools (e.g., breakpoints, verbose logging, or the AlmogBaku `debug-skill` if available in your IDE).
+Use for reproducible defects, crashes, failed checks, unexpected behavior, or inconsistent runtime state. For a question limited to diagnosis, do not apply a fix. For an authorized fix, follow the active plan and changelog contract.
 
-2. **Formulate a Hypothesis in FCVW/TROUBLESHOOTING.md:**
-   - Before editing any source files in `src/`, you must open or create a troubleshooting log.
-   - Document your hypothesis: "I believe the error is caused by X because of Y in file Z."
-   - State how you will prove or disprove it.
+## Non-responsibilities
 
-3. **Verify the Hypothesis:**
-   - Add temporary logs, use a debugger, or write an isolated test to confirm your theory.
-   - Do not make a logic change until the hypothesis is proven.
+- unrelated refactoring or speculative cleanup;
+- suppressing symptoms without explaining the cause;
+- publishing secrets, credentials, or unnecessary raw logs;
+- treating an unverified hypothesis as a finding.
 
-4. **Apply the Fix:**
-   - Once proven, apply the minimal fix required.
-   - Run the tests again to verify the fix.
-   - Remove any temporary logging or debugging artifacts.
+## Inputs
 
-5. **Update Documentation:**
-   - Ensure the resolution is documented in `FCVW/TROUBLESHOOTING.md`.
-   - Update the relevant plan in `FCVW/Plans/in_progress/`.
+Expected behavior, observed behavior, environment, reproduction steps, logs or stack traces, recent changes, and the narrowest relevant source and test files.
 
-## Anti-Patterns to Avoid
-- **Guess and Check**: Changing a line, running a test, seeing it fail, and changing another line blindly.
-- **Silent Fixes**: Making a fix without updating the FCVW documentation.
-- **Broad Changes**: Refactoring unrelated code while trying to fix a specific bug.
+## Procedure
+
+1. Reproduce the problem or state why reproduction is currently impossible.
+2. Capture the exact symptom, environment, and smallest failing case.
+3. Form one ranked hypothesis tied to concrete evidence.
+4. Design a check that can disprove that hypothesis.
+5. Run the check and update the hypothesis from the result.
+6. Repeat until the cause is supported or the investigation is explicitly inconclusive.
+7. If a fix is authorized, add or identify a regression check, apply the minimal change, remove temporary instrumentation, and rerun affected validation.
+8. Promote durable incident learning to a troubleshooting record when recurrence, severity, or operational value justifies it.
+
+## Required output
+
+Symptom, reproduction status, evidence, tested hypotheses, supported root cause or remaining uncertainty, affected scope, and validation results. If code changed, link the active plan and changelog entry.
+
+## Validation
+
+The original failure is reproduced before the fix when feasible, the causal check changes as predicted, the regression check passes afterward, and unrelated validation has not regressed.
+
+## Exit criteria
+
+Exit when the cause is supported and the authorized fix is validated, or when the remaining blocker and next evidence needed are recorded without presenting speculation as resolution.

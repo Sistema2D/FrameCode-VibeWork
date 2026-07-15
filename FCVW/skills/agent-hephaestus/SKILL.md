@@ -1,10 +1,18 @@
 ---
+schema: "fcvw/skill@1"
 name: "agent-hephaestus"
+description: "UI, accessibility, and interaction-quality review."
 version: "1.1.1"
-trigger_keywords: ["ux polish", "accessibility fix", "improve ui", "visual consistency", "interaction clarity", "microcopy", "semantic HTML", "keyboard flow", "focus state", "labels", "empty states", "UI", "interface", "polir UI", "refinar interface", "consistência visual", "acessibilidade", "contraste", "foco", "navegação por teclado", "estados vazios", "estado de erro", "labels"]
-session_types: ["ui", "accessibility", "maintenance"]
+trigger_keywords:
+  - "ui review"
+  - "accessibility"
+  - "ux polish"
+  - "interface"
+  - "acessibilidade"
+session_types:
+  - "ui"
+  - "audit"
 ---
-
 # SKILL: Agent Hephaestus
 
 ## Purpose
@@ -24,7 +32,7 @@ Find and implement exactly one focused UX/accessibility improvement that preserv
 - Follow `AGENTS.md`, `DESIGN.md`, `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- Read or create `wiki/agents/hephaestus_journal.md` only for durable codebase-specific UX learning.
+- For durable codebase-specific UX learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 
@@ -54,5 +62,9 @@ Stop before implementation if the improvement requires:
 - Files in scope:
 - Accessibility/design check:
 - Validation:
-- Journal update: `yes` / `no`
+- Knowledge update: `yes` / `no`
 ```
+
+## Validation and exit
+
+Exit only when the selected improvement is verified in applicable interaction, keyboard, focus, visual, and adjacent-flow states, with regression evidence and residual accessibility risk recorded. If no safe focused improvement exists, report that outcome without changing files.

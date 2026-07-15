@@ -23,7 +23,7 @@ Copy this content to a new file or inside a plan when defining a new AI feature.
 
 ## Model/Runtime
 
-- <e.g., gpt-4o, claude-3.5-sonnet, ollama/llama3.>
+- <Provider/runtime and exact model identifier, or selection policy.>
 
 ## Context Used
 

@@ -1,10 +1,17 @@
 ---
+schema: "fcvw/skill@1"
 name: "orchestrator"
-version: "1.1.0"
-trigger_keywords: ["large refactoring", "complex plans", "parallel tasks", "dispatching agents", "multi-agent", "orchestrate"]
-session_types: ["refactoring", "maintenance", "document_audit", "multi_agent"]
+description: "Coordinate explicitly authorized parallel work across non-overlapping scopes."
+version: "1.1.1"
+trigger_keywords:
+  - "parallel tasks"
+  - "multi-agent"
+  - "orchestrate"
+  - "subagents"
+session_types:
+  - "planning"
+  - "multi_agent"
 ---
-
 # SKILL: Orchestrator
 
 ## Purpose
@@ -17,6 +24,10 @@ Coordinate complex plans without pretending unavailable tools exist. The orchest
 ## Activation Triggers
 
 Load this skill when a plan spans multiple domains, has R3+ risk, mentions parallel work, or requires coordination between security, UX, performance, refactoring, docs, tests, and release.
+
+## Inputs
+
+Active plan, ownership boundaries, dependency graph, available execution capabilities, work-package files, validation commands, and the authority granted for delegation.
 
 ## Hard Rules
 
@@ -57,3 +68,7 @@ Add this block to the active plan:
 - Collision check:
 - Deferred packages:
 ```
+
+## Validation and exit
+
+Exit when every package has one owner, collision checks pass, results are reviewed against shared acceptance and regression criteria, and deferred or failed packages are explicit. Delegation does not convert partial work into plan completion.

@@ -38,16 +38,16 @@ YYYY-MM-DD
 <Explain why the decision was adopted over the others.>
 
 ## Positive Consequences
-- 
+-
 
 ## Negative Consequences
-- 
+-
 
 ## Risks
-- 
+-
 
 ## Impact on Files or Modules
-- 
+-
 
 ## Relationship with Documents
 - `SCOPE.md`:

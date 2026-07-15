@@ -1,57 +1,12 @@
-# Project Governance Wiki
+# Technical memory
 
-This folder stores the cumulative technical memory of the project's governance in Markdown format.
+- Use `schema.md` for page contracts.
+- Use `MEMORY.md` for active/archive lifecycle.
+- Keep current reusable knowledge in thematic folders.
+- Keep recent handoffs in `sessions/`.
+- Keep reusable confirmed regressions and their permanent replay guardrails in `regressions/`.
+- Move older sessions to `archive/YYYY/`; do not delete evidence by default.
+- Use `wiki-curator` to promote and deduplicate.
+- Use `wiki-lint` for incremental validation.
 
-The wiki does not replace the official documents of the repository, such as `AGENTS.md`, `PLANNING.md`, `VERSIONING.md`, `TROUBLESHOOTING.md`, `AUDIT.md`, `REFACTORING.md`, `AI.md`, or `DESIGN.md`.
-
-It works as a continuous learning layer: it records validated patterns, recurring failures, consolidated decisions, refactorings, audits, releases, components, useful prompts, open questions, reusable syntheses, and curated topic clusters.
-
-When the project also has a user/runtime wiki or vault, explicitly differentiate that structure from this governance wiki.
-
-## Principles
-
-1. Raw sources must be preserved.
-2. Syntheses must point to their sources.
-3. Reusable knowledge must be promoted to its own pages.
-4. Hypotheses must not be treated as truths.
-5. Obsolete content must be marked as such, not deleted without justification.
-6. The wiki must be consulted before making relevant changes.
-7. The wiki must be updated after changes that generate reusable learning.
-8. The wiki must not store secrets, tokens, private logs, or unnecessary personal data.
-9. Wiki curation must use the fixed optimized mode in `skills/wiki-curator/SKILL.md`.
-
-## Main Files
-
-- `schema.md`: structural rules of the wiki.
-- `index.md`: navigable index of knowledge.
-- `log.md`: chronological log of ingestions, syntheses, audits, and linting.
-- `taxonomy.md`: canonical tags, themes, and thematic frontmatter colors.
-- `metrics.md`: freshness, promotion, duplication, release synthesis, and cost-control metrics.
-- `inbox/`: unprocessed inputs.
-- `raw/`: immutable raw sources.
-- `sources/`: normalized or described sources.
-- `concepts/`: technical and product concepts.
-- `decisions/`: consolidated architectural decisions.
-- `patterns/`: approved technical patterns.
-- `failures/`: learnings about failures.
-- `refactorings/`: refactoring learnings and opportunities.
-- `audits/`: recurring audit findings.
-- `agents/`: agent-specific journals using `agents/<agent_name>_journal.md`.
-- `releases/`: syntheses of published versions.
-- `components/`: components, modules, and responsibilities.
-- `prompts/`: useful and validated prompts.
-- `questions/`: open questions.
-- `syntheses/`: cross-cutting syntheses.
-- `templates/`: wiki page templates.
-
-## Formal Sources
-
-Preferred formal sources:
-
-- `Plans/completed/`
-- `changelogs/`
-- `troubleshooting/`
-- `decisions/`
-- `audits/`
-- Root official documents
-- Code snippets or documentation used as evidence
+The clean baseline contains navigation and templates only.

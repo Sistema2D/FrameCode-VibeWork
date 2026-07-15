@@ -1,131 +1,83 @@
 ---
+schema: "fcvw/skill@1"
 name: "git-conventional-commits"
-version: "1.0.0"
-trigger_keywords: ["commit", "tag", "push", "publish release", "git release", "release notes", "changelog commit", "version tag"]
-session_types: ["release", "versioning"]
+description: "Prepare scoped conventional commits, tags, and release messages."
+version: "1.2.0"
+trigger_keywords:
+  - "commit"
+  - "tag"
+  - "push"
+  - "conventional commit"
+session_types:
+  - "git"
+  - "release"
 ---
 
-# SKILL: Git Conventional Commits
+# Git conventional commits
 
-High-density procedural guide for standardizing Git commits, semantic versioning tags, and release note generation in FrameCode VibeWork projects.
+## Purpose
 
-## Activation Triggers
+Prepare or execute a reviewable Git commit, annotated version tag, push, or release message while preserving scope, version namespaces, and external-action authority.
 
-Load this skill (with `view_file` and `IsSkillFile: true`) when the task involves:
-- Writing or reviewing a Git commit message
-- Creating a version tag (`git tag`)
-- Pushing a release to remote
-- Generating release notes from a changelog
-- Reviewing staged changes before a commit
+## Use conditions
 
-## 1. Commit Message Standard (Conventional Commits)
+Use when the user requests commit-message preparation, staging/commit, tag creation, push, or release-message generation. Load `release-checklist` as well when a version or publication is involved.
 
-### Format
+## Non-responsibilities
 
-```
+- inferring authority to commit, tag, push, publish, merge, or rewrite history;
+- staging unrelated worktree changes;
+- choosing an application release record for an FCVW release, or the reverse;
+- creating mandatory wiki/session records when no reusable knowledge or policy requires them;
+- exposing secrets through diffs, messages, tags, or release notes.
+
+## Inputs
+
+Valid Git worktree, status and diff, active/completed plans, application changelog or framework release record, target branch/remote, target version, validation evidence, and explicit authority for each external mutation.
+
+## Commit format
+
+```text
 <type>(<scope>): <short imperative summary>
 
-[optional body — what and why, not how]
+<optional body describing why and impact>
 
-[optional footer — breaking changes, issue refs]
+<optional issue, plan, or BREAKING CHANGE footer>
 ```
 
-### Allowed Types
+Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `perf`, `build`, `ci`, `chore`, and `revert`. Scope names the smallest stable responsibility, not an agent or temporary filename.
 
-| Type | Use When |
-|---|---|
-| `feat` | New feature or functional addition |
-| `fix` | Bug fix or correction |
-| `docs` | Documentation-only changes |
-| `refactor` | Code restructuring without behavior change |
-| `chore` | Maintenance tasks (deps, config, scripts) |
-| `style` | Formatting, whitespace (no logic change) |
-| `test` | Adding or updating tests |
-| `perf` | Performance improvement |
-| `ci` | CI/CD configuration changes |
-| `revert` | Reverting a previous commit |
+A breaking footer describes the actual compatibility impact and migration, for example:
 
-### Scope (Optional)
+```text
+feat(schema)!: require regression contract in new plans
 
-Use the affected module, folder, or feature as scope:
-
-```
-feat(skills): add git-conventional-commits skill
-docs(wiki): populate patterns and decisions pages
-fix(manifest): fill placeholder fields
+BREAKING CHANGE: new plans use fcvw/plan@2; plan@1 remains legacy-readable.
 ```
 
-### Breaking Changes
+## Procedure
 
-Mark with `BREAKING CHANGE:` in footer or `!` after type:
+1. Confirm the directory is a valid Git worktree and inspect branch, remotes, status, staged diff, and unstaged diff.
+2. Identify user-owned pre-existing changes and exclude them unless explicitly included.
+3. Confirm plan, regression evidence, and application changelog or framework release record are coherent.
+4. Scan the intended diff for secrets, generated noise, unresolved conflicts, and out-of-scope paths.
+5. Select type/scope and draft a concise imperative summary; add compatibility and issue/plan references only when useful.
+6. Stage and commit only when authorized, then verify the resulting commit content and worktree state.
+7. For a version tag, confirm semantic version, namespace, release record, target commit, and publication state; create an annotated tag only when authorized.
+8. Push branch, tag, or release only with explicit authority and record actual remote evidence separately.
 
-```
-feat(api)!: change session synthesis frontmatter schema
+## Required output
 
-BREAKING CHANGE: session_number field is now mandatory in all S*.md files
-```
+Action requested, files included/excluded, commit message, commit identifier when created, tag/version when created, remote action and evidence when performed, validation status, and remaining worktree state.
 
-## 2. Commit Checklist
+## Validation
 
-Before committing:
+- Commit diff contains only intended paths.
+- Message matches the actual change and flags breaking compatibility correctly.
+- Application and framework release namespaces are not mixed.
+- Tag points to the intended commit and version record.
+- External publication is never claimed from a local command alone.
 
-- [ ] `git status -s` — confirm only intended files are staged
-- [ ] `git diff --staged` — review exact changes
-- [ ] Commit type is accurate (`feat` vs `docs` vs `chore`)
-- [ ] Summary is imperative, lowercase, ≤72 chars, no period at end
-- [ ] Breaking changes are flagged if applicable
-- [ ] Related plan and changelog exist for the change
+## Exit criteria
 
-## 3. Semantic Version Tagging
-
-### Tag Command
-
-```bash
-git tag -a v{MAJOR}.{MINOR}.{PATCH} -m "V{MAJOR}.{MINOR}.{PATCH} — {one-line summary}"
-```
-
-Examples:
-```bash
-git tag -a v0.5.0 -m "V0.5.0 — ASE expansion and wiki population"
-git tag -a v1.0.0 -m "V1.0.0 — First stable release"
-```
-
-### When to Bump
-
-| Bump | Rule | Example trigger |
-|---|---|---|
-| PATCH (`x.y.Z`) | Backward-compatible bugfix or doc fix | Fix broken link, correct typo in skill |
-| MINOR (`x.Y.0`) | New backward-compatible feature | New skill, new wiki page, new template |
-| MAJOR (`X.0.0`) | Breaking change | Rename core fields, drop a mandatory document |
-
-## 4. Push and Publish Sequence
-
-```bash
-# 1. Stage
-git add -A
-
-# 2. Commit
-git commit -m "chore: bump to V0.5.0 — ASE expansion and wiki population"
-
-# 3. Tag
-git tag -a v0.5.0 -m "V0.5.0 — ASE expansion, wiki population, CONTEXT_MAP"
-
-# 4. Push branch + tags
-git push origin main --tags
-```
-
-## 5. Release Notes Generation
-
-Use `changelogs/Vx.y.z.md` as the authoritative source for GitHub release notes.
-
-Copy the **Summary** and **Items Modified** sections from the changelog into the GitHub release body.
-
-Format for GitHub release title: `V{MAJOR}.{MINOR}.{PATCH} — {one-line summary}`
-
-## 6. Post-Release Checklist
-
-- [ ] Tag visible on remote: `git tag -l`
-- [ ] GitHub release page created with changelog content
-- [ ] `MANIFEST.md` version field updated to new version
-- [ ] `wiki/releases/v{x}-{y}-{z}.md` created (use `wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md`)
-- [ ] AICC session synthesis created in `wiki/sessions/`
+Exit when the authorized Git action is verified and residual worktree changes are reported, or when the missing worktree, authority, validation, or release evidence is stated without performing the blocked action.

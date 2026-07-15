@@ -1,43 +1,42 @@
-# Template: Governance Gate Report
+# Template: governance gate report
 
-## Gate
+```markdown
+---
+schema: "fcvw/automation@1"
+id: "GATE-YYYY-MM-DD-slug"
+kind: "gate"
+status: "active"
+owner: "<owner>"
+execution_mode: "scenario_1"
+created_at: "YYYY-MM-DD"
+updated_at: "YYYY-MM-DD"
+---
 
-<gate name>
+# Gate name
 
-## Trigger
+## Trigger and transition controlled
 
-<why this gate was evaluated>
+## Preconditions and permissions
 
-## Files Checked
+## Evidence reviewed
 
-- 
+## Checks
 
-## Result
-
-`passed` / `failed` / `passed with warnings`
-
-## Findings
-
-- 
-
-## Required Corrections
-
-- 
-
-## Evidence
-
-- 
-
-## Residual Risk
-
-- 
+| Check | Result | Evidence |
+|---|---|---|
+| | pass / warn / block | |
 
 ## Decision
 
-`continue` / `block` / `split plan` / `require human review`
+`pass | warn | block`
 
-## Scenario 1 Compliance
+## Required actions and owner
 
-- [ ] The gate was evaluated through Markdown/manual/agentic inspection.
-- [ ] No executable enforcement was introduced.
-- [ ] Blocking conditions were recorded in the active plan.
+## Failure policy
+
+## Bypass, residual risk, and expiry
+
+## Rollback or disable
+
+For a Regression gate, include the protected behaviors, consulted contracts, replay results, limitations, rollback status, and the related plan's Regression impact section.
+```

@@ -1,24 +1,56 @@
-# Agnix Linter (AI Config Linter)
+---
+schema: "fcvw/skill@1"
+name: "agnix-linter"
+description: "Markdown and governance structure lint checklist."
+version: "1.2.0"
+trigger_keywords:
+  - "governance lint"
+  - "dead links"
+  - "markdown audit"
+  - "auditoria estrutural"
+session_types:
+  - "audit"
+  - "release"
+---
 
-*Activation Triggers:* periodic maintenance, governance audit, validating AI instructions.
+# Governance and Markdown linter
 
-This skill is designed to audit the internal consistency and structural integrity of the `FrameCode-VibeWork` framework itself.
+## Purpose
 
-## Core Directives
+Detect structural defects, dead references, schema drift, and contradictory governance instructions without silently changing policy.
 
-When invoked to run a governance audit, you must behave as an AI Config Linter. Your job is to parse the markdown files inside `FCVW/` and the root `AGENTS.md` to ensure they are valid, non-conflicting, and functional for AI agents.
+## Use conditions
 
-### Linter Rules to Enforce:
+Use during governance audits, framework maintenance, release closeout, or after moving and renaming documentation.
 
-1. **Dead Links Check:** Verify that all `[links](...)` pointing to internal `FCVW/` documents resolve to actual files on disk. 
-2. **Conflict Detection:** Compare `AGENTS.md` instructions against specific `FCVW/skills/*/SKILL.md` files. Report if a global rule contradicts a specific skill rule.
-3. **Format Integrity:** 
-   - Ensure all `SKILL.md` files clearly state their *Activation Triggers* at the top.
-   - Ensure no markdown file has broken tables or unclosed code blocks.
-4. **Mandatory Hooks:** Ensure `FCVW/PLANNING.md` correctly references `AGENTS.md` and the changelogs logic.
+## Non-responsibilities
 
-### Workflow:
-1. Scan the `FCVW/` directory tree.
-2. Cross-reference the files.
-3. Automatically fix broken links or minor formatting issues.
-4. If a logical conflict is found in governance, generate an audit report in `FCVW/AUDIT.md` (or a similar reporting structure) and present it to the human partner for review. Do not change governance logic without human approval.
+- deciding product policy or resolving a governance conflict without authorization;
+- rewriting historical evidence to make validation pass;
+- claiming semantic correctness from syntax checks alone;
+- modifying versioned files without a plan and changelog.
+
+## Inputs
+
+`AGENTS.md`, the context map, schema and ownership documents, affected Markdown, skill catalog, record indexes, and any explicit legacy baseline.
+
+## Procedure
+
+1. Select clean-template, instantiated, incremental, or strict validation scope.
+2. Check internal links, Markdown fences, required paths, schemas, IDs, lifecycle directories, and version namespaces.
+3. Compare global instructions with narrower policies and skills for direct contradictions.
+4. Distinguish new defects from accepted legacy debt.
+5. Report exact file and rule for every finding.
+6. Apply only authorized, plan-scoped corrections and rerun the same checks.
+
+## Required output
+
+Validation profile, checks executed, pass/fail result, actionable findings with paths, accepted baseline items, fixes made, and residual risks.
+
+## Validation
+
+Every reported path exists, each finding is reproducible, duplicate reports are consolidated, and the same lint scope passes after an authorized correction.
+
+## Exit criteria
+
+Exit when the chosen profile passes or each remaining finding has an explicit owner, reason, and follow-up path.

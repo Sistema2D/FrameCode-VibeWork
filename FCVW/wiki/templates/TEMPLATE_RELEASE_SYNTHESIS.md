@@ -19,35 +19,35 @@ tags:
 
 ## Main Changes
 
-- 
+-
 
 ## Relevant Decisions
 
-- 
+-
 
 ## Patterns Created or Reinforced
 
-- 
+-
 
 ## Fixed Failures
 
-- 
+-
 
 ## Refactorings Executed
 
-- 
+-
 
 ## Related Audits
 
-- 
+-
 
 ## Known Gaps / Open Items
 
-- 
+-
 
 ## Reusable Learnings
 
-- 
+-
 
 ## Next Recommendations
 

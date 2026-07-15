@@ -1,57 +1,54 @@
 ---
+schema: "fcvw/skill@1"
 name: "project-instantiation"
-version: "1.0.0"
-trigger_keywords: ["bootstrap", "new project", "instantiate", "initialize", "novo projeto", "inicializar projeto", "fase 0", "briefing"]
-session_types: ["briefing", "new_project", "document_audit"]
+description: "Instantiate project-owned FCVW profiles from a clean baseline."
+version: "1.1.1"
+trigger_keywords:
+  - "instantiate project"
+  - "bootstrap"
+  - "new project"
+  - "instanciar"
+session_types:
+  - "instantiation"
+  - "planning"
 ---
 
-# SKILL: Project Instantiation & Bootstrapping
+# Project instantiation
 
-High-density manual and checklists for bootstrapping a new project from the FrameCode VibeWork template repository. Ensures correct variable and placeholder substitutions while preserving generic governance models.
+## Purpose
 
-## Activation Triggers
+Convert clean project profiles into evidence-backed application truth without editing framework policies or reusable templates.
 
-Load this skill (with `view_file` and `IsSkillFile: true`) when:
-- The user declares "iniciar novo projeto", "instanciar framework", "bootstrap", "fase 0", "briefing", or similar.
-- Instantiating the framework into a fresh downstream repository.
+## Use conditions
 
----
+Use only for a verified clean-template workspace becoming a new application. Existing or partially governed applications use `retroactive-instantiation` instead.
 
-## 1. Safety Checks (Before Touching Files)
+## Inputs
 
-1. **Verify Sandbox Scope:** Confirm you are operating within the target downstream directory and not inside the core template repository.
-2. **Template Preservation Rules:** 
-   - Files under `/FCVW/governance/` and `/FCVW/wiki/templates/` **must remain 100% untouched** (no substitutions).
-   - Only copies placed in the root or in active wiki subfolders should be modified.
+`INSTANTIATION.md`, `BRIEFING.md`, `OWNERSHIP.md`, `FRAMEWORK_LOCK.md`, and user-approved product context.
 
----
+## Procedure
 
-## 2. Bootstrapping Steps Checklist
+1. Confirm the workspace is a clean template, not an existing application.
+2. Create the instantiation plan.
+3. Complete briefing gaps or record questions.
+4. Fill project profiles and set one application version source.
+5. Preserve framework policies and templates.
+6. Remove or explicitly waive project-profile placeholders.
+7. Set profile `instantiation_status: complete`.
+8. Run validator with `instantiated` profile.
 
-### Step 2.1: Briefing & Phase 0 Discovery
-- Open and fill out `FCVW/BRIEFING.md` based on initial interviews or user requirements.
-- Map out the exact stack to `FCVW/STACK.md` and project limits to `FCVW/SCOPE.md`.
+## Non-responsibilities
 
-### Step 2.2: Placeholder Substitutions
-Go through the following canonical files in the workspace and replace the core placeholders (e.g. `[project-name]`, `[author-name]`):
-- [ ] Generate or update root `README.md` for the target application
-- [ ] `AGENTS.md` (Raiz)
-- [ ] `FCVW/MANIFEST.md`
+- global recursive replacement;
+- inventing product decisions;
+- copying any production-derived comparison fixture or another application's history as project truth;
+- changing framework version.
 
-*Note: Use manual, localized search-and-replace rather than batch renaming scripts to prevent corruption.*
+## Required output
 
-### Step 2.3: Initializing Versioning & Logs
-- [ ] Clean up any generic template logs in `FCVW/wiki/log.md`, initializing it with the bootstrap event.
-- [ ] Create the first formal changelog `FCVW/changelogs/V0.1.0.md` (or `V0.0.1.md`) documenting the initial project instantiation.
-- [ ] Populate `FCVW/MANIFEST.md` under section `14. Manifest Update History` with the bootstrap event.
+Completed profiles, first application plan/changelog, remaining questions, and validation report.
 
----
+## Validation and exit
 
-## 3. Post-Bootstrap Audit
-
-Verify the filesystem layout after execution:
-- [ ] The framework baseline root contains `AGENTS.md`, `.gitignore`, `.cursorrules`, and `.windsurfrules`.
-- [ ] The instantiated application root contains a generated `README.md` that describes the application, not the generic framework.
-- [ ] The `/FCVW/` folder is cleanly isolated.
-- [ ] All `.env` configurations are correctly filtered in `.gitignore`.
-- [ ] A clean initial git commit has been formed.
+Ownership is correct, required profiles are complete, version namespaces are separate, and no example/history contamination exists.

@@ -1,60 +1,24 @@
 ---
-title: "Wiki Metrics"
-type: "synthesis"
-status: "validated"
-confidence: "high"
-last_reviewed: "2026-06-17"
-related_version: "V0.11.0"
-sources:
-  - "AI.md"
-  - "wiki/schema.md"
-  - "skills/wiki-curator/SKILL.md"
-tags:
-  - "wiki"
-  - "validation"
-  - "continuous-learning"
-theme: "knowledge-governance"
-theme_color: "teal"
-next_review: "2026-09-17"
-review_cadence: "quarterly"
+schema: "fcvw/wiki-metrics@1"
+artifact_role: "generated"
+owner: "project"
+upgrade_strategy: "regenerate"
+last_reviewed: "2026-07-15"
 ---
 
-# Wiki Metrics
+# Wiki metrics
 
-Metrics used to keep the LLM Wiki current while controlling token cost.
-
-## Freshness Targets
-
-| Page Type | Review Cadence | Trigger |
+| Metric | Target | Current clean baseline |
 |---|---|---|
-| `decision` | 180 days | architecture, security, data, or API change |
-| `pattern` | 180 days | new implementation validates or contradicts the pattern |
-| `failure` | 90 days | recurring issue, bugfix, or troubleshooting closure |
-| `refactoring` | 120 days | cleanup, module split, stale-file scan |
-| `release` | each release | release publication or rollback |
-| `synthesis` | 90 days | related pages changed or wiki-lint flags drift |
-| `session` | no routine review | promoted only when reusable learning exists |
+| New-page schema coverage | 100% | no project pages |
+| Duplicate session IDs | 0 | 0 |
+| Active session count | 3–10 | 0 |
+| Active session size | project budget | 0 |
+| Validated pages with sources | 100% | no project pages |
+| Broken internal links | 0 | validate at closeout |
+| Stale validated behavior pages | reviewed within project threshold | none |
+| Confirmed regressions with permanent guardrail and replay | 100% | no project regressions |
+| Repeated regression without stronger guardrail | 0 | 0 |
+| Exact legacy baseline entries | decreasing | 0 |
 
-## Quality Metrics
-
-| Metric | Target | Evidence |
-|---|---|---|
-| Promotion precision | no one-off notes promoted | active plan or wiki log |
-| Source coverage | every interpretative page cites at least one source | frontmatter `sources` |
-| Link coverage | every curated page has at least one related link or index entry | `wiki/index.md` or wikilink |
-| Taxonomy coverage | curated pages use canonical tags and theme metadata | frontmatter |
-| Duplication control | overlapping notes are merged or marked with `canonical_page` / `superseded_by` | page frontmatter |
-| Release synthesis coverage | every published changelog has a release synthesis unless explicitly waived | `wiki/releases/` |
-| Cost control | no full wiki crawl without lint finding or explicit request | plan validation notes |
-
-## Standard Optimized Cost Mode
-
-The wiki curator always uses one fixed optimized mode:
-
-- load routing documents and indexes first;
-- load source records only when they triggered curation;
-- prefer updating an existing page over creating a duplicate;
-- defer broad reads to `wiki-lint` findings or explicit user request;
-- record remaining gaps instead of spending tokens to inspect unrelated domains.
-
-No customizable cost mode is exposed by the framework.
+Application projects regenerate these values. Do not copy metrics from another application.

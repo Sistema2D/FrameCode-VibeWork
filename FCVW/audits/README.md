@@ -1,5 +1,3 @@
 # Audits
 
-This directory stores formal audit records produced during document audits, release checks, or governance reviews.
-
-Use `FCVW/AUDIT.md` as the normative checklist before creating new audit records.
+Store dated application audit records here after instantiation. Every audit must state scope, sources, findings with severity, limitations, and follow-up ownership. The clean template intentionally contains no audit evidence.

@@ -1,10 +1,18 @@
 ---
+schema: "fcvw/skill@1"
 name: "agent-factory"
-version: "1.0.0"
-trigger_keywords: ["create skill", "new skill", "create agent", "new agent", "agent factory", "skill factory", "specialized agent", "specialized skill", "criar skill", "criar agente"]
-session_types: ["ai_governance", "document_audit", "maintenance", "refactoring"]
+description: "Evidence-based gate for creating a new skill or agent profile."
+version: "1.1.1"
+trigger_keywords:
+  - "create skill"
+  - "create agent"
+  - "new skill"
+  - "nova skill"
+  - "criar agente"
+session_types:
+  - "ai_governance"
+  - "planning"
 ---
-
 # SKILL: Agent and Skill Factory
 
 ## Purpose
@@ -20,6 +28,10 @@ Load this skill before creating any new file under `skills/` or any new agent pr
 - an existing skill is too broad, too vague, or missing a repeatable procedure for a high-risk task;
 - a proposed solution would otherwise add long instructions to `AGENTS.md`, `AI.md`, or another base-loaded document;
 - an agent proposes a new role to solve a specific recurring problem.
+
+## Inputs
+
+Recurring task evidence, existing skill/catalog coverage, trigger and responsibility boundary, expected consumers, validation task, maintenance owner, and token/risk ROI estimate.
 
 ## Decision Ladder
 

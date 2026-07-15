@@ -41,15 +41,15 @@ YYYY-MM-DD
 
 ## Findings
 
-- 
+-
 
 ## Actions Executed
 
-- 
+-
 
 ## Gaps / Open Items
 
-- 
+-
 
 ## Result
 

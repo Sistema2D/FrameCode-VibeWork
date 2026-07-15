@@ -27,15 +27,15 @@ tags:
 
 ## Hypotheses
 
-- 
+-
 
 ## Existing Evidence
 
-- 
+-
 
 ## Next Steps
 
-- 
+-
 
 ## Resolution
 

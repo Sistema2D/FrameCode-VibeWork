@@ -19,9 +19,9 @@ tags:
 
 ## Alternatives Considered
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Decision Made
 
@@ -33,15 +33,15 @@ tags:
 
 ## Positive Consequences
 
-- 
+-
 
 ## Negative Consequences or Trade-Offs
 
-- 
+-
 
 ## Conditions for Review
 
-- 
+-
 
 ## Relations
 

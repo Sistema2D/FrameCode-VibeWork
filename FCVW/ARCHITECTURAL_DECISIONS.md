@@ -1,3 +1,10 @@
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
+---
+
 # Architectural Decisions
 
 Methodological document to register relevant technical decisions of the project using ADRs, Architecture Decision Records.

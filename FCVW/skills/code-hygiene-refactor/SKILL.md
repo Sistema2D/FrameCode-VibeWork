@@ -1,10 +1,17 @@
 ---
+schema: "fcvw/skill@1"
 name: "code-hygiene-refactor"
-version: "1.0.1"
-trigger_keywords: ["code hygiene", "higiene de codigo", "higiene de código", "cleanup", "limpeza", "deduplicate", "duplication", "duplicação", "duplicate code", "código duplicado", "dead code", "código morto", "unused files", "stale files", "arquivo obsoleto", "arquivo morto", "refactor actively", "refatoração", "retroactive cleanup", "technical debt", "dívida técnica", "monolith", "monolito", "sobras de implementação"]
-session_types: ["refactoring", "retroactive_instantiation", "document_audit", "maintenance"]
+description: "Select a bounded, behavior-preserving code-hygiene batch."
+version: "1.1.1"
+trigger_keywords:
+  - "code hygiene"
+  - "duplication"
+  - "dead code"
+  - "higiene de código"
+session_types:
+  - "refactoring"
+  - "audit"
 ---
-
 # SKILL: Code Hygiene Refactor
 
 ## Purpose
@@ -21,6 +28,10 @@ Load this skill when:
 - a plan touches code with known `#tech-debt`;
 - an agent is tempted to copy/paste similar code;
 - a cleanup/refactoring plan is opened.
+
+## Inputs
+
+Active plan and scope, changed-path and ownership evidence, similar-code search, dependency/consumer references, focused behavior checks, and rollback or restoration source for removals.
 
 ## Non-Negotiable Rules
 
