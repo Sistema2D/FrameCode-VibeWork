@@ -1,27 +1,14 @@
-# Agent Journals
+# Agent-specific knowledge
 
-This folder stores agent-specific journals.
-
-Official path pattern:
-
-```text
-FCVW/wiki/agents/<agent_name>_journal.md
-```
+This directory stores durable, sourced, project-specific learning produced through specialized agent procedures. Routine narration, raw chat, and per-run status do not belong here.
 
 Rules:
 
-- Each agent uses one predictable journal file derived from the agent name.
-- Journals record durable, codebase-specific learnings, not routine narration.
-- Append new entries; do not overwrite previous journal content.
+- Use `fcvw/wiki@1` with `type: agent` and a collision-resistant ID.
+- Prefer updating an existing canonical page when the learning has the same responsibility and sources.
+- Never coordinate parallel writers through one shared fixed journal filename.
+- Record sources, confidence, review date, affected boundary, and related plan.
 - Do not store secrets, tokens, private logs, or unnecessary personal data.
-- Use concise dated entries.
-- Journal files should use wiki frontmatter with `type: "agent"` when they are created.
-- When a journal entry becomes reusable across agents, promote it to the appropriate wiki folder and link back to the journal entry.
+- Promote cross-agent patterns to the appropriate canonical theme and link the source page.
 
-Examples:
-
-```text
-FCVW/wiki/agents/aegis_journal.md
-FCVW/wiki/agents/hephaestus_journal.md
-FCVW/wiki/agents/hermes_journal.md
-```
+Suggested filename: `AGENT-YYYYMMDD-<short-id>-<topic>.md`. The filename aids browsing; the frontmatter `id` owns uniqueness.

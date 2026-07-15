@@ -1,10 +1,17 @@
 ---
+schema: "fcvw/skill@1"
 name: "self-improvement"
-version: "1.0.1"
-trigger_keywords: ["self improvement", "improve skill", "improve agent", "adjust skill", "adjust agent", "adjust trigger", "trigger failed", "skill failed", "agent failed", "prompt improvement", "ambiguous rule", "melhorar skill", "melhorar agente", "ajuste de gatilho", "gatilho falhou", "skill não acionou", "agente não acionou", "auto melhoria", "melhoria de prompt", "regra ambígua"]
-session_types: ["ai_governance", "document_audit", "maintenance", "refactoring"]
+description: "Improve an existing skill or agent from evidence while preserving scope."
+version: "1.1.1"
+trigger_keywords:
+  - "improve skill"
+  - "skill failed"
+  - "trigger failed"
+  - "melhorar skill"
+session_types:
+  - "ai_governance"
+  - "maintenance"
 ---
-
 # SKILL: Skill and Agent Self-Improvement
 
 ## Purpose
@@ -21,6 +28,10 @@ Load this skill before changing any `skills/*/SKILL.md`, agent profile, skill ca
 - a new framework rule makes an existing skill incomplete or contradictory;
 - a proposed edit claims token savings, better triggers, or safer execution for existing assets;
 - the task uses Portuguese equivalents such as melhorar skill, melhorar agente, ajuste de gatilho, gatilho falhou, skill não acionou, agente não acionou, auto melhoria, melhoria de prompt, or regra ambígua.
+
+## Inputs
+
+Concrete failure or drift evidence, owning canonical documents, current skill and catalog entry, overlapping skills, representative replay task, and active plan/change record.
 
 ## Improvement Gate
 

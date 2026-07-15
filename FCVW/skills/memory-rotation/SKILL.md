@@ -1,42 +1,62 @@
 ---
-name: Memory Rotation (Garbage Collection)
-description: Analyzes the FCVW/wiki/sessions/ directory. If there are more than 10 sessions, it condenses learnings into FCVW/wiki/concepts/ and deletes older raw sessions to prevent context bloat.
+schema: "fcvw/skill@1"
+name: "memory-rotation"
+description: "Archive and curate old sessions without destroying audit evidence."
+version: "1.1.0"
+trigger_keywords:
+  - "rotate memory"
+  - "context bloat"
+  - "archive sessions"
+  - "rotacionar memória"
+session_types:
+  - "wiki_maintenance"
+  - "handoff"
 ---
 
-# 🧠 Memory Rotation & Garbage Collection
+# Memory rotation
 
-## Activation Triggers
+## Purpose
 
-Load this skill when `FCVW/wiki/sessions/` has more than 10 session files, or when the task is to clean sessions, rotate memory, reduce context bloat, or consolidate old session syntheses.
+Keep active session context bounded while preserving historical evidence and promoting sourced reusable knowledge.
 
-## Context
-When working with AI agents continuously, the `FCVW/wiki/sessions/` folder acts as the active short-term memory (compressed chronological session synthesis). If this folder accumulates dozens of files, reading the latest context or indexing it becomes excessively costly (Context Bloat), degrading AI inference capabilities and increasing latency/costs.
+## Use when
 
-## When to Use
-This skill MUST be executed when you detect that the `FCVW/wiki/sessions/` directory contains more than **10 files**.
+- active sessions exceed 10 files, 100 KB, or the project's context budget;
+- duplicated or stale session summaries impair retrieval;
+- the user requests archive, rotation, or memory consolidation.
 
-## Routine / Execution Steps
+## Do not use for
 
-1. **Audit Active Memory**:
-   - List all files in `FCVW/wiki/sessions/` using your file listing tools.
-   - Sort them chronologically (usually by filename numbering `S001`, `S002`, etc.).
+- deleting evidence to make validation appear clean;
+- rewriting published history;
+- replacing canonical project documents with session narrative.
 
-2. **Extract Deep Learnings**:
-   - Read the old sessions (from the oldest up to the 4th most recent).
-   - Identify critical "Deep Learnings": architectural decisions made, persistent bugs fixed, or overarching design changes.
-   - Consolidate these learnings.
+## Inputs
 
-3. **Transfer to Long-Term Memory**:
-   - Inject the consolidated learnings into the appropriate documents inside `FCVW/wiki/concepts/`, `FCVW/wiki/components/`, or update `FCVW/ARCHITECTURAL_DECISIONS.md`.
-   - Add back-links if using Obsidian graph view.
+- `MEMORY.md`;
+- `wiki/schema.md`;
+- active and archived session indexes;
+- retention/legal requirements.
 
-4. **Purge (Garbage Collection)**:
-   - Delete all the old session files that you just processed.
-   - **Keep ONLY the 3 most recent sessions** in `FCVW/wiki/sessions/`. This ensures the next agent starting a task only reads immediate relevant history.
-   - Log the garbage collection event in `FCVW/wiki/log.md`.
+## Procedure
 
-5. **Report**:
-   - Notify the user of how many files were deleted and what major concepts were transferred to long-term memory.
-## Activation Triggers
+1. Inventory active sessions and choose a bounded archive range.
+2. Identify decisions, patterns, failures, and unresolved conflicts.
+3. Promote only sourced, reusable knowledge; update an existing canonical page before creating a duplicate.
+4. Create `wiki/archive/YYYY/README.md` with range, sources, destination paths, and unresolved items.
+5. Move selected sessions to `wiki/archive/YYYY/`.
+6. Keep the latest 3–10 relevant sessions active.
+7. Update index, log, metrics, and backlinks.
+8. Run wiki lint in incremental mode.
 
-Load this skill when `FCVW/wiki/sessions/` has more than 10 session files, or when the task is to clean sessions, rotate memory, reduce context bloat, or consolidate old session syntheses.
+## Required output
+
+Record files moved, knowledge promoted, duplicates merged, unresolved conflicts, retention decision, and validation.
+
+## Validation and exit
+
+- no source session is lost;
+- archive links resolve;
+- active session IDs remain unique;
+- promoted claims cite sources;
+- active memory is within the configured budget.

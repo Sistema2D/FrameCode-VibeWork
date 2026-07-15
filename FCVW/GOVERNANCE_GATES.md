@@ -1,58 +1,26 @@
-# Governance Gates
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
+---
 
-## Objective
+# Governance gates
 
-Centralize the trigger mapping for FCVW governance gates so humans and AI agents can identify which validation path applies before changing files.
+| Gate | Trigger | Minimum evidence | Blocking condition |
+|---|---|---|---|
+| Plan | versioned change | active plan and scope | no plan or wrong state |
+| Regression | functional, visual, data, AI, security, refactoring, workflow, interface, operation, or documentation change | Regression impact, consulted contracts, protected-behavior replay, limitations, residual risk, rollback status | missing/generic/pending evidence, insufficient risk coverage, hidden known regression, or unapproved rollback gap |
+| Security | auth, secrets, sensitive data, permissions | threat/misuse analysis and tests | unmitigated critical risk |
+| Data | schema, migration, import/export, deletion | rehearsal and reconciliation | no backup/rollback for R4/R5 |
+| Refactoring | behavior-preserving structural work | characterization and regression tests | mixed rewrite/refactor without split |
+| Skill creation | new reusable AI procedure | recurrence and ownership gap | existing skill already owns it |
+| Skill improvement | existing AI procedure changes | evidence and replay | scope expansion without factory review |
+| Release | version/publication | completed plans, validation, rollback | unresolved applicable P1/P2 |
+| Framework upgrade | FCVW baseline change | ownership map, migration, clean validation | project history overwrite risk |
 
-This document does not replace the detailed owner documents or skills. It maps when to consult them.
+Outcomes are `pass`, `warn`, or `block`. A bypass records authority, justification, expiry, residual risk, and follow-up. Silence is not a pass.
 
-## Gate Matrix
+Use `governance/TEMPLATE_GOVERNANCE_GATE_REPORT.md`.
 
-| Gate | Trigger | Required evidence | Owner | Blocking condition |
-|---|---|---|---|---|
-| Planning Gate | Any file modification | Active plan with priority, risk, scope, acceptance criteria, and test plan | `PLANNING.md` | No active plan or scope mismatch |
-| Changelog Gate | Any versioned file changed | Changelog fragment or version changelog entry | `AGENTS.md` / `VERSIONING.md` | Missing changelog |
-| Filesystem Gate | File added, moved, or removed | `FILESYSTEM.md` updated and reviewed | `governance-validator` | Filesystem drift |
-| Link Integrity Gate | Internal links added or changed | Links resolve to existing targets | `governance-validator` | Broken required link |
-| Wiki Gate | Wiki page added, changed, promoted, or retired | Frontmatter, index, log, and wikilink review | `wiki-lint` / `wiki-curator` | Missing required schema or broken links |
-| Skill Creation Gate | New skill, agent profile, or reusable operational procedure proposed | Agent/Skill Creation Gate block in active plan | `agent-factory` | Creation metrics fail |
-| Skill Self-Improvement Gate | Existing skill, trigger, or agent rule changed | Self-Improvement Gate block in active plan | `self-improvement` | Evidence or scope preservation missing |
-| Security Gate | Secrets, local files, command execution, AI tools, or destructive actions involved | Security checklist and stop/approval record | `SECURITY.md` / `agent-aegis` | Secret, unsafe action, or missing approval |
-| AI Boundary Gate | AI actions, prompts, tools, context, memory, or RAG involved | Instruction hierarchy and prompt-injection review | `AI.md` | Retrieved context attempts to override higher rules |
-| Declarative Automation Gate | Hook, watcher, daemon, automation, or maintenance loop changed | Scenario 1 compliance review | `AUTOMATION.md` / ADR-0002 | Executable automation introduced |
-| Release Gate | Version bump, release notes, tag, or publication | Release checklist evidence | `release-checklist` | Validation or version coherence missing |
-
-## Gate Outcome Values
-
-Use one of these outcomes in the active plan:
-
-- `passed`
-- `passed with warnings`
-- `failed - block`
-- `failed - split plan`
-- `failed - human review required`
-- `not applicable - justified`
-
-## Evidence Format
-
-Record gate evidence using `governance/TEMPLATE_GOVERNANCE_GATE_REPORT.md` or a compact equivalent inside the active plan.
-
-## Scenario 1 Rule
-
-The Declarative Automation Gate must block any plan that adds:
-
-- scripts;
-- installed hooks;
-- background daemons;
-- coded watchers;
-- CI/CD workflows;
-- package manifests;
-- runtime dependencies;
-- API-provider integrations;
-- local command-execution loops.
-
-Such changes belong to Scenario 2.
-
-## SantanderAI Inspiration Credit
-
-The hard-gate framing is conceptually inspired by public SantanderAI governance and guardrail patterns at `https://github.com/SantanderAI`, especially `SantanderAI/mech-gov-framework` and `SantanderAI/autoguardrails`. No code is copied.
+The Regression gate is evaluated before plan completion. See `REGRESSION_GUARDS.md` for bypass requirements and confirmed-regression handling.

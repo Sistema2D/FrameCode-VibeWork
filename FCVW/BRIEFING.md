@@ -1,3 +1,11 @@
+---
+schema: "fcvw/project-briefing@1"
+artifact_role: "project_profile"
+owner: "project"
+upgrade_strategy: "preserve"
+instantiation_status: "pending"
+---
+
 # Initial Project Briefing
 
 Methodological document to conduct **Phase 0 — Discovery and Briefing** before the development or restructuring of an application.

@@ -1,31 +1,26 @@
-# Template: Release Note
-
-Use this template for executive launch summaries. The formal record must be the changelog.
+# Template: application release
 
 ```markdown
-# Release Vx.y.z
+---
+schema: "fcvw/changelog@1"
+version: "Vx.y.z"
+date: "YYYY-MM-DD"
+release_status: "unreleased | in_preparation | published | canceled"
+release_type: "patch | minor | major"
+external_publication: "not_applicable | pending | published"
+---
 
-## Date
-YYYY-MM-DD
+# Application release Vx.y.z
 
-## Type
-`major` / `minor` / `patch`
-
-## Executive Summary
-- <Synthesis of the value delivered in this version.>
-
-## Main Changes
-- <Highlighted features, fixes, or improvements.>
-
-## Plans Included
-- <List of files in Plans/completed/>
-
-## Validation Executed
-- <Summary of tests and environment.>
-
-## Known Gaps
-- <Bugs or technical debt that remain.>
-
+## Summary
+## Related plans
+## Added
+## Changed
+## Fixed
+## Removed
+## Security and data impact
+## Validation
+## Known gaps
+## Migration
 ## Rollback
-- <How to undo the publication or restore previous version.>
 ```

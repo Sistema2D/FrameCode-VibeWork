@@ -6,11 +6,11 @@
 
 ## Entry Points
 
-- 
+-
 
 ## Actors
 
-- 
+-
 
 ## Related Modules
 
@@ -54,11 +54,11 @@ flowchart TD
 
 ## Validation Criteria
 
-- 
+-
 
 ## Known Risks
 
-- 
+-
 
 ## Change History
 

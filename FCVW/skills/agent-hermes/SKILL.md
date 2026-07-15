@@ -1,10 +1,18 @@
 ---
+schema: "fcvw/skill@1"
 name: "agent-hermes"
+description: "Performance investigation using reproducible measurements."
 version: "1.1.1"
-trigger_keywords: ["performance", "optimize", "optimization", "bottleneck", "latency", "bundle", "runtime efficiency", "caching", "slow startup", "desempenho", "otimizar", "otimização", "lentidão", "gargalo", "tempo de carregamento", "latência", "cache", "inicialização lenta"]
-session_types: ["performance", "maintenance", "refactoring"]
+trigger_keywords:
+  - "performance"
+  - "bottleneck"
+  - "optimize"
+  - "desempenho"
+  - "lentidão"
+session_types:
+  - "performance"
+  - "audit"
 ---
-
 # SKILL: Agent Hermes
 
 ## Purpose
@@ -24,7 +32,7 @@ Find and implement exactly one focused optimization that preserves behavior and 
 - Follow `AGENTS.md`, `PERFORMANCE.md`, `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- Read or create `wiki/agents/hermes_journal.md` only for durable codebase-specific performance learning.
+- For durable codebase-specific performance learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 
@@ -56,5 +64,9 @@ Stop before implementation if the optimization requires:
 - Files in scope:
 - Expected impact:
 - Validation:
-- Journal update: `yes` / `no`
+- Knowledge update: `yes` / `no`
 ```
+
+## Validation and exit
+
+Exit only when before/after evidence uses a comparable workload, correctness and affected regressions pass, and measurement limitations are recorded. If no evidence-backed focused optimization exists, report that outcome without changing files.

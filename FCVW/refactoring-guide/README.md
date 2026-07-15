@@ -41,7 +41,7 @@ Governance structure for deciding, executing, reviewing, and auditing refactorin
 
 ## Templates
 
-Official templates are located in [`../governance/`](../governance/README_FRAMEWORK.md). For PRs, use [`../governance/TEMPLATE_REFACTORING_PULL_REQUEST.md`](../governance/TEMPLATE_REFACTORING_PULL_REQUEST.md) and copy it to `.github/pull_request_template.md` in the target repository.
+Official templates are indexed in [`../governance/README.md`](../governance/README.md). For PRs, use [`../governance/TEMPLATE_REFACTORING_PULL_REQUEST.md`](../governance/TEMPLATE_REFACTORING_PULL_REQUEST.md) and copy it to the target repository only when that repository uses pull requests.
 
 ## Technical Coverage
 

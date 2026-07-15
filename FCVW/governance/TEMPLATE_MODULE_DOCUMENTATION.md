@@ -12,7 +12,7 @@
 
 ## Related Pages / Components / Services
 
-- 
+-
 
 ## Inputs
 
@@ -28,15 +28,15 @@
 
 ## Business Rules
 
-- 
+-
 
 ## Internal Dependencies
 
-- 
+-
 
 ## External Dependencies
 
-- 
+-
 
 ## User Events and Actions
 
@@ -56,11 +56,11 @@
 
 ## Validation Criteria
 
-- 
+-
 
 ## Known Risks
 
-- 
+-
 
 ## Operating Flow
 

@@ -1,114 +1,78 @@
-# Governance Validator
+---
+schema: "fcvw/skill@1"
+name: "governance-validator"
+description: "Validate FCVW structure, schemas, ownership, states, and clean-template boundaries."
+version: "1.2.0"
+trigger_keywords:
+  - "validate governance"
+  - "verify filesystem"
+  - "plan state"
+  - "validar governança"
+  - "context map"
+  - "reading trigger"
+  - "orphan policy"
+  - "integridade do framework"
+session_types:
+  - "audit"
+  - "release"
+  - "framework_upgrade"
+---
 
-*Activation Triggers:* validate governance, verify filesystem, check document integrity, pre-audit check, structural audit, validar governança, verificar filesystem, integridade documental, pré-auditoria, auditoria estrutural
+# Governance validator
 
 ## Purpose
 
-Validate critical governance invariants using only manual AI-driven inspection — no scripts, no automation. Loaded on-demand before releases, structural audits, or when discrepancies are suspected.
+Evaluate the human-readable FCVW invariants. The optional script automates deterministic checks; this skill owns interpretation and remediation decisions.
 
-## Validation 1 — FILESYSTEM.md Accuracy
+## Profiles
 
-Verify that `FILESYSTEM.md`'s visual tree matches the physical disk state exactly.
+- `clean-template`: project-profile placeholders are allowed; application histories and contamination are forbidden.
+- `instantiated`: required project profiles must be complete.
+- `incremental`: new violations fail; exact legacy baseline findings are reported but do not block.
+- `strict`: all applicable findings block.
 
-### Checklist
+## Inputs
 
-- [ ] **Root files**: Confirm `.cursorrules`, `.gitignore`, `.windsurfrules`, `AGENTS.md`, `README.md` exist at project root.
-- [ ] **FCVW/ files**: All `.md` files listed under `FCVW/` (e.g., `AI.md`, `SCOPE.md`, `PLANNING.md`) exist. No listed file is missing; no unlisted file is present.
-- [ ] **Subdirectory structure**: For every directory in the tree, confirm the subdirectory exists and contains only the files shown. Directories with only a `README.md` must be annotated `(empty baseline)`.
-- [ ] **No ghost files**: Every file path in the tree resolves to an actual file. Remove or annotate any that do not.
-- [ ] **No omissions**: Every `.md` file physically present under `FCVW/` (excluding `.gitignore`d paths) has a corresponding entry in the tree.
+- `SCHEMAS.md`, `OWNERSHIP.md`, `FRAMEWORK_LOCK.md`;
+- physical filesystem;
+- active plan and target release;
+- optional legacy baseline.
 
-### Correction Protocol
+## Checks
 
-If a discrepancy is found:
-1. If the tree lists a file that does not exist, remove the entry or annotate it as `(removed)`.
-2. If a file exists but is not in the tree, add it.
-3. Update the **last_reviewed** date in FILESYSTEM.md frontmatter.
-4. Record the discrepancy and correction in the active plan or changelog.
+1. Canonical files and ownership metadata.
+2. Plan status/directory coherence and unique IDs.
+3. Skill metadata, catalog coverage, and provider-neutral core instructions.
+4. Framework/application version namespace separation.
+5. Markdown links and fence balance.
+6. Wiki IDs, schema, index, freshness, and archive rules.
+7. Placeholder policy by profile.
+8. Clean-template contamination.
+9. Framework lock, release record, and migration coherence.
+10. `FILESYSTEM.md` canonical path/glob coverage.
+11. Operational-index and reading-route coverage for every root framework policy, project profile, and declared skill session type.
 
----
+## Optional execution
 
-## Validation 2 — Governance Document Integrity
+`python tools/validate_fcvw.py --root . --profile <profile>`
 
-Verify that all governance documents are internally consistent and structurally sound.
+For controlled legacy debt:
 
-### Checklist
+`python tools/validate_fcvw.py --root . --profile incremental --baseline path/to/legacy-baseline.md`
 
-#### Frontmatter Integrity
+Scripts do not auto-correct historical evidence. Review every proposed remediation and keep the report attached to the active plan or release.
 
-- [ ] Every knowledge page under `wiki/` (except `README.md`, `schema.md`, `index.md`, `log.md`, and folder-internal `README.md`) has valid YAML frontmatter per `wiki/schema.md §3`.
-- [ ] Frontmatter fields are in English, not mixed with Portuguese equivalents (e.g., no `status: "validado"` alongside `status: "validated"`).
-- [ ] `type` values match the allowed list from `wiki/schema.md §3`.
-- [ ] `status` values match the allowed list from `wiki/schema.md §4`.
+## Non-responsibilities
 
-#### Internal Link Integrity
+- application runtime tests;
+- legal approval;
+- destructive cleanup without a plan;
+- hiding legacy findings.
 
-- [ ] All literal Markdown relative links such as ``[label](relative/path.md)`` under `FCVW/` resolve to existing files. Check links in:
-  - `AGENTS.md`
-  - `FCVW/README.md`
-  - `FCVW/CONTEXT_MAP.md`
-  - `FCVW/STACK.md`
-  - `FCVW/MANIFEST.md`
-  - `FCVW/PLANNING.md`
-  - `FCVW/AUTOMATION.md`
-  - `FCVW/HOOKS.md`
-  - `FCVW/WATCHERS.md`
-  - `FCVW/DAEMONS.md`
-  - `FCVW/GOVERNANCE_GATES.md`
-- [ ] All Obsidian-style `[[wikilink]]` references in `wiki/` point to existing files or known valid targets.
-- [ ] No `FCVW/` document links to a path that was removed or relocated.
+## Required output
 
-#### Cross-Reference Consistency
+List command/profile, passed checks, new failures, reading-route gaps, baseline findings, corrections, and residual risk.
 
-- [ ] **Version coherence**: `MANIFEST.md §1`, `STACK.md`, and the active changelog all declare the same current version (`Vx.y.z`).
-- [ ] **Document index**: Every document listed in `MANIFEST.md §7` exists on disk. Every official document on disk is listed in `MANIFEST.md §7`.
-- [ ] **Skill catalog**: Every skill in `skills/README.md` has a corresponding `skills/<name>/SKILL.md` file. No `SKILL.md` exists without a catalog entry.
-- [ ] **AGENTS.md references**: Every `FCVW/` document referenced in `AGENTS.md` (selective loading table, operational rules, checklist) exists and has not been renamed.
-- [ ] **CONTEXT_MAP.md accuracy**: Session types listed match the actual operational documents.
+## Validation and exit
 
-#### Declarative Automation Integrity
-
-- [ ] `AUTOMATION.md`, `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, and `GOVERNANCE_GATES.md` exist when referenced by `AGENTS.md`, `CONTEXT_MAP.md`, `STACK.md`, or `MANIFEST.md`.
-- [ ] No declarative automation document instructs agents to create or execute scripts under Scenario 1.
-- [ ] Hook, watcher, daemon, and gate documents clearly state that they are Markdown-only contracts.
-- [ ] Every new template listed under `governance/` exists in `FILESYSTEM.md`.
-- [ ] No automation contract bypasses `PLANNING.md`, `SECURITY.md`, `AI.md`, ADR-0001, or ADR-0002.
-- [ ] SantanderAI credits, when present, are framed as conceptual or architectural inspiration and do not imply copied code.
-
-#### Plan State Coherence
-
-- [ ] Every plan in `FCVW/Plans/pending/` has internal field `Status: pending`.
-- [ ] Every plan in `FCVW/Plans/in_progress/` has internal field `Status: in_progress`.
-- [ ] Every plan in `FCVW/Plans/completed/` has internal field `Status: completed`.
-- [ ] Every plan in `FCVW/Plans/discontinued/` has internal field `Status: discontinued`.
-- [ ] A completed plan has a `Completion Date`, validation evidence, and a corresponding changelog entry unless explicitly justified.
-- [ ] A plan cited by a published changelog exists and is not still marked `pending` or `in_progress`.
-
-#### Table & Format Integrity
-
-- [ ] No broken markdown tables (uneven column counts, missing separators).
-- [ ] No unclosed code blocks (triple backticks without a closing pair).
-- [ ] No raw HTML that could introduce rendering inconsistencies.
-
-### Correction Protocol
-
-For each issue found:
-1. Fix the broken link, frontmatter, plan status, or reference directly.
-2. If a document was renamed, update all cross-references.
-3. If a file is orphaned (no longer referenced), either add it to the appropriate index or deprecate it.
-4. Record all corrections in the active plan and changelog.
-
----
-
-## Token Optimization Note
-
-Use instead of loading FILESYSTEM.md + AUDIT.md + TESTS.md for validation checks. Load on-demand only when:
-
-- Preparing a release (`skill:release-checklist` is already the primary)
-- Running a structural audit (`skill:agnix-linter` covers formatting)
-- Suspicion of FILESYSTEM.md drift
-- Before closing a plan that alters directory structure
-- Verifying that plan status fields match their `Plans/{status}` directories
-- Verifying declarative automation integrity after hook, watcher, daemon, or gate contract changes
-
-Do not load this skill during routine development work.
+Exit only when blocking findings are resolved or explicitly accepted by authorized scope, and no new debt is suppressed as legacy.

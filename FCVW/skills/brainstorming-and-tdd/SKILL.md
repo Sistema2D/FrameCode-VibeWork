@@ -1,34 +1,58 @@
-# Brainstorming & Test-Driven Development (TDD) Workflow
-
-*Activation Triggers:* starting a new feature, fixing a bug, answering a request, implementing a plan.
-
-This skill combines the philosophy of the **Superpowers methodology** and the **Spartan AI Toolkit** to enforce discipline on the AI agent.
-
-## Part 1: Brainstorming (Anti-Immediate Action)
-
-When the user asks you to build or fix something, **do not immediately jump into writing code or creating a plan.**
-
-Instead, you must step back and extract a clear specification.
-
-### Brainstorming Rules:
-1. **Ask clarifying questions.** What is the edge case? What is the expected user flow?
-2. **Do not create a plan in `FCVW/Plans/pending/`** until you have received explicit confirmation of the design/spec from the user.
-3. If the request is vague, present options to the user and wait for their choice.
-4. **Draft the Spec**: Summarize the agreed-upon requirements into a concise specification block before moving to the FCVW Planning phase.
-
+---
+schema: "fcvw/skill@1"
+name: "brainstorming-and-tdd"
+description: "Clarify behavior and use test-first implementation when applicable."
+version: "1.2.0"
+trigger_keywords:
+  - "new feature"
+  - "fix bug"
+  - "tdd"
+  - "brainstorm"
+session_types:
+  - "feature"
+  - "bugfix"
 ---
 
-## Part 2: Test-Driven Development (Red/Green TDD)
+# Behavior design and test-first development
 
-Once a plan is approved and moved to `FCVW/Plans/in_progress/`, you must enforce TDD.
+## Purpose
 
-### Implementation Workflow:
-1. **Write the failing test first (Red).** Based on the plan, write the unit or integration test that verifies the expected behavior.
-2. **Run the test.** Confirm that it fails because the feature does not exist or the bug is present.
-3. **Write the implementation code (Green).** Write the minimal amount of code necessary to make the test pass.
-4. **Run the test again.** Ensure it now passes.
-5. **YAGNI (You Aren't Gonna Need It).** Do not implement speculative features that are not covered by the failing tests you just wrote.
+Turn an implementation request into observable behavior and use the smallest useful test-first loop to reduce ambiguity and regression risk.
 
-### Spartan Quality Gates:
-- Ensure the commit message format complies with semantic conventions.
-- Never commit broken code. If the test fails, do not proceed to close the plan. Fix the code.
+## Use conditions
+
+Use for behavior changes where an automated unit, integration, contract, or end-to-end check is practical. Ask a blocking question only when missing information would materially change scope or outcome; otherwise state a bounded assumption and proceed.
+
+## Non-responsibilities
+
+- requiring TDD for pure documentation, exploratory spikes, or surfaces with no practical harness;
+- expanding the feature beyond agreed acceptance criteria;
+- replacing product decisions with test implementation details;
+- creating brittle tests that assert incidental structure instead of behavior.
+
+## Inputs
+
+User outcome, current behavior, edge cases, constraints, acceptance criteria, affected interfaces, existing tests, and active plan.
+
+## Procedure
+
+1. Express the request as actors, trigger, observable result, boundaries, and failure cases.
+2. Resolve material ambiguity and record assumptions.
+3. Select the narrowest test level that proves the behavior.
+4. For a defect, reproduce it with a failing regression check when feasible; for legacy code, use a characterization test before changing behavior.
+5. Run the new check and confirm it fails for the intended reason.
+6. Implement the smallest plan-scoped change that satisfies it.
+7. Rerun the focused check, then the relevant regression suite.
+8. Refactor only while all checks remain green and within scope.
+
+## Required output
+
+Concise behavior specification, assumptions, test level, red/green evidence, implementation scope, regression results, and any justified manual validation.
+
+## Validation
+
+The test fails before implementation for the expected reason, passes after the change, remains meaningful if the defect is reintroduced, and does not depend on irrelevant internals.
+
+## Exit criteria
+
+Exit when acceptance criteria are demonstrated by appropriate evidence, or when the missing test capability and alternative validation are recorded explicitly.

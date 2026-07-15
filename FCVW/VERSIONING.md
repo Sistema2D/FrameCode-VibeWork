@@ -1,234 +1,56 @@
-# Versioning and Changelogs
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace_with_migration"
+---
 
-> **Current version: `V0.11.0`** - see [`changelogs/V0.11.0.md`](changelogs/V0.11.0.md)
+# Versioning and changelog namespaces
 
-This document defines the versioning, release, and changelog rules of the application.
+## Two independent versions
 
-The goal is to ensure traceability between plans, applied changes, modified files, justifications, executed validations, and published versions.
+- **Application version:** owned by the application and recorded in its single runtime/manifest source.
+- **Framework version:** owned by FCVW and recorded in `FRAMEWORK_LOCK.md`.
 
-## Base Version and Current Version
+An FCVW documentation upgrade does not bump the application version unless it changes application behavior or the project's release policy explicitly says otherwise.
 
-The formal base version of the documented versioning process is:
+## Locations
 
-```text
-V0.0.0
-```
+- Application release: `changelogs/Vx.y.z.md`.
+- Application unreleased fragment: `changelogs/unreleased/<plan-id>.md`.
+- Framework release: `framework-releases/Vx.y.z.md`.
+- Framework baseline in a project: `FRAMEWORK_LOCK.md`.
 
-The current version of the application must be consulted jointly in:
+Never store framework release history in application `changelogs/`.
 
-- application source code (constant or version file);
-- `STACK.md`, `Current version` field;
-- `MANIFEST.md`, `Current version` field;
-- corresponding `changelogs/Vx.y.z.md`.
+## Semantic versioning
 
-As long as the version is not centralized in a single release file, the version references in code and documentation must remain coherent with each other.
+| Change | Bump |
+|---|---|
+| Backward-compatible correction | patch |
+| New backward-compatible capability | minor |
+| Breaking schema, path, or behavior | major |
 
-## Relationship with Release
+Pre-1.0 minor versions may contain breaking changes only when the framework release record and migration note make them explicit.
 
-`RELEASE.md` describes the operational workflow to prepare, validate, and publish a release. This `VERSIONING.md` is the normative source for version, increment, changelog status, and publication criteria.
+## Application changelog
 
-The changelog in `changelogs/Vx.y.z.md` is the formal source of the published version or the version in preparation. Syntheses in `wiki/releases/` may record reusable learnings, but do not replace the changelog.
+Use schema `fcvw/changelog@1` and include:
 
-## Version Format
+- version, date, release type and status;
+- summary and related plans;
+- created, modified, and removed behavior;
+- affected files/areas;
+- functional, visual, technical, security, and data impact as applicable;
+- validation, known gaps, and rollback;
+- external publication status when relevant.
 
-```text
-Vx.y.z
-```
+One logical change batch creates one unreleased fragment. Release assembly may combine several fragments into one version.
 
-Where:
+## Framework release
 
-- `x`: major version;
-- `y`: minor version;
-- `z`: patch version.
+Use schema `fcvw/framework-release@1`. Record compatibility, ownership/path changes, schema changes, migrations, validation, and the clean-template asset state.
 
-## Increment Criteria
+## Source of truth
 
-### Major Version (`x`)
-
-Increment when the change:
-
-- modifies core architecture;
-- alters main API contracts;
-- requires relevant structural migration;
-- breaks backward compatibility with old persisted data;
-- alters the main workflow in a way incompatible with previous versions;
-- introduces a broad product or distribution change.
-
-### Minor Version (`y`)
-
-Increment when the change:
-
-- adds relevant functionality;
-- creates a new screen, module, or usage flow;
-- expands capabilities without breaking compatibility;
-- adds significant integration or functional improvement.
-
-### Patch Version (`z`)
-
-Increment when the change:
-
-- fixes a bug;
-- adjusts existing behavior without changing the contract;
-- improves documentation;
-- updates process, planning, troubleshooting, or design;
-- fixes a localized visual issue;
-- applies a small refactoring with no relevant functional impact.
-
-## Mandatory Changelog Rule
-
-Every functional, visual, structural, documental, build, process, or versioned data change must have a corresponding Markdown file in `changelogs/`.
-
-The file must be created or updated before closing the plan.
-
-No version should be considered completed without a corresponding changelog.
-
-The `release-checklist` skill must be loaded whenever a task creates or edits `changelogs/Vx.y.z.md`, bumps a version field, marks a changelog as `published`, prepares a tag, or publishes a GitHub release.
-
-## Naming Pattern
-
-```text
-changelogs/Vx.y.z.md
-```
-
-The filename must correspond exactly to the version recorded in the changelog content.
-
-## Mandatory Changelog Structure
-
-```markdown
-# Changelog Vx.y.z
-
-## Version
-
-`Vx.y.z`
-
-## Date
-
-YYYY-MM-DD
-
-## Release Status
-
-`in_preparation`
-
-## GitHub Release Status
-
-`not_applicable | pending | published`
-
-## Release Type
-
-`major` / `minor` / `patch`
-
-## Summary
-
--
-
-## Related Plans
-
--
-
-## Items Created
-
--
-
-## Items Modified
-
--
-
-## Items Removed
-
--
-
-## Justifications
-
--
-
-## Affected Files
-
--
-
-## Functional Impact
-
--
-
-## Visual Impact
-
--
-
-## Technical Impact
-
--
-
-## Evaluated Risks and Regressions
-
--
-
-## Validation Executed
-
--
-
-## Known Gaps
-
--
-
-## Rollback Observations
-
--
-```
-
-## Allowed Statuses for Release
-
-- `in_preparation`: release in assembly, still subject to changes.
-- `in_validation`: changes completed, validation in progress.
-- `published`: release completed and recorded as official version.
-- `canceled`: release planned, but not published.
-
-## GitHub Release Status
-
-Use this field to avoid ambiguity between a formal changelog publication and an external GitHub Release/tag publication:
-
-- `not_applicable`: the changelog is published, but no GitHub Release/tag was required or performed.
-- `pending`: the GitHub Release/tag is expected but not yet completed.
-- `published`: the GitHub Release/tag was created and verified.
-
-Do not mark GitHub release status as `published` without evidence of tag/release creation.
-
-## Release Types
-
-- `major`: increment of `x`.
-- `minor`: increment of `y`.
-- `patch`: increment of `z`.
-
-## Relationship with Plans
-
-Each relevant changelog item must point to one or more plans in `Plans/`.
-
-- Completed plans must be cited by filename.
-- In-progress plans must not be treated as completed.
-- Discontinued plans only enter the changelog if they affected decisions, files, or scope.
-- The plan's internal **Status** field must match the directory where the plan resides.
-
-## Criteria to Publish a Version
-
-A version can only be marked as `published` when:
-
-- all included plans are in `Plans/completed/`;
-- all included plans have internal `Status: completed`;
-- the changelog exists and lists created, modified, and removed items;
-- the validation defined in the plans has been executed or the limitation is documented;
-- version references in code, documentation, and build are coherent;
-- known gaps are recorded;
-- there is no temporary file used as a source of truth.
-
-## Rollback
-
-When a release alters code, persisted data, build, migration, or API contracts, the changelog must indicate the rollback procedure or justify why rollback does not apply.
-
-## Minimum Audit Before Closing a Release
-
-- Does the `changelogs/Vx.y.z.md` file exist?
-- Does the filename correspond to the **Version** field?
-- Do all cited plans exist and reside in `Plans/completed/`?
-- Do all cited completed plans have internal `Status: completed`?
-- Were created, modified, and removed files listed?
-- Were justifications and validations recorded?
-- Are known gaps explicit?
-- Is `GitHub Release Status` present and accurate?
+Do not manually duplicate the current version across README, stack, manifest, code, and changelogs. Choose one application source and derive or link other surfaces. The framework version is always read from `FRAMEWORK_LOCK.md`.

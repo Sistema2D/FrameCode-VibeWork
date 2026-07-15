@@ -1,5 +1,5 @@
-# Releases
+# Release knowledge
 
-This directory stores release syntheses for published versions of the project.
+Store a release synthesis only when a release creates reusable knowledge, a breaking migration, major incident learning, or a project policy explicitly requires it.
 
-Create a new file for each release when there is reusable learning to preserve.
+Application changelogs and framework release records remain the formal release evidence.

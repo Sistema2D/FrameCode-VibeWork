@@ -1,58 +1,56 @@
-# Tech Stack
+---
+schema: "fcvw/project-stack@1"
+artifact_role: "project_profile"
+owner: "project"
+upgrade_strategy: "preserve"
+instantiation_status: "pending"
+---
+
+# Technology stack
 
 ## Application
 
-- Name: `FrameCode VibeWork`
-- Current version: `V0.12.0`
-- Type: `framework / governance template`
-- Target platform: `cross-platform (Windows / Linux / macOS)`
-- Objective: `Markdown-first governance framework for AI-assisted application development with context compression, on-demand skills, declarative automation contracts, and token-budget guidance.`
+| Concern | Selection | Version/source | Notes |
+|---|---|---|---|
+| Application type | `<web, desktop, mobile, service, library>` | | |
+| Primary language | `<language>` | | |
+| Runtime | `<runtime>` | | |
+| UI | `<framework or not_applicable>` | | |
+| Backend | `<framework or not_applicable>` | | |
+| Persistence | `<database/files or not_applicable>` | | |
+| Deployment | `<target>` | | |
 
-## Governance Layer
+## Canonical version sources
 
-The primary stack of this framework is pure Markdown and Git. No runtime dependencies.
+- Application version: `<single source path>`.
+- Framework version: `FRAMEWORK_LOCK.md`.
+- Dependency versions: lockfile or platform-native equivalent.
 
-- Document format: `Markdown (.md)`
-- Version control: `Git`
-- Visualization: `Obsidian` optional
-- Distribution: `GitHub template / git clone`
-- ADR-0001: Pure Markdown instruction model
-- ADR-0002: Declarative automation contracts over executable automation
+Do not copy the application version into multiple documents unless it is derived automatically.
 
-## Token Economy Layer
+## Required commands
 
-- Input economy: `CONTEXT_MAP.md`, AICC session syntheses, and JIT skills.
-- Output economy: `TOKEN_BUDGET.md`, with detailed evidence stored in plans, changelogs, audits, troubleshooting, release notes, and PR descriptions.
+| Purpose | Command | Environment |
+|---|---|---|
+| Install | `<command>` | |
+| Type/static check | `<command>` | |
+| Lint | `<command>` | |
+| Unit tests | `<command>` | |
+| Integration tests | `<command>` | |
+| Build | `<command>` | |
+| Start | `<command>` | |
 
-## Declarative Automation Contracts
+## Boundaries
 
-The framework may describe hooks, watchers, daemons, maintenance loops, and governance gates as Markdown-only operational contracts.
+- Supported operating systems:
+- Supported browsers/clients:
+- Required external services:
+- Unsupported or intentionally excluded technologies:
 
-These contracts do not introduce executable scripts, installed hooks, background processes, package dependencies, CI/CD workflows, API-key integrations, provider SDKs, or local command-execution loops.
+## Governance layer
 
-## AI / LLM Integration
-
-- Runtime/model server: `Model-agnostic — any LLM agent that can read and follow Markdown`
-- Context compression: `AICC`
-- Skills engine: `ASE — AI Skills Engine`
-- Wiki memory: `LLM Wiki`
-
-## Active Skills
-
-Skills live under `skills/<name>/SKILL.md` and are loaded on demand. See `skills/README.md` for the current catalog.
-
-## Build and Execution
-
-- Build script: `Not applicable`
-- Execution script: `Not applicable`
-- Node package files: `Not applicable in the framework root`
-- Main output: versioned governance documents, plans, changelogs, wiki pages, and session syntheses
-
-## Persistence and Logs
-
-- Plans: `Plans/{pending,in_progress,completed,discontinued}/`
-- Changelogs: `changelogs/unreleased/` and formal `changelogs/Vx.y.z.md`
-- Technical memory: `wiki/`
-- Session context: `wiki/sessions/S*.md`
-- Troubleshooting: `troubleshooting/`
-- ADRs: `decisions/`
+- Framework: FrameCode VibeWork `V0.13.0`.
+- Plans: `FCVW/Plans/`.
+- Application releases: `FCVW/changelogs/`.
+- Framework baseline: `FCVW/FRAMEWORK_LOCK.md`.
+- Optional validator: `tools/validate_fcvw.py`.

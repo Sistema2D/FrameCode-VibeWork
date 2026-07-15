@@ -1,248 +1,85 @@
-# Testing and Validation
-
-Methodological document to define the rules of testing, validation, and regression of the application.
-
-This file complements `PLANNING.md`, `TROUBLESHOOTING.md`, `VERSIONING.md`, `DESIGN.md`, `STACK.md`, and `WORKFLOW.md`. It must be consulted whenever a functional, visual, structural, documental, build, data, security, or AI change is planned, implemented, or published.
-
-## Objective
-
-Ensure that each change is validated proportionally to its risk, priority, technical impact, and user impact.
-
-This document does not replace individual plans in `Plans/`. Each plan must bring its own testing plan, but should use this file as a reference.
-
-## General Principles
-
-- Every change must have validation compatible with its risk.
-- Manual validation must be recorded when automated testing does not exist.
-- Reproducible failures must generate or update a record in `troubleshooting/`.
-- Published changes must have testing evidence in the plan and in the changelog.
-- Tests must cover expected behavior, invalid behavior, and probable regressions.
-- No test should rely on real private data when it can use dummy data.
-- Every testing limitation must be explicitly declared in the plan and in the changelog.
-
-## Test Classification by Change Type
-
-| Change Type | Minimum Required Tests |
-|---|---|
-| Documentation | Check links, coherence with related documents, and absence of normative conflict |
-| UI/UX | Validate normal screen, maximized screen, minimum size, hover, focus, click, disabled states, and contrast |
-| Frontend | Build, manual workflow of the affected screen, navigation regression, and visual persistence |
-| Backend | Compilation/syntactic check, affected endpoints, invalid inputs, and controlled errors |
-| Persistence | Create, read, update, delete, corrupt test file, validate backup and migration |
-| AI | Simple input, long input, model failure, model absence, incorrect context, and action boundaries |
-| Vault/RAG | Upload, read, search, links, sources, manifest, path traversal, and context retrieval |
-| Security | Token, CORS, permissions, paths, secrets, logs, and destructive actions |
-| Build/release | Clean build, initial execution, displayed version, changelog, and output files |
-| Refactoring | Non-regression tests, before/after behavior comparison, and residual risk metrics |
-| Code hygiene / anti-monolith | Similar-code search, module boundary review, dead/stale candidate evidence, before/after behavior comparison, and deferred debt record |
-| Agent/skill creation | Recurrence evidence, coverage-gap review, token/risk ROI estimate, narrow-scope check, validation replay, and catalog consistency |
-| Skill/agent self-improvement | Failure/drift evidence, scope-preservation review, before/after trigger check, token/risk ROI estimate, and replay against the source task |
-| Wiki curation | Promotion criteria, source coverage, taxonomy/theme metadata, duplication or supersession check, freshness metrics, index/log sync, and fixed optimized cost mode evidence |
-
-## Validation Matrix by Risk
-
-### R1 — Very Low Risk
-
-Minimum validation:
-
-- manual review of the altered file;
-- checking document consistency;
-- registry in the plan and in the changelog whenever there is a change to a versioned file.
-
-### R2 — Low Risk
-
-Minimum validation:
-
-- pontuais/local manual tests;
-- build or syntactic check when there is code;
-- validation of the directly affected component.
-
-### R3 — Moderate Risk
-
-Minimum validation:
-
-- full build;
-- manual test of the affected main workflow;
-- test of at least one alternative workflow;
-- regression test of related modules;
-- registry of limitations.
-
-### R4 — High Risk
-
-Minimum validation:
-
-- full build;
-- full manual tests of the affected workflow;
-- regression tests of dependent workflows;
-- error and recovery test;
-- rollback plan;
-- detailed registry in the changelog.
-
-### R5 — Critical Risk
-
-Minimum validation:
-
-- full build;
-- expanded regression test;
-- validation of existing data;
-- validation of rollback;
-- explicit security evaluation;
-- human approval before considering completed;
-- detailed changelog with residual risks.
-
-## General Checklist Before Concluding a Plan
-
-- [ ] Tested scope matches the plan's scope.
-- [ ] Anti-Monolith Gate was recorded when a new or expanded non-trivial artifact was created.
-- [ ] Code Hygiene Scan was recorded when duplication, cleanup, stale files, dead code, or monolith remediation was involved.
-- [ ] Agent/Skill Creation Gate was recorded when a new skill, agent profile, command pack, or reusable operational procedure was created.
-- [ ] Skill/Agent Self-Improvement Gate was recorded when a skill, agent profile, trigger list, or agent operating rule changed.
-- [ ] Expected behavior was validated.
-- [ ] Invalid inputs were evaluated when applicable.
-- [ ] Errors are handled safely.
-- [ ] There was no perceptible regression in related workflows.
-- [ ] Documentation was updated when necessary.
-- [ ] Changelog records the executed validation.
-- [ ] Testing limitations were recorded.
-- [ ] Known gaps were recorded.
-
-## Frontend Tests
-
-Applicable to web, native desktop, mobile, TUI, or hybrid interfaces.
-
-### Minimum Criteria
-
-- Screen opens without error.
-- Navigation works.
-- Visual states are perceptible.
-- Fields accept valid input.
-- Fields reject or handle invalid input.
-- Destructive actions request confirmation.
-- Disabled buttons do not execute actions.
-- Resizing does not cause overlap.
-- Long text does not break layout.
-- Icons and tooltips remain coherent.
-
-### Visual Checklist
-
-- [ ] Normal window.
-- [ ] Maximized window.
-- [ ] Minimum supported size.
-- [ ] Expected theme.
-- [ ] Adequate contrast.
-- [ ] Hover.
-- [ ] Keyboard focus.
-- [ ] Pressed.
-- [ ] Disabled.
-- [ ] Error.
-- [ ] Success.
-- [ ] Tooltip.
-- [ ] Modal.
-- [ ] Scroll.
-
-## Backend Tests
-
-### Minimum Criteria
-
-- Application starts.
-- Main endpoints respond.
-- Invalid inputs return a controlled error.
-- External dependency failure does not crash the process.
-- Logs do not expose secrets.
-- Destructive operations require confirmation or adequate protection.
-
-### API Checklist
-
-- [ ] Health check.
-- [ ] Endpoint with valid input.
-- [ ] Endpoint with invalid input.
-- [ ] Endpoint without authorization when applicable.
-- [ ] Endpoint with authorization when applicable.
-- [ ] Dependency error.
-- [ ] Timeout.
-- [ ] Empty response.
-- [ ] Large response.
-
-## Persistence Tests
-
-### Minimum Criteria
-
-- Data creation.
-- Data reading.
-- Data updating.
-- Data deletion.
-- Backup when applicable.
-- Recovery after missing file.
-- Recovery after corrupted file.
-- Backward compatibility with data from previous version.
-
-### Checklist
-
-- [ ] New data is saved.
-- [ ] Saved data is reloaded.
-- [ ] Existing data is not lost.
-- [ ] Missing file is safely recreated.
-- [ ] Invalid file does not cause crash without message.
-- [ ] Backup is created before a critical rewrite.
-- [ ] Migration, if any, is idempotent.
-
-## AI Tests
-
-### Minimum Criteria
-
-- Model unavailable is handled.
-- Empty response is handled.
-- Long response is handled.
-- Streaming error is handled.
-- Retrieved context is displayed when applicable.
-- Sources are traceable when applicable.
-- AI does not execute actions outside allowed scope.
-- Wiki curation uses `wiki-curator` in fixed optimized mode and does not perform broad wiki crawls unless `wiki-lint` or the user explicitly requires it.
-- Curated wiki pages use canonical tags, themes, and review metrics when applicable.
-- Prompt injection in retrieved data is treated as untrusted content.
-
-### Automated Prompt Evaluation (LLM Regression)
-
-For mature projects, relying solely on manual empirical prompt tests is insufficient. The project must adopt an automated LLM evaluation framework (e.g., `promptfoo`) integrated into the CI/CD pipeline to ensure that changes to `AGENTS.md` or the `FCVW/` knowledge base do not degrade the agent's behavior.
-
-### Recommended Cases
-
-- Simple question.
-- Long question.
-- Ambiguous question.
-- Question trying to ignore rules.
-- Question requiring local source.
-- Question with no source available.
-- Cancellation during generation.
-- AI runtime failure.
-
-## Security Tests
-
-- [ ] Token or authentication when applicable.
-- [ ] CORS or allowed origins when applicable.
-- [ ] Path traversal blocked.
-- [ ] Secrets do not appear in logs.
-- [ ] Files outside the allowed directory are not accessed.
-- [ ] Destructive actions require confirmation.
-- [ ] Sensitive data is not sent to external services without an explicit rule.
-- [ ] Prompt injection does not alter system rules.
-
-## Release Tests
-
-Before publishing a version:
-
-- [ ] All plans of the release are completed.
-- [ ] Changelog exists.
-- [ ] Version displayed in the application is coherent.
-- [ ] `STACK.md` records the correct version.
-- [ ] Clean build was executed or limitation was recorded.
-- [ ] Main workflow was validated.
-- [ ] Known gaps were recorded.
-- [ ] Rollback was described when applicable.
-
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
 ---
 
-## Models and Templates
+# Testing and validation
 
-The registration of validation and tests must be done directly in the plan file, following the template in:
-`governance/TEMPLATE_PLAN.md`
+## Purpose
+
+Define risk-proportional evidence for new behavior, protected existing behavior, failure handling, and rollback. Each plan selects the applicable checks; this policy does not invent application-specific commands.
+
+## General rules
+
+- Validate both the requested outcome and the protected behaviors listed in the plan's Regression impact section.
+- Prefer reproducible automated checks for stable contracts; record manual evidence when automation is unavailable or unsuitable.
+- A test name or suite size is not evidence by itself: record command or procedure, result, protected contract, and limitation.
+- Use representative synthetic or sanitized fixtures instead of private production data.
+- A reproducible failure receives a troubleshooting record when diagnosis or recurrence value justifies it.
+- Published changes carry concise validation evidence in their plan and changelog or framework release record.
+- Missing tooling does not silently lower risk; it becomes a limitation, residual risk, and completion decision.
+
+## Minimum regression evidence by risk
+
+| Risk | Minimum evidence |
+|---|---|
+| R1 | Focused review or replay of the changed contract, structural checks when applicable, and changelog/release evidence |
+| R2 | Direct component or document-contract test plus one relevant existing-behavior replay |
+| R3 | Full build or equivalent integrity check, primary workflow, alternate/error workflow, and related-boundary regression |
+| R4 | R3 plus dependent workflows, compatibility or recovery evidence, documented rollback, and explicit residual-risk review |
+| R5 | Expanded regression across affected boundaries, security/data review when applicable, rollback rehearsal, and explicit human approval before completion |
+
+Authentication, authorization, persistent data, public APIs or file formats, agent instructions, memory, filesystem, automation, migrations, destructive behavior, and releases are not R1 by default. An R1 classification for one of these surfaces requires a concrete blast-radius and reversibility rationale.
+
+## Evidence matrix by change surface
+
+| Surface | Required considerations |
+|---|---|
+| Documentation/governance | links, schema, ownership, instruction conflicts, lifecycle, generated summaries, negative structural fixture |
+| UI/accessibility | supported viewport/state matrix, keyboard/focus, contrast, error/empty/loading states, primary and adjacent navigation |
+| Frontend/client | focused tests, build, affected journey, navigation/state persistence, error and offline/dependency behavior |
+| Backend/API | syntax/compile, contract tests, valid/invalid input, authorization, dependency failure, idempotency where required |
+| Data/filesystem | CRUD or equivalent lifecycle, old-data compatibility, migration idempotency, reconciliation, backup and recovery |
+| AI/agent/RAG | allowed and denied actions, untrusted-content handling, context/source traceability, unavailable model, memory boundaries |
+| Security/privacy | authentication, authorization denial, secrets/logs, path boundaries, destructive confirmation, misuse cases |
+| Refactoring | characterization baseline, before/after behavior, public contract, focused and dependent regressions |
+| Performance/operations | measured baseline, representative load, startup/deploy/recovery, resource and failure thresholds |
+| Release/build | clean artifact, version surfaces, primary smoke, migration/rollback, changelog, known gaps |
+
+## Regression test design
+
+1. Name the protected behavior and its authoritative contract.
+2. Choose the narrowest check that can detect the unwanted change.
+3. Capture a baseline before modification when the result is comparative.
+4. Include negative, invalid, denied, empty, or recovery cases when relevant.
+5. Confirm a new guardrail would fail on the known regressed state when practical.
+6. Run focused checks first and broaden by risk and dependency radius.
+7. Record nondeterminism, environment differences, skipped paths, and residual uncertainty.
+
+## AI and agent boundary replay
+
+Changes to `AGENTS.md`, AI policies, skills, prompts, memory, retrieval, or automation must replay representative allowed, denied, ambiguous, unavailable-runtime, and prompt-injection cases. Mature projects may automate evaluations in their chosen runtime, but FCVW does not require a particular vendor or test package.
+
+## Visual evidence
+
+Visual changes identify supported viewports and states before testing. Compare relevant before/after states; verify keyboard focus, zoom or scaling when applicable, long content, empty/error/loading states, disabled and destructive actions. Store only non-sensitive captures in project-owned paths.
+
+## Data and rollback evidence
+
+Schema, format, migration, retention, import/export, or destructive changes use representative prior-version data. Validate reconciliation, idempotency, backup, recovery, and rollback—or record why rollback is irreversible and who approved that risk.
+
+## Completion checklist
+
+- [ ] Requested behavior has evidence.
+- [ ] Regression impact identifies protected behavior and source contracts.
+- [ ] Applicable focused and dependent checks have final results.
+- [ ] Invalid, denied, error, and recovery paths were considered.
+- [ ] Compatibility and rollback were validated when applicable.
+- [ ] Security, data, AI, visual, or operational gates ran when triggered.
+- [ ] No pending regression result remains.
+- [ ] Limitations, residual risks, and known gaps are explicit.
+- [ ] Plan and changelog or framework release record contain reproducible evidence.
+
+Use `governance/TEMPLATE_PLAN.md` to record change-specific validation and `REGRESSION_GUARDS.md` for blocking rules.

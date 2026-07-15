@@ -1,39 +1,15 @@
-# Template: Watcher Rule
+# Template: watcher rule
 
-## Observed Event
+Use `TEMPLATE_AUTOMATION_CONTRACT.md` with `kind: watcher` and add:
 
-<file, folder, document state, plan state, wiki state, release state, security signal>
+```markdown
+## Event source and match
 
-## Detection Method
+## Debounce and deduplication
 
-`manual inspection` / `AI inspection` / `repository diff` / `document review`
+## Bounded reaction
 
-## Expected Reaction
+## Retry and maximum attempts
 
-- 
-
-## Blocking?
-
-`yes` / `no`
-
-## Owner
-
-<document or skill>
-
-## Required Evidence
-
-- 
-
-## False Positive Handling
-
-- 
-
-## Related Hook
-
-- 
-
-## Scenario 1 Compliance
-
-- [ ] This watcher is not implemented as a running process.
-- [ ] This watcher is a Markdown-only event/reaction rule.
-- [ ] This watcher does not execute code or observe the filesystem automatically.
+## Alert and disable condition
+```

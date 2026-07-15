@@ -1,3 +1,10 @@
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
+---
+
 # Troubleshooting and Issue History
 
 This document defines the rules for recording, consulting, updating, and closing failures identified in the application.
@@ -219,4 +226,3 @@ To create new troubleshooting records, use the template in:
 `governance/TEMPLATE_TROUBLESHOOTING.md`
 
 The template includes: identification metadata, symptom description, hypotheses table, root cause, solution steps, validation checklist, prevention notes, and a wiki promotion decision field.
-

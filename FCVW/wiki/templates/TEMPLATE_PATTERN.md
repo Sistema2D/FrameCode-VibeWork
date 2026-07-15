@@ -23,11 +23,11 @@ tags:
 
 ## When to Use
 
-- 
+-
 
 ## When Not to Use
 
-- 
+-
 
 ## Application Example
 
@@ -37,11 +37,11 @@ tags:
 
 ## Validation Evidence
 
-- 
+-
 
 ## Risks
 
-- 
+-
 
 ## Related Pages
 

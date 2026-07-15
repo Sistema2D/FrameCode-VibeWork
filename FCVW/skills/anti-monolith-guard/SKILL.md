@@ -1,10 +1,17 @@
 ---
+schema: "fcvw/skill@1"
 name: "anti-monolith-guard"
-version: "1.0.0"
-trigger_keywords: ["monolith", "monolito", "large file", "large module", "new module", "new component", "new service", "module boundary", "mixed responsibilities", "oversized file"]
-session_types: ["new_feature", "refactoring", "retroactive_instantiation", "application_module_docs"]
+description: "Prevent mixed-responsibility modules and uncontrolled file growth."
+version: "1.1.1"
+trigger_keywords:
+  - "monolith"
+  - "large file"
+  - "module boundary"
+  - "anti-monólito"
+session_types:
+  - "planning"
+  - "refactoring"
 ---
-
 # SKILL: Anti-Monolith Guard
 
 ## Purpose
@@ -21,6 +28,10 @@ Load this skill before implementation when any condition is true:
 - copying a similar block because "it is faster";
 - retroactive instantiation finds a large application file without clear ownership;
 - the plan uses vague scope such as "implement dashboard", "build backend", "create full app", or "add whole flow".
+
+## Inputs
+
+Active plan, target artifact, responsibility map, similar-code search, dependency/consumer evidence, current size or complexity indicators, and the checks that protect behavior during a split.
 
 ## Hard Gates
 

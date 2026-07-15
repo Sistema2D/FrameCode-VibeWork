@@ -1,3 +1,10 @@
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
+---
+
 # Document and Operational Audit
 
 Methodological document to review coherence between documentation, plans, changelogs, versioning, scope, design, tests, security, data, and implementation.
@@ -135,14 +142,14 @@ Items:
 - [ ] Plans involving duplication, cleanup, stale files, dead code, or monolith remediation recorded a Code Hygiene Scan.
 - [ ] Plans that created skills, agent profiles, command packs, or reusable operational procedures recorded recurrence, coverage gap, token/risk ROI, scope boundary, and validation task.
 - [ ] Plans that changed skills, agent profiles, triggers, or agent operating rules recorded failure/drift evidence, metric passed, scope preservation, token/risk ROI, and validation replay.
-- [ ] `skills/README.md`, `CONTEXT_MAP.md`, and `STACK.md` list every active skill/profile exactly once.
+- [ ] `skills/README.md` catalogs every active skill exactly once; `CONTEXT_MAP.md` routes only applicable skill families.
 - [ ] Wiki curation changes use `skills/wiki-curator/SKILL.md`, `wiki/taxonomy.md`, and `wiki/metrics.md` when tags, themes, grouping, freshness, or promotion are affected.
 - [ ] No new agent or skill is persona-only, style-only, broader than its trigger family, or overlapping another asset by more than 50%.
 - [ ] `R4` and `R5` plans include rollback and expanded validation, and `R5` plans record explicit human approval.
 - [ ] High-risk low-priority plans were postponed, decomposed, discontinued, or explicitly justified.
 - [ ] There is no resolved issue without minimum evidence.
 - [ ] Relevant application module, screen, page, component, flow, or business-rule changes updated the application-owned module documentation defined by `APPLICATION_DOCUMENTATION.md`.
-- [ ] Agent journals, when used, live under `wiki/agents/<agent_name>_journal.md` and do not use competing paths.
+- [ ] Durable agent pages, when used, follow `fcvw/wiki@1`, use collision-resistant IDs under `wiki/agents/`, and do not rely on shared fixed filenames.
 - [ ] `DESIGN.md` reflects approved visual changes.
 - [ ] `SCOPE.md` reflects approved functional changes.
 - [ ] `WORKFLOW.md` reflects modified flows.
@@ -172,11 +179,11 @@ YYYY-MM-DD
 
 ## Scope of Audit
 
-- 
+-
 
 ## Analyzed Files
 
-- 
+-
 
 ## Overall Result
 
@@ -190,13 +197,13 @@ YYYY-MM-DD
 
 ## Gaps
 
-- 
+-
 
 ## Recommendations
 
-- 
+-
 
 ## Final Validation
 
-- 
+-
 ```

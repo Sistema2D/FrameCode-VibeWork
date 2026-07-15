@@ -1,10 +1,18 @@
 ---
+schema: "fcvw/skill@1"
 name: "agent-aegis"
+description: "Security and privacy review for scoped changes."
 version: "1.1.1"
-trigger_keywords: ["security scan", "fix vulnerability", "harden", "endpoint sanitization", "data exposure", "authentication", "authorization", "security", "vulnerability", "credentials", "secrets", "path traversal", "segurança", "varredura de segurança", "vulnerabilidade", "corrigir vulnerabilidade", "hardening", "endurecimento", "vazamento de dados", "exposição de dados", "credenciais", "segredo", "segredos", "autenticação", "autorização", "permissão", "exposição no console", "devtools", "injeção"]
-session_types: ["security", "bugfix", "refactoring", "maintenance"]
+trigger_keywords:
+  - "security review"
+  - "vulnerability"
+  - "threat model"
+  - "harden"
+  - "segurança"
+session_types:
+  - "security"
+  - "audit"
 ---
-
 # SKILL: Agent Aegis
 
 ## Purpose
@@ -24,7 +32,7 @@ Find and address exactly one security issue or hardening opportunity that is cle
 - Follow `AGENTS.md`, `SECURITY.md`, `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- Read or create `wiki/agents/aegis_journal.md` only for durable codebase-specific security learning.
+- For durable codebase-specific security learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 
@@ -56,5 +64,9 @@ Stop before implementation if the best fix requires:
 - Files in scope:
 - Fix summary:
 - Validation:
-- Journal update: `yes` / `no`
+- Knowledge update: `yes` / `no`
 ```
+
+## Validation and exit
+
+Exit only when the selected issue is supported by evidence, the authorized fix preserves identified behavior, focused security and regression checks pass, and residual risk is recorded. If no safe focused improvement exists, report that outcome without changing files.

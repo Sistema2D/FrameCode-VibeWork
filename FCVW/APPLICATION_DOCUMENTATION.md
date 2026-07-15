@@ -1,3 +1,10 @@
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
+---
+
 # Application Module Documentation
 
 This document defines how downstream applications using FrameCode VibeWork should document pages, screens, modules, components, and flows.

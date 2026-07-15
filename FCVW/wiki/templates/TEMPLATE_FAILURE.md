@@ -15,7 +15,7 @@ tags:
 
 ## Symptoms
 
-- 
+-
 
 ## Context
 
@@ -27,19 +27,19 @@ tags:
 
 ## Unsuccessful Attempts
 
-- 
+-
 
 ## Validated Solution
 
-- 
+-
 
 ## Validation Executed
 
-- 
+-
 
 ## Prevention
 
-- 
+-
 
 ## Relations
 

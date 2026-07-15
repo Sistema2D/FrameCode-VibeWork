@@ -1,5 +1,3 @@
-# Troubleshooting Records
+# Troubleshooting records
 
-This directory stores issue records, hypotheses, handling attempts, validations, and resolutions.
-
-Use `FCVW/TROUBLESHOOTING.md` as the normative workflow before creating or updating records.
+Store durable incident and debugging evidence here using the troubleshooting template. Record symptoms, environment, hypotheses, experiments, root cause, resolution, validation, and prevention; do not store secrets or raw sensitive logs.

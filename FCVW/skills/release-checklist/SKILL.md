@@ -1,189 +1,71 @@
 ---
+schema: "fcvw/skill@1"
 name: "release-checklist"
-version: "1.0.1"
-trigger_keywords: ["release", "publish", "v0.", "v1.", "version bump", "tag release", "minor release", "major release", "patch release", "cut a release", "changelog", "release notes", "GitHub release", "publicação", "publicar versão", "bump de versão", "nova versão", "notas de versão", "tag", "publicar release"]
-session_types: ["release"]
+description: "Prepare and validate application or framework releases."
+version: "1.1.1"
+trigger_keywords:
+  - "release"
+  - "version bump"
+  - "changelog"
+  - "publish"
+  - "publicar versão"
+session_types:
+  - "release"
 ---
 
-# SKILL: Release Checklist
+# Release checklist
 
-Condensed operational checklist for executing a FrameCode VibeWork release. Replaces loading `RELEASE.md` (~2.9k bytes) + `VERSIONING.md` (~4.9k bytes) + `AUDIT.md` (~4.4k bytes) separately (~12.2k bytes total → ~2.7k tokens saved per release session).
+## Purpose
 
-## Activation Triggers
+Prepare and validate an application or FCVW framework release while keeping version namespaces, migration, rollback, evidence, and publication authority coherent.
 
-Load this skill (with `view_file` and `IsSkillFile: true`) when the task involves:
+## Use conditions
 
-- Bumping a version number (patch, minor, or major)
-- Creating or editing any `changelogs/Vx.y.z.md`
-- Marking a changelog as `published`
-- Changing `Current Version` in `MANIFEST.md`, `STACK.md`, root `README.md`, `FCVW/README.md`, or `VERSIONING.md`
-- Publishing a GitHub release or preparing a release tag
-- Executing pre-release audit or validation
-- User says "release", "publish", "publicação", "publicar versão", "bump de versão", "nova versão", "changelog", "notas de versão", or references a specific version number
+Use for version selection, release-record assembly, tag/release preparation, or publication closeout. Read-only version questions do not authorize a release mutation.
 
-## 1. Version Decision
+## First decision
 
-Determine the bump type before starting:
+Classify the release:
 
-| Change Type | Bump | Example |
-|---|---|---|
-| Bugfix, typo, doc correction only | PATCH (`x.y.Z`) | `V0.4.0 → V0.4.1` |
-| New feature, new skill, new wiki section | MINOR (`x.Y.0`) | `V0.4.0 → V0.5.0` |
-| Breaking change to core fields, document removal, schema change | MAJOR (`X.0.0`) | `V0.4.0 → V1.0.0` |
+- **Application:** use `changelogs/` and the application's version source.
+- **Framework:** use `framework-releases/`, `FRAMEWORK_LOCK.md`, `OWNERSHIP.md`, and `MIGRATIONS.md`.
 
-## 2. Pre-Release Checklist
+Never mix the namespaces.
 
-### 2.1 Audit
+## Inputs
 
-- [ ] All files modified in this release are listed in `changelogs/Vx.y.z.md`
-- [ ] No placeholder fields (`<...>`) remain in modified documents, except intentional templates
-- [ ] No broken internal links introduced in this release
-- [ ] `MANIFEST.md` version field matches the new version
-- [ ] Related plan in `Plans/completed/` or `Plans/discontinued/`
-- [ ] Changelog publication status and GitHub release publication status are recorded separately
+Completed plans, unreleased fragments, target version, test evidence, deployment/rollback information, and publication authority.
 
-### 2.2 Wiki Lint (Required for MINOR and MAJOR releases)
+## Procedure
 
-- [ ] Load skill `skills/wiki-lint/SKILL.md` and execute full lint
-- [ ] Record lint result in `wiki/log.md`
+1. Select included plans and confirm states.
+2. Decide semantic bump and compatibility.
+3. Assemble the appropriate release record from its template.
+4. Check version source and related links.
+5. Run application tests and governance validation appropriate to risk.
+6. Confirm migration, backup, deployment, and rollback where applicable.
+7. Publish only after target validation and explicit authority.
+8. Record external tag/release evidence separately.
 
-### 2.3 Acceptance Criteria
+## Framework-specific checks
 
-- [ ] All acceptance criteria in the release plan are checked
-- [ ] No P1 or P2 issues remain open in `Plans/in_progress/`
+- role manifest/ownership is current;
+- clean artifact excludes project records and comparison fixtures;
+- schema changes have migrations;
+- clean-template validator passes;
+- downstream preservation paths are documented;
+- artifact checksum is recorded.
 
-## 3. Changelog Creation
+## Non-responsibilities
 
-Create `changelogs/V{MAJOR}.{MINOR}.{PATCH}.md` using the structure:
+- inferring permission to push, tag, deploy, or publish;
+- claiming external publication without evidence;
+- bumping the application version for a governance-only framework update by default.
 
-```markdown
-# Changelog V{MAJOR}.{MINOR}.{PATCH}
+## Required output
 
-## Version
+Release type, version, included plans, validation, migration/rollback, publication state, and residual gaps.
 
-`V{MAJOR}.{MINOR}.{PATCH}`
+## Validation and exit
 
-## Date
-
-YYYY-MM-DD
-
-## Release Status
-
-`published`
-
-## GitHub Release Status
-
-`not_applicable | pending | published`
-
-## Release Type
-
-`patch | minor | major`
-
-## Summary
-
-- <bullet: what changed and why>
-
-## Related Plans
-
-- `<plan filename>`
-
-## Items Created
-
-- `<file>`
-
-## Items Modified
-
-- `<file>`
-
-## Items Removed
-
-- `<file>` or `None`
-
-## Justifications
-
-- <why these changes were necessary>
-
-## Affected Files
-
-- `<file>`
-
-## Functional Impact
-
-- <impact or none>
-
-## Visual Impact
-
-- <impact or none>
-
-## Technical Impact
-
-- <impact or none>
-
-## Evaluated Risks and Regressions
-
-- <risk and mitigation>
-
-## Validation Executed
-
-- <what was verified>
-
-## Known Gaps
-
-- <gap or none>
-
-## Rollback Observations
-
-- <rollback or not applicable>
-```
-
-## 4. Publication Sequence
-
-```bash
-# 1. Stage all changes
-git add -A
-
-# 2. Commit (use git-conventional-commits skill for message format)
-git commit -m "chore: release V{MAJOR}.{MINOR}.{PATCH} — <one-line summary>"
-
-# 3. Tag
-git tag -a v{MAJOR}.{MINOR}.{PATCH} -m "V{MAJOR}.{MINOR}.{PATCH} — <one-line summary>"
-
-# 4. Push with tags
-git push origin main --tags
-
-# 5. Create GitHub release from tag using changelogs/V*.md content
-```
-
-If tag or GitHub release creation is not performed, record `GitHub Release Status: not_applicable` or `pending` rather than implying external publication.
-
-## 5. Post-Release Checklist
-
-- [ ] GitHub release page created with tag `v{x}.{y}.{z}`, or `GitHub Release Status` explicitly states `not_applicable` / `pending`
-- [ ] Release notes match `changelogs/V{x}.{y}.{z}.md` content
-- [ ] `wiki/releases/v{x}-{y}-{z}.md` created when release learning is reusable (use `wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md`)
-- [ ] `wiki/index.md` → Releases section updated when a release synthesis is created
-- [ ] `wiki/log.md` → release event recorded
-- [ ] AICC session synthesis (`wiki/sessions/S{num}.md`) created for this session
-- [ ] `MANIFEST.md` update history entry added when applicable
-
-## 6. Release Type Guidance
-
-### Patch Release
-
-- Scope: only bugfixes, doc corrections, broken links, frontmatter fixes
-- Wiki lint: optional (run if wiki was modified)
-- Announcement: not required
-
-### Minor Release
-
-- Scope: new features, new skills, new wiki content, new templates
-- Wiki lint: mandatory
-- Announcement: recommended (GitHub release + update README if needed)
-
-### Major Release
-
-- Scope: breaking changes, major architectural pivots, schema changes
-- Wiki lint: mandatory
-- Announcement: required
-- ADR: required if architectural decision was made
-- Update `INSTANTIATION.md` if the framework structure changed for downstream users
+The record is internally coherent, blocking gates pass, and `published` is used only after actual publication.

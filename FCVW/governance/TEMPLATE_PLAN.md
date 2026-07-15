@@ -1,52 +1,110 @@
-# Template: Change Plan
+# Template: change plan
 
-This is the base template for any change in the project. Save in `Plans/pending/`.
+Save as `Plans/pending/P{1..5}-R{1..5}-YYYY-MM-DD-<slug>.md` and replace every placeholder before execution.
 
 ```markdown
 ---
-context_files: [] # List exact file paths the AI should load to execute this plan (reduces token bleed)
+schema: "fcvw/plan@2"
+id: "P3-R2-YYYY-MM-DD-short-description"
+status: "pending"
+priority: "P3"
+risk: "R2"
+created_at: "YYYY-MM-DD"
+updated_at: "YYYY-MM-DD"
+current_version: "Vx.y.z"
+expected_version: "Vx.y.z | assigned_at_release"
+owner: "<human-or-agent-role>"
+regression_contract: "required | not_applicable"
+context_files:
+  - "path/to/file"
 ---
-# P<Priority>-R<Risk>-YYYY-MM-DD-<short-description>
 
-- **Description:** <What will be done.>
-- **Justification:** <Why it is necessary.>
-- **Objective:** <Expected result.>
-- **Scope:** <What is included and what is not.>
-- **Affected files:**
-  - 
-- **Implementation plan:**
-  1. 
-  2. 
-- **Acceptance criteria:**
-  - [ ] 
-- **Test plan:**
-  - [ ] 
-- **Priority:** `P1` (Critical) to `P5` (Optional)
-- **Risk:** `R1` (Very Low) to `R5` (Critical)
-- **Operational Score:** `P{n}-R{n} => impact_weight {6 - P} x risk_weight {R} = {score}`
-- **Review Gate:** `none` / `documentation review` / `technical review` / `human approval required`
-- **Rollback Required:** `No` / `Yes - <rollback summary>`
-- **Decomposition Required:** `No` / `Yes - <split recommendation>`
-- **Application Module Documentation:** `not applicable` / `created at docs/...` / `updated at docs/...`
-- **Current Version:** `Vx.y.z`
-- **Expected Version:** `Vx.y.z`
-- **Status:** `pending`
-- **Creation Date:** YYYY-MM-DD
-- **Completion Date:** Not applicable.
-- **Technical observations:**
-  - 
+# Short change title
 
-## Validation Executed (Fill on completion)
+## Description
 
-### Environment
-- OS: 
-- Backend/Runtime: 
+<What will change.>
 
-### Tests
-| Test | Result | Evidence |
+## Justification and objective
+
+<Why and expected result.>
+
+## Scope
+
+### Included
+
+- <Included boundary.>
+
+### Excluded
+
+- <Excluded boundary.>
+
+## Affected files or boundaries
+
+- <Path or responsibility.>
+
+## Implementation plan
+
+1. <Bounded step.>
+
+## Acceptance criteria
+
+- [ ] <Observable result.>
+
+## Regression impact
+
+### Existing behaviors that may be affected
+
+- <Protected behavior, consumer, interface, data, visual state, permission, or governance contract.>
+
+### Regression contracts consulted
+
+- `<authoritative path or interface>` — <what it protects>.
+
+### Regression checks required
+
+- [ ] <Focused automated test, manual workflow replay, visual check, compatibility check, security denial case, AI boundary replay, or structural negative fixture.>
+
+### Regression evidence
+
+| Check | Result | Evidence |
 |---|---|---|
-| | | |
+| <Protected behavior> | pending | <command/procedure and artifact> |
 
-### Final Result
-`approved` / `rejected`
+### Limitations and residual risk
+
+- <Limitation, owner, decision, and follow-up; or `None`.>
+
+For `regression_contract: not_applicable`, replace the subsections with `Justification: <specific reason>` and retain any applicable structural check. A plan cannot close with placeholders or pending regression results.
+
+## Validation plan
+
+- [ ] <Command or procedure and expected result.>
+
+## Rollback
+
+<Procedure or explicit approved reason it does not apply.>
+
+## Gates and approvals
+
+- Regression gate:
+- Security/data/refactoring/skill/release gate:
+- Decomposition required:
+
+## Related records
+
+- Changelog/framework release:
+- Decision:
+- Failure/regression:
+- Other plan:
+
+## Validation executed
+
+| Check | Result | Evidence |
+|---|---|---|
+| <Check> | <pass/fail/blocked/not_applicable> | <Evidence> |
+
+## Gaps and residual risk
+
+- <Gap, owner, and follow-up; or `None`.>
 ```

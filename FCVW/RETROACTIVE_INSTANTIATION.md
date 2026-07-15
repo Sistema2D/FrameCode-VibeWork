@@ -1,3 +1,10 @@
+---
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
+---
+
 # Retroactive Instantiation
 
 > **Purpose**: Adopt FrameCode VibeWork (FCVW) in an existing, advanced, legacy, or partially governed application — without losing history, code, or existing documentation.
@@ -21,17 +28,17 @@ Use this workflow when you have an existing project (with code, history, partial
 ### Phase 1 — Assessment
 
 1. **Map existing structure**: Inventory all directories, configuration files, documentation, and data schemas.
-2. **Identify governance gaps**: Compare against `FCVW/MANIFEST.md §7` — which official documents are missing?
+2. **Identify governance gaps**: Compare the repository with `MANIFEST.md`, `FILESYSTEM.md`, and `OWNERSHIP.md`; record which canonical profiles and record directories are missing.
 3. **Record baseline**: Create a record in `FCVW/briefings/` describing the pre-adoption state.
 4. **Run hygiene triage**: Load `skills/code-hygiene-refactor/SKILL.md` and identify duplicate snippets, stale files, dead code candidates, catch-all modules, and monolithic files without modifying application code.
 5. **Run anti-monolith triage**: Load `skills/anti-monolith-guard/SKILL.md` for any large or mixed-responsibility area that will receive new FCVW-driven changes.
 
 ### Phase 2 — Framework Integration
 
-1. **Copy FCVW directory**: Clone or copy the `FCVW/` folder into the project root.
+1. **Copy the clean distribution**: Use a verified FCVW release artifact, excluding comparison examples, framework-development plans, and any application history from the source checkout.
 2. **Copy AGENTS.md** to the project root as the bridge entrypoint.
 3. **Merge README.md**: Keep the existing project README. Add a section referencing `AGENTS.md` as the governance entry point.
-4. **Update `.gitignore`**: Add FCVW baseline exemptions if needed (e.g., `FCVW/repository-open-graph-template.png`).
+4. **Update `.gitignore`**: Preserve project-specific rules and add only the exclusions required by files actually adopted.
 5. **Preserve existing CI/CD**: Do not modify existing pipelines unless explicitly required.
 
 ### Phase 3 — Backfill

@@ -1,92 +1,62 @@
-# Agent Skill: Obsidian Flavored Markdown Standardizer
-
 ---
-name: obsidian-markdown
-description: Standardize and edit Obsidian Flavored Markdown notes with wikilinks, embeds, callouts, properties, and double-bracket correlations. Use when working with .md files in the LLM Wiki (/wiki/), or when a plan requires structural note updates, formatting, or creating Obsidian semantic graph connections.
+schema: "fcvw/skill@1"
+name: "obsidian-markdown"
+description: "Format portable Markdown and optional Obsidian-compatible links."
+version: "1.2.0"
+trigger_keywords:
+  - "obsidian"
+  - "wikilink"
+  - "frontmatter"
+  - "markdown note"
+session_types:
+  - "wiki_maintenance"
+  - "documentation"
 ---
 
-Standardize and create valid Obsidian Flavored Markdown to guarantee that the LLM Wiki in `/wiki/` scales as an absolute, connected semantic graph.
+# Obsidian-compatible Markdown
 
-## Activation Triggers
-- Trigger 1: Creating or modifying any Markdown note in `/wiki/` (concepts, failures, releases, prompt patterns, decisions).
-- Trigger 2: When validating the internal linking or cross-referencing between root guidelines and wiki notes.
+## Purpose
 
-## 2. Note Structure & Frontmatter (Properties)
-Every wiki note must have a YAML block at the absolute top of the file containing the following properties:
+Create or normalize Markdown that remains valid under FCVW schemas while adding Obsidian-specific navigation only when the project uses it.
 
-```yaml
----
-title: "Capitalized Descriptive Title"
-type: "concept / synthesis / failure / pattern / decision / draft"
-status: "pending / in_progress / validated / contradictory"
-confidence: "low / medium / high"
-last_reviewed: "YYYY-MM-DD"
-related_version: "Vx.y.z"
-tags:
-  - "#category-tag"
-  - "#secondary-tag"
----
-```
+## Use conditions
 
-## 3. Internal Semantic Links (Wikilinks)
-Use bidirectional wikilinks to interconnect notes. This builds Obsidian's internal correlation graph:
+Use when the user requests Obsidian formatting, wikilinks, embeds, callouts, note properties, or graph-oriented wiki maintenance. Ordinary FCVW documentation uses portable Markdown by default.
 
-```markdown
-[[Note Name]]                          Link to note
-[[Note Name|Display Text]]             Custom display text for link suggestion
-[[Note Name#Heading]]                  Link to specific heading section in another note
-[[Note Name#^block-id]]                Link to a specific block ID
-[[#Heading in same note]]              Same-note heading link
-```
+## Inputs
 
-*Rule: Place a block ID `^block-id` at the end of a block/paragraph to reference it directly elsewhere.*
+Target note, `wiki/schema.md`, taxonomy, source links, destination, current canonical page, and the project's decision on supported Obsidian syntax.
 
-## 4. Reusable Section Embeds (Transclusion)
-Prefix wikilinks with `!` to dynamically embed other note sections inline without duplicating text:
+## Non-responsibilities
 
-```markdown
-![[Note Name]]                         Embed entire note
-![[Note Name#Heading]]                 Embed a specific section inline
-![[image.png|width]]                   Embed image with optional width
-```
+- inventing sources, confidence, status, tags, or relationships;
+- replacing FCVW frontmatter with a second tool-specific metadata block;
+- converting all Markdown to wikilinks without retrieval value;
+- embedding secrets, private files, or unstable absolute paths;
+- rewriting unrelated historical notes.
 
-## 5. Visual Callouts
-Use standard callouts to highlight specific architectural notes, warnings, optimizations, or errors:
+## Procedure
 
-```markdown
-> [!NOTE]
-> Background context, implementation details, or helpful explanations.
+1. Select the applicable FCVW schema and preserve one YAML frontmatter block at the file start.
+2. Check for an existing canonical page before creating a note.
+3. Preserve sources, status, confidence, and semantic meaning.
+4. Use ordinary Markdown links for portable repository navigation; add `[[wikilinks]]` only when Obsidian resolution is configured and useful.
+5. Add embeds, callouts, highlights, or Mermaid only when they materially improve retrieval or comprehension.
+6. Validate link targets, heading hierarchy, frontmatter, placeholders, and rendering in the supported mode.
 
-> [!TIP]
-> Performance optimizations, best practices, or efficiency suggestions.
+## Formatting rules
 
-> [!IMPORTANT]
-> Essential requirements, critical steps, or must-know information.
+- FCVW schema values and controlled statuses come from `wiki/schema.md`; this skill does not define competing values.
+- A note has one H1 and a logical heading hierarchy.
+- Internal wikilinks use the vault-relative note path or canonical title consistently.
+- Embeds use `![[note]]` or `![[note#heading]]` only for stable reusable content.
+- Obsidian callouts use a supported type and retain readable quoted content in ordinary Markdown renderers.
+- Mermaid nodes must not contain sensitive values; clickable node behavior is optional and project-configured.
 
-> [!WARNING]
-> Breaking changes, compatibility issues, or potential problems.
+## Required output
 
-> [!CAUTION]
-> High-risk actions that could cause data loss or security vulnerabilities.
-```
+Changed note paths, schema used, links/embeds added, sources preserved, Obsidian-only features, and validation limitations.
 
-Common foldable callout (- collapsed by default, + expanded by default):
-```markdown
-> [!FAQ]- Question Title
-> Collapsed answer content.
-```
+## Validation and exit
 
-## 6. Diagramming (Mermaid)
-Always use mermaid code blocks for visual workflows:
-```mermaid
-graph TD
-    A[Start] --> B[Process]
-```
-To enable link clicks inside a Mermaid node, declare: `class NodeName internal-link;` at the bottom of the block.
-
-## 7. Definition of Done Checklist for Notes
-- [ ] Properties block is complete and valid YAML at the top.
-- [ ] Heading hierarchy is logical and uses a single `# H1` matching the title.
-- [ ] Internal vault connections use `[[wikilinks]]`. External connections use literal Markdown link syntax such as ``[label](https://example.com)``.
-- [ ] Highlights use `==double equal signs==`.
-- [ ] No placeholder syntax remains.
+Exit when frontmatter matches FCVW, links resolve in the declared mode, no duplicate canonical page or placeholder remains, portable readers retain the essential content, and any Obsidian-only dependency is explicit.

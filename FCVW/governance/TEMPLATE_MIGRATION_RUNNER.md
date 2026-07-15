@@ -58,7 +58,7 @@ async function runMigrations() {
   // 3. Apply Migrations Sequentially
   for (let v = currentVersion + 1; v <= TARGET_VERSION; v++) {
     const migrationFile = path.join(__dirname, `../data/migrations/V${v}.sql`);
-    
+
     if (!fs.existsSync(migrationFile)) {
       throw new Error(`Migration file missing: V${v}.sql`);
     }
@@ -70,7 +70,7 @@ async function runMigrations() {
       await db.exec('BEGIN TRANSACTION;');
       await db.exec(sqlScript);
       await db.exec(`
-        INSERT INTO schema_metadata (version, applied_at, description) 
+        INSERT INTO schema_metadata (version, applied_at, description)
         VALUES (${v}, datetime('now'), 'Applied migration V${v}');
       `);
       await db.exec('COMMIT;');
@@ -79,13 +79,13 @@ async function runMigrations() {
       // 4. Failure Recovery / Rollback
       await db.exec('ROLLBACK TRANSACTION;');
       console.error(`FATAL: Migration V${v} failed! Rolled back transaction.`, error);
-      
+
       // Restore backup if it existed
       if (fs.existsSync(backupPath)) {
           fs.copyFileSync(backupPath, dbPath);
           console.log("Restored previous database state from backup.");
       }
-      
+
       process.exit(1); // Halt application to prevent silent corruption
     }
   }
