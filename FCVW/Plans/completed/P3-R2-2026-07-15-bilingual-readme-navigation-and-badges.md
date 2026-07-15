@@ -1,7 +1,7 @@
 ---
 schema: "fcvw/plan@2"
 id: "P3-R2-2026-07-15-bilingual-readme-navigation-and-badges"
-status: "in_progress"
+status: "completed"
 priority: "P3"
 risk: "R2"
 created_at: "2026-07-15"
@@ -64,14 +64,14 @@ V0.13.0 substantially improved the Portuguese adoption guide but reduced English
 
 ## Acceptance criteria
 
-- [ ] Buy Me a Coffee, Apache 2.0, LinkedIn, and v0.13.0 release badges are visible and link to the intended destinations.
-- [ ] The top language selector uses explicit PT-BR and ENG-US anchors.
-- [ ] Each language has a local table of contents, stable section anchors, language switching, and back-to-top navigation.
-- [ ] PT-BR and ENG-US cover the same major concepts, workflows, validation profiles, paths, limitations, and release state.
-- [ ] All relative Markdown links resolve.
-- [ ] V0.13.0 remains published and unchanged; V0.13.1 remains `in_preparation`.
-- [ ] Validator tests, clean-template validation, and Git diff hygiene pass.
-- [ ] Local and remote README contents match after merge.
+- [x] Buy Me a Coffee, Apache 2.0, LinkedIn, and v0.13.0 release badges are visible and link to the intended destinations.
+- [x] The top language selector uses explicit PT-BR and ENG-US anchors.
+- [x] Each language has a local table of contents, stable section anchors, language switching, and back-to-top navigation.
+- [x] PT-BR and ENG-US cover the same major concepts, workflows, validation profiles, paths, limitations, and release state.
+- [x] All relative Markdown links resolve.
+- [x] V0.13.0 remains published and unchanged; V0.13.1 remains `in_preparation`.
+- [x] Validator tests, clean-template validation, and Git diff hygiene pass.
+- [x] Local and remote README contents match after merge.
 
 ## Regression impact
 
@@ -91,11 +91,11 @@ V0.13.0 substantially improved the Portuguese adoption guide but reduced English
 
 ### Regression checks required
 
-- [ ] Check all local README paths through the validator.
-- [ ] Compare PT-BR and ENG-US section inventories.
-- [ ] Verify four badge destinations and explicit language anchors.
-- [ ] Confirm stable release remains v0.13.0 and no release/tag is created.
-- [ ] Confirm GitHub main matches the validated local README after merge.
+- [x] Check all local README paths through the validator.
+- [x] Compare PT-BR and ENG-US section inventories.
+- [x] Verify four badge destinations and explicit language anchors.
+- [x] Confirm stable release remains v0.13.0 and no release/tag is created.
+- [x] Confirm GitHub main matches the validated local README after merge.
 
 ### Regression evidence
 
@@ -103,9 +103,9 @@ V0.13.0 substantially improved the Portuguese adoption guide but reduced English
 |---|---|---|
 | Original badge recovery | pass | remote commit `a915dc8`: support, license, LinkedIn, and release destinations |
 | Current rich content baseline | pass | published V0.13.0 local and remote README |
-| Language parity | pending | final heading/section inventory |
-| Markdown navigation | pending | validator and explicit-anchor scan |
-| Local/remote parity | pending | post-merge blob/hash comparison |
+| Language parity | pass | 12 PT-BR and 12 ENG-US major sections |
+| Markdown navigation | pass | 27 unique anchors; 27 fragment targets resolved; validator 0 findings |
+| Local/remote parity | pass | post-merge README blob hashes match |
 
 ### Limitations and residual risk
 
@@ -142,7 +142,15 @@ Restore the published V0.13.0 README from tag `v0.13.0`, remove the unpublished 
 |---|---|---|
 | Remote orientation | pass | latest release v0.13.0; main available; no open PRs |
 | Historical README inspection | pass | four original badge destinations recovered from `a915dc8` |
+| Bilingual navigation | pass | 12 equivalent sections per language and explicit language/top links |
+| Governance regression | pass | 14 tests; clean-template 0 errors and 0 findings |
+| GitHub publication | pass | PR #41 merged; main README matches local validated content |
 
 ## Gaps and residual risk
 
-- Implementation and publication are in progress.
+- V0.13.1 remains intentionally `in_preparation`; this documentation PR does not authorize a tag, release, or asset.
+- Badge rendering depends on shields.io availability, while the README retains textual footer links as a fallback.
+
+## Status
+
+`completed`
