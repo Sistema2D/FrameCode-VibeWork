@@ -4,7 +4,7 @@
 
 # FrameCode VibeWork
 
-**Markdown-first governance for human and AI-assisted software development**
+**Markdown-First Declarative Governance for AI-Assisted Software Development**
 
 Scoped planning · regression protection · selective context · controlled technical memory
 
