@@ -18,6 +18,7 @@ from frontmatter_fcvw import parse_frontmatter, scalar
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 MALFORMED_MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]\n]+\]\s+\(([^)\n]+)\)")
+MALFORMED_ATX_HEADING = re.compile(r"^\s*#{1,6}[^#\s]")
 WIKILINK = re.compile(r"(?<!!)\[\[([^\]]+)\]\]")
 FENCE = re.compile(r"^\s*(```+|~~~+)")
 EXTERNAL = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
@@ -166,6 +167,14 @@ def build_graph(root: Path) -> DocumentGraph:
         targets: list[tuple[str, bool]] = []
         for line in lines:
             code_ranges = [match.span() for match in INLINE_CODE.finditer(line)]
+            if MALFORMED_ATX_HEADING.match(line):
+                findings.append(
+                    GraphFinding(
+                        "document-heading-syntax",
+                        relative,
+                        f"ATX heading marker must be followed by whitespace: {line.strip()}",
+                    )
+                )
             for match in MALFORMED_MARKDOWN_LINK.finditer(line):
                 if not any(start <= match.start() and match.end() <= end for start, end in code_ranges):
                     findings.append(

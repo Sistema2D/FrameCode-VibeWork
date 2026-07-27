@@ -285,6 +285,18 @@ class DocumentGraphTests(TemporaryRootTest):
             )
         )
 
+    def test_atx_heading_marker_requires_whitespace(self) -> None:
+        _, root = self.make_root()
+        self.write_entrypoints(root)
+        (root / "FCVW" / "note.md").write_text("#Broken heading\n", encoding="utf-8")
+        findings = build_graph(root).findings
+        self.assertTrue(
+            any(
+                item.rule == "document-heading-syntax" and item.path == "FCVW/note.md"
+                for item in findings
+            )
+        )
+
     def test_generated_artifact_requires_outgoing_source(self) -> None:
         _, root = self.make_root()
         self.write_entrypoints(root)
