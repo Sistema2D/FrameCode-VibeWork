@@ -93,8 +93,8 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 - Native platform capability checked: Python standard-library parsing, hashing, BM25 math, filesystem traversal, and Markdown links were sufficient.
 - Installed dependency checked: no third-party dependency was needed.
 - New code or complexity justified: seven small single-purpose modules isolate frontmatter, graph, queue, locale, packaging, indexing, and retrieval concerns without a service or database.
-- Minimum non-trivial behavior tests: 58 focused feature/adversarial tests plus 16 validator regressions.
-- Deliberate simplification and limitations: no embeddings, vector database, background automation, unreviewed translations, archive builder, or remote publication.
+- Minimum non-trivial behavior tests: 62 focused feature/adversarial tests plus 16 validator regressions.
+- Deliberate simplification and limitations: no embeddings, vector database, background automation, third-party archive dependency, automatic language selection, or remote publication.
 - Condition for future evolution: measured lexical-recall gaps, approved language reviews, or repeated workflow evidence.
 - Mandatory safeguards preserved: security, privacy, accessibility, traceability, validation, audit, integrity, documentation, and risk-proportional regression checks remain blocking.
 
@@ -108,7 +108,8 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 - [x] Proportionality checks reuse existing gates and do not create a new skill without evidence.
 - [x] `FCVW/APP_RULES.md` is routed, preserved, indexed, and validated.
 - [x] Language-specific release contracts cover independent `pt-BR`, `en-US`, `es`, and `de` empty-template variants without changing the source or runtime layout.
-- [ ] Complete external `pt-BR`, `en-US`, `es`, and `de` release variants, reviews, archives, and checksums are present or explicitly owned by a blocking follow-up plan.
+- [x] Complete external `pt-BR`, `en-US`, `es`, and `de` release folders, candidate archives, and source-bound checksums are present locally.
+- [ ] Accountable language review is approved for all four variants.
 - [x] Every governed Markdown artifact is reachable from an official entrypoint or explicit catalog.
 - [x] Every generated record category has an incoming catalog/relationship link and outgoing authoritative relationship, unless a validated schema-based exception applies.
 - [x] Standard Markdown links remain portable and create Obsidian backlinks.
@@ -139,7 +140,7 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 
 ### Regression checks required
 
-- [x] Existing 14 validator regression tests.
+- [x] All 16 validator regression tests.
 - [x] Structured-frontmatter positive and negative fixtures.
 - [x] Queue missing, stale, duplicate, wrong-state, and valid fixtures.
 - [x] Link graph valid, broken, orphan, unreachable, self-only, wikilink, and catalog fixtures.
@@ -155,13 +156,13 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 |---|---|---|
 | Existing clean-template validator | pass | Pre-change: `errors=0 findings=0` |
 | Existing unit suite | pass | Pre-change: 14 tests passed |
-| Post-change validation | pass | 16 validator + 58 feature/adversarial tests before candidate generation; clean validator 0/0; graph 191/3/0 |
-| Local-only boundary | pass | HEAD and origin unchanged; no commit, tag, push, release, or issue mutation |
+| Post-change validation | pass | 16 validator + 62 feature/adversarial tests; source clean validator 0/0; source graph 191/3/0; every candidate graph 192/3/0 |
+| Local-only boundary | pass | Candidate revisions committed locally through `c9ac95c`; no tag, push, GitHub Release, or issue mutation |
 
 ### Limitations and residual risk
 
-- Machine translation cannot substitute for native-speaker review; any untranslated or provisional language variant must be explicitly marked before release.
-- No multilingual filesystem migration exists: the source and installed tree stay monolingual, while four external release variants remain to be prepared.
+- Machine translation cannot substitute for accountable language review; every provisional variant remains explicitly `in_review`.
+- No multilingual filesystem migration exists: the source and installed tree stay monolingual, while the four external release candidates remain independent.
 - Obsidian behavior is validated through portable link semantics and graph rules, not through automating the Obsidian desktop application.
 
 ## Validation plan
@@ -235,24 +236,35 @@ Restore the pre-change worktree from Git commit `16ea5c2`. No remote state will 
 | Pre-change clean validator | pass | 0 errors, 0 findings |
 | Pre-change unit suite | pass | 14/14 |
 | Validator regression suite | pass | `python -B tools/test_validate_fcvw.py`: 16/16 |
-| Feature/adversarial suite | pass | `python -B tools/test_open_issues.py`: 54/54 |
-| Python syntax | pass | 9 tool/test modules parsed through `ast` without bytecode |
+| Feature/adversarial suite | pass | `python -B tools/test_open_issues.py`: 62/62 |
+| Python syntax | pass | 10 tool/test modules parsed through `ast` without bytecode |
 | Document graph | pass | 191 nodes, 3 entrypoints, 0 findings |
 | Plan queues | pass | reopened correction is the first valid `in_progress` recommendation |
-| Language-release staging | pass | External-source, immutable-revision, machine-drift, local-clean-validation, no-selector-root, and `.obsidian` package-state fixtures pass |
-| Language-release gate | expected block | Explicit `--require-complete` against empty staging reports exactly the four missing `pt-BR`, `en-US`, `es`, and `de` variants |
+| Language-release staging | pass | Four complete independent folders; 206 source files and 207 files per candidate; schema, machine surface, heading/list/table/quote structure, links, and language metadata are parity-checked |
+| Language-release gate | expected block | Exactly four `locale-review` findings remain, one accountable approval per `pt-BR`, `en-US`, `es`, and `de` candidate |
+| Candidate packages | pass | Four deterministic ZIPs plus external `SHA256SUMS.txt`; two builds were byte-identical |
+| Extracted packages | pass | Every exact-root archive extracted to 207 files and passed clean-template 0/0 plus graph 192/3/0 |
 | Clean-template validator | pass | 0 errors, 0 findings |
 | Patch integrity | pass | `git diff --check` exit 0; only line-ending conversion notices |
 | Local Obsidian state | pass | `.obsidian/` absent, ignored if recreated locally, excluded by release-tree validation |
-| Local-only boundary | pass | HEAD = origin/main = `16ea5c2`; branch `main`; no tag or remote mutation |
+| Local-only boundary | pass | Local candidate baseline `c9ac95c`; origin remains unmodified; no tag or remote mutation |
 | Pre-release adversarial audit | fail | False-positive graph, queue, schema, retrieval, locale, and release-readiness cases reproduced; plan reopened |
 | Second adversarial audit | pass after correction | Candidate-validator execution, unbounded retrieval, absent mandatory sources, unenforced wiki/audit/application schemas, self-referential release revisions, lock-state circularity, and truncated application-release template were reproduced and corrected |
 | Third adversarial audit | pass after correction | Automatic language-layout coupling, inferred document language, non-failing missing context, duplicate chunk IDs, repository/editor package leakage, non-Markdown drift, checksum/asset decoupling, unscoped clean history, weak troubleshooting records, nested-fence parsing, fenced release headings, and non-portable Markdown links were reproduced and corrected |
 
+### Local candidate checksum evidence
+
+- `FrameCode-VibeWork-V0.14.0-de.zip`: `554de70c4cb5ee2bab67e4b609eb0829a084d887e7094ec7f4417329746205f3`
+- `FrameCode-VibeWork-V0.14.0-en-US.zip`: `196a8fd1a3d1b2f5ce2936c7b1ee07441e4ddb023987d04bdcf01440f3c2fd03`
+- `FrameCode-VibeWork-V0.14.0-es.zip`: `c65cae0c34e397fb18b7eb73164f58d50eaca56c333325f5a110113cd9fcddc0`
+- `FrameCode-VibeWork-V0.14.0-pt-BR.zip`: `681943409829edbe14523157a667b4c9450bc7782d69e99cae84349e1446bd26`
+
+The external `SHA256SUMS.txt` contains the same values. The four archive hashes and the checksum manifest were reproduced byte-for-byte in a second build.
+
 ## Gaps and residual risk
 
-- External `pt-BR`, `en-US`, `es`, and `de` empty-template variants and native/accountable language review remain the blocking R5 stage before plan completion and language-specific publication.
-- No release archives or checksums exist because they cannot be built truthfully before the staged variants, review evidence, and immutable release source revision exist.
+- External `pt-BR`, `en-US`, `es`, and `de` empty-template folders, candidate ZIPs, and source-bound checksums exist locally; accountable approval remains the blocking R5 stage before plan completion and publication.
+- Any language-review correction requires rebuilding and revalidating the affected deterministic archives and checksums.
 - Obsidian desktop itself was not automated; compatibility is established through portable relative links, incoming-link validation, reachability, zero graph findings, ignored local `.obsidian/` state, and a release-tree exclusion check.
-- The adversarial fixtures now pass. `V0.14.0` and this plan remain blocked only on the four reviewed external variants, clean archives, checksums, and immutable release source revision.
-- The user's conditional GitHub publication authorization was not exercised because the audit found defects and the language-release gate still has four blocking variants.
+- The adversarial fixtures now pass. `V0.14.0` and this plan remain blocked only on the four accountable language approvals.
+- The user's conditional GitHub publication authorization was not exercised because the language-release gate still has four blocking review findings.
