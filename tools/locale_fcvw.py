@@ -37,6 +37,8 @@ REQUIRED_VARIANT_PATHS = {
     "tools/frontmatter_fcvw.py",
 }
 RELEASE_EVIDENCE_PATHS = {"FCVW/LANGUAGE_REVIEW.md"}
+RELEASE_EVIDENCE_GRAPH_TARGETS = {"LANGUAGE_REVIEW.md"}
+RELEASE_EVIDENCE_GRAPH_LABELS = {"FCVW/LANGUAGE_REVIEW.md"}
 IGNORED_PARTS = {".git", ".obsidian", "__pycache__", ".codex-test-tmp"}
 FORBIDDEN_PACKAGE_PARTS = {".git", ".github", ".obsidian", "__pycache__", ".codex-test-tmp"}
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
@@ -141,6 +143,20 @@ def markdown_machine_signature(path: Path) -> tuple[tuple[str, str], ...]:
         if _machine_token(normalized):
             signature.append(("inline-code", normalized))
     return tuple(sorted(Counter(signature).elements()))
+
+
+def source_comparison_signature(path: Path, relative: str) -> tuple[tuple[str, str], ...]:
+    signature = markdown_machine_signature(path)
+    if relative != "FCVW/DOCUMENT_GRAPH.md":
+        return signature
+    return tuple(
+        item
+        for item in signature
+        if not (
+            (item[0] == "link-target" and item[1] in RELEASE_EVIDENCE_GRAPH_TARGETS)
+            or (item[0] == "inline-code" and item[1] in RELEASE_EVIDENCE_GRAPH_LABELS)
+        )
+    )
 
 
 def _run_clean_validator(variant_root: Path) -> tuple[bool, str]:
@@ -384,9 +400,10 @@ def validate_release_variants(
                         "non-Markdown surface differs from source",
                     )
                 )
-            if source_path.suffix.lower() == ".md" and markdown_machine_signature(source_path) != markdown_machine_signature(
-                reference_path
-            ):
+            if source_path.suffix.lower() == ".md" and source_comparison_signature(
+                source_path,
+                relative,
+            ) != source_comparison_signature(reference_path, relative):
                 findings.append(
                     LocaleFinding(
                         "locale-source-parity",

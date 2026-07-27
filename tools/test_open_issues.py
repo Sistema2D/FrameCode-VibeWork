@@ -816,6 +816,9 @@ class LanguageReleaseVariantTests(TemporaryRootTest):
         _, source_parent = self.make_root()
         source_root = source_parent / "clean"
         shutil.copytree(root / "en-US", source_root)
+        (source_root / "FCVW" / "LANGUAGE_REVIEW.md").unlink()
+        source_catalog = source_root / "FCVW" / "DOCUMENT_GRAPH.md"
+        source_catalog.write_text(render_catalog(source_root, source_catalog), encoding="utf-8")
         self.assertEqual(
             [],
             validate_release_variants(
