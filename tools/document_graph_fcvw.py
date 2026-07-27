@@ -19,6 +19,7 @@ from frontmatter_fcvw import parse_frontmatter, scalar
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 MALFORMED_MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]\n]+\]\s+\(([^)\n]+)\)")
 MALFORMED_ATX_HEADING = re.compile(r"^\s*#{1,6}[^#\s]")
+MALFORMED_TASK_ITEM = re.compile(r"^\s*[-+*]\s+\[\](?:\s|$)")
 WIKILINK = re.compile(r"(?<!!)\[\[([^\]]+)\]\]")
 FENCE = re.compile(r"^\s*(```+|~~~+)")
 EXTERNAL = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
@@ -173,6 +174,14 @@ def build_graph(root: Path) -> DocumentGraph:
                         "document-heading-syntax",
                         relative,
                         f"ATX heading marker must be followed by whitespace: {line.strip()}",
+                    )
+                )
+            if MALFORMED_TASK_ITEM.match(line):
+                findings.append(
+                    GraphFinding(
+                        "document-task-list-syntax",
+                        relative,
+                        f"task-list marker must contain a space, x, or X: {line.strip()}",
                     )
                 )
             for match in MALFORMED_MARKDOWN_LINK.finditer(line):
