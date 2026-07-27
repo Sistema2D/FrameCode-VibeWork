@@ -10,7 +10,7 @@ created_at: "2026-07-27"
 updated_at: "2026-07-27"
 current_version: "V0.13.0"
 expected_version: "V0.14.0"
-owner: "Codex with explicit local-only user approval"
+owner: "Codex with explicit user approval for implementation and GitHub publication"
 record_scope: "framework"
 regression_contract: "required"
 context_files:
@@ -38,13 +38,13 @@ Implement the seven open framework issues reviewed on 2026-07-27, including plan
 
 Language completeness is a release-production metric only. The source and every installed framework remain one monolingual conventional tree; users choose a language by downloading one independent empty-template variant, with no automatic selection or synchronization.
 
-Implementation remains local while any publication gate is blocking. On 2026-07-27 the user requested the four revised templates, ZIPs, and remaining release work; the immutable local content-baseline commit required before language review is in scope, while push, tag, GitHub Release, and remote issue mutation remain conditional on every release gate passing.
+Implementation remained local while publication gates were blocking. On 2026-07-27 the user approved the four language adaptations and explicitly authorized all remaining steps through GitHub Release publication. Push, tag, Release publication, and related issue closeout are now in scope only after every local gate passes.
 
 ## Justification and objective
 
 The current framework validates paths, selected reading routes, and schemas, but does not guarantee incoming links or reachability for every template and generated record. The open issues also expose real gaps in queue consistency, frontmatter parsing, application-rule routing, multilingual distribution, and proportionality governance.
 
-The objective is a coherent V0.14.0 local candidate whose normative and generated Markdown artifacts form a validated, Obsidian-compatible graph.
+The objective is a coherent published V0.14.0 release whose normative and generated Markdown artifacts form a validated, Obsidian-compatible graph.
 
 ## Scope
 
@@ -58,8 +58,7 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 
 ### Excluded
 
-- Push, pull request, tag, deployment, or GitHub Release while a validation or language-release gate is blocking.
-- Mutation of remote issues.
+- Force-push, history rewriting, destructive tag replacement, or silent removal of publication evidence.
 - Installation of third-party dependencies.
 - Claiming external publication or translation review by native speakers.
 
@@ -109,7 +108,7 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 - [x] `FCVW/APP_RULES.md` is routed, preserved, indexed, and validated.
 - [x] Language-specific release contracts cover independent `pt-BR`, `en-US`, `es`, and `de` empty-template variants without changing the source or runtime layout.
 - [x] Complete external `pt-BR`, `en-US`, `es`, and `de` release folders, candidate archives, and source-bound checksums are present locally.
-- [ ] Accountable language review is approved for all four variants.
+- [x] Accountable language review is approved for all four variants.
 - [x] Every governed Markdown artifact is reachable from an official entrypoint or explicit catalog.
 - [x] Every generated record category has an incoming catalog/relationship link and outgoing authoritative relationship, unless a validated schema-based exception applies.
 - [x] Standard Markdown links remain portable and create Obsidian backlinks.
@@ -157,11 +156,11 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 | Existing clean-template validator | pass | Pre-change: `errors=0 findings=0` |
 | Existing unit suite | pass | Pre-change: 14 tests passed |
 | Post-change validation | pass | 16 validator + 62 feature/adversarial tests; source clean validator 0/0; source graph 191/3/0; every candidate graph 192/3/0 |
-| Local-only boundary | pass | Candidate revisions committed locally through `c9ac95c`; no tag, push, GitHub Release, or issue mutation |
+| Pre-publication boundary | pass | Candidate revisions remained local through approval; no external state was claimed before authorization and blocker-free validation |
 
 ### Limitations and residual risk
 
-- Machine translation cannot substitute for accountable language review; every provisional variant remains explicitly `in_review`.
+- The repository owner explicitly approved every language adaptation; this establishes accountable acceptance but does not claim professional certification or native-speaker review.
 - No multilingual filesystem migration exists: the source and installed tree stay monolingual, while the four external release candidates remain independent.
 - Obsidian behavior is validated through portable link semantics and graph rules, not through automating the Obsidian desktop application.
 
@@ -176,14 +175,14 @@ The objective is a coherent V0.14.0 local candidate whose normative and generate
 
 ## Rollback
 
-Restore the pre-change worktree from Git commit `16ea5c2`. No remote state will be changed. Because destructive Git reset is not authorized, rollback execution would require a separate explicit request; this plan only records the verified restoration source.
+Before publication, stop without creating external state if a gate fails. After publication, preserve the release evidence and correct defects through a follow-up patch release or an explicit revert commit from restoration source `16ea5c2`. Removing a published Release or tag, rewriting history, or performing a destructive reset requires separate explicit authorization.
 
 ## Gates and approvals
 
 - Regression gate: required, R5.
 - Security/data/refactoring/skill/release gate: AI, filesystem, skill self-improvement, release, and migration gates apply.
 - Decomposition required: implementation is phased with validation after each foundational boundary.
-- Human approval: the user explicitly authorized local implementation, requested the four candidate assets and remaining release steps on 2026-07-27, and conditionally authorized external publication; that publication condition is not exercisable while release blockers remain.
+- Human approval: the user explicitly authorized local implementation, approved all four language adaptations, and authorized every remaining step through GitHub Release publication on 2026-07-27.
 
 ## Anti-Monolith Gate
 
@@ -241,8 +240,9 @@ Restore the pre-change worktree from Git commit `16ea5c2`. No remote state will 
 | Document graph | pass | 191 nodes, 3 entrypoints, 0 findings |
 | Plan queues | pass | reopened correction is the first valid `in_progress` recommendation |
 | Language-release staging | pass | Four complete independent folders; 206 source files and 207 files per candidate; schema, machine surface, heading/list/table/quote structure, links, and language metadata are parity-checked |
-| Language-release gate | expected block | Exactly four `locale-review` findings remain, one accountable approval per `pt-BR`, `en-US`, `es`, and `de` candidate |
-| Candidate packages | pass | Four deterministic ZIPs plus external `SHA256SUMS.txt`; two builds were byte-identical |
+| Language-release gate | pass | Repository-owner approval recorded in all four `LANGUAGE_REVIEW.md` files; explicit release validator reports 0 errors and 0 findings |
+| Approved-package preflight | pass | Four approved ZIPs plus external `SHA256SUMS.txt` generated without `--allow-in-review`; final assets will be rebuilt from the tagged ready revision |
+| Candidate packages | pass | Four deterministic pre-approval ZIPs plus external `SHA256SUMS.txt`; two builds were byte-identical |
 | Extracted packages | pass | Every exact-root archive extracted to 207 files and passed clean-template 0/0 plus graph 192/3/0 |
 | Clean-template validator | pass | 0 errors, 0 findings |
 | Patch integrity | pass | `git diff --check` exit 0; only line-ending conversion notices |
@@ -252,19 +252,18 @@ Restore the pre-change worktree from Git commit `16ea5c2`. No remote state will 
 | Second adversarial audit | pass after correction | Candidate-validator execution, unbounded retrieval, absent mandatory sources, unenforced wiki/audit/application schemas, self-referential release revisions, lock-state circularity, and truncated application-release template were reproduced and corrected |
 | Third adversarial audit | pass after correction | Automatic language-layout coupling, inferred document language, non-failing missing context, duplicate chunk IDs, repository/editor package leakage, non-Markdown drift, checksum/asset decoupling, unscoped clean history, weak troubleshooting records, nested-fence parsing, fenced release headings, and non-portable Markdown links were reproduced and corrected |
 
-### Local candidate checksum evidence
+### Superseded pre-approval candidate checksum evidence
 
 - `FrameCode-VibeWork-V0.14.0-de.zip`: `554de70c4cb5ee2bab67e4b609eb0829a084d887e7094ec7f4417329746205f3`
 - `FrameCode-VibeWork-V0.14.0-en-US.zip`: `196a8fd1a3d1b2f5ce2936c7b1ee07441e4ddb023987d04bdcf01440f3c2fd03`
 - `FrameCode-VibeWork-V0.14.0-es.zip`: `c65cae0c34e397fb18b7eb73164f58d50eaca56c333325f5a110113cd9fcddc0`
 - `FrameCode-VibeWork-V0.14.0-pt-BR.zip`: `681943409829edbe14523157a667b4c9450bc7782d69e99cae84349e1446bd26`
 
-The external `SHA256SUMS.txt` contains the same values. The four archive hashes and the checksum manifest were reproduced byte-for-byte in a second build.
+The former candidate `SHA256SUMS.txt` contained the same values and was reproduced byte-for-byte in a second build. These hashes are historical pre-approval evidence and are not the final release checksums.
 
 ## Gaps and residual risk
 
-- External `pt-BR`, `en-US`, `es`, and `de` empty-template folders, candidate ZIPs, and source-bound checksums exist locally; accountable approval remains the blocking R5 stage before plan completion and publication.
-- Any language-review correction requires rebuilding and revalidating the affected deterministic archives and checksums.
+- External `pt-BR`, `en-US`, `es`, and `de` empty-template folders and approved preflight ZIPs exist locally; no language or content blocker remains.
+- The final deterministic archives and checksums must be rebuilt from the tagged `ready` revision before publication.
 - Obsidian desktop itself was not automated; compatibility is established through portable relative links, incoming-link validation, reachability, zero graph findings, ignored local `.obsidian/` state, and a release-tree exclusion check.
-- The adversarial fixtures now pass. `V0.14.0` and this plan remain blocked only on the four accountable language approvals.
-- The user's conditional GitHub publication authorization was not exercised because the language-release gate still has four blocking review findings.
+- The adversarial fixtures and approved-language gate pass. The only remaining lifecycle work is final ready-revision packaging, external publication, remote issue closeout, and post-publication evidence.
