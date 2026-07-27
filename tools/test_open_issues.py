@@ -868,15 +868,15 @@ class LanguageReleaseVariantTests(TemporaryRootTest):
             release_record = variant_root / "FCVW" / "framework-releases" / "V0.14.0.md"
             release_record.parent.mkdir(parents=True, exist_ok=True)
             release_record.write_text("# Release candidate\n", encoding="utf-8")
-            active_plan = (
+            release_plan = (
                 variant_root
                 / "FCVW"
                 / "Plans"
-                / "in_progress"
+                / "completed"
                 / "P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md"
             )
-            active_plan.parent.mkdir(parents=True, exist_ok=True)
-            active_plan.write_text("# Active release plan\n", encoding="utf-8")
+            release_plan.parent.mkdir(parents=True, exist_ok=True)
+            release_plan.write_text("# Completed release plan\n", encoding="utf-8")
             catalog = variant_root / "FCVW" / "DOCUMENT_GRAPH.md"
             catalog.write_text(render_catalog(variant_root, catalog), encoding="utf-8")
         self.assertEqual([], validate_release_variants(root))
@@ -892,16 +892,16 @@ class LanguageReleaseVariantTests(TemporaryRootTest):
                 "# Release candidate\n\n- Post-baseline package evidence.\n",
                 encoding="utf-8",
             )
-            active_plan = (
+            release_plan = (
                 root
                 / name
                 / "FCVW"
                 / "Plans"
-                / "in_progress"
+                / "completed"
                 / "P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md"
             )
-            active_plan.write_text(
-                "# Active release plan\n\n- Post-baseline validation evidence.\n",
+            release_plan.write_text(
+                "# Completed release plan\n\n- Post-baseline validation evidence.\n",
                 encoding="utf-8",
             )
         self.assertEqual(

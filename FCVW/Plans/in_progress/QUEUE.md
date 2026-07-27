@@ -13,4 +13,3 @@ In-progress plans normally run before pending plans. Dependencies, regression ri
 
 | Order | Plan | Category | Blocked by | Override reason |
 |---:|---|---|---|---|
-| 1 | [P2-R5-2026-07-27-open-issues-42-48-and-document-graph](P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md) | correction | none | Pre-release adversarial audit reopened the R5 plan |

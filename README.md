@@ -13,7 +13,7 @@ Scoped planning · regression protection · selective context · controlled tech
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
 [![Release](https://img.shields.io/badge/Release-v0.14.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0)
 
-Release-ready **V0.14.0** - publication evidence pending
+Stable release **V0.14.0**
 
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
@@ -263,7 +263,7 @@ FCVW separa dois namespaces:
 - **aplicação:** `FCVW/changelogs/Vx.y.z.md` e a fonte de versão do produto;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` e [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-A [V0.14.0](FCVW/framework-releases/V0.14.0.md) está pronta para publicação com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. Até a publicação externa, a última release publicada continua sendo a [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0).
+A [V0.14.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.14.0.md](FCVW/framework-releases/V0.14.0.md).
 
 A partir da release com distribuição multilíngue, o usuário escolhe o idioma ao baixar um único template vazio (`pt-BR`, `en-US`, `es` ou `de`). Cada pasta ou asset é autônomo e monolíngue; o framework não detecta, alterna nem sincroniza idiomas durante o uso. A presença e a equivalência dos quatro templates são métricas da release.
 
@@ -556,7 +556,7 @@ FCVW separates two namespaces:
 - **application:** `FCVW/changelogs/Vx.y.z.md` and the product version source;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` and [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-[V0.14.0](FCVW/framework-releases/V0.14.0.md) is ready for publication with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. Until external publication, the latest published release remains [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0).
+[V0.14.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.14.0.md](FCVW/framework-releases/V0.14.0.md).
 
 Starting with the multilingual distribution release, the user chooses a language by downloading one empty template (`pt-BR`, `en-US`, `es`, or `de`). Each folder or asset is standalone and monolingual; the framework does not detect, switch, or synchronize languages during use. Presence and parity of all four templates are release metrics.
 
@@ -611,7 +611,7 @@ V0.13 introduced ownership-aware migration, `plan@2` and `regression@1` schemas,
 
 <div align="center">
 
-Ready: [V0.14.0](FCVW/framework-releases/V0.14.0.md) · Published baseline until external release: [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0)
+Stable: [V0.14.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0) · [Technical release record](FCVW/framework-releases/V0.14.0.md)
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
 

@@ -3,7 +3,7 @@ schema: "fcvw/plan@2"
 artifact_role: "record"
 upgrade_strategy: "preserve"
 id: "P2-R5-2026-07-27-open-issues-42-48-and-document-graph"
-status: "in_progress"
+status: "completed"
 priority: "P2"
 risk: "R5"
 created_at: "2026-07-27"
@@ -113,7 +113,7 @@ The objective is a coherent published V0.14.0 release whose normative and genera
 - [x] Every generated record category has an incoming catalog/relationship link and outgoing authoritative relationship, unless a validated schema-based exception applies.
 - [x] Standard Markdown links remain portable and create Obsidian backlinks.
 - [x] Clean-template validation, adversarial fixtures, and all unit tests pass after correction.
-- [x] No remote mutation occurred.
+- [x] Remote publication and issue closeout occurred only after every release gate passed and the user explicitly authorized them.
 
 ## Regression impact
 
@@ -155,8 +155,9 @@ The objective is a coherent published V0.14.0 release whose normative and genera
 |---|---|---|
 | Existing clean-template validator | pass | Pre-change: `errors=0 findings=0` |
 | Existing unit suite | pass | Pre-change: 14 tests passed |
-| Post-change validation | pass | 16 validator + 62 feature/adversarial tests; source clean validator 0/0; source graph 191/3/0; every candidate graph 192/3/0 |
+| Post-change validation | pass | 16 validator + 62 feature/adversarial tests; source clean validator 0/0; tagged ready source graph 191/3/0; post-publication evidence graph and every candidate graph 192/3/0 |
 | Pre-publication boundary | pass | Candidate revisions remained local through approval; no external state was claimed before authorization and blocker-free validation |
+| Publication lifecycle | pass | Main and annotated tag `v0.14.0` resolve to the ready revision; GitHub reports the Release and five expected assets published; issues #42-#48 are closed as completed |
 
 ### Limitations and residual risk
 
@@ -225,7 +226,7 @@ Before publication, stop without creating external state if a gate fails. After 
 
 - Changelog/framework release: [V0.14.0](../../framework-releases/V0.14.0.md).
 - Decisions: [ADR-0003](../../decisions/ADR-0003-proportionality-and-contextual-anti-monolith-gates.md) and [ADR-0004](../../decisions/ADR-0004-multilingual-source-and-release-model.md).
-- Failure/regression: none at plan start.
+- Failure/regression: [stale GitHub Pages source after clean-template migration](../../troubleshooting/2026-07-27-stale-github-pages-source.md).
 - Other plan: none.
 
 ## Validation executed
@@ -237,33 +238,34 @@ Before publication, stop without creating external state if a gate fails. After 
 | Validator regression suite | pass | `python -B tools/test_validate_fcvw.py`: 16/16 |
 | Feature/adversarial suite | pass | `python -B tools/test_open_issues.py`: 62/62 |
 | Python syntax | pass | 10 tool/test modules parsed through `ast` without bytecode |
-| Document graph | pass | 191 nodes, 3 entrypoints, 0 findings |
-| Plan queues | pass | reopened correction is the first valid `in_progress` recommendation |
+| Document graph | pass | Tagged ready source: 191 nodes; post-publication evidence source: 192 nodes; both have 3 entrypoints and 0 findings |
+| Plan queues | pass | completed plan removed from the `in_progress` queue in the same lifecycle change |
 | Language-release staging | pass | Four complete independent folders; 206 source files and 207 files per candidate; schema, machine surface, heading/list/table/quote structure, links, and language metadata are parity-checked |
 | Language-release gate | pass | Repository-owner approval recorded in all four `LANGUAGE_REVIEW.md` files; explicit release validator reports 0 errors and 0 findings |
-| Approved-package preflight | pass | Four approved ZIPs plus external `SHA256SUMS.txt` generated without `--allow-in-review`; final assets will be rebuilt from the tagged ready revision |
+| Final approved packages | pass | Four approved ZIPs plus external `SHA256SUMS.txt` built from ready revision `7151c30f67e875ecbcd05624c1562d2787d603f9` without `--allow-in-review`; second build was byte-identical |
 | Candidate packages | pass | Four deterministic pre-approval ZIPs plus external `SHA256SUMS.txt`; two builds were byte-identical |
 | Extracted packages | pass | Every exact-root archive extracted to 207 files and passed clean-template 0/0 plus graph 192/3/0 |
 | Clean-template validator | pass | 0 errors, 0 findings |
 | Patch integrity | pass | `git diff --check` exit 0; only line-ending conversion notices |
 | Local Obsidian state | pass | `.obsidian/` absent, ignored if recreated locally, excluded by release-tree validation |
-| Local-only boundary | pass | Local candidate baseline `c9ac95c`; origin remains unmodified; no tag or remote mutation |
+| Remote publication | pass | `main` and annotated tag pushed; [GitHub Release v0.14.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0) published with five verified assets; issues #42-#48 commented and closed as completed |
+| Post-release download smoke | pass | All five assets downloaded from GitHub matched their local SHA-256 values byte-for-byte |
+| GitHub Pages configuration | pass after correction | Repeated stale `main:/docs` failure reproduced; repository-root Jekyll incompatibility confirmed; errored Pages site disabled, API now returns 404, legacy Website metadata is blank, and failed-run history was preserved |
 | Pre-release adversarial audit | fail | False-positive graph, queue, schema, retrieval, locale, and release-readiness cases reproduced; plan reopened |
 | Second adversarial audit | pass after correction | Candidate-validator execution, unbounded retrieval, absent mandatory sources, unenforced wiki/audit/application schemas, self-referential release revisions, lock-state circularity, and truncated application-release template were reproduced and corrected |
 | Third adversarial audit | pass after correction | Automatic language-layout coupling, inferred document language, non-failing missing context, duplicate chunk IDs, repository/editor package leakage, non-Markdown drift, checksum/asset decoupling, unscoped clean history, weak troubleshooting records, nested-fence parsing, fenced release headings, and non-portable Markdown links were reproduced and corrected |
 
-### Superseded pre-approval candidate checksum evidence
+### Final published checksum evidence
 
-- `FrameCode-VibeWork-V0.14.0-de.zip`: `554de70c4cb5ee2bab67e4b609eb0829a084d887e7094ec7f4417329746205f3`
-- `FrameCode-VibeWork-V0.14.0-en-US.zip`: `196a8fd1a3d1b2f5ce2936c7b1ee07441e4ddb023987d04bdcf01440f3c2fd03`
-- `FrameCode-VibeWork-V0.14.0-es.zip`: `c65cae0c34e397fb18b7eb73164f58d50eaca56c333325f5a110113cd9fcddc0`
-- `FrameCode-VibeWork-V0.14.0-pt-BR.zip`: `681943409829edbe14523157a667b4c9450bc7782d69e99cae84349e1446bd26`
+- `FrameCode-VibeWork-V0.14.0-de.zip`: `10e9269604ac5a8bee151e6bf0533155450ec69b777c9f183f25beea4d652d5e`
+- `FrameCode-VibeWork-V0.14.0-en-US.zip`: `52883cdb12ab6339e8aebdb568861e0013426f8d0b03e3962f0b54b98b61dab1`
+- `FrameCode-VibeWork-V0.14.0-es.zip`: `80741ffa4f80e3e91fbaa6e52e8201e9f46b63c4c404e6c8b5394da548d35930`
+- `FrameCode-VibeWork-V0.14.0-pt-BR.zip`: `d2c7f88bf97d85f0d1c250105d27fb1fb376f0f7c6e32870b0b7ca30d2788702`
 
-The former candidate `SHA256SUMS.txt` contained the same values and was reproduced byte-for-byte in a second build. These hashes are historical pre-approval evidence and are not the final release checksums.
+The external `SHA256SUMS.txt` contains the same values. A second build reproduced the four archives and checksum manifest byte-for-byte, and GitHub reports matching asset digests.
 
 ## Gaps and residual risk
 
-- External `pt-BR`, `en-US`, `es`, and `de` empty-template folders and approved preflight ZIPs exist locally; no language or content blocker remains.
-- The final deterministic archives and checksums must be rebuilt from the tagged `ready` revision before publication.
+- No blocking content, language, graph, migration, validation, packaging, publication, or issue-closeout gap remains.
 - Obsidian desktop itself was not automated; compatibility is established through portable relative links, incoming-link validation, reachability, zero graph findings, ignored local `.obsidian/` state, and a release-tree exclusion check.
-- The adversarial fixtures and approved-language gate pass. The only remaining lifecycle work is final ready-revision packaging, external publication, remote issue closeout, and post-publication evidence.
+- The release has no continuously running service to monitor. Post-release verification covers published Git references, release metadata, downloaded asset digests, issue state, and removal of the incompatible legacy Pages configuration.

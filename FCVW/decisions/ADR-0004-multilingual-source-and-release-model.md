@@ -60,5 +60,5 @@ The current single-tree source remains authoritative. The repository must not cl
 
 ## Relationships
 
-- Active implementation plan: [P2-R5 open-issues update](../Plans/in_progress/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md).
+- Completed implementation plan: [P2-R5 open-issues update](../Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md).
 - Governing policies: [Filesystem](../FILESYSTEM.md), [Release](../RELEASE.md), [Versioning](../VERSIONING.md), and [Migrations](../MIGRATIONS.md).

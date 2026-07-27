@@ -141,6 +141,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R3-2026-07-15-final-integrity-reading-routes-and-readme.md`](Plans/completed/P2-R3-2026-07-15-final-integrity-reading-routes-and-readme.md)
 - [`FCVW/Plans/completed/P2-R3-2026-07-15-v0130-github-publication.md`](Plans/completed/P2-R3-2026-07-15-v0130-github-publication.md)
 - [`FCVW/Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md`](Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md)
+- [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)
 - [`FCVW/Plans/completed/README.md`](Plans/completed/README.md)
 
@@ -150,7 +151,6 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/Plans/in_progress
 
-- [`FCVW/Plans/in_progress/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/in_progress/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md)
 - [`FCVW/Plans/in_progress/README.md`](Plans/in_progress/README.md)
 
@@ -275,6 +275,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/troubleshooting
 
+- [`FCVW/troubleshooting/2026-07-27-stale-github-pages-source.md`](troubleshooting/2026-07-27-stale-github-pages-source.md)
 - [`FCVW/troubleshooting/README.md`](troubleshooting/README.md)
 
 ## FCVW/wiki
