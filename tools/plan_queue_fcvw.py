@@ -17,6 +17,7 @@ CATEGORY_RANK = {name: index for index, name in enumerate(CATEGORIES)}
 PLAN_LINK = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 NONE_VALUES = {"", "-", "none", "n/a", "not_applicable"}
 PREEMPT_PREFIX = "before_in_progress:"
+TABLE_SEPARATOR = re.compile(r"^:?-{3,}:?$")
 
 
 @dataclass(frozen=True)
@@ -44,14 +45,22 @@ def parse_queue(path: Path) -> tuple[list[QueueEntry], list[QueueFinding]]:
     entries: list[QueueEntry] = []
     findings: list[QueueFinding] = []
     header_seen = False
+    separator_seen = False
     for line_number, line in enumerate(lines, 1):
         stripped = line.strip()
-        if stripped.startswith("| Order | Plan | Category | Blocked by | Override reason |"):
-            header_seen = True
-            continue
-        if not header_seen or not stripped.startswith("|") or stripped.startswith("|---"):
+        if not stripped.startswith("|"):
             continue
         cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        if not header_seen:
+            if len(cells) == 5 and not cells[0].isdigit() and not PLAN_LINK.fullmatch(cells[1]):
+                header_seen = True
+            continue
+        if not separator_seen:
+            if len(cells) == 5 and all(TABLE_SEPARATOR.fullmatch(cell) for cell in cells):
+                separator_seen = True
+            continue
+        if not stripped.startswith("|"):
+            continue
         if len(cells) != 5:
             findings.append(QueueFinding("plan-queue-format", relative, f"invalid row at line {line_number}"))
             continue
@@ -67,7 +76,7 @@ def parse_queue(path: Path) -> tuple[list[QueueEntry], list[QueueFinding]]:
             continue
         plan_id, target = match.groups()
         entries.append(QueueEntry(order, plan_id.strip("`"), target, category, blocked_by, override_reason))
-    if not header_seen:
+    if not header_seen or not separator_seen:
         findings.append(QueueFinding("plan-queue-format", relative, "canonical queue table header is missing"))
     return entries, findings
 

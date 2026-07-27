@@ -468,6 +468,22 @@ class QueueTests(TemporaryRootTest):
         self.assertEqual("in_progress", state)
         self.assertEqual(active_id, entry.plan_id if entry else None)
 
+    def test_localized_queue_header_preserves_positional_machine_contract(self) -> None:
+        _, root = self.make_root()
+        pending, in_progress = self.setup_queues(root)
+        plan_id = "P2-R2-2026-07-27-localized-queue"
+        (pending / f"{plan_id}.md").write_text(self.plan_text(plan_id, "pending"), encoding="utf-8")
+        localized = self.queue_text(
+            "pending",
+            [f"| 1 | [{plan_id}]({plan_id}.md) | correction | none | none |"],
+        ).replace(
+            "| Order | Plan | Category | Blocked by | Override reason |",
+            "| Ordem | Plano | Categoria | Bloqueado por | Motivo da substituição |",
+        )
+        (pending / "QUEUE.md").write_text(localized, encoding="utf-8")
+        (in_progress / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
+        self.assertEqual([], validate_plan_queues(root))
+
     def test_missing_plan_and_priority_inversion_fail(self) -> None:
         _, root = self.make_root()
         pending, in_progress = self.setup_queues(root)
@@ -829,6 +845,38 @@ class LanguageReleaseVariantTests(TemporaryRootTest):
                 run_clean_validation=False,
             ),
         )
+        agents = root / "es" / "AGENTS.md"
+        agents_text = agents.read_text(encoding="utf-8")
+        agents.write_text("# Unexpected heading\n\n" + agents_text, encoding="utf-8")
+        self.assertTrue(
+            any(item.rule == "locale-markdown-structure" for item in validate_release_variants(root))
+        )
+        agents.write_text(agents_text, encoding="utf-8")
+        fenced_agents = agents_text + "\n```text\nmachine-stable\n```\n"
+        for name in RELEASE_VARIANTS:
+            (root / name / "AGENTS.md").write_text(fenced_agents, encoding="utf-8")
+        agents.write_text(fenced_agents.replace("machine-stable", "translated-code"), encoding="utf-8")
+        self.assertTrue(
+            any(
+                item.rule == "locale-machine-parity" and item.path == "es/AGENTS.md"
+                for item in validate_release_variants(root)
+            )
+        )
+        for name in RELEASE_VARIANTS:
+            (root / name / "AGENTS.md").write_text(agents_text, encoding="utf-8")
+        locale_readme = root / "es" / "README.md"
+        locale_readme_text = locale_readme.read_text(encoding="utf-8")
+        locale_readme.write_text(
+            '---\nlanguage: "en-US"\n---\n\n' + locale_readme_text,
+            encoding="utf-8",
+        )
+        self.assertTrue(
+            any(
+                item.rule == "locale-language-metadata" and item.path == "es/README.md"
+                for item in validate_release_variants(root)
+            )
+        )
+        locale_readme.write_text(locale_readme_text, encoding="utf-8")
         sentinel = root / "untrusted-validator-executed"
         candidate_validator = (
             "from pathlib import Path\n"

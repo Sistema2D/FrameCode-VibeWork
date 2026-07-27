@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import unicodedata
 import re
 import sys
 from dataclasses import dataclass
@@ -188,6 +189,274 @@ SKILL_BODY_HEADINGS = {
     "exit criteria": ("## exit criteria", "## validation and exit", "## definition of done", "## post-release checklist"),
 }
 
+SKILL_BODY_TRANSLATIONS = {
+    "purpose": ("## objetivo", "## proposito", "## zweck"),
+    "use conditions": (
+        "## activadores de activacion",
+        "## aktivierungsausloser",
+        "## condiciones de uso",
+        "## condicoes de uso",
+        "## gatilhos de ativacao",
+        "## modi",
+        "## modos",
+        "## nutzungsbedingungen",
+        "## perfiles",
+        "## perfis",
+        "## profile",
+        "## usar cuando",
+        "## use quando",
+        "## verwenden sie wann",
+        "## quando usar",
+        "## wann verwenden",
+    ),
+    "non-responsibilities": (
+        "## blockbedingungen",
+        "## condiciones de bloqueo",
+        "## condicoes de bloqueio",
+        "## grenzen",
+        "## harte regeln",
+        "## keine verantwortung",
+        "## limites",
+        "## nao responsabilidades",
+        "## nao use para",
+        "## nicht verwenden fur",
+        "## nicht-verantwortlichkeiten",
+        "## no responsabilidades",
+        "## no utilizar para",
+        "## padroes proibidos",
+        "## patrones prohibidos",
+        "## reglas estrictas",
+        "## reglas no negociables",
+        "## regras nao negociaveis",
+        "## regras rigidas",
+        "## unverhandelbare regeln",
+        "## verbotene muster",
+    ),
+    "inputs": (
+        "## bestellung prufen",
+        "## eingaben",
+        "## entradas",
+        "## fonte obrigatoria da verdade",
+        "## fuente obligatoria de la verdad",
+        "## inspeccionar orden",
+        "## inspecionar pedido",
+        "## obligatorische quelle der wahrheit",
+        "## ordem de auditoria",
+        "## ordem de digitalizacao",
+        "## orden de auditoria",
+        "## orden de escaneo",
+        "## prufauftrag",
+        "## scanreihenfolge",
+    ),
+    "procedure": (
+        "## arbeitsablauf",
+        "## aufraumsequenz",
+        "## ausfuhrungscheckliste",
+        "## bestellung prufen",
+        "## bucle de curacion",
+        "## cheques",
+        "## ciclo de curadoria",
+        "## entscheidungsleiter",
+        "## escada de decisao",
+        "## escalera de decision",
+        "## escaneo de higiene",
+        "## fixkostenmodus",
+        "## flujo de trabajo",
+        "## fluxo de trabalho",
+        "## harte tore",
+        "## hygiene-scan",
+        "## inspeccionar orden",
+        "## inspecionar pedido",
+        "## kurationsschleife",
+        "## lista de verificacao de execucao",
+        "## lista de verificacion de ejecucion",
+        "## modo de costo fijo",
+        "## modo de custo fixo",
+        "## ordem de auditoria",
+        "## ordem de digitalizacao",
+        "## orden de auditoria",
+        "## orden de escaneo",
+        "## portoes rigidos",
+        "## procedimento",
+        "## procedimiento",
+        "## prufauftrag",
+        "## puertas duras",
+        "## scanreihenfolge",
+        "## schecks",
+        "## secuencia de limpieza",
+        "## secuencia de mejora segura",
+        "## sequencia de limpeza",
+        "## sequencia de melhoria segura",
+        "## sichere verbesserungssequenz",
+        "## verificacao de higiene",
+        "## verificacoes",
+        "## vorgehensweise",
+    ),
+    "required output": (
+        "## ausgabe erforderlich",
+        "## erforderliche ausgabe",
+        "## saida necessaria",
+        "## salida requerida",
+    ),
+    "validation": (
+        "## criterios de saida",
+        "## criterios de salida",
+        "## exit-kriterien",
+        "## harte tore",
+        "## metricas",
+        "## metriken",
+        "## portao de criacao",
+        "## portao de melhoria",
+        "## portoes rigidos",
+        "## puerta de la creacion",
+        "## puerta de mejora",
+        "## puertas duras",
+        "## schopfungstor",
+        "## validacao",
+        "## validacao e saida",
+        "## validacion",
+        "## validacion y salida",
+        "## validierung",
+        "## validierung und beenden",
+        "## verbesserungstor",
+    ),
+    "exit criteria": (
+        "## criterios de saida",
+        "## criterios de salida",
+        "## exit-kriterien",
+        "## validacao e saida",
+        "## validacion y salida",
+        "## validierung und beenden",
+    ),
+}
+
+LOCALIZED_TITLES = {
+    "regression guardrails": {
+        "protetores de regressao",
+        "barandillas de regresion",
+        "regressionsleitplanken",
+    },
+    "minimum regression evidence by risk": {
+        "evidencia minima de regressao por risco",
+        "evidencia minima de regresion por riesgo",
+        "minimale regressionsnachweise nach risikoklasse",
+    },
+    "regression-prone events": {
+        "eventos propensos a regressao",
+        "eventos propensos a la regresion",
+        "regressionsanfallige ereignisse",
+    },
+    "regression": {"regressao", "regresion"},
+    "regression impact": {"impacto da regressao", "impacto de la regresion", "regressionsauswirkung"},
+    "existing behaviors that may be affected": {
+        "comportamentos existentes que podem ser afetados",
+        "comportamientos existentes que pueden verse afectados",
+        "bestehende verhaltensweisen, die moglicherweise betroffen sind",
+    },
+    "regression contracts consulted": {
+        "contratos de regressao consultados",
+        "contratos de regresion consultados",
+        "regressionsvertrage konsultiert",
+    },
+    "regression checks required": {
+        "verificacoes de regressao necessarias",
+        "se requieren comprobaciones de regresion",
+        "regressionsprufungen erforderlich",
+    },
+    "regression evidence": {"evidencia de regressao", "evidencia de regresion", "regressionsbeweise"},
+    "justification": {"justificativa", "justificacion", "begrundung"},
+    "summary": {"resumo", "resumen", "zusammenfassung"},
+    "related framework plans": {
+        "planos de estrutura relacionados",
+        "planes marco relacionados",
+        "verwandte rahmenplane",
+    },
+    "framework surfaces added": {
+        "superficies de estrutura adicionadas",
+        "se agregaron superficies de marco",
+        "gerustflachen hinzugefugt",
+    },
+    "framework surfaces changed": {
+        "superficies da estrutura alteradas",
+        "las superficies del marco cambiaron",
+        "gerustoberflachen geandert",
+    },
+    "framework surfaces removed": {
+        "superficies da estrutura removidas",
+        "superficies de estructura eliminadas",
+        "gerustflachen entfernt",
+    },
+    "ownership and path changes": {
+        "mudancas de propriedade e caminho",
+        "cambios de propiedad y ruta",
+        "eigentumer- und pfadanderungen",
+    },
+    "schema changes": {"mudancas de esquema", "cambios de esquema", "schemaanderungen"},
+    "migration": {"migracao", "migracion"},
+    "validation": {"validacao", "validacion", "validierung"},
+    "language-variant parity and review evidence": {
+        "paridade entre variantes de idioma e evidencias de revisao",
+        "paridad de variantes linguisticas y evidencia de revision",
+        "sprachvariantenparitat und uberprufungsnachweise",
+    },
+    "locale parity and language-review evidence": {
+        "paridade de localidade e evidencias de revisao linguistica",
+        "paridade de localidade e evidencias de revisao de idioma",
+        "paridad regional y evidencia de revision linguistica",
+        "paridad local y evidencia de revision de idioma",
+        "gebietsschemaparitat und sprachprufungsnachweise",
+        "lokale paritat und sprachuberprufungsnachweise",
+    },
+    "clean assets and package contents": {
+        "limpe ativos e conteudo do pacote",
+        "limpiar activos y contenido del paquete",
+        "bereinigen sie assets und paketinhalte",
+    },
+    "checksums": {"somas de verificacao", "sumas de verificacion", "prufsummen"},
+    "downstream preservation rules": {
+        "regras de preservacao downstream",
+        "reglas de preservacion posteriores",
+        "nachgelagerte aufbewahrungsregeln",
+    },
+    "known gaps": {"lacunas conhecidas", "brechas conocidas", "bekannte lucken"},
+    "rollback": {"reversao", "revertir"},
+    "publication evidence": {
+        "evidencia de publicacao",
+        "prueba de publicacion",
+        "veroffentlichungsnachweise",
+    },
+    "affected areas": {"areas afetadas", "areas afectadas", "betroffene gebiete"},
+    "added": {"adicionado", "adicionados", "agregado", "agregados", "hinzugefugt"},
+    "changed": {"alterado", "alterados", "cambiado", "cambiados", "geandert"},
+    "fixed": {"corrigido", "corrigidos", "corregido", "corregidos", "behoben"},
+    "removed": {"removido", "removidos", "eliminado", "eliminados", "entfernt"},
+    "assets and package contents": {
+        "ativos e conteudo do pacote",
+        "activos y contenido del paquete",
+        "assets und paketinhalte",
+    },
+    "security and data impact": {
+        "impacto de seguranca e dados",
+        "impacto en seguridad y datos",
+        "sicherheits- und datenauswirkungen",
+    },
+    "post-release validation": {
+        "validacao pos-release",
+        "validacion posterior a la publicacion",
+        "validierung nach der veroffentlichung",
+    },
+    "scope": {"escopo", "alcance", "geltungsbereich"},
+    "authoritative sources": {"fontes autorizadas", "fuentes autorizadas", "massgebliche quellen"},
+    "method": {"metodo", "methode"},
+    "findings": {"achados", "hallazgos", "befunde"},
+    "limitations and residual risk": {
+        "limitacoes e risco residual",
+        "limitaciones y riesgo residual",
+        "einschrankungen und restrisiko",
+    },
+    "follow-up": {"acompanhamento", "seguimiento", "nachverfolgung"},
+}
+
 PROVIDER_TERMS = (
     "IsSkillFile",
     "view_file",
@@ -267,6 +536,30 @@ class BaselineEntry:
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig")
+
+
+def normalized_title(value: str) -> str:
+    return "".join(
+        character
+        for character in unicodedata.normalize("NFKD", value.casefold())
+        if not unicodedata.combining(character)
+    ).strip()
+
+
+def title_aliases(title: str) -> set[str]:
+    canonical = normalized_title(title)
+    return {canonical, *LOCALIZED_TITLES.get(canonical, set())}
+
+
+def has_localized_heading(text: str, level: int, title: str, *, include_fences: bool = False) -> bool:
+    prefix = "#" * level + " "
+    accepted = title_aliases(title)
+    lines = enumerate(text.splitlines(), 1) if include_fences else outside_code_fences(text)
+    return any(
+        line.strip().startswith(prefix)
+        and normalized_title(line.strip()[len(prefix) :]) in accepted
+        for _, line in lines
+    )
 
 
 def frontmatter(text: str) -> dict[str, FrontmatterValue]:
@@ -464,8 +757,8 @@ def level_two_section(text: str, title: str) -> str | None:
     start: int | None = None
     body: list[str] = []
     marker = ""
-    heading = re.compile(rf"^##\s+{re.escape(title)}\s*$", re.I)
     next_heading = re.compile(r"^##\s+")
+    accepted = title_aliases(title)
     for index, line in enumerate(lines):
         fence = re.match(r"^\s*(`{3,}|~{3,})", line)
         if fence:
@@ -476,7 +769,11 @@ def level_two_section(text: str, title: str) -> str | None:
                 marker = ""
             continue
         if not marker:
-            if start is None and heading.match(line.strip()):
+            if (
+                start is None
+                and line.strip().startswith("## ")
+                and normalized_title(line.strip()[3:]) in accepted
+            ):
                 start = index + 1
                 continue
             if start is not None and next_heading.match(line.strip()):
@@ -507,10 +804,11 @@ def validate_plan_regression(
         findings.append(Finding("plan-regression", relative, "Regression impact is empty or contains placeholders"))
     if contract == "required":
         for marker in REGRESSION_MARKERS:
-            if marker.lower() not in section.lower():
+            if not has_localized_heading(section, 3, marker.removeprefix("### ").strip()):
                 findings.append(Finding("plan-regression", relative, f"missing regression marker: {marker}"))
     elif contract == "not_applicable":
-        justification = re.search(r"(?im)^Justification:\s*(.+)$", section)
+        justification_labels = "|".join(re.escape(value) for value in title_aliases("Justification"))
+        justification = re.search(rf"(?im)^(?:{justification_labels}):\s*(.+)$", normalized_title(section))
         if not justification or len(justification.group(1).strip()) < 12:
             findings.append(Finding("plan-regression", relative, "not_applicable requires a specific Justification"))
     if scalar(metadata, "status") == "completed" and re.search(r"\bpending\b", section, re.I):
@@ -603,9 +901,13 @@ def validate_skills(root: Path, findings: list[Finding]) -> None:
         for term in PROVIDER_TERMS:
             if term in text:
                 findings.append(Finding("provider-neutrality", relative, f"provider-specific core term: {term}"))
-        headings = tuple(line.strip().lower() for line in text.splitlines() if line.startswith("## "))
+        headings = tuple(normalized_title(line.strip()) for line in text.splitlines() if line.startswith("## "))
         for concept, accepted in SKILL_BODY_HEADINGS.items():
-            if not any(any(heading.startswith(marker) for marker in accepted) for heading in headings):
+            markers = {
+                normalized_title(marker)
+                for marker in (*accepted, *SKILL_BODY_TRANSLATIONS.get(concept, ()))
+            }
+            if not any(any(heading.startswith(marker) for marker in markers) for heading in headings):
                 findings.append(Finding("skill-contract", relative, f"missing body concept: {concept}"))
 
 
@@ -1027,7 +1329,27 @@ def validate_regression_surfaces(root: Path, findings: list[Finding]) -> None:
     }
     for relative, marker in required_content.items():
         path = root / relative
-        if path.is_file() and marker not in read_text(path):
+        if not path.is_file():
+            continue
+        text = read_text(path)
+        present = marker in text
+        heading_match = re.fullmatch(r"(#{1,6})\s+(.+)", marker)
+        if heading_match:
+            present = has_localized_heading(
+                text,
+                len(heading_match.group(1)),
+                heading_match.group(2),
+                include_fences=relative.startswith("FCVW/governance/TEMPLATE_"),
+            )
+        elif marker.startswith("| Regression |"):
+            accepted = title_aliases("Regression")
+            present = any(
+                len(cells := [cell.strip() for cell in line.strip().strip("|").split("|")]) >= 1
+                and normalized_title(cells[0]) in accepted
+                for line in text.splitlines()
+                if line.strip().startswith("|")
+            )
+        if not present:
             findings.append(Finding("regression-surface", relative, f"required marker is missing: {marker}"))
 
 
@@ -1179,10 +1501,19 @@ def _validate_framework_release_record(root: Path, path: Path, findings: list[Fi
 
 def validate_version(root: Path, findings: list[Finding]) -> None:
     lock_text = read_text(root / "FCVW" / "FRAMEWORK_LOCK.md")
-    match = re.search(r"Installed version.*?(V\d+\.\d+\.\d+)", lock_text)
-    version = match.group(1) if match else ""
-    state_match = re.search(r"Release state.*?`([^`]+)`", lock_text)
-    lock_state = state_match.group(1) if state_match else ""
+    version = ""
+    lock_state = ""
+    for line in lock_text.splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) != 2:
+            continue
+        value = cells[1].strip().strip("`")
+        if not version and re.fullmatch(r"V\d+\.\d+\.\d+", value):
+            version = value
+        if not lock_state and value in {"ready", "published"}:
+            lock_state = value
     if not version:
         findings.append(Finding("framework-version", "FCVW/FRAMEWORK_LOCK.md", "installed version not found"))
         return
@@ -1506,7 +1837,27 @@ def validate_document_graph(root: Path, findings: list[Finding]) -> None:
     graph = build_graph(root)
     findings.extend(Finding(item.rule, item.path, item.message, item.severity) for item in graph.findings)
     catalog = root / "FCVW" / "DOCUMENT_GRAPH.md"
-    if catalog.is_file() and read_text(catalog) != render_catalog(root, catalog):
+    if catalog.is_file():
+        actual_text = read_text(catalog)
+        expected_text = render_catalog(root, catalog)
+        actual_entries = tuple(
+            sorted(
+                (link.group(1), tuple(INLINE_CODE.findall(line)))
+                for _, line in outside_code_fences(actual_text)
+                for link in MARKDOWN_LINK.finditer(line)
+            )
+        )
+        expected_entries = tuple(
+            sorted(
+                (link.group(1), tuple(INLINE_CODE.findall(line)))
+                for _, line in outside_code_fences(expected_text)
+                for link in MARKDOWN_LINK.finditer(line)
+            )
+        )
+    else:
+        actual_entries = ()
+        expected_entries = ()
+    if catalog.is_file() and actual_entries != expected_entries:
         findings.append(
             Finding(
                 "document-catalog-stale",

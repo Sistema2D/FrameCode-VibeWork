@@ -43,6 +43,8 @@ IGNORED_PARTS = {".git", ".obsidian", "__pycache__", ".codex-test-tmp"}
 FORBIDDEN_PACKAGE_PARTS = {".git", ".github", ".obsidian", "__pycache__", ".codex-test-tmp"}
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 INLINE_CODE = re.compile(r"`([^`\n]+)`")
+FENCE = re.compile(r"^\s*(`{3,}|~{3,})")
+HEADING = re.compile(r"^(#{1,6})\s+")
 CONTROLLED_METADATA = {
     "schema",
     "id",
@@ -142,7 +144,53 @@ def markdown_machine_signature(path: Path) -> tuple[tuple[str, str], ...]:
         normalized = value.strip()
         if _machine_token(normalized):
             signature.append(("inline-code", normalized))
+    if path.name == "QUEUE.md" and "Plans" in path.parts:
+        for line in text.splitlines():
+            if not line.strip().startswith("|"):
+                continue
+            cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+            if len(cells) == 5 and cells[0].isdigit():
+                signature.extend(
+                    (
+                        ("queue-order", cells[0]),
+                        ("queue-category", cells[2]),
+                        ("queue-blocked-by", cells[3]),
+                    )
+                )
+    marker = ""
+    block: list[str] = []
+    for line in text.splitlines(keepends=True):
+        fence = FENCE.match(line)
+        if fence and not marker:
+            marker = fence.group(1)
+            block = [line]
+            continue
+        if marker:
+            block.append(line)
+            if fence and fence.group(1)[0] == marker[0] and len(fence.group(1)) >= len(marker):
+                signature.append(("fenced-code", hashlib.sha256("".join(block).encode("utf-8")).hexdigest()))
+                marker = ""
+                block = []
+    if marker:
+        signature.append(("fenced-code-unclosed", hashlib.sha256("".join(block).encode("utf-8")).hexdigest()))
     return tuple(sorted(Counter(signature).elements()))
+
+
+def markdown_structure_signature(path: Path) -> tuple[int, ...]:
+    headings: list[int] = []
+    marker = ""
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        fence = FENCE.match(line)
+        if fence:
+            current = fence.group(1)
+            if not marker:
+                marker = current
+            elif current[0] == marker[0] and len(current) >= len(marker):
+                marker = ""
+            continue
+        if not marker and (heading := HEADING.match(line)):
+            headings.append(len(heading.group(1)))
+    return tuple(headings)
 
 
 def source_comparison_signature(path: Path, relative: str) -> tuple[tuple[str, str], ...]:
@@ -336,6 +384,18 @@ def validate_release_variants(
                     )
                 )
 
+        for relative in sorted(path for path in manifest if path.endswith(".md")):
+            metadata = parse_frontmatter((variant_root / relative).read_text(encoding="utf-8-sig")).data
+            declared_language = scalar(metadata, "language")
+            if declared_language and declared_language != language:
+                findings.append(
+                    LocaleFinding(
+                        "locale-language-metadata",
+                        f"{name}/{relative}",
+                        f"declared language must match {language}",
+                    )
+                )
+
         for relative in sorted(reference_manifest & manifest):
             reference_path = reference_root / relative
             variant_path = variant_root / relative
@@ -370,6 +430,14 @@ def validate_release_variants(
                             "locale-machine-parity",
                             f"{name}/{relative}",
                             f"Markdown machine identifiers or link targets differ from {REFERENCE_VARIANT}",
+                        )
+                    )
+                if markdown_structure_signature(reference_path) != markdown_structure_signature(variant_path):
+                    findings.append(
+                        LocaleFinding(
+                            "locale-markdown-structure",
+                            f"{name}/{relative}",
+                            f"Markdown heading structure differs from {REFERENCE_VARIANT}",
                         )
                     )
 
@@ -409,6 +477,16 @@ def validate_release_variants(
                         "locale-source-parity",
                         f"{REFERENCE_VARIANT}/{relative}",
                         "Markdown machine surface differs from source",
+                    )
+                )
+            if source_path.suffix.lower() == ".md" and markdown_structure_signature(
+                source_path
+            ) != markdown_structure_signature(reference_path):
+                findings.append(
+                    LocaleFinding(
+                        "locale-source-parity",
+                        f"{REFERENCE_VARIANT}/{relative}",
+                        "Markdown heading structure differs from source",
                     )
                 )
     return findings
