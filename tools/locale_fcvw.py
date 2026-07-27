@@ -36,7 +36,10 @@ REQUIRED_VARIANT_PATHS = {
     "tools/document_graph_fcvw.py",
     "tools/frontmatter_fcvw.py",
 }
-RELEASE_EVIDENCE_PATHS = {"FCVW/LANGUAGE_REVIEW.md"}
+RELEASE_EVIDENCE_PATHS = {
+    "FCVW/LANGUAGE_REVIEW.md",
+    "FCVW/framework-releases/V0.14.0.md",
+}
 RELEASE_EVIDENCE_GRAPH_TARGETS = {"LANGUAGE_REVIEW.md"}
 RELEASE_EVIDENCE_GRAPH_LABELS = {"FCVW/LANGUAGE_REVIEW.md"}
 IGNORED_PARTS = {".git", ".obsidian", "__pycache__", ".codex-test-tmp"}

@@ -853,6 +853,9 @@ class LanguageReleaseVariantTests(TemporaryRootTest):
                 else:
                     content = "fixture\n"
                 path.write_text(content, encoding="utf-8")
+            release_record = variant_root / "FCVW" / "framework-releases" / "V0.14.0.md"
+            release_record.parent.mkdir(parents=True, exist_ok=True)
+            release_record.write_text("# Release candidate\n", encoding="utf-8")
             catalog = variant_root / "FCVW" / "DOCUMENT_GRAPH.md"
             catalog.write_text(render_catalog(variant_root, catalog), encoding="utf-8")
         self.assertEqual([], validate_release_variants(root))
@@ -862,6 +865,12 @@ class LanguageReleaseVariantTests(TemporaryRootTest):
         (source_root / "FCVW" / "LANGUAGE_REVIEW.md").unlink()
         source_catalog = source_root / "FCVW" / "DOCUMENT_GRAPH.md"
         source_catalog.write_text(render_catalog(source_root, source_catalog), encoding="utf-8")
+        for name in RELEASE_VARIANTS:
+            release_record = root / name / "FCVW" / "framework-releases" / "V0.14.0.md"
+            release_record.write_text(
+                "# Release candidate\n\n- Post-baseline package evidence.\n",
+                encoding="utf-8",
+            )
         self.assertEqual(
             [],
             validate_release_variants(
