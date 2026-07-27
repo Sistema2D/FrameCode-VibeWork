@@ -35,7 +35,7 @@ Use this workflow when you have an existing project (with code, history, partial
 
 ### Phase 2 — Framework Integration
 
-1. **Copy the clean distribution**: Use a verified FCVW release artifact, excluding comparison examples, framework-development plans, and any application history from the source checkout.
+1. **Copy one clean distribution**: Use the single language-specific FCVW release artifact chosen by the user. Exclude comparison evidence and downstream/application history from a source checkout; governed framework history may remain when the release contract includes it. Do not copy all language variants or add automatic language selection.
 2. **Copy AGENTS.md** to the project root as the bridge entrypoint.
 3. **Merge README.md**: Keep the existing project README. Add a section referencing `AGENTS.md` as the governance entry point.
 4. **Update `.gitignore`**: Preserve project-specific rules and add only the exclusions required by files actually adopted.
@@ -77,3 +77,13 @@ Use this workflow when you have an existing project (with code, history, partial
 - `FCVW/INSTANTIATION.md` — greenfield project instantiation
 - `FCVW/skills/retroactive-instantiation/SKILL.md` — ASE skill version
 - `FCVW/CONTEXT_MAP.md` — session type: Briefing / Instantiation
+
+## Application-rule and graph backfill
+
+During retroactive adoption:
+
+1. inventory business rules already enforced by code, tests, workflows, and user-facing behavior;
+2. promote only confirmed application rules to `FCVW/APP_RULES.md`, with stable IDs and affected boundaries;
+3. build `FCVW/DOCUMENT_GRAPH.md` after the adopted files are linked from official entrypoints;
+4. report pre-existing orphan records explicitly instead of inventing relationships; and
+5. if an incremental orphan baseline is temporarily approved for legacy content, restrict it to exact paths and never add new artifacts to it.

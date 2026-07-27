@@ -48,6 +48,8 @@ Authentication, authorization, persistent data, public APIs or file formats, age
 | Performance/operations | measured baseline, representative load, startup/deploy/recovery, resource and failure thresholds |
 | Release/build | clean artifact, version surfaces, primary smoke, migration/rollback, changelog, known gaps |
 
+Release tests also cover state transitions, content-versus-publication revisions, completed related plans, copyable template completeness, language-variant asset/checksum evidence, and external publication URLs.
+
 ## Regression test design
 
 1. Name the protected behavior and its authoritative contract.
@@ -83,3 +85,38 @@ Schema, format, migration, retention, import/export, or destructive changes use 
 - [ ] Plan and changelog or framework release record contain reproducible evidence.
 
 Use `governance/TEMPLATE_PLAN.md` to record change-specific validation and `REGRESSION_GUARDS.md` for blocking rules.
+
+## Document graph and queue evidence
+
+Structural changes must test valid and negative cases for incoming links, entrypoint reachability, broken/ambiguous targets, self-only links, inline-code examples, source-relative destinations, spaces in paths, queue absence, duplicate/stale IDs, exact state-directory targets, status mismatch, category and P1-P5 order, blocker lifecycle, and justified cross-state override.
+
+An index that merely contains a path does not prove a meaningful record relationship. Generated plans, audits, troubleshooting records, releases, regressions, and session syntheses also link their authoritative parent or source.
+
+## Frontmatter and retrieval evidence
+
+Frontmatter changes test scalars, first-level lists, non-empty required values, ID/priority/risk coherence, duplicate keys, invalid ISO dates, unsupported nesting, invalid enums, relationship-path existence, and legacy preservation. Retrieval changes test role-based default scope and authority, mandatory-route recall, missing-context failure status, out-of-root plans, source traceability, retrieval priority, freshness, active-plan relation, excluded content, obsolete-content penalties, explicit declared-language filtering, empty results, token bounds, and prompt-injection handling.
+
+Language-specific release tests use an external authoritative clean source and immutable revision. They test missing `pt-BR`, `en-US`, `es`, and `de` variants, source-manifest divergence, authoritative clean validation without executing candidate validators, reviewer-revision mismatch, machine-surface drift, local graph integrity, and the prohibition against treating unreviewed translations as approved.
+
+Normal source validation must pass without language directories and must not invoke the release-variant validator. Release fixtures also prove that staging needs no language-selection index and that each downloadable variant is independently valid and internally linked.
+
+Local `.obsidian/` state may be recreated by the editor and is ignored by source validation, but clean release-asset inspection must prove it was not packaged.
+
+Release packaging tests cover deterministic ZIP bytes, exact per-language archive roots, manifest inspection, SHA-256 binding, refusal to package forbidden editor/repository/cache state, safe replacement boundaries, and the rule that candidate mode tolerates only an `in_review` approval blocker.
+
+## V0.14.0 structural suite
+
+```powershell
+python -B tools/test_validate_fcvw.py
+python -B tools/test_open_issues.py
+python -B tools/document_graph_fcvw.py --root .
+python -B tools/plan_queue_fcvw.py --root . --recommend
+python -B tools/validate_fcvw.py --root . --profile clean-template
+```
+
+The language gate is separate and runs only against prepared release artifacts:
+
+```powershell
+python -B tools/locale_fcvw.py --root <release-staging-root> --require-complete --source-root <clean-source-root> --source-revision <40-character-commit>
+python -B tools/package_release_fcvw.py --root <release-staging-root> --source-root <clean-source-root> --source-revision <40-character-commit> --version <Vx.y.z> --output <asset-directory>
+```

@@ -1,8 +1,19 @@
+# Template: general knowledge note
+
+```markdown
 ---
+schema: "fcvw/wiki@1"
+id: "NOTE-YYYYMMDD-<short-id>"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "search_only"
 title: "<title>"
 type: "<concept | decision | pattern | failure | refactoring | audit | release | component | prompt | question | synthesis | source>"
 status: "draft"
 confidence: "low"
+created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
 related_version: "V0.0.0"
 sources:
@@ -32,7 +43,7 @@ tags:
 
 ## Relations
 
-- Related to: `<related-page>`
+- [Authoritative source or related record](<relative-path-to-authoritative-source.md>)
 
 ## Limitations
 
@@ -41,3 +52,4 @@ tags:
 ## Next Review
 
 YYYY-MM-DD
+```

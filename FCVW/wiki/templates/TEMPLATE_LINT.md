@@ -1,8 +1,19 @@
+# Template: wiki lint report
+
+```markdown
 ---
+schema: "fcvw/wiki@1"
+id: "LINT-YYYYMMDD-<short-id>"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "search_only"
 title: "LLM Wiki Lint Report"
 type: "audit"
 status: "draft"
 confidence: "low"
+created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
 related_version: "V0.0.0"
 sources:
@@ -54,3 +65,8 @@ YYYY-MM-DD
 ## Result
 
 `approved` / `approved with reservations` / `rejected`
+
+## Authoritative sources and follow-up
+
+- [Wiki schema, source record, or follow-up plan](<relative-path-to-authoritative-source.md>)
+```

@@ -33,7 +33,7 @@ This directory is the governance layer installed in a project. `AGENTS.md` remai
 
 ### Project profiles — instantiate and preserve
 
-`BRIEFING.md`, `DATA.md`, `DESIGN.md`, `ENVIRONMENT.md`, `MANIFEST.md`, `PERFORMANCE.md`, `SCOPE.md`, `SECURITY.md`, `STACK.md`, and `WORKFLOW.md`.
+`APP_RULES.md`, `BRIEFING.md`, `DATA.md`, `DESIGN.md`, `ENVIRONMENT.md`, `MANIFEST.md`, `PERFORMANCE.md`, `SCOPE.md`, `SECURITY.md`, `STACK.md`, and `WORKFLOW.md`.
 
 Some profiles contain generic guidance plus clearly marked project sections. Framework upgrades must never overwrite populated project values.
 
@@ -43,7 +43,7 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ### Generated summaries — regenerate
 
-`FILESYSTEM.md`, `wiki/index.md`, `wiki/log.md`, and `wiki/metrics.md`.
+`DOCUMENT_GRAPH.md`, `FILESYSTEM.md`, `wiki/index.md`, `wiki/log.md`, and `wiki/metrics.md`.
 
 ## Framework versus application releases
 
@@ -57,3 +57,14 @@ The namespaces must not be mixed.
 ## Clean baseline rule
 
 Empty record directories keep a README only. Application examples, histories, and production-derived comparison fixtures remain outside the framework project and its clean distribution.
+
+## New operational navigation
+
+| Need | Load first | Validation |
+|---|---|---|
+| Review application-specific rules | [`APP_RULES.md`](APP_RULES.md) | unique rule IDs and project-profile ownership |
+| Select the next plan | [`Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md), then [`Plans/pending/QUEUE.md`](Plans/pending/QUEUE.md) | queue/state consistency |
+| Browse all governed Markdown | [`DOCUMENT_GRAPH.md`](DOCUMENT_GRAPH.md) | incoming links and entrypoint reachability |
+| Build optional lexical context | [`AI.md`](AI.md) | mandatory routes remain authoritative |
+
+`DOCUMENT_GRAPH.md` is a generated navigation surface for Obsidian and portable Markdown readers. It does not become a source of policy merely because it links one.

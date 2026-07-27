@@ -22,3 +22,7 @@ last_reviewed: "2026-07-15"
 | Exact legacy baseline entries | decreasing | 0 |
 
 Application projects regenerate these values. Do not copy metrics from another application.
+
+## Relationships
+
+Metrics are regenerated from the [wiki operating contract](README.md), [schema](schema.md), and [taxonomy](taxonomy.md).

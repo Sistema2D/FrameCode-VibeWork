@@ -5,7 +5,7 @@ Reusable empty models. Templates use placeholders intentionally and are replaced
 Core templates:
 
 - change plan, application release, and framework release;
-- ADR, troubleshooting, audit, briefing, data, environment, and module documentation;
+- ADR, troubleshooting, audit, language-specific release review, briefing, data, environment, and module documentation;
 - refactoring controls and post-validation;
 - automation, hook, watcher, maintenance loop, and governance gate;
 - skill/agent proposal and self-improvement report;

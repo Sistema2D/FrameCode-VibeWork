@@ -46,11 +46,13 @@ Items:
 
 ## Records Location
 
-This file defines the audit methodology. Formal audit reports, when created, must be kept in `audits/` at the root of the application.
+This file defines the audit methodology. Formal audit reports, when created, must be kept in `FCVW/audits/` in the application repository.
 
 Reusable syntheses derived from audits can be recorded in `wiki/audits/`, provided they point to the formal report, plan, changelog, or official document used as source.
 
 The governance wiki does not replace formal reports, plans, changelogs, or official documents.
+
+Create new formal reports from the portable [audit record template](governance/TEMPLATE_AUDIT.md). An instantiated audit is a preserved record and contains Markdown links to its authoritative sources and follow-up plan.
 
 ### Version Audit
 
@@ -129,7 +131,7 @@ Items:
 > This checklist is for **pre-release auditing** (coherence of the repository as a whole). The **task closure** checklist is in `AGENTS.md`.
 
 - [ ] `AGENTS.md` cites all relevant official documents.
-- [ ] The repository root remains clean for framework distribution: bridge/public files such as `README.md`, `AGENTS.md`, `.gitignore`, `.cursorrules`, `.windsurfrules`, and `.github/` may exist, but no permanent root `docs/`, root `package.json`, root `package-lock.json`, root `tests/`, or framework-owned generated site artifacts are present.
+- [ ] The repository root remains clean for framework distribution: bridge/public files such as `README.md`, `AGENTS.md`, `.gitignore`, `.cursorrules`, `.windsurfrules`, and `.github/` may exist; ignored `.obsidian/` state may exist only in the local source checkout and must be absent from release assets; no permanent root `docs/`, root `package.json`, root `package-lock.json`, root `tests/`, or framework-owned generated site artifacts are present.
 - [ ] The framework baseline does not contain `FCVW/docs/`; public documentation sites belong to external repositories or deployment pipelines.
 - [ ] `STACK.md` records the correct version.
 - [ ] `changelogs/Vx.y.z.md` exists.
@@ -207,3 +209,19 @@ YYYY-MM-DD
 
 -
 ```
+
+## Document graph audit
+
+- [ ] Every governed Markdown artifact is reachable from `AGENTS.md`, `README.md`, `FCVW/README.md`, or a linked catalog.
+- [ ] Every non-entrypoint artifact has an incoming link or a schema-based, justified exception.
+- [ ] Every generated record links its authoritative source, plan, decision, release, or governing policy.
+- [ ] Standard relative Markdown links provide portable Obsidian backlinks.
+- [ ] Queues and catalogs contain no stale, duplicate, or missing records.
+- [ ] `DOCUMENT_GRAPH.md` was regenerated after structural changes.
+
+## Proportionality audit
+
+- [ ] New abstractions, dependencies, wrappers, layers, services, and material files have a demonstrated current need.
+- [ ] Existing code, native capabilities, and installed dependencies were checked first.
+- [ ] Simplification did not weaken mandatory safeguards.
+- [ ] A new skill was not created when an inline checklist or existing gate already covered the procedure.

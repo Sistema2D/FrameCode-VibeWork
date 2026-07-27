@@ -57,3 +57,11 @@ The following are always project-owned after instantiation:
 - populated project profiles.
 
 An upstream release must publish a file-role manifest or equivalent migration table so selective upgrade does not depend on guesswork.
+
+## New operational surfaces
+
+- `APP_RULES.md` is a preserved project profile and is never overwritten by a framework upgrade.
+- `Plans/pending/QUEUE.md` and `Plans/in_progress/QUEUE.md` are project-owned operational indexes.
+- `DOCUMENT_GRAPH.md` is generated and may be regenerated from the physical Markdown graph.
+- Context indexes are disposable generated artifacts and never replace their source documents.
+- Language-specific release variants contain the same ownership classes as the canonical source. A user downloads one variant; its framework policies and templates remain framework-owned, while populated project profiles and new project records become project-owned. FCVW does not install or own parallel language trees in the project.

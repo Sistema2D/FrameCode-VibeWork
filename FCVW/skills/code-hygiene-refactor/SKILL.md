@@ -2,7 +2,7 @@
 schema: "fcvw/skill@1"
 name: "code-hygiene-refactor"
 description: "Select a bounded, behavior-preserving code-hygiene batch."
-version: "1.1.1"
+version: "1.2.0"
 trigger_keywords:
   - "code hygiene"
   - "duplication"
@@ -41,6 +41,30 @@ Active plan and scope, changed-path and ownership evidence, similar-code search,
 - Do not introduce new dependencies for cleanup without explicit research and plan approval.
 - Prefer extracting existing repeated logic over inventing generic abstractions.
 - Keep each cleanup batch reviewable and reversible.
+
+## Proportionality Check
+
+Before creating a utility, service, wrapper, component, dependency, file, layer, or parallel mechanism, evaluate in order:
+
+1. Is the behavior necessary in the current scope?
+2. Does the codebase already contain a complete or partial solution?
+3. Does the language, framework, platform, or infrastructure provide a native capability?
+4. Does an already installed dependency solve it adequately?
+5. Only then, is new code justified?
+
+For any non-trivial increase in technical complexity, record:
+
+- the real problem and root cause;
+- reused assets and searches performed;
+- native and installed alternatives considered;
+- why the smallest viable option is insufficient;
+- minimum behavior tests;
+- limitations of the deliberate simplification; and
+- the condition that would justify future evolution.
+
+This check is mandatory when adding a dependency, abstraction, service, wrapper, architectural layer, or parallel workflow. It is advisory for small direct changes whose implementation is self-evidently bounded. It must never reduce security, privacy, accessibility, traceability, validation, audit, compliance, data integrity, or risk-required tests.
+
+Do not create a separate anti-overengineering skill unless repeated evidence shows this integrated check cannot cover the workflow.
 
 ## Hygiene Scan
 

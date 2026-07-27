@@ -27,3 +27,8 @@ Normative governance is stored in portable Markdown and version control. Optiona
 ## Supersession
 
 A replacement ADR must preserve a runtime-independent baseline or document a breaking migration.
+
+## Related records
+
+- [Artifact schemas](../SCHEMAS.md)
+- [Artifact ownership and upgrades](../OWNERSHIP.md)

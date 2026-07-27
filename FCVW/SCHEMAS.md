@@ -29,6 +29,8 @@ Required frontmatter: `id`, `status`, `priority`, `risk`, `created_at`, `updated
 
 Allowed statuses: `pending`, `in_progress`, `completed`, `discontinued`.
 
+Priority and risk use the controlled values `P1` through `P5` and `R1` through `R5`. The values encoded in `id` and filename must match frontmatter. Required scalar fields cannot be empty, and `context_files` must be a non-empty list of resolvable local paths.
+
 Allowed regression contracts: `required`, `not_applicable`. The body requirements and completion blockers are defined in `REGRESSION_GUARDS.md`.
 
 The status must match the containing directory. IDs use `P1..P5-R1..R5-YYYY-MM-DD-slug`.
@@ -37,29 +39,37 @@ The status must match the containing directory. IDs use `P1..P5-R1..R5-YYYY-MM-D
 
 ## Application changelog — `fcvw/changelog@1`
 
-Required: application version, date, release status, release type, related plans, summary, affected areas, validation, known gaps, and rollback.
+Required: application version, date, release status, release type, non-empty related plans, summary, affected areas or categorized changes, validation, known gaps, and rollback. New full release records with `artifact_role: record` also require record ownership/preservation, content and publication revisions, non-empty language coverage, external publication state, security/data impact, migration, assets, checksums, publication evidence, and post-release validation. Sections remain present with a specific `not applicable` rationale when the surface does not apply.
 
 Allowed release statuses: `unreleased`, `in_preparation`, `published`, `canceled`.
 
+Related plans must exist and published releases reference completed plans. When `external_publication: published`, the record contains a 40-character deployed/tagged revision and an external evidence URL.
+
 ## Framework release — `fcvw/framework-release@1`
 
-Required: FCVW version, compatibility, migration note, created/modified/removed framework surfaces, schema changes, validation, and publication status.
+Required: FCVW version, compatibility, migration note, separate added/changed/removed framework surfaces, ownership/path changes, schema changes, validation, and publication status. New records declare `artifact_role: record`, framework ownership, preservation strategy, release type, compatibility, content-baseline `source_revision`, tagged `publication_revision`, release languages, and related plans.
+
+Allowed publication states are `in_preparation`, `ready`, `published`, and `canceled`. A `ready` record identifies an earlier immutable 40-character content baseline. A published record additionally identifies its 40-character tagged publication revision, references only completed plans, lists all four language-specific assets and their SHA-256 values, and links the external GitHub Release. At most one framework release may be `in_preparation` or `ready`.
 
 Framework records live under `framework-releases/`, never under application `changelogs/`.
 
 ## Wiki page — `fcvw/wiki@1`
 
-Required for new knowledge pages: `id`, `title`, `type`, `status`, `confidence`, `created_at`, `last_reviewed`, `sources`, and `tags`.
+Required for new knowledge pages: `id`, `artifact_role: record`, owner, preservation strategy, retrieval scope, `title`, `type`, `status`, `confidence`, `created_at`, `last_reviewed`, `sources`, and `tags`.
 
 Session IDs use `SES-YYYYMMDD-HHMMSS-<short-id>`; sequential numbers may be displayed but are not unique identifiers.
 
 ## Regression record — `fcvw/regression@1`
 
-Required frontmatter: `id`, `title`, `type`, `severity`, `status`, `detected_at`, `last_reviewed`, `related_plan`, `sources`, and `tags`.
+Required frontmatter: `id`, `artifact_role: record`, owner, preservation strategy, retrieval scope, `title`, `type`, `severity`, `status`, `detected_at`, `last_reviewed`, `related_plan`, `sources`, and `tags`.
 
 Allowed types: `functional`, `interface`, `data`, `visual`, `security`, `ai`, `governance`, `documentation`, `performance`, and `operations`. Allowed statuses: `detected`, `mitigated`, `resolved`, `accepted`, `superseded`. IDs use `REG-YYYYMMDD-<short-id>` so parallel records do not rely on a shared counter.
 
 The body records what regressed, detection, root cause, missing guardrail, permanent guardrail, replay test, related release, and residual risk. Reusable records live under `wiki/regressions/`.
+
+## Formal audit — `fcvw/audit@1`
+
+Required frontmatter: `id`, `artifact_role: record`, owner, preservation strategy, status, `created_at`, `last_reviewed`, and non-empty `sources`. The body records scope, authoritative sources through Markdown links, method, severity-classified findings, validation, limitations, residual risk, and linked follow-up.
 
 ## Skill — `fcvw/skill@1`
 
@@ -84,3 +94,69 @@ The baseline is valid only with the validator's `incremental` profile. Matching 
 - Renaming a required field or changing its meaning is breaking. `fcvw/plan@2` is therefore explicit rather than silently tightening `fcvw/plan@1`.
 - Legacy records are preserved and validated against an explicit baseline.
 - New changes must not expand legacy debt.
+
+## Portable frontmatter profile
+
+FCVW accepts scalars and first-level lists. Dates are ISO strings. Duplicate keys, nested mappings/lists, anchors, aliases, tags, and block scalar syntax are invalid. Unknown fields remain allowed unless they conflict with ownership or lifecycle.
+
+New or substantively changed records should declare `artifact_role`, `owner`, and `upgrade_strategy`. Historical records remain readable without normalization solely for metadata.
+
+Optional retrieval fields are `language`, `theme`, `tags`, `authority`, `last_reviewed`, `retrieval_priority`, and `retrieval_scope`. Allowed scopes are `always`, `routed`, `search_only`, `exact_only`, and `excluded_by_default`; priorities are `high`, `normal`, and `low`; authority values are `canonical`, `routed`, `historical`, and `generated`.
+
+Policies and the framework lock default to canonical authority. Project profiles default to routed authority. Records default to historical authority and `exact_only` or `search_only` according to category. Templates, examples, and generated artifacts default to generated authority and `excluded_by_default`. Those lower-authority categories cannot elevate their scope or become normative through metadata.
+
+
+### Record adoption matrix
+
+| Record category | New records | Existing history | Default retrieval |
+|---|---|---|---|
+| Active plans in every state | required by `fcvw/plan@2` | legacy-readable; migrate only when substantively reopened | `exact_only` plus active-plan routing |
+| Session syntheses and handoffs | required by the applicable wiki schema | preserve without normalization | `search_only` |
+| Audits and governance/validation reports | identity, status, dates, ownership, upgrade strategy, and sources required | preserve without normalization | `search_only` |
+| Troubleshooting and regression records | typed schema required | preserve confirmed historical evidence | `search_only` or routed by failure |
+| Architectural decisions | stable ID, status, scope, ownership, and relations required | preserve immutable records | `routed` |
+| Application changelogs and framework releases | release schema required | preserve publication evidence | `exact_only` |
+| Migration records | record metadata required when stored separately; canonical `MIGRATIONS.md` remains policy | preserve | `routed` |
+| Wiki knowledge | `fcvw/wiki@1` required | legacy-readable until edited | metadata-selected |
+| Templates and examples | classification recommended; placeholders remain allowed | no forced rewrite | `excluded_by_default` |
+| Generated catalogs and indexes | generated role plus regenerate strategy required | regenerate | `excluded_by_default` |
+
+Missing optional metadata does not invalidate untouched history. Any new or substantively edited record must use the row above, and no retrieval metadata can elevate a record above its owning canonical source.
+
+New records also declare `record_scope: application | framework` when their scope determines clean-distribution eligibility. Only records explicitly scoped to `framework` may remain in a clean FCVW baseline; an absent or application scope is treated as downstream history.
+## Plan queue ? `fcvw/plan-queue@1`
+
+Required frontmatter: `schema`, `artifact_role`, `owner`, `upgrade_strategy`, `state`, and `updated_at`. Allowed states are `pending` and `in_progress`. The canonical table contains order, Markdown-linked plan ID, category, blocker, and override reason.
+
+Each link resolves exactly to the named plan in the queue's own state directory. `none`, `-`, or an empty blocker means unblocked. Internal blockers are comma-separated plan IDs that exist and are not already terminal; an external blocker uses `external: <specific reason>`. Pending work may preempt in-progress work only with `before_in_progress: <specific reason>` in its override column. Within one category, P1 through P5 is the mandatory tie-break order unless a concrete override explains the inversion.
+
+## Application rules ? `fcvw/app-rules@1`
+
+`FCVW/APP_RULES.md` is a preserved `project_profile`. Rules use stable `APP-RULE-NNN` IDs and a controlled status of `active`, `deprecated`, or `superseded`. Every rule records non-empty sections for Rule, Affected components, Rationale and expected behavior, Exceptions, and Related records. Affected components and related records contain navigable Markdown links. Examples inside fenced code blocks do not instantiate rules.
+
+## Document graph ? `fcvw/document-graph@1`
+
+`FCVW/DOCUMENT_GRAPH.md` is generated and regenerated. Each governed Markdown artifact must be reachable from an official entrypoint or explicit catalog. Entry points are the only default exception to the incoming-link requirement.
+
+Frontmatter relationships such as `context_files`, `sources`, `related_plan`, `related_release`, `related`, `supersedes`, and `superseded_by` must resolve when they identify local paths. Plain metadata identifiers do not replace a navigable Markdown relationship when Obsidian backlink behavior is required.
+
+Artifacts with `artifact_role: record` or `artifact_role: generated` require an outgoing relationship to an authoritative local source; self-links and a link only to the generated catalog do not satisfy it. A deliberate orphan exception requires `orphan_policy: allowed`, a specific `orphan_reason`, accountable `orphan_owner`, and a non-expired ISO `orphan_review_due`.
+
+Markdown link destinations are source-relative and portable; vault-root interpretation applies only to Obsidian wikilinks. Inline-code examples are not graph edges, and paths containing spaces use valid percent-encoded or angle-bracket destinations.
+
+
+## Language review - `fcvw/language-review@1`
+
+Each complete language-specific release variant contains `FCVW/LANGUAGE_REVIEW.md` with `language`, `status`, `reviewer`, `reviewed_at`, and `source_revision`. Allowed statuses are `draft`, `in_review`, `approved`, and `rejected`.
+
+Only `approved` review evidence for the exact immutable source revision permits a language-specific release asset. Explicit release validation receives an external authoritative clean source root and revision, compares the `en-US` functional manifest against that source, uses its own authoritative validator against the source and every staged variant, and checks structural and machine-surface parity. Release-only review evidence is excluded from source-manifest equality but must exist and match across all variants. Candidate validator copies are never executed before parity and trust are established. This record validates accountable language adaptation; directory naming or machine translation alone is insufficient.
+
+This schema is a release-production contract. Normal framework validation, instantiation, and use neither require multiple language directories nor select a language automatically.
+
+Create the evidence from [TEMPLATE_LANGUAGE_REVIEW.md](governance/TEMPLATE_LANGUAGE_REVIEW.md).
+
+## Troubleshooting - `fcvw/troubleshooting@1`
+
+New troubleshooting records use a collision-resistant `TRB-YYYYMMDD-<short-id>` ID and declare record ownership, `record_scope`, `search_only` retrieval, failure status, confidence, detection/review dates, related plan, sources, and tags. Allowed statuses are `draft`, `in_validation`, `validated`, and `obsolete`; allowed confidence values are `low`, `medium`, and `high`.
+
+The record preserves identification, symptom, hypotheses, root cause, applied solution, validation, prevention, wiki-promotion decision, and final status. A navigable Markdown link connects it to its authoritative plan, policy, or evidence. Untouched historical troubleshooting without a schema remains readable; once substantively edited, migrate it through [TEMPLATE_TROUBLESHOOTING.md](governance/TEMPLATE_TROUBLESHOOTING.md).

@@ -1,15 +1,26 @@
 # Template: Troubleshooting Record
 
-Save in: `troubleshooting/{YYYY-MM-DD}-{short-description}.md`
+Save in: `FCVW/troubleshooting/{YYYY-MM-DD}-{short-description}.md`
 
-```markdown
+````markdown
 ---
+schema: "fcvw/troubleshooting@1"
+id: "TRB-YYYYMMDD-<short-id>"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "search_only"
 title: "<Short description of the issue>"
 type: "failure"
 status: "draft | in_validation | validated | obsolete"
 confidence: "low | medium | high"
+detected_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
 related_version: "Vx.y.z"
+related_plan: "<plan-id>"
+sources:
+  - "<authoritative-plan-policy-or-evidence-path>"
 tags:
   - "#failure-log"
   - "<additional tags>"
@@ -24,7 +35,7 @@ tags:
 - **Affected version:** `Vx.y.z`
 - **Affected files / modules:**
   - `<path/to/file.ext>`
-- **Related plan (if any):** `Plans/{status}/<plan-file>.md`
+- **Related plan:** [Plan or governing source](<relative-path-to-authoritative-source.md>)
 
 ## 2. Symptom Description
 
@@ -77,4 +88,4 @@ tags:
 `open | investigating | resolved | wont-fix`
 
 **Resolution date:** YYYY-MM-DD (when resolved)
-```
+````

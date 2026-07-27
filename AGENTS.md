@@ -84,3 +84,13 @@ The clean framework must not contain application plans, application releases, ru
 - `FILESYSTEM.md` is regenerated when paths change.
 - Version surfaces agree.
 - No unrelated or application-owned content entered the clean baseline.
+
+## Document graph, application rules, and plan queues
+
+- Select active work from `FCVW/Plans/in_progress/QUEUE.md` before `pending/QUEUE.md`; repair an invalid queue before implementation.
+- Use `python tools/plan_queue_fcvw.py --root . --recommend` for the deterministic recommendation; a queue finding blocks the recommendation.
+- For application behavior, workflow, data, permission, interface, or cross-module changes, consult `FCVW/APP_RULES.md` and record affected rule IDs in the plan.
+- Every governed Markdown artifact must be reachable from `AGENTS.md`, `README.md`, `FCVW/README.md`, or a catalog linked from those entrypoints.
+- Generated records must have an incoming catalog or relationship link and an outgoing link to their authoritative source, plan, decision, release, or governing policy.
+- Use portable relative Markdown links as the canonical link form. Wikilinks may supplement them but may not be the only relationship.
+- Regenerate `FCVW/DOCUMENT_GRAPH.md` with `python tools/document_graph_fcvw.py --root . --write` after adding, moving, or removing governed Markdown.

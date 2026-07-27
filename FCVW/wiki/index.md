@@ -10,3 +10,7 @@ upgrade_strategy: "regenerate"
 No project-specific knowledge has been created in the clean template.
 
 Promote and link current canonical pages here after instantiation. Archives and session histories are searched on demand rather than enumerated in the active index.
+
+## Relationships
+
+Generated from the governed knowledge structure in the [wiki index](README.md) and [taxonomy](taxonomy.md).

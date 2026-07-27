@@ -7,5 +7,6 @@ node_modules/
 __pycache__/
 .pytest_cache/
 .fcvw-cache/
+.obsidian/
 *.py[cod]
 .DS_Store

@@ -55,3 +55,24 @@ python tools/validate_fcvw.py --root . --profile incremental --baseline path/to/
 Start from `governance/TEMPLATE_LEGACY_BASELINE.md`. The file and each row are time-bounded. Every entry must contain the exact path, rule identifier, existing message, justification, owner, and review date. Only the exact tuple `path + rule + message` becomes non-blocking; changed messages and new paths still fail. Expired or malformed baselines fail configuration, and entries that no longer match are reported as stale warnings so they can be removed.
 
 Without `--baseline`, `incremental` blocks all applicable findings. `--baseline` is rejected under other profiles; `strict` always blocks all applicable findings.
+
+## V0.13.0 to V0.14.0
+
+V0.14.0 introduces structured frontmatter validation, plan queues, application rules, document-graph integrity, optional lexical retrieval, proportionality governance, and language-specific release contracts.
+
+Required migration:
+
+1. Preserve project profiles and records.
+2. Add `APP_RULES.md` as a preserved project profile and populate only confirmed rules.
+3. Add active plans to their exact `QUEUE.md`; completed and discontinued records remain historical.
+4. Regenerate `DOCUMENT_GRAPH.md` and resolve new orphans rather than hiding them.
+5. Validate first-level frontmatter lists and repair duplicate or unsupported YAML constructs in substantively touched files.
+6. Keep optional context indexes outside normative records and rebuild them from sources.
+7. Do not migrate the repository or an installed framework to a multilingual layout. Prepare `pt-BR`, `en-US`, `es`, and `de` as independent empty-template variants in external release staging.
+8. Keep `FRAMEWORK_LOCK.md` on the published installed baseline while V0.14.0 is `in_preparation`; advance it with the release record only at the `ready` gate.
+9. Bind complete language-variant validation to an external clean source root and immutable source revision; do not validate a staged variant against itself.
+10. Record the reviewed content baseline separately from the later tagged publication revision to avoid a self-referential commit hash.
+
+Historical artifacts are not rewritten only to add retrieval metadata or new optional ownership fields.
+
+Language choice requires no downstream migration. A user selects one language by downloading that release variant, and the resulting framework behaves as a normal monolingual tree without automatic detection, fallback, or synchronization.

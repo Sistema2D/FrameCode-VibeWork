@@ -6,6 +6,9 @@ Save as `Plans/pending/P{1..5}-R{1..5}-YYYY-MM-DD-<slug>.md` and replace every p
 ---
 schema: "fcvw/plan@2"
 id: "P3-R2-YYYY-MM-DD-short-description"
+artifact_role: "record"
+upgrade_strategy: "preserve"
+retrieval_scope: "exact_only"
 status: "pending"
 priority: "P3"
 risk: "R2"
@@ -46,6 +49,23 @@ context_files:
 ## Implementation plan
 
 1. <Bounded step.>
+
+## Proportionality gate
+
+Complete this section when the change adds a dependency, abstraction, service, wrapper, architectural layer, parallel mechanism, or other non-trivial technical complexity.
+
+- Real problem and root cause:
+- Necessary in current scope:
+- Existing codebase solution checked:
+- Native platform capability checked:
+- Installed dependency checked:
+- New code or complexity justified:
+- Minimum non-trivial behavior tests:
+- Deliberate simplification and limitations:
+- Condition for future evolution:
+- Mandatory safeguards preserved: security, privacy, accessibility, traceability, validation, audit, compliance, data integrity, documentation, and risk-required tests.
+
+For a trivial bounded change, state `Not applicable ? <specific reason>`.
 
 ## Acceptance criteria
 
@@ -90,6 +110,8 @@ For `regression_contract: not_applicable`, replace the subsections with `Justifi
 - Regression gate:
 - Security/data/refactoring/skill/release gate:
 - Decomposition required:
+The plan must be listed by its state queue and contain at least one portable Markdown link to an authoritative source or related record before closeout.
+
 
 ## Related records
 

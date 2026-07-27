@@ -24,3 +24,13 @@ Outcomes are `pass`, `warn`, or `block`. A bypass records authority, justificati
 Use `governance/TEMPLATE_GOVERNANCE_GATE_REPORT.md`.
 
 The Regression gate is evaluated before plan completion. See `REGRESSION_GUARDS.md` for bypass requirements and confirmed-regression handling.
+
+## Additional cross-cutting gates
+
+| Gate | Trigger | Minimum evidence | Blocking condition |
+|---|---|---|---|
+| Proportionality | new dependency, abstraction, wrapper, module, service, layer, or material file | need, reuse search, native capability, installed dependency, new-code justification | no current need, avoidable duplication, speculative scope, or mandatory safeguard removed |
+| Document graph | governed Markdown added, moved, renamed, removed, or generated | incoming link, authoritative outgoing relationship for records, entrypoint reachability, regenerated catalog | orphan, unreachable artifact, broken/ambiguous link, or record without source |
+| Plan queue | plan created or changes active state | exact queue membership, category/order, blocker and override reason | missing, duplicate, stale, wrong-state, or unexplained category inversion |
+
+The Proportionality gate is advisory when evidence is adequate. It may not bypass security, privacy, accessibility, compliance, audit, data-integrity, documentation, or risk-proportional testing requirements.

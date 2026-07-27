@@ -1,8 +1,19 @@
+# Template: release synthesis
+
+```markdown
 ---
+schema: "fcvw/wiki@1"
+id: "REL-YYYYMMDD-<short-id>"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "search_only"
 title: "Release Synthesis <Vx.y.z>"
 type: "release"
 status: "draft"
 confidence: "medium"
+created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
 related_version: "Vx.y.z"
 sources:
@@ -52,3 +63,8 @@ tags:
 ## Next Recommendations
 
 -
+
+## Authoritative release and related records
+
+- [Application changelog or framework release](<relative-path-to-release-record.md>)
+```

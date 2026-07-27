@@ -1,8 +1,19 @@
+# Template: technical-debt knowledge
+
+```markdown
 ---
+schema: "fcvw/wiki@1"
+id: "DEBT-YYYYMMDD-<short-id>"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "search_only"
 title: "Technical Debt card: [Short Description]"
 type: "concept"
 status: "draft"
 confidence: "medium"
+created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
 related_version: "Vx.y.z"
 sources:
@@ -42,3 +53,8 @@ tags:
 ### 3.2 Refactoring Complexity
 *   **Expected Complexity Score:** Low / Moderate / High
 *   **Validation Plan:** [Describe how to test the refactoring, e.g., regression check on workflow Y.]
+
+## 4. Authoritative source and follow-up
+
+- [Code, plan, decision, or issue that owns this debt](<relative-path-to-authoritative-source.md>)
+```

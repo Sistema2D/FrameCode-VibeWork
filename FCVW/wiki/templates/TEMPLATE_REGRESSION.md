@@ -4,6 +4,11 @@
 ---
 schema: "fcvw/regression@1"
 id: "REG-YYYYMMDD-short-id"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "search_only"
 title: "<Short title>"
 type: "functional | interface | data | visual | security | ai | governance | documentation | performance | operations"
 severity: "R1 | R2 | R3 | R4 | R5"
@@ -45,9 +50,9 @@ tags:
 
 ## Related release and records
 
-- Plan: `<plan-id>`
-- Changelog/framework release: `<path>`
-- Troubleshooting/decision: `<path or not applicable>`
+- [Plan](<relative-path-to-plan.md>)
+- [Changelog or framework release](<relative-path-to-release.md>)
+- [Troubleshooting or decision](<relative-path-to-record.md>)
 
 ## Residual risk and review
 

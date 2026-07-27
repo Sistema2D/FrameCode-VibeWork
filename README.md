@@ -13,7 +13,8 @@ Scoped planning · regression protection · selective context · controlled tech
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
 [![Release](https://img.shields.io/badge/Release-v0.13.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0)
 
-Stable release **V0.13.0** · Documentation patch **V0.13.1 in preparation**
+Stable release **V0.13.0** - Local candidate **V0.14.0 in preparation**
+
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
@@ -194,6 +195,8 @@ Consulte [REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md) para blockers e [TEST
 ```powershell
 python -m py_compile tools/validate_fcvw.py tools/test_validate_fcvw.py
 python tools/test_validate_fcvw.py
+python tools/test_open_issues.py
+python tools/document_graph_fcvw.py --root .
 python tools/validate_fcvw.py --root . --profile clean-template
 ```
 
@@ -260,7 +263,10 @@ FCVW separa dois namespaces:
 - **aplicação:** `FCVW/changelogs/Vx.y.z.md` e a fonte de versão do produto;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` e [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-A release estável atual é [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0), com pacote limpo e SHA-256 publicados. O patch documental [V0.13.1](FCVW/framework-releases/V0.13.1.md) está **in preparation** e não possui tag ou release.
+A release estável atual é [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0), com pacote limpo e SHA-256 publicados. A candidata local [V0.14.0](FCVW/framework-releases/V0.14.0.md) incorpora a candidata V0.13.1 e não possui commit, tag, asset ou release externo.
+
+A partir da release com distribuição multilíngue, o usuário escolhe o idioma ao baixar um único template vazio (`pt-BR`, `en-US`, `es` ou `de`). Cada pasta ou asset é autônomo e monolíngue; o framework não detecta, alterna nem sincroniza idiomas durante o uso. A presença e a equivalência dos quatro templates são métricas da release.
+
 
 Uma mudança do FCVW não incrementa a versão da aplicação. `published` só é usado após publicação real; tag, push, deploy e release externo exigem autoridade e evidência separadas.
 
@@ -483,6 +489,8 @@ See [REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md) for blockers and [TESTS.md
 python -m py_compile tools/validate_fcvw.py tools/test_validate_fcvw.py
 python tools/test_validate_fcvw.py
 python tools/validate_fcvw.py --root . --profile clean-template
+python tools/test_open_issues.py
+python tools/document_graph_fcvw.py --root .
 ```
 
 After application profiles are instantiated:
@@ -548,9 +556,12 @@ FCVW separates two namespaces:
 - **application:** `FCVW/changelogs/Vx.y.z.md` and the product version source;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` and [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-The current stable release is [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0), with a published clean package and SHA-256. Documentation patch [V0.13.1](FCVW/framework-releases/V0.13.1.md) is **in preparation** and has no tag or release.
+The current stable release is [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0), with a published clean package and SHA-256. Local candidate [V0.14.0](FCVW/framework-releases/V0.14.0.md) incorporates the V0.13.1 candidate and has no commit, tag, asset, or external release.
+
+Starting with the multilingual distribution release, the user chooses a language by downloading one empty template (`pt-BR`, `en-US`, `es`, or `de`). Each folder or asset is standalone and monolingual; the framework does not detect, switch, or synchronize languages during use. Presence and parity of all four templates are release metrics.
 
 An FCVW change does not increment an application's version. `published` is used only after real publication; tags, pushes, deployments, and external releases require separate authority and evidence.
+
 
 [ENG-US navigation](#en-us) · [Top](#top)
 
@@ -600,9 +611,10 @@ V0.13 introduced ownership-aware migration, `plan@2` and `regression@1` schemas,
 
 <div align="center">
 
-Stable: [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0) · Next: [V0.13.1](FCVW/framework-releases/V0.13.1.md) in preparation
+Stable: [V0.13.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.13.0) · Next: [V0.14.0](FCVW/framework-releases/V0.14.0.md) in preparation
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
+
 
 [PT-BR](#pt-br) · [ENG-US](#en-us) · [Top](#top)
 

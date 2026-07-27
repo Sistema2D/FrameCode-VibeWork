@@ -131,6 +131,46 @@ context_files:
         validate_clean_template(root, findings)
         self.assertTrue(any(item.path == "production-export" for item in findings))
 
+    def test_local_obsidian_state_is_allowed_but_not_required(self) -> None:
+        temporary, root = self.make_root()
+        self.addCleanup(temporary.cleanup)
+        (root / ".obsidian").mkdir()
+        (root / ".obsidian" / "workspace.json").write_text("{}", encoding="utf-8")
+        findings: list[Finding] = []
+        validate_clean_template(root, findings)
+        self.assertFalse(any(item.path == ".obsidian" for item in findings))
+
+    def test_clean_profile_preserves_only_framework_scoped_history(self) -> None:
+        temporary, root = self.make_root()
+        self.addCleanup(temporary.cleanup)
+        audits = root / "FCVW" / "audits"
+        wiki = root / "FCVW" / "wiki"
+        audits.mkdir()
+        wiki.mkdir()
+        (audits / "framework.md").write_text(
+            "---\nrecord_scope: \"framework\"\n---\n# Framework audit\n",
+            encoding="utf-8",
+        )
+        (audits / "application.md").write_text(
+            "---\nrecord_scope: \"application\"\n---\n# Application audit\n",
+            encoding="utf-8",
+        )
+        (wiki / "framework.md").write_text(
+            "---\nrecord_scope: \"framework\"\n---\n# Framework knowledge\n",
+            encoding="utf-8",
+        )
+        (wiki / "application.md").write_text(
+            "---\nrecord_scope: \"application\"\n---\n# Application knowledge\n",
+            encoding="utf-8",
+        )
+        findings: list[Finding] = []
+        validate_clean_template(root, findings)
+        contaminated = {item.path for item in findings if item.rule == "clean-contamination"}
+        self.assertNotIn("FCVW/audits/framework.md", contaminated)
+        self.assertNotIn("FCVW/wiki/framework.md", contaminated)
+        self.assertIn("FCVW/audits/application.md", contaminated)
+        self.assertIn("FCVW/wiki/application.md", contaminated)
+
     def test_incomplete_skill_body_fails_contract(self) -> None:
         temporary, root = self.make_root()
         self.addCleanup(temporary.cleanup)

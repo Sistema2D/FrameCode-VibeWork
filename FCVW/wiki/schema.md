@@ -17,6 +17,10 @@ New non-index pages use:
 ---
 schema: "fcvw/wiki@1"
 id: "<collision-resistant-id>"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+retrieval_scope: "search_only"
 title: "<title>"
 type: "concept | decision | pattern | failure | regression | refactoring | audit | agent | release | session | component | prompt | question | synthesis | source | raw"
 status: "draft | in_validation | validated | obsolete | superseded | contradictory"
@@ -30,7 +34,9 @@ tags:
 ---
 ```
 
-Optional: `canonical_page`, `supersedes`, `superseded_by`, `related`, `related_version`, and `owner`.
+Optional: `canonical_page`, `supersedes`, `superseded_by`, `related`, and `related_version`.
+
+Every instantiated page contains at least one portable Markdown link to an authoritative source or related record. Frontmatter `sources` supports validation and retrieval, but does not by itself create an Obsidian backlink.
 
 ## IDs
 

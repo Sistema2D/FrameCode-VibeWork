@@ -188,7 +188,18 @@ Examples:
 - Mandatory constraints:
 - Prohibited technologies:
 
-### 9. Quality, Testing, and Validation
+### 9. Application Rules
+
+- Which business rules apply across more than one component?
+- Which workflows, permissions, calculations, synchronization rules, or interface conventions must never drift?
+- Which rule already exists only in code, tests, or team memory?
+- Which components enforce each rule?
+- Who can approve an exception?
+- What evidence demonstrates the expected behavior?
+- Which rules are temporary, deprecated, or superseded?
+- Which confirmed rules must be instantiated in `APP_RULES.md`?
+
+### 10. Quality, Testing, and Validation
 
 - How will the project be tested?
 - Which flows require mandatory manual testing?
@@ -197,7 +208,7 @@ Examples:
 - What criteria define that a version is ready?
 - What regressions would be unacceptable?
 
-### 10. Versioning and Governance
+### 11. Versioning and Governance
 
 - Initial version:
 - Versioning strategy:

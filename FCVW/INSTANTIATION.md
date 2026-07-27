@@ -26,6 +26,8 @@ Use this document when:
 
 ## Principles
 
+- Start from exactly one language-specific clean release variant selected by the user at download time.
+- Treat the downloaded variant as a normal monolingual framework tree; do not add, discover, or synchronize the other language variants.
 - Do not perform automatic recursive replacement in all files.
 - Do not alter generic templates as if they were canonical project documents.
 - Do not fill in placeholders without briefing evidence or explicit confirmation from the user.
@@ -117,3 +119,9 @@ Before closing the instantiation:
 ## Final Rule
 
 Instantiation is not a global textual replacement. It is a controlled migration from a generic framework to a specific project, with review of affected files, traceability via plan and changelog, and preservation of reusable templates.
+
+## Application-rule and graph initialization
+
+During Phase 0, review `APP_RULES.md` with briefing evidence. Set `instantiation_status: complete` only after known cross-cutting rules are recorded or the absence of current rules is explicitly justified.
+
+Create the first plan in `pending/`, add it to `pending/QUEUE.md`, then move both plan state and queue membership transactionally. After generated records or documentation are added, regenerate `DOCUMENT_GRAPH.md` and require zero blocking orphans before closeout.

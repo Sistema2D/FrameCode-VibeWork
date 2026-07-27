@@ -36,11 +36,18 @@
 - Theme: <light / dark / both>
 - Key components:
 
-## 6. Risks and Gaps
+## 6. Application Rules
+- Cross-cutting business rules:
+- Workflow, permission, calculation, or synchronization constraints:
+- Affected components:
+- Rule owners and exception authority:
+
+## 7. Risks and Gaps
 - Critical:
 - Relevant:
 
-## 7. Next Steps
+## 8. Next Steps
 - [ ] Create MANIFEST.md
 - [ ] Create SCOPE.md
 - [ ] Create STACK.md
+- [ ] Instantiate APP_RULES.md

@@ -120,3 +120,9 @@ Plans that alter application modules must state one of:
 - module documentation not applicable, with justification.
 
 The validation evidence must include the relevant documentation path or the explicit non-applicability reason.
+
+## Relationship with application rules
+
+When a module document describes a durable cross-module or domain constraint, link the corresponding `APP-RULE-NNN` entry in [`APP_RULES.md`](APP_RULES.md). Module documentation explains the local flow; `APP_RULES.md` owns the cross-cutting application rule.
+
+A relevant change records one of: rule unchanged after consultation, rule updated, rule added, or no matching application rule. Plain repeated prose in several module documents is not a substitute for a canonical application rule.

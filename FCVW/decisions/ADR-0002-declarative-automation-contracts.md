@@ -27,3 +27,8 @@ Scenario 1 defines automation as Markdown-only `fcvw/automation@1` contracts. Sc
 ## Supersession
 
 Changes to the contract schema follow `SCHEMAS.md` and require migration guidance when compatibility breaks.
+
+## Related records
+
+- [Declarative automation](../AUTOMATION.md)
+- [Artifact schemas](../SCHEMAS.md)

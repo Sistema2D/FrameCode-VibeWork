@@ -2,7 +2,7 @@
 schema: "fcvw/skill@1"
 name: "anti-monolith-guard"
 description: "Prevent mixed-responsibility modules and uncontrolled file growth."
-version: "1.1.1"
+version: "1.2.0"
 trigger_keywords:
   - "monolith"
   - "large file"
@@ -33,6 +33,21 @@ Load this skill before implementation when any condition is true:
 
 Active plan, target artifact, responsibility map, similar-code search, dependency/consumer evidence, current size or complexity indicators, and the checks that protect behavior during a split.
 
+## Applicability Classification
+
+Classify the target before applying numeric thresholds:
+
+| Artifact class | Automatic size enforcement | Review focus |
+|---|---|---|
+| Source code, query, executable configuration, or runtime prompt | Yes, using the closest project-adjusted budget | responsibility, coupling, side effects, test boundary |
+| Operational AI instruction or procedural skill | Warning by default; block only when mixed responsibilities or unsafe context loading are demonstrated | instruction hierarchy, retrieval cost, cohesion, provider neutrality |
+| Canonical documentation, specification, report, plan, decision, or release record | No numeric block | cohesion, discoverability, ownership, document-graph relationships |
+| Template, example, generated catalog, or historical record | No numeric block | schema correctness, generation source, reachability, preservation |
+
+Markdown is not automatically documentary: classify it by responsibility. A Markdown prompt that controls runtime behavior may be operational, while a long technical specification may remain one cohesive document.
+
+If the target is not source code or an operational instruction, record `not numerically applicable` and use document-graph and schema validation instead. Do not split prose merely to satisfy a line count.
+
 ## Hard Gates
 
 Stop and split the work before editing if any gate fails:
@@ -48,7 +63,7 @@ Stop and split the work before editing if any gate fails:
 
 ## Recommended Size Budgets
 
-These are governance thresholds, not universal language rules. A project may override them in `STACK.md` or `APPLICATION_DOCUMENTATION.md`.
+These are code-oriented governance defaults, not universal rules. Apply them only after the applicability classification. A project may resize them in `STACK.md` or `APPLICATION_DOCUMENTATION.md` when architecture, security, integrity, or performance evidence requires a different budget.
 
 | Artifact | Warning | Block unless justified |
 |---|---:|---:|
@@ -60,6 +75,18 @@ These are governance thresholds, not universal language rules. A project may ove
 | General module file | 250 lines | 400 lines |
 
 If a file crosses the warning threshold, record the reason in the plan. If it crosses the block threshold, split first or document why a temporary exception is safer.
+
+## Exceptions and Threshold Reassessment
+
+An exception may pass only when the plan records:
+
+- the concrete regression, security, architecture, integrity, performance, or cognitive-load harm that a split could cause;
+- why a smaller boundary, extraction, or existing module is insufficient;
+- the project-adjusted warning and block thresholds;
+- validation that protects the critical attribute; and
+- an owner and revisit condition.
+
+Line count alone never proves a monolith, and splitting into many low-value files can itself fail this gate. Exceptions cannot waive mandatory security, privacy, accessibility, data-integrity, audit, or regression controls.
 
 ## Boundary Pattern
 
@@ -104,6 +131,8 @@ Record this compact block in the active plan before editing:
 - Skill loaded: `skills/anti-monolith-guard/SKILL.md`
 - Target artifact:
 - Primary responsibility:
+- Artifact class: `source` / `operational instruction` / `documentation` / `record/template/generated`
+- Numeric threshold applicability: `applicable` / `warning only` / `not applicable`
 - Explicit non-responsibilities:
 - Size budget:
 - Similar code checked:

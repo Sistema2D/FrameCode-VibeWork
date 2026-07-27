@@ -10,13 +10,13 @@ upgrade_strategy: "replace_with_migration"
 | Field | Value |
 |---|---|
 | Framework | `FrameCode VibeWork` |
-| Installed version | `V0.13.1` |
-| Release state | `in_preparation` |
+| Installed version | `V0.13.0` |
+| Release state | `published` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
 | Installed modules | `core, plans, regression-guards, records, wiki, skills, declarative-automation, optional-validator` |
-| Last migration | `V0.12.0 -> V0.13.0`; V0.13.1 documentation patch requires no migration |
+| Last migration | `V0.12.0 -> V0.13.0` |
 
 ## Schema baselines
 

@@ -1,8 +1,19 @@
+# Template: reusable pattern
+
+```markdown
 ---
+schema: "fcvw/wiki@1"
+id: "PAT-YYYYMMDD-<short-id>"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "search_only"
 title: "<pattern name>"
 type: "pattern"
 status: "draft"
 confidence: "low"
+created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
 related_version: "V0.0.0"
 sources:
@@ -45,4 +56,5 @@ tags:
 
 ## Related Pages
 
-- `<page>`
+- [Plan, decision, audit, or source evidence](<relative-path-to-authoritative-source.md>)
+```

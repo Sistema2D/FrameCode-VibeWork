@@ -114,3 +114,34 @@ A plan is completed only when:
 - status and directory agree.
 
 Legacy plans retain their original schema. Apply the current schema when a legacy plan is substantively reopened.
+
+## Priority queues
+
+`Plans/in_progress/QUEUE.md` and `Plans/pending/QUEUE.md` are project-owned operational indexes. Every plan in either directory appears exactly once in its matching queue. Queue changes and plan lifecycle changes form one transaction.
+
+Recommendation order is:
+
+1. valid in-progress entries before pending entries, unless a pending entry has an explicit `before_in_progress: <specific reason>` override;
+2. unblocked entries before entries with unresolved dependencies;
+3. `correction`, `optimization`, `code_hygiene`, `visual`, then `other`;
+4. P1 through P5 within the same category, then explicit row order.
+
+A plan link must resolve exactly to the plan file in the queue's matching state directory. Use `none`, `-`, or an empty blocker for unblocked work; use comma-separated plan IDs for internal dependencies and `external: <specific reason>` for external dependencies. Resolved, unknown, or self-referential blockers are invalid.
+
+A category or same-category priority inversion requires a concrete override reason. Missing, stale, duplicate, wrong-target, or wrong-state queues block implementation until repaired; a provisional recommendation may be displayed but is not authoritative.
+
+## Solution proportionality
+
+Before adding a dependency, abstraction, wrapper, module, service, layer, or material new file, answer in order:
+
+1. Is the behavior necessary in the approved scope?
+2. Does an equivalent or reusable solution already exist in the codebase?
+3. Does the language, framework, platform, or infrastructure provide a suitable native capability?
+4. Does an already installed dependency satisfy the requirement?
+5. If not, what evidence justifies new code or dependency?
+
+The check is advisory for ordinary implementation and blocking when the proposal has no concrete need, duplicates an existing solution, or expands scope without approval. Simplification never overrides security, privacy, accessibility, traceability, validation, audit, data integrity, required documentation, or risk-proportional tests.
+
+## Document relationships
+
+Plans link affected policies and profiles through `context_files`, use portable Markdown links for related records, and remain reachable through their queue or generated plan index. A plan may not close while its related changelog, release, decision, regression, or validation evidence is an orphan.
