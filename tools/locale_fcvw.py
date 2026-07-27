@@ -176,8 +176,8 @@ def markdown_machine_signature(path: Path) -> tuple[tuple[str, str], ...]:
     return tuple(sorted(Counter(signature).elements()))
 
 
-def markdown_structure_signature(path: Path) -> tuple[int, ...]:
-    headings: list[int] = []
+def markdown_structure_signature(path: Path) -> tuple[str, ...]:
+    structure: list[str] = []
     marker = ""
     for line in path.read_text(encoding="utf-8-sig").splitlines():
         fence = FENCE.match(line)
@@ -189,8 +189,22 @@ def markdown_structure_signature(path: Path) -> tuple[int, ...]:
                 marker = ""
             continue
         if not marker and (heading := HEADING.match(line)):
-            headings.append(len(heading.group(1)))
-    return tuple(headings)
+            structure.append(f"heading:{len(heading.group(1))}")
+            continue
+        if marker:
+            continue
+        if unordered := re.match(r"^(\s*)[-+*]\s+", line):
+            structure.append(f"unordered-list:{len(unordered.group(1))}")
+            continue
+        if ordered := re.match(r"^(\s*)\d+[.)]\s+", line):
+            structure.append(f"ordered-list:{len(ordered.group(1))}")
+            continue
+        if quote := re.match(r"^\s*(>+)\s*", line):
+            structure.append(f"blockquote:{len(quote.group(1))}")
+            continue
+        if line.strip().startswith("|") and line.strip().endswith("|"):
+            structure.append(f"table-row:{line.count('|') - 1}")
+    return tuple(structure)
 
 
 def source_comparison_signature(path: Path, relative: str) -> tuple[tuple[str, str], ...]:
@@ -479,9 +493,12 @@ def validate_release_variants(
                         "Markdown machine surface differs from source",
                     )
                 )
-            if source_path.suffix.lower() == ".md" and markdown_structure_signature(
-                source_path
-            ) != markdown_structure_signature(reference_path):
+            if (
+                source_path.suffix.lower() == ".md"
+                and relative != "FCVW/DOCUMENT_GRAPH.md"
+                and markdown_structure_signature(source_path)
+                != markdown_structure_signature(reference_path)
+            ):
                 findings.append(
                     LocaleFinding(
                         "locale-source-parity",

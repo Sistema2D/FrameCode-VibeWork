@@ -270,6 +270,21 @@ class DocumentGraphTests(TemporaryRootTest):
         self.assertTrue(any(item.rule == "document-link" and "missing.md" in item.message for item in findings))
         self.assertFalse(any("LICENSE" in item.message for item in findings))
 
+    def test_whitespace_between_link_label_and_destination_fails(self) -> None:
+        _, root = self.make_root()
+        self.write_entrypoints(root)
+        (root / "FCVW" / "note.md").write_text(
+            "[Malformed] (README.md)\n",
+            encoding="utf-8",
+        )
+        findings = build_graph(root).findings
+        self.assertTrue(
+            any(
+                item.rule == "document-link-syntax" and item.path == "FCVW/note.md"
+                for item in findings
+            )
+        )
+
     def test_generated_artifact_requires_outgoing_source(self) -> None:
         _, root = self.make_root()
         self.write_entrypoints(root)
@@ -859,6 +874,18 @@ class LanguageReleaseVariantTests(TemporaryRootTest):
         self.assertTrue(
             any(
                 item.rule == "locale-machine-parity" and item.path == "es/AGENTS.md"
+                for item in validate_release_variants(root)
+            )
+        )
+        for name in RELEASE_VARIANTS:
+            (root / name / "AGENTS.md").write_text(agents_text, encoding="utf-8")
+        list_agents = "- " + agents_text
+        for name in RELEASE_VARIANTS:
+            (root / name / "AGENTS.md").write_text(list_agents, encoding="utf-8")
+        agents.write_text("– " + agents_text, encoding="utf-8")
+        self.assertTrue(
+            any(
+                item.rule == "locale-markdown-structure" and item.path == "es/AGENTS.md"
                 for item in validate_release_variants(root)
             )
         )

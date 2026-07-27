@@ -17,6 +17,7 @@ from frontmatter_fcvw import parse_frontmatter, scalar
 
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
+MALFORMED_MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]\n]+\]\s+\(([^)\n]+)\)")
 WIKILINK = re.compile(r"(?<!!)\[\[([^\]]+)\]\]")
 FENCE = re.compile(r"^\s*(```+|~~~+)")
 EXTERNAL = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
@@ -165,6 +166,15 @@ def build_graph(root: Path) -> DocumentGraph:
         targets: list[tuple[str, bool]] = []
         for line in lines:
             code_ranges = [match.span() for match in INLINE_CODE.finditer(line)]
+            for match in MALFORMED_MARKDOWN_LINK.finditer(line):
+                if not any(start <= match.start() and match.end() <= end for start, end in code_ranges):
+                    findings.append(
+                        GraphFinding(
+                            "document-link-syntax",
+                            relative,
+                            f"Markdown link has whitespace before its destination: {match.group(1)}",
+                        )
+                    )
             for match in MARKDOWN_LINK.finditer(line):
                 if not any(start <= match.start() and match.end() <= end for start, end in code_ranges):
                     targets.append((match.group(1), False))
