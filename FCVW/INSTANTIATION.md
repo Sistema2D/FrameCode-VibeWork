@@ -102,7 +102,7 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 8. Create a changelog fragment in `changelogs/unreleased/{plan-name}.md`.
 9. Validate remaining placeholders according to artifact role.
 10. Update `wiki/index.md` and `wiki/log.md` if the instantiation generates reusable learning.
-11. Run `python tools/validate_fcvw.py --root . --profile instantiated`, then complete the plan.
+11. Run `python FCVW/tools/validate_fcvw.py --root . --profile instantiated` for an installed release (`python tools/validate_fcvw.py ...` in the framework source checkout), then complete the plan.
 
 ## Recommended Validation
 

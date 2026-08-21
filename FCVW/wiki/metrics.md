@@ -3,7 +3,7 @@ schema: "fcvw/wiki-metrics@1"
 artifact_role: "generated"
 owner: "project"
 upgrade_strategy: "regenerate"
-last_reviewed: "2026-07-15"
+last_reviewed: "2026-08-21"
 ---
 
 # Wiki metrics
@@ -19,6 +19,9 @@ last_reviewed: "2026-07-15"
 | Stale validated behavior pages | reviewed within project threshold | none |
 | Confirmed regressions with permanent guardrail and replay | 100% | no project regressions |
 | Repeated regression without stronger guardrail | 0 | 0 |
+| Broken or ambiguous typed relationship targets | 0 | 0 |
+| Changed tracked sources without dependent review | 0 | 0 |
+| Semantic review outside declared source bounds | 0 | 0 |
 | Exact legacy baseline entries | decreasing | 0 |
 
 Application projects regenerate these values. Do not copy metrics from another application.

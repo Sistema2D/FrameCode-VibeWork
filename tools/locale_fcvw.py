@@ -35,6 +35,7 @@ REQUIRED_VARIANT_PATHS = {
     "tools/validate_fcvw.py",
     "tools/document_graph_fcvw.py",
     "tools/frontmatter_fcvw.py",
+    "tools/release_layout_fcvw.py",
 }
 RELEASE_EVIDENCE_PATHS = {
     "FCVW/LANGUAGE_REVIEW.md",

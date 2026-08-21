@@ -11,6 +11,7 @@ import unicodedata
 from pathlib import Path
 
 from frontmatter_fcvw import parse_frontmatter, scalar, string_list
+from knowledge_graph_fcvw import TYPED_RELATION_FIELDS
 
 
 HEADING = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
@@ -95,6 +96,11 @@ def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, ob
         text = path.read_text(encoding="utf-8-sig")
         result = parse_frontmatter(text)
         metadata = result.data
+        relationships = {
+            field: string_list(metadata, field)
+            for field in TYPED_RELATION_FIELDS
+            if string_list(metadata, field)
+        }
         scope = default_scope(relative_path, metadata)
         if scope == "excluded_by_default" and not include_excluded:
             continue
@@ -115,15 +121,25 @@ def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, ob
                     "path": relative,
                     "heading": heading,
                     "schema": scalar(metadata, "schema"),
+                    "id": scalar(metadata, "id"),
                     "artifact_role": scalar(metadata, "artifact_role"),
                     "authority": default_authority(metadata),
+                    "type": scalar(metadata, "type"),
+                    "confidence": scalar(metadata, "confidence"),
+                    "maturity": scalar(metadata, "maturity"),
                     "language": scalar(metadata, "language"),
                     "retrieval_scope": scope,
                     "retrieval_priority": scalar(metadata, "retrieval_priority", "normal"),
                     "theme": scalar(metadata, "theme"),
                     "tags": string_list(metadata, "tags"),
+                    "domain": string_list(metadata, "domain"),
                     "status": scalar(metadata, "status"),
                     "last_reviewed": scalar(metadata, "last_reviewed"),
+                    "next_review": scalar(metadata, "next_review"),
+                    "sources": string_list(metadata, "sources"),
+                    "source_digest": scalar(metadata, "source_digest"),
+                    "relationships": relationships,
+                    "chunk_hash": f"sha256:{digest}",
                     "content_hash": f"sha256:{digest}",
                     "content": content,
                 }

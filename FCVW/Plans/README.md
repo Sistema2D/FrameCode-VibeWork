@@ -15,3 +15,5 @@ For the planning methodology, see `FCVW/PLANNING.md`.
 - [`pending/QUEUE.md`](pending/QUEUE.md) ? ordered backlog after active work.
 
 Every plan in either active directory appears exactly once in its queue. Completed and discontinued plans remain reachable through [`../DOCUMENT_GRAPH.md`](../DOCUMENT_GRAPH.md) and their related release, changelog, decision, regression, or audit records.
+
+Blocking plan prerequisites are declared durably through `depends_on` and a Dependency validation table. Queue blocker cells contain only unresolved prerequisite IDs or a specific external condition. The two queues remain canonical; a combined view may be generated to `.fcvw-cache/` with `tools/plan_queue_fcvw.py --output`.

@@ -59,7 +59,9 @@ Framework releases publish independent clean empty-template variants for `pt-BR`
 
 Recommended asset names are `FrameCode-VibeWork-Vx.y.z-pt-BR.zip`, `-en-US.zip`, `-es.zip`, and `-de.zip`, plus `SHA256SUMS.txt`. GitHub-generated source archives are source snapshots and must not be described as clean templates.
 
-The user chooses the framework language by downloading one asset. A downloaded variant contains no automatic language selector, fallback, synchronization process, or dependency on the other variants. The four-language requirement measures release completeness; it is not a runtime feature and does not change the normal source or installed filesystem.
+The user chooses the framework language by downloading one asset. A downloaded variant contains no automatic language selector, fallback, synchronization process, or dependency on the other variants. The four-language requirement measures release completeness; it is not a runtime feature. Starting with V0.15.0, it does change the installed package boundary: the template root contains only `AGENTS.md` and `FCVW/`, while the governed source and pre-package staging remain conventional development trees.
+
+Every V0.15.0-or-later ZIP must have one conventional archive wrapper whose first-level payload is exactly `AGENTS.md` and `FCVW/`. The packager relocates root tools, legal notices, and provider bridges under `FCVW/`, excludes repository-only root `README.md` and `.gitignore`, rejects path collisions or additional root entries, regenerates the local document graph, and preserves deterministic bytes/checksums. Removing `FCVW/` is the bounded filesystem uninstall; `AGENTS.md` requires a separate review because downstream users may customize it.
 
 Application and framework GitHub release notes use the same sections: summary, included plans, added/changed/fixed/removed behavior, compatibility, migration, validation, known gaps, rollback, assets, checksums, and publication evidence.
 
@@ -71,7 +73,7 @@ Prepare the four complete variants under an external or disposable staging root 
 python tools/locale_fcvw.py --root <release-staging-root> --require-complete --source-root <clean-source-root> --source-revision <40-character-commit>
 ```
 
-The `en-US` functional manifest must exactly match that source; release-only review evidence is compared across variants but is not required in the source baseline. The authoritative validator that launches the release check validates the source and every variant; candidate copies of `tools/validate_fcvw.py` are compared for parity but are not executed before trust is established. Every approved `LANGUAGE_REVIEW.md` must name the same immutable revision. Each variant also contains a local `DOCUMENT_GRAPH.md`; links cannot escape to another language variant to mask missing adapted content.
+The `en-US` functional manifest must exactly match that source; release-only review evidence is compared across variants but is not required in the source baseline. The authoritative validator that launches the release check validates the source and every pre-package variant; candidate copies of `tools/validate_fcvw.py` are compared for parity but are not executed before trust is established. Packaging then validates the mapped installed layout independently. Every approved `LANGUAGE_REVIEW.md` must name the same immutable revision. Each installed variant contains a regenerated local `DOCUMENT_GRAPH.md`; links cannot escape to another language variant to mask missing adapted content.
 
 After the gate passes, create and inspect deterministic assets:
 

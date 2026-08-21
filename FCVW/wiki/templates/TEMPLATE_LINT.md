@@ -47,6 +47,9 @@ YYYY-MM-DD
 - [ ] ADRs without a page in `decisions/`.
 - [ ] Obsolete pages without marking.
 - [ ] Contradictions between sources.
+- [ ] Typed relationship targets, inverse derivation, conflicts, and cycles.
+- [ ] Source-digest changes and dependent review candidates.
+- [ ] Optional semantic findings are source-bounded, reviewable, and non-mutating.
 - [ ] `index.md` updated.
 - [ ] `log.md` updated.
 

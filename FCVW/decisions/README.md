@@ -8,3 +8,4 @@ Store immutable ADRs that capture context, decision, alternatives, consequences,
 - [ADR-0002: Declarative automation contracts](ADR-0002-declarative-automation-contracts.md)
 - [ADR-0003: Proportionality and contextual anti-monolith gates](ADR-0003-proportionality-and-contextual-anti-monolith-gates.md)
 - [ADR-0004: Language-specific clean release artifacts](ADR-0004-multilingual-source-and-release-model.md)
+- [ADR-0005: Contained release filesystem](ADR-0005-contained-release-filesystem.md)

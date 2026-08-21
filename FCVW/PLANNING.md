@@ -126,9 +126,23 @@ Recommendation order is:
 3. `correction`, `optimization`, `code_hygiene`, `visual`, then `other`;
 4. P1 through P5 within the same category, then explicit row order.
 
-A plan link must resolve exactly to the plan file in the queue's matching state directory. Use `none`, `-`, or an empty blocker for unblocked work; use comma-separated plan IDs for internal dependencies and `external: <specific reason>` for external dependencies. Resolved, unknown, or self-referential blockers are invalid.
+A plan link must resolve exactly to the plan file in the queue's matching state directory. Use `none`, `-`, or an empty blocker for unblocked work; use comma-separated unresolved `depends_on` IDs for internal dependencies and `external: <specific reason>` for external dependencies. Unknown, self-referential, satisfied, or queue-only internal blockers are invalid; discontinued prerequisites remain unresolved as explicitly invalidated dependencies.
 
 A category or same-category priority inversion requires a concrete override reason. Missing, stale, duplicate, wrong-target, or wrong-state queues block implementation until repaired; a provisional recommendation may be displayed but is not authoritative.
+
+## Plan dependencies
+
+`depends_on` is an optional first-level list of blocking prerequisite plan IDs on `fcvw/plan@2`. Non-blocking associations remain Markdown links under Related records and must not be placed in `depends_on`.
+
+A plan with `depends_on` contains a machine-readable `## Dependency validation` table with five columns: Dependency, Blocking reason, Unblock criteria, Status, and Evidence. Allowed dependency statuses are `pending`, `satisfied`, and `invalidated`.
+
+- `pending` remains unresolved and appears in the matching queue's `Blocked by` column;
+- `satisfied` requires the prerequisite plan to be `completed` plus concrete validation evidence, and is removed from the queue blocker column without deleting the historical `depends_on` relation;
+- `invalidated` applies when the prerequisite was `discontinued`; it remains blocking until the dependent plan is explicitly replanned, replaced, or discontinued;
+- dependency cycles, missing or ambiguous plan IDs, self-dependencies, and evidence-free satisfaction are invalid;
+- the queue's internal blockers must equal unresolved `depends_on` IDs, while `external: <specific reason>` remains available for non-plan conditions.
+
+The two state queues remain canonical operational indexes. `python tools/plan_queue_fcvw.py --root . --output .fcvw-cache/plan-queue.md` may generate a combined human view, but that output is disposable and never a third source of truth.
 
 ## Solution proportionality
 

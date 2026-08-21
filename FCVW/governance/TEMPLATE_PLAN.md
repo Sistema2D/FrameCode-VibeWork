@@ -20,6 +20,7 @@ owner: "<human-or-agent-role>"
 regression_contract: "required | not_applicable"
 context_files:
   - "path/to/file"
+depends_on: []
 ---
 
 # Short change title
@@ -70,6 +71,16 @@ For a trivial bounded change, state `Not applicable ? <specific reason>`.
 ## Acceptance criteria
 
 - [ ] <Observable result.>
+
+## Dependency validation
+
+None. When `depends_on` is non-empty, replace this line with:
+
+| Dependency | Blocking reason | Unblock criteria | Status | Evidence |
+|---|---|---|---|---|
+| P3-R2-YYYY-MM-DD-prerequisite | <Specific reason> | <Observable criteria> | pending | pending |
+
+Use `satisfied` only after the prerequisite is completed and concrete evidence is recorded. Use `invalidated` for a discontinued prerequisite and keep the dependent plan blocked until it is explicitly replanned, replaced, or discontinued.
 
 ## Regression impact
 

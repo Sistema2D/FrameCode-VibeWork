@@ -13,9 +13,13 @@ title: "<decision>"
 type: "decision"
 status: "draft"
 confidence: "low"
+maturity: "provisional"
 created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
+next_review: "YYYY-MM-DD"
 related_version: "V0.0.0"
+derived_from:
+  - "<source-wiki-id-or-governed-path>"
 sources:
   - "decisions/<ADR>.md"
 tags:

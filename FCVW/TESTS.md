@@ -90,11 +90,15 @@ Use `governance/TEMPLATE_PLAN.md` to record change-specific validation and `REGR
 
 Structural changes must test valid and negative cases for incoming links, entrypoint reachability, broken/ambiguous targets, self-only links, inline-code examples, source-relative destinations, spaces in paths, queue absence, duplicate/stale IDs, exact state-directory targets, status mismatch, category and P1-P5 order, blocker lifecycle, and justified cross-state override.
 
+Plan-dependency changes additionally test flat-list enforcement, missing/ambiguous/self references, duplicate IDs, cycles, queue parity, completed prerequisites without evidence, satisfied evidence, discontinued invalidation, and completed dependent plans with unresolved prerequisites. Aggregate queue output must be derived from both canonical queues and remain disposable.
+
 An index that merely contains a path does not prove a meaningful record relationship. Generated plans, audits, troubleshooting records, releases, regressions, and session syntheses also link their authoritative parent or source.
 
 ## Frontmatter and retrieval evidence
 
 Frontmatter changes test scalars, first-level lists, non-empty required values, ID/priority/risk coherence, duplicate keys, invalid ISO dates, unsupported nesting, invalid enums, relationship-path existence, and legacy preservation. Retrieval changes test role-based default scope and authority, mandatory-route recall, missing-context failure status, out-of-root plans, source traceability, retrieval priority, freshness, active-plan relation, excluded content, obsolete-content penalties, explicit declared-language filtering, empty results, token bounds, and prompt-injection handling.
+
+Typed-knowledge changes test ID/path target resolution, generated inverses, self/conflicting relations, supersession cycles, maturity values, source-digest syntax and change detection, dependent review candidates, document-graph independence, chunk/source hash distinction, metadata filters, one-hop relation selection, graph seed/candidate limits, and deterministic behavior without a semantic model. Semantic review tests source bounds, review-only output, unavailable-runtime handling, and prohibition of silent mutation.
 
 Language-specific release tests use an external authoritative clean source and immutable revision. They test missing `pt-BR`, `en-US`, `es`, and `de` variants, source-manifest divergence, authoritative clean validation without executing candidate validators, reviewer-revision mismatch, machine-surface drift, local graph integrity, and the prohibition against treating unreviewed translations as approved.
 
@@ -102,7 +106,7 @@ Normal source validation must pass without language directories and must not inv
 
 Local `.obsidian/` state may be recreated by the editor and is ignored by source validation, but clean release-asset inspection must prove it was not packaged.
 
-Release packaging tests cover deterministic ZIP bytes, exact per-language archive roots, manifest inspection, SHA-256 binding, refusal to package forbidden editor/repository/cache state, safe replacement boundaries, and the rule that candidate mode tolerates only an `in_review` approval blocker.
+Release packaging tests cover deterministic ZIP bytes, exact per-language archive roots, manifest inspection, SHA-256 binding, refusal to package forbidden editor/repository/cache state or symlinks, safe replacement boundaries, and the rule that candidate mode tolerates only an `in_review` approval blocker. V0.15.0 layout tests additionally cover source-only exclusions, path collisions, the exact `AGENTS.md` + `FCVW/` payload root, installed required paths, local graph regeneration, extra-root rejection, and proof that removing `FCVW/` preserves an unrelated application file.
 
 ## V0.14.0 structural suite
 
@@ -110,6 +114,7 @@ Release packaging tests cover deterministic ZIP bytes, exact per-language archiv
 python -B tools/test_validate_fcvw.py
 python -B tools/test_open_issues.py
 python -B tools/document_graph_fcvw.py --root .
+python -B tools/knowledge_graph_fcvw.py --root .
 python -B tools/plan_queue_fcvw.py --root . --recommend
 python -B tools/validate_fcvw.py --root . --profile clean-template
 ```

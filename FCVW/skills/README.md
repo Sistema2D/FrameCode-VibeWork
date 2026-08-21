@@ -30,8 +30,8 @@ Skills are provider-neutral, just-in-time procedures using `fcvw/skill@1`. Load 
 | `retroactive-instantiation` | non-destructive adoption |
 | `self-improvement` | evidence-based existing-skill change |
 | `systematic-debugging` | hypothesis-driven diagnosis |
-| `wiki-curator` | sourced knowledge promotion and deduplication |
-| `wiki-lint` | wiki structure, freshness, and baseline validation |
+| `wiki-curator` | sourced promotion, typed relations, and stale-source review |
+| `wiki-lint` | deterministic wiki integrity plus optional bounded semantic review |
 
 ## Rules
 
