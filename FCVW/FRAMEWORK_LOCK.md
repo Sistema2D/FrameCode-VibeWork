@@ -11,7 +11,7 @@ upgrade_strategy: "replace_with_migration"
 |---|---|
 | Framework | `FrameCode VibeWork` |
 | Installed version | `V0.15.0` |
-| Release state | `ready` |
+| Release state | `published` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
