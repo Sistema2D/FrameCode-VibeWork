@@ -7,7 +7,7 @@ upgrade_strategy: "replace"
 
 # FCVW operational index
 
-This directory is the governance layer installed in a project. The published installed baseline remains V0.14.0 while V0.15.0 is prepared. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
+This directory is the governance layer installed in a project. V0.15.0 is the validated release candidate. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
 
 ## Installation and removal boundary
 
