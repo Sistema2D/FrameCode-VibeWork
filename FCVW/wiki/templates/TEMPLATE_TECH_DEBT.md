@@ -13,9 +13,13 @@ title: "Technical Debt card: [Short Description]"
 type: "concept"
 status: "draft"
 confidence: "medium"
+maturity: "provisional"
 created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
+next_review: "YYYY-MM-DD"
 related_version: "Vx.y.z"
+derived_from:
+  - "<source-wiki-id-or-governed-path>"
 sources:
   - "[File link or task where debt was introduced]"
 tags:

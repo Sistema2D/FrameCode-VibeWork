@@ -7,7 +7,15 @@ upgrade_strategy: "replace"
 
 # FCVW operational index
 
-This directory is the governance layer installed in a project. `AGENTS.md` remains at repository root as the entrypoint.
+This directory is the governance layer installed in a project. V0.15.0 is the validated release candidate. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
+
+## Installation and removal boundary
+
+- A release payload exposes exactly `AGENTS.md` and `FCVW/` at its template root.
+- Tools, legal notices, provider adapters, policies, templates, and framework records are contained by `FCVW/`.
+- Run installed tools from `FCVW/tools/`; the framework source checkout keeps its development tools at root `tools/`.
+- To remove the framework from an application, back up project-owned records if needed, delete `FCVW/`, then review and optionally delete `AGENTS.md`. No application path is part of that deletion boundary.
+- Do not use this shortcut on a pre-V0.15.0 installation until completing the filesystem migration in `MIGRATIONS.md`.
 
 ## Start here
 

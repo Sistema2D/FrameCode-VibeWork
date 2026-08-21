@@ -10,13 +10,13 @@ upgrade_strategy: "replace_with_migration"
 | Field | Value |
 |---|---|
 | Framework | `FrameCode VibeWork` |
-| Installed version | `V0.14.0` |
-| Release state | `published` |
+| Installed version | `V0.15.0` |
+| Release state | `ready` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
-| Installed modules | `core, plans, regression-guards, records, wiki, skills, declarative-automation, optional-validator` |
-| Last migration | `V0.13.0 -> V0.14.0` |
+| Installed modules | `core, plans, regression-guards, records, wiki, typed-knowledge, skills, declarative-automation, contained-release-layout, optional-validator` |
+| Last migration | `V0.14.0 -> V0.15.0` |
 
 ## Schema baselines
 
@@ -36,5 +36,6 @@ upgrade_strategy: "replace_with_migration"
 | Language review | `fcvw/language-review@1` |
 | Formal audit | `fcvw/audit@1` |
 | Troubleshooting | `fcvw/troubleshooting@1` |
+| Knowledge graph | `fcvw/knowledge-graph@1` |
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.

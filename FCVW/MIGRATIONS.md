@@ -76,3 +76,35 @@ Required migration:
 Historical artifacts are not rewritten only to add retrieval metadata or new optional ownership fields.
 
 Language choice requires no downstream migration. A user selects one language by downloading that release variant, and the resulting framework behaves as a normal monolingual tree without automatic detection, fallback, or synchronization.
+
+## V0.14.0 to V0.15.0
+
+V0.15.0 adds durable plan dependency evidence and additive typed/source-aware wiki metadata while preserving both canonical state queues, `fcvw/plan@2`, `fcvw/wiki@1`, BM25, JIT routing, and the document graph.
+
+Required migration:
+
+1. Preserve all project-owned plans and wiki records; do not rewrite completed history solely for optional fields.
+2. For each active `fcvw/plan@2` whose queue row contains internal blocker IDs, add those IDs to `depends_on` and create one Dependency validation row per ID.
+3. Keep pending or in-progress prerequisites as `pending`. Mark a dependency `satisfied` only after its prerequisite is completed and concrete evidence is recorded.
+4. Treat a discontinued prerequisite as `invalidated`; keep the dependent plan blocked until it is explicitly replanned, replaced, or discontinued.
+5. Retain `Plans/in_progress/QUEUE.md` and `Plans/pending/QUEUE.md` as canonical. Delete or ignore any manually maintained aggregate queue; regenerate disposable views from the tool.
+6. Existing wiki pages remain valid without maturity, typed relations, or source metadata. Add them only when the page is substantively reviewed and the semantics improve retrieval or impact analysis.
+7. Replace any proposed tracked-source `content_hash` with `source_digest`; context chunks continue exposing `content_hash` as a compatibility alias plus `chunk_hash`.
+8. Do not add `status: stale`. Generate stale-source and dependent-review findings, review affected knowledge, and update digests only after that review.
+9. Keep generated knowledge graphs, stale reports, context indexes, and aggregate queue views in `.fcvw-cache/` or another disposable location.
+10. Rebuild the context index before using new metadata filters or typed graph expansion. Graph expansion remains opt-in, relation-selected, one-hop, and bounded.
+11. Regenerate `DOCUMENT_GRAPH.md` and run the complete validator/test suite.
+12. For a fresh V0.15.0 release installation, copy the two payload entries only: root `AGENTS.md` and `FCVW/`. Installed commands now use `FCVW/tools/`.
+13. For an existing installation, back up populated profiles and records, merge the new `FCVW/` tree by ownership, and do not bulk-move or delete root `tools/`, `LICENSE`, `NOTICE`, `.cursorrules`, or `.windsurfrules`; those names may belong to the application.
+14. Remove an older root framework file only after matching it to the prior release manifest and confirming that it has no application modification. Ambiguous files remain for manual reconciliation.
+15. Regenerate the graph with `python FCVW/tools/document_graph_fcvw.py --root . --write` and validate with `python FCVW/tools/validate_fcvw.py --root . --profile instantiated` after migration.
+16. After a successful contained installation, framework removal consists of backing up any project-owned records, deleting `FCVW/`, then reviewing and optionally deleting the separately customized `AGENTS.md`.
+
+Compatibility notes:
+
+- Optional plan and wiki fields are additive within the existing major schemas.
+- Active queue-only dependencies require migration because operational parity is now deterministic; historical terminal plans without `depends_on` remain readable.
+- No embeddings, new runtime dependency, database, background service, shared canonical queue, or committed generated-index tree is introduced.
+- Optional semantic wiki review remains non-blocking and cannot mutate canonical knowledge.
+- The source checkout and pre-package language staging retain root `tools/` for development. Release assets relocate those tools under `FCVW/tools/` and omit repository-only root `README.md` and `.gitignore`.
+- The single-folder removal shortcut applies directly to fresh V0.15.0-or-later assets. Older installations require the manifest-based reconciliation above; no migration may assume that same-named root files are framework-owned.

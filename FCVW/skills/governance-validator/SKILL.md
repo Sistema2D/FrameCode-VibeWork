@@ -2,7 +2,7 @@
 schema: "fcvw/skill@1"
 name: "governance-validator"
 description: "Validate FCVW structure, schemas, ownership, states, and clean-template boundaries."
-version: "1.2.0"
+version: "1.2.1"
 trigger_keywords:
   - "validate governance"
   - "verify filesystem"
@@ -54,11 +54,17 @@ Evaluate the human-readable FCVW invariants. The optional script automates deter
 
 ## Optional execution
 
+Installed release:
+
+`python FCVW/tools/validate_fcvw.py --root . --profile <profile>`
+
+Framework source checkout:
+
 `python tools/validate_fcvw.py --root . --profile <profile>`
 
 For controlled legacy debt:
 
-`python tools/validate_fcvw.py --root . --profile incremental --baseline path/to/legacy-baseline.md`
+Use the matching installed/source tool prefix with `--profile incremental --baseline path/to/legacy-baseline.md`.
 
 Scripts do not auto-correct historical evidence. Review every proposed remediation and keep the report attached to the active plan or release.
 

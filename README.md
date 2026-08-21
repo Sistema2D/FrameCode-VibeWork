@@ -11,9 +11,9 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Support](https://img.shields.io/badge/Support-Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache_2.0-6f42c1?style=flat-square)](LICENSE)
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
-[![Release](https://img.shields.io/badge/Release-v0.14.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0)
+[![Release](https://img.shields.io/badge/Release-v0.15.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.15.0)
 
-Stable release **V0.14.0**
+Release candidate **V0.15.0**
 
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
@@ -197,6 +197,7 @@ python -m py_compile tools/validate_fcvw.py tools/test_validate_fcvw.py
 python tools/test_validate_fcvw.py
 python tools/test_open_issues.py
 python tools/document_graph_fcvw.py --root .
+python tools/knowledge_graph_fcvw.py --root .
 python tools/validate_fcvw.py --root . --profile clean-template
 ```
 
@@ -234,7 +235,7 @@ Os 21 skills em `FCVW/skills/` são procedimentos just-in-time. Cada um declara 
 - o core permanece independente de fornecedor;
 - skills não ampliam o escopo do plano.
 
-[MEMORY.md](FCVW/MEMORY.md) separa contexto ativo, conhecimento curado e arquivo pesquisável. A wiki guarda conhecimento reutilizável e com fontes, não uma cópia de toda sessão. Use `wiki-curator` para promoção e deduplicação e `wiki-lint` para integridade.
+[MEMORY.md](FCVW/MEMORY.md) separa contexto ativo, conhecimento curado e arquivo pesquisável. A wiki guarda conhecimento reutilizável e com fontes, não uma cópia de toda sessão. Relações tipadas e digests de fontes alimentam apenas grafos e revisões derivados; não substituem os Markdown canônicos. Use `wiki-curator` para promoção e revisão de impacto e `wiki-lint` para integridade determinística e revisão semântica opcional.
 
 [Navegação PT-BR](#pt-br) · [Topo](#top)
 
@@ -263,9 +264,11 @@ FCVW separa dois namespaces:
 - **aplicação:** `FCVW/changelogs/Vx.y.z.md` e a fonte de versão do produto;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` e [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-A [V0.14.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.14.0.md](FCVW/framework-releases/V0.14.0.md).
+A V0.15.0 está pronta para publicação com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.15.0.md](FCVW/framework-releases/V0.15.0.md).
 
 A partir da release com distribuição multilíngue, o usuário escolhe o idioma ao baixar um único template vazio (`pt-BR`, `en-US`, `es` ou `de`). Cada pasta ou asset é autônomo e monolíngue; o framework não detecta, alterna nem sincroniza idiomas durante o uso. A presença e a equivalência dos quatro templates são métricas da release.
+
+Nos assets preparados a partir da V0.15.0, a raiz do template contém somente `AGENTS.md` e `FCVW/`. Ferramentas, licença, notice e adaptadores ficam contidos em `FCVW/`; assim, após preservar registros do projeto, remover o framework significa apagar essa pasta e revisar separadamente o `AGENTS.md`. O repositório-fonte continua mantendo `README.md`, `tools/` e infraestrutura Git em seus caminhos convencionais de desenvolvimento.
 
 
 Uma mudança do FCVW não incrementa a versão da aplicação. `published` só é usado após publicação real; tag, push, deploy e release externo exigem autoridade e evidência separadas.
@@ -491,6 +494,7 @@ python tools/test_validate_fcvw.py
 python tools/validate_fcvw.py --root . --profile clean-template
 python tools/test_open_issues.py
 python tools/document_graph_fcvw.py --root .
+python tools/knowledge_graph_fcvw.py --root .
 ```
 
 After application profiles are instantiated:
@@ -527,7 +531,7 @@ The 21 skills under `FCVW/skills/` are just-in-time procedures. Each declares tr
 - the core remains provider-neutral;
 - skills never expand the plan's scope.
 
-[MEMORY.md](FCVW/MEMORY.md) separates active context, curated knowledge, and searchable archives. The wiki stores reusable, sourced knowledge rather than a copy of every session. Use `wiki-curator` for promotion and deduplication and `wiki-lint` for integrity.
+[MEMORY.md](FCVW/MEMORY.md) separates active context, curated knowledge, and searchable archives. The wiki stores reusable, sourced knowledge rather than a copy of every session. Typed relations and source digests feed derived graphs and review findings only; they never replace canonical Markdown. Use `wiki-curator` for promotion and impact review and `wiki-lint` for deterministic integrity plus optional semantic review.
 
 [ENG-US navigation](#en-us) · [Top](#top)
 
@@ -556,9 +560,11 @@ FCVW separates two namespaces:
 - **application:** `FCVW/changelogs/Vx.y.z.md` and the product version source;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` and [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-[V0.14.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.14.0.md](FCVW/framework-releases/V0.14.0.md).
+V0.15.0 is ready for publication with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.15.0.md](FCVW/framework-releases/V0.15.0.md).
 
 Starting with the multilingual distribution release, the user chooses a language by downloading one empty template (`pt-BR`, `en-US`, `es`, or `de`). Each folder or asset is standalone and monolingual; the framework does not detect, switch, or synchronize languages during use. Presence and parity of all four templates are release metrics.
+
+In assets prepared from V0.15.0 onward, the template root contains only `AGENTS.md` and `FCVW/`. Tools, license, notice, and provider adapters are contained by `FCVW/`; after preserving project records, framework removal means deleting that directory and reviewing `AGENTS.md` separately. The source repository keeps `README.md`, `tools/`, and Git infrastructure in their conventional development paths.
 
 An FCVW change does not increment an application's version. `published` is used only after real publication; tags, pushes, deployments, and external releases require separate authority and evidence.
 
@@ -611,7 +617,7 @@ V0.13 introduced ownership-aware migration, `plan@2` and `regression@1` schemas,
 
 <div align="center">
 
-Stable: [V0.14.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.14.0) · [Technical release record](FCVW/framework-releases/V0.14.0.md)
+Candidate: **V0.15.0** · [Technical release record](FCVW/framework-releases/V0.15.0.md)
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
 

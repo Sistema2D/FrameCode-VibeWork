@@ -12,8 +12,10 @@ import tempfile
 import zipfile
 from pathlib import Path
 
+from document_graph_fcvw import render_catalog
 from frontmatter_fcvw import parse_frontmatter, scalar
 from locale_fcvw import RELEASE_VARIANTS, LocaleFinding, validate_release_variants
+from release_layout_fcvw import materialize_release_layout, validate_release_layout
 
 
 VERSION = re.compile(r"V\d+\.\d+\.\d+")
@@ -50,6 +52,8 @@ def package_files(root: Path) -> list[Path]:
             raise ValueError(f"forbidden package state: {relative.as_posix()}")
         if path.suffix.lower() in {".pyc", ".pyo"}:
             raise ValueError(f"compiled Python artifact is forbidden: {relative.as_posix()}")
+        if path.is_symlink():
+            raise ValueError(f"symbolic links are forbidden in release payloads: {relative.as_posix()}")
         files.append(path)
     return sorted(files, key=lambda item: item.relative_to(root).as_posix())
 
@@ -113,6 +117,12 @@ def inspect_archive(path: Path, archive_root: str, expected_files: set[str]) -> 
                 raise ValueError(f"archive contains compiled Python artifact: {member}")
             if Path(member).is_absolute() or ".." in Path(member).parts:
                 raise ValueError(f"archive contains unsafe path: {member}")
+        first_level = {Path(member).relative_to(archive_root).parts[0] for member in members}
+        if first_level != {"AGENTS.md", "FCVW"}:
+            raise ValueError(
+                "archive payload root must contain exactly AGENTS.md and FCVW; "
+                f"found={sorted(first_level)}"
+            )
 
 
 def create_archives(staging_root: Path, output_root: Path, version: str, *, replace: bool = False) -> dict[str, str]:
@@ -134,30 +144,35 @@ def create_archives(staging_root: Path, output_root: Path, version: str, *, repl
         if not path.is_file() or path.parent != output_root:
             raise ValueError(f"refusing to replace unexpected target: {path}")
 
-    manifests: dict[str, set[str]] = {}
-    for language in RELEASE_VARIANTS:
-        variant = staging_root / language
-        if not variant.is_dir():
-            raise FileNotFoundError(f"release variant is missing: {variant}")
-        manifests[language] = {path.relative_to(variant).as_posix() for path in package_files(variant)}
-
     temporary_assets: dict[str, Path] = {}
     checksums: dict[str, str] = {}
     temporary_checksum: Path | None = None
     try:
-        for language, destination in asset_paths.items():
-            descriptor, temporary_name = tempfile.mkstemp(
-                dir=output_root,
-                prefix=f".{destination.name}.",
-                suffix=".tmp",
-            )
-            os.close(descriptor)
-            temporary = Path(temporary_name)
-            temporary_assets[language] = temporary
-            archive_root = destination.stem
-            write_archive(staging_root / language, temporary, archive_root)
-            inspect_archive(temporary, archive_root, manifests[language])
-            checksums[destination.name] = sha256(temporary)
+        with tempfile.TemporaryDirectory(prefix="fcvw-release-layout-") as layout_directory:
+            layout_root = Path(layout_directory)
+            for language, destination in asset_paths.items():
+                variant = staging_root / language
+                if not variant.is_dir():
+                    raise FileNotFoundError(f"release variant is missing: {variant}")
+                installed = layout_root / language
+                materialize_release_layout(variant, installed, package_files(variant))
+                graph_path = installed / "FCVW" / "DOCUMENT_GRAPH.md"
+                graph_path.write_text(render_catalog(installed, graph_path), encoding="utf-8", newline="\n")
+                validate_release_layout(installed)
+                manifest = {path.relative_to(installed).as_posix() for path in package_files(installed)}
+
+                descriptor, temporary_name = tempfile.mkstemp(
+                    dir=output_root,
+                    prefix=f".{destination.name}.",
+                    suffix=".tmp",
+                )
+                os.close(descriptor)
+                temporary = Path(temporary_name)
+                temporary_assets[language] = temporary
+                archive_root = destination.stem
+                write_archive(installed, temporary, archive_root)
+                inspect_archive(temporary, archive_root, manifest)
+                checksums[destination.name] = sha256(temporary)
         descriptor, temporary_name = tempfile.mkstemp(
             dir=output_root,
             prefix=".SHA256SUMS.",

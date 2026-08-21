@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from frontmatter_fcvw import parse_frontmatter, scalar
+from plan_dependencies_fcvw import PLAN_ID, dependency_state, inspect_plan_dependencies
 
 
 CATEGORIES = ("correction", "optimization", "code_hygiene", "visual", "other")
@@ -86,11 +87,12 @@ def validate_plan_queues(root: Path) -> list[QueueFinding]:
     plans_root = root / "FCVW" / "Plans"
     findings: list[QueueFinding] = []
     seen_global: dict[str, str] = {}
-    all_plan_paths: dict[str, list[Path]] = {}
-    for path in plans_root.glob("*/*.md"):
-        if path.name in {"README.md", "QUEUE.md", "INDEX.md"}:
-            continue
-        all_plan_paths.setdefault(path.stem, []).append(path)
+    dependency_snapshot = inspect_plan_dependencies(root)
+    all_plan_paths = dependency_snapshot.catalog
+    plan_metadata = dependency_snapshot.metadata
+    plan_dependencies = dependency_snapshot.dependencies
+    dependency_evidence = dependency_snapshot.evidence
+    findings.extend(QueueFinding(item.rule, item.path, item.message) for item in dependency_snapshot.findings)
     for state in ("pending", "in_progress"):
         folder = plans_root / state
         queue_path = folder / "QUEUE.md"
@@ -136,12 +138,12 @@ def validate_plan_queues(root: Path) -> list[QueueFinding]:
 
         priorities: dict[str, int] = {}
         for plan_id, plan_path in plan_paths.items():
-            plan_metadata = parse_frontmatter(plan_path.read_text(encoding="utf-8-sig")).data
-            if scalar(plan_metadata, "status") != state:
+            current_metadata = parse_frontmatter(plan_path.read_text(encoding="utf-8-sig")).data
+            if scalar(current_metadata, "status") != state:
                 findings.append(
                     QueueFinding("plan-queue-state", relative, f"queued plan metadata does not match {state}: {plan_id}")
                 )
-            priority = scalar(plan_metadata, "priority")
+            priority = scalar(current_metadata, "priority")
             if re.fullmatch(r"P[1-5]", priority):
                 priorities[plan_id] = int(priority[1:])
 
@@ -204,6 +206,7 @@ def validate_plan_queues(root: Path) -> list[QueueFinding]:
                         )
                     )
             blocker = entry.blocked_by.strip()
+            internal_blockers: list[str] = []
             if blocker.lower() not in NONE_VALUES:
                 if blocker.lower().startswith("external:"):
                     if len(blocker.split(":", 1)[1].strip()) < 8:
@@ -211,13 +214,10 @@ def validate_plan_queues(root: Path) -> list[QueueFinding]:
                             QueueFinding("plan-queue-blocker", relative, f"external blocker is too vague: {entry.plan_id}")
                         )
                 else:
-                    dependencies = [item.strip().strip("`") for item in blocker.split(",") if item.strip()]
-                    for dependency in dependencies:
+                    internal_blockers = [item.strip().strip("`") for item in blocker.split(",") if item.strip()]
+                    for dependency in internal_blockers:
                         matches = all_plan_paths.get(dependency, [])
-                        if not re.fullmatch(
-                            r"P[1-5]-R[1-5]-\d{4}-\d{2}-\d{2}-[a-z0-9-]+",
-                            dependency,
-                        ):
+                        if not PLAN_ID.fullmatch(dependency):
                             findings.append(
                                 QueueFinding(
                                     "plan-queue-blocker",
@@ -239,17 +239,32 @@ def validate_plan_queues(root: Path) -> list[QueueFinding]:
                                 )
                             )
                             continue
-                        dependency_metadata = parse_frontmatter(
-                            matches[0].read_text(encoding="utf-8-sig")
-                        ).data
-                        if scalar(dependency_metadata, "status") in {"completed", "discontinued"}:
-                            findings.append(
-                                QueueFinding(
-                                    "plan-queue-blocker",
-                                    relative,
-                                    f"resolved blocker remains in queue for {entry.plan_id}: {dependency}",
-                                )
-                            )
+            declared = plan_dependencies.get(entry.plan_id, [])
+            evidence = dependency_evidence.get(entry.plan_id, {})
+            unresolved = [
+                dependency
+                for dependency in declared
+                if dependency_state(dependency, all_plan_paths, evidence)[0] != "satisfied"
+            ]
+            if declared and set(internal_blockers) != set(unresolved):
+                findings.append(
+                    QueueFinding(
+                        "plan-queue-dependency",
+                        relative,
+                        f"queue blockers for {entry.plan_id} must equal unresolved depends_on IDs: "
+                        f"expected {', '.join(unresolved) or 'none'}",
+                    )
+                )
+            elif internal_blockers and not declared:
+                schema = scalar(plan_metadata.get(entry.plan_id, {}), "schema")
+                if schema == "fcvw/plan@2":
+                    findings.append(
+                        QueueFinding(
+                            "plan-queue-dependency",
+                            relative,
+                            f"internal blockers must be declared in depends_on: {entry.plan_id}",
+                        )
+                    )
             if entry.plan_id in seen_global:
                 findings.append(
                     QueueFinding(
@@ -284,10 +299,38 @@ def recommend_next_plan(root: Path) -> tuple[str, QueueEntry] | None:
     return None
 
 
+def render_aggregate_queue(root: Path) -> str:
+    """Render a disposable combined view without creating another source of truth."""
+
+    root = root.resolve()
+    plans_root = root / "FCVW" / "Plans"
+    recommendation = recommend_next_plan(root)
+    recommended_id = recommendation[1].plan_id if recommendation else ""
+    lines = [
+        "# Aggregate plan queue",
+        "",
+        "> Disposable view generated from the canonical in-progress and pending queues.",
+        "",
+        "| State | Order | Plan | Category | Blocked by | Recommended |",
+        "|---|---:|---|---|---|---|",
+    ]
+    for state in ("in_progress", "pending"):
+        entries, _ = parse_queue(plans_root / state / "QUEUE.md")
+        for entry in entries:
+            lines.append(
+                f"| {state} | {entry.order} | {entry.plan_id} | {entry.category} | "
+                f"{entry.blocked_by or 'none'} | {'yes' if entry.plan_id == recommended_id else 'no'} |"
+            )
+    if len(lines) == 6:
+        lines.append("| - | - | none | - | - | no |")
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
     parser.add_argument("--recommend", action="store_true")
+    parser.add_argument("--output", help="write a disposable aggregate Markdown view")
     args = parser.parse_args()
     root = Path(args.root).resolve()
     findings = validate_plan_queues(root)
@@ -296,6 +339,13 @@ def main() -> int:
     if findings:
         print(f"FCVW plan queues: findings={len(findings)}")
         return 1
+    if args.output:
+        output = Path(args.output)
+        if not output.is_absolute():
+            output = root / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(render_aggregate_queue(root), encoding="utf-8", newline="\n")
+        print(f"FCVW aggregate plan queue: output={output}")
     if args.recommend:
         recommendation = recommend_next_plan(root)
         if recommendation is None:

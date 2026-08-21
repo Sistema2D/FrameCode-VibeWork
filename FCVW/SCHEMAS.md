@@ -37,6 +37,8 @@ The status must match the containing directory. IDs use `P1..P5-R1..R5-YYYY-MM-D
 
 `fcvw/plan@1` is a supported legacy schema. It remains readable in place; substantively reopened plans migrate to `fcvw/plan@2`.
 
+Optional `depends_on` is a first-level list of blocking prerequisite plan IDs. A plan declaring it includes a five-column `## Dependency validation` table whose row IDs exactly match the list. `pending`, `satisfied`, and `invalidated` are the allowed row states. Satisfied dependencies require a completed prerequisite and non-placeholder evidence; discontinued prerequisites are invalidated rather than treated as satisfied. Active queue blockers equal unresolved dependency IDs. These additive fields do not require a new plan schema major, but downstream active plans using queue-only internal blockers migrate them into `depends_on`.
+
 ## Application changelog — `fcvw/changelog@1`
 
 Required: application version, date, release status, release type, non-empty related plans, summary, affected areas or categorized changes, validation, known gaps, and rollback. New full release records with `artifact_role: record` also require record ownership/preservation, content and publication revisions, non-empty language coverage, external publication state, security/data impact, migration, assets, checksums, publication evidence, and post-release validation. Sections remain present with a specific `not applicable` rationale when the surface does not apply.
@@ -58,6 +60,12 @@ Framework records live under `framework-releases/`, never under application `cha
 Required for new knowledge pages: `id`, `artifact_role: record`, owner, preservation strategy, retrieval scope, `title`, `type`, `status`, `confidence`, `created_at`, `last_reviewed`, `sources`, and `tags`.
 
 Session IDs use `SES-YYYYMMDD-HHMMSS-<short-id>`; sequential numbers may be displayed but are not unique identifiers.
+
+Optional knowledge maturity values are `hypothesis`, `provisional`, `established`, and `disputed`. Maturity is separate from lifecycle `status`, evidence `confidence`, and ownership-derived `authority`; obsolete or superseded knowledge is not represented as a maturity value.
+
+Optional typed relationships are `related`, `depends_on`, `supports`, `contradicts`, `implements`, `derived_from`, `invalidates`, `supersedes`, `superseded_by`, and scalar `canonical_page`. Targets resolve to a unique artifact ID or governed Markdown path. First-level lists remain mandatory for every typed field except `canonical_page`; generated inverse edges are derived and need not be copied into frontmatter.
+
+Optional source provenance fields are `source_type`, `source_path`, `source_url`, `source_digest`, `ingested_at`, and `last_checked`. `source_digest` uses `sha256:<64 lowercase hex>` and is distinct from the context index's chunk `content_hash`. Digest mismatches are review findings, not silent status changes.
 
 ## Regression record — `fcvw/regression@1`
 
@@ -103,6 +111,8 @@ New or substantively changed records should declare `artifact_role`, `owner`, an
 
 Optional retrieval fields are `language`, `theme`, `tags`, `authority`, `last_reviewed`, `retrieval_priority`, and `retrieval_scope`. Allowed scopes are `always`, `routed`, `search_only`, `exact_only`, and `excluded_by_default`; priorities are `high`, `normal`, and `low`; authority values are `canonical`, `routed`, `historical`, and `generated`.
 
+Knowledge index metadata may additionally expose `id`, `type`, `confidence`, `maturity`, `domain`, `sources`, `source_digest`, `next_review`, and typed relationships. These fields support filtering and bounded graph expansion but cannot elevate authority or retrieval scope.
+
 Policies and the framework lock default to canonical authority. Project profiles default to routed authority. Records default to historical authority and `exact_only` or `search_only` according to category. Templates, examples, and generated artifacts default to generated authority and `excluded_by_default`. Those lower-authority categories cannot elevate their scope or become normative through metadata.
 
 
@@ -121,6 +131,8 @@ Policies and the framework lock default to canonical authority. Project profiles
 | Templates and examples | classification recommended; placeholders remain allowed | no forced rewrite | `excluded_by_default` |
 | Generated catalogs and indexes | generated role plus regenerate strategy required | regenerate | `excluded_by_default` |
 
+`wiki/index.md` is the exception: it is a small curated `project_profile` with preserve strategy. Category, stale, contradiction, orphan, unresolved, graph, and aggregate queue views remain disposable generated outputs rather than committed indexes.
+
 Missing optional metadata does not invalidate untouched history. Any new or substantively edited record must use the row above, and no retrieval metadata can elevate a record above its owning canonical source.
 
 New records also declare `record_scope: application | framework` when their scope determines clean-distribution eligibility. Only records explicitly scoped to `framework` may remain in a clean FCVW baseline; an absent or application scope is treated as downstream history.
@@ -128,7 +140,11 @@ New records also declare `record_scope: application | framework` when their scop
 
 Required frontmatter: `schema`, `artifact_role`, `owner`, `upgrade_strategy`, `state`, and `updated_at`. Allowed states are `pending` and `in_progress`. The canonical table contains order, Markdown-linked plan ID, category, blocker, and override reason.
 
-Each link resolves exactly to the named plan in the queue's own state directory. `none`, `-`, or an empty blocker means unblocked. Internal blockers are comma-separated plan IDs that exist and are not already terminal; an external blocker uses `external: <specific reason>`. Pending work may preempt in-progress work only with `before_in_progress: <specific reason>` in its override column. Within one category, P1 through P5 is the mandatory tie-break order unless a concrete override explains the inversion.
+Each link resolves exactly to the named plan in the queue's own state directory. `none`, `-`, or an empty blocker means unblocked. Internal blockers are comma-separated unresolved `depends_on` plan IDs; an external blocker uses `external: <specific reason>`. A completed prerequisite remains blocked until its dependency row records `satisfied` with evidence; a discontinued prerequisite is `invalidated` and remains blocked pending explicit replanning. Pending work may preempt in-progress work only with `before_in_progress: <specific reason>` in its override column. Within one category, P1 through P5 is the mandatory tie-break order unless a concrete override explains the inversion.
+
+## Knowledge graph — `fcvw/knowledge-graph@1`
+
+The optional JSON graph is a disposable reconstruction of typed Markdown frontmatter. It contains nodes, explicit edges, and generated inverse edges and never replaces source pages or `fcvw/document-graph@1`. It is written only to `.fcvw-cache/` or another user-selected non-normative output path.
 
 ## Application rules ? `fcvw/app-rules@1`
 

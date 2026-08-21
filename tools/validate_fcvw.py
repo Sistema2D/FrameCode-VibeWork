@@ -12,7 +12,9 @@ from datetime import date
 from pathlib import Path
 from document_graph_fcvw import build_graph, render_catalog
 from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, string_list
+from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
+from release_layout_fcvw import is_installed_release_layout
 
 from urllib.parse import unquote
 
@@ -22,15 +24,21 @@ REQUIRED_PATHS = (
     "README.md",
     "LICENSE",
     "NOTICE",
+    "tools/validate_fcvw.py",
     "tools/test_validate_fcvw.py",
     "tools/test_open_issues.py",
+    "tools/test_plan_dependencies_and_knowledge.py",
     "tools/frontmatter_fcvw.py",
     "tools/document_graph_fcvw.py",
+    "tools/knowledge_graph_fcvw.py",
+    "tools/knowledge_sources_fcvw.py",
+    "tools/plan_dependencies_fcvw.py",
     "tools/plan_queue_fcvw.py",
     "tools/build_context_index.py",
     "tools/retrieve_context.py",
     "tools/locale_fcvw.py",
     "tools/package_release_fcvw.py",
+    "tools/release_layout_fcvw.py",
     "FCVW/README.md",
     "FCVW/APP_RULES.md",
     "FCVW/DOCUMENT_GRAPH.md",
@@ -474,8 +482,16 @@ LOCAL_RELATIONSHIP_FIELDS = (
     "related_plan",
     "related_release",
     "related",
+    "depends_on",
+    "supports",
+    "contradicts",
+    "implements",
+    "derived_from",
+    "invalidates",
     "supersedes",
     "superseded_by",
+    "canonical_page",
+    "source_path",
 )
 FRAMEWORK_RELEASE_FIELDS = (
     "version",
@@ -690,9 +706,16 @@ def markdown_files(root: Path) -> list[Path]:
 
 
 def validate_required(root: Path, findings: list[Finding]) -> None:
+    installed = is_installed_release_layout(root)
     for relative in REQUIRED_PATHS:
-        if not (root / relative).is_file():
-            findings.append(Finding("required-path", relative, "required path is missing"))
+        expected = relative
+        if installed:
+            if relative == "README.md":
+                continue
+            if relative in {"LICENSE", "NOTICE"} or relative.startswith("tools/"):
+                expected = f"FCVW/{relative}"
+        if not (root / expected).is_file():
+            findings.append(Finding("required-path", expected, "required path is missing"))
 
 
 def validate_canonical_metadata(root: Path, findings: list[Finding]) -> None:
@@ -1004,6 +1027,8 @@ def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
             for field in ("sources", "tags"):
                 if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
                     findings.append(Finding("wiki-schema", relative, f"{field} must be a non-empty list"))
+            if "domain" in metadata and not isinstance(metadata.get("domain"), list):
+                findings.append(Finding("wiki-schema", relative, "domain must be a first-level list"))
             if scalar(metadata, "artifact_role") != "record":
                 findings.append(Finding("wiki-schema", relative, "artifact_role must be record"))
             if scalar(metadata, "upgrade_strategy") != "preserve":
@@ -1309,7 +1334,10 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
                     "non-framework knowledge record in clean baseline",
                 )
             )
-    for forbidden in ("FCVW/LICENSE", "FCVW/repository-open-graph-template.png"):
+    forbidden_paths = ["FCVW/repository-open-graph-template.png"]
+    if not is_installed_release_layout(root):
+        forbidden_paths.append("FCVW/LICENSE")
+    for forbidden in forbidden_paths:
         if (root / forbidden).exists():
             findings.append(Finding("clean-contamination", forbidden, "duplicate/application artifact in clean baseline"))
 
@@ -1517,8 +1545,11 @@ def validate_version(root: Path, findings: list[Finding]) -> None:
     if not version:
         findings.append(Finding("framework-version", "FCVW/FRAMEWORK_LOCK.md", "installed version not found"))
         return
-    if version not in read_text(root / "README.md"):
-        findings.append(Finding("framework-version", "README.md", f"README does not reference {version}"))
+    readme = root / ("FCVW/README.md" if is_installed_release_layout(root) else "README.md")
+    if version not in read_text(readme):
+        findings.append(
+            Finding("framework-version", readme.relative_to(root).as_posix(), f"README does not reference {version}")
+        )
     release_path = root / "FCVW" / "framework-releases" / f"{version}.md"
     if not release_path.is_file():
         findings.append(Finding("framework-release", release_path.relative_to(root).as_posix(), "release record missing"))
@@ -1721,6 +1752,8 @@ def _relationship_candidate(root: Path, source: Path, value: str) -> Path | None
     target = target.replace("\\", "/")
     if target.startswith("/"):
         return root / target.lstrip("/")
+    if target == "README.md" and is_installed_release_layout(root):
+        return root / "FCVW" / "README.md"
     if target.startswith(("FCVW/", "AGENTS.md", "README.md")):
         return root / target
     return source.parent / target
@@ -1795,7 +1828,16 @@ def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
             and "Plans" in path.relative_to(root).parts
             and any(state in path.relative_to(root).parts for state in ("completed", "discontinued"))
         )
-        for field in ("created_at", "updated_at", "last_reviewed", "detected_at", "date"):
+        for field in (
+            "created_at",
+            "updated_at",
+            "last_reviewed",
+            "next_review",
+            "ingested_at",
+            "last_checked",
+            "detected_at",
+            "date",
+        ):
             value = scalar(metadata, field)
             if value:
                 try:
@@ -1865,6 +1907,14 @@ def validate_document_graph(root: Path, findings: list[Finding]) -> None:
                 "generated catalog does not match the current Markdown filesystem",
             )
         )
+
+
+def validate_knowledge_graph(root: Path, findings: list[Finding]) -> None:
+    graph = build_knowledge_graph(root)
+    findings.extend(
+        Finding(item.rule, item.path, item.message, item.severity)
+        for item in graph.findings
+    )
 
 
 def validate_queues(root: Path, findings: list[Finding]) -> None:
@@ -1972,6 +2022,7 @@ def main() -> int:
     validate_frontmatter_documents(root, findings)
     validate_queues(root, findings)
     validate_document_graph(root, findings)
+    validate_knowledge_graph(root, findings)
     validate_canonical_metadata(root, findings)
     validate_plans(root, findings)
     validate_skills(root, findings)

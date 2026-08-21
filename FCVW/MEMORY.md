@@ -45,3 +45,9 @@ Deletion requires an explicit retention policy, approval, and evidence that no l
 ## Freshness
 
 Knowledge pages declare confidence, sources, last review date, and supersession links. Stale information is reviewed or marked obsolete; it is not silently treated as current.
+
+Tracked source pages may store `source_digest` and knowledge may declare `derived_from`. A digest mismatch is a derived review condition: report the source and dependent pages, then require a reviewer to confirm, update, supersede, or invalidate the knowledge. Do not add a lifecycle `stale` status or silently refresh the stored digest.
+
+Claim-bearing pages may use maturity independently from lifecycle, confidence, and authority. Source, raw, and session records do not require maturity.
+
+The document graph owns navigation and reachability. The disposable knowledge graph owns typed semantic relations; neither graph is canonical truth.

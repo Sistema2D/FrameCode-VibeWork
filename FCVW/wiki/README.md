@@ -8,5 +8,7 @@
 - Move older sessions to `archive/YYYY/`; do not delete evidence by default.
 - Use `wiki-curator` to promote and deduplicate.
 - Use `wiki-lint` for incremental validation.
+- Use typed frontmatter relations only when their semantics improve retrieval or impact review; keep portable Markdown links for navigation.
+- Track selected evidence under `sources/` and generate semantic graphs or stale reports only into `.fcvw-cache/` or another disposable path.
 
 The clean baseline contains navigation and templates only.

@@ -78,6 +78,8 @@ Rules:
 - track freshness, promotion precision, duplication, release synthesis coverage, taxonomy coverage, and cost control using `wiki/metrics.md`;
 - organize curated wiki pages with canonical tags, `theme`, and `theme_color` from `wiki/taxonomy.md`;
 - use one fixed optimized curation mode only: JIT loading of index/log/schema/taxonomy/metrics plus directly triggered source records. Do not expose customizable curation cost modes.
+- treat tracked source-digest changes as review candidates for explicit `derived_from` dependents; never refresh digests or mutate dependent knowledge before review.
+- use typed relations only when their semantics improve retrieval or impact analysis, and derive inverse graph edges instead of duplicating them in pages.
 
 ### Agent with Tools
 
@@ -351,7 +353,7 @@ To create new AI feature specifications, use the template in:
 
 Optional lexical retrieval complements but never replaces deterministic routing. The mandatory layer always contains `AGENTS.md`, the applicable `CONTEXT_MAP.md` route, the active plan, its `context_files`, and directly affected files.
 
-The complementary layer may index Markdown by `##` and `###` sections, preserve tables and fenced code, filter by metadata, and rank with auditable BM25. Results return path, heading, score, content hash, and selection reason.
+The complementary layer may index Markdown by `##` and `###` sections, preserve tables and fenced code, filter by metadata, and rank with auditable BM25. Results return path, heading, score, chunk hash, selection reason, and whether selection was lexical or graph-derived.
 
 Rules:
 
@@ -362,6 +364,9 @@ Rules:
 - lower-authority artifacts cannot elevate themselves above their canonical source through metadata;
 - archives and superseded material are penalized or search-only;
 - ranking may use controlled retrieval priority, review freshness, path/heading signals, and direct active-plan relationships in addition to lexical relevance;
+- metadata filters may use explicit type, tag, maturity, or declared language without inferring absent values;
+- typed graph expansion occurs only after lexical ranking, uses a user-selected relation set, starts from at most five lexical source paths, expands one hop, and adds at most eight candidates;
+- the disposable knowledge graph is reconstructed from Markdown and never replaces the document graph or source authority;
 - generated indexes are disposable and non-normative;
 - absence of a source is explicit;
 - mandatory-path output reports missing or out-of-root sources explicitly;
@@ -369,13 +374,16 @@ Rules:
 - an explicit `language` metadata filter may scope already multilingual application content, but it never discovers or selects an FCVW release language and no language is inferred for undeclared documents;
 - embeddings remain optional and require measured lexical recall gaps.
 
-Reference tools: `tools/build_context_index.py` and `tools/retrieve_context.py`.
+Reference tools: `tools/build_context_index.py`, `tools/knowledge_graph_fcvw.py`, and `tools/retrieve_context.py`.
 
 Example:
 
 ```powershell
 python tools/build_context_index.py --root . --output path/to/disposable-context-index.jsonl
-python tools/retrieve_context.py --root . --index path/to/disposable-context-index.jsonl --query "task terms" --active-plan FCVW/Plans/in_progress/<plan>.md --mandatory <directly-affected-path>
+python tools/knowledge_graph_fcvw.py --root . --output .fcvw-cache/knowledge-graph.json --review-output .fcvw-cache/knowledge-review.json
+python tools/retrieve_context.py --root . --index path/to/disposable-context-index.jsonl --query "task terms" --active-plan FCVW/Plans/in_progress/<plan>.md --mandatory <directly-affected-path> --knowledge-graph .fcvw-cache/knowledge-graph.json --relation derived_from
 ```
 
 The retriever returns excerpts as untrusted evidence. `exact_only` records require an explicit path, ID, or filename in the query.
+
+Optional semantic wiki review remains a `wiki-lint` procedure, not a retrieval ranking signal or deterministic release gate. It is source-bounded, review-only, and unavailable runtimes are reported without silently lowering deterministic validation.

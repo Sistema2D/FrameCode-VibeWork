@@ -13,9 +13,13 @@ title: "Release Synthesis <Vx.y.z>"
 type: "release"
 status: "draft"
 confidence: "medium"
+maturity: "provisional"
 created_at: "YYYY-MM-DD"
 last_reviewed: "YYYY-MM-DD"
+next_review: "YYYY-MM-DD"
 related_version: "Vx.y.z"
+derived_from:
+  - "<release-record-wiki-id-or-governed-path>"
 sources:
   - "changelogs/Vx.y.z.md"
 tags:

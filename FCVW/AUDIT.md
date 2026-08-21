@@ -40,6 +40,7 @@ Items:
 - agent/skill creation gates present when plans add new skills, agent profiles, specialist roles, or reusable operational procedures;
 - self-improvement gates present when plans modify skills, agent profiles, triggers, or agent operating rules;
 - wiki-curation evidence present when plans promote, revise, group, retag, or schedule wiki knowledge;
+- typed knowledge relationships resolve, tracked-source changes have review candidates, and semantic findings never mutate canonical pages silently;
 - no plan closes with unresolved duplication, stale files, or dead-code cleanup claims without evidence or deferral;
 - absence of contradictory instructions;
 - updated templates.
@@ -123,6 +124,7 @@ Items:
 - boundaries of action;
 - memory and learning;
 - wiki curation cost mode, taxonomy, freshness metrics, and source coverage;
+- typed graph bounds, source-digest impact review, and deterministic/semantic lint separation;
 - sensitive data;
 - conflicting instructions.
 

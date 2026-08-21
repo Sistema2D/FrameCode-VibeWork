@@ -22,8 +22,10 @@ from package_release_fcvw import (
     blocking_findings,
     create_archives,
     inspect_archive,
+    package_files,
     sha256,
 )
+from release_layout_fcvw import materialize_release_layout, payload_mapping, validate_release_layout
 from plan_queue_fcvw import recommend_next_plan, validate_plan_queues
 from retrieve_context import (
     MAX_EXCERPT_CHARS,
@@ -35,16 +37,19 @@ from retrieve_context import (
 )
 from validate_fcvw import (
     FRAMEWORK_RELEASE_SECTIONS,
+    REQUIRED_PATHS,
     Finding,
     _validate_framework_release_record,
     validate_app_rules,
     validate_application_releases,
     validate_audit_records,
+    validate_clean_template,
     validate_frontmatter_documents,
     level_two_section,
     validate_markdown,
     validate_plans,
     validate_troubleshooting_records,
+    validate_required,
     validate_version,
     validate_wiki_ids,
 )
@@ -63,11 +68,26 @@ class ReleasePackageTests(TemporaryRootTest):
         for language in RELEASE_VARIANTS:
             variant = staging / language
             (variant / "FCVW").mkdir(parents=True)
+            (variant / "tools").mkdir()
+            (variant / "AGENTS.md").write_text("[FCVW](FCVW/README.md)\n", encoding="utf-8")
             (variant / "README.md").write_text(f"# {language}\n", encoding="utf-8")
+            (variant / ".gitignore").write_text(".cache/\n", encoding="utf-8")
+            (variant / "LICENSE").write_text("license\n", encoding="utf-8")
+            (variant / "NOTICE").write_text("notice\n", encoding="utf-8")
+            (variant / "FCVW" / "README.md").write_text("# FCVW V0.14.0\n", encoding="utf-8")
+            (variant / "FCVW" / "DOCUMENT_GRAPH.md").write_text("# Graph\n", encoding="utf-8")
             (variant / "FCVW" / "LANGUAGE_REVIEW.md").write_text(
                 f'---\nlanguage: "{language}"\nstatus: "in_review"\n---\n',
                 encoding="utf-8",
             )
+            for name in (
+                "validate_fcvw.py",
+                "document_graph_fcvw.py",
+                "frontmatter_fcvw.py",
+                "package_release_fcvw.py",
+                "release_layout_fcvw.py",
+            ):
+                (variant / "tools" / name).write_text(f'"""{name}"""\n', encoding="utf-8")
         return staging
 
     def test_candidate_mode_tolerates_only_unapproved_review_finding(self) -> None:
@@ -94,7 +114,12 @@ class ReleasePackageTests(TemporaryRootTest):
             self.assertEqual(checksums[name], sha256(archive))
             with zipfile.ZipFile(archive) as opened:
                 names = opened.namelist()
-            self.assertIn(f"{archive.stem}/README.md", names)
+            self.assertIn(f"{archive.stem}/AGENTS.md", names)
+            self.assertIn(f"{archive.stem}/FCVW/README.md", names)
+            self.assertIn(f"{archive.stem}/FCVW/LICENSE", names)
+            self.assertIn(f"{archive.stem}/FCVW/tools/validate_fcvw.py", names)
+            self.assertNotIn(f"{archive.stem}/README.md", names)
+            self.assertNotIn(f"{archive.stem}/tools/validate_fcvw.py", names)
             self.assertTrue(all(member.startswith(f"{archive.stem}/") for member in names))
 
     def test_forbidden_package_state_and_existing_assets_block(self) -> None:
@@ -117,6 +142,88 @@ class ReleasePackageTests(TemporaryRootTest):
             opened.writestr("candidate/README.md", "# Candidate\n")
         with self.assertRaisesRegex(ValueError, "manifest mismatch"):
             inspect_archive(archive, "candidate", {"README.md", "AGENTS.md"})
+
+    def test_archive_inspection_rejects_extra_root_entry_even_when_manifest_matches(self) -> None:
+        _, root = self.make_root()
+        archive = root / "candidate.zip"
+        members = {"AGENTS.md", "FCVW/README.md", "README.md"}
+        with zipfile.ZipFile(archive, "w") as opened:
+            for member in members:
+                opened.writestr(f"candidate/{member}", member)
+        with self.assertRaisesRegex(ValueError, "exactly AGENTS.md and FCVW"):
+            inspect_archive(archive, "candidate", members)
+
+    def test_layout_mapping_rejects_collisions(self) -> None:
+        _, root = self.make_root()
+        (root / "FCVW").mkdir()
+        first = root / "LICENSE"
+        second = root / "FCVW" / "LICENSE"
+        first.write_text("root", encoding="utf-8")
+        second.write_text("nested", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "layout collision"):
+            payload_mapping(root, [first, second])
+
+    def test_materialized_layout_is_single_folder_removable(self) -> None:
+        _, root = self.make_root()
+        staging = self.make_staging(root)
+        variant = staging / "en-US"
+        installed = root / "installed"
+        materialize_release_layout(variant, installed, package_files(variant))
+        validate_release_layout(installed)
+        self.assertEqual({"AGENTS.md", "FCVW"}, {path.name for path in installed.iterdir()})
+        self.assertFalse((installed / "README.md").exists())
+        self.assertFalse((installed / ".gitignore").exists())
+
+        application_file = installed / "application.py"
+        application_file.write_text("print('preserved')\n", encoding="utf-8")
+        shutil.rmtree(installed / "FCVW")
+        self.assertTrue(application_file.is_file())
+        self.assertTrue((installed / "AGENTS.md").is_file())
+
+    def test_installed_layout_satisfies_required_path_contract(self) -> None:
+        _, root = self.make_root()
+        source = root / "source"
+        for relative in REQUIRED_PATHS:
+            path = source / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(relative, encoding="utf-8")
+        installed = root / "installed"
+        materialize_release_layout(source, installed, package_files(source))
+        findings: list[Finding] = []
+        validate_required(installed, findings)
+        self.assertEqual([], findings)
+
+    def test_installed_layout_accepts_contained_license_and_source_readme_alias(self) -> None:
+        _, root = self.make_root()
+        installed = root / "installed"
+        (installed / "FCVW" / "tools").mkdir(parents=True)
+        (installed / "AGENTS.md").write_text("[FCVW](FCVW/README.md)\n", encoding="utf-8")
+        (installed / "FCVW" / "tools" / "validate_fcvw.py").write_text("# validator\n", encoding="utf-8")
+        (installed / "FCVW" / "README.md").write_text("# FCVW\n", encoding="utf-8")
+        (installed / "FCVW" / "LICENSE").write_text("license\n", encoding="utf-8")
+        (installed / "FCVW" / "note.md").write_text(
+            "---\n"
+            'schema: "fcvw/document@1"\n'
+            'artifact_role: "record"\n'
+            'owner: "framework"\n'
+            'upgrade_strategy: "preserve"\n'
+            "context_files:\n"
+            '  - "README.md"\n'
+            "---\n\n# Note\n",
+            encoding="utf-8",
+        )
+        findings: list[Finding] = []
+        validate_frontmatter_documents(installed, findings)
+        validate_clean_template(installed, findings)
+        self.assertFalse(any(item.rule == "frontmatter-relationship" for item in findings))
+        self.assertFalse(any(item.path == "FCVW/LICENSE" for item in findings))
+
+        source = root / "source"
+        (source / "FCVW").mkdir(parents=True)
+        (source / "FCVW" / "LICENSE").write_text("duplicate\n", encoding="utf-8")
+        source_findings: list[Finding] = []
+        validate_clean_template(source, source_findings)
+        self.assertTrue(any(item.path == "FCVW/LICENSE" for item in source_findings))
 
 
 class FrontmatterTests(unittest.TestCase):
@@ -611,7 +718,7 @@ class QueueTests(TemporaryRootTest):
         self.assertEqual("pending", state)
         self.assertEqual(higher, entry.plan_id if entry else None)
 
-    def test_resolved_dependency_is_a_stale_blocker(self) -> None:
+    def test_internal_blocker_requires_declared_dependency(self) -> None:
         _, root = self.make_root()
         pending, in_progress = self.setup_queues(root)
         completed = root / "FCVW" / "Plans" / "completed"
@@ -631,7 +738,7 @@ class QueueTests(TemporaryRootTest):
             encoding="utf-8",
         )
         (in_progress / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
-        self.assertTrue(any(item.rule == "plan-queue-blocker" for item in validate_plan_queues(root)))
+        self.assertTrue(any(item.rule == "plan-queue-dependency" for item in validate_plan_queues(root)))
 
 
 class RetrievalTests(TemporaryRootTest):
