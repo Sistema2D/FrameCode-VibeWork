@@ -1,15 +1,15 @@
 ---
 schema: "fcvw/plan-queue@1"
-artifact_role: "project_profile"
+artifact_role: "generated"
 owner: "project"
-upgrade_strategy: "preserve"
+upgrade_strategy: "regenerate"
 state: "pending"
-updated_at: "2026-07-27"
+updated_at: "2026-08-31"
 ---
 
 # Pending plan queue
 
-Plans are ordered by `correction`, `optimization`, `code_hygiene`, `visual`, then `other`. A lower-ranked category may appear earlier only with a concrete override reason.
+Generated from [`queue.d/`](queue.d/README.md). Edit a fragment, not this file. Queue policy lives in [`PLANNING.md`](../../PLANNING.md).
 
 | Order | Plan | Category | Blocked by | Override reason |
 |---:|---|---|---|---|

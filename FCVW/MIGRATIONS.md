@@ -44,6 +44,42 @@ The V0.12.0 clean package reduced many operational documents, templates, refacto
 - Existing `fcvw/plan@1` records stay readable and are not rewritten solely for the Regression impact requirement.
 - A confirmed regression may be promoted to `fcvw/regression@1`; do not fabricate records during migration.
 
+## V0.15.0 to V0.16.0
+
+V0.16.0 remediates the V0.15.0 audit. The migration is additive: no existing
+artifact needs rewriting, and no existing schema was narrowed enough to
+invalidate prior records.
+
+Required migration:
+
+1. Preserve project profiles and records.
+2. Replace framework policies, templates, skills, and tools.
+3. Move `.cursorrules` and `.windsurfrules` from `FCVW/` to the repository root
+   if the previous installation has them. Inside `FCVW/` they have no effect.
+4. Generate `FCVW/ROLE_MANIFEST.json` with
+   `python FCVW/tools/role_manifest_fcvw.py --root . --write`. Without it, the
+   next upgrade cannot tell a locally edited policy from an untouched one.
+5. Adopt fragmented queues when convenient: create `Plans/<state>/queue.d/` and
+   move one `QUEUE.md` row at a time into an `fcvw/plan-queue-entry@1` fragment.
+   While the directory does not exist, the legacy queue stays canonical and valid.
+6. Review active `fcvw/plan@2` plans at risk `R3` or above that declare
+   `regression_contract: not_applicable`: the combination is now invalid.
+   Completed plans remain valid historical evidence.
+7. Review `fcvw/plan@2` plans without a populated `Rollback` section.
+8. Regenerate `DOCUMENT_GRAPH.md` and the queue views, then run the validator.
+
+Compatibility notes:
+
+- `fcvw/plan@1` and `fcvw/plan@2` remain readable without retroactive editing.
+- The compact class `fcvw/plan-compact@1` is optional; no existing plan needs to
+  migrate to it.
+- Link resolution became lexical instead of syscall-based. A repository relying
+  on symbolic links to resolve Markdown would see a difference; the packaging
+  contract already forbade them.
+- The six reproduced refactoring catalog pages were consolidated into
+  `refactoring-guide/02-refactoring-catalog.md`. Old links must be redirected;
+  the validator reports each one.
+
 ## Legacy baseline
 
 The `incremental` profile accepts a project-specific baseline for pre-existing findings:

@@ -17,7 +17,7 @@ Read-only work does not create a plan. A versioned change uses one of these form
 
 | Class | Typical use | Required detail |
 |---|---|---|
-| Compact | isolated P4/P5-R1 text or metadata | objective, files, validation, rollback, status |
+| Compact | isolated P4/P5-R1 text or metadata | `fcvw/plan-compact@1`: objective, files, validation, rollback, status |
 | Standard | functional, visual, structural, configuration, tests, docs behavior | full plan template |
 | Expanded | R4/R5, security, migration, destructive work, schema or framework release | full template, gates, approval, rollback rehearsal |
 
@@ -52,11 +52,16 @@ Allowed statuses are `pending`, `in_progress`, `completed`, and `discontinued`. 
 - related plans, decisions, failures, and changelog;
 - status.
 
-Use `governance/TEMPLATE_PLAN.md`. New or substantively reopened plans use `fcvw/plan@2`. Historical `fcvw/plan@1` records remain readable without retroactive editing.
+Use `governance/TEMPLATE_PLAN.md` for the standard and expanded classes, and `governance/TEMPLATE_PLAN_COMPACT.md` for the compact class. New or substantively reopened plans use `fcvw/plan@2`; the compact class uses `fcvw/plan-compact@1` and is restricted by the validator to `P4`/`P5` with `R1`. Historical `fcvw/plan@1` records remain readable without retroactive editing.
 
 ## Regression impact
 
-Every `fcvw/plan@2` plan declares `regression_contract: required` or `not_applicable`. A required contract identifies existing behaviors and consumers that may be affected before implementation, then records final replay evidence before completion. `not_applicable` requires a concrete justification and remains subject to structural/documentation regression checks.
+A compact plan (`fcvw/plan-compact@1`) declares no regression contract: its
+`P4`/`P5`-`R1` band is the justification, and the validator refuses any other
+combination. If the change leaves that band, convert the plan to `fcvw/plan@2`
+before continuing.
+
+Every `fcvw/plan@2` plan declares `regression_contract: required` or `not_applicable`. A required contract identifies existing behaviors and consumers that may be affected before implementation, then records final replay evidence before completion. `not_applicable` requires a concrete justification of at least 40 characters that argues the waiver instead of restating it, and remains subject to structural/documentation regression checks. The validator refuses it at risk `R3` or above and in any plan routed through `SECURITY.md`, `DATA.md`, or `MIGRATIONS.md`. Every `fcvw/plan@2` also needs a `Rollback` section containing a real procedure.
 
 The section may not remain empty, generic, placeholder-only, or `pending` at completion. Use `REGRESSION_GUARDS.md` for blocking conditions and `TESTS.md` for risk-proportional evidence.
 
@@ -117,7 +122,7 @@ Legacy plans retain their original schema. Apply the current schema when a legac
 
 ## Priority queues
 
-`Plans/in_progress/QUEUE.md` and `Plans/pending/QUEUE.md` are project-owned operational indexes. Every plan in either directory appears exactly once in its matching queue. Queue changes and plan lifecycle changes form one transaction.
+The canonical queue for each state is the set of fragments in `Plans/<state>/queue.d/`, one per plan, using `fcvw/plan-queue-entry@1`. `Plans/in_progress/QUEUE.md` and `Plans/pending/QUEUE.md` are the generated aggregate view. A prior project that keeps rows directly in `QUEUE.md` stays valid until it migrates. Every plan in either directory appears exactly once in its matching queue. Queue changes and plan lifecycle changes form one transaction, and with fragments that transaction touches only the plan and its own fragment.
 
 Recommendation order is:
 
@@ -155,6 +160,26 @@ Before adding a dependency, abstraction, wrapper, module, service, layer, or mat
 5. If not, what evidence justifies new code or dependency?
 
 The check is advisory for ordinary implementation and blocking when the proposal has no concrete need, duplicates an existing solution, or expands scope without approval. Simplification never overrides security, privacy, accessibility, traceability, validation, audit, data integrity, required documentation, or risk-proportional tests.
+
+## Framework proportionality
+
+The proportionality rule above also applies to the framework itself. A new policy
+document, schema, derived surface, or template is justified only when a matching
+rule exists that the validator can execute. Prose that no tool checks is not
+governance: it is documentation, and it belongs inside an existing document
+rather than creating one more surface to maintain, review, and translate into
+four languages.
+
+Before adding a surface to FCVW, answer in order:
+
+1. Does an existing document or schema already cover this?
+2. Which validator rule will make the new surface checkable?
+3. Which `CONTEXT_MAP.md` route makes an agent load it, and under which trigger?
+4. What is the per-session token cost, and who pays it?
+5. What is removed in exchange?
+
+A new surface without a matching rule is a proportionality failure, and the same
+advisory or blocking gate used for application work applies here.
 
 ## Document relationships
 

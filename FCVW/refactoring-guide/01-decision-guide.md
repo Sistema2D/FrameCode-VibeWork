@@ -6,19 +6,19 @@ Use this file to identify the refactoring scenario and direct the team to the ap
 
 | Observed Symptom | Confirmation Question | Applicable File |
 |---|---|---|
-| Long method, difficult to understand, or with blocks that seem to have their own intention. | Are there excerpts that could have their own name? | [`02-composing-methods.md`](02-composing-methods.md) |
-| Complex expression, confusing temporary variable, or algorithm difficult to replace. | Is the difficulty inside a method? | [`02-composing-methods.md`](02-composing-methods.md) |
-| Method or field seems to belong to another class. | Does another class use this behavior/data more? | [`03-moving-features-between-objects.md`](03-moving-features-between-objects.md) |
-| Class does too much work or almost nothing. | Is the responsibility incorrectly concentrated or dispersed? | [`03-moving-features-between-objects.md`](03-moving-features-between-objects.md) |
-| Excessive dependency through call chains or useless delegation. | Does the client know too many objects or is there an intermediate without value? | [`03-moving-features-between-objects.md`](03-moving-features-between-objects.md) |
-| Primitive data represent domain concepts. | Does the data have its own rule, validation, unit, format, or behavior? | [`04-organizing-data.md`](04-organizing-data.md) |
-| Public fields, exposed collections, heterogeneous array, or magic number. | Is the data vulnerable to improper alteration? | [`04-organizing-data.md`](04-organizing-data.md) |
-| Complex, duplicated, nested, or type-based conditional. | Does the decision logic hinder reading, extension, or testing? | [`05-simplifying-conditional-expressions.md`](05-simplifying-conditional-expressions.md) |
-| Many `null`s, control flags, or implicit premises. | Is there a special flow that should be explicit? | [`05-simplifying-conditional-expressions.md`](05-simplifying-conditional-expressions.md) |
-| Method has a bad name, too many parameters, unused parameter, or complex constructor. | Is the call interface confusing or unstable? | [`06-making-method-calls-simpler.md`](06-making-method-calls-simpler.md) |
-| Method returns a value and changes state at the same time. | Does the call mix query and command? | [`06-making-method-calls-simpler.md`](06-making-method-calls-simpler.md) |
-| Inheritance contains duplication, misplaced subclasses, or excessive hierarchy. | Is the problem in the abstraction between classes? | [`07-dealing-with-generalization.md`](07-dealing-with-generalization.md) |
-| Delegation replaces inheritance or inheritance replaces delegation improperly. | Is the "is-a" or "has-a" relationship poorly modeled? | [`07-dealing-with-generalization.md`](07-dealing-with-generalization.md) |
+| Long method, difficult to understand, or with blocks that seem to have their own intention. | Are there excerpts that could have their own name? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Complex expression, confusing temporary variable, or algorithm difficult to replace. | Is the difficulty inside a method? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Method or field seems to belong to another class. | Does another class use this behavior/data more? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Class does too much work or almost nothing. | Is the responsibility incorrectly concentrated or dispersed? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Excessive dependency through call chains or useless delegation. | Does the client know too many objects or is there an intermediate without value? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Primitive data represent domain concepts. | Does the data have its own rule, validation, unit, format, or behavior? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Public fields, exposed collections, heterogeneous array, or magic number. | Is the data vulnerable to improper alteration? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Complex, duplicated, nested, or type-based conditional. | Does the decision logic hinder reading, extension, or testing? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Many `null`s, control flags, or implicit premises. | Is there a special flow that should be explicit? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Method has a bad name, too many parameters, unused parameter, or complex constructor. | Is the call interface confusing or unstable? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Method returns a value and changes state at the same time. | Does the call mix query and command? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Inheritance contains duplication, misplaced subclasses, or excessive hierarchy. | Is the problem in the abstraction between classes? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
+| Delegation replaces inheritance or inheritance replaces delegation improperly. | Is the "is-a" or "has-a" relationship poorly modeled? | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) |
 | The problem was perceived as a code smell, but the technique is still unclear. | Which smell closest matches the case? | [`08-code-smells-map.md`](08-code-smells-map.md) |
 
 ## Decision Flow
@@ -132,12 +132,12 @@ To optimize tokens, read only what is necessary for the current activity.
 |---|---|---|
 | Common base (once per session or opening) | [`00-general-governance.md`](00-general-governance.md) | Does not need to be reread for each activity. |
 | Doubt if it is pure refactoring | [`18-behavioral-refactoring-vs-rewrite.md`](18-behavioral-refactoring-vs-rewrite.md) | Classifies refactoring vs fix/feature/rewrite. |
-| Symptom inside method/expression | [`02-composing-methods.md`](02-composing-methods.md) | Use when the problem is inside the method. |
-| Complex conditional, flags, or `null` | [`05-simplifying-conditional-expressions.md`](05-simplifying-conditional-expressions.md) | Use when the decision is difficult to read/test. |
-| Responsibility between classes/objects | [`03-moving-features-between-objects.md`](03-moving-features-between-objects.md) | Method/field in the wrong place, class too large/small. |
-| Data/encapsulation problem | [`04-organizing-data.md`](04-organizing-data.md) | Primitives, exposed collections, type codes. |
-| Confusing call interface | [`06-making-method-calls-simpler.md`](06-making-method-calls-simpler.md) | Bad name, many parameters, mixed return/effect. |
-| Abstraction, inheritance, or delegation | [`07-dealing-with-generalization.md`](07-dealing-with-generalization.md) | Excessive hierarchy, improper inheritance. |
+| Symptom inside method/expression | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) | Use when the problem is inside the method. |
+| Complex conditional, flags, or `null` | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) | Use when the decision is difficult to read/test. |
+| Responsibility between classes/objects | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) | Method/field in the wrong place, class too large/small. |
+| Data/encapsulation problem | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) | Primitives, exposed collections, type codes. |
+| Confusing call interface | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) | Bad name, many parameters, mixed return/effect. |
+| Abstraction, inheritance, or delegation | [`02-refactoring-catalog.md`](02-refactoring-catalog.md) | Excessive hierarchy, improper inheritance. |
 | Smell without clear technique | [`08-code-smells-map.md`](08-code-smells-map.md) | Use to discover the technical file. |
 | Specific operational conditions | Table “Operational Layer for Large Bases” | Read only the file(s) pointed to by the condition. |
 | Needs template | [`20-templates.md`](20-templates.md) | Copy only the applicable template. |

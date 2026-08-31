@@ -12,6 +12,7 @@ from build_context_index import build_index
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import recommend_next_plan, render_aggregate_queue, validate_plan_queues
 from retrieve_context import bm25
+from release_layout_fcvw import governed_root
 
 
 class TemporaryRootTest(unittest.TestCase):
@@ -319,13 +320,16 @@ class KnowledgeGraphTests(TemporaryRootTest):
 
 class WikiLintContractTests(unittest.TestCase):
     def test_semantic_review_remains_bounded_non_mutating_and_non_gating(self) -> None:
-        root = Path(__file__).resolve().parents[1]
+        root = governed_root(Path(__file__))
         contract = (root / "FCVW" / "skills" / "wiki-lint" / "SKILL.md").read_text(encoding="utf-8").lower()
 
-        self.assertIn("source-bounded", contract)
-        self.assertIn("never rewrite, validate, supersede, invalidate, or refresh a digest automatically", contract)
-        self.assertIn("do not make semantic findings a release gate", contract)
-        self.assertIn("report semantic review as unavailable", contract)
+        # Controlled values are never translated (FCVW/SCHEMAS.md), so the
+        # contract is asserted on tokens rather than on localizable prose.
+        self.assertIn("scope: source-bounded", contract)
+        self.assertIn("mutation: forbidden", contract)
+        self.assertIn("release_gate: forbidden", contract)
+        self.assertIn("runtime_unavailable: report-only", contract)
+        self.assertIn("authority: advisory", contract)
 
 
 if __name__ == "__main__":

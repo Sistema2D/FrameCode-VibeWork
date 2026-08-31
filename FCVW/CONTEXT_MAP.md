@@ -51,6 +51,7 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | Governance audit / maintenance (`audit`, `maintenance`) | integrity, lint, drift, cleanup, over-engineering, policy review | `governance-validator`, `SCHEMAS.md`, `AUDIT.md` relevant checklist | `FILESYSTEM.md`, `OWNERSHIP.md`, `agnix-linter`, hygiene skills | product docs unless a finding crosses scope |
 | Closeout / handoff (`handoff`) | finish, resume later, transfer context, archive session | active plan, `REGRESSION_GUARDS.md`, `AUDIT.md` closeout checklist | `aicc-compact`, `MEMORY.md`, release record | unrelated archived sessions |
 | Multi-agent (`multi_agent`) | explicit delegation, parallel agents, work packages | active plan, `orchestrator`, ownership/lock metadata | each delegated skill and exact files | old handoffs |
+| Framework feedback (`framework_feedback`) | suggest a framework change, disagree with a prior note, review the feedback backlog | `wiki/feedback/README.md`, `wiki/templates/TEMPLATE_FEEDBACK.md` | notes on the same `topic`, `PLANNING.md`, affected policy | unrelated application domains |
 
 ## Event-triggered mandatory reads
 
@@ -80,6 +81,9 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | `AUDIT.md` | matching audit type or quick checklist; pre-release checklist only at release | running a repository-wide or release audit |
 | `APPLICATION_DOCUMENTATION.md` | When documentation is required and minimum module scope | designing the full downstream documentation tree |
 | `ARCHITECTURAL_DECISIONS.md` | When to create/not create an ADR and acceptance checklist | authoring or superseding an ADR |
+| `SCHEMAS.md` | Common fields plus only the schema of the artifact at hand | changing a schema or auditing compatibility |
+| `PLANNING.md` | When planning applies; plan class; regression impact; queues | reopening a plan or revising queue policy |
+| `TESTS.md` | Minimum evidence by risk plus the row for the changed surface | defining project test strategy |
 
 ## Declared skill session type aliases
 
@@ -93,6 +97,7 @@ Every `session_types` value in `skills/*/SKILL.md` must appear here or directly 
 | `documentation` | Documentation / file movement |
 | `feature` | New feature |
 | `framework_upgrade` | Framework upgrade |
+| `framework_feedback` | Framework feedback |
 | `git` | Git / repository mutation |
 | `handoff` | Closeout / handoff |
 | `instantiation` | Instantiation |
@@ -113,7 +118,7 @@ Every `session_types` value in `skills/*/SKILL.md` must appear here or directly 
 - If no route matches a read-only request, load only `AGENTS.md`, `FRAMEWORK_LOCK.md`, and the closest canonical index; do not invent a plan.
 - If no route matches a versioned change, load `PLANNING.md`, `REGRESSION_GUARDS.md`, `OWNERSHIP.md`, and the closest domain policy, then record the routing gap in the active plan.
 - Do not solve an uncertain route by loading the whole wiki, all plans, all skills, or every long policy.
-- Project-profile placeholders are unknown facts until `instantiation_status: complete`; they never override framework policy.
+- Project profile placeholders are unknown facts until `instantiation_status: complete`; a `not_applicable` profile declares that the concern does not apply yet. Neither overrides framework policy.
 - Archives and historical records are search targets selected by exact symptom, ID, version, path, or scope—not default context.
 
 ## Validator contract

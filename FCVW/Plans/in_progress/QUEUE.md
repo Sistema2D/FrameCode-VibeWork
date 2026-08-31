@@ -1,15 +1,15 @@
 ---
 schema: "fcvw/plan-queue@1"
-artifact_role: "project_profile"
+artifact_role: "generated"
 owner: "project"
-upgrade_strategy: "preserve"
+upgrade_strategy: "regenerate"
 state: "in_progress"
-updated_at: "2026-08-21"
+updated_at: "2026-08-31"
 ---
 
 # In-progress plan queue
 
-In-progress plans normally run before pending plans. Dependencies, regression risk, or explicit human direction may change the recommendation when the reason is recorded.
+Generated from [`queue.d/`](queue.d/README.md). Edit a fragment, not this file. Queue policy lives in [`PLANNING.md`](../../PLANNING.md).
 
 | Order | Plan | Category | Blocked by | Override reason |
 |---:|---|---|---|---|

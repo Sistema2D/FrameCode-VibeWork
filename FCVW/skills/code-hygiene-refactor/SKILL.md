@@ -2,7 +2,7 @@
 schema: "fcvw/skill@1"
 name: "code-hygiene-refactor"
 description: "Select a bounded, behavior-preserving code-hygiene batch."
-version: "1.2.0"
+version: "1.3.0"
 trigger_keywords:
   - "code hygiene"
   - "duplication"
@@ -51,6 +51,17 @@ Before creating a utility, service, wrapper, component, dependency, file, layer,
 3. Does the language, framework, platform, or infrastructure provide a native capability?
 4. Does an already installed dependency solve it adequately?
 5. Only then, is new code justified?
+
+```yaml
+proportionality_gate: required
+ladder:
+  - in_scope
+  - existing_solution
+  - native_capability
+  - installed_dependency
+  - justified_new_code
+advisory_when: bounded_direct_change
+```
 
 For any non-trivial increase in technical complexity, record:
 

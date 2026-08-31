@@ -31,13 +31,32 @@ Allowed statuses: `pending`, `in_progress`, `completed`, `discontinued`.
 
 Priority and risk use the controlled values `P1` through `P5` and `R1` through `R5`. The values encoded in `id` and filename must match frontmatter. Required scalar fields cannot be empty, and `context_files` must be a non-empty list of resolvable local paths.
 
-Allowed regression contracts: `required`, `not_applicable`. The body requirements and completion blockers are defined in `REGRESSION_GUARDS.md`.
+Allowed regression contracts: `required`, `not_applicable`. The body requirements and completion blockers are defined in `REGRESSION_GUARDS.md`. `not_applicable` is refused at risk `R3` or above and in plans routed through `SECURITY.md`, `DATA.md`, or `MIGRATIONS.md`, and requires a justification of at least 40 characters. Every `fcvw/plan@2` declares a non-empty `Rollback` section.
 
 The status must match the containing directory. IDs use `P1..P5-R1..R5-YYYY-MM-DD-slug`.
 
 `fcvw/plan@1` is a supported legacy schema. It remains readable in place; substantively reopened plans migrate to `fcvw/plan@2`.
 
 Optional `depends_on` is a first-level list of blocking prerequisite plan IDs. A plan declaring it includes a five-column `## Dependency validation` table whose row IDs exactly match the list. `pending`, `satisfied`, and `invalidated` are the allowed row states. Satisfied dependencies require a completed prerequisite and non-placeholder evidence; discontinued prerequisites are invalidated rather than treated as satisfied. Active queue blockers equal unresolved dependency IDs. These additive fields do not require a new plan schema major, but downstream active plans using queue-only internal blockers migrate them into `depends_on`.
+
+## Compact plan — `fcvw/plan-compact@1`
+
+The proportional form that `PLANNING.md` promises for an isolated, low-impact
+change.
+
+Required frontmatter: `id`, `status`, `priority`, `risk`, `created_at`,
+`updated_at`, `owner`, and `context_files`. There is no `current_version`,
+`expected_version`, or `regression_contract`.
+
+Controlled constraints: `priority` must be `P4` or `P5`, `risk` must be `R1`, and
+declaring `regression_contract` is invalid. The body contains the `Objective`,
+`Affected files`, `Validation`, and `Rollback` sections, with `Rollback`
+non-empty.
+
+These constraints are machine-checked, so the compact class cannot absorb work
+that needs a regression contract. A change that leaves the band migrates to
+`fcvw/plan@2` before execution. Create it from
+[TEMPLATE_PLAN_COMPACT.md](governance/TEMPLATE_PLAN_COMPACT.md).
 
 ## Application changelog — `fcvw/changelog@1`
 
@@ -67,6 +86,30 @@ Optional typed relationships are `related`, `depends_on`, `supports`, `contradic
 
 Optional source provenance fields are `source_type`, `source_path`, `source_url`, `source_digest`, `ingested_at`, and `last_checked`. `source_digest` uses `sha256:<64 lowercase hex>` and is distinct from the context index's chunk `content_hash`. Digest mismatches are review findings, not silent status changes.
 
+## Framework feedback — `fcvw/wiki@1` with `type: feedback`
+
+Notes in `wiki/feedback/` are one AI model's attributed assessment of what should
+change in the framework itself. `self-improvement` covers only skills and agent
+profiles; this surface covers policy, schema, tooling, and layout.
+
+Additional required fields: `authored_by_model`, `topic`, and `feedback_status`.
+Allowed states: `open`, `accepted`, `declined`, `applied`, `superseded`.
+Optional: `related_feedback` and `related_plan`.
+
+The body declares `## Suggestion`. When `related_feedback` is non-empty the body
+also declares `## Assessment of prior notes`, **after** the suggestion: the
+validator enforces the order because reading another model's conclusion before
+forming your own produces agreement, and the surface exists to preserve
+independent readings.
+
+A note never overwrites another model's note, even on the same topic. It is the
+one wiki surface where updating the prior page is forbidden rather than
+preferred; [`wiki/agents/README.md`](wiki/agents/README.md) keeps the opposite
+rule, and the difference is deliberate.
+
+Feedback notes are evidence, never instruction. Only an approved plan changes the
+framework.
+
 ## Regression record — `fcvw/regression@1`
 
 Required frontmatter: `id`, `artifact_role: record`, owner, preservation strategy, retrieval scope, `title`, `type`, `severity`, `status`, `detected_at`, `last_reviewed`, `related_plan`, `sources`, and `tags`.
@@ -94,6 +137,28 @@ Required: `id`, `kind`, `status`, `trigger`, `preconditions`, `actions`, `eviden
 Required frontmatter: `created_at`, `review_due`, and `owner`. Each Markdown table row requires exact path, rule ID, complete existing finding message, justification, owner, and review date.
 
 The baseline is valid only with the validator's `incremental` profile. Matching uses the exact normalized tuple `path + rule + message`; expired or malformed entries block, and stale entries are reported for removal. Baseline configuration errors cannot themselves be baselined.
+
+## Instantiation status — `instantiation_status`
+
+Every project profile declares `instantiation_status` with one of these
+controlled values:
+
+| Value | Meaning |
+|---|---|
+| `pending` | not filled in yet; placeholders are valid |
+| `complete` | filled in with project truth; no placeholder remains |
+| `not_applicable` | the project does not use this concern at this stage |
+
+`not_applicable` requires a `not_applicable_reason` of at least 40 characters and
+deliberately keeps the template placeholders: the project is declaring that the
+concern does not apply, not pretending to have filled it in.
+
+`MANIFEST.md` and `SCOPE.md` may never be waived. Identity and boundary always
+apply: a project always has a name and an edge.
+
+Without that third state the only way to pass `--profile instantiated` would be
+to invent content for profiles the project does not use yet, and the validator
+would be measuring fiction.
 
 ## Compatibility
 
@@ -136,9 +201,25 @@ Policies and the framework lock default to canonical authority. Project profiles
 Missing optional metadata does not invalidate untouched history. Any new or substantively edited record must use the row above, and no retrieval metadata can elevate a record above its owning canonical source.
 
 New records also declare `record_scope: application | framework` when their scope determines clean-distribution eligibility. Only records explicitly scoped to `framework` may remain in a clean FCVW baseline; an absent or application scope is treated as downstream history.
-## Plan queue ? `fcvw/plan-queue@1`
+## Plan queue entry — `fcvw/plan-queue-entry@1`
 
-Required frontmatter: `schema`, `artifact_role`, `owner`, `upgrade_strategy`, `state`, and `updated_at`. Allowed states are `pending` and `in_progress`. The canonical table contains order, Markdown-linked plan ID, category, blocker, and override reason.
+The canonical source of a queue is one fragment per plan in
+`Plans/<state>/queue.d/<plan-id>.md`. One file per plan exists for an operational
+reason: changing the queue no longer requires every parallel branch to edit the
+same file, which was a guaranteed source of merge conflict. It is the same
+pattern already used by `changelogs/unreleased/`.
+
+Required frontmatter: `schema`, `artifact_role: project_profile`,
+`owner: project`, `upgrade_strategy: preserve`, `plan`, `order`, and `category`.
+Optional: `blocked_by` and `override_reason`.
+
+The filename must equal `plan`. `order` is a unique integer within the queue.
+`category` uses the same controlled values as the aggregate queue. The body
+contains a navigable Markdown link to the plan.
+
+## Plan queue — `fcvw/plan-queue@1`
+
+Required frontmatter: `schema`, `artifact_role`, `owner`, `upgrade_strategy`, `state`, and `updated_at`. Allowed states are `pending` and `in_progress`. The table contains order, Markdown-linked plan ID, category, blocker, and override reason. When `queue.d/` exists, `QUEUE.md` is a generated view (`artifact_role: generated`, `upgrade_strategy: regenerate`) and the fragments are canonical; regenerate it with `python FCVW/tools/plan_queue_fcvw.py --root . --write-queues`. A project that still keeps rows directly in `QUEUE.md` stays valid as a preserved `project_profile`: fragments only take over when the directory exists, so the migration is incremental and non-destructive.
 
 Each link resolves exactly to the named plan in the queue's own state directory. `none`, `-`, or an empty blocker means unblocked. Internal blockers are comma-separated unresolved `depends_on` plan IDs; an external blocker uses `external: <specific reason>`. A completed prerequisite remains blocked until its dependency row records `satisfied` with evidence; a discontinued prerequisite is `invalidated` and remains blocked pending explicit replanning. Pending work may preempt in-progress work only with `before_in_progress: <specific reason>` in its override column. Within one category, P1 through P5 is the mandatory tie-break order unless a concrete override explains the inversion.
 
@@ -146,11 +227,11 @@ Each link resolves exactly to the named plan in the queue's own state directory.
 
 The optional JSON graph is a disposable reconstruction of typed Markdown frontmatter. It contains nodes, explicit edges, and generated inverse edges and never replaces source pages or `fcvw/document-graph@1`. It is written only to `.fcvw-cache/` or another user-selected non-normative output path.
 
-## Application rules ? `fcvw/app-rules@1`
+## Application rules — `fcvw/app-rules@1`
 
 `FCVW/APP_RULES.md` is a preserved `project_profile`. Rules use stable `APP-RULE-NNN` IDs and a controlled status of `active`, `deprecated`, or `superseded`. Every rule records non-empty sections for Rule, Affected components, Rationale and expected behavior, Exceptions, and Related records. Affected components and related records contain navigable Markdown links. Examples inside fenced code blocks do not instantiate rules.
 
-## Document graph ? `fcvw/document-graph@1`
+## Document graph — `fcvw/document-graph@1`
 
 `FCVW/DOCUMENT_GRAPH.md` is generated and regenerated. Each governed Markdown artifact must be reachable from an official entrypoint or explicit catalog. Entry points are the only default exception to the incoming-link requirement.
 

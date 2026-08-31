@@ -1,0 +1,3 @@
+# Deterministic line endings: the packager promises byte-identical archives,
+# and a CRLF checkout would make that promise depend on the build machine.
+* text=auto eol=lf

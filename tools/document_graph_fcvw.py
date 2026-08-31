@@ -14,6 +14,7 @@ from pathlib import Path
 from urllib.parse import quote, unquote
 
 from frontmatter_fcvw import parse_frontmatter, scalar
+from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
@@ -108,10 +109,14 @@ def _candidate(root: Path, source: Path, raw_target: str, *, vault_relative: boo
             return None
         markdown = candidate.with_suffix(".md")
         candidate = markdown if markdown.exists() else candidate / "README.md"
+    # `root` is already resolved by the caller, and Markdown link targets are
+    # portable repository paths rather than filesystem links. Normalising the
+    # path lexically therefore gives the same answer as `Path.resolve()` while
+    # avoiding two filesystem round trips for every link in the repository.
     try:
-        resolved = candidate.resolve()
-        resolved.relative_to(root.resolve())
-        return resolved
+        normalized = Path(os.path.normpath(candidate))
+        normalized.relative_to(root)
+        return normalized
     except (ValueError, OSError):
         return Path("__outside_root__") / target
 
@@ -163,7 +168,7 @@ def build_graph(root: Path) -> DocumentGraph:
 
     for path in files:
         relative = path.relative_to(root).as_posix()
-        text = path.read_text(encoding="utf-8-sig")
+        text = cache_read_text(path)
         lines = _outside_fences(text)
         targets: list[tuple[str, bool]] = []
         for line in lines:
@@ -230,7 +235,7 @@ def build_graph(root: Path) -> DocumentGraph:
 
     for path in files:
         relative = path.relative_to(root).as_posix()
-        metadata = parse_frontmatter(path.read_text(encoding="utf-8-sig")).data
+        metadata = cache_frontmatter(path)
         allowed = _validated_orphan_exception(metadata, relative, findings)
         if relative not in entrypoints and not incoming_mutable.get(relative) and not allowed:
             findings.append(GraphFinding("document-orphan", relative, "Markdown artifact has no incoming link"))

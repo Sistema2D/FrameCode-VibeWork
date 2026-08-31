@@ -44,6 +44,10 @@ RELEASE_EVIDENCE_PATHS = {
 }
 RELEASE_EVIDENCE_GRAPH_TARGETS = {"LANGUAGE_REVIEW.md"}
 RELEASE_EVIDENCE_GRAPH_LABELS = {"FCVW/LANGUAGE_REVIEW.md"}
+# The role manifest stores a content digest per file, and Markdown content
+# legitimately differs between language variants, so it is compared as a
+# generated per-variant surface rather than byte-for-byte like a tool.
+PER_VARIANT_GENERATED_PATHS = {"FCVW/ROLE_MANIFEST.json"}
 IGNORED_PARTS = {".git", ".obsidian", "__pycache__", ".codex-test-tmp"}
 FORBIDDEN_PACKAGE_PARTS = {".git", ".github", ".obsidian", "__pycache__", ".codex-test-tmp"}
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
@@ -418,7 +422,11 @@ def validate_release_variants(
         for relative in sorted(reference_manifest & manifest):
             reference_path = reference_root / relative
             variant_path = variant_root / relative
-            if reference_path.suffix.lower() != ".md" and digest(reference_path) != digest(variant_path):
+            if (
+                reference_path.suffix.lower() != ".md"
+                and relative not in PER_VARIANT_GENERATED_PATHS
+                and digest(reference_path) != digest(variant_path)
+            ):
                 findings.append(
                     LocaleFinding(
                         "locale-machine-parity",
@@ -479,7 +487,11 @@ def validate_release_variants(
         for relative in sorted((source_manifest - RELEASE_EVIDENCE_PATHS) & (reference_manifest - RELEASE_EVIDENCE_PATHS)):
             source_path = source_root / relative
             reference_path = reference_root / relative
-            if source_path.suffix.lower() != ".md" and digest(source_path) != digest(reference_path):
+            if (
+                source_path.suffix.lower() != ".md"
+                and relative not in PER_VARIANT_GENERATED_PATHS
+                and digest(source_path) != digest(reference_path)
+            ):
                 findings.append(
                     LocaleFinding(
                         "locale-source-parity",

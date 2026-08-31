@@ -10,3 +10,6 @@ __pycache__/
 .obsidian/
 *.py[cod]
 .DS_Store
+
+# Generated per payload by the release packager, never from the source layout.
+FCVW/ROLE_MANIFEST.json

@@ -11,6 +11,7 @@ from pathlib import Path
 
 from frontmatter_fcvw import parse_frontmatter, scalar
 from plan_dependencies_fcvw import PLAN_ID, dependency_state, inspect_plan_dependencies
+from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 
 
 CATEGORIES = ("correction", "optimization", "code_hygiene", "visual", "other")
@@ -19,6 +20,12 @@ PLAN_LINK = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 NONE_VALUES = {"", "-", "none", "n/a", "not_applicable"}
 PREEMPT_PREFIX = "before_in_progress:"
 TABLE_SEPARATOR = re.compile(r"^:?-{3,}:?$")
+# One fragment per plan removes the single shared file that every parallel
+# branch had to edit. QUEUE.md stays valid as a legacy source and becomes a
+# generated view once fragments exist.
+FRAGMENT_DIRECTORY = "queue.d"
+FRAGMENT_SCHEMA = "fcvw/plan-queue-entry@1"
+FRAGMENT_FIELDS = ("schema", "plan", "order", "category")
 
 
 @dataclass(frozen=True)
@@ -42,7 +49,7 @@ def parse_queue(path: Path) -> tuple[list[QueueEntry], list[QueueFinding]]:
     relative = path.as_posix()
     if not path.is_file():
         return [], [QueueFinding("plan-queue", relative, "queue file is missing")]
-    lines = path.read_text(encoding="utf-8-sig").splitlines()
+    lines = cache_read_text(path).splitlines()
     entries: list[QueueEntry] = []
     findings: list[QueueFinding] = []
     header_seen = False
@@ -82,6 +89,100 @@ def parse_queue(path: Path) -> tuple[list[QueueEntry], list[QueueFinding]]:
     return entries, findings
 
 
+def fragment_directory(folder: Path) -> Path:
+    return folder / FRAGMENT_DIRECTORY
+
+
+def parse_queue_fragments(folder: Path, root: Path) -> tuple[list[QueueEntry], list[QueueFinding]]:
+    """Read one queue entry per file so parallel work never shares a queue file."""
+
+    directory = fragment_directory(folder)
+    entries: list[QueueEntry] = []
+    findings: list[QueueFinding] = []
+    seen_order: dict[int, str] = {}
+    for path in sorted(directory.glob("*.md")):
+        if path.name == "README.md":
+            continue
+        relative = path.relative_to(root).as_posix()
+        metadata = cache_frontmatter(path)
+        if scalar(metadata, "schema") != FRAGMENT_SCHEMA:
+            findings.append(QueueFinding("plan-queue-schema", relative, "invalid or missing queue-entry schema"))
+            continue
+        missing = [field for field in FRAGMENT_FIELDS if not scalar(metadata, field)]
+        if missing:
+            findings.append(
+                QueueFinding("plan-queue-schema", relative, f"missing field(s): {', '.join(missing)}")
+            )
+            continue
+        plan_id = scalar(metadata, "plan")
+        raw_order = scalar(metadata, "order")
+        try:
+            order = int(raw_order)
+        except ValueError:
+            findings.append(QueueFinding("plan-queue-order", relative, f"order must be an integer: {raw_order!r}"))
+            continue
+        if path.stem != plan_id:
+            findings.append(
+                QueueFinding("plan-queue-entry", relative, "queue fragment filename must equal its plan id")
+            )
+        if order in seen_order:
+            findings.append(
+                QueueFinding(
+                    "plan-queue-order",
+                    relative,
+                    f"order {order} is already used by {seen_order[order]}",
+                )
+            )
+        seen_order[order] = relative
+        entries.append(
+            QueueEntry(
+                order=order,
+                plan_id=plan_id,
+                # Targets are resolved from the state directory, like a QUEUE.md row.
+                target=f"{plan_id}.md",
+                category=scalar(metadata, "category"),
+                blocked_by=scalar(metadata, "blocked_by"),
+                override_reason=scalar(metadata, "override_reason"),
+            )
+        )
+    entries.sort(key=lambda item: item.order)
+    return entries, findings
+
+
+def render_queue(state: str, entries: list[QueueEntry], updated_at: str) -> str:
+    """Render the disposable aggregate view of one state queue."""
+
+    title = "Pending plan queue" if state == "pending" else "In-progress plan queue"
+    rows = [
+        f"| {entry.order} | [{entry.plan_id}]({entry.target}) | "
+        f"{entry.category} | {entry.blocked_by or 'none'} | {entry.override_reason or '-'} |"
+        for entry in entries
+    ]
+    return "\n".join(
+        [
+            "---",
+            'schema: "fcvw/plan-queue@1"',
+            'artifact_role: "generated"',
+            'owner: "project"',
+            'upgrade_strategy: "regenerate"',
+            f'state: "{state}"',
+            f'updated_at: "{updated_at}"',
+            "---",
+            "",
+            f"# {title}",
+            "",
+            f"Generated from [`{FRAGMENT_DIRECTORY}/`]({FRAGMENT_DIRECTORY}/README.md). "
+            "Edit a fragment, not this file. Queue policy lives in "
+            "[`PLANNING.md`](../../PLANNING.md).",
+            "",
+            "| Order | Plan | Category | Blocked by | Override reason |",
+            "|---:|---|---|---|---|",
+            *rows,
+            "",
+        ]
+    )
+
+
 def validate_plan_queues(root: Path) -> list[QueueFinding]:
     root = root.resolve()
     plans_root = root / "FCVW" / "Plans"
@@ -97,27 +198,37 @@ def validate_plan_queues(root: Path) -> list[QueueFinding]:
         folder = plans_root / state
         queue_path = folder / "QUEUE.md"
         relative = queue_path.relative_to(root).as_posix()
-        entries, parse_findings = parse_queue(queue_path)
-        findings.extend(
-            QueueFinding(item.rule, relative if item.path == queue_path.as_posix() else item.path, item.message)
-            for item in parse_findings
-        )
-        if not queue_path.is_file():
+        fragments = fragment_directory(folder)
+        use_fragments = fragments.is_dir()
+        if use_fragments:
+            entries, parse_findings = parse_queue_fragments(folder, root)
+            findings.extend(parse_findings)
+        else:
+            entries, parse_findings = parse_queue(queue_path)
+            findings.extend(
+                QueueFinding(item.rule, relative if item.path == queue_path.as_posix() else item.path, item.message)
+                for item in parse_findings
+            )
+            if not queue_path.is_file():
+                continue
+        if queue_path.is_file():
+            metadata = cache_frontmatter(queue_path)
+            if scalar(metadata, "schema") != "fcvw/plan-queue@1":
+                findings.append(QueueFinding("plan-queue-schema", relative, "invalid or missing queue schema"))
+            if scalar(metadata, "state") != state:
+                findings.append(QueueFinding("plan-queue-state", relative, f"queue state must be {state}"))
+            expected_role = ("generated", "regenerate") if use_fragments else ("project_profile", "preserve")
+            for field, expected in (
+                ("artifact_role", expected_role[0]),
+                ("owner", "project"),
+                ("upgrade_strategy", expected_role[1]),
+            ):
+                if scalar(metadata, field) != expected:
+                    findings.append(QueueFinding("plan-queue-schema", relative, f"{field} must be {expected}"))
+            if not scalar(metadata, "updated_at"):
+                findings.append(QueueFinding("plan-queue-schema", relative, "updated_at is required"))
+        elif not use_fragments:
             continue
-        metadata = parse_frontmatter(queue_path.read_text(encoding="utf-8-sig")).data
-        if scalar(metadata, "schema") != "fcvw/plan-queue@1":
-            findings.append(QueueFinding("plan-queue-schema", relative, "invalid or missing queue schema"))
-        if scalar(metadata, "state") != state:
-            findings.append(QueueFinding("plan-queue-state", relative, f"queue state must be {state}"))
-        for field, expected in (
-            ("artifact_role", "project_profile"),
-            ("owner", "project"),
-            ("upgrade_strategy", "preserve"),
-        ):
-            if scalar(metadata, field) != expected:
-                findings.append(QueueFinding("plan-queue-schema", relative, f"{field} must be {expected}"))
-        if not scalar(metadata, "updated_at"):
-            findings.append(QueueFinding("plan-queue-schema", relative, "updated_at is required"))
 
         plan_paths = {
             path.stem: path
@@ -138,7 +249,7 @@ def validate_plan_queues(root: Path) -> list[QueueFinding]:
 
         priorities: dict[str, int] = {}
         for plan_id, plan_path in plan_paths.items():
-            current_metadata = parse_frontmatter(plan_path.read_text(encoding="utf-8-sig")).data
+            current_metadata = cache_frontmatter(plan_path)
             if scalar(current_metadata, "status") != state:
                 findings.append(
                     QueueFinding("plan-queue-state", relative, f"queued plan metadata does not match {state}: {plan_id}")
@@ -329,10 +440,35 @@ def render_aggregate_queue(root: Path) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
+    parser.add_argument(
+        "--write-queues",
+        action="store_true",
+        help="regenerate each QUEUE.md view from its queue.d/ fragments",
+    )
     parser.add_argument("--recommend", action="store_true")
     parser.add_argument("--output", help="write a disposable aggregate Markdown view")
     args = parser.parse_args()
     root = Path(args.root).resolve()
+    if args.write_queues:
+        from datetime import date
+
+        written = []
+        for state in ("pending", "in_progress"):
+            folder = root / "FCVW" / "Plans" / state
+            if not fragment_directory(folder).is_dir():
+                continue
+            entries, fragment_findings = parse_queue_fragments(folder, root)
+            if fragment_findings:
+                for finding in fragment_findings:
+                    print(f"ERROR [{finding.rule}] {finding.path}: {finding.message}")
+                return 1
+            (folder / "QUEUE.md").write_text(
+                render_queue(state, entries, date.today().isoformat()),
+                encoding="utf-8",
+                newline="\n",
+            )
+            written.append(f"{state} ({len(entries)})")
+        print(f"FCVW plan queue views regenerated: {', '.join(written) if written else 'none'}")
     findings = validate_plan_queues(root)
     for finding in findings:
         print(f"ERROR [{finding.rule}] {finding.path}: {finding.message}")

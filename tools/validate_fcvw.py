@@ -5,12 +5,14 @@ from __future__ import annotations
 
 import argparse
 import unicodedata
+import os
 import re
 import sys
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 from document_graph_fcvw import build_graph, render_catalog
+from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, string_list
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
@@ -39,6 +41,9 @@ REQUIRED_PATHS = (
     "tools/locale_fcvw.py",
     "tools/package_release_fcvw.py",
     "tools/release_layout_fcvw.py",
+    "tools/fcvw_cache.py",
+    "tools/role_manifest_fcvw.py",
+    "tools/upgrade_fcvw.py",
     "FCVW/README.md",
     "FCVW/APP_RULES.md",
     "FCVW/DOCUMENT_GRAPH.md",
@@ -57,13 +62,25 @@ REQUIRED_PATHS = (
     "FCVW/REGRESSION_GUARDS.md",
     "FCVW/FILESYSTEM.md",
     "FCVW/governance/TEMPLATE_PLAN.md",
+    "FCVW/governance/TEMPLATE_PLAN_COMPACT.md",
+    "FCVW/governance/TEMPLATE_CI_WORKFLOW.md",
     "FCVW/governance/TEMPLATE_AUDIT.md",
     "FCVW/framework-releases/README.md",
     "FCVW/examples/minimal-change/README.md",
     "FCVW/skills/README.md",
     "FCVW/wiki/regressions/README.md",
+    "FCVW/wiki/feedback/README.md",
+    "FCVW/wiki/templates/TEMPLATE_FEEDBACK.md",
     "FCVW/wiki/templates/TEMPLATE_REGRESSION.md",
 )
+
+# A project rarely has every concern on day one. Without a third state the only
+# way to pass `--profile instantiated` is to invent content for profiles the
+# project does not use yet, so the validator would be measuring fiction.
+INSTANTIATION_STATUSES = {"pending", "complete", "not_applicable"}
+# Identity and scope always apply: a project always has a name and a boundary.
+INSTANTIATION_REQUIRED_PROFILES = {"MANIFEST.md", "SCOPE.md"}
+MINIMUM_INSTANTIATION_REASON = 40
 
 PROJECT_PROFILES = (
     "BRIEFING.md",
@@ -93,7 +110,56 @@ PLAN_FIELDS = (
 )
 
 PLAN2_FIELDS = PLAN_FIELDS + ("regression_contract",)
-PLAN_SCHEMAS = {"fcvw/plan@1", "fcvw/plan@2"}
+COMPACT_PLAN_SCHEMA = "fcvw/plan-compact@1"
+# A compact plan is the proportional form promised by PLANNING.md: identity,
+# objective, affected files, validation and rollback. It is deliberately
+# restricted so it can never absorb work that needs a regression contract.
+COMPACT_PLAN_FIELDS = (
+    "id",
+    "status",
+    "priority",
+    "risk",
+    "created_at",
+    "updated_at",
+    "owner",
+    "context_files",
+)
+COMPACT_PLAN_SECTIONS = ("Objective", "Affected files", "Validation", "Rollback")
+COMPACT_PLAN_PRIORITIES = {"P4", "P5"}
+COMPACT_PLAN_RISKS = {"R1"}
+PLAN_SCHEMAS = {"fcvw/plan@1", "fcvw/plan@2", COMPACT_PLAN_SCHEMA}
+# Risk classes that may never waive the regression contract. REGRESSION_GUARDS.md
+# and TESTS.md already say so in prose; this makes it machine-enforced.
+REGRESSION_REQUIRED_RISKS = {"R3", "R4", "R5"}
+SENSITIVE_CONTEXT_FILES = ("SECURITY.md", "DATA.md", "MIGRATIONS.md")
+GENERIC_JUSTIFICATIONS = (
+    "nao se aplica",
+    "not applicable",
+    "no aplica",
+    "nicht zutreffend",
+    "documentation only",
+    "apenas documentacao",
+    "solo documentacion",
+    "nur dokumentation",
+    "trivial",
+    "sem impacto",
+    "no impact",
+)
+MINIMUM_JUSTIFICATION = 40
+INVISIBLE_CHARACTERS = {
+    "\u200b": "zero-width space",
+    "\u200c": "zero-width non-joiner",
+    "\u200d": "zero-width joiner",
+    "\u00a0": "non-breaking space",
+    "\ufffd": "replacement character",
+}
+MANGLED_DASH = re.compile(r"(?<=\w)\s\?\s(?=\w)")
+LANGUAGE_DISPLAY_FORMS = {
+    "pt-BR": ("pt-br", "portuguese", "portugues", "brasil", "brazil"),
+    "en-US": ("en-us", "english", "ingles", "united states"),
+    "es": ("es", "spanish", "espanol", "castellano"),
+    "de": ("de", "german", "deutsch", "alemao"),
+}
 PLAN_PRIORITIES = {f"P{index}" for index in range(1, 6)}
 PLAN_RISKS = {f"R{index}" for index in range(1, 6)}
 REGRESSION_CONTRACTS = {"required", "not_applicable"}
@@ -106,6 +172,7 @@ REGRESSION_MARKERS = (
 )
 WIKI_TYPES = {
     "concept",
+    "feedback",
     "decision",
     "pattern",
     "failure",
@@ -122,6 +189,17 @@ WIKI_TYPES = {
     "source",
     "raw",
 }
+# Feedback about the framework itself is deliberately append-only and attributed.
+# Two models may reach opposite conclusions about the same topic, and the value of
+# the surface is that both survive; consolidating them would destroy the evidence
+# the maintainer needs. This is the one wiki surface where updating a prior page
+# is forbidden rather than preferred - see FCVW/wiki/agents/README.md for the
+# opposite rule and why the difference is deliberate.
+FEEDBACK_STATUSES = {"open", "accepted", "declined", "applied", "superseded"}
+FEEDBACK_FIELDS = ("authored_by_model", "topic", "feedback_status")
+FEEDBACK_SUGGESTION_TITLE = "Suggestion"
+FEEDBACK_ASSESSMENT_TITLE = "Assessment of prior notes"
+
 WIKI_STATUSES = {"draft", "in_validation", "validated", "obsolete", "superseded", "contradictory"}
 WIKI_CONFIDENCE = {"low", "medium", "high"}
 REGRESSION_TYPES = {
@@ -141,6 +219,7 @@ FORBIDDEN_ROOT_ENTRIES = ("FCVW - Exemplo retirado de aplicação real",)
 CLEAN_ROOT_ENTRIES = {
     ".cursorrules",
     ".git",
+    ".gitattributes",
     ".github",
     ".gitignore",
     ".obsidian",
@@ -339,6 +418,16 @@ SKILL_BODY_TRANSLATIONS = {
 }
 
 LOCALIZED_TITLES = {
+    "objective": {"objetivo", "ziel"},
+    "affected files": {
+        "arquivos afetados",
+        "archivos afectados",
+        "betroffene dateien",
+        "affected files or boundaries",
+        "arquivos ou limites afetados",
+    },
+    "validation": {"validacao", "validacion", "validierung", "validation plan", "plano de validacao"},
+    "rollback": {"reversao", "reversion", "rueckabwicklung", "zuruckrollen"},
     "regression guardrails": {
         "protetores de regressao",
         "barandillas de regresion",
@@ -551,7 +640,7 @@ class BaselineEntry:
 
 
 def read_text(path: Path) -> str:
-    return path.read_text(encoding="utf-8-sig")
+    return cache_read_text(path)
 
 
 def normalized_title(value: str) -> str:
@@ -580,6 +669,12 @@ def has_localized_heading(text: str, level: int, title: str, *, include_fences: 
 
 def frontmatter(text: str) -> dict[str, FrontmatterValue]:
     return parse_frontmatter(text).data
+
+
+def frontmatter_of(path: Path) -> dict[str, FrontmatterValue]:
+    """Frontmatter for one path, parsed at most once per run."""
+
+    return cache_frontmatter(path)
 
 
 def normalized_finding_path(value: str) -> str:
@@ -701,8 +796,206 @@ def outside_code_fences(text: str) -> list[tuple[int, str]]:
     return lines
 
 
-def markdown_files(root: Path) -> list[Path]:
-    return sorted((root / "FCVW").rglob("*.md"), key=lambda item: item.as_posix().lower())
+def markdown_files(root: Path, scope: set[str] | None = None) -> list[Path]:
+    """Governed Markdown, optionally narrowed to a changed-path scope.
+
+    Only rules whose verdict depends on a single file may be scoped. Anything
+    that compares files with each other - identifier uniqueness, the document
+    graph, the queues, release surfaces - keeps reading the whole tree, so a
+    scoped run still fails when the repository as a whole is inconsistent.
+    """
+
+    paths = sorted((root / "FCVW").rglob("*.md"), key=lambda item: item.as_posix().lower())
+    if scope is None:
+        return paths
+    return [path for path in paths if path.relative_to(root).as_posix() in scope]
+
+
+AUTOMATION_SCHEMA = "fcvw/automation@1"
+AUTOMATION_FIELDS = (
+    "id",
+    "kind",
+    "status",
+    "trigger",
+    "preconditions",
+    "actions",
+    "evidence",
+    "failure_policy",
+    "rollback",
+    "owner",
+)
+AUTOMATION_KINDS = {"hook", "watcher", "daemon", "governance_gate"}
+AUTOMATION_STATUSES = {"draft", "active", "paused", "retired"}
+AUTOMATION_SCENARIOS = {"1", "2", "3"}
+
+
+def validate_automation(root: Path, findings: list[Finding], scope: set[str] | None = None) -> None:
+    """Validate declared automation contracts.
+
+    `fcvw/automation@1` was the only schema in SCHEMAS.md with required fields and
+    no machine check at all, which meant a hook, watcher, daemon or gate could
+    claim a lifecycle it never declared. Contracts are found by schema rather than
+    by directory so a project can keep them wherever its documentation lives.
+    """
+
+    for path in markdown_files(root, scope):
+        relative = path.relative_to(root).as_posix()
+        if path.name.startswith("TEMPLATE_"):
+            continue
+        metadata = frontmatter_of(path)
+        if scalar(metadata, "schema") != AUTOMATION_SCHEMA:
+            continue
+        for field in AUTOMATION_FIELDS:
+            if field not in metadata:
+                findings.append(Finding("automation-contract", relative, f"missing field: {field}"))
+            elif not str(metadata[field]).strip():
+                findings.append(Finding("automation-contract", relative, f"field must not be empty: {field}"))
+        kind = scalar(metadata, "kind")
+        if kind and kind not in AUTOMATION_KINDS:
+            findings.append(
+                Finding("automation-contract", relative, f"invalid kind: {kind!r}; expected one of {sorted(AUTOMATION_KINDS)}")
+            )
+        status = scalar(metadata, "status")
+        if status and status not in AUTOMATION_STATUSES:
+            findings.append(
+                Finding("automation-contract", relative, f"invalid status: {status!r}; expected one of {sorted(AUTOMATION_STATUSES)}")
+            )
+        scenario = scalar(metadata, "scenario")
+        if scenario and scenario not in AUTOMATION_SCENARIOS:
+            findings.append(
+                Finding("automation-contract", relative, f"invalid scenario: {scenario!r}; expected 1, 2, or 3")
+            )
+        # AUTOMATION.md: an executable contract needs named authority, because a
+        # Markdown contract never proves that anything ran.
+        if scenario in {"2", "3"} and not scalar(metadata, "authorized_by"):
+            findings.append(
+                Finding(
+                    "automation-contract",
+                    relative,
+                    f"scenario {scenario} automation requires an explicit authorized_by",
+                )
+            )
+
+
+def validate_character_integrity(root: Path, findings: list[Finding], scope: set[str] | None = None) -> None:
+    """Catch invisible and transcoding-damaged characters in governed Markdown.
+
+    Release variants are produced by transcoding and translation passes, which
+    is exactly where em dashes decay into literal question marks and zero-width
+    characters accumulate. Neither is visible in review, so only a machine check
+    finds them.
+    """
+
+    for path in markdown_files(root, scope):
+        relative = path.relative_to(root).as_posix()
+        text = read_text(path)
+        for character, label in INVISIBLE_CHARACTERS.items():
+            count = text.count(character)
+            if count:
+                findings.append(
+                    Finding(
+                        "character-integrity",
+                        relative,
+                        f"{count} invisible or damaged character(s): {label} (U+{ord(character):04X})",
+                    )
+                )
+        for line_number, line in outside_code_fences(text):
+            if MANGLED_DASH.search(line):
+                findings.append(
+                    Finding(
+                        "character-integrity",
+                        relative,
+                        f"line {line_number}: isolated '?' between words is a damaged dash or accent",
+                    )
+                )
+
+
+def validate_language_review(root: Path, findings: list[Finding]) -> None:
+    """Require the language-review record to name the language it declares.
+
+    The record is the gate that authorises a language-specific release asset, so
+    a body copied from another variant silently certifies the wrong language.
+    """
+
+    path = root / "FCVW" / "LANGUAGE_REVIEW.md"
+    if not path.is_file():
+        return
+    relative = path.relative_to(root).as_posix()
+    text = read_text(path)
+    declared = scalar(frontmatter(text), "language")
+    if declared not in LANGUAGE_DISPLAY_FORMS:
+        findings.append(Finding("language-review", relative, f"unsupported declared language: {declared!r}"))
+        return
+    heading = next(
+        (line[2:] for _, line in outside_code_fences(text) if line.startswith("# ")),
+        "",
+    )
+    scope = level_two_section(text, "Scope") or ""
+    body = normalized_title(heading + " " + scope)
+    if not any(form in body for form in LANGUAGE_DISPLAY_FORMS[declared]):
+        findings.append(
+            Finding(
+                "language-review",
+                relative,
+                f"title and scope must name the declared language {declared!r}",
+            )
+        )
+    for other, forms in LANGUAGE_DISPLAY_FORMS.items():
+        if other == declared:
+            continue
+        matched = [form for form in forms if len(form) > 3 and form in body]
+        if matched:
+            findings.append(
+                Finding(
+                    "language-review",
+                    relative,
+                    f"declares {declared!r} but title/scope describes {other!r} ({matched[0]!r})",
+                )
+            )
+
+
+REPOSITORY_WIDE_RULES = {
+    "required-path",
+    "clean-root",
+    "clean-contamination",
+    "document-catalog-stale",
+    "plan-queue",
+    "queue",
+    "version",
+    "framework-release",
+    "application-release",
+    "language-review",
+    "baseline-config",
+    "reading-route",
+    "skill-catalog",
+    "duplicate-id",
+}
+
+
+def changed_markdown_since(root: Path, revision: str) -> tuple[set[str], Finding | None]:
+    """List governed Markdown changed since a git revision.
+
+    Scoping the report is about signal, not speed: repository-wide rules always
+    run, so a scoped run still fails when the tree as a whole is inconsistent.
+    """
+
+    import subprocess
+
+    try:
+        result = subprocess.run(
+            ["git", "diff", "--name-only", revision, "--", "*.md"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return set(), Finding("scope-config", str(root), f"--since could not run git: {error}")
+    if result.returncode != 0:
+        message = result.stderr.strip().splitlines()[-1] if result.stderr.strip() else "unknown git error"
+        return set(), Finding("scope-config", revision, f"--since is not a usable git revision: {message}")
+    return {normalized_finding_path(line) for line in result.stdout.splitlines() if line.strip()}, None
 
 
 def validate_required(root: Path, findings: list[Finding]) -> None:
@@ -718,17 +1011,19 @@ def validate_required(root: Path, findings: list[Finding]) -> None:
             findings.append(Finding("required-path", expected, "required path is missing"))
 
 
-def validate_canonical_metadata(root: Path, findings: list[Finding]) -> None:
+def validate_canonical_metadata(root: Path, findings: list[Finding], scope: set[str] | None = None) -> None:
     for path in sorted((root / "FCVW").glob("*.md")):
         relative = path.relative_to(root).as_posix()
-        metadata = frontmatter(read_text(path))
+        if scope is not None and relative not in scope:
+            continue
+        metadata = frontmatter_of(path)
         for field in ("schema", "artifact_role", "owner", "upgrade_strategy"):
             if field not in metadata:
                 findings.append(Finding("canonical-metadata", relative, f"missing field: {field}"))
 
 
-def validate_markdown(root: Path, findings: list[Finding]) -> None:
-    for path in markdown_files(root):
+def validate_markdown(root: Path, findings: list[Finding], scope: set[str] | None = None) -> None:
+    for path in markdown_files(root, scope):
         relative = path.relative_to(root).as_posix()
         text = read_text(path)
         marker = ""
@@ -832,10 +1127,117 @@ def validate_plan_regression(
     elif contract == "not_applicable":
         justification_labels = "|".join(re.escape(value) for value in title_aliases("Justification"))
         justification = re.search(rf"(?im)^(?:{justification_labels}):\s*(.+)$", normalized_title(section))
-        if not justification or len(justification.group(1).strip()) < 12:
-            findings.append(Finding("plan-regression", relative, "not_applicable requires a specific Justification"))
+        reason = justification.group(1).strip() if justification else ""
+        if len(reason) < MINIMUM_JUSTIFICATION:
+            findings.append(
+                Finding(
+                    "plan-regression",
+                    relative,
+                    "not_applicable requires a specific Justification of at least "
+                    f"{MINIMUM_JUSTIFICATION} characters",
+                )
+            )
+        elif any(reason.startswith(generic) and len(reason) < 80 for generic in GENERIC_JUSTIFICATIONS):
+            findings.append(
+                Finding(
+                    "plan-regression",
+                    relative,
+                    f"not_applicable Justification restates the waiver instead of arguing it: {reason[:60]!r}",
+                )
+            )
     if scalar(metadata, "status") == "completed" and re.search(r"\bpending\b", section, re.I):
         findings.append(Finding("plan-regression", relative, "completed plan has pending regression evidence"))
+    rollback = level_two_section(text, "Rollback")
+    if rollback is None:
+        findings.append(Finding("plan-rollback", relative, "Rollback section is missing"))
+    elif not rollback.strip() or PLACEHOLDER.search(rollback) or len(rollback.strip()) < 12:
+        findings.append(
+            Finding("plan-rollback", relative, "Rollback is empty, placeholder, or too short to be a procedure")
+        )
+
+
+def validate_plan_risk_binding(
+    relative: str,
+    metadata: dict[str, FrontmatterValue],
+    findings: list[Finding],
+) -> None:
+    """Tie the regression contract to the declared risk and to sensitive surfaces.
+
+    REGRESSION_GUARDS.md and TESTS.md already say that authentication, persisted
+    data, public interfaces and destructive work are never low-risk. Without this
+    check a plan could declare R5 and waive regression evidence in the same breath.
+    """
+
+    if scalar(metadata, "schema") != "fcvw/plan@2":
+        return
+    contract = scalar(metadata, "regression_contract")
+    if contract != "not_applicable":
+        return
+    risk = scalar(metadata, "risk")
+    if risk in REGRESSION_REQUIRED_RISKS:
+        findings.append(
+            Finding(
+                "plan-risk-binding",
+                relative,
+                f"risk {risk} requires regression_contract: required",
+            )
+        )
+    touched = [
+        value
+        for value in string_list(metadata, "context_files")
+        if any(value.endswith(sensitive) for sensitive in SENSITIVE_CONTEXT_FILES)
+    ]
+    if touched:
+        findings.append(
+            Finding(
+                "plan-risk-binding",
+                relative,
+                "a plan routed through a security, data, or migration contract "
+                f"requires regression_contract: required ({touched[0]})",
+            )
+        )
+
+
+def validate_compact_plan(
+    relative: str,
+    metadata: dict[str, FrontmatterValue],
+    text: str,
+    findings: list[Finding],
+) -> None:
+    """Keep the compact plan genuinely small and genuinely low-risk."""
+
+    priority = scalar(metadata, "priority")
+    risk = scalar(metadata, "risk")
+    if priority not in COMPACT_PLAN_PRIORITIES:
+        findings.append(
+            Finding(
+                "plan-compact",
+                relative,
+                f"a compact plan is limited to {sorted(COMPACT_PLAN_PRIORITIES)}; found {priority!r}",
+            )
+        )
+    if risk not in COMPACT_PLAN_RISKS:
+        findings.append(
+            Finding(
+                "plan-compact",
+                relative,
+                f"a compact plan is limited to {sorted(COMPACT_PLAN_RISKS)}; found {risk!r}",
+            )
+        )
+    if "regression_contract" in metadata:
+        findings.append(
+            Finding(
+                "plan-compact",
+                relative,
+                "a compact plan must not declare regression_contract; use fcvw/plan@2 instead",
+            )
+        )
+    for title in COMPACT_PLAN_SECTIONS:
+        if not has_localized_heading(text, 2, title):
+            findings.append(Finding("plan-compact", relative, f"missing required section: {title}"))
+    rollback = level_two_section(text, "Rollback")
+    if rollback is not None and (not rollback.strip() or PLACEHOLDER.search(rollback)):
+        findings.append(Finding("plan-rollback", relative, "Rollback is empty or contains placeholders"))
 
 
 def validate_plans(root: Path, findings: list[Finding]) -> None:
@@ -853,7 +1255,12 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
             schema = scalar(metadata, "schema")
             if schema not in PLAN_SCHEMAS:
                 findings.append(Finding("plan-schema", relative, "plan must use a supported FCVW plan schema"))
-            required_fields = PLAN2_FIELDS if schema == "fcvw/plan@2" else PLAN_FIELDS
+            if schema == COMPACT_PLAN_SCHEMA:
+                required_fields = COMPACT_PLAN_FIELDS
+            elif schema == "fcvw/plan@2":
+                required_fields = PLAN2_FIELDS
+            else:
+                required_fields = PLAN_FIELDS
             for field in required_fields:
                 if field not in metadata:
                     findings.append(Finding("plan-schema", relative, f"missing field: {field}"))
@@ -864,10 +1271,10 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
                 "risk",
                 "created_at",
                 "updated_at",
-                "current_version",
-                "expected_version",
                 "owner",
             )
+            if schema != COMPACT_PLAN_SCHEMA:
+                scalar_fields += ("current_version", "expected_version")
             if schema == "fcvw/plan@2":
                 scalar_fields += ("regression_contract",)
             for field in scalar_fields:
@@ -897,7 +1304,11 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
             if plan_id in seen:
                 findings.append(Finding("duplicate-id", relative, f"plan id also used by {seen[plan_id]}"))
             seen[plan_id] = relative
-            validate_plan_regression(relative, metadata, text, findings)
+            if schema == COMPACT_PLAN_SCHEMA:
+                validate_compact_plan(relative, metadata, text, findings)
+            else:
+                validate_plan_risk_binding(relative, metadata, findings)
+                validate_plan_regression(relative, metadata, text, findings)
 
 
 def validate_skills(root: Path, findings: list[Finding]) -> None:
@@ -948,7 +1359,7 @@ def validate_reading_routes(root: Path, findings: list[Finding]) -> None:
     fcvw_index = read_text(index_path)
     discoverability = "\n".join((read_text(agents_path), context, fcvw_index))
     for path in sorted((root / "FCVW").glob("*.md")):
-        metadata = frontmatter(read_text(path))
+        metadata = frontmatter_of(path)
         if scalar(metadata, "artifact_role") != "framework_policy":
             continue
         if path.name not in fcvw_index:
@@ -989,6 +1400,86 @@ def validate_reading_routes(root: Path, findings: list[Finding]) -> None:
                 )
 
 
+def validate_feedback_notes(root: Path, findings: list[Finding]) -> None:
+    """Keep framework feedback attributed, additive, and independently formed.
+
+    Three properties matter and only these are machine-checkable. The note names
+    the model that wrote it, so a later reader can weigh the source. It carries a
+    lifecycle, so the surface does not grow without ever resolving. And when it
+    responds to an earlier note it states its own suggestion *before* assessing
+    that note, because a model that reads someone else's conclusion first tends
+    to agree with it, and two independent readings are the entire point.
+    """
+
+    directory = root / "FCVW" / "wiki" / "feedback"
+    if not directory.is_dir():
+        return
+    seen: dict[str, str] = {}
+    for path in sorted(directory.glob("*.md")):
+        if path.name == "README.md":
+            continue
+        relative = path.relative_to(root).as_posix()
+        text = read_text(path)
+        metadata = frontmatter_of(path)
+        if scalar(metadata, "type") != "feedback":
+            findings.append(Finding("feedback-note", relative, "feedback note must declare type: feedback"))
+        for field in FEEDBACK_FIELDS:
+            if not scalar(metadata, field).strip():
+                findings.append(Finding("feedback-note", relative, f"missing or empty field: {field}"))
+        status = scalar(metadata, "feedback_status")
+        if status and status not in FEEDBACK_STATUSES:
+            findings.append(
+                Finding(
+                    "feedback-note",
+                    relative,
+                    f"invalid feedback_status: {status!r}; expected one of {sorted(FEEDBACK_STATUSES)}",
+                )
+            )
+        identity = scalar(metadata, "id").strip()
+        if identity:
+            if identity in seen:
+                findings.append(Finding("duplicate-id", relative, f"feedback id also used by {seen[identity]}"))
+            seen[identity] = relative
+        # One note per model per topic keeps a disagreement readable; a second
+        # note from the same model on the same topic belongs in that note.
+        if not has_localized_heading(text, 2, FEEDBACK_SUGGESTION_TITLE):
+            findings.append(
+                Finding("feedback-note", relative, f"missing required section: {FEEDBACK_SUGGESTION_TITLE}")
+            )
+        prior = string_list(metadata, "related_feedback")
+        if prior:
+            if not has_localized_heading(text, 2, FEEDBACK_ASSESSMENT_TITLE):
+                findings.append(
+                    Finding(
+                        "feedback-note",
+                        relative,
+                        "a note that cites related_feedback must assess it in "
+                        f"'{FEEDBACK_ASSESSMENT_TITLE}'",
+                    )
+                )
+            else:
+                suggestion_at = _heading_position(text, FEEDBACK_SUGGESTION_TITLE)
+                assessment_at = _heading_position(text, FEEDBACK_ASSESSMENT_TITLE)
+                if suggestion_at is not None and assessment_at is not None and assessment_at < suggestion_at:
+                    findings.append(
+                        Finding(
+                            "feedback-note",
+                            relative,
+                            "state your own suggestion before assessing prior notes, so the "
+                            "assessment does not shape it",
+                        )
+                    )
+
+
+def _heading_position(text: str, title: str) -> int | None:
+    accepted = title_aliases(title)
+    for number, line in outside_code_fences(text):
+        stripped = line.strip()
+        if stripped.startswith("## ") and normalized_title(stripped[3:]) in accepted:
+            return number
+    return None
+
+
 def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
     wiki = root / "FCVW" / "wiki"
     seen: dict[str, str] = {}
@@ -997,7 +1488,7 @@ def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
         if path.name in exempt or "templates" in path.parts:
             continue
         relative = path.relative_to(root).as_posix()
-        metadata = frontmatter(read_text(path))
+        metadata = frontmatter_of(path)
         page_id = scalar(metadata, "id")
         if not page_id:
             findings.append(Finding("wiki-id", relative, "knowledge page is missing a unique id"))
@@ -1273,8 +1764,41 @@ def validate_profiles(root: Path, profile: str, findings: list[Finding]) -> None
         metadata = frontmatter(text)
         if scalar(metadata, "artifact_role") != "project_profile":
             findings.append(Finding("ownership", relative, "profile must declare project_profile ownership"))
+        status = scalar(metadata, "instantiation_status")
+        if status and status not in INSTANTIATION_STATUSES:
+            findings.append(
+                Finding(
+                    "instantiation",
+                    relative,
+                    f"invalid instantiation_status: {status!r}; expected one of "
+                    f"{sorted(INSTANTIATION_STATUSES)}",
+                )
+            )
         if profile in {"instantiated", "strict", "incremental"}:
-            if scalar(metadata, "instantiation_status") != "complete":
+            if status == "not_applicable":
+                if name in INSTANTIATION_REQUIRED_PROFILES:
+                    findings.append(
+                        Finding(
+                            "instantiation",
+                            relative,
+                            "identity and scope profiles always apply and cannot be waived",
+                        )
+                    )
+                    continue
+                reason = scalar(metadata, "not_applicable_reason").strip()
+                if len(reason) < MINIMUM_INSTANTIATION_REASON:
+                    findings.append(
+                        Finding(
+                            "instantiation",
+                            relative,
+                            "not_applicable requires a not_applicable_reason of at least "
+                            f"{MINIMUM_INSTANTIATION_REASON} characters",
+                        )
+                    )
+                # A waived profile keeps its template placeholders on purpose:
+                # the project is declaring that it does not use this concern yet.
+                continue
+            if status != "complete":
                 findings.append(Finding("instantiation", relative, "profile is not complete"))
             if PLACEHOLDER.search(text):
                 findings.append(Finding("placeholder", relative, "instantiated profile contains placeholders"))
@@ -1298,7 +1822,7 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
         for path in (fcvw / folder).glob("*.md"):
             if path.name == "README.md":
                 continue
-            if scalar(frontmatter(read_text(path)), "record_scope") != "framework":
+            if scalar(frontmatter_of(path), "record_scope") != "framework":
                 findings.append(
                     Finding(
                         "clean-contamination",
@@ -1314,19 +1838,19 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
         for path in (fcvw / "Plans" / state).glob("*.md"):
             if path.name in {"README.md", "QUEUE.md", "INDEX.md"}:
                 continue
-            metadata = frontmatter(read_text(path))
+            metadata = frontmatter_of(path)
             if scalar(metadata, "record_scope") != "framework":
                 findings.append(Finding("clean-contamination", path.relative_to(root).as_posix(), "non-framework plan in clean baseline"))
     for path in (fcvw / "decisions").glob("*.md"):
         if path.name == "README.md":
             continue
-        if scalar(frontmatter(read_text(path)), "record_scope") != "framework":
+        if scalar(frontmatter_of(path), "record_scope") != "framework":
             findings.append(Finding("clean-contamination", path.relative_to(root).as_posix(), "non-framework decision in clean baseline"))
     wiki_exempt = {"README.md", "index.md", "log.md", "metrics.md", "schema.md", "taxonomy.md"}
     for path in (fcvw / "wiki").rglob("*.md"):
         if path.name in wiki_exempt or "templates" in path.parts:
             continue
-        if scalar(frontmatter(read_text(path)), "record_scope") != "framework":
+        if scalar(frontmatter_of(path), "record_scope") != "framework":
             findings.append(
                 Finding(
                     "clean-contamination",
@@ -1435,7 +1959,7 @@ def _validate_framework_release_record(root: Path, path: Path, findings: list[Fi
         if plan is None:
             findings.append(Finding("framework-release", relative, f"related plan is missing or ambiguous: {plan_id}"))
             continue
-        if status == "published" and scalar(frontmatter(read_text(plan)), "status") != "completed":
+        if status == "published" and scalar(frontmatter_of(plan), "status") != "completed":
             findings.append(Finding("framework-release", relative, f"published release has incomplete plan: {plan_id}"))
     if status in {"ready", "published"} and current_record:
         source_revision = scalar(metadata, "source_revision")
@@ -1554,7 +2078,7 @@ def validate_version(root: Path, findings: list[Finding]) -> None:
     if not release_path.is_file():
         findings.append(Finding("framework-release", release_path.relative_to(root).as_posix(), "release record missing"))
     else:
-        release_metadata = frontmatter(read_text(release_path))
+        release_metadata = frontmatter_of(release_path)
         if scalar(release_metadata, "schema") != "fcvw/framework-release@1":
             findings.append(Finding("framework-release", release_path.relative_to(root).as_posix(), "invalid release schema"))
         if scalar(release_metadata, "version") != version:
@@ -1707,7 +2231,7 @@ def validate_application_releases(root: Path, findings: list[Finding]) -> None:
                     Finding("application-release", relative, f"related plan is missing or ambiguous: {plan_id}")
                 )
                 continue
-            if status == "published" and scalar(frontmatter(read_text(plan)), "status") != "completed":
+            if status == "published" and scalar(frontmatter_of(plan), "status") != "completed":
                 findings.append(
                     Finding("application-release", relative, f"published release has incomplete plan: {plan_id}")
                 )
@@ -1862,8 +2386,11 @@ def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
                 if candidate is None:
                     continue
                 try:
-                    resolved = candidate.resolve()
-                    resolved.relative_to(root.resolve())
+                    # `root` is resolved once in main(); frontmatter relationships
+                    # are portable repository paths, so lexical normalisation is
+                    # both correct and free of filesystem round trips.
+                    resolved = Path(os.path.normpath(candidate))
+                    resolved.relative_to(root)
                 except (ValueError, OSError):
                     findings.append(
                         Finding("frontmatter-relationship", relative, f"{field} escapes repository root: {target}")
@@ -1875,9 +2402,11 @@ def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
                     )
 
 
+STALE_CATALOG_DERIVED_RULES = {"document-orphan", "document-unreachable"}
+
+
 def validate_document_graph(root: Path, findings: list[Finding]) -> None:
     graph = build_graph(root)
-    findings.extend(Finding(item.rule, item.path, item.message, item.severity) for item in graph.findings)
     catalog = root / "FCVW" / "DOCUMENT_GRAPH.md"
     if catalog.is_file():
         actual_text = read_text(catalog)
@@ -1899,14 +2428,31 @@ def validate_document_graph(root: Path, findings: list[Finding]) -> None:
     else:
         actual_entries = ()
         expected_entries = ()
-    if catalog.is_file() and actual_entries != expected_entries:
+    stale = catalog.is_file() and actual_entries != expected_entries
+    graph_findings = [
+        Finding(item.rule, item.path, item.message, item.severity) for item in graph.findings
+    ]
+    if stale:
+        # Orphan and reachability findings are derived from the generated
+        # catalog, so a stale catalog reports every governed artifact twice.
+        # One actionable finding replaces that noise; the derived rules are
+        # re-evaluated for real once the catalog is regenerated.
+        suppressed = sum(1 for item in graph_findings if item.rule in STALE_CATALOG_DERIVED_RULES)
+        graph_findings = [item for item in graph_findings if item.rule not in STALE_CATALOG_DERIVED_RULES]
+        detail = (
+            f"; {suppressed} derived orphan/reachability finding(s) suppressed until it is regenerated"
+            if suppressed
+            else ""
+        )
         findings.append(
             Finding(
                 "document-catalog-stale",
                 "FCVW/DOCUMENT_GRAPH.md",
-                "generated catalog does not match the current Markdown filesystem",
+                "generated catalog does not match the current Markdown filesystem"
+                f"{detail}",
             )
         )
+    findings.extend(graph_findings)
 
 
 def validate_knowledge_graph(root: Path, findings: list[Finding]) -> None:
@@ -1933,8 +2479,14 @@ def validate_app_rules(root: Path, profile: str, findings: list[Finding]) -> Non
     if scalar(metadata, "artifact_role") != "project_profile":
         findings.append(Finding("app-rules-ownership", relative, "APP_RULES must be a project_profile"))
     instantiation_status = scalar(metadata, "instantiation_status")
-    if instantiation_status not in {"pending", "complete"}:
-        findings.append(Finding("app-rules-status", relative, "instantiation_status must be pending or complete"))
+    if instantiation_status not in INSTANTIATION_STATUSES:
+        findings.append(
+            Finding(
+                "app-rules-status",
+                relative,
+                f"instantiation_status must be one of {sorted(INSTANTIATION_STATUSES)}",
+            )
+        )
     prose_lines = [line for _, line in outside_code_fences(text)]
     prose = "\n".join(prose_lines)
     matches = list(re.finditer(r"(?m)^##\s+(APP-RULE-\d{3,})\b[^\n]*$", prose))
@@ -1991,6 +2543,25 @@ def main() -> int:
         "--baseline",
         help="legacy baseline Markdown file; valid only with --profile incremental",
     )
+    parser.add_argument(
+        "--format",
+        choices=("text", "json"),
+        default="text",
+        help="report format; json is intended for CI consumption",
+    )
+    parser.add_argument(
+        "--fail-on",
+        choices=("error", "warning", "never"),
+        default="error",
+        help="lowest severity that fails the run",
+    )
+    parser.add_argument(
+        "--since",
+        help=(
+            "git revision; report per-file findings only for Markdown changed since it. "
+            "Repository-wide rules are always reported."
+        ),
+    )
     args = parser.parse_args()
     root = Path(args.root).resolve()
     findings: list[Finding] = []
@@ -2018,16 +2589,28 @@ def main() -> int:
             print(f"ERROR [{finding.rule}] {finding.path}: {finding.message}")
         return 1
 
-    validate_markdown(root, findings)
+    scope: set[str] | None = None
+    if args.since:
+        changed, scope_error = changed_markdown_since(root, args.since)
+        if scope_error is not None:
+            findings.append(scope_error)
+        else:
+            scope = changed
+
+    validate_markdown(root, findings, scope)
+    validate_character_integrity(root, findings, scope)
+    validate_automation(root, findings, scope)
+    validate_language_review(root, findings)
     validate_frontmatter_documents(root, findings)
     validate_queues(root, findings)
     validate_document_graph(root, findings)
     validate_knowledge_graph(root, findings)
-    validate_canonical_metadata(root, findings)
+    validate_canonical_metadata(root, findings, scope)
     validate_plans(root, findings)
     validate_skills(root, findings)
     validate_reading_routes(root, findings)
     validate_wiki_ids(root, findings)
+    validate_feedback_notes(root, findings)
     validate_audit_records(root, findings)
     validate_troubleshooting_records(root, findings)
     validate_profiles(root, args.profile, findings)
@@ -2042,15 +2625,64 @@ def main() -> int:
         findings, accepted, stale = apply_legacy_baseline(findings, baseline_entries)
         findings.extend(stale)
 
+    scoped_out = 0
+    if scope is not None:
+        kept = [
+            item
+            for item in findings
+            if item.rule in REPOSITORY_WIDE_RULES or normalized_finding_path(item.path) in scope
+        ]
+        scoped_out = len(findings) - len(kept)
+        findings = kept
+
     errors = [item for item in findings if item.severity == "error"]
-    for finding in accepted:
-        print(f"BASELINE [{finding.rule}] {finding.path}: {finding.message}")
-    for finding in findings:
-        print(f"{finding.severity.upper()} [{finding.rule}] {finding.path}: {finding.message}")
-    print(
-        f"FCVW validation: profile={args.profile} errors={len(errors)} "
-        f"findings={len(findings)} baseline={len(accepted)}"
-    )
+    warnings = [item for item in findings if item.severity == "warning"]
+
+    if args.format == "json":
+        import json
+
+        print(
+            json.dumps(
+                {
+                    "profile": args.profile,
+                    "errors": len(errors),
+                    "warnings": len(warnings),
+                    "findings": [
+                        {
+                            "rule": item.rule,
+                            "path": item.path,
+                            "message": item.message,
+                            "severity": item.severity,
+                        }
+                        for item in findings
+                    ],
+                    "baseline": [
+                        {"rule": item.rule, "path": item.path, "message": item.message}
+                        for item in accepted
+                    ],
+                    "scoped_out": scoped_out,
+                    "since": args.since,
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+    else:
+        for finding in accepted:
+            print(f"BASELINE [{finding.rule}] {finding.path}: {finding.message}")
+        for finding in findings:
+            print(f"{finding.severity.upper()} [{finding.rule}] {finding.path}: {finding.message}")
+        scope_note = f" scoped_out={scoped_out}" if args.since else ""
+        print(
+            f"FCVW validation: profile={args.profile} errors={len(errors)} "
+            f"warnings={len(warnings)} findings={len(findings)} "
+            f"baseline={len(accepted)}{scope_note}"
+        )
+
+    if args.fail_on == "never":
+        return 0
+    if args.fail_on == "warning":
+        return 1 if findings else 0
     return 1 if errors else 0
 
 

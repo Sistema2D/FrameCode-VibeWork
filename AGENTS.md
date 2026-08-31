@@ -28,7 +28,7 @@ Read-only queries, analysis, status checks, and reviews do not require a reposit
 
 Every logical change batch to versioned files requires one plan under `FCVW/Plans/`. Use effort proportional to risk:
 
-- **Compact plan:** P4/P5 and R1 changes such as isolated text or metadata corrections.
+- **Compact plan:** P4/P5 and R1 changes such as isolated text or metadata corrections. Uses `fcvw/plan-compact@1` and `FCVW/governance/TEMPLATE_PLAN_COMPACT.md`.
 - **Standard plan:** functional, visual, structural, test, configuration, or documentation behavior changes.
 - **Expanded plan:** R4/R5, security, authentication, migrations, destructive operations, framework schemas, or release changes.
 
@@ -37,7 +37,7 @@ The plan may cover its own creation and the associated changelog. Do not create 
 ## Required change flow
 
 1. Check `FCVW/Plans/in_progress/` and `pending/` for related work.
-2. Create or resume a plan using `FCVW/governance/TEMPLATE_PLAN.md`.
+2. Create or resume a plan using `FCVW/governance/TEMPLATE_PLAN.md`, or `FCVW/governance/TEMPLATE_PLAN_COMPACT.md` when the change is P4/P5 with R1.
 3. Classify priority and risk; record scope, acceptance criteria, Regression impact, validation, and rollback.
 4. Move the plan to `in_progress/` before implementation.
 5. Modify only in-scope files.
@@ -87,11 +87,13 @@ The clean framework must not contain application plans, application releases, ru
 
 ## Document graph, application rules, and plan queues
 
-- Select active work from `FCVW/Plans/in_progress/QUEUE.md` before `pending/QUEUE.md`; repair an invalid queue before implementation.
+- Select active work from `FCVW/Plans/in_progress/` before `pending/`; repair an invalid queue before implementation. The canonical queue is `Plans/<state>/queue.d/<plan-id>.md`, one fragment per plan; `QUEUE.md` is the generated view, regenerated with `python FCVW/tools/plan_queue_fcvw.py --root . --write-queues`.
 - Use `python FCVW/tools/plan_queue_fcvw.py --root . --recommend` in an installed release, or `python tools/plan_queue_fcvw.py --root . --recommend` in the framework source checkout; a queue finding blocks the recommendation.
 - Before executing a plan with `depends_on`, confirm its dependency table, completed prerequisite evidence, and queue blockers agree; discontinued prerequisites never satisfy a dependency automatically.
 - For application behavior, workflow, data, permission, interface, or cross-module changes, consult `FCVW/APP_RULES.md` and record affected rule IDs in the plan.
 - Every governed Markdown artifact must be reachable from `AGENTS.md`, `README.md`, `FCVW/README.md`, or a catalog linked from those entrypoints.
 - Generated records must have an incoming catalog or relationship link and an outgoing link to their authoritative source, plan, decision, release, or governing policy.
-- Use portable relative Markdown links as the canonical link form. Wikilinks may supplement them but may not be the only relationship.
+- Use portable relative Markdown links as the single canonical link form. A wikilink is optional and never required; do not carry the same relationship in both forms, because the two copies drift and both are then validated.
+- Regenerate `FCVW/ROLE_MANIFEST.json` with `python FCVW/tools/role_manifest_fcvw.py --root . --write` after adding, moving, or removing any governed file; it is the role inventory that selective upgrade consumes.
+
 - Regenerate `FCVW/DOCUMENT_GRAPH.md` with `python FCVW/tools/document_graph_fcvw.py --root . --write` in an installed release, or the source-checkout equivalent under `tools/`, after adding, moving, or removing governed Markdown.

@@ -7,11 +7,11 @@ upgrade_strategy: "replace"
 
 # FCVW operational index
 
-This directory is the governance layer installed in a project. The published installed baseline is V0.15.0. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
+This directory is the governance layer installed in a project. V0.16.0 is the validated release candidate. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
 
 ## Installation and removal boundary
 
-- A release payload exposes exactly `AGENTS.md` and `FCVW/` at its template root.
+- A release payload exposes `AGENTS.md`, `FCVW/`, and the optional provider bridges `.cursorrules` and `.windsurfrules` at the template root. The bridges stay at the root because that is the only place their editors read them.
 - Tools, legal notices, provider adapters, policies, templates, and framework records are contained by `FCVW/`.
 - Run installed tools from `FCVW/tools/`; the framework source checkout keeps its development tools at root `tools/`.
 - To remove the framework from an application, back up project-owned records if needed, delete `FCVW/`, then review and optionally delete `AGENTS.md`. No application path is part of that deletion boundary.
@@ -32,6 +32,7 @@ This directory is the governance layer installed in a project. The published ins
 | Validate governance | `skills/governance-validator/SKILL.md` | `SCHEMAS.md` |
 | Curate memory | `MEMORY.md` | `wiki/schema.md` |
 | Define automation | `AUTOMATION.md` | hook, watcher, daemon, or gate contract |
+| Upgrade the framework | `OWNERSHIP.md` | `tools/upgrade_fcvw.py --root . --release <target>` |
 
 ## Document classes
 
@@ -51,7 +52,7 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ### Generated summaries — regenerate
 
-`DOCUMENT_GRAPH.md`, `FILESYSTEM.md`, `wiki/index.md`, `wiki/log.md`, and `wiki/metrics.md`.
+`DOCUMENT_GRAPH.md`, `FILESYSTEM.md`, `ROLE_MANIFEST.json`, `Plans/*/QUEUE.md`, `wiki/index.md`, `wiki/log.md`, and `wiki/metrics.md`.
 
 ## Framework versus application releases
 

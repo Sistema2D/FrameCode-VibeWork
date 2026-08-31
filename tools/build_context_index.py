@@ -12,6 +12,7 @@ from pathlib import Path
 
 from frontmatter_fcvw import parse_frontmatter, scalar, string_list
 from knowledge_graph_fcvw import TYPED_RELATION_FIELDS
+from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 
 
 HEADING = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
@@ -36,7 +37,13 @@ def default_scope(path: Path, metadata: dict[str, object]) -> str:
         return "excluded_by_default"
     if "archive" in parts:
         return "search_only"
-    if schema in {"fcvw/plan@1", "fcvw/plan@2", "fcvw/changelog@1", "fcvw/framework-release@1"}:
+    if schema in {
+        "fcvw/plan@1",
+        "fcvw/plan@2",
+        "fcvw/plan-compact@1",
+        "fcvw/changelog@1",
+        "fcvw/framework-release@1",
+    }:
         return "exact_only"
     if role == "record" or parts & {"audits", "troubleshooting", "sessions", "regressions"}:
         return "search_only"
@@ -93,7 +100,7 @@ def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, ob
         relative_path = path.relative_to(root)
         if any(part in {".git", ".obsidian", "__pycache__"} for part in relative_path.parts):
             continue
-        text = path.read_text(encoding="utf-8-sig")
+        text = cache_read_text(path)
         result = parse_frontmatter(text)
         metadata = result.data
         relationships = {

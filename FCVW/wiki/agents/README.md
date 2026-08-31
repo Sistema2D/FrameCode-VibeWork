@@ -5,6 +5,7 @@ This directory stores durable, sourced, project-specific learning produced throu
 Rules:
 
 - Use `fcvw/wiki@1` with `type: agent` and a collision-resistant ID.
+- This consolidation rule does not apply to `../feedback/`, where a note never overwrites another model's note: consolidated knowledge converges, attributed assessment preserves disagreement.
 - Prefer updating an existing canonical page when the learning has the same responsibility and sources.
 - Never coordinate parallel writers through one shared fixed journal filename.
 - Record sources, confidence, review date, affected boundary, and related plan.

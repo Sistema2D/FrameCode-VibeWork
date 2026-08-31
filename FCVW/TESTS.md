@@ -108,16 +108,22 @@ Local `.obsidian/` state may be recreated by the editor and is ignored by source
 
 Release packaging tests cover deterministic ZIP bytes, exact per-language archive roots, manifest inspection, SHA-256 binding, refusal to package forbidden editor/repository/cache state or symlinks, safe replacement boundaries, and the rule that candidate mode tolerates only an `in_review` approval blocker. V0.15.0 layout tests additionally cover source-only exclusions, path collisions, the exact `AGENTS.md` + `FCVW/` payload root, installed required paths, local graph regeneration, extra-root rejection, and proof that removing `FCVW/` preserves an unrelated application file.
 
-## V0.14.0 structural suite
+## Structural suite
+
+In an installed release the tools live under `FCVW/tools/`; in the framework source checkout they live under the root `tools/`. Use the matching prefix.
 
 ```powershell
-python -B tools/test_validate_fcvw.py
-python -B tools/test_open_issues.py
-python -B tools/document_graph_fcvw.py --root .
-python -B tools/knowledge_graph_fcvw.py --root .
-python -B tools/plan_queue_fcvw.py --root . --recommend
-python -B tools/validate_fcvw.py --root . --profile clean-template
+python -B FCVW/tools/test_validate_fcvw.py
+python -B FCVW/tools/test_open_issues.py
+python -B FCVW/tools/test_plan_dependencies_and_knowledge.py
+python -B FCVW/tools/document_graph_fcvw.py --root .
+python -B FCVW/tools/knowledge_graph_fcvw.py --root .
+python -B FCVW/tools/role_manifest_fcvw.py --root . --write
+python -B FCVW/tools/plan_queue_fcvw.py --root . --recommend
+python -B FCVW/tools/validate_fcvw.py --root . --profile clean-template
 ```
+
+`--since` narrows the per-file rules to the changed files and skips reading the rest; repository-wide rules — graph, queues, identifier uniqueness, release surfaces — keep reading the whole tree, so a scoped run still fails when the tree as a whole is inconsistent.
 
 The language gate is separate and runs only against prepared release artifacts:
 

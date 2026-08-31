@@ -17,6 +17,7 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - `LICENSE`
 - `NOTICE`
 - `.gitignore`
+- `.gitattributes`
 - local-only `.obsidian/` may be recreated by Obsidian and is ignored; it is never required or distributed
 - optional provider bridges `.cursorrules` and `.windsurfrules` (when distributed)
 - `FCVW/`
@@ -32,6 +33,9 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - `tools/locale_fcvw.py`
 - `tools/package_release_fcvw.py`
 - `tools/release_layout_fcvw.py`
+- `tools/fcvw_cache.py`
+- `tools/role_manifest_fcvw.py`
+- `tools/upgrade_fcvw.py`
 - optional context tools `tools/build_context_index.py` and `tools/retrieve_context.py`
 - `tools/test_validate_fcvw.py`
 
@@ -67,7 +71,10 @@ Run the optional validator to verify the current tree instead of manually expand
 
 - Application-specific cross-cutting rules: `FCVW/APP_RULES.md`.
 - Generated Obsidian-compatible catalog: `FCVW/DOCUMENT_GRAPH.md`.
-- Active priority queues: `FCVW/Plans/{pending,in_progress}/QUEUE.md`.
+- Generated role inventory consumed by selective upgrade: `FCVW/ROLE_MANIFEST.json`.
+- A merge conflict in a generated surface is never merged by hand: regenerate it.
+- Canonical queue fragments: `FCVW/Plans/{pending,in_progress}/queue.d/*.md`.
+- Generated queue view: `FCVW/Plans/{pending,in_progress}/QUEUE.md`.
 - Optional disposable context indexes: user-selected output path; never a normative source or distributable record.
 - Optional disposable knowledge graphs, source-review reports, and aggregate queue views: `.fcvw-cache/` or another user-selected output path; never normative or distributable records.
 
@@ -79,6 +86,8 @@ Starting with V0.15.0 assets, the template root contains exactly:
 
 ```text
 AGENTS.md
+.cursorrules      (optional provider bridge)
+.windsurfrules    (optional provider bridge)
 FCVW/
 ```
 

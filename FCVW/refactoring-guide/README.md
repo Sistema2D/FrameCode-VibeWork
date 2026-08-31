@@ -19,12 +19,7 @@ Governance structure for deciding, executing, reviewing, and auditing refactorin
 |---|---|
 | [`00-general-governance.md`](00-general-governance.md) | Universal rules, roles, entry and exit criteria, risks, and approval levels. |
 | [`01-decision-guide.md`](01-decision-guide.md) | Decision-making guide to identify the scenario and direct to the applicable file. |
-| [`02-composing-methods.md`](02-composing-methods.md) | Rules for long methods, difficult expressions, temporary variables, algorithms, and method extraction/substitution (Composing Methods). |
-| [`03-moving-features-between-objects.md`](03-moving-features-between-objects.md) | Rules for moving methods/fields, extracting/inlining classes, delegation, and local extension (Moving Features between Objects). |
-| [`04-organizing-data.md`](04-organizing-data.md) | Rules for encapsulation, value/reference objects, collections, arrays, type codes, and associations (Organizing Data). |
-| [`05-simplifying-conditional-expressions.md`](05-simplifying-conditional-expressions.md) | Rules for complex conditionals, duplicate, nested, flags, polymorphism, null object, and assertions (Simplifying Conditional Expressions). |
-| [`06-making-method-calls-simpler.md`](06-making-method-calls-simpler.md) | Rules for names, parameters, constructors, query/modifier, exceptions, and method visibility (Making Method Calls Simpler). |
-| [`07-dealing-with-generalization.md`](07-dealing-with-generalization.md) | Rules for inheritance, delegation, extracting superclass/interface/subclass, template method, and collapsing hierarchy (Dealing with Generalization). |
+| [`02-refactoring-catalog.md`](02-refactoring-catalog.md) | Symptom-to-family routing for the classic catalog, general family rules, and the mandatory FCVW governance for each. The literature is referenced, not reproduced. |
 | [`08-code-smells-map.md`](08-code-smells-map.md) | Diagnostic map by code smell, providing directions to applicable techniques. |
 | [`09-pr-checklist.md`](09-pr-checklist.md) | Objective checklist for review, evidence, tests, rollback, and acceptance. |
 | [`10-code-inventory-and-classification.md`](10-code-inventory-and-classification.md) | Inventory of modules, dependencies, criticality, owners, coverage, and critical points. |

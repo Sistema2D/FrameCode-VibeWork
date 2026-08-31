@@ -19,7 +19,7 @@ Complete this document during Phase 0. Placeholders are valid only while `instan
 | Repository | `<repository_or_not_applicable>` |
 | Product owner | `<owner>` |
 | Current application version | `V0.0.1` |
-| Current FCVW baseline | `V0.13.0` |
+| Current FCVW baseline | `V0.16.0` |
 | Status | `discovery` |
 
 ## Purpose

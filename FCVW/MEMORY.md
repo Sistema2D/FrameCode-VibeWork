@@ -42,6 +42,8 @@ Rotate when active sessions exceed either:
 
 Deletion requires an explicit retention policy, approval, and evidence that no legal, audit, security, or recovery need remains.
 
+Resolved feedback notes (`applied`, `declined`, or `superseded`) follow this same rotation; `open` notes stay active until the maintainer decides.
+
 ## Freshness
 
 Knowledge pages declare confidence, sources, last review date, and supersession links. Stale information is reviewed or marked obsolete; it is not silently treated as current.

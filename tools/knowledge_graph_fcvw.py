@@ -13,6 +13,7 @@ from urllib.parse import unquote
 
 from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, string_list
 from knowledge_sources_fcvw import dependent_review_findings, review_date_findings, validate_source_page
+from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 
 
 TYPED_RELATION_FIELDS = (
@@ -71,7 +72,7 @@ def _metadata_files(root: Path) -> list[tuple[Path, dict[str, FrontmatterValue]]
     for path in sorted(root.rglob("*.md"), key=lambda item: item.as_posix().lower()):
         if any(part in {".git", ".obsidian", ".fcvw-cache", "__pycache__"} for part in path.parts):
             continue
-        metadata = parse_frontmatter(path.read_text(encoding="utf-8-sig")).data
+        metadata = cache_frontmatter(path)
         if metadata:
             records.append((path, metadata))
     return records

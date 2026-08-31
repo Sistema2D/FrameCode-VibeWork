@@ -10,13 +10,13 @@ upgrade_strategy: "replace_with_migration"
 | Field | Value |
 |---|---|
 | Framework | `FrameCode VibeWork` |
-| Installed version | `V0.15.0` |
-| Release state | `published` |
+| Installed version | `V0.16.0` |
+| Release state | `ready` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
-| Installed modules | `core, plans, regression-guards, records, wiki, typed-knowledge, skills, declarative-automation, contained-release-layout, optional-validator` |
-| Last migration | `V0.14.0 -> V0.15.0` |
+| Installed modules | `core, plans, compact-plans, regression-guards, records, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, fragmented-queues, role-manifest, assisted-upgrade, optional-validator` |
+| Last migration | `V0.15.0 -> V0.16.0` |
 
 ## Schema baselines
 
@@ -39,3 +39,5 @@ upgrade_strategy: "replace_with_migration"
 | Knowledge graph | `fcvw/knowledge-graph@1` |
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.
+
+The V0.16.0 candidate stays `in_preparation` in [`framework-releases/V0.16.0.md`](framework-releases/V0.16.0.md). Per `VERSIONING.md`, this lock only advances to V0.16.0 at the post-publication evidence commit; until then it records the last published version.

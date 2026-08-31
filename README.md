@@ -13,7 +13,7 @@ Scoped planning · regression protection · selective context · controlled tech
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
 [![Release](https://img.shields.io/badge/Release-v0.15.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.15.0)
 
-Stable release **V0.15.0**
+Stable release **V0.16.0**
 
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
@@ -264,11 +264,11 @@ FCVW separa dois namespaces:
 - **aplicação:** `FCVW/changelogs/Vx.y.z.md` e a fonte de versão do produto;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` e [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-A [V0.15.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.15.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.15.0.md](FCVW/framework-releases/V0.15.0.md).
+A [V0.16.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.16.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.16.0.md](FCVW/framework-releases/V0.16.0.md).
 
 A partir da release com distribuição multilíngue, o usuário escolhe o idioma ao baixar um único template vazio (`pt-BR`, `en-US`, `es` ou `de`). Cada pasta ou asset é autônomo e monolíngue; o framework não detecta, alterna nem sincroniza idiomas durante o uso. A presença e a equivalência dos quatro templates são métricas da release.
 
-Nos assets preparados a partir da V0.15.0, a raiz do template contém somente `AGENTS.md` e `FCVW/`. Ferramentas, licença, notice e adaptadores ficam contidos em `FCVW/`; assim, após preservar registros do projeto, remover o framework significa apagar essa pasta e revisar separadamente o `AGENTS.md`. O repositório-fonte continua mantendo `README.md`, `tools/` e infraestrutura Git em seus caminhos convencionais de desenvolvimento.
+Nos assets preparados a partir da V0.16.0, a raiz do template contém `AGENTS.md`, `FCVW/` e as pontes de provedor opcionais `.cursorrules` e `.windsurfrules`, que só funcionam na raiz. Ferramentas, licença e notice ficam contidos em `FCVW/`; assim, após preservar registros do projeto, remover o framework significa apagar essa pasta e revisar separadamente o `AGENTS.md`. O repositório-fonte continua mantendo `README.md`, `tools/` e infraestrutura Git em seus caminhos convencionais de desenvolvimento.
 
 
 Uma mudança do FCVW não incrementa a versão da aplicação. `published` só é usado após publicação real; tag, push, deploy e release externo exigem autoridade e evidência separadas.
@@ -560,11 +560,11 @@ FCVW separates two namespaces:
 - **application:** `FCVW/changelogs/Vx.y.z.md` and the product version source;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` and [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-[V0.15.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.15.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.15.0.md](FCVW/framework-releases/V0.15.0.md).
+[V0.16.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.16.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.16.0.md](FCVW/framework-releases/V0.16.0.md).
 
 Starting with the multilingual distribution release, the user chooses a language by downloading one empty template (`pt-BR`, `en-US`, `es`, or `de`). Each folder or asset is standalone and monolingual; the framework does not detect, switch, or synchronize languages during use. Presence and parity of all four templates are release metrics.
 
-In assets prepared from V0.15.0 onward, the template root contains only `AGENTS.md` and `FCVW/`. Tools, license, notice, and provider adapters are contained by `FCVW/`; after preserving project records, framework removal means deleting that directory and reviewing `AGENTS.md` separately. The source repository keeps `README.md`, `tools/`, and Git infrastructure in their conventional development paths.
+In assets prepared from V0.16.0 onward, the template root contains `AGENTS.md`, `FCVW/`, and the optional provider bridges `.cursorrules` and `.windsurfrules`, which only work at the root. Tools, license, and notice are contained by `FCVW/`; after preserving project records, framework removal means deleting that directory and reviewing `AGENTS.md` separately. The source repository keeps `README.md`, `tools/`, and Git infrastructure in their conventional development paths.
 
 An FCVW change does not increment an application's version. `published` is used only after real publication; tags, pushes, deployments, and external releases require separate authority and evidence.
 
@@ -617,7 +617,7 @@ V0.13 introduced ownership-aware migration, `plan@2` and `regression@1` schemas,
 
 <div align="center">
 
-Stable: [V0.15.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.15.0) · [Technical release record](FCVW/framework-releases/V0.15.0.md)
+Stable: [V0.16.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.16.0) · [Technical release record](FCVW/framework-releases/V0.16.0.md)
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
 

@@ -3,7 +3,7 @@ schema: "fcvw/document-graph@1"
 artifact_role: "generated"
 owner: "framework"
 upgrade_strategy: "regenerate"
-last_reviewed: "2026-08-21"
+last_reviewed: "2026-08-31"
 ---
 
 # Document graph catalog
@@ -91,6 +91,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/framework-releases/V0.13.1.md`](framework-releases/V0.13.1.md)
 - [`FCVW/framework-releases/V0.14.0.md`](framework-releases/V0.14.0.md)
 - [`FCVW/framework-releases/V0.15.0.md`](framework-releases/V0.15.0.md)
+- [`FCVW/framework-releases/V0.16.0.md`](framework-releases/V0.16.0.md)
 
 ## FCVW/governance
 
@@ -104,6 +105,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/governance/TEMPLATE_AUDIT.md`](governance/TEMPLATE_AUDIT.md)
 - [`FCVW/governance/TEMPLATE_AUTOMATION_CONTRACT.md`](governance/TEMPLATE_AUTOMATION_CONTRACT.md)
 - [`FCVW/governance/TEMPLATE_BRIEFING.md`](governance/TEMPLATE_BRIEFING.md)
+- [`FCVW/governance/TEMPLATE_CI_WORKFLOW.md`](governance/TEMPLATE_CI_WORKFLOW.md)
 - [`FCVW/governance/TEMPLATE_CODE_HYGIENE_REPORT.md`](governance/TEMPLATE_CODE_HYGIENE_REPORT.md)
 - [`FCVW/governance/TEMPLATE_DAEMON_LOOP.md`](governance/TEMPLATE_DAEMON_LOOP.md)
 - [`FCVW/governance/TEMPLATE_DATA_SCHEMA.md`](governance/TEMPLATE_DATA_SCHEMA.md)
@@ -118,6 +120,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/governance/TEMPLATE_MODULE_DOCUMENTATION.md`](governance/TEMPLATE_MODULE_DOCUMENTATION.md)
 - [`FCVW/governance/TEMPLATE_MONOLITH_GATE.md`](governance/TEMPLATE_MONOLITH_GATE.md)
 - [`FCVW/governance/TEMPLATE_PLAN.md`](governance/TEMPLATE_PLAN.md)
+- [`FCVW/governance/TEMPLATE_PLAN_COMPACT.md`](governance/TEMPLATE_PLAN_COMPACT.md)
 - [`FCVW/governance/TEMPLATE_REFACTORING.md`](governance/TEMPLATE_REFACTORING.md)
 - [`FCVW/governance/TEMPLATE_REFACTORING_ADR.md`](governance/TEMPLATE_REFACTORING_ADR.md)
 - [`FCVW/governance/TEMPLATE_REFACTORING_CHARACTERIZATION_TEST_PLAN.md`](governance/TEMPLATE_REFACTORING_CHARACTERIZATION_TEST_PLAN.md)
@@ -147,6 +150,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md`](Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md`](Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md`](Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md)
+- [`FCVW/Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md`](Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md)
 - [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)
 - [`FCVW/Plans/completed/README.md`](Plans/completed/README.md)
@@ -160,21 +164,24 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md)
 - [`FCVW/Plans/in_progress/README.md`](Plans/in_progress/README.md)
 
+## FCVW/Plans/in_progress/queue.d
+
+- [`FCVW/Plans/in_progress/queue.d/README.md`](Plans/in_progress/queue.d/README.md)
+
 ## FCVW/Plans/pending
 
 - [`FCVW/Plans/pending/QUEUE.md`](Plans/pending/QUEUE.md)
 - [`FCVW/Plans/pending/README.md`](Plans/pending/README.md)
 
+## FCVW/Plans/pending/queue.d
+
+- [`FCVW/Plans/pending/queue.d/README.md`](Plans/pending/queue.d/README.md)
+
 ## FCVW/refactoring-guide
 
 - [`FCVW/refactoring-guide/00-general-governance.md`](refactoring-guide/00-general-governance.md)
 - [`FCVW/refactoring-guide/01-decision-guide.md`](refactoring-guide/01-decision-guide.md)
-- [`FCVW/refactoring-guide/02-composing-methods.md`](refactoring-guide/02-composing-methods.md)
-- [`FCVW/refactoring-guide/03-moving-features-between-objects.md`](refactoring-guide/03-moving-features-between-objects.md)
-- [`FCVW/refactoring-guide/04-organizing-data.md`](refactoring-guide/04-organizing-data.md)
-- [`FCVW/refactoring-guide/05-simplifying-conditional-expressions.md`](refactoring-guide/05-simplifying-conditional-expressions.md)
-- [`FCVW/refactoring-guide/06-making-method-calls-simpler.md`](refactoring-guide/06-making-method-calls-simpler.md)
-- [`FCVW/refactoring-guide/07-dealing-with-generalization.md`](refactoring-guide/07-dealing-with-generalization.md)
+- [`FCVW/refactoring-guide/02-refactoring-catalog.md`](refactoring-guide/02-refactoring-catalog.md)
 - [`FCVW/refactoring-guide/08-code-smells-map.md`](refactoring-guide/08-code-smells-map.md)
 - [`FCVW/refactoring-guide/09-pr-checklist.md`](refactoring-guide/09-pr-checklist.md)
 - [`FCVW/refactoring-guide/10-code-inventory-and-classification.md`](refactoring-guide/10-code-inventory-and-classification.md)
@@ -321,6 +328,10 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 - [`FCVW/wiki/failures/README.md`](wiki/failures/README.md)
 
+## FCVW/wiki/feedback
+
+- [`FCVW/wiki/feedback/README.md`](wiki/feedback/README.md)
+
 ## FCVW/wiki/inbox
 
 - [`FCVW/wiki/inbox/README.md`](wiki/inbox/README.md)
@@ -370,6 +381,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/wiki/templates/README.md`](wiki/templates/README.md)
 - [`FCVW/wiki/templates/TEMPLATE_DECISION.md`](wiki/templates/TEMPLATE_DECISION.md)
 - [`FCVW/wiki/templates/TEMPLATE_FAILURE.md`](wiki/templates/TEMPLATE_FAILURE.md)
+- [`FCVW/wiki/templates/TEMPLATE_FEEDBACK.md`](wiki/templates/TEMPLATE_FEEDBACK.md)
 - [`FCVW/wiki/templates/TEMPLATE_GENERAL_NOTE.md`](wiki/templates/TEMPLATE_GENERAL_NOTE.md)
 - [`FCVW/wiki/templates/TEMPLATE_LINT.md`](wiki/templates/TEMPLATE_LINT.md)
 - [`FCVW/wiki/templates/TEMPLATE_PATTERN.md`](wiki/templates/TEMPLATE_PATTERN.md)

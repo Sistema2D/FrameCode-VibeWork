@@ -9,6 +9,9 @@ from typing import Iterable
 
 ENTRYPOINT = Path("AGENTS.md")
 FRAMEWORK_DIRECTORY = Path("FCVW")
+# Provider bridges are only read by their tools at the repository root, so the
+# contained layout keeps them there instead of burying them inside FCVW/.
+ROOT_BRIDGES = (Path(".cursorrules"), Path(".windsurfrules"))
 SOURCE_ONLY_ROOT_FILES = {Path("README.md"), Path(".gitignore")}
 REQUIRED_INSTALLED_PATHS = {
     ENTRYPOINT,
@@ -23,13 +26,31 @@ REQUIRED_INSTALLED_PATHS = {
 }
 
 
+def governed_root(start: Path) -> Path:
+    """Resolve the governed repository root from any tool or test file.
+
+    Works in both supported layouts without guessing: the framework source
+    checkout keeps its tools in a root `tools/`, while an installed release
+    keeps them in `FCVW/tools/`. The root is the first ancestor that owns both
+    `AGENTS.md` and `FCVW/`.
+    """
+
+    here = Path(start).resolve()
+    for candidate in (here if here.is_dir() else here.parent, *here.parents):
+        if (candidate / ENTRYPOINT).is_file() and (candidate / FRAMEWORK_DIRECTORY).is_dir():
+            return candidate
+    raise ValueError(f"no governed root above {start}")
+
+
 def installed_path(relative: Path) -> Path | None:
     """Return the installed path for one source-relative payload file."""
 
     if relative.is_absolute() or ".." in relative.parts or relative == Path("."):
         raise ValueError(f"unsafe source payload path: {relative.as_posix()}")
-    if relative == ENTRYPOINT:
-        return ENTRYPOINT
+    if relative == ENTRYPOINT or relative in ROOT_BRIDGES:
+        return relative
+    if relative.parent == FRAMEWORK_DIRECTORY and Path(relative.name) in ROOT_BRIDGES:
+        return Path(relative.name)
     if relative in SOURCE_ONLY_ROOT_FILES:
         return None
     if relative.parts[0] == FRAMEWORK_DIRECTORY.name:
@@ -91,11 +112,12 @@ def validate_release_layout(root: Path) -> None:
 
     root = root.resolve()
     entries = {path.name for path in root.iterdir()}
-    expected_entries = {ENTRYPOINT.name, FRAMEWORK_DIRECTORY.name}
-    if entries != expected_entries:
+    bridges = {bridge.name for bridge in ROOT_BRIDGES}
+    expected_entries = {ENTRYPOINT.name, FRAMEWORK_DIRECTORY.name} | bridges
+    if not entries <= expected_entries or not {ENTRYPOINT.name, FRAMEWORK_DIRECTORY.name} <= entries:
         raise ValueError(
-            "installed release root must contain exactly AGENTS.md and FCVW; "
-            f"found={sorted(entries)}"
+            "installed release root must contain AGENTS.md and FCVW plus optional "
+            f"provider bridges {sorted(bridges)}; found={sorted(entries)}"
         )
     missing = sorted(
         path.as_posix() for path in REQUIRED_INSTALLED_PATHS if not (root / path).is_file()
@@ -103,5 +125,8 @@ def validate_release_layout(root: Path) -> None:
     if missing:
         raise ValueError(f"installed release layout is incomplete: {missing}")
     residue = entries - {FRAMEWORK_DIRECTORY.name}
-    if residue != {ENTRYPOINT.name}:
-        raise ValueError(f"framework removal residue is not limited to AGENTS.md: {sorted(residue)}")
+    if not residue <= ({ENTRYPOINT.name} | bridges):
+        raise ValueError(
+            "framework removal residue is not limited to AGENTS.md and provider "
+            f"bridges: {sorted(residue)}"
+        )

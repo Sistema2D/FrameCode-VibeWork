@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import os
 import re
 import sys
@@ -15,6 +16,7 @@ from pathlib import Path
 from document_graph_fcvw import render_catalog
 from frontmatter_fcvw import parse_frontmatter, scalar
 from locale_fcvw import RELEASE_VARIANTS, LocaleFinding, validate_release_variants
+from role_manifest_fcvw import MANIFEST_PATH, build_manifest
 from release_layout_fcvw import materialize_release_layout, validate_release_layout
 
 
@@ -118,9 +120,11 @@ def inspect_archive(path: Path, archive_root: str, expected_files: set[str]) -> 
             if Path(member).is_absolute() or ".." in Path(member).parts:
                 raise ValueError(f"archive contains unsafe path: {member}")
         first_level = {Path(member).relative_to(archive_root).parts[0] for member in members}
-        if first_level != {"AGENTS.md", "FCVW"}:
+        allowed_root = {"AGENTS.md", "FCVW", ".cursorrules", ".windsurfrules"}
+        if not first_level <= allowed_root or not {"AGENTS.md", "FCVW"} <= first_level:
             raise ValueError(
-                "archive payload root must contain exactly AGENTS.md and FCVW; "
+                "archive payload root must contain AGENTS.md and FCVW plus optional "
+                "provider bridges; "
                 f"found={sorted(first_level)}"
             )
 
@@ -158,6 +162,16 @@ def create_archives(staging_root: Path, output_root: Path, version: str, *, repl
                 materialize_release_layout(variant, installed, package_files(variant))
                 graph_path = installed / "FCVW" / "DOCUMENT_GRAPH.md"
                 graph_path.write_text(render_catalog(installed, graph_path), encoding="utf-8", newline="\n")
+                # The role manifest records a path and a digest per file, so a
+                # manifest built from the source tree would describe paths the
+                # payload does not have and digests the packager just changed.
+                # It has to be rebuilt from the materialised installed layout.
+                manifest_path = installed / MANIFEST_PATH
+                manifest_path.write_text(
+                    json.dumps(build_manifest(installed), ensure_ascii=False, indent=2) + chr(10),
+                    encoding="utf-8",
+                    newline=chr(10),
+                )
                 validate_release_layout(installed)
                 manifest = {path.relative_to(installed).as_posix() for path in package_files(installed)}
 

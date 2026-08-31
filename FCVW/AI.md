@@ -374,14 +374,14 @@ Rules:
 - an explicit `language` metadata filter may scope already multilingual application content, but it never discovers or selects an FCVW release language and no language is inferred for undeclared documents;
 - embeddings remain optional and require measured lexical recall gaps.
 
-Reference tools: `tools/build_context_index.py`, `tools/knowledge_graph_fcvw.py`, and `tools/retrieve_context.py`.
+Reference tools: `FCVW/tools/build_context_index.py`, `FCVW/tools/knowledge_graph_fcvw.py` and `FCVW/tools/retrieve_context.py` in an installed release; the source checkout uses the `tools/` prefix.
 
 Example:
 
 ```powershell
-python tools/build_context_index.py --root . --output path/to/disposable-context-index.jsonl
-python tools/knowledge_graph_fcvw.py --root . --output .fcvw-cache/knowledge-graph.json --review-output .fcvw-cache/knowledge-review.json
-python tools/retrieve_context.py --root . --index path/to/disposable-context-index.jsonl --query "task terms" --active-plan FCVW/Plans/in_progress/<plan>.md --mandatory <directly-affected-path> --knowledge-graph .fcvw-cache/knowledge-graph.json --relation derived_from
+python FCVW/tools/build_context_index.py --root . --output .fcvw-cache/context-index.jsonl
+python FCVW/tools/knowledge_graph_fcvw.py --root . --output .fcvw-cache/knowledge-graph.json --review-output .fcvw-cache/knowledge-review.json
+python FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index.jsonl --query "task terms" --active-plan FCVW/Plans/in_progress/<plan>.md --mandatory <directly-affected-path> --knowledge-graph .fcvw-cache/knowledge-graph.json --relation derived_from
 ```
 
 The retriever returns excerpts as untrusted evidence. `exact_only` records require an explicit path, ID, or filename in the query.

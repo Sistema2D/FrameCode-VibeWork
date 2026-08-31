@@ -14,6 +14,7 @@ Start with a small canonical set and add project tags only when retrieval improv
 - `planning-governance`
 - `release-governance`
 - `knowledge-governance`
+- `framework-feedback`
 - `ai-operations`
 - `quality-validation`
 - `regression-prevention`

@@ -2,12 +2,7 @@
 
 - `00-general-governance.md`
 - `01-decision-guide.md`
-- `02-composing-methods.md`
-- `03-moving-features-between-objects.md`
-- `04-organizing-data.md`
-- `05-simplifying-conditional-expressions.md`
-- `06-making-method-calls-simpler.md`
-- `07-dealing-with-generalization.md`
+- `02-refactoring-catalog.md`
 - `08-code-smells-map.md`
 - `09-pr-checklist.md`
 - `10-code-inventory-and-classification.md`

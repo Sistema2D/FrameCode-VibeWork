@@ -66,7 +66,7 @@ Complete this section when the change adds a dependency, abstraction, service, w
 - Condition for future evolution:
 - Mandatory safeguards preserved: security, privacy, accessibility, traceability, validation, audit, compliance, data integrity, documentation, and risk-required tests.
 
-For a trivial bounded change, state `Not applicable ? <specific reason>`.
+For a trivial bounded change, state `Not applicable — <specific reason>`.
 
 ## Acceptance criteria
 

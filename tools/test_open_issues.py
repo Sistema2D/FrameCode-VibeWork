@@ -25,7 +25,7 @@ from package_release_fcvw import (
     package_files,
     sha256,
 )
-from release_layout_fcvw import materialize_release_layout, payload_mapping, validate_release_layout
+from release_layout_fcvw import governed_root, materialize_release_layout, payload_mapping, validate_release_layout
 from plan_queue_fcvw import recommend_next_plan, validate_plan_queues
 from retrieve_context import (
     MAX_EXCERPT_CHARS,
@@ -150,7 +150,7 @@ class ReleasePackageTests(TemporaryRootTest):
         with zipfile.ZipFile(archive, "w") as opened:
             for member in members:
                 opened.writestr(f"candidate/{member}", member)
-        with self.assertRaisesRegex(ValueError, "exactly AGENTS.md and FCVW"):
+        with self.assertRaisesRegex(ValueError, "payload root must contain AGENTS.md and FCVW"):
             inspect_archive(archive, "candidate", members)
 
     def test_layout_mapping_rejects_collisions(self) -> None:
@@ -1199,7 +1199,7 @@ class ContractCompletionTests(TemporaryRootTest):
         self.assertEqual("real summary", level_two_section(text, "Summary"))
 
     def test_application_release_template_keeps_evidence_inside_copyable_block(self) -> None:
-        root = Path(__file__).resolve().parent.parent
+        root = governed_root(Path(__file__))
         template = (root / "FCVW" / "governance" / "TEMPLATE_RELEASE.md").read_text(encoding="utf-8-sig")
         fenced = template.split("```markdown", 1)[1].rsplit("```", 1)[0]
         for heading in (
@@ -1408,7 +1408,7 @@ class ContractCompletionTests(TemporaryRootTest):
         self.assertTrue(any("1. Identification" in item.message for item in findings))
 
     def test_future_record_templates_require_role_and_portable_source_link(self) -> None:
-        root = Path(__file__).resolve().parent.parent
+        root = governed_root(Path(__file__))
         templates = sorted((root / "FCVW" / "wiki" / "templates").glob("TEMPLATE_*.md"))
         templates.append(root / "FCVW" / "governance" / "TEMPLATE_AUDIT.md")
         templates.append(root / "FCVW" / "governance" / "TEMPLATE_LANGUAGE_REVIEW.md")
@@ -1543,13 +1543,19 @@ class ContractCompletionTests(TemporaryRootTest):
         self.assertIn("authority=historical", result[0]["reason"])
 
     def test_proportionality_and_document_classification_are_contractual(self) -> None:
-        root = Path(__file__).resolve().parent.parent
+        root = governed_root(Path(__file__))
         monolith = (root / "FCVW" / "skills" / "anti-monolith-guard" / "SKILL.md").read_text(encoding="utf-8-sig")
         hygiene = (root / "FCVW" / "skills" / "code-hygiene-refactor" / "SKILL.md").read_text(encoding="utf-8-sig")
-        self.assertIn("Canonical documentation", monolith)
-        self.assertIn("No numeric block", monolith)
-        self.assertIn("Does the codebase already contain", hygiene)
-        self.assertIn("already installed dependency", hygiene)
+        # Controlled values are never translated (FCVW/SCHEMAS.md); localizable
+        # prose is not a stable contract surface across release variants.
+        self.assertIn("`record/template/generated`", monolith)
+        self.assertIn("`not numerically applicable`", monolith)
+        self.assertIn("`documentation`", monolith)
+        self.assertIn("proportionality_gate: required", hygiene)
+        self.assertIn("- installed_dependency", hygiene)
+        plan_template = (root / "FCVW" / "governance" / "TEMPLATE_PLAN.md").read_text(encoding="utf-8-sig")
+        self.assertIn("Existing codebase solution checked:", plan_template)
+        self.assertIn("Installed dependency checked:", plan_template)
         indexed = build_index(root)
         indexed_paths = {str(item["path"]) for item in indexed}
         self.assertNotIn("FCVW/governance/TEMPLATE_PLAN.md", indexed_paths)

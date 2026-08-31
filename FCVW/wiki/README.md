@@ -5,6 +5,7 @@
 - Keep current reusable knowledge in thematic folders.
 - Keep recent handoffs in `sessions/`.
 - Keep reusable confirmed regressions and their permanent replay guardrails in `regressions/`.
+- Keep attributed feedback about the framework itself in `feedback/`; a note never overwrites another model's note.
 - Move older sessions to `archive/YYYY/`; do not delete evidence by default.
 - Use `wiki-curator` to promote and deduplicate.
 - Use `wiki-lint` for incremental validation.
