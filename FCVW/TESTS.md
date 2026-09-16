@@ -139,3 +139,18 @@ use the source checkout tool prefix. Replay mandatory immunity, disabled and
 shadow CLI equivalence, cumulative explicit routes, missing mandatory failure,
 excluded/exact-only content, injection, invalid graph/schema/hash/weights, cycles,
 budget bounds and fallback. Synthetic fixtures verify invariants, not task quality.
+
+## Retrieval quality and installed archives
+
+Run the following from a source checkout; installed tools use the FCVW tools directory.
+
+```sh
+python -B -m unittest discover -s tools -p 'test_*.py'
+python -B tools/benchmark_retrieval_fcvw.py --root . --check
+python -B tools/verify_release_fcvw.py --source-root . --smoke --run-tests
+python -B tools/verify_release_fcvw.py --source-root . --archive /path/FrameCode-VibeWork-V0.18.0-en-US.zip --checksums /path/SHA256SUMS.txt --run-tests
+```
+
+The benchmark contains 12 labeled synthetic cases, including eight session families, exact-only history, injection evidence and cumulative boundaries. Supply `--cases` and `--index` together for external labeled JSONL. The check fails on missing required files, required recall below one, forbidden hits or useful recall below the unbudgeted baseline. Precision and cost remain measured reports, not universal thresholds. Timings exclude route resolution and graph reconstruction.
+
+Archive verification checks SHA-256, paths, size limits, containment and version, then binds installed Python tools to the trusted source before optional execution. Local smoke exercises the installation layout without manufacturing language-review evidence. The source-only [CI contract](governance/CI_CONTRACT.md) runs Linux/Windows with Python 3.12/3.14, records benchmark artifacts and validates published ZIPs. Real-task evaluation is tracked in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55).

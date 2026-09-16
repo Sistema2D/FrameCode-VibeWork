@@ -272,3 +272,11 @@ excerpt-cost estimates and comparison metrics. `fcvw/adaptive-analysis@1` report
 degrees, weak components, isolated nodes and reciprocal pairs. These are disposable
 JSON outputs validated by the routing module, not canonical Markdown records.
 Feedback and plastic-edge schemas are deferred until evidence justifies learning.
+
+## Retrieval evaluation and selection JSON
+
+`fcvw/retrieval-benchmark@1` reports an input digest, per-case mandatory recall, optional precision, useful recall, missing useful chunks, forbidden hits, estimated optional cost, retrieval/selection latency and separately labeled task outcomes. Missing task outcomes are null, never inferred from retrieval success.
+
+External case JSONL requires `id`, `query`, nonempty `expected_mandatory` and `useful_chunks`. Optional string lists are `forbidden_chunks`, `sessions`, `events`, `changed_files` and `mandatory`. Useful IDs must exist in the paired index. Optional `outcome` accepts boolean `corrected`, boolean `validation_passed` and nonnegative integer `actual_input_tokens`; these are caller-supplied observations, not execution results produced by the benchmark.
+
+Retriever CLI results add `chunk_id`, `chunk_hash` and `excerpt_complete`. Structured inputs add `routing` with source, events and per-path reasons. Opt-in selection adds `context_selection` with decisions, budget and cost estimate; selected chunks remain in `complementary_results`. Shadow also exposes `proposed_chunk_ids`. Existing fields remain readable. See [AI](AI.md) and [test protocol](TESTS.md).

@@ -67,9 +67,9 @@ class KnowledgeGraph:
         }
 
 
-def _metadata_files(root: Path) -> list[tuple[Path, dict[str, FrontmatterValue]]]:
+def _metadata_files(root: Path, files: list[Path] | None = None) -> list[tuple[Path, dict[str, FrontmatterValue]]]:
     records: list[tuple[Path, dict[str, FrontmatterValue]]] = []
-    for path in sorted(root.rglob("*.md"), key=lambda item: item.as_posix().lower()):
+    for path in sorted(root.rglob("*.md") if files is None else files, key=lambda item: item.as_posix().lower()):
         if any(part in {".git", ".obsidian", ".fcvw-cache", "__pycache__"} for part in path.parts):
             continue
         metadata = cache_frontmatter(path)
@@ -181,9 +181,9 @@ def _cycles(edges: list[dict[str, object]], relation: str) -> list[list[str]]:
     return [list(item) for item in sorted(found)]
 
 
-def build_knowledge_graph(root: Path) -> KnowledgeGraph:
+def build_knowledge_graph(root: Path, *, files: list[Path] | None = None) -> KnowledgeGraph:
     root = root.resolve()
-    metadata_files = _metadata_files(root)
+    metadata_files = _metadata_files(root, files)
     metadata_by_path = {path.resolve(): metadata for path, metadata in metadata_files}
     ids: dict[str, list[Path]] = {}
     wiki_pages: list[tuple[Path, dict[str, FrontmatterValue]]] = []

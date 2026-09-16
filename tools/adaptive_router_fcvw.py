@@ -12,8 +12,9 @@ import re
 from pathlib import Path, PurePosixPath
 
 from knowledge_graph_fcvw import build_knowledge_graph
-from document_graph_fcvw import build_graph
-from frontmatter_fcvw import parse_frontmatter, scalar
+from document_graph_fcvw import build_graph, markdown_files
+from frontmatter_fcvw import scalar
+from fcvw_cache import frontmatter as cached_frontmatter, read_text as cached_text
 
 
 SCHEMA = "fcvw/adaptive-structure@1"
@@ -44,20 +45,19 @@ def structural_graph(root: Path) -> dict:
     """Rebuild from governed sources, never from a persisted adaptive cache."""
     root = root.resolve()
     # Existing graph discovery follows paths; reject symlinks before invoking it.
-    for path in root.rglob("*.md"):
-        if any(part in {".git", ".fcvw-cache", "__pycache__"} for part in path.parts):
-            continue
+    files = markdown_files(root)
+    for path in files:
         if path.is_symlink() or not path.resolve().is_relative_to(root):
             raise ValueError("graph source escapes root or is a symlink")
-    knowledge = build_knowledge_graph(root)
+    knowledge = build_knowledge_graph(root, files=files)
     if any(item.severity == "error" for item in knowledge.findings):
         raise ValueError("knowledge graph has blocking findings; validate sources first")
-    documents = build_graph(root)
+    documents = build_graph(root, files=files)
     canonical = set()
     for name in documents.nodes:
         if not safe_path(name):
             raise ValueError("invalid document path")
-        metadata = parse_frontmatter((root / name).read_text(encoding="utf-8-sig")).data
+        metadata = cached_frontmatter(root / name)
         if name == "AGENTS.md" or scalar(metadata, "artifact_role") in {
                 "framework_policy", "framework_lock", "project_profile"}:
             canonical.add(name)
@@ -70,7 +70,7 @@ def structural_graph(root: Path) -> dict:
     # Path references are structural evidence, not an automatic event classifier.
     route_edges = set()
     for source in ("AGENTS.md", "FCVW/CONTEXT_MAP.md"):
-        for target in re.findall(r"`([^`\n]+\.md)`", (root / source).read_text(encoding="utf-8-sig")):
+        for target in re.findall(r"`([^`\n]+\.md)`", cached_text(root / source)):
             target = target if target.startswith("FCVW/") or target == "AGENTS.md" else "FCVW/" + target
             if target in canonical and source != target:
                 route_edges.add((source, target, "route_reference"))
@@ -218,6 +218,7 @@ def shadow_route(graph: dict, baseline: list[dict], mandatory: list[str], *,
     for path, record in candidates.items():
         score = max(0, base[path] + excitation[path] - inhibition[path])
         ranked.append({"path": path, "score": round(score, 8),
+                       "chunk_id": record.get("chunk_id"), "chunk_hash": record.get("chunk_hash", record.get("content_hash")),
                        "base": round(base[path], 8), "excitation": round(excitation[path], 8),
                        "inhibition": round(inhibition[path], 8), "trace": traces[path],
                        "estimated_excerpt_tokens": (len(str(record.get("excerpt", ""))) + 3) // 4})
@@ -235,6 +236,7 @@ def shadow_route(graph: dict, baseline: list[dict], mandatory: list[str], *,
     return {"schema": RUN_SCHEMA, "mode": "shadow", "authority_notice": NOTICE,
             "structural_hash": graph["structural_hash"], "mandatory_paths": mandatory,
             "proposed_optional_paths": selected, "candidates": ranked,
+            "proposed_chunk_ids": [r["chunk_id"] for r in ranked if r["decision"] == "selected"],
             "estimated_optional_excerpt_tokens": budget - remaining,
             "token_estimator": "ceil(excerpt Unicode characters / 4); not model tokens or full files",
             "metrics": compare(list(candidates), selected, mandatory)}

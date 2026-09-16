@@ -68,7 +68,7 @@ def markdown_files(root: Path) -> list[Path]:
     paths: list[Path] = []
     for path in root.rglob("*.md"):
         relative = path.relative_to(root)
-        if any(part in {".git", ".obsidian", ".codex-test-tmp", "__pycache__"} for part in relative.parts):
+        if any(part in {".git", ".obsidian", ".fcvw-cache", ".codex-test-tmp", "__pycache__"} for part in relative.parts):
             continue
         paths.append(path)
     return sorted(paths, key=lambda item: item.relative_to(root).as_posix().lower())
@@ -159,9 +159,9 @@ def _validated_orphan_exception(
     return True
 
 
-def build_graph(root: Path) -> DocumentGraph:
+def build_graph(root: Path, *, files: list[Path] | None = None) -> DocumentGraph:
     root = root.resolve()
-    files = markdown_files(root)
+    files = markdown_files(root) if files is None else files
     node_set = {path.relative_to(root).as_posix() for path in files}
     outgoing_mutable: dict[str, set[str]] = defaultdict(set)
     findings: list[GraphFinding] = []

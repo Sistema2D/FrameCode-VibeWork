@@ -7,7 +7,7 @@ upgrade_strategy: "replace"
 
 # FCVW operational index
 
-This directory is the governance layer installed in a project. V0.16.0 is the validated release candidate. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
+This directory is the governance layer installed in a project. V0.18.0 is the current release candidate. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
 
 ## Installation and removal boundary
 
@@ -79,3 +79,7 @@ Empty record directories keep a README only. Application examples, histories, an
 | Build optional lexical context | [`AI.md`](AI.md) | mandatory routes remain authoritative |
 
 `DOCUMENT_GRAPH.md` is a generated navigation surface for Obsidian and portable Markdown readers. It does not become a source of policy merely because it links one.
+
+## V0.18.0 retrieval quality
+
+See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Follow-up work is tracked in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [issue 56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [issue 57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57).

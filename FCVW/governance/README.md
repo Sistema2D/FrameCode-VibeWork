@@ -13,3 +13,7 @@ Core templates:
 - legacy validation baseline.
 
 Copy a template to its record directory; do not fill project data into the template itself.
+
+## Framework automation record
+
+- [Framework CI contract](CI_CONTRACT.md).

@@ -31,3 +31,7 @@ All contracts use `fcvw/automation@1` and define trigger, preconditions, actions
 A Markdown contract describes expected behavior. It does not prove execution. Evidence must identify who or what ran the contract, when, inputs, result, and remaining failures.
 
 Executable implementation requires a separate plan, security review, environment ownership, test strategy, disable/rollback path, and explicit user authorization when external effects are involved.
+
+## Framework repository CI
+
+The maintainer-authorized [CI contract](governance/CI_CONTRACT.md) implements Scenario 3 for this source repository. It is read-only, uses pinned actions and bounded jobs, and never publishes a release or changes branch protection automatically. Downloading a template does not enable CI in the receiving application.

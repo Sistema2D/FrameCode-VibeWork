@@ -1,0 +1,70 @@
+name: FCVW validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.12', '3.14']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      PYTHONUTF8: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Regression suites
+        run: python -B -m unittest discover -s tools -p "test_*.py"
+      - name: Governance
+        run: python -B tools/validate_fcvw.py --root . --profile clean-template
+      - name: Labeled retrieval benchmark
+        run: python -B tools/benchmark_retrieval_fcvw.py --root . --check --output "${{ runner.temp }}/fcvw-benchmark.json"
+      - name: Installed layout
+        run: python -B tools/verify_release_fcvw.py --source-root . --smoke --run-tests
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: benchmark-${{ matrix.os }}-${{ matrix.python }}
+          path: ${{ runner.temp }}/fcvw-benchmark.json
+          retention-days: 14
+
+  release-assets:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Download published assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release download "$RELEASE_TAG" --dir "$RUNNER_TEMP/release" --pattern '*.zip' --pattern SHA256SUMS.txt
+      - name: Verify each archive
+        shell: bash
+        run: |
+          for archive in "$RUNNER_TEMP/release/"*.zip; do
+            python -B tools/verify_release_fcvw.py --source-root . --archive "$archive" --checksums "$RUNNER_TEMP/release/SHA256SUMS.txt" --run-tests
+          done

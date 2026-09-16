@@ -94,9 +94,11 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/framework-releases/V0.15.0.md`](framework-releases/V0.15.0.md)
 - [`FCVW/framework-releases/V0.16.0.md`](framework-releases/V0.16.0.md)
 - [`FCVW/framework-releases/V0.17.0.md`](framework-releases/V0.17.0.md)
+- [`FCVW/framework-releases/V0.18.0.md`](framework-releases/V0.18.0.md)
 
 ## FCVW/governance
 
+- [`FCVW/governance/CI_CONTRACT.md`](governance/CI_CONTRACT.md)
 - [`FCVW/governance/README.md`](governance/README.md)
 - [`FCVW/governance/TEMPLATE_ADR.md`](governance/TEMPLATE_ADR.md)
 - [`FCVW/governance/TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md`](governance/TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md)
@@ -164,11 +166,13 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/Plans/in_progress
 
+- [`FCVW/Plans/in_progress/P2-R4-2026-09-16-retrieval-quality-and-ci.md`](Plans/in_progress/P2-R4-2026-09-16-retrieval-quality-and-ci.md)
 - [`FCVW/Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md)
 - [`FCVW/Plans/in_progress/README.md`](Plans/in_progress/README.md)
 
 ## FCVW/Plans/in_progress/queue.d
 
+- [`FCVW/Plans/in_progress/queue.d/P2-R4-2026-09-16-retrieval-quality-and-ci.md`](Plans/in_progress/queue.d/P2-R4-2026-09-16-retrieval-quality-and-ci.md)
 - [`FCVW/Plans/in_progress/queue.d/README.md`](Plans/in_progress/queue.d/README.md)
 
 ## FCVW/Plans/pending

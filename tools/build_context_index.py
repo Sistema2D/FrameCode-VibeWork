@@ -17,6 +17,7 @@ from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read
 
 HEADING = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
 FENCE = re.compile(r"^\s*(```+|~~~+)")
+MAX_CHUNK_CHARS = 1200
 EXCLUDED_PARTS = {"templates", "examples", ".git", ".obsidian", "__pycache__"}
 
 
@@ -93,12 +94,44 @@ def sections(text: str) -> list[tuple[str, str]]:
     return [(title, "\n".join(body).strip()) for title, body in chunks]
 
 
+def bounded_chunks(content: str, limit: int = MAX_CHUNK_CHARS) -> list[str]:
+    """Keep paragraphs and fenced code atomic; oversized blocks remain complete."""
+    blocks, block, marker = [], [], ""
+    for line in content.splitlines():
+        match = FENCE.match(line)
+        if match:
+            current = match.group(1)
+            if not marker:
+                marker = current
+            elif current[0] == marker[0] and len(current) >= len(marker):
+                marker = ""
+        if not line.strip() and not marker:
+            if block:
+                blocks.append("\n".join(block))
+                block = []
+        else:
+            block.append(line)
+    if block:
+        blocks.append("\n".join(block))
+    chunks, pending = [], ""
+    for block in blocks:
+        combined = pending + "\n\n" + block if pending else block
+        if pending and len(combined) > limit:
+            chunks.append(pending)
+            pending = block
+        else:
+            pending = combined
+    if pending:
+        chunks.append(pending)
+    return chunks
+
+
 def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, object]]:
     root = root.resolve()
     records: list[dict[str, object]] = []
     for path in sorted(root.rglob("*.md"), key=lambda item: item.as_posix().lower()):
         relative_path = path.relative_to(root)
-        if any(part in {".git", ".obsidian", "__pycache__"} for part in relative_path.parts):
+        if any(part in {".git", ".obsidian", ".fcvw-cache", "__pycache__"} for part in relative_path.parts):
             continue
         text = cache_read_text(path)
         result = parse_frontmatter(text)
@@ -112,7 +145,7 @@ def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, ob
         if scope == "excluded_by_default" and not include_excluded:
             continue
         slug_counts: dict[str, int] = {}
-        for heading, content in sections(text):
+        for heading, content in [(h, c) for h, section in sections(text) for c in bounded_chunks(section)]:
             digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
             relative = relative_path.as_posix()
             base_slug = slug(heading)

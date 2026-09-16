@@ -116,3 +116,14 @@ Regenerate this inventory under the [document graph contract](DOCUMENT_GRAPH.md)
 
 Installed releases place these under `FCVW/tools/`. Derived JSON stays outside
 the versioned baseline; no adaptive cache is required.
+
+## Retrieval quality tools and repository CI
+
+- `tools/context_routing_fcvw.py`
+- `tools/context_selection_fcvw.py`
+- `tools/benchmark_retrieval_fcvw.py`
+- `tools/verify_release_fcvw.py`
+- `tools/test_retrieval_quality.py`
+- source-only `.github/workflows/validate.yml`
+
+Installed tools remain under `FCVW/tools/`. Benchmarks and caches are disposable and excluded from release assets. [CI_CONTRACT.md](governance/CI_CONTRACT.md) describes this repository automation; downstream installation does not activate it.

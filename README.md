@@ -625,3 +625,16 @@ Stable: [V0.17.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v
 [PT-BR](#pt-br) · [ENG-US](#en-us) · [Top](#top)
 
 </div>
+
+## V0.18.0 — retrieval quality / qualidade de recuperação
+
+A próxima release corrige correspondências acidentais no histórico, explica rotas obrigatórias e permite selecionar trechos completos por orçamento opcional. O benchmark contém 12 casos sintéticos rotulados; a CI verifica Linux/Windows, Python 3.12/3.14 e pacotes instalados. A estimativa de tokens não mede consumo do modelo e o modo adaptativo continua somente sombra.
+
+The next release fixes incidental history matches, explains mandatory routes and adds optional complete-chunk budget selection. Its benchmark contains 12 labeled synthetic cases; CI checks Linux/Windows, Python 3.12/3.14 and installed packages. Token estimates are not model usage and adaptive routing remains shadow-only.
+
+- [Uso / Usage](FCVW/AI.md)
+- [Validação / Validation](FCVW/TESTS.md)
+- [Registro técnico / Technical record](FCVW/framework-releases/V0.18.0.md)
+- [Avaliação real / Real-task evaluation #55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55)
+- [Aprendizagem reversível / Reversible learning #56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56)
+- [Assistência condicionada / Guarded assist #57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57)

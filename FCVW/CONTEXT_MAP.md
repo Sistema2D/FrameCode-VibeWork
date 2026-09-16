@@ -57,18 +57,19 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 
 | Observed event or changed boundary | Mandatory read before action | Required evidence |
 |---|---|---|
-| Any versioned change | `PLANNING.md`, `REGRESSION_GUARDS.md` | active plan, regression contract, rollback |
-| Add, move, rename, generate, or delete a file/directory | `OWNERSHIP.md`, `FILESYSTEM.md` | ownership role, path/index synchronization |
-| Root entrypoint, canonical FCVW policy, schema, template, or validator changes | `SCHEMAS.md`, `OWNERSHIP.md`, `AUDIT.md` | compatibility and governance validation |
-| Public API, CLI, event, file format, module boundary, or primary workflow changes | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `WORKFLOW.md` | consumer impact, ADR decision, documentation update |
-| Dependency, runtime, build tool, SDK, or external service changes | `STACK.md`, `ENVIRONMENT.md`, `SECURITY.md` | compatibility, source/license, failure/rollback evidence |
-| Authentication, authorization, secret, sensitive data, destructive action | `SECURITY.md`, `DATA.md`, `TESTS.md` | misuse/denial cases, residual risk, rollback |
-| Persistence, schema, import/export, retention, or migration changes | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | old-data compatibility, reconciliation, recovery |
-| AI instruction, prompt, skill, agent, memory, retrieval, or tool boundary changes | `AI.md`, `SECURITY.md`, `TESTS.md` | allowed/denied boundary replay; factory or improvement gate |
-| Failure, failed check, unexplained behavior, or known regression | `TROUBLESHOOTING.md`, `REGRESSION_GUARDS.md` | hypothesis/evidence and permanent replay decision |
-| Hook, watcher, daemon, or gate contract changes | `AUTOMATION.md` and matching `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, or `GOVERNANCE_GATES.md` | trigger, permissions, evidence, failure policy, disable/rollback |
-| Version, changelog, artifact, tag, deploy, or publication changes | `VERSIONING.md`, `RELEASE.md`, `release-checklist` | namespace, included plans, validation, authority |
-| Plan completion or session handoff | `AUDIT.md` closeout checklist, `REGRESSION_GUARDS.md` | final results, limitations, release/changelog, next state |
+| `event:change` Any versioned change | `PLANNING.md`, `REGRESSION_GUARDS.md` | active plan, regression contract, rollback |
+| `event:filesystem` Add, move, rename, generate, or delete a file/directory | `OWNERSHIP.md`, `FILESYSTEM.md` | ownership role, path/index synchronization |
+| `event:policy` Root entrypoint, canonical FCVW policy, schema, template, or validator changes | `SCHEMAS.md`, `OWNERSHIP.md`, `AUDIT.md` | compatibility and governance validation |
+| `event:public_interface` Public API, CLI, event, file format, module boundary, or primary workflow changes | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `WORKFLOW.md` | consumer impact, ADR decision, documentation update |
+| `event:dependency` Dependency, runtime, build tool, SDK, or external service changes | `STACK.md`, `ENVIRONMENT.md`, `SECURITY.md` | compatibility, source/license, failure/rollback evidence |
+| `event:security` Authentication, authorization, secret, sensitive data, destructive action | `SECURITY.md`, `DATA.md`, `TESTS.md` | misuse/denial cases, residual risk, rollback |
+| `event:data` Persistence, schema, import/export, retention, or migration changes | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | old-data compatibility, reconciliation, recovery |
+| `event:ai` AI instruction, prompt, skill, agent, memory, retrieval, or tool boundary changes | `AI.md`, `SECURITY.md`, `TESTS.md` | allowed/denied boundary replay; factory or improvement gate |
+| `event:failure` Failure, failed check, unexplained behavior, or known regression | `TROUBLESHOOTING.md`, `REGRESSION_GUARDS.md` | hypothesis/evidence and permanent replay decision |
+| `event:automation` Hook, watcher, daemon, or gate contract changes | `AUTOMATION.md` and matching `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, or `GOVERNANCE_GATES.md` | trigger, permissions, evidence, failure policy, disable/rollback |
+| `event:release` Version, changelog, artifact, tag, deploy, or publication changes | `VERSIONING.md`, `RELEASE.md`, `release-checklist` | namespace, included plans, validation, authority |
+| `event:closeout` Plan completion or session handoff | `AUDIT.md` closeout checklist, `REGRESSION_GUARDS.md` | final results, limitations, release/changelog, next state |
+
 
 ## Selective loading for long documents
 
@@ -141,3 +142,7 @@ The clean-template validator checks that every root document marked `artifact_ro
 For the structural retrieval experiment, read the optional routing section in
 [AI governance](AI.md) and [ADR-0006](decisions/ADR-0006-adaptive-context-routing.md).
 Its suggestions never replace the cumulative mandatory reads above.
+
+## Structured retrieval routes
+
+Repeat `--session`, `--event` and `--changed-file` to accumulate immediate required reads from the tables above. Stable `event:` identifiers are machine keys; descriptions remain human-readable. The CLI reports the reason for each derived path and unions these with the entrypoints, active plan and explicit `--mandatory` paths. Unknown identifiers fail closed. File hints are conservative: declare semantic events and file additions/deletions explicitly. See [retrieval usage](AI.md).

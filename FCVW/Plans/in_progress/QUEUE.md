@@ -13,3 +13,4 @@ Generated from [`queue.d/`](queue.d/README.md). Edit a fragment, not this file. 
 
 | Order | Plan | Category | Blocked by | Override reason |
 |---:|---|---|---|---|
+| 1 | [P2-R4-2026-09-16-retrieval-quality-and-ci](P2-R4-2026-09-16-retrieval-quality-and-ci.md) | correction | none | - |

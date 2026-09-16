@@ -392,12 +392,27 @@ Optional semantic wiki review remains a `wiki-lint` procedure, not a retrieval r
 
 `retrieve_context.py --adaptive-mode shadow` adds a separate proposal and leaves
 mandatory paths and delivered BM25 results unchanged. Default mode is disabled.
-The caller still resolves every event trigger through `CONTEXT_MAP.md` and passes
-the resulting paths through the active plan or `--mandatory`; this CLI is not a
-semantic trigger classifier. Supplied mandatory recall is not end-to-end recall.
+Callers declare applicable events through structured inputs described below,
+the active plan and explicit paths. This CLI is not a semantic trigger classifier.
+Supplied mandatory recall is not end-to-end recall.
 Only already eligible results enter scoring. No graph can restore excluded,
 nonexact historical, or filtered content. Mandatory paths are outside scoring
 and budgets. Contradictions remain counterevidence; explicit invalidation and
 supersession may inhibit optional suggestions. No learned state is read or written.
 Malformed structure falls back to baseline. Sources remain authoritative.
 See [decision, feasibility and CLI](decisions/ADR-0006-adaptive-context-routing.md).
+
+## Verifiable retrieval and complete chunks
+
+V0.18.0 adds structured routes derived directly from [CONTEXT_MAP.md](CONTEXT_MAP.md), with no duplicate rule store. Required context stays outside optional scoring and budgets; callers must read the returned mandatory paths. The CLI does not load complete mandatory documents into its JSON response.
+
+```sh
+python -B FCVW/tools/build_context_index.py --root . --output .fcvw-cache/context-index.jsonl
+python -B FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index.jsonl --query "retrieval injection defense" --session ai_governance --event ai --changed-file FCVW/AI.md --context-budget 2000 --candidate-k 20 --top-k 8 --max-chunks-per-file 2
+```
+
+In a source checkout use root tools instead. Rebuild old indexes: sections now split at paragraph boundaries around 1200 characters, preserving fenced code and oversized atomic blocks. Chunk IDs distinguish fragments; hashes detect content changes. Exact-only matching requires a bounded identity, so an incidental substring such as “maintain” cannot activate “AI”. Explicit filename stems remain supported.
+
+Selection is opt-in through `--context-budget`. It preserves rank, keeps complete chunks, removes exact duplicate text and mandatory-path duplicates, and limits chunks per file. Oversized chunks are skipped with a reason, never cut. The estimate covers the serialized optional-results array only: Unicode characters divided by four, rounded up. It excludes mandatory documents and diagnostic metadata and is not a model token limit.
+
+Shadow scoring evaluates up to 20 eligible candidates before the delivered top-k cut. It still cannot restore excluded or nonexact history. Graph builders share one file inventory and process-local parsing cache; sources remain canonical and no persisted adaptive state is trusted. See [benchmark and installation checks](TESTS.md).

@@ -56,3 +56,7 @@ Unicode characters divided by four, rounded up; it is neither model token usage
 nor full-file cost. Optional precision and missing useful context require independent
 usefulness labels and remain unknown without them. Require held-out quality
 non-inferiority before claiming savings or enabling production selection.
+
+## Complete-chunk budget estimates
+
+For opt-in lexical selection, `--context-budget` bounds the estimated serialized optional-results array, including its metadata, rather than only excerpt characters. Complete paragraphs and code blocks are retained or skipped; required paths never consume this optional allowance. Diagnostics report every decision. This remains a Unicode-character approximation, not model usage; actual token accounting and quality validation remain in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55). The shadow proposal keeps its separately named excerpt-cost estimate.

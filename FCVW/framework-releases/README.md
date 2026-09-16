@@ -21,3 +21,7 @@ Each `Vx.y.z.md` record must identify compatibility, migration, changed framewor
 - [`V0.16.0.md`](V0.16.0.md) — audit remediation and scale hardening.
 
 - [V0.17.0](V0.17.0.md) — structural shadow routing.
+
+## V0.18.0
+
+- [V0.18.0](V0.18.0.md) — retrieval quality, explainable routes and installed validation.
