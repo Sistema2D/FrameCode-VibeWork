@@ -108,3 +108,11 @@ The user chooses the language by downloading exactly one variant. Each variant o
 ## Relationships
 
 Regenerate this inventory under the [document graph contract](DOCUMENT_GRAPH.md) and interpret ownership through [OWNERSHIP.md](OWNERSHIP.md).
+
+## Optional routing tools
+
+- `tools/adaptive_router_fcvw.py`
+- `tools/test_adaptive_routing.py`
+
+Installed releases place these under `FCVW/tools/`. Derived JSON stays outside
+the versioned baseline; no adaptive cache is required.

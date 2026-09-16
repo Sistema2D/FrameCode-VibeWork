@@ -257,3 +257,18 @@ Create the evidence from [TEMPLATE_LANGUAGE_REVIEW.md](governance/TEMPLATE_LANGU
 New troubleshooting records use a collision-resistant `TRB-YYYYMMDD-<short-id>` ID and declare record ownership, `record_scope`, `search_only` retrieval, failure status, confidence, detection/review dates, related plan, sources, and tags. Allowed statuses are `draft`, `in_validation`, `validated`, and `obsolete`; allowed confidence values are `low`, `medium`, and `high`.
 
 The record preserves identification, symptom, hypotheses, root cause, applied solution, validation, prevention, wiki-promotion decision, and final status. A navigable Markdown link connects it to its authoritative plan, policy, or evidence. Untouched historical troubleshooting without a schema remains readable; once substantively edited, migrate it through [TEMPLATE_TROUBLESHOOTING.md](governance/TEMPLATE_TROUBLESHOOTING.md).
+
+## Disposable structural routing JSON
+
+`fcvw/adaptive-structure@1` contains derived authority, sorted relative-path nodes,
+typed signed edges, a source hash and a structural hash. The router validates
+schema, authority, path bounds, uniqueness, endpoints, fixed relation weights,
+hash integrity and size limits before scoring. Hashes detect drift, not authenticity.
+The CLI rebuilds from local sources; it never trusts an imported adaptive cache.
+
+`fcvw/adaptive-shadow@1` contains mode, structural hash, unchanged mandatory paths,
+proposed optional paths, score components, bounded hop traces, selection reasons,
+excerpt-cost estimates and comparison metrics. `fcvw/adaptive-analysis@1` reports
+degrees, weak components, isolated nodes and reciprocal pairs. These are disposable
+JSON outputs validated by the routing module, not canonical Markdown records.
+Feedback and plastic-edge schemas are deferred until evidence justifies learning.

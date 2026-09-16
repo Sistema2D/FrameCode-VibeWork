@@ -387,3 +387,17 @@ python FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index
 The retriever returns excerpts as untrusted evidence. `exact_only` records require an explicit path, ID, or filename in the query.
 
 Optional semantic wiki review remains a `wiki-lint` procedure, not a retrieval ranking signal or deterministic release gate. It is source-bounded, review-only, and unavailable runtimes are reported without silently lowering deterministic validation.
+
+## Optional structural routing experiment
+
+`retrieve_context.py --adaptive-mode shadow` adds a separate proposal and leaves
+mandatory paths and delivered BM25 results unchanged. Default mode is disabled.
+The caller still resolves every event trigger through `CONTEXT_MAP.md` and passes
+the resulting paths through the active plan or `--mandatory`; this CLI is not a
+semantic trigger classifier. Supplied mandatory recall is not end-to-end recall.
+Only already eligible results enter scoring. No graph can restore excluded,
+nonexact historical, or filtered content. Mandatory paths are outside scoring
+and budgets. Contradictions remain counterevidence; explicit invalidation and
+supersession may inhibit optional suggestions. No learned state is read or written.
+Malformed structure falls back to baseline. Sources remain authoritative.
+See [decision, feasibility and CLI](decisions/ADR-0006-adaptive-context-routing.md).

@@ -131,3 +131,11 @@ The language gate is separate and runs only against prepared release artifacts:
 python -B tools/locale_fcvw.py --root <release-staging-root> --require-complete --source-root <clean-source-root> --source-revision <40-character-commit>
 python -B tools/package_release_fcvw.py --root <release-staging-root> --source-root <clean-source-root> --source-revision <40-character-commit> --version <Vx.y.z> --output <asset-directory>
 ```
+
+## Structural shadow routing
+
+Run `python -B FCVW/tools/test_adaptive_routing.py` in an installed package, or
+use the source checkout tool prefix. Replay mandatory immunity, disabled and
+shadow CLI equivalence, cumulative explicit routes, missing mandatory failure,
+excluded/exact-only content, injection, invalid graph/schema/hash/weights, cycles,
+budget bounds and fallback. Synthetic fixtures verify invariants, not task quality.

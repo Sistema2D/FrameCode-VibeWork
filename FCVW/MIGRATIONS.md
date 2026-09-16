@@ -144,3 +144,11 @@ Compatibility notes:
 - Optional semantic wiki review remains non-blocking and cannot mutate canonical knowledge.
 - The source checkout and pre-package language staging retain root `tools/` for development. Release assets relocate those tools under `FCVW/tools/` and omit repository-only root `README.md` and `.gitignore`.
 - The single-folder removal shortcut applies directly to fresh V0.15.0-or-later assets. Older installations require the manifest-based reconciliation above; no migration may assume that same-named root files are framework-owned.
+
+## V0.16.0 to V0.17.0
+
+Replace framework-owned tools and policies using the role manifest; preserve all
+project profiles and records. The optional router is disabled by default and has
+no persistent state or required dependency. Existing retrieval arguments and output
+remain compatible. Rebuild disposable indexes after source changes. To roll back,
+omit the shadow flag or reinstall V0.16.0 using ownership-aware replacement.

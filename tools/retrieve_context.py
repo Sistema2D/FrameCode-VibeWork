@@ -278,6 +278,9 @@ def main() -> int:
     parser.add_argument("--knowledge-graph")
     parser.add_argument("--relation", action="append", default=[])
     parser.add_argument("--graph-limit", type=int, default=4)
+    parser.add_argument("--adaptive-mode", choices=["disabled", "shadow"], default="disabled")
+    parser.add_argument("--adaptive-hops", type=int, choices=range(4), default=2)
+    parser.add_argument("--optional-token-budget", type=int, default=2000)
     args = parser.parse_args()
     root = Path(args.root).resolve()
     active_plan = Path(args.active_plan) if args.active_plan else None
@@ -306,6 +309,18 @@ def main() -> int:
             graph_limit=args.graph_limit,
         ),
     }
+    if args.adaptive_mode == "shadow":
+        from adaptive_router_fcvw import shadow_route, structural_graph
+
+        try:
+            result["adaptive_shadow"] = shadow_route(
+                structural_graph(root), result["complementary_results"], mandatory,
+                hops=args.adaptive_hops, budget=args.optional_token_budget,
+                top_k=min(max(args.top_k, 0), MAX_TOP_K),
+            )
+        except (OSError, ValueError) as error:
+            result["adaptive_shadow"] = {"mode": "shadow", "status": "fallback",
+                                         "reason": str(error), "baseline_preserved": True}
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 1 if mandatory_missing else 0
 

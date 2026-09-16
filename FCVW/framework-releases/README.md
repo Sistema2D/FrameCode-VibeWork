@@ -19,3 +19,5 @@ This directory is the changelog namespace for FCVW itself. Application releases 
 Each `Vx.y.z.md` record must identify compatibility, migration, changed framework surfaces, validation, publication state, known gaps, and rollback. A release marked `in_preparation` is not a published artifact.
 
 - [`V0.16.0.md`](V0.16.0.md) — audit remediation and scale hardening.
+
+- [V0.17.0](V0.17.0.md) — structural shadow routing.

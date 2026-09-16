@@ -3,7 +3,7 @@ schema: "fcvw/document-graph@1"
 artifact_role: "generated"
 owner: "framework"
 upgrade_strategy: "regenerate"
-last_reviewed: "2026-08-31"
+last_reviewed: "2026-09-16"
 ---
 
 # Document graph catalog
@@ -72,6 +72,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/decisions/ADR-0003-proportionality-and-contextual-anti-monolith-gates.md`](decisions/ADR-0003-proportionality-and-contextual-anti-monolith-gates.md)
 - [`FCVW/decisions/ADR-0004-multilingual-source-and-release-model.md`](decisions/ADR-0004-multilingual-source-and-release-model.md)
 - [`FCVW/decisions/ADR-0005-contained-release-filesystem.md`](decisions/ADR-0005-contained-release-filesystem.md)
+- [`FCVW/decisions/ADR-0006-adaptive-context-routing.md`](decisions/ADR-0006-adaptive-context-routing.md)
 - [`FCVW/decisions/README.md`](decisions/README.md)
 
 ## FCVW/examples
@@ -92,6 +93,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/framework-releases/V0.14.0.md`](framework-releases/V0.14.0.md)
 - [`FCVW/framework-releases/V0.15.0.md`](framework-releases/V0.15.0.md)
 - [`FCVW/framework-releases/V0.16.0.md`](framework-releases/V0.16.0.md)
+- [`FCVW/framework-releases/V0.17.0.md`](framework-releases/V0.17.0.md)
 
 ## FCVW/governance
 
@@ -151,6 +153,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md`](Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md`](Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md`](Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md)
+- [`FCVW/Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md`](Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md)
 - [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)
 - [`FCVW/Plans/completed/README.md`](Plans/completed/README.md)

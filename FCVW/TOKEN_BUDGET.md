@@ -47,3 +47,12 @@ Useful repository metrics:
 - archive versus active-memory size;
 - repeated clarification count;
 - validation defects caused by missing context.
+
+## Shadow measurements
+
+Report baseline/proposed optional paths, supplied mandatory recall, optional
+Jaccard, latency and the estimator. The current approximation counts excerpt
+Unicode characters divided by four, rounded up; it is neither model token usage
+nor full-file cost. Optional precision and missing useful context require independent
+usefulness labels and remain unknown without them. Require held-out quality
+non-inferiority before claiming savings or enabling production selection.
