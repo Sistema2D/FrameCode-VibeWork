@@ -56,6 +56,8 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ## Framework versus application releases
 
+Current framework candidate: [V0.17.0](framework-releases/V0.17.0.md).
+
 - FCVW releases: `framework-releases/Vx.y.z.md`.
 - Application releases: `changelogs/Vx.y.z.md`.
 - Installed FCVW baseline: `FRAMEWORK_LOCK.md`.

@@ -15,6 +15,8 @@ Scoped planning · regression protection · selective context · controlled tech
 
 Stable release **V0.16.0**
 
+Validated candidate / candidato validado: [V0.17.0](FCVW/framework-releases/V0.17.0.md).
+
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
