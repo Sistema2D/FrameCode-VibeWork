@@ -11,9 +11,9 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Support](https://img.shields.io/badge/Support-Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache_2.0-6f42c1?style=flat-square)](LICENSE)
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
-[![Release](https://img.shields.io/badge/Release-v0.18.0_candidate-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases)
+[![Release](https://img.shields.io/badge/Release-v0.18.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0)
 
-Stable release **V0.17.0**
+Stable release **V0.18.0**
 
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
@@ -264,7 +264,7 @@ FCVW separa dois namespaces:
 - **aplicação:** `FCVW/changelogs/Vx.y.z.md` e a fonte de versão do produto;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` e [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-A [V0.17.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.17.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.17.0.md](FCVW/framework-releases/V0.17.0.md).
+A [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.18.0.md](FCVW/framework-releases/V0.18.0.md).
 
 A partir da release com distribuição multilíngue, o usuário escolhe o idioma ao baixar um único template vazio (`pt-BR`, `en-US`, `es` ou `de`). Cada pasta ou asset é autônomo e monolíngue; o framework não detecta, alterna nem sincroniza idiomas durante o uso. A presença e a equivalência dos quatro templates são métricas da release.
 
@@ -560,7 +560,7 @@ FCVW separates two namespaces:
 - **application:** `FCVW/changelogs/Vx.y.z.md` and the product version source;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` and [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-[V0.17.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.17.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.17.0.md](FCVW/framework-releases/V0.17.0.md).
+[V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.18.0.md](FCVW/framework-releases/V0.18.0.md).
 
 Starting with the multilingual distribution release, the user chooses a language by downloading one empty template (`pt-BR`, `en-US`, `es`, or `de`). Each folder or asset is standalone and monolingual; the framework does not detect, switch, or synchronize languages during use. Presence and parity of all four templates are release metrics.
 
@@ -617,7 +617,7 @@ V0.13 introduced ownership-aware migration, `plan@2` and `regression@1` schemas,
 
 <div align="center">
 
-Stable: [V0.17.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.17.0) · [Technical release record](FCVW/framework-releases/V0.17.0.md)
+Stable: [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0) · [Technical release record](FCVW/framework-releases/V0.18.0.md)
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
 
@@ -628,9 +628,9 @@ Stable: [V0.17.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v
 
 ## V0.18.0 — retrieval quality / qualidade de recuperação
 
-A próxima release corrige correspondências acidentais no histórico, explica rotas obrigatórias e permite selecionar trechos completos por orçamento opcional. O benchmark contém 12 casos sintéticos rotulados; a CI verifica Linux/Windows, Python 3.12/3.14 e pacotes instalados. A estimativa de tokens não mede consumo do modelo e o modo adaptativo continua somente sombra.
+A V0.18.0 corrige correspondências acidentais no histórico, explica rotas obrigatórias e permite selecionar trechos completos por orçamento opcional. O benchmark contém 12 casos sintéticos rotulados; a CI verifica Linux/Windows, Python 3.12/3.14 e pacotes instalados. A estimativa de tokens não mede consumo do modelo e o modo adaptativo continua somente sombra.
 
-The next release fixes incidental history matches, explains mandatory routes and adds optional complete-chunk budget selection. Its benchmark contains 12 labeled synthetic cases; CI checks Linux/Windows, Python 3.12/3.14 and installed packages. Token estimates are not model usage and adaptive routing remains shadow-only.
+V0.18.0 fixes incidental history matches, explains mandatory routes and adds optional complete-chunk budget selection. Its benchmark contains 12 labeled synthetic cases; CI checks Linux/Windows, Python 3.12/3.14 and installed packages. Token estimates are not model usage and adaptive routing remains shadow-only.
 
 - [Uso / Usage](FCVW/AI.md)
 - [Validação / Validation](FCVW/TESTS.md)

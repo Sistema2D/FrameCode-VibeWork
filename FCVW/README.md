@@ -7,7 +7,7 @@ upgrade_strategy: "replace"
 
 # FCVW operational index
 
-This directory is the governance layer installed in a project. V0.18.0 is the current release candidate. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
+This directory is the governance layer installed in a project. V0.18.0 is the current published release. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0 release assets.
 
 ## Installation and removal boundary
 
@@ -56,7 +56,7 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ## Framework versus application releases
 
-Current published framework: [V0.17.0](framework-releases/V0.17.0.md).
+Current published framework: [V0.18.0](framework-releases/V0.18.0.md).
 
 - FCVW releases: `framework-releases/Vx.y.z.md`.
 - Application releases: `changelogs/Vx.y.z.md`.

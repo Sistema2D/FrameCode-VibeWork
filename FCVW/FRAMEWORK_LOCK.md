@@ -11,7 +11,7 @@ upgrade_strategy: "replace_with_migration"
 |---|---|
 | Framework | `FrameCode VibeWork` |
 | Installed version | `V0.18.0` |
-| Release state | `ready` |
+| Release state | `published` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
@@ -40,4 +40,4 @@ upgrade_strategy: "replace_with_migration"
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.
 
-Validated candidate: [V0.18.0](framework-releases/V0.18.0.md). External evidence follows publication; remote CI limits are recorded in the release.
+Published baseline: [V0.18.0](framework-releases/V0.18.0.md). The release record contains publication evidence and remote CI coverage limits.
