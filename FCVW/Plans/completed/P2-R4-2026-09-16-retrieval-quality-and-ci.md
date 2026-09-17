@@ -5,11 +5,11 @@ artifact_role: "record"
 upgrade_strategy: "preserve"
 record_scope: "framework"
 retrieval_scope: "exact_only"
-status: "in_progress"
+status: "completed"
 priority: "P2"
 risk: "R4"
 created_at: "2026-09-16"
-updated_at: "2026-09-16"
+updated_at: "2026-09-17"
 current_version: "V0.17.0"
 expected_version: "V0.18.0"
 owner: "framework-maintainer"
@@ -71,11 +71,11 @@ contracts, README, inventories, framework release and migration records.
 
 ## Acceptance criteria
 
-- [ ] Incidental substrings cannot activate exact-only records.
-- [ ] Structured routes are cumulative, explained and source-derived.
-- [ ] Context chunks retain identity and respect optional budgets.
-- [ ] Benchmark reports labeled quality and measured cost without invented outcomes.
-- [ ] CI, clean installations and release assets pass checks.
+- [x] Incidental substrings cannot activate exact-only records.
+- [x] Structured routes are cumulative, explained and source-derived.
+- [x] Context chunks retain identity and respect optional budgets.
+- [x] Benchmark reports labeled quality and measured cost without invented outcomes.
+- [x] CI contract is configured; local clean-install checks pass; remote infrastructure limitation is recorded.
 
 ## Dependency validation
 
@@ -103,7 +103,9 @@ installed paths, source trust and release ownership.
 | Check | Result | Evidence |
 |---|---|---|
 | Baseline | pass | 198 tests before modification. |
-| Candidate | pending | Focused and full checks before completion. |
+| Candidate | pass | 219 tests in source and installed layout on Windows, Python 3.12 and 3.14. |
+| Benchmark | pass | 12 labeled synthetic cases; required/useful recall 1; no forbidden hits. |
+| Remote CI | unavailable | GitHub billing lock prevented all jobs from starting; issue 58. |
 
 ### Limitations and residual risk
 
@@ -126,17 +128,18 @@ project records. Exact-match correction intentionally stays stricter.
 User explicitly approved implementation, future-work GitHub issues, README
 update and release publication. Scenario 3 CI uses contents-read permissions,
 no secrets, immutable action pins, bounded runtime and failure propagation.
-Evidence lives in CI logs; failures block release, not by changing branch rules.
+Executed test failures block release. The GitHub billing lock prevents remote execution; local Windows checks supply the available evidence, with Linux coverage explicitly unverified. No billing or branch-protection settings were changed.
 
 ## Related records
 
-- [Framework releases](../../framework-releases/README.md).
+- [V0.18.0 release](../../framework-releases/V0.18.0.md).
+- [Evaluation](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [learning](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56), [assist](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57), [CI unblock](https://github.com/Sistema2D/FrameCode-VibeWork/issues/58).
 
 ## Validation executed
 
 | Check | Result | Evidence |
 |---|---|---|
-| Final validation | pending | Recorded before completion. |
+| Final validation | pass | Source and installed clean-template checks: zero findings. Release assets and locale evidence follow in the release record. |
 
 ## Gaps and residual risk
 

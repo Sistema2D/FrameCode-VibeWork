@@ -638,3 +638,5 @@ The next release fixes incidental history matches, explains mandatory routes and
 - [Avaliação real / Real-task evaluation #55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55)
 - [Aprendizagem reversível / Reversible learning #56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56)
 - [Assistência condicionada / Guarded assist #57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57)
+
+CI remota / Remote CI: [#58](https://github.com/Sistema2D/FrameCode-VibeWork/issues/58) — execução impedida por pendência de faturamento do GitHub / execution blocked by GitHub account billing. Local Windows checks pass on Python 3.12 and 3.14; Linux remains unverified.

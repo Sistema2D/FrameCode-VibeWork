@@ -3,7 +3,7 @@ schema: "fcvw/document-graph@1"
 artifact_role: "generated"
 owner: "framework"
 upgrade_strategy: "regenerate"
-last_reviewed: "2026-09-16"
+last_reviewed: "2026-09-17"
 ---
 
 # Document graph catalog
@@ -156,6 +156,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md`](Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md`](Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md`](Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md)
+- [`FCVW/Plans/completed/P2-R4-2026-09-16-retrieval-quality-and-ci.md`](Plans/completed/P2-R4-2026-09-16-retrieval-quality-and-ci.md)
 - [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)
 - [`FCVW/Plans/completed/README.md`](Plans/completed/README.md)
@@ -166,13 +167,11 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/Plans/in_progress
 
-- [`FCVW/Plans/in_progress/P2-R4-2026-09-16-retrieval-quality-and-ci.md`](Plans/in_progress/P2-R4-2026-09-16-retrieval-quality-and-ci.md)
 - [`FCVW/Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md)
 - [`FCVW/Plans/in_progress/README.md`](Plans/in_progress/README.md)
 
 ## FCVW/Plans/in_progress/queue.d
 
-- [`FCVW/Plans/in_progress/queue.d/P2-R4-2026-09-16-retrieval-quality-and-ci.md`](Plans/in_progress/queue.d/P2-R4-2026-09-16-retrieval-quality-and-ci.md)
 - [`FCVW/Plans/in_progress/queue.d/README.md`](Plans/in_progress/queue.d/README.md)
 
 ## FCVW/Plans/pending
