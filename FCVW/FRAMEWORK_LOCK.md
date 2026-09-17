@@ -10,13 +10,13 @@ upgrade_strategy: "replace_with_migration"
 | Field | Value |
 |---|---|
 | Framework | `FrameCode VibeWork` |
-| Installed version | `V0.17.0` |
-| Release state | `published` |
+| Installed version | `V0.18.0` |
+| Release state | `ready` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
-| Installed modules | `core, plans, compact-plans, regression-guards, records, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, fragmented-queues, role-manifest, assisted-upgrade, optional-validator, optional-shadow-routing` |
-| Last migration | `V0.16.0 -> V0.17.0` |
+| Installed modules | `core, plans, compact-plans, regression-guards, records, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, fragmented-queues, role-manifest, assisted-upgrade, optional-validator, optional-shadow-routing, verified-context-routing, complete-chunk-selection` |
+| Last migration | `V0.17.0 -> V0.18.0` |
 
 ## Schema baselines
 
@@ -40,4 +40,4 @@ upgrade_strategy: "replace_with_migration"
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.
 
-Published baseline: [V0.17.0](framework-releases/V0.17.0.md). The release record contains the tagged revision, asset checksums and external publication evidence.
+Validated candidate: [V0.18.0](framework-releases/V0.18.0.md). External evidence follows publication; remote CI limits are recorded in the release.
