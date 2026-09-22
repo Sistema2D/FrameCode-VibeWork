@@ -280,3 +280,11 @@ Feedback and plastic-edge schemas are deferred until evidence justifies learning
 External case JSONL requires `id`, `query`, nonempty `expected_mandatory` and `useful_chunks`. Optional string lists are `forbidden_chunks`, `sessions`, `events`, `changed_files` and `mandatory`. Useful IDs must exist in the paired index. Optional `outcome` accepts boolean `corrected`, boolean `validation_passed` and nonnegative integer `actual_input_tokens`; these are caller-supplied observations, not execution results produced by the benchmark.
 
 Retriever CLI results add `chunk_id`, `chunk_hash` and `excerpt_complete`. Structured inputs add `routing` with source, events and per-path reasons. Opt-in selection adds `context_selection` with decisions, budget and cost estimate; selected chunks remain in `complementary_results`. Shadow also exposes `proposed_chunk_ids`. Existing fields remain readable. See [AI](AI.md) and [test protocol](TESTS.md).
+
+## Loop evaluation JSON — opt-in
+
+`fcvw/loop-protocol@1`, `fcvw/loop-run@1` and derived `fcvw/loop-report@1` are
+defined in the [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md).
+Unlike Markdown frontmatter, these bounded JSON inputs reject unknown fields to
+reduce accidental raw-payload retention. They are external evidence, not required
+project records. Existing retrieval benchmark contracts remain unchanged.

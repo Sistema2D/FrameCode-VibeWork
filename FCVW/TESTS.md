@@ -189,3 +189,15 @@ their Divergences rows are missing. A decision never changes a historical verdic
 [QA](skills/QA/SKILL.md) first maps the accessible application, then tests and maintains only affected [product surfaces](wiki/product/README.md). Test reports separate approved expected behavior from actual observations and preserve failures. Initial discovery can end in a resumable checkpoint; neither a partial inventory nor source inspection proves live coverage.
 
 Run the optional selected-page checker after writing contracts/runs. It checks stable IDs, element-to-case coverage, complete inventory claims, run contract hashes, missing/duplicate results and evidence fields. It rejects passes for unknown/provisional expectations and stale contracts. It does not browse, authenticate, infer requirements or prove evidence truth. Keep the normal application tests and relevant wiki validation. Missing target execution capability is a blocked result, not an alternative definition of pass. Follow [target guidance](skills/QA/TARGETS.md) for native UI, CLI, APIs, compiled libraries, services and firmware; identify simulation separately from physical hardware coverage.
+
+## Validated-completion evaluation
+
+The optional [loop evaluator](governance/LOOP_EVALUATION_CONTRACT.md) calculates
+cost, iterations, rework, timing and quality from explicit external events. Use
+`python -B tools/loop_metrics_fcvw.py --protocol /external/protocol.json --runs /external/runs.jsonl --check`
+in source, or the installed tools prefix. Missing provider counts remain unknown;
+synthetic fixtures and deterministic repository audits do not prove agent efficacy.
+The test suite covers exact metrics, resumption/conflicting duplicates, partial
+measurements, unknown/unfinished runs, shadow attribution, QA decisions, frozen
+identity, output containment and delayed quality. No automatic evaluation is
+added to ordinary retrieval or project execution.

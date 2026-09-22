@@ -675,3 +675,35 @@ O agente **QA** mapeia a aplicação na primeira execução: telas, botões, mod
 - [Templates](FCVW/wiki/templates/README.md)
 
 Disponível no código-fonte para a próxima release. A primeira execução em um projeto exige o endereço ou instruções de inicialização da aplicação e acesso ao ambiente de teste autorizado. / Available in source for the next release; actual project execution requires a target application and authorized test access.
+
+## Avaliação do ciclo completo / Full-cycle evaluation
+
+O avaliador local da [issue #55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55)
+mede tokens até conclusão validada (quando disponíveis), iterações, retrabalho,
+aprovação inicial, tempo, repetição de falhas e utilidade do contexto. Consome
+registros externos explícitos; preserva tarefas incompletas e separa medições,
+estimativas e dados ausentes. Não executa modelos nem promove estratégias.
+
+The optional evaluator binds runs to a frozen protocol, deduplicates resumed
+evidence and reports paired descriptive comparisons. Real task efficacy requires
+appropriate independent evidence; synthetic tests and repository audits alone
+cannot establish it. Existing retrieval remains unchanged.
+
+- [Contrato / Contract](FCVW/governance/LOOP_EVALUATION_CONTRACT.md)
+- [Template](FCVW/governance/TEMPLATE_LOOP_EVALUATION.md)
+
+```sh
+python -B tools/loop_metrics_fcvw.py --protocol /external/protocol.json --runs /external/runs.jsonl --output /external/report.json --check
+```
+
+No pacote instalado, use `FCVW/tools/`. A ferramenta não depende de GitHub Actions
+pago. `--check` retorna falha para evidência inconclusiva ou invariantes violados;
+um relatório válido não representa autorização para aprendizagem ou assistência.
+
+
+O piloto inicial executou 24 auditorias do repositório em oito domínios. Preservou
+100% do contexto obrigatório, mas registrou perda de recall útil com orçamento no
+caso de UI e uma proposta sombra proibida pelos rótulos do piloto. Não há medição
+de tokens do provedor nem evidência de superioridade em tarefas executadas por IA.
+A issue #55 permanece aberta para essa validação empírica. Resultados e limitações:
+[plano concluído de implementação e piloto](FCVW/Plans/completed/P2-R4-2026-09-22-loop-evaluation.md).

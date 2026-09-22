@@ -7,3 +7,5 @@ Plans whose acceptance, validation, documentation, and changelog obligations are
 - [Retrieval quality and CI](P2-R4-2026-09-16-retrieval-quality-and-ci.md).
 
 - [Free local validation](P2-R3-2026-09-22-local-validation.md).
+
+- [Local loop evaluation and initial pilot](P2-R4-2026-09-22-loop-evaluation.md).

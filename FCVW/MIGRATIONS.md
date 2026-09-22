@@ -159,6 +159,13 @@ Replace framework-owned tools and policies through the role manifest and preserv
 
 ## V0.18.0 to V0.19.0 — in preparation
 
+Loop evaluation adds optional external JSON schemas and tools; no existing benchmark,
+application record or retrieval invocation is migrated. Create a separately frozen
+protocol for new evaluations. Do not infer loop events from old benchmark outcomes
+or backfill missing usage with estimates labeled as provider measurements. Retain
+external evidence and rebuild reports explicitly; no collector runs by default.
+
+
 QA 1.1.0 requires user consultation for every behavior divergence. The optional
 selected-run report adds divergence metrics, pending cases and user_decision_gate.
 Existing runs remain readable; failing historical cases without question/response

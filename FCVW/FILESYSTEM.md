@@ -138,3 +138,13 @@ Installed tools remain under `FCVW/tools/`. Benchmarks and caches are disposable
 - QA execution guidance: `FCVW/wiki/qa/README.md`.
 
 Filled product inventories/surfaces and execution reports belong to downstream applications; the clean framework includes only guidance and reusable templates. See [product contract](wiki/product/README.md).
+
+## Optional loop evaluation
+
+- `tools/loop_contract_fcvw.py`: bounded protocol/event validation.
+- `tools/loop_metrics_fcvw.py`: deterministic local aggregation and reporting.
+- `tools/test_loop_metrics.py`: mathematical, provenance and boundary regression tests.
+- [Evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) and [blank template](governance/TEMPLATE_LOOP_EVALUATION.md).
+
+Tools install under `FCVW/tools/`; actual datasets, run evidence and pilot snapshots
+remain external or in disposable cache and never enter the clean framework.

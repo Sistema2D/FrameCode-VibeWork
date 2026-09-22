@@ -74,6 +74,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/decisions/ADR-0005-contained-release-filesystem.md`](decisions/ADR-0005-contained-release-filesystem.md)
 - [`FCVW/decisions/ADR-0006-adaptive-context-routing.md`](decisions/ADR-0006-adaptive-context-routing.md)
 - [`FCVW/decisions/ADR-0007-product-wiki-qa.md`](decisions/ADR-0007-product-wiki-qa.md)
+- [`FCVW/decisions/ADR-0008-loop-evaluation.md`](decisions/ADR-0008-loop-evaluation.md)
 - [`FCVW/decisions/README.md`](decisions/README.md)
 
 ## FCVW/examples
@@ -102,6 +103,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 - [`FCVW/governance/CI_CONTRACT.md`](governance/CI_CONTRACT.md)
 - [`FCVW/governance/LOCAL_VALIDATION_CONTRACT.md`](governance/LOCAL_VALIDATION_CONTRACT.md)
+- [`FCVW/governance/LOOP_EVALUATION_CONTRACT.md`](governance/LOOP_EVALUATION_CONTRACT.md)
 - [`FCVW/governance/README.md`](governance/README.md)
 - [`FCVW/governance/TEMPLATE_ADR.md`](governance/TEMPLATE_ADR.md)
 - [`FCVW/governance/TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md`](governance/TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md)
@@ -123,6 +125,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/governance/TEMPLATE_HOOK_CHECK.md`](governance/TEMPLATE_HOOK_CHECK.md)
 - [`FCVW/governance/TEMPLATE_LANGUAGE_REVIEW.md`](governance/TEMPLATE_LANGUAGE_REVIEW.md)
 - [`FCVW/governance/TEMPLATE_LEGACY_BASELINE.md`](governance/TEMPLATE_LEGACY_BASELINE.md)
+- [`FCVW/governance/TEMPLATE_LOOP_EVALUATION.md`](governance/TEMPLATE_LOOP_EVALUATION.md)
 - [`FCVW/governance/TEMPLATE_MIGRATION_RUNNER.md`](governance/TEMPLATE_MIGRATION_RUNNER.md)
 - [`FCVW/governance/TEMPLATE_MODULE_DOCUMENTATION.md`](governance/TEMPLATE_MODULE_DOCUMENTATION.md)
 - [`FCVW/governance/TEMPLATE_MONOLITH_GATE.md`](governance/TEMPLATE_MONOLITH_GATE.md)
@@ -162,6 +165,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md`](Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md`](Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-16-retrieval-quality-and-ci.md`](Plans/completed/P2-R4-2026-09-16-retrieval-quality-and-ci.md)
+- [`FCVW/Plans/completed/P2-R4-2026-09-22-loop-evaluation.md`](Plans/completed/P2-R4-2026-09-22-loop-evaluation.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md`](Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md)
 - [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)

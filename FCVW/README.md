@@ -91,3 +91,10 @@ Current source validation uses the explicitly invoked [local checks](TESTS.md) a
 ## Product behavior and QA
 
 [Product wiki](wiki/product/README.md) centralizes sourced screen/control behavior and links observed execution evidence. [QA](skills/QA/SKILL.md) maps the application on first use, then performs selective functional tests and maintenance. It is invoked on demand; no background agent or new runtime dependency is activated.
+
+## Optional validated-completion evaluation
+
+The [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) and
+[template](governance/TEMPLATE_LOOP_EVALUATION.md) support explicit local measurement
+of TVC, IVC, RTR, FPVR, TTVS, RFR and UCTR. Reports preserve incomplete runs and
+evidence gaps; no learning, service or automatic promotion is enabled.

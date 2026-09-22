@@ -416,3 +416,12 @@ In a source checkout use root tools instead. Rebuild old indexes: sections now s
 Selection is opt-in through `--context-budget`. It preserves rank, keeps complete chunks, removes exact duplicate text and mandatory-path duplicates, and limits chunks per file. Oversized chunks are skipped with a reason, never cut. The estimate covers the serialized optional-results array only: Unicode characters divided by four, rounded up. It excludes mandatory documents and diagnostic metadata and is not a model token limit.
 
 Shadow scoring evaluates up to 20 eligible candidates before the delivered top-k cut. It still cannot restore excluded or nonexact history. Graph builders share one file inventory and process-local parsing cache; sources remain canonical and no persisted adaptive state is trusted. See [benchmark and installation checks](TESTS.md).
+
+## Optional full-cycle evaluation
+
+Use the [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) to assess
+cost through validated completion using explicit sanitized external evidence.
+Default routing, mandatory context and QA user decisions remain unchanged.
+Shadow-only proposals cannot establish execution benefit; reports never authorize
+learning or promotion. Actual usage, estimates and unavailable measurements stay
+separate. No background collector or model invocation is installed.

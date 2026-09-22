@@ -12,3 +12,5 @@ Store immutable ADRs that capture context, decision, alternatives, consequences,
 
 - [ADR-0006: Structural shadow routing](ADR-0006-adaptive-context-routing.md)
 - [ADR-0007: Product knowledge and multidisciplinary QA](ADR-0007-product-wiki-qa.md)
+
+- [ADR-0008: Explicit local loop evidence](ADR-0008-loop-evaluation.md).
