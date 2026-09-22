@@ -157,4 +157,10 @@ Legacy pages are preserved through exact baselines; new or changed pages must co
 
 ## Product surfaces and QA evidence
 
+QA runs may carry a Divergences table under the [product contract](product/README.md).
+Every failed case requires user consultation even when its decision row is missing;
+the optional checker reports consultation coverage and pending decisions separately
+from functional results. Historical runs are readable without the table, but missing
+decision evidence cannot authorize new changes. No schema major version changes.
+
 Product behavior reuses `fcvw/wiki@1` with `type: component`, `qa_surface: screen | modal | component | flow | cli | api | service | library | device | firmware | protocol`, a stable ID, route (URL or logical entrypoint) and `retrieval_scope: search_only`. Execution reports reuse `type: audit`, `qa_run: "true"` and `retrieval_scope: exact_only`. QA runs identify the actual execution runtime, including OS/tool/harness or board/simulator where applicable. Normal sources, confidence, lifecycle and ownership rules still apply. The optional [product checker contract](product/README.md) defines inventory, element, case, contract-hash and result tables. A validated knowledge page does not mean the application passed its tests. Approved expectations require an approved source; observed behavior alone is not intent.

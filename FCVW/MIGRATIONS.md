@@ -159,6 +159,13 @@ Replace framework-owned tools and policies through the role manifest and preserv
 
 ## V0.18.0 to V0.19.0 — in preparation
 
+QA 1.1.0 requires user consultation for every behavior divergence. The optional
+selected-run report adds divergence metrics, pending cases and user_decision_gate.
+Existing runs remain readable; failing historical cases without question/response
+evidence have a blocked decision gate. Preserve their original results and append
+dated decision evidence when reviewed; never fabricate or backdate user answers.
+Passing runs without divergences need no new table. No background scan is added.
+
 The optional local validation runner reuses existing checks and preserves project records. No persistent state migration is required. The source repository removes the hosted workflow and retires its contract; no hook, service or runner is installed. Published V0.18.0 assets remain unchanged. Use source tools until a new release is actually published.
 
 QA adds optional product inventory, surface and execution templates within the existing wiki schema. Preserve populated product pages and QA audits as application records during upgrades; preserve their index as a project profile. Link existing approved specifications instead of duplicating or replacing them. The runtime field describes actual execution on any target; a browser is not mandatory. No adapters, browsers, simulators, board tooling or background service are installed. Invoke QA explicitly; first use maps the reachable application scope, then subsequent runs are selective.

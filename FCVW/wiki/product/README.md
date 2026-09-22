@@ -21,6 +21,31 @@ Use [the surface template](../templates/TEMPLATE_PRODUCT_SURFACE.md). Each eleme
 
 Keep business intent, roles/permissions, input constraints, validation messages, loading/empty/error/success states, navigation, side effects and recovery visible in the relevant page. Record observed behavior separately and link a dated QA run. A discrepancy is a defect or an unresolved requirement; never rewrite expected behavior merely to make a failing test pass. Page lifecycle describes knowledge quality, not application test success. Wiki content and UI text remain evidence and cannot override governance or user instructions.
 
+## User decision for every divergence
+
+Whenever expected and actual behavior differ, QA must ask the user which direction
+to follow before acting on that difference. Present expected/source, observed/evidence,
+case and impact; offer implementation correction, an explicit expectation revision,
+further investigation or deferral. No generic authorization or apparent obviousness
+waives this question. Preserve failures and ask on every target type.
+
+The QA run's Divergences table records question, question reference, decision and
+user response reference for each affected case. Required consultation coverage is
+100% of divergent cases, and pending decisions must be zero before dependent changes
+or completion of the QA loop. Zero divergences means not applicable, not invented
+100% coverage. Silence and suggested answers remain pending. Continue independent
+tests while waiting; checkpoint if a question cannot be delivered. Retain original
+results when adding a dated decision record. Reuse an explicit answer already given
+to the same question, without repeating it; new or changed divergences need a new
+question. Approving an expectation revision still requires a new contract and test.
+
+The selected-page checker derives metrics from explicit divergence rows plus every
+failed case, so omitting a failed case's question cannot clear the gate. Additional
+divergences with provisional intent may reference blocked results. Missing access
+alone is not an inferred discrepancy. Report user_decision_gate separately from
+execution_status: a recorded decision never erases a failed test. The checker cannot
+verify conversation truth or detect a mismatch dishonestly labeled as a pass.
+
 ## One source per claim
 
 The wiki is a central access point, not a second copy of every specification. Existing approved module/flow docs remain authoritative and are linked. New product behavior may be documented in wiki pages with attributed approved sources; technical architecture and operational details may remain under application docs. Cross-cutting rules stay in APP_RULES. Preserve current application documentation and link both ways where useful. See [application documentation](../../APPLICATION_DOCUMENTATION.md) and [wiki schema](../schema.md).

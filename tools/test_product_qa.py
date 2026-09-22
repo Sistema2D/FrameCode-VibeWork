@@ -187,6 +187,109 @@ class ProductQATests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'approved expectation'):
             surface(self.root, 'surface.md')
 
+    def divergence(self, *, question='Expected Alice; observed Bob. Which behavior should prevail?',
+                   question_ref='conversation/question-1', decision='pending', decision_ref='-'):
+        p = self.root / 'run.md'
+        p.write_text(p.read_text(encoding='utf-8') + '''
+## Divergences
+| surface_id | case_id | question | question_ref | decision | decision_ref |
+|---|---|---|---|---|---|
+| UI-profile | save-name | ''' + ' | '.join((question, question_ref, decision, decision_ref)) + ' |\n', encoding='utf-8')
+
+    def test_failed_case_without_question_blocks_decision_gate(self):
+        self.replace('run.md', '| pass | Name is Alice |', '| fail | Name is Bob |')
+        report = evaluate(self.root, ['surface.md'], run='run.md')
+        self.assertEqual(report['user_decision_gate'], 'blocked')
+        self.assertEqual(report['divergence_metrics'], dict(total=1, asked=0, unasked=1,
+                         consultation_coverage_pct=0, decided=0, pending_decisions=1))
+        self.assertEqual(report['pending_divergences'][0]['expected'], 'Name is Alice')
+        self.assertEqual(report['pending_divergences'][0]['observed'], 'Name is Bob')
+
+    def test_drafted_question_is_not_consultation_and_asked_is_not_answered(self):
+        self.replace('run.md', '| pass | Name is Alice |', '| fail | Name is Bob |')
+        self.divergence(question_ref='-')
+        report = evaluate(self.root, ['surface.md'], run='run.md')
+        self.assertEqual(report['divergence_metrics']['asked'], 0)
+        self.replace('run.md', '| - | pending |', '| conversation/question-1 | pending |')
+        report = evaluate(self.root, ['surface.md'], run='run.md')
+        self.assertEqual(report['divergence_metrics']['consultation_coverage_pct'], 100)
+        self.assertEqual(report['divergence_metrics']['pending_decisions'], 1)
+        self.assertEqual(report['user_decision_gate'], 'blocked')
+
+    def test_user_directions_preserve_original_failure_and_contract(self):
+        for decision in ('fix_implementation', 'update_expectation', 'investigate', 'defer'):
+            with self.subTest(decision=decision):
+                fixture(self.root)
+                digest = surface(self.root, 'surface.md')['sha256']
+                self.replace('run.md', '| pass | Name is Alice |', '| fail | Name is Bob |')
+                self.divergence(decision=decision, decision_ref='conversation/user-response-2')
+                report = evaluate(self.root, ['surface.md'], run='run.md')
+                self.assertEqual(report['user_decision_gate'], 'clear')
+                self.assertEqual(report['divergence_metrics']['pending_decisions'], 0)
+                self.assertEqual(report['execution_status'], 'fail')
+                self.assertEqual(report['contract_hashes']['UI-profile'], digest)
+
+    def test_decisions_require_user_response_and_real_question_fields(self):
+        for args in ({'decision': 'fix_implementation'},
+                     {'decision': 'update_expectation', 'question_ref': '-', 'decision_ref': 'user-2'},
+                     {'decision': 'update_expectation', 'question': '-', 'decision_ref': 'user-2'},
+                     {'decision': 'automatic_approval', 'decision_ref': 'model-confidence'}):
+            with self.subTest(args=args):
+                fixture(self.root)
+                self.replace('run.md', '| pass | Name is Alice |', '| fail | Name is Bob |')
+                self.divergence(**args)
+                with self.assertRaisesRegex(ValueError, 'decision'):
+                    evaluate(self.root, ['surface.md'], run='run.md')
+
+    def test_divergence_identity_and_nonpassing_result_required(self):
+        self.divergence()
+        with self.assertRaisesRegex(ValueError, 'non-passing'):
+            evaluate(self.root, ['surface.md'], run='run.md')
+        self.replace('run.md', '| pass | Name is Alice |', '| fail | Name is Bob |')
+        self.replace('run.md', '| UI-profile | save-name | Expected', '| UI-missing | save-name | Expected')
+        with self.assertRaisesRegex(ValueError, 'non-passing'):
+            evaluate(self.root, ['surface.md'], run='run.md')
+        self.replace('run.md', '| UI-missing |', '| UI-profile |')
+        p = self.root / 'run.md'
+        text = p.read_text(encoding='utf-8')
+        p.write_text(text + text.splitlines()[-1] + '\n', encoding='utf-8')
+        with self.assertRaisesRegex(ValueError, 'unique'):
+            evaluate(self.root, ['surface.md'], run='run.md')
+
+    def test_no_divergence_is_not_applicable_and_provisional_mismatch_still_blocks(self):
+        report = evaluate(self.root, ['surface.md'])
+        self.assertEqual(report['user_decision_gate'], 'not_evaluated')
+        report = evaluate(self.root, ['surface.md'], run='run.md')
+        self.assertIsNone(report['divergence_metrics']['consultation_coverage_pct'])
+        self.assertEqual(report['user_decision_gate'], 'clear')
+        old = surface(self.root, 'surface.md')['sha256']
+        self.replace('surface.md', '| approved |', '| provisional |')
+        self.replace('run.md', old, surface(self.root, 'surface.md')['sha256'])
+        self.replace('run.md', '| pass | Name is Alice |', '| blocked | Bob observed; intent unconfirmed |')
+        # Lack of access alone need not imply a mismatch; an explicit discrepancy does.
+        self.assertEqual(evaluate(self.root, ['surface.md'], run='run.md')['divergence_metrics']['total'], 0)
+        self.divergence()
+        report = evaluate(self.root, ['surface.md'], run='run.md')
+        self.assertEqual(report['divergence_metrics']['total'], 1)
+        self.assertEqual(report['user_decision_gate'], 'blocked')
+
+    def test_partial_consultation_cannot_hide_another_failed_case(self):
+        old = surface(self.root, 'surface.md')['sha256']
+        p = self.root / 'surface.md'
+        text = p.read_text(encoding='utf-8')
+        row = text.splitlines()[-1]
+        p.write_text(text + row.replace('save-name', 'save-again') + '\n', encoding='utf-8')
+        self.replace('run.md', old, surface(self.root, 'surface.md')['sha256'])
+        self.replace('run.md', '| pass | Name is Alice |', '| fail | Name is Bob |')
+        p = self.root / 'run.md'
+        text = p.read_text(encoding='utf-8')
+        p.write_text(text + text.splitlines()[-1].replace('save-name', 'save-again') + '\n', encoding='utf-8')
+        self.divergence(decision='fix_implementation', decision_ref='conversation/user-2')
+        report = evaluate(self.root, ['surface.md'], run='run.md')
+        self.assertEqual(report['divergence_metrics'], dict(total=2, asked=1, unasked=1,
+                         consultation_coverage_pct=50, decided=1, pending_decisions=1))
+        self.assertEqual(report['user_decision_gate'], 'blocked')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -656,6 +656,15 @@ Run the command from the main-branch checkout to check tests, governance, benchm
 
 ## Wiki funcional e agente QA / Product wiki and QA
 
+**Decisão obrigatória:** sempre que houver divergência entre comportamento esperado
+e observado, o QA pergunta ao usuário qual caminho seguir e registra a resposta.
+A métrica exige 100% das divergências consultadas e zero decisões pendentes antes
+de agir sobre elas. Sem resposta, alterações dependentes ficam bloqueadas.
+
+**Mandatory decision:** QA asks the user about every expected/actual divergence.
+Consultation coverage must be 100%, with no pending decisions before dependent
+changes. User decisions are recorded separately from the original test results.
+
 O agente **QA** mapeia a aplicação na primeira execução: telas, botões, modais, campos, fluxos e estados acessíveis. Em aplicações sem interface gráfica, mapeia comandos, APIs, bibliotecas, serviços, protocolos e entradas/saídas. Registra finalidade, contexto de uso, regras conhecidas e lacunas na wiki; depois revisa apenas áreas afetadas. Comportamento esperado precisa de fonte aprovada, e comportamento observado fica ligado à evidência do teste. Falhas não viram requisitos automaticamente.
 
 **QA** first maps the accessible application, then tests and maintains selected product knowledge. Unknown requirements, inaccessible roles and untested areas remain explicit. The multidisciplinary profile selects browser, native UI, terminal, protocol client, compiled harness, simulator or authorized hardware tools according to the target; no background crawler or runtime dependency is installed. Initial mapping can resume from a checkpoint. Structural checks validate declared coverage and evidence fields, not the truth of execution.

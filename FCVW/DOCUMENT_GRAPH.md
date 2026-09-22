@@ -155,6 +155,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R3-2026-07-15-final-integrity-reading-routes-and-readme.md`](Plans/completed/P2-R3-2026-07-15-final-integrity-reading-routes-and-readme.md)
 - [`FCVW/Plans/completed/P2-R3-2026-07-15-v0130-github-publication.md`](Plans/completed/P2-R3-2026-07-15-v0130-github-publication.md)
 - [`FCVW/Plans/completed/P2-R3-2026-09-22-local-validation.md`](Plans/completed/P2-R3-2026-09-22-local-validation.md)
+- [`FCVW/Plans/completed/P2-R3-2026-09-22-qa-user-decision.md`](Plans/completed/P2-R3-2026-09-22-qa-user-decision.md)
 - [`FCVW/Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md`](Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md`](Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md`](Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md)

@@ -53,6 +53,27 @@ Record target, roles, target platform, applicable viewport/device conditions, te
 
 Link replay steps, screenshots or traces sufficient to support observed results. Redact sensitive data. Results may be pass, fail, blocked or not_run. Unknown/provisional expectations cannot pass. Add a reproducible defect with expected/actual difference and affected case; product repairs require a separate authorized plan.
 
+## Divergences
+
+| surface_id | case_id | question | question_ref | decision | decision_ref |
+|---|---|---|---|---|---|
+
+Add one row per divergent case. Present expected/source, observed/evidence and impact
+to the user, and ask which direction to follow. Record the question text and its
+conversation reference; a drafted question alone is not consultation. Use pending
+until the user explicitly answers, then fix_implementation, update_expectation,
+investigate or defer plus the actual response reference. Never invent references
+or treat a suggested/default answer as submitted. Keep this table empty when there
+are no divergences. Failed cases omitted here still count as unasked and pending.
+
+## Decision metrics
+
+Report total divergent cases, asked, unasked, consultation_coverage_pct, decided and
+pending_decisions from the checker. Require 100% consultation and zero pending
+decisions before acting on a divergence; with zero divergences coverage is not
+applicable. Pending answers block dependent changes, not independent tests.
+Decisions do not change historical test results or remove the need for retesting.
+
 ## Coverage and handoff
 
 List tested, failed, blocked, not-run and undiscovered scope separately. Identify follow-up owner and exact next step. Link relevant product pages and the inventory. No claim of universal coverage follows from a passing selected subset.

@@ -105,6 +105,43 @@ def surface(root: Path, path: str) -> dict:
     return {**contract, 'path': path, 'sha256': hashlib.sha256(json.dumps(contract, sort_keys=True).encode()).hexdigest()}
 
 
+def divergence_decisions(text: str, results: dict, expected: dict) -> dict:
+    """Account for declared mismatches; evidence references cannot attest user consent."""
+    decisions = {}
+    if any(line == '## Divergences' for line in _outside_fences(text)):
+        for row in table(text, 'Divergences', ('surface_id', 'case_id', 'question', 'question_ref', 'decision', 'decision_ref')):
+            key = row['surface_id'], row['case_id']
+            if key not in results or key in decisions or results[key]['result'] == 'pass':
+                raise ValueError('divergence must reference a unique non-passing result')
+            if row['decision'] not in {'pending', 'fix_implementation', 'update_expectation', 'investigate', 'defer'}:
+                raise ValueError('invalid user divergence decision')
+            asked = meaningful(row['question']) and meaningful(row['question_ref'])
+            if row['decision'] != 'pending' and (not asked or not meaningful(row['decision_ref'])):
+                raise ValueError('user decision requires a recorded question and explicit user response reference')
+            decisions[key] = row
+    # A failed case cannot bypass consultation by omitting the divergence table/row.
+    keys = {key for key, row in results.items() if row['result'] == 'fail'} | decisions.keys()
+    asked_count = decided_count = 0
+    pending = []
+    for key in sorted(keys):
+        row = decisions.get(key, {})
+        asked = meaningful(row.get('question', '')) and meaningful(row.get('question_ref', ''))
+        decided = row.get('decision', 'pending') != 'pending'
+        asked_count += asked
+        decided_count += decided
+        if not decided:
+            pending.append({'surface_id': key[0], 'case_id': key[1],
+                            'expected': expected[key]['expected'], 'source': expected[key]['source'],
+                            'observed': results[key]['observed'], 'evidence': results[key]['evidence'],
+                            'question_recorded': asked})
+    total = len(keys)
+    return {'user_decision_gate': 'blocked' if pending else 'clear',
+            'divergence_metrics': {'total': total, 'asked': asked_count, 'unasked': total - asked_count,
+                                   'consultation_coverage_pct': round(100 * asked_count / total, 2) if total else None,
+                                   'decided': decided_count, 'pending_decisions': total - decided_count},
+            'pending_divergences': pending}
+
+
 def evaluate(root: Path, paths: list[str], *, inventory: str | None = None, run: str | None = None) -> dict:
     paths = list(dict.fromkeys(paths))
     inventory_status = None
@@ -143,6 +180,7 @@ def evaluate(root: Path, paths: list[str], *, inventory: str | None = None, run:
         raise ValueError('select at least one mapped surface')
     expected = {(p['id'], cid): case for p in surfaces.values() for cid, case in p['cases'].items()}
     results = {}
+    decision_report = {'user_decision_gate': 'not_evaluated', 'divergence_metrics': None, 'pending_divergences': []}
     if run:
         meta, text = read_page(root, run)
         if meta.get('schema') != 'fcvw/wiki@1' or meta.get('type') != 'audit' or scalar(meta, 'qa_run') != 'true':
@@ -167,14 +205,16 @@ def evaluate(root: Path, paths: list[str], *, inventory: str | None = None, run:
             if row['result'] == 'pass' and expected[key]['expectation'] != 'approved':
                 raise ValueError('unknown/provisional expectation cannot pass')
             results[key] = row
+        decision_report = divergence_decisions(text, results, expected)
     missing = sorted(set(expected) - set(results))
     counts = {s: sum(r['result'] == s for r in results.values()) for s in ('pass', 'fail', 'blocked', 'not_run')}
     status = 'not_run' if not run else 'fail' if counts['fail'] else 'incomplete' if missing or counts['blocked'] or counts['not_run'] else 'pass'
     return {'schema': 'fcvw/product-qa-check@1', 'structural_status': 'pass', 'execution_status': status,
+            **decision_report,
             'inventory_status': inventory_status, 'surfaces': len(surfaces), 'elements': sum(len(p['elements']) for p in surfaces.values()),
             'declared_cases': len(expected), 'results': counts, 'missing_cases': [list(k) for k in missing],
             'contract_hashes': {k: p['sha256'] for k, p in surfaces.items()},
-            'notice': 'Checks declared scope and evidence fields only; does not prove live execution, evidence truth, hidden surface completeness or requirement approval.'}
+            'notice': 'Checks declared scope and evidence fields only; does not prove live execution, evidence truth, actual user consultation/consent, hidden surface completeness or requirement approval.'}
 
 
 def main() -> int:
@@ -191,7 +231,7 @@ def main() -> int:
         if args.output:
             Path(args.output).write_text(data, encoding='utf-8')
         print(data, end='')
-        return int(bool(args.run) and report['execution_status'] != 'pass')
+        return int(bool(args.run) and (report['execution_status'] != 'pass' or report['user_decision_gate'] == 'blocked'))
     except (ValueError, OSError) as exc:
         parser.exit(1, f'QA wiki check failed: {exc}\n')
 
