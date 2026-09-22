@@ -124,6 +124,7 @@ the versioned baseline; no adaptive cache is required.
 - `tools/benchmark_retrieval_fcvw.py`
 - `tools/verify_release_fcvw.py`
 - `tools/test_retrieval_quality.py`
-- source-only `.github/workflows/validate.yml`
+- `tools/check_fcvw.py`
+- `tools/test_local_checks.py`
 
-Installed tools remain under `FCVW/tools/`. Benchmarks and caches are disposable and excluded from release assets. [CI_CONTRACT.md](governance/CI_CONTRACT.md) describes this repository automation; downstream installation does not activate it.
+Installed tools remain under `FCVW/tools/`. Benchmarks and caches are disposable and excluded from release assets. [LOCAL_VALIDATION_CONTRACT.md](governance/LOCAL_VALIDATION_CONTRACT.md) describes explicitly invoked local checks. The former hosted workflow is removed; no downstream automation is activated.

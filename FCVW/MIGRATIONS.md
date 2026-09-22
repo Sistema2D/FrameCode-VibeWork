@@ -156,3 +156,7 @@ omit the shadow flag or reinstall V0.16.0 using ownership-aware replacement.
 ## V0.17.0 to V0.18.0
 
 Replace framework-owned tools and policies through the role manifest and preserve project records. Rebuild disposable indexes to obtain complete bounded chunks and updated identities. Exact-only matching intentionally rejects accidental substring matches. Structured routes and budget selection are optional; CLI metadata is additive. Shadow proposals now use a larger eligible pool and may change, while delivered lexical results remain independent of shadow scoring. Repository CI is source-only and is not installed into downstream projects. To roll back, omit the new flags or restore V0.17.0 by ownership and rebuild its index.
+
+## V0.18.0 to V0.19.0 — in preparation
+
+The optional local validation runner reuses existing checks and preserves project records. No persistent state migration is required. The source repository removes the hosted workflow and retires its contract; no hook, service or runner is installed. Published V0.18.0 assets remain unchanged. Use source tools until a new release is actually published.

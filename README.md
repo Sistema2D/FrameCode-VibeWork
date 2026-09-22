@@ -628,9 +628,9 @@ Stable: [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v
 
 ## V0.18.0 — retrieval quality / qualidade de recuperação
 
-A V0.18.0 corrige correspondências acidentais no histórico, explica rotas obrigatórias e permite selecionar trechos completos por orçamento opcional. O benchmark contém 12 casos sintéticos rotulados; a CI verifica Linux/Windows, Python 3.12/3.14 e pacotes instalados. A estimativa de tokens não mede consumo do modelo e o modo adaptativo continua somente sombra.
+A V0.18.0 corrige correspondências acidentais no histórico, explica rotas obrigatórias e permite selecionar trechos completos por orçamento opcional. O benchmark contém 12 casos sintéticos rotulados; os testes locais verificaram Windows, Python 3.12/3.14 e pacotes instalados. A estimativa de tokens não mede consumo do modelo e o modo adaptativo continua somente sombra.
 
-V0.18.0 fixes incidental history matches, explains mandatory routes and adds optional complete-chunk budget selection. Its benchmark contains 12 labeled synthetic cases; CI checks Linux/Windows, Python 3.12/3.14 and installed packages. Token estimates are not model usage and adaptive routing remains shadow-only.
+V0.18.0 fixes incidental history matches, explains mandatory routes and adds optional complete-chunk budget selection. Its benchmark contains 12 labeled synthetic cases; local checks covered Windows, Python 3.12/3.14 and installed packages. Token estimates are not model usage and adaptive routing remains shadow-only.
 
 - [Uso / Usage](FCVW/AI.md)
 - [Validação / Validation](FCVW/TESTS.md)
@@ -639,4 +639,17 @@ V0.18.0 fixes incidental history matches, explains mandatory routes and adds opt
 - [Aprendizagem reversível / Reversible learning #56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56)
 - [Assistência condicionada / Guarded assist #57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57)
 
-CI remota / Remote CI: [#58](https://github.com/Sistema2D/FrameCode-VibeWork/issues/58) — execução impedida por pendência de faturamento do GitHub / execution blocked by GitHub account billing. Local Windows checks pass on Python 3.12 and 3.14; Linux remains unverified.
+A [issue #58](https://github.com/Sistema2D/FrameCode-VibeWork/issues/58) foi encerrada por decisão do mantenedor. A validação atual é local e não depende de GitHub Actions ou pagamento. / Issue #58 was closed by the maintainer; current validation runs locally without GitHub Actions or payment.
+
+
+## Validação local gratuita / Free local validation
+
+No checkout da branch principal, execute:
+
+```sh
+python -B tools/check_fcvw.py --root .
+```
+
+O comando executa testes, governança, benchmark e verificação da instalação. Salva relatório JSON e logs em `.fcvw-cache/local-checks/` e retorna erro se qualquer etapa falhar. Aceita vários executáveis Python e verificação de ZIPs existentes; consulte [instruções completas](FCVW/TESTS.md). Não instala serviços nem exige conta ou cartão. A execução é manual antes de aceitar alterações; Linux só estará validado por uma execução em Linux.
+
+Run the command from the main-branch checkout to check tests, governance, benchmark and installed layout. JSON evidence and logs stay in `.fcvw-cache/local-checks/`; any failed step returns nonzero. Multiple Python executables and existing ZIP verification are supported. No service, account or card is required. Invoke it before accepting changes; other operating systems require their own actual run. Published V0.18.0 ZIPs remain unchanged; this runner is available in source for the next release.

@@ -153,4 +153,27 @@ python -B tools/verify_release_fcvw.py --source-root . --archive /path/FrameCode
 
 The benchmark contains 12 labeled synthetic cases, including eight session families, exact-only history, injection evidence and cumulative boundaries. Supply `--cases` and `--index` together for external labeled JSONL. The check fails on missing required files, required recall below one, forbidden hits or useful recall below the unbudgeted baseline. Precision and cost remain measured reports, not universal thresholds. Timings exclude route resolution and graph reconstruction.
 
-Archive verification checks SHA-256, paths, size limits, containment and version, then binds installed Python tools to the trusted source before optional execution. Local smoke exercises the installation layout without manufacturing language-review evidence. The source-only [CI contract](governance/CI_CONTRACT.md) runs Linux/Windows with Python 3.12/3.14, records benchmark artifacts and validates published ZIPs. Real-task evaluation is tracked in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55).
+Archive verification checks SHA-256, paths, size limits, containment and version, then binds installed Python tools to the trusted source before optional execution. Local smoke exercises the installation layout without manufacturing language-review evidence. The [local validation contract](governance/LOCAL_VALIDATION_CONTRACT.md) orchestrates these checks on explicitly selected local interpreters; coverage is limited to the actual host OS. Real-task evaluation is tracked in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55).
+
+
+## Local validation without hosted services
+
+Available in the source checkout; use the installed tool prefix only in a package that includes this command. V0.18.0 assets remain immutable and do not contain the new runner.
+
+```sh
+python -B tools/check_fcvw.py --root .
+```
+
+This uses the current interpreter and writes a unique run under `.fcvw-cache/local-checks/`. The report includes every command/log, actual Python and OS, source revision and dirty state, content digest, and pass/fail status. `--output` may select an external directory; inside the source tree only the cache directory is allowed. No logs are uploaded. A nonzero exit blocks acceptance; the tool never silently substitutes an unavailable interpreter or claims Linux coverage from a Windows run.
+
+For two already-installed Windows runtimes:
+
+```powershell
+$fcvwPython312 = py -3.12 -c "import sys; print(sys.executable)"
+$fcvwPython314 = py -3.14 -c "import sys; print(sys.executable)"
+python -B tools/check_fcvw.py --root . --python "$fcvwPython312" --python "$fcvwPython314"
+```
+
+Repeat `--python` with executable paths on any supported host. On Linux use an installed Python interpreter and keep the resulting Linux report separately; a local run does not test other operating systems. `--timeout` controls the maximum seconds per direct command, default 900. The runner executes trusted repository code with the user's permissions.
+
+For existing release assets add `--release-dir` pointing to a directory containing exactly four language ZIPs of one version and SHA256SUMS.txt. For older archives, also supply `--release-source` pointing to a trusted checkout of their release tag. This preserves source-code binding rather than skipping it. The runner verifies existing assets; translation review, locale parity and reproducible package construction remain separate release gates. See [the execution contract](governance/LOCAL_VALIDATION_CONTRACT.md).

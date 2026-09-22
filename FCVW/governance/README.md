@@ -17,3 +17,5 @@ Copy a template to its record directory; do not fill project data into the templ
 ## Framework automation record
 
 - [Framework CI contract](CI_CONTRACT.md).
+
+- [Local validation contract](LOCAL_VALIDATION_CONTRACT.md).

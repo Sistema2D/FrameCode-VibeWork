@@ -83,3 +83,7 @@ Empty record directories keep a README only. Application examples, histories, an
 ## V0.18.0 retrieval quality
 
 See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Follow-up work is tracked in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [issue 56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [issue 57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57).
+
+## Local validation
+
+Current source validation uses the explicitly invoked [local checks](TESTS.md) and [Scenario 2 contract](governance/LOCAL_VALIDATION_CONTRACT.md). Hosted Actions are retired. Evidence reports only actually tested runtimes and operating systems; no payment or hosted account is required.

@@ -32,6 +32,7 @@ A Markdown contract describes expected behavior. It does not prove execution. Ev
 
 Executable implementation requires a separate plan, security review, environment ownership, test strategy, disable/rollback path, and explicit user authorization when external effects are involved.
 
-## Framework repository CI
 
-The maintainer-authorized [CI contract](governance/CI_CONTRACT.md) implements Scenario 3 for this source repository. It is read-only, uses pinned actions and bounded jobs, and never publishes a release or changes branch protection automatically. Downloading a template does not enable CI in the receiving application.
+## Local framework validation
+
+The user-authorized [local validation contract](governance/LOCAL_VALIDATION_CONTRACT.md) implements Scenario 2. A maintainer explicitly invokes the runner; no hosted service, payment, credentials, scheduler or background process is required. The previous [hosted contract](governance/CI_CONTRACT.md) is retired and its source workflow removed. Downloading a template does not activate automation.

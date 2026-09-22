@@ -6,7 +6,7 @@ record_scope: "framework"
 upgrade_strategy: "preserve"
 owner: "framework-maintainer"
 kind: "governance_gate"
-status: "active"
+status: "retired"
 scenario: "3"
 execution_mode: "scenario_3"
 authorized_by: "Explicit user request for implementation and release on 2026-09-16"
@@ -32,3 +32,7 @@ Each job runs source regressions, governance, the synthetic labeled benchmark an
 ## Bounds and rollback
 
 Jobs time out after 15 minutes, have no automatic retry and use isolated ephemeral runners. Repeated runs do not modify the repository. Cancel a run or disable/revert the workflow to stop execution. The workflow is excluded from installed releases; this record grants no authority to enable downstream CI. See [release policy](../RELEASE.md).
+
+## Retirement — 2026-09-22
+
+The user closed [issue 58](https://github.com/Sistema2D/FrameCode-VibeWork/issues/58) as not planned because hosted Actions are not financially viable. The source workflow was removed. The sections above describe the former contract, not an active or successfully executed service. The [local validation contract](LOCAL_VALIDATION_CONTRACT.md) now owns current execution. Existing release evidence is preserved.
