@@ -128,3 +128,13 @@ the versioned baseline; no adaptive cache is required.
 - `tools/test_local_checks.py`
 
 Installed tools remain under `FCVW/tools/`. Benchmarks and caches are disposable and excluded from release assets. [LOCAL_VALIDATION_CONTRACT.md](governance/LOCAL_VALIDATION_CONTRACT.md) describes explicitly invoked local checks. The former hosted workflow is removed; no downstream automation is activated.
+
+## Optional product QA
+
+- `tools/qa_wiki_fcvw.py`
+- `tools/test_product_qa.py`
+- `FCVW/skills/QA/SKILL.md` and `FCVW/skills/QA/TARGETS.md`
+- Product knowledge guidance: `FCVW/wiki/product/README.md`.
+- QA execution guidance: `FCVW/wiki/qa/README.md`.
+
+Filled product inventories/surfaces and execution reports belong to downstream applications; the clean framework includes only guidance and reusable templates. See [product contract](wiki/product/README.md).

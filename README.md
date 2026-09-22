@@ -653,3 +653,16 @@ python -B tools/check_fcvw.py --root .
 O comando executa testes, governança, benchmark e verificação da instalação. Salva relatório JSON e logs em `.fcvw-cache/local-checks/` e retorna erro se qualquer etapa falhar. Aceita vários executáveis Python e verificação de ZIPs existentes; consulte [instruções completas](FCVW/TESTS.md). Não instala serviços nem exige conta ou cartão. A execução é manual antes de aceitar alterações; Linux só estará validado por uma execução em Linux.
 
 Run the command from the main-branch checkout to check tests, governance, benchmark and installed layout. JSON evidence and logs stay in `.fcvw-cache/local-checks/`; any failed step returns nonzero. Multiple Python executables and existing ZIP verification are supported. No service, account or card is required. Invoke it before accepting changes; other operating systems require their own actual run. Published V0.18.0 ZIPs remain unchanged; this runner is available in source for the next release.
+
+## Wiki funcional e agente QA / Product wiki and QA
+
+O agente **QA** mapeia a aplicação na primeira execução: telas, botões, modais, campos, fluxos e estados acessíveis. Em aplicações sem interface gráfica, mapeia comandos, APIs, bibliotecas, serviços, protocolos e entradas/saídas. Registra finalidade, contexto de uso, regras conhecidas e lacunas na wiki; depois revisa apenas áreas afetadas. Comportamento esperado precisa de fonte aprovada, e comportamento observado fica ligado à evidência do teste. Falhas não viram requisitos automaticamente.
+
+**QA** first maps the accessible application, then tests and maintains selected product knowledge. Unknown requirements, inaccessible roles and untested areas remain explicit. The multidisciplinary profile selects browser, native UI, terminal, protocol client, compiled harness, simulator or authorized hardware tools according to the target; no background crawler or runtime dependency is installed. Initial mapping can resume from a checkpoint. Structural checks validate declared coverage and evidence fields, not the truth of execution.
+
+- [Agente QA / QA profile](FCVW/skills/QA/SKILL.md)
+- [Modos de execução / Target execution guidance](FCVW/skills/QA/TARGETS.md)
+- [Wiki de produto / Product knowledge](FCVW/wiki/product/README.md)
+- [Templates](FCVW/wiki/templates/README.md)
+
+Disponível no código-fonte para a próxima release. A primeira execução em um projeto exige o endereço ou instruções de inicialização da aplicação e acesso ao ambiente de teste autorizado. / Available in source for the next release; actual project execution requires a target application and authorized test access.

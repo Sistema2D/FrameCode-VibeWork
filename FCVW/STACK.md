@@ -54,3 +54,7 @@ Do not copy the application version into multiple documents unless it is derived
 - Application releases: `FCVW/changelogs/`.
 - Framework baseline: `FCVW/FRAMEWORK_LOCK.md`.
 - Optional validator: `tools/validate_fcvw.py`.
+
+## Optional product QA capability
+
+[QA](skills/QA/SKILL.md) is available on demand. The host supplies authorized browser, native UI, terminal, protocol, harness, simulator or hardware interaction capabilities as applicable; the framework installs no execution runtime or service. Record actual project capability and commands when instantiated.

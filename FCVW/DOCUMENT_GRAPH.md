@@ -73,6 +73,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/decisions/ADR-0004-multilingual-source-and-release-model.md`](decisions/ADR-0004-multilingual-source-and-release-model.md)
 - [`FCVW/decisions/ADR-0005-contained-release-filesystem.md`](decisions/ADR-0005-contained-release-filesystem.md)
 - [`FCVW/decisions/ADR-0006-adaptive-context-routing.md`](decisions/ADR-0006-adaptive-context-routing.md)
+- [`FCVW/decisions/ADR-0007-product-wiki-qa.md`](decisions/ADR-0007-product-wiki-qa.md)
 - [`FCVW/decisions/README.md`](decisions/README.md)
 
 ## FCVW/examples
@@ -160,6 +161,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md`](Plans/completed/P2-R4-2026-08-28-audit-remediation-and-scale-hardening.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md`](Plans/completed/P2-R4-2026-09-16-connectome-shadow-routing.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-16-retrieval-quality-and-ci.md`](Plans/completed/P2-R4-2026-09-16-retrieval-quality-and-ci.md)
+- [`FCVW/Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md`](Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md)
 - [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)
 - [`FCVW/Plans/completed/README.md`](Plans/completed/README.md)
@@ -271,6 +273,11 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 - [`FCVW/skills/project-instantiation/SKILL.md`](skills/project-instantiation/SKILL.md)
 
+## FCVW/skills/QA
+
+- [`FCVW/skills/QA/SKILL.md`](skills/QA/SKILL.md)
+- [`FCVW/skills/QA/TARGETS.md`](skills/QA/TARGETS.md)
+
 ## FCVW/skills/release-checklist
 
 - [`FCVW/skills/release-checklist/SKILL.md`](skills/release-checklist/SKILL.md)
@@ -349,9 +356,17 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 - [`FCVW/wiki/patterns/README.md`](wiki/patterns/README.md)
 
+## FCVW/wiki/product
+
+- [`FCVW/wiki/product/README.md`](wiki/product/README.md)
+
 ## FCVW/wiki/prompts
 
 - [`FCVW/wiki/prompts/README.md`](wiki/prompts/README.md)
+
+## FCVW/wiki/qa
+
+- [`FCVW/wiki/qa/README.md`](wiki/qa/README.md)
 
 ## FCVW/wiki/questions
 
@@ -394,6 +409,9 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/wiki/templates/TEMPLATE_GENERAL_NOTE.md`](wiki/templates/TEMPLATE_GENERAL_NOTE.md)
 - [`FCVW/wiki/templates/TEMPLATE_LINT.md`](wiki/templates/TEMPLATE_LINT.md)
 - [`FCVW/wiki/templates/TEMPLATE_PATTERN.md`](wiki/templates/TEMPLATE_PATTERN.md)
+- [`FCVW/wiki/templates/TEMPLATE_PRODUCT_INDEX.md`](wiki/templates/TEMPLATE_PRODUCT_INDEX.md)
+- [`FCVW/wiki/templates/TEMPLATE_PRODUCT_SURFACE.md`](wiki/templates/TEMPLATE_PRODUCT_SURFACE.md)
+- [`FCVW/wiki/templates/TEMPLATE_QA_RUN.md`](wiki/templates/TEMPLATE_QA_RUN.md)
 - [`FCVW/wiki/templates/TEMPLATE_QUESTION.md`](wiki/templates/TEMPLATE_QUESTION.md)
 - [`FCVW/wiki/templates/TEMPLATE_REGRESSION.md`](wiki/templates/TEMPLATE_REGRESSION.md)
 - [`FCVW/wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md`](wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md)

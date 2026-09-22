@@ -11,3 +11,4 @@ Store immutable ADRs that capture context, decision, alternatives, consequences,
 - [ADR-0005: Contained release filesystem](ADR-0005-contained-release-filesystem.md)
 
 - [ADR-0006: Structural shadow routing](ADR-0006-adaptive-context-routing.md)
+- [ADR-0007: Product knowledge and multidisciplinary QA](ADR-0007-product-wiki-qa.md)

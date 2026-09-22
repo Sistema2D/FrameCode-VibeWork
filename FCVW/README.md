@@ -87,3 +87,7 @@ See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) 
 ## Local validation
 
 Current source validation uses the explicitly invoked [local checks](TESTS.md) and [Scenario 2 contract](governance/LOCAL_VALIDATION_CONTRACT.md). Hosted Actions are retired. Evidence reports only actually tested runtimes and operating systems; no payment or hosted account is required.
+
+## Product behavior and QA
+
+[Product wiki](wiki/product/README.md) centralizes sourced screen/control behavior and links observed execution evidence. [QA](skills/QA/SKILL.md) maps the application on first use, then performs selective functional tests and maintenance. It is invoked on demand; no background agent or new runtime dependency is activated.

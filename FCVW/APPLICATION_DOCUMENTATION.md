@@ -17,7 +17,7 @@ Ensure that application modules are documented consistently, with traceability b
 
 ## Physical Ownership
 
-The application documentation path is:
+The existing application technical-documentation path is:
 
 ```text
 [project-root]/docs/
@@ -28,7 +28,7 @@ Rules:
 - `docs/` at the project root is application-owned in an instantiated or downstream application.
 - `docs/` must not be versioned as a framework-owned documentation site artifact in the FCVW baseline.
 - `FCVW/` stores the rules and reusable templates.
-- Filled module documents must not be stored inside `FCVW/` unless they document the framework itself.
+- Technical module documents remain in application docs. Application behavior knowledge may live in the preserved product wiki under the contract below; filled pages are never shipped in the clean framework.
 - If the baseline framework repository needs a public site, publish it from another repository or external pipeline, not from this application-documentation convention.
 
 ## Recommended Structure
@@ -126,3 +126,10 @@ The validation evidence must include the relevant documentation path or the expl
 When a module document describes a durable cross-module or domain constraint, link the corresponding `APP-RULE-NNN` entry in [`APP_RULES.md`](APP_RULES.md). Module documentation explains the local flow; `APP_RULES.md` owns the cross-cutting application rule.
 
 A relevant change records one of: rule unchanged after consultation, rule updated, rule added, or no matching application rule. Plain repeated prose in several module documents is not a substitute for a canonical application rule.
+
+
+## Product knowledge in the wiki
+
+The application may centralize screen, element, modal and flow behavior in the [product wiki](wiki/product/README.md), using sourced component pages and separate QA audit records. This is application-owned knowledge preserved across upgrades. Keep one authoritative source for each claim: link existing approved module/flow docs instead of duplicating them, and keep cross-cutting rules in APP_RULES. Wiki observations do not replace approved requirements or governance. Unknown intent stays explicitly unresolved.
+
+[QA](skills/QA/SKILL.md) performs mandatory first-run mapping of the accessible application, then selective live tests and product-wiki maintenance. Expected behavior, observed behavior and test evidence remain distinct. Technical module docs can link the product page rather than repeat its complete UI inventory. See [templates](wiki/templates/README.md) and [test protocol](TESTS.md).

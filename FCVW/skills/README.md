@@ -11,6 +11,7 @@ Skills are provider-neutral, just-in-time procedures using `fcvw/skill@1`. Load 
 
 | Skill | Responsibility |
 |---|---|
+| `QA` | first-run application mapping, live functional testing and product-wiki maintenance |
 | `agent-aegis` | security and privacy review |
 | `agent-factory` | gate for creating a skill or agent |
 | `agent-hephaestus` | UI and accessibility review |

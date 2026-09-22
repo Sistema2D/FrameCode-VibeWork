@@ -160,3 +160,5 @@ Replace framework-owned tools and policies through the role manifest and preserv
 ## V0.18.0 to V0.19.0 — in preparation
 
 The optional local validation runner reuses existing checks and preserves project records. No persistent state migration is required. The source repository removes the hosted workflow and retires its contract; no hook, service or runner is installed. Published V0.18.0 assets remain unchanged. Use source tools until a new release is actually published.
+
+QA adds optional product inventory, surface and execution templates within the existing wiki schema. Preserve populated product pages and QA audits as application records during upgrades; preserve their index as a project profile. Link existing approved specifications instead of duplicating or replacing them. The runtime field describes actual execution on any target; a browser is not mandatory. No adapters, browsers, simulators, board tooling or background service are installed. Invoke QA explicitly; first use maps the reachable application scope, then subsequent runs are selective.

@@ -13,3 +13,6 @@
 - Track selected evidence under `sources/` and generate semantic graphs or stale reports only into `.fcvw-cache/` or another disposable path.
 
 The clean baseline contains navigation and templates only.
+
+- [Product behavior hub](product/README.md): initial application mapping and selective surface knowledge.
+- [QA evidence](qa/README.md): exact execution records linked from product pages.

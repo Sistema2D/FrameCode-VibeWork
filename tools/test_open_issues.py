@@ -1416,8 +1416,13 @@ class ContractCompletionTests(TemporaryRootTest):
         self.assertGreaterEqual(len(templates), 10)
         for path in templates:
             text = path.read_text(encoding="utf-8-sig")
-            self.assertIn('artifact_role: "record"', text, path.name)
-            self.assertIn("record_scope:", text, path.name)
+            if path.name == "TEMPLATE_PRODUCT_INDEX.md":
+                self.assertIn('schema: "fcvw/wiki-index@1"', text, path.name)
+                self.assertIn('artifact_role: "project_profile"', text, path.name)
+                self.assertIn('upgrade_strategy: "preserve"', text, path.name)
+            else:
+                self.assertIn('artifact_role: "record"', text, path.name)
+                self.assertIn("record_scope:", text, path.name)
             self.assertRegex(
                 text,
                 r"\[[^\]]+\]\((?:<relative-path-[^)]+\.md>|(?:\.\./)?[A-Za-z0-9_./-]+\.md)\)",

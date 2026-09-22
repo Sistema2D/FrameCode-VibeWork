@@ -2,7 +2,7 @@
 schema: "fcvw/skill@1"
 name: "wiki-curator"
 description: "Promote sourced reusable knowledge and merge duplicates."
-version: "1.2.0"
+version: "1.2.1"
 trigger_keywords:
   - "curate wiki"
   - "promote knowledge"
@@ -102,3 +102,8 @@ Pages created, updated, merged, superseded, or deferred; sources and confidence;
 - Theme/tag metadata follows `wiki/taxonomy.md`.
 - Metrics or validation evidence are recorded.
 - Residual gaps are explicit.
+
+
+## Product knowledge handoff
+
+For [product pages](../../wiki/product/README.md), preserve the distinction between sourced expected behavior, observed behavior and exact QA runs. [QA](../QA/SKILL.md) owns first-run live mapping and functional replay; curator owns deduplication, source review and lifecycle. Do not promote an observed defect into approved intent, refresh a changed behavior hash to reuse an old pass, or claim browser execution from document review. Review only affected product pages; preserve earlier runs and unresolved expectations.

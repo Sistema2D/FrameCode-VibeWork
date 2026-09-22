@@ -11,3 +11,11 @@ Wiki page templates.
 - Claim-bearing templates may use maturity and typed relationships; source, raw, and session pages do not require maturity.
 
 Use `TEMPLATE_REGRESSION.md` for a confirmed reusable regression. Do not use it for an unverified symptom, a generic risk, or a duplicate of an existing canonical regression page.
+
+## Product mapping and QA
+
+- [Initial inventory](TEMPLATE_PRODUCT_INDEX.md)
+- [Screen, modal, component or flow](TEMPLATE_PRODUCT_SURFACE.md)
+- [Live QA run](TEMPLATE_QA_RUN.md)
+
+Follow the [product knowledge contract](../product/README.md).
