@@ -148,3 +148,13 @@ Filled product inventories/surfaces and execution reports belong to downstream a
 
 Tools install under `FCVW/tools/`; actual datasets, run evidence and pilot snapshots
 remain external or in disposable cache and never enter the clean framework.
+
+## Optional adaptive controls
+
+- `tools/adaptive_control_fcvw.py`: evidence, bounded control and runtime stops.
+- `tools/adaptive_learning_fcvw.py`: reviewed feedback replay, lifecycle and opt-in selection.
+- `tools/test_adaptive_controls.py`: synthetic boundary and source/installed CLI tests.
+- [Experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
+
+Filled control/state/runtime/evidence files stay outside clean source and packages,
+or under ignored .fcvw-cache. No database, service or collector is installed.

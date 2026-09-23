@@ -3,7 +3,7 @@ schema: "fcvw/document-graph@1"
 artifact_role: "generated"
 owner: "framework"
 upgrade_strategy: "regenerate"
-last_reviewed: "2026-09-22"
+last_reviewed: "2026-09-23"
 ---
 
 # Document graph catalog
@@ -75,6 +75,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/decisions/ADR-0006-adaptive-context-routing.md`](decisions/ADR-0006-adaptive-context-routing.md)
 - [`FCVW/decisions/ADR-0007-product-wiki-qa.md`](decisions/ADR-0007-product-wiki-qa.md)
 - [`FCVW/decisions/ADR-0008-loop-evaluation.md`](decisions/ADR-0008-loop-evaluation.md)
+- [`FCVW/decisions/ADR-0009-adaptive-experiment-controls.md`](decisions/ADR-0009-adaptive-experiment-controls.md)
 - [`FCVW/decisions/README.md`](decisions/README.md)
 
 ## FCVW/examples
@@ -101,6 +102,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/governance
 
+- [`FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md`](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md)
 - [`FCVW/governance/CI_CONTRACT.md`](governance/CI_CONTRACT.md)
 - [`FCVW/governance/LOCAL_VALIDATION_CONTRACT.md`](governance/LOCAL_VALIDATION_CONTRACT.md)
 - [`FCVW/governance/LOOP_EVALUATION_CONTRACT.md`](governance/LOOP_EVALUATION_CONTRACT.md)
@@ -177,11 +179,13 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/Plans/in_progress
 
+- [`FCVW/Plans/in_progress/P2-R4-2026-09-23-adaptive-controls.md`](Plans/in_progress/P2-R4-2026-09-23-adaptive-controls.md)
 - [`FCVW/Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md)
 - [`FCVW/Plans/in_progress/README.md`](Plans/in_progress/README.md)
 
 ## FCVW/Plans/in_progress/queue.d
 
+- [`FCVW/Plans/in_progress/queue.d/P2-R4-2026-09-23-adaptive-controls.md`](Plans/in_progress/queue.d/P2-R4-2026-09-23-adaptive-controls.md)
 - [`FCVW/Plans/in_progress/queue.d/README.md`](Plans/in_progress/queue.d/README.md)
 
 ## FCVW/Plans/pending

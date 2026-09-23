@@ -98,3 +98,9 @@ The [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) and
 [template](governance/TEMPLATE_LOOP_EVALUATION.md) support explicit local measurement
 of TVC, IVC, RTR, FPVR, TTVS, RFR and UCTR. Reports preserve incomplete runs and
 evidence gaps; no learning, service or automatic promotion is enabled.
+
+## Explicit adaptive experiments
+
+[Adaptive experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md): optional
+reviewed feedback, bounded state lifecycle, evidence gates, runtime stops and
+assistance. No default learning or automatic promotion; current pilot does not qualify.

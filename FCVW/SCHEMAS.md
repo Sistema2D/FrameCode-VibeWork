@@ -288,3 +288,12 @@ defined in the [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md
 Unlike Markdown frontmatter, these bounded JSON inputs reject unknown fields to
 reduce accidental raw-payload retention. They are external evidence, not required
 project records. Existing retrieval benchmark contracts remain unchanged.
+
+## Explicit adaptive experiment JSON
+
+Optional `fcvw/adaptive-control@1`, `fcvw/adaptive-feedback@1`,
+`fcvw/adaptive-state@1`, `fcvw/adaptive-runtime@1`,
+`fcvw/adaptive-assessment@1` and `fcvw/adaptive-selection@1` are defined by the
+[experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md). Input fields are
+strict; declarations remain caller evidence, not authentication. No existing loop,
+benchmark or legacy structural-shadow schema changes.

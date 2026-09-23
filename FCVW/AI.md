@@ -425,3 +425,13 @@ Default routing, mandatory context and QA user decisions remain unchanged.
 Shadow-only proposals cannot establish execution benefit; reports never authorize
 learning or promotion. Actual usage, estimates and unavailable measurements stay
 separate. No background collector or model invocation is installed.
+
+## Reviewed adaptive capability
+
+The [adaptive experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) adds
+explicit controls to the legacy shadow-only path. `--adaptive-mode assist` requires
+scoped control, runtime observations and adequate reviewed evidence; learned state
+is optional. Human-reviewed adjustment feedback alone can update bounded weights.
+Missing or negative evidence cannot activate the experiment. Default retrieval and
+shadow without a control never load feedback. QA/safety stops survive rollback.
+No operational promotion or benefit is inferred from closing a tracking issue.

@@ -159,6 +159,15 @@ Replace framework-owned tools and policies through the role manifest and preserv
 
 ## V0.18.0 to V0.19.0 — in preparation
 
+Adaptive experiments add opt-in controls and strict external JSON contracts.
+Existing default/shadow invocations remain valid. No state is migrated or loaded
+implicitly. Before using assist, obtain reviewed evidence and prepare a source-bound
+control/runtime; changing control requires revalidated state and a new scoped run.
+Reset/export/rollback operate on external derived files and preserve QA/safety stops.
+The current pilot does not satisfy activation. See the
+[experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
+
+
 Loop evaluation adds optional external JSON schemas and tools; no existing benchmark,
 application record or retrieval invocation is migrated. Create a separately frozen
 protocol for new evaluations. Do not infer loop events from old benchmark outcomes

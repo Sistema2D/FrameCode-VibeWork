@@ -201,3 +201,14 @@ The test suite covers exact metrics, resumption/conflicting duplicates, partial
 measurements, unknown/unfinished runs, shadow attribution, QA decisions, frozen
 identity, output containment and delayed quality. No automatic evaluation is
 added to ordinary retrieval or project execution.
+
+## Adaptive control boundary replay
+
+Test [adaptive controls](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) with synthetic
+positive evidence and negative real pilot reassessment. Protect default delivery,
+source/index identity, independent evidence, holdout separation, strict feedback
+authority, bounded/decayed updates, duplicate/conflict rejection, state replay,
+export/reset/rollback, expiry, budgets, stagnation, QA/safety latches and CLI fallback.
+These tests establish implementation behavior, not causal efficacy or human authority.
+Real provider usage, independent label review, paired execution and follow-up are
+still required before interpreting full-cycle savings or non-inferiority.

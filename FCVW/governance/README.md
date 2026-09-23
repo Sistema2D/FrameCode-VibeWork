@@ -21,3 +21,5 @@ Copy a template to its record directory; do not fill project data into the templ
 - [Local validation contract](LOCAL_VALIDATION_CONTRACT.md).
 
 - [Loop evaluation contract](LOOP_EVALUATION_CONTRACT.md) and [protocol/run template](TEMPLATE_LOOP_EVALUATION.md).
+
+- [Explicit adaptive experiment contract](ADAPTIVE_EXPERIMENT_CONTRACT.md).

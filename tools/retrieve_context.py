@@ -287,7 +287,10 @@ def main() -> int:
     parser.add_argument("--knowledge-graph")
     parser.add_argument("--relation", action="append", default=[])
     parser.add_argument("--graph-limit", type=int, default=4)
-    parser.add_argument("--adaptive-mode", choices=["disabled", "shadow"], default="disabled")
+    parser.add_argument("--adaptive-mode", choices=["disabled", "shadow", "assist"], default="disabled")
+    parser.add_argument("--adaptive-control", help="explicit reviewed external experiment control")
+    parser.add_argument("--adaptive-runtime", help="latest external run observation and persistent stop latch")
+    parser.add_argument("--adaptive-state", help="optional reviewed feedback state; never loaded by default")
     parser.add_argument("--adaptive-hops", type=int, choices=range(4), default=2)
     parser.add_argument("--optional-token-budget", type=int, default=2000)
     parser.add_argument("--session", action="append", default=[])
@@ -297,6 +300,8 @@ def main() -> int:
     parser.add_argument("--max-chunks-per-file", type=int, default=2)
     parser.add_argument("--candidate-k", type=int, default=20, help="eligible pool for selection and shadow, bounded at 20")
     args = parser.parse_args()
+    if (args.adaptive_runtime or args.adaptive_state) and not args.adaptive_control:
+        parser.error("adaptive runtime/state requires --adaptive-control")
     root = Path(args.root).resolve()
     active_plan = Path(args.active_plan) if args.active_plan else None
     if active_plan and not active_plan.is_absolute():
@@ -315,9 +320,10 @@ def main() -> int:
     if args.relation and not args.knowledge_graph:
         parser.error("--relation requires --knowledge-graph")
     knowledge_graph = load_knowledge_graph(Path(args.knowledge_graph)) if args.knowledge_graph else None
+    records = load_records(Path(args.index))
     candidates = bm25(
             args.query,
-            load_records(Path(args.index)),
+            records,
             language=args.language,
             top_k=max(args.candidate_k, min(max(args.top_k, 0), MAX_TOP_K)),
             related_paths=set(mandatory),
@@ -347,7 +353,7 @@ def main() -> int:
             parser.error(str(error))
         result["complementary_results"] = selection.pop("results")
         result["context_selection"] = selection
-    if args.adaptive_mode == "shadow":
+    if args.adaptive_mode == "shadow" and not args.adaptive_control:
         from adaptive_router_fcvw import shadow_route, structural_graph
 
         try:
@@ -359,8 +365,46 @@ def main() -> int:
         except (OSError, ValueError) as error:
             result["adaptive_shadow"] = {"mode": "shadow", "status": "fallback",
                                          "reason": str(error), "baseline_preserved": True}
+    if args.adaptive_control or args.adaptive_mode == "assist":
+        from adaptive_learning_fcvw import select
+        from check_fcvw import snapshot
+        from loop_contract_fcvw import read_json, require
+        import hashlib
+
+        decision = {"status": "fallback", "execution_blocked": True, "baseline_preserved": True}
+        try:
+            require(args.adaptive_control and args.adaptive_runtime, "assist requires explicit control and runtime")
+            require(not mandatory_missing, "mandatory files missing")
+            config = read_json(Path(args.adaptive_control))
+            current = read_json(Path(args.adaptive_runtime))
+            state = None
+            state_error = None
+            if args.adaptive_state:
+                try:
+                    state = read_json(Path(args.adaptive_state))
+                except (ValueError, OSError, RecursionError) as error:
+                    state_error = str(error)
+            by_id = {r.get("chunk_id"): r for r in records}
+            complete = [{**r, "excerpt": by_id[r["chunk_id"]]["content"], "excerpt_complete": True} for r in candidates]
+            decision = select(config, current, complete, mandatory, root=root,
+                              source_digest=snapshot(root)["tree_sha256"],
+                              index_digest=hashlib.sha256(Path(args.index).read_bytes()).hexdigest(),
+                              mode=args.adaptive_mode, state=state, top_k=min(max(args.top_k, 0), MAX_TOP_K),
+                              per_file=args.max_chunks_per_file, budget=args.context_budget)
+            if state_error and not decision["execution_blocked"] and args.adaptive_mode != "disabled":
+                decision.update(status="fallback", reason="state unavailable: " + state_error,
+                                baseline_preserved=True, results=None)
+            chosen = decision.pop("results", None)
+            if decision["status"] == "active":
+                result["complementary_results"] = chosen
+                result["context_selection"] = {k:v for k,v in decision["selection"].items() if k != "results"}
+            if "selection" in decision:
+                decision["selection"].pop("results", None)
+        except (ValueError, OSError, KeyError, TypeError, RecursionError) as error:
+            decision["reason"] = str(error)
+        result["adaptive_experiment"] = decision
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 1 if mandatory_missing else 0
+    return 1 if mandatory_missing or result.get("adaptive_experiment", {}).get("execution_blocked") else 0
 
 
 if __name__ == "__main__":

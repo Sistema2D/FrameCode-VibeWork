@@ -705,5 +705,24 @@ O piloto inicial executou 24 auditorias do repositório em oito domínios. Prese
 100% do contexto obrigatório, mas registrou perda de recall útil com orçamento no
 caso de UI e uma proposta sombra proibida pelos rótulos do piloto. Não há medição
 de tokens do provedor nem evidência de superioridade em tarefas executadas por IA.
-A issue #55 permanece aberta para essa validação empírica. Resultados e limitações:
+A validação empírica necessária à ativação permanece sem evidência suficiente. Resultados e limitações:
 [plano concluído de implementação e piloto](FCVW/Plans/completed/P2-R4-2026-09-22-loop-evaluation.md).
+
+
+## Experimentos adaptativos com controle explícito
+
+A implementação das issues #56/#57 acrescenta feedback humano revisado, pesos
+limitados, replay/exportação/reset/rollback e assistência opcional. Os controles
+validam a evidência da #55 antes de permitir ativação. O piloto atual não passa:
+nenhuma economia de tokens, não inferioridade ou promoção operacional é presumida.
+
+`--adaptive-mode assist` exige arquivos externos de controle e observação. O padrão
+continua lexical; consultas obrigatórias do QA e bloqueios de segurança sobrevivem
+ao rollback. A ferramenta não executa modelos nem coleta prompts automaticamente.
+
+- [Contrato, campos e comandos](FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md)
+- [Decisão de arquitetura](FCVW/decisions/ADR-0009-adaptive-experiment-controls.md)
+
+Adaptive capabilities remain opt-in and evidence-gated. Synthetic safety tests
+verify implementation only; operational activation requires separately reviewed
+real task evidence. No paid infrastructure or always-on process is required.
