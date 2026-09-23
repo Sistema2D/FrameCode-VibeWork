@@ -69,6 +69,8 @@ class AdaptiveControlTests(unittest.TestCase):
     def test_assessment_recomputes_evidence_without_authorizing_promotion(self):
         result=assess(self.cfg['protocol'],self.cfg['events'],'budget')
         self.assertEqual(result['decision'],'eligible_for_review')
+        self.assertEqual(result['evidence_classification'],'descriptive_screen_only')
+        self.assertTrue(result['independent_review_required'])
         self.assertEqual(result['loop_report']['dependent_experiments']['issue_57'],'not_authorized_by_tool')
         self.cfg['events'][0]['usage_complete']=False
         self.assertEqual(assess(self.cfg['protocol'],self.cfg['events'],'budget')['decision'],'inconclusive')
@@ -190,6 +192,35 @@ class AdaptiveControlTests(unittest.TestCase):
         obs['checkpoints'][0]['signature']='changed'
         with self.assertRaisesRegex(ValueError,'history rewritten'):runtime(self.cfg,obs,old)
 
+    def test_cli_runtime_ledger_rejects_restarted_and_stale_runs(self):
+        tool = Path(__file__).with_name('adaptive_learning_fcvw.py')
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            config_file, observation_file, ledger = (folder / name for name in
+                                                       ('control.json', 'observation.json', 'ledger.db'))
+            config_file.write_text(json.dumps(self.cfg), encoding='utf-8')
+            def invoke(command, output, *, previous=None, obs=None):
+                observation_file.write_text(json.dumps(obs or observed()), encoding='utf-8')
+                args = [sys.executable, '-B', str(tool), command, '--control', str(config_file),
+                        '--observation', str(observation_file), '--ledger', str(ledger),
+                        '--output', str(folder / output)]
+                if previous:
+                    args += ['--runtime', str(folder / previous)]
+                return subprocess.run(args, capture_output=True, text=True)
+            self.assertEqual(invoke('start', 'first.json').returncode, 0)
+            duplicate = invoke('start', 'duplicate.json')
+            self.assertEqual(duplicate.returncode, 2)
+            self.assertIn('run_id already exists', duplicate.stderr)
+            halted = observed(); halted['qa_pending'] = 1
+            self.assertEqual(invoke('observe', 'halted.json', previous='first.json', obs=halted).returncode, 1)
+            stale = invoke('observe', 'stale.json', previous='first.json')
+            self.assertEqual(stale.returncode, 2)
+            self.assertIn('stale or unregistered', stale.stderr)
+            new_run = observed(); new_run['run_id'] = 'live-2'
+            denied = invoke('start', 'new-run.json', obs=new_run)
+            self.assertEqual(denied.returncode, 2)
+            self.assertIn('persistent stop', denied.stderr)
+
     def test_budgets_drift_and_persistent_quality_trigger_stop(self):
         for key,value in (('tokens',10000),('elapsed_ms',100000),('iterations',20)):
             obs=observed();obs[key]=value
@@ -263,10 +294,16 @@ class AdaptiveControlTests(unittest.TestCase):
                                      if r['path'] not in ('AGENTS.md','FCVW/CONTEXT_MAP.md') and r['retrieval_scope']=='routed'}
             cfgpath=folder/'control.json';cfgpath.write_text(json.dumps(cfg),encoding='utf-8')
             obs=observed();obs['observed_at']=datetime.now(timezone.utc).isoformat()
-            rt=folder/'runtime.json';rt.write_text(json.dumps(runtime(cfg,obs)),encoding='utf-8')
+            ledger=folder/'ledger.db';obspath=folder/'observation.json';obspath.write_text(json.dumps(obs),encoding='utf-8')
+            rt=folder/'runtime.json'
+            lifecycle=Path(__file__).with_name('adaptive_learning_fcvw.py')
+            started=subprocess.run([sys.executable,'-B',str(lifecycle),'start','--control',str(cfgpath),
+                                    '--observation',str(obspath),'--ledger',str(ledger),'--output',str(rt)],
+                                   capture_output=True,text=True,encoding='utf-8')
+            self.assertEqual(started.returncode,0,started.stderr)
             cmd=[sys.executable,'-X','utf8','-B',str(tool),'--root',str(root),'--index',str(index),'--query','security']
             baseline=json.loads(subprocess.check_output(cmd,encoding='utf-8'))
-            args=['--adaptive-control',str(cfgpath),'--adaptive-runtime',str(rt)]
+            args=['--adaptive-control',str(cfgpath),'--adaptive-runtime',str(rt),'--adaptive-ledger',str(ledger)]
             active=subprocess.run(cmd+args+['--adaptive-mode','assist'],capture_output=True,text=True,encoding='utf-8')
             self.assertEqual(active.returncode,0,active.stderr+active.stdout)
             data=json.loads(active.stdout)
@@ -279,8 +316,16 @@ class AdaptiveControlTests(unittest.TestCase):
             self.assertEqual(result['adaptive_experiment']['status'],'fallback')
             shadow=json.loads(subprocess.check_output(cmd+args+['--adaptive-mode','shadow'],encoding='utf-8'))
             self.assertEqual(shadow['complementary_results'],baseline['complementary_results'])
-            obs['qa_pending']=1;rt.write_text(json.dumps(runtime(cfg,obs)),encoding='utf-8')
-            denied=subprocess.run(cmd+args+['--adaptive-mode','disabled'],capture_output=True,text=True,encoding='utf-8')
+            obs['qa_pending']=1;obspath.write_text(json.dumps(obs),encoding='utf-8')
+            stopped=folder/'stopped.json'
+            observed_run=subprocess.run([sys.executable,'-B',str(lifecycle),'observe','--control',str(cfgpath),
+                                         '--observation',str(obspath),'--ledger',str(ledger),
+                                         '--runtime',str(rt),'--output',str(stopped)],
+                                        capture_output=True,text=True,encoding='utf-8')
+            self.assertEqual(observed_run.returncode,1,observed_run.stderr)
+            denied=subprocess.run(cmd+['--adaptive-control',str(cfgpath),'--adaptive-runtime',str(stopped),
+                                       '--adaptive-ledger',str(ledger),'--adaptive-mode','disabled'],
+                                  capture_output=True,text=True,encoding='utf-8')
             self.assertEqual(denied.returncode,1)
             self.assertEqual(json.loads(denied.stdout)['adaptive_experiment']['reason'],'qa_user_decision_required')
 

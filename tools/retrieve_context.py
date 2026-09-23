@@ -7,6 +7,7 @@ import argparse
 import json
 import math
 import re
+import time
 from collections import Counter
 from datetime import date
 from pathlib import Path
@@ -273,6 +274,7 @@ def bm25(
 
 
 def main() -> int:
+    started = time.perf_counter()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
     parser.add_argument("--index", required=True)
@@ -290,18 +292,31 @@ def main() -> int:
     parser.add_argument("--adaptive-mode", choices=["disabled", "shadow", "assist"], default="disabled")
     parser.add_argument("--adaptive-control", help="explicit reviewed external experiment control")
     parser.add_argument("--adaptive-runtime", help="latest external run observation and persistent stop latch")
+    parser.add_argument("--adaptive-ledger", help="trusted persistent run registry required with adaptive control")
     parser.add_argument("--adaptive-state", help="optional reviewed feedback state; never loaded by default")
     parser.add_argument("--adaptive-hops", type=int, choices=range(4), default=2)
     parser.add_argument("--optional-token-budget", type=int, default=2000)
     parser.add_argument("--session", action="append", default=[])
     parser.add_argument("--event", action="append", default=[])
     parser.add_argument("--changed-file", action="append", default=[])
+    parser.add_argument("--file-change", action="append", default=[],
+                        help="repeat OPERATION:repository-relative-path; modify avoids filesystem-change overrouting")
+    parser.add_argument("--versioned-change", action="store_true",
+                        help="require explicit impact event and at least one changed-file declaration")
+    parser.add_argument("--trace", help="opt-in content-free decision JSONL")
+    parser.add_argument("--trace-run-id", help="shared run ID required with --trace")
     parser.add_argument("--context-budget", type=int, help="opt in to complete-chunk selection with an estimated JSON token budget")
     parser.add_argument("--max-chunks-per-file", type=int, default=2)
     parser.add_argument("--candidate-k", type=int, default=20, help="eligible pool for selection and shadow, bounded at 20")
     args = parser.parse_args()
+    if bool(args.trace) != bool(args.trace_run_id):
+        parser.error("--trace and --trace-run-id must be used together")
     if (args.adaptive_runtime or args.adaptive_state) and not args.adaptive_control:
         parser.error("adaptive runtime/state requires --adaptive-control")
+    if args.adaptive_control and not args.adaptive_ledger:
+        parser.error("adaptive control requires --adaptive-ledger")
+    if args.adaptive_ledger and not args.adaptive_control:
+        parser.error("adaptive ledger requires --adaptive-control")
     root = Path(args.root).resolve()
     active_plan = Path(args.active_plan) if args.active_plan else None
     if active_plan and not active_plan.is_absolute():
@@ -309,10 +324,12 @@ def main() -> int:
     if not 1 <= args.candidate_k <= MAX_TOP_K:
         parser.error("--candidate-k must be 1..20")
     routing = None
-    if args.session or args.event or args.changed_file:
+    if args.session or args.event or args.changed_file or args.file_change or args.versioned_change:
         from context_routing_fcvw import resolve_routes
         try:
-            routing = resolve_routes(root, sessions=args.session, events=args.event, changed_files=args.changed_file)
+            routing = resolve_routes(root, sessions=args.session, events=args.event,
+                                     changed_files=args.changed_file, file_changes=args.file_change,
+                                     versioned_change=args.versioned_change)
         except (OSError, ValueError) as error:
             parser.error(str(error))
     mandatory = mandatory_paths(root, active_plan, [*args.mandatory, *(routing["mandatory_paths"] if routing else [])])
@@ -377,6 +394,8 @@ def main() -> int:
             require(not mandatory_missing, "mandatory files missing")
             config = read_json(Path(args.adaptive_control))
             current = read_json(Path(args.adaptive_runtime))
+            from adaptive_runtime_ledger_fcvw import verify_latest
+            verify_latest(Path(args.adaptive_ledger), root, config, current)
             state = None
             state_error = None
             if args.adaptive_state:
@@ -403,6 +422,18 @@ def main() -> int:
         except (ValueError, OSError, KeyError, TypeError, RecursionError) as error:
             decision["reason"] = str(error)
         result["adaptive_experiment"] = decision
+    if args.trace:
+        from trace_fcvw import append
+        import hashlib
+        experiment = result.get('adaptive_experiment', {})
+        append(Path(args.trace), root, run_id=args.trace_run_id, component='retrieval',
+               status='blocked' if mandatory_missing or experiment.get('execution_blocked') else 'pass',
+               reason='mandatory_missing' if mandatory_missing else
+                      'adaptive_decision' if experiment else 'lexical_selection',
+               input_digest=hashlib.sha256(Path(args.index).read_bytes()).hexdigest(),
+               duration_ms=round((time.perf_counter()-started)*1000),
+               protected=[Path(p) for p in (args.index, args.knowledge_graph, args.adaptive_control,
+                                             args.adaptive_runtime, args.adaptive_state, args.adaptive_ledger) if p])
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 1 if mandatory_missing or result.get("adaptive_experiment", {}).get("execution_blocked") else 0
 

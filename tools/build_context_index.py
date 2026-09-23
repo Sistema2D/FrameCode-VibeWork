@@ -13,12 +13,13 @@ from pathlib import Path
 from frontmatter_fcvw import parse_frontmatter, scalar, string_list
 from knowledge_graph_fcvw import TYPED_RELATION_FIELDS
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
+from path_policy_fcvw import DISPOSABLE_PARTS
 
 
 HEADING = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
 FENCE = re.compile(r"^\s*(```+|~~~+)")
 MAX_CHUNK_CHARS = 1200
-EXCLUDED_PARTS = {"templates", "examples", ".git", ".obsidian", "__pycache__"}
+EXCLUDED_PARTS = DISPOSABLE_PARTS | {"templates", "examples"}
 
 
 def slug(value: str) -> str:
@@ -131,7 +132,7 @@ def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, ob
     records: list[dict[str, object]] = []
     for path in sorted(root.rglob("*.md"), key=lambda item: item.as_posix().lower()):
         relative_path = path.relative_to(root)
-        if any(part in {".git", ".obsidian", ".fcvw-cache", "__pycache__"} for part in relative_path.parts):
+        if any(part in DISPOSABLE_PARTS for part in relative_path.parts):
             continue
         text = cache_read_text(path)
         result = parse_frontmatter(text)

@@ -15,6 +15,7 @@ from urllib.parse import unquote
 
 from document_graph_fcvw import build_graph
 from frontmatter_fcvw import parse_frontmatter, scalar
+from path_policy_fcvw import DISPOSABLE_PARTS
 
 
 RELEASE_VARIANTS = {
@@ -48,8 +49,9 @@ RELEASE_EVIDENCE_GRAPH_LABELS = {"FCVW/LANGUAGE_REVIEW.md"}
 # legitimately differs between language variants, so it is compared as a
 # generated per-variant surface rather than byte-for-byte like a tool.
 PER_VARIANT_GENERATED_PATHS = {"FCVW/ROLE_MANIFEST.json"}
-IGNORED_PARTS = {".git", ".obsidian", "__pycache__", ".codex-test-tmp"}
-FORBIDDEN_PACKAGE_PARTS = {".git", ".github", ".obsidian", "__pycache__", ".codex-test-tmp"}
+
+IGNORED_PARTS = DISPOSABLE_PARTS
+FORBIDDEN_PACKAGE_PARTS = DISPOSABLE_PARTS | {".github"}
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 INLINE_CODE = re.compile(r"`([^`\n]+)`")
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})")

@@ -825,6 +825,20 @@ class UpgradePlanTests(unittest.TestCase):
         upgrade_fcvw.apply_upgrade(installed, release, actions, accept_conflicts=True)
         self.assertFalse((installed.parent / "ESCAPED.txt").exists())
 
+    def test_upgrade_rejects_existing_link_target(self) -> None:
+        installed, _ = self.make_pair()
+        outside = installed.parent / 'outside-policy.md'
+        outside.write_text('outside', encoding='utf-8')
+        link = installed / 'FCVW' / 'PLANNING.md'
+        link.unlink()
+        try:
+            link.symlink_to(outside)
+        except OSError as error:
+            self.skipTest(f'host cannot create symlinks: {error}')
+        with self.assertRaisesRegex(ValueError, 'filesystem link'):
+            upgrade_fcvw.contained(installed, 'FCVW/PLANNING.md')
+        self.assertEqual(outside.read_text(encoding='utf-8'), 'outside')
+
 class PlanIdentityTests(unittest.TestCase):
     """Identity rules are what keep two plans from colliding silently."""
 

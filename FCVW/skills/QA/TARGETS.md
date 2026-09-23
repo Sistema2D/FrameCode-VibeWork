@@ -9,6 +9,12 @@ upgrade_strategy: "replace"
 
 Use only the rows relevant to the selected application. [QA](SKILL.md) owns the same discovery, execution, evidence and wiki-maintenance loop across disciplines; these are execution choices, not claims that adapters or equipment are installed. The host supplies available tools. Missing capabilities leave explicit blocked cases and an in-progress mapping checkpoint.
 
+Before executing cases, record one compact capability line per selected target:
+`target/build | execution tool or harness | OS/device | observable outputs | permitted actions | missing capability | time/attempt limit`.
+Classify each case as executable, partially observable or blocked. This line is
+an evidence declaration, not proof of target access; the dated run carries actual
+commands, traces or observations. Do not build an adapter merely to fill a row.
+
 ## Select by executable behavior
 
 | Target | Initial mapping | How to act when capability is available | Evidence and limits |

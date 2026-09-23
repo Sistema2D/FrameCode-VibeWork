@@ -169,7 +169,9 @@ def main() -> int:
     result["corpus"] = "external caller-labeled" if args.cases else "synthetic regression corpus (12 cases)"
     payload = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.output:
-        Path(args.output).write_text(payload, encoding="utf-8")
+        destination = Path(args.output)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(payload, encoding="utf-8")
     else:
         print(payload, end="")
     failed = any(r["mandatory_recall"] < 1 or r["mandatory_missing"] or r["selected"]["forbidden_hits"]

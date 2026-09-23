@@ -19,6 +19,7 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - `.gitignore`
 - `.gitattributes`
 - local-only `.obsidian/` may be recreated by Obsidian and is ignored; it is never required or distributed
+- local-only `.fcvw-cache/` and `.codex-test-tmp/` are excluded from governed inventories and release payloads
 - optional provider bridges `.cursorrules` and `.windsurfrules` (when distributed)
 - `FCVW/`
 - `tools/validate_fcvw.py`
@@ -34,6 +35,9 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - `tools/package_release_fcvw.py`
 - `tools/release_layout_fcvw.py`
 - `tools/fcvw_cache.py`
+- `tools/path_policy_fcvw.py`
+- `tools/trace_fcvw.py`
+- `tools/adaptive_runtime_ledger_fcvw.py`
 - `tools/role_manifest_fcvw.py`
 - `tools/upgrade_fcvw.py`
 - optional context tools `tools/build_context_index.py` and `tools/retrieve_context.py`

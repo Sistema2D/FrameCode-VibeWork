@@ -91,8 +91,11 @@ with rejected evidence. Reset never clears an execution stop latch.
 
 `fcvw/adaptive-runtime@1` contains schema, control_digest, sequence, observation,
 blocked, reason and checksum. `start` explicitly creates the initial record;
-`observe` requires the previous runtime. Both inputs/outputs remain external or
-under .fcvw-cache. Each update uses a new path; inputs cannot be overwritten.
+`observe` requires the previous runtime. Both require one explicit persistent
+`--ledger` path. The optional local SQLite ledger records the latest state for each
+control/run ID, rejects duplicate starts, stale updates and new runs for a task
+stopped under the same control. Inputs/outputs remain external or under .fcvw-cache.
+Each update uses a new path; inputs cannot be overwritten.
 
 Observation fields: run_id, task_id, observed_at, iterations, elapsed_ms, tokens
 (measured total or null), token_source (provider/tokenizer/estimate/unavailable),
@@ -109,8 +112,11 @@ Updates preserve run/task identity, monotonically increasing counters/timestamps
 checkpoint and quality histories, and any previous stop. A stop survives a later
 pass, user answer, weight reset and retrieval rollback. Review the cause and obtain
 a newly scoped control before resuming; do not create another runtime to bypass a
-stopped run. Local operators own the current-runtime pointer and must not replay an
-older file. No shared database or cross-process lock is claimed.
+stopped run. The ledger uses a local transaction across CLI processes; selection
+rejects an older runtime than the latest registered state. The ledger is trusted
+operator state, not authentication: deleting, replacing or editing it outside the
+CLI defeats the guarantee. Do not expose it to untrusted writers or claim
+distributed execution safety.
 
 Stop before another selection on safety_block, qa_pending, unknown tokens, budget
 exhaustion or unknown failure signature. Equal failure signatures count through
@@ -133,7 +139,7 @@ and content hashes can narrow it, never restore language-filtered, excluded or
 nonexact historical content. Mandatory routes remain outside scoring and budgets.
 Complete chunks use the existing serialized-JSON estimate and per-file/top-k rules.
 An explicit smaller --context-budget remains binding. Estimates are not provider tokens.
-Source/index drift or invalid control/runtime blocks execution. Invalid/missing
+Source/index drift or invalid control/runtime/ledger blocks execution. Invalid/missing
 optional learned state preserves the exact configured lexical baseline, with a
 fallback reason. No learned state means an explicitly fixed structural variant.
 
@@ -151,16 +157,17 @@ be deliberately populated and reviewed; no shipped example authorizes execution.
 
 ```sh
 python -B tools/adaptive_learning_fcvw.py assess --control /external/control.json --output /external/assessment.json
-python -B tools/adaptive_learning_fcvw.py start --control /external/control.json --observation /external/observation-0.json --output /external/runtime-0.json
-python -B tools/adaptive_learning_fcvw.py observe --control /external/control.json --runtime /external/runtime-0.json --observation /external/observation-1.json --output /external/runtime-1.json
+python -B tools/adaptive_learning_fcvw.py start --control /external/control.json --ledger /external/runtime-ledger.db --observation /external/observation-0.json --output /external/runtime-0.json
+python -B tools/adaptive_learning_fcvw.py observe --control /external/control.json --ledger /external/runtime-ledger.db --runtime /external/runtime-0.json --observation /external/observation-1.json --output /external/runtime-1.json
 python -B tools/adaptive_learning_fcvw.py replay --control /external/control.json --feedback /external/feedback.json --output /external/state.json
 python -B tools/adaptive_learning_fcvw.py export --control /external/control.json --state /external/state.json --output /external/backup.json
 python -B tools/adaptive_learning_fcvw.py reset --control /external/control.json --output /external/empty.json
 python -B tools/adaptive_learning_fcvw.py rollback --control /external/control.json --state /external/backup.json --output /external/restored.json
-python -B tools/retrieve_context.py --root . --index /external/index.jsonl --query 'task terms' --session security --adaptive-mode assist --adaptive-control /external/control.json --adaptive-runtime /external/runtime-1.json --adaptive-state /external/state.json
+python -B tools/retrieve_context.py --root . --index /external/index.jsonl --query 'task terms' --session security --adaptive-mode assist --adaptive-control /external/control.json --adaptive-ledger /external/runtime-ledger.db --adaptive-runtime /external/runtime-1.json --adaptive-state /external/state.json
 ```
 
-JSON input limit is 32 MiB; unknown fields fail. Commands never run supplied strings,
+JSON input limit is 32 MiB; unknown fields fail. The ledger is an optional local
+SQLite file for assist, not a framework-wide persistence dependency. Commands never run supplied strings,
 fetch a URL, call a model or overwrite canonical documents. Outputs are atomic and
 cannot alias inputs. assess returns 1 for rejected/inconclusive evidence, observe
 returns 1 on a stop, malformed commands return 2. Optional retrieval diagnostics

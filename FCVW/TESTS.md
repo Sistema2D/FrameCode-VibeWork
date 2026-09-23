@@ -31,6 +31,12 @@ Define risk-proportional evidence for new behavior, protected existing behavior,
 | R4 | R3 plus dependent workflows, compatibility or recovery evidence, documented rollback, and explicit residual-risk review |
 | R5 | Expanded regression across affected boundaries, security/data review when applicable, rollback rehearsal, and explicit human approval before completion |
 
+An additional independent critic/reviewer is selective: use one when a high-risk
+change has unresolved ambiguity, repeated prior defects or an unverified boundary
+that a second perspective can actually inspect. Record its question, findings,
+validation impact and added calls/time. Do not dispatch a second agent solely
+because a plan is R3+ or because a tool is available.
+
 Authentication, authorization, persistent data, public APIs or file formats, agent instructions, memory, filesystem, automation, migrations, destructive behavior, and releases are not R1 by default. An R1 classification for one of these surfaces requires a concrete blast-radius and reversibility rationale.
 
 ## Evidence matrix by change surface
@@ -212,3 +218,11 @@ export/reset/rollback, expiry, budgets, stagnation, QA/safety latches and CLI fa
 These tests establish implementation behavior, not causal efficacy or human authority.
 Real provider usage, independent label review, paired execution and follow-up are
 still required before interpreting full-cycle savings or non-inferiority.
+
+Cross-tool regressions cover the default local runner's disposable cache,
+temporary-file index exclusion, blocked first-run QA inventory, output-directory
+creation, known file operations, adaptive ledger restart/stale-state denial and
+content-free decision tracing. A filesystem-link upgrade denial test runs on hosts
+that permit link creation and is explicitly skipped otherwise. These checks
+exercise implementation boundaries; they do not provide real-task efficacy or
+cross-operating-system coverage.

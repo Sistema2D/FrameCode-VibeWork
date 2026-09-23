@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import time
 
 from document_graph_fcvw import _outside_fences
 from frontmatter_fcvw import parse_frontmatter, scalar
@@ -176,7 +177,7 @@ def evaluate(root: Path, paths: list[str], *, inventory: str | None = None, run:
     for key, entry in mapped.items():
         if key not in surfaces or any(surfaces[key][k] != entry[k] for k in ('kind', 'route')) or surfaces[key]['path'] != entry['page']:
             raise ValueError('inventory identity, kind, route or page differs from surface')
-    if not surfaces:
+    if not surfaces and not (inventory and inventory_status == 'in_progress' and not run):
         raise ValueError('select at least one mapped surface')
     expected = {(p['id'], cid): case for p in surfaces.values() for cid, case in p['cases'].items()}
     results = {}
@@ -211,6 +212,9 @@ def evaluate(root: Path, paths: list[str], *, inventory: str | None = None, run:
     status = 'not_run' if not run else 'fail' if counts['fail'] else 'incomplete' if missing or counts['blocked'] or counts['not_run'] else 'pass'
     return {'schema': 'fcvw/product-qa-check@1', 'structural_status': 'pass', 'execution_status': status,
             **decision_report,
+            'consultation_provenance': 'declared_only' if run else 'not_evaluated',
+            'checkpoint_state': 'blocked' if inventory_status == 'in_progress' and not surfaces
+                                else inventory_status or 'not_applicable',
             'inventory_status': inventory_status, 'surfaces': len(surfaces), 'elements': sum(len(p['elements']) for p in surfaces.values()),
             'declared_cases': len(expected), 'results': counts, 'missing_cases': [list(k) for k in missing],
             'contract_hashes': {k: p['sha256'] for k, p in surfaces.items()},
@@ -218,18 +222,30 @@ def evaluate(root: Path, paths: list[str], *, inventory: str | None = None, run:
 
 
 def main() -> int:
+    started = time.perf_counter()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', default='.')
     parser.add_argument('--surface', action='append', default=[])
     parser.add_argument('--inventory')
     parser.add_argument('--run')
     parser.add_argument('--output')
+    parser.add_argument('--trace', help='opt-in content-free decision JSONL')
+    parser.add_argument('--trace-run-id', help='shared run ID required with --trace')
     args = parser.parse_args()
+    if bool(args.trace) != bool(args.trace_run_id):
+        parser.error('--trace and --trace-run-id must be used together')
     try:
         report = evaluate(Path(args.root).resolve(), args.surface, inventory=args.inventory, run=args.run)
         data = json.dumps(report, ensure_ascii=False, indent=2) + '\n'
         if args.output:
             Path(args.output).write_text(data, encoding='utf-8')
+        if args.trace:
+            from trace_fcvw import append
+            append(Path(args.trace), Path(args.root), run_id=args.trace_run_id,
+                   component='qa_wiki', status=report['execution_status'],
+                   reason=report['user_decision_gate'],
+                   duration_ms=round((time.perf_counter()-started)*1000),
+                   protected=[Path(p) for p in (*args.surface, args.inventory, args.run, args.output) if p])
         print(data, end='')
         return int(bool(args.run) and (report['execution_status'] != 'pass' or report['user_decision_gate'] == 'blocked'))
     except (ValueError, OSError) as exc:

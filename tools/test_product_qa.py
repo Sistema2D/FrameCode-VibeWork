@@ -79,7 +79,9 @@ class ProductQATests(unittest.TestCase):
         self.assertEqual(report['missing_cases'], [['UI-profile', 'save-name']])
 
     def test_complete_declared_run_and_real_failure_are_distinct(self):
-        self.assertEqual(evaluate(self.root, [], inventory='inventory.md', run='run.md')['execution_status'], 'pass')
+        report = evaluate(self.root, [], inventory='inventory.md', run='run.md')
+        self.assertEqual(report['execution_status'], 'pass')
+        self.assertEqual(report['consultation_provenance'], 'declared_only')
         self.replace('run.md', '| pass | Name is Alice |', '| fail | Name is Bob |')
         self.assertEqual(evaluate(self.root, ['surface.md'], run='run.md')['execution_status'], 'fail')
 
@@ -130,6 +132,18 @@ class ProductQATests(unittest.TestCase):
             evaluate(self.root, ['surface.md'], inventory='inventory.md')
         self.replace('inventory.md', '"complete"', '"in_progress"')
         self.assertEqual(evaluate(self.root, ['surface.md'], inventory='inventory.md')['inventory_status'], 'in_progress')
+
+    def test_first_run_with_every_surface_blocked_keeps_a_valid_checkpoint(self):
+        self.replace('inventory.md', '"complete"', '"in_progress"')
+        self.replace('inventory.md', '| mapped |', '| blocked |')
+        self.replace('inventory.md', '\n|---|---|---|\n', '\n|---|---|---|\n| /profile | application unavailable | blocked |\n')
+        report = evaluate(self.root, [], inventory='inventory.md')
+        self.assertEqual(report['inventory_status'], 'in_progress')
+        self.assertEqual(report['execution_status'], 'not_run')
+        self.assertEqual(report['surfaces'], 0)
+        self.assertEqual(report['checkpoint_state'], 'blocked')
+        with self.assertRaisesRegex(ValueError, 'select at least one mapped'):
+            evaluate(self.root, [], inventory='inventory.md', run='run.md')
 
     def test_frontier_and_revision_mismatch_are_explicit(self):
         self.replace('inventory.md', '\n|---|---|---|\n', '\n|---|---|---|\n| /admin | Unavailable role | blocked |\n')

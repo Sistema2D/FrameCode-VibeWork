@@ -2,7 +2,7 @@
 schema: "fcvw/skill@1"
 name: "orchestrator"
 description: "Coordinate explicitly authorized parallel work across non-overlapping scopes."
-version: "1.1.1"
+version: "1.2.0"
 trigger_keywords:
   - "parallel tasks"
   - "multi-agent"
@@ -23,7 +23,7 @@ Coordinate complex plans without pretending unavailable tools exist. The orchest
 
 ## Activation Triggers
 
-Load this skill when a plan spans multiple domains, has R3+ risk, mentions parallel work, or requires coordination between security, UX, performance, refactoring, docs, tests, and release.
+Load this skill for explicitly authorized delegation or a plan with genuinely independent work packages requiring cross-owner coordination. R3+ risk or multiple domains alone do not justify an extra delegation layer; keep a single executor when the work is tightly coupled.
 
 ## Inputs
 
@@ -41,9 +41,7 @@ Active plan, ownership boundaries, dependency graph, available execution capabil
 
 1. Read the active plan and identify independent work packages.
 2. Check `Plans/in_progress/` for scope collisions.
-3. Select execution mode:
-   - delegated mode when subagent tools are available;
-   - sequential mode otherwise.
+3. Select execution mode. Delegate only when the current authority permits it, subagent tools exist, scopes do not overlap, and independent work should improve measured time or review quality. Otherwise use one executor and record the reason; split into sequential packages only when that clarifies dependencies.
 4. For each work package, define:
    - exact files in scope;
    - required skill;

@@ -12,6 +12,7 @@ import sys
 import tempfile
 import zipfile
 from pathlib import Path
+from path_policy_fcvw import DISPOSABLE_PARTS
 
 from document_graph_fcvw import render_catalog
 from frontmatter_fcvw import parse_frontmatter, scalar
@@ -22,12 +23,8 @@ from release_layout_fcvw import materialize_release_layout, validate_release_lay
 
 VERSION = re.compile(r"V\d+\.\d+\.\d+")
 ARCHIVE_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
-FORBIDDEN_ARCHIVE_PARTS = {
-    ".git",
+FORBIDDEN_ARCHIVE_PARTS = DISPOSABLE_PARTS | {
     ".github",
-    ".obsidian",
-    ".codex-test-tmp",
-    "__pycache__",
     ".pytest_cache",
     ".mypy_cache",
     ".ruff_cache",

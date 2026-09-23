@@ -24,10 +24,11 @@ from pathlib import Path
 from fcvw_cache import frontmatter as cache_frontmatter
 from frontmatter_fcvw import scalar
 from release_layout_fcvw import ROOT_BRIDGES
+from path_policy_fcvw import DISPOSABLE_PARTS
 
 MANIFEST_SCHEMA = "fcvw/role-manifest@1"
 MANIFEST_PATH = Path("FCVW") / "ROLE_MANIFEST.json"
-IGNORED_PARTS = {".git", ".github", ".obsidian", "__pycache__", ".fcvw-cache"}
+IGNORED_PARTS = DISPOSABLE_PARTS | {".github"}
 # Records that describe the framework's own development stay framework-owned even
 # though they live under a project-owned directory. Without this distinction an
 # upgrade cannot replace them and they silently become permanent project history.

@@ -126,9 +126,16 @@ def contained(root: Path, relative: str) -> Path:
     root = root.resolve()
     target = Path(os.path.normpath(root / relative))
     try:
-        target.relative_to(root)
+        parts = target.relative_to(root).parts
     except ValueError as error:
         raise ValueError(f"manifest path escapes the tree: {relative}") from error
+    current = root
+    for part in parts:
+        current = current / part
+        if current.is_symlink() or (hasattr(current, "is_junction") and current.is_junction()):
+            raise ValueError(f"manifest path crosses a filesystem link: {relative}")
+    if not target.resolve().is_relative_to(root):
+        raise ValueError(f"manifest path resolves outside the tree: {relative}")
     return target
 
 
@@ -136,7 +143,7 @@ def apply_upgrade(installed_root: Path, release_root: Path, actions: list[Action
     applied = 0
     for action in actions:
         if action.verdict == "replace" or action.verdict == "new":
-            source = release_root / action.path
+            source = contained(release_root, action.path)
             if not source.is_file():
                 continue
             target = contained(installed_root, action.path)
@@ -144,7 +151,7 @@ def apply_upgrade(installed_root: Path, release_root: Path, actions: list[Action
             shutil.copy2(source, target)
             applied += 1
         elif action.verdict == "conflict" and accept_conflicts:
-            source = release_root / action.path
+            source = contained(release_root, action.path)
             target = contained(installed_root, action.path)
             backup = target.with_suffix(target.suffix + ".local")
             shutil.copy2(target, backup)

@@ -15,6 +15,7 @@ from urllib.parse import quote, unquote
 
 from frontmatter_fcvw import parse_frontmatter, scalar
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
+from path_policy_fcvw import DISPOSABLE_PARTS
 
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
@@ -68,7 +69,7 @@ def markdown_files(root: Path) -> list[Path]:
     paths: list[Path] = []
     for path in root.rglob("*.md"):
         relative = path.relative_to(root)
-        if any(part in {".git", ".obsidian", ".fcvw-cache", ".codex-test-tmp", "__pycache__"} for part in relative.parts):
+        if any(part in DISPOSABLE_PARTS for part in relative.parts):
             continue
         paths.append(path)
     return sorted(paths, key=lambda item: item.relative_to(root).as_posix().lower())

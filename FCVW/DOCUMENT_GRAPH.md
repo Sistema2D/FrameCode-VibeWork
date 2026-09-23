@@ -55,6 +55,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 - [`FCVW/audits/2026-08-21-installed-validator-skill-self-improvement.md`](audits/2026-08-21-installed-validator-skill-self-improvement.md)
 - [`FCVW/audits/2026-08-21-typed-wiki-skills-self-improvement.md`](audits/2026-08-21-typed-wiki-skills-self-improvement.md)
+- [`FCVW/audits/2026-09-23-skill-routing-improvement.md`](audits/2026-09-23-skill-routing-improvement.md)
 - [`FCVW/audits/README.md`](audits/README.md)
 
 ## FCVW/briefings
@@ -170,6 +171,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R4-2026-09-22-loop-evaluation.md`](Plans/completed/P2-R4-2026-09-22-loop-evaluation.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md`](Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md)
 - [`FCVW/Plans/completed/P2-R4-2026-09-23-adaptive-controls.md`](Plans/completed/P2-R4-2026-09-23-adaptive-controls.md)
+- [`FCVW/Plans/completed/P2-R4-2026-09-23-audit-remediation.md`](Plans/completed/P2-R4-2026-09-23-audit-remediation.md)
 - [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)
 - [`FCVW/Plans/completed/README.md`](Plans/completed/README.md)

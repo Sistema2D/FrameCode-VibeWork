@@ -716,7 +716,9 @@ limitados, replay/exportação/reset/rollback e assistência opcional. Os contro
 validam a evidência da #55 antes de permitir ativação. O piloto atual não passa:
 nenhuma economia de tokens, não inferioridade ou promoção operacional é presumida.
 
-`--adaptive-mode assist` exige arquivos externos de controle e observação. O padrão
+`--adaptive-mode assist` exige arquivos externos de controle e observação e um
+registro local SQLite explícito (`--adaptive-ledger`) que impede reinícios e
+observações antigas sob o mesmo controle. O padrão
 continua lexical; consultas obrigatórias do QA e bloqueios de segurança sobrevivem
 ao rollback. A ferramenta não executa modelos nem coleta prompts automaticamente.
 

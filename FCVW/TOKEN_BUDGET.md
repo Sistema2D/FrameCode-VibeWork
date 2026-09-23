@@ -18,6 +18,8 @@ Token efficiency means loading the smallest evidence set that preserves correctn
 5. Load the relevant sections of long policies first, using the section routes in `CONTEXT_MAP.md`.
 6. Load a JIT skill instead of several long documents when the skill fully covers the operation.
 7. Put detailed evidence in repository records and keep user-facing updates compact.
+8. Keep command output and repeated status checks proportional to the decision;
+   avoid loading complete large files when a named section suffices.
 
 ## Context tiers
 

@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from check_fcvw import release_assets, run_checks, run_step, snapshot
+from validate_fcvw import validate_clean_template
 
 
 class LocalChecksTests(unittest.TestCase):
@@ -92,6 +93,12 @@ class LocalChecksTests(unittest.TestCase):
         with patch('check_fcvw.run_step', side_effect=self.fake_step):
             report, _ = run_checks(self.root, self.root / '.fcvw-cache/checks', ['python'])
         self.assertTrue(report['source_unchanged'])
+
+    def test_default_cache_is_accepted_by_clean_template_check(self):
+        (self.root / '.fcvw-cache/local-checks').mkdir(parents=True)
+        findings = []
+        validate_clean_template(self.root, findings)
+        self.assertFalse([item for item in findings if item.rule == 'clean-contamination'])
 
     def test_source_change_during_run_invalidates_evidence(self):
         def changing(*args):

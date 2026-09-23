@@ -299,21 +299,12 @@ Recommended criteria:
 
 ## Token Efficiency and Performance Rules for AI Agents
 
-To optimize execution speed, minimize financial API token costs, and prevent context window exhaustion, all AI agents cooperating on this repository must strictly adhere to the following directives:
-
-### 1. High-Density Communication Standard
-* **No Conversational Padding:** Avoid polite fillers (e.g., "I apologize for the oversight", "Let me help you with that", "Sure, I can do that"). Proceed directly to technical solutions and code changes.
-* **No Unnecessary Summaries:** Do not re-summarize, describe, or restate the contents of files that have been written, updated, or viewed during the turn. Let the code speak for itself.
-* **Telegraphic Responses:** Use brief, structured, high-density bullet points or tables for chat responses and final summaries.
-
-### 2. Context Boundaries & Pruning
-* **Route-aware domain isolation:** Follow `CONTEXT_MAP.md`, the active plan's `context_files`, and cumulative mandatory event triggers. Load only the relevant sections of long policies; expand outside the initial route only when a discovered dependency requires it, and record the reason instead of broad-loading unrelated domains.
-* **Chunked View Limits:** Do not view entire large files. Limit reads using targeted line range parameters (`StartLine` and `EndLine`) to inspect only the required context.
-* **Fixed Wiki Curation Mode:** When curating wiki knowledge, use the standard optimized mode in `skills/wiki-curator/SKILL.md`. Load only routing documents, wiki index/log/schema/taxonomy/metrics, and directly triggered source records unless `wiki-lint` finds an anomaly.
-
-### 3. Log and Terminal Compaction
-* **Silent Execution Flags:** When executing terminal commands, always use the shortest possible status flags (e.g., `git status -s` instead of `git status`) and suppress verbose outputs.
-* **No Repetitive Status Checks:** Do not execute redundant status or check commands. Rely on clean, single-pass validations.
+Use [the token budget](TOKEN_BUDGET.md) for context tiers, measurement and
+compact evidence. [The context map](CONTEXT_MAP.md) owns cumulative mandatory
+reads and section-level disclosure; safety, QA decisions and changed boundaries
+are never omitted to save tokens. For wiki curation, use the fixed selective mode
+in [wiki-curator](skills/wiki-curator/SKILL.md). Keep terminal output and repeated
+status checks proportional to the decision being made.
 
 ## Checklist for AI-Related Changes
 
@@ -408,10 +399,16 @@ V0.18.0 adds structured routes derived directly from [CONTEXT_MAP.md](CONTEXT_MA
 
 ```sh
 python -B FCVW/tools/build_context_index.py --root . --output .fcvw-cache/context-index.jsonl
-python -B FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index.jsonl --query "retrieval injection defense" --session ai_governance --event ai --changed-file FCVW/AI.md --context-budget 2000 --candidate-k 20 --top-k 8 --max-chunks-per-file 2
+python -B FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index.jsonl --query "retrieval injection defense" --session ai_governance --versioned-change --event ai --file-change modify:FCVW/AI.md --context-budget 2000 --candidate-k 20 --top-k 8 --max-chunks-per-file 2
 ```
 
 In a source checkout use root tools instead. Rebuild old indexes: sections now split at paragraph boundaries around 1200 characters, preserving fenced code and oversized atomic blocks. Chunk IDs distinguish fragments; hashes detect content changes. Exact-only matching requires a bounded identity, so an incidental substring such as “maintain” cannot activate “AI”. Explicit filename stems remain supported.
+
+For changed files, `--file-change OPERATION:PATH` distinguishes an edit from an
+addition, move, rename or deletion; `--versioned-change` requires an explicit
+`--event` impact and at least one file declaration. This checks declarations, not
+their semantic truth. A host must still identify hidden security, data and other
+cross-cutting impacts. The older `--changed-file` remains conservative.
 
 Selection is opt-in through `--context-budget`. It preserves rank, keeps complete chunks, removes exact duplicate text and mandatory-path duplicates, and limits chunks per file. Oversized chunks are skipped with a reason, never cut. The estimate covers the serialized optional-results array only: Unicode characters divided by four, rounded up. It excludes mandatory documents and diagnostic metadata and is not a model token limit.
 
@@ -430,8 +427,20 @@ separate. No background collector or model invocation is installed.
 
 The [adaptive experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) adds
 explicit controls to the legacy shadow-only path. `--adaptive-mode assist` requires
-scoped control, runtime observations and adequate reviewed evidence; learned state
+scoped control, a trusted local runtime ledger, observations and adequate reviewed evidence; learned state
 is optional. Human-reviewed adjustment feedback alone can update bounded weights.
 Missing or negative evidence cannot activate the experiment. Default retrieval and
 shadow without a control never load feedback. QA/safety stops survive rollback.
 No operational promotion or benefit is inferred from closing a tracking issue.
+
+## Optional decision trace
+
+`retrieve_context.py`, `qa_wiki_fcvw.py`, `adaptive_learning_fcvw.py` and
+`check_fcvw.py` accept
+`--trace /external/decisions.jsonl --trace-run-id TASK-ID`. Reuse the same ID to
+join their content-free decision records. The JSONL stores component, status,
+reason label, input digest when available, elapsed time and provider token count
+only when a trusted caller supplies one; missing usage is `unavailable`, never
+zero. A trace inside the framework must live under `.fcvw-cache/`. It does not
+attest that the host read a file, called an LLM or consulted the user; a trusted
+host adapter must supply those events separately before making such claims.

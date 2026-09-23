@@ -54,6 +54,8 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | Multi-agent (`multi_agent`) | explicit delegation, parallel agents, work packages | active plan, `orchestrator`, ownership/lock metadata | each delegated skill and exact files | old handoffs |
 | Framework feedback (`framework_feedback`) | suggest a framework change, disagree with a prior note, review the feedback backlog | `wiki/feedback/README.md`, `wiki/templates/TEMPLATE_FEEDBACK.md` | notes on the same `topic`, `PLANNING.md`, affected policy | unrelated application domains |
 
+For a mixed QA request, choose `product_qa` when the task requires observing the running application or maintaining its behavior inventory. Choose Testing / QA for test strategy or code-level validation without product mapping, UI / accessibility for a focused design or implementation review, and Wiki / memory for general knowledge curation. Add a second route only for a separately requested or discovered boundary; one concern does not automatically delegate to every adjacent skill.
+
 ## Event-triggered mandatory reads
 
 | Observed event or changed boundary | Mandatory read before action | Required evidence |
@@ -146,4 +148,7 @@ Its suggestions never replace the cumulative mandatory reads above.
 
 ## Structured retrieval routes
 
-Repeat `--session`, `--event` and `--changed-file` to accumulate immediate required reads from the tables above. Stable `event:` identifiers are machine keys; descriptions remain human-readable. The CLI reports the reason for each derived path and unions these with the entrypoints, active plan and explicit `--mandatory` paths. Unknown identifiers fail closed. File hints are conservative: declare semantic events and file additions/deletions explicitly. See [retrieval usage](AI.md).
+The routing output includes `section_hints` for selected long policies so the
+host can read the first relevant sections before expanding a document.
+
+Repeat `--session` and `--event` to accumulate immediate required reads. For a versioned change, use `--versioned-change` with at least one explicit impact `--event` and a changed file. Prefer `--file-change modify:PATH`, `add:PATH`, `delete:PATH`, `move:PATH` or `rename:PATH` when the operation is known. The older `--changed-file PATH` retains conservative unknown-operation hints. Known additions, moves, renames and deletions add `event:filesystem`; known edits do not. Stable `event:` identifiers are machine keys; descriptions remain human-readable. The CLI reports each reason and unions paths with the entrypoints, active plan and explicit `--mandatory` paths. Unknown identifiers fail closed. The host must still classify semantic impacts such as permission changes in neutrally named files; the flag checks that a declaration exists, not that it is true or exhaustive. See [retrieval usage](AI.md).

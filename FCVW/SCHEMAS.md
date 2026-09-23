@@ -297,3 +297,14 @@ Optional `fcvw/adaptive-control@1`, `fcvw/adaptive-feedback@1`,
 [experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md). Input fields are
 strict; declarations remain caller evidence, not authentication. No existing loop,
 benchmark or legacy structural-shadow schema changes.
+
+## Disposable decision trace JSONL
+
+`fcvw/decision-trace@1` is opt-in, content-free local evidence from selected
+tools. Each row has a caller-supplied `run_id`, timestamp, component, status,
+reason label, nullable SHA-256 input digest and duration, and nullable provider
+token count with explicit source (`provider` or `unavailable`). It records a tool
+decision, not a model call, user message, file read or independent attestation.
+Keep it outside the release payload or under `.fcvw-cache/`; reject aliasing an
+input/report path. The optional adaptive SQLite ledger is local operational
+state, not a canonical Markdown or public JSON schema.

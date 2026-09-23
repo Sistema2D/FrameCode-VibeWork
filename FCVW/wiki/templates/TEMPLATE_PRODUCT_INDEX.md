@@ -20,7 +20,7 @@ roles: "<roles actually accessible>"
 
 ## Discovery checkpoint
 
-Record execution modes, runtime/toolchain or hardware prerequisites, visited navigation or non-GUI entrypoints, explored dialogs/protocols/states, available roles, excluded actions, discovery time, next entrypoint and remaining limits. Set complete only after mapped entries and resolved frontier cover the declared scope. Missing tooling or access keeps this in progress.
+Record execution modes, runtime/toolchain or hardware prerequisites, visited navigation or non-GUI entrypoints, explored dialogs/protocols/states, available roles, excluded actions, discovery time, next entrypoint, deadline or time budget, maximum repeated attempts and remaining limits. State the stop reason when interrupted. Set complete only after mapped entries and resolved frontier cover the declared scope. Missing tooling or access keeps this in progress; an all-blocked initial inventory is a valid checkpoint with no test pass.
 
 ## Surfaces
 

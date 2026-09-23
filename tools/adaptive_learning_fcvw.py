@@ -3,6 +3,7 @@ import argparse
 from copy import deepcopy
 from datetime import datetime, timezone
 import json
+import time
 from pathlib import Path
 
 from adaptive_control_fcvw import activation, assess, control, runtime, seal, verify_seal, validate_runtime
@@ -128,6 +129,7 @@ def select(config, current, candidates, mandatory, *, root, source_digest, index
 
 
 def main():
+    started = time.perf_counter()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', choices=('assess', 'replay', 'reset', 'export', 'rollback', 'start', 'observe'))
     parser.add_argument('--root', default=str(governed_root(Path(__file__))))
@@ -136,25 +138,45 @@ def main():
     parser.add_argument('--state', help='state to export, or known state to restore by validated replay')
     parser.add_argument('--observation')
     parser.add_argument('--runtime', help='prior stop latch; observe appends without clearing it')
+    parser.add_argument('--ledger', help='persistent local run registry required for start/observe')
+    parser.add_argument('--trace', help='opt-in content-free decision JSONL')
+    parser.add_argument('--trace-run-id', help='shared run ID required with --trace')
     parser.add_argument('--output', required=True)
     args = parser.parse_args()
-    inputs = [Path(p) for p in (args.control, args.feedback, args.state, args.observation, args.runtime) if p]
+    if bool(args.trace) != bool(args.trace_run_id):
+        parser.error('--trace and --trace-run-id must be used together')
+    inputs = [Path(p) for p in (args.control, args.feedback, args.state, args.observation, args.runtime, args.ledger) if p]
     try:
         cfg = control(read_json(Path(args.control)))
         if args.command == 'assess':
             result = assess(cfg['protocol'], cfg['events'], cfg['evaluation_strategy'])
         elif args.command in ('start', 'observe'):
+            require(args.ledger is not None, 'start/observe requires --ledger')
             require(args.observation is not None, '--observation required')
             require(args.runtime is not None if args.command == 'observe' else args.runtime is None,
                     'observe requires previous --runtime; start explicitly creates a new run')
-            result = runtime(cfg, read_json(Path(args.observation)), read_json(Path(args.runtime)) if args.runtime else None)
+            previous = read_json(Path(args.runtime)) if args.runtime else None
+            result = runtime(cfg, read_json(Path(args.observation)), previous)
+            from adaptive_runtime_ledger_fcvw import record
+            record(Path(args.ledger), Path(args.root), cfg, result, previous,
+                   lambda: write_report(Path(args.output), json.dumps(result, ensure_ascii=False, indent=2)+'\n',
+                                        Path(args.root), inputs))
         elif args.command in ('export', 'rollback'):
             require(args.state is not None, '--state required')
             result = validate_state(read_json(Path(args.state)), cfg)
         else:
             require(args.command == 'reset' or args.feedback is not None, '--feedback required')
             result = replay(cfg, [] if args.command == 'reset' else read_json(Path(args.feedback)))
-        write_report(Path(args.output), json.dumps(result, ensure_ascii=False, indent=2)+'\n', Path(args.root), inputs)
+        if args.command not in ('start', 'observe'):
+            write_report(Path(args.output), json.dumps(result, ensure_ascii=False, indent=2)+'\n', Path(args.root), inputs)
+        if args.trace:
+            from trace_fcvw import append
+            append(Path(args.trace), Path(args.root), run_id=args.trace_run_id,
+                   component='adaptive_learning',
+                   status='blocked' if result.get('blocked') or result.get('decision', 'eligible_for_review') != 'eligible_for_review' else 'pass',
+                   reason=args.command,
+                   duration_ms=round((time.perf_counter()-started)*1000),
+                   protected=[*inputs, Path(args.output)])
         return int(result.get('decision', 'eligible_for_review') != 'eligible_for_review' or result.get('blocked', False))
     except (ValueError, OSError, TypeError, KeyError, RecursionError) as error:
         parser.error(str(error))

@@ -2,6 +2,11 @@
 
 Reference workflow for Scenario 3 of [`AUTOMATION.md`](../AUTOMATION.md).
 
+Historical optional integration: the current validation path is the
+[local contract](LOCAL_VALIDATION_CONTRACT.md). This hosted template is retained
+only for a project that makes a new, explicit decision to enable and fund its
+own Scenario 3 automation. It is not part of the default release workflow.
+
 FCVW does **not** install this. `AUTOMATION.md` is explicit: Scenario 1 never
 installs hooks or schedules work by implication, and external automation
 requires project approval and documentation. Copy the block below into

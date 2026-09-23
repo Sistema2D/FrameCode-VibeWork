@@ -8,6 +8,11 @@ import re
 from document_graph_fcvw import _outside_fences
 from fcvw_cache import read_text
 
+FILE_OPERATIONS = {"add", "modify", "delete", "move", "rename", "unknown"}
+PRIVATE_TOOL_STEMS = {"fcvw_cache", "frontmatter_fcvw", "release_layout_fcvw",
+                      "knowledge_sources_fcvw", "plan_dependencies_fcvw", "context_routing_fcvw",
+                      "context_selection_fcvw", "loop_contract_fcvw", "adaptive_control_fcvw"}
+
 
 def normalized_path(value: str) -> str:
     value = value.replace("\\", "/")
@@ -52,13 +57,15 @@ def route_tables(root: Path) -> tuple[dict[str, list[str]], dict[str, list[str]]
     return sessions, events
 
 
-def changed_file_events(path: str) -> set[str]:
+def changed_file_events(path: str, operation: str = "unknown") -> set[str]:
     path = normalized_path(path)
+    if operation not in FILE_OPERATIONS:
+        raise ValueError(f"unknown file operation: {operation}")
     lowered = path.lower()
     parts = set(PurePosixPath(lowered).parts)
     stem = PurePosixPath(lowered).stem
     result = {"change"}
-    if lowered.endswith(".md"):
+    if lowered.endswith(".md") and operation != "modify":
         result.add("filesystem")
     if (path == "AGENTS.md" or (path.startswith("FCVW/") and path.count("/") == 1)
             or "validate_fcvw" in stem):
@@ -74,14 +81,38 @@ def changed_file_events(path: str) -> set[str]:
         result.add("release")
     if ".github" in parts or stem in {"automation", "hooks", "watchers", "daemons", "governance_gates"}:
         result.add("automation")
-    if lowered.endswith(".py") and ("tools" in parts):
+    if lowered.endswith(".py") and ("tools" in parts) and not stem.startswith("test_") and stem not in PRIVATE_TOOL_STEMS:
         result.add("public_interface")
     return result
 
 
+def section_hints(root: Path, selected: set[str]) -> dict[str, str]:
+    """Expose the canonical first-section guidance without loading whole policies."""
+    hints: dict[str, str] = {}
+    active = False
+    for line in _outside_fences(read_text(root / 'FCVW/CONTEXT_MAP.md')):
+        if line.startswith('## '):
+            active = line == '## Selective loading for long documents'
+            continue
+        if not active or not line.startswith('|'):
+            continue
+        cells = [cell.strip() for cell in line.strip('|').split('|')]
+        if len(cells) != 3:
+            continue
+        match = re.fullmatch(r'`([A-Za-z_]+\.md)`', cells[0])
+        if match:
+            path = 'FCVW/' + match.group(1)
+            if path in selected:
+                hints[path] = cells[1]
+    return hints
+
+
 def resolve_routes(root: Path, *, sessions: list[str] | None = None,
-                   events: list[str] | None = None, changed_files: list[str] | None = None) -> dict:
+                   events: list[str] | None = None, changed_files: list[str] | None = None,
+                   file_changes: list[str] | None = None, versioned_change: bool = False) -> dict:
     session_table, event_table = route_tables(root)
+    if versioned_change and (not events or not (changed_files or file_changes)):
+        raise ValueError("versioned change requires at least one explicit --event and changed file")
     reasons = defaultdict(list)
     selected_events = defaultdict(list)
     for event in events or []:
@@ -90,6 +121,13 @@ def resolve_routes(root: Path, *, sessions: list[str] | None = None,
         path = normalized_path(changed)
         for event in sorted(changed_file_events(path)):
             selected_events[event].append(f"changed-file:{path}:event:{event}")
+    for value in file_changes or []:
+        operation, separator, raw_path = value.partition(":")
+        if not separator:
+            raise ValueError("file change must be OPERATION:repository-relative-path")
+        path = normalized_path(raw_path)
+        for event in sorted(changed_file_events(path, operation)):
+            selected_events[event].append(f"file-change:{operation}:{path}:event:{event}")
     for session in dict.fromkeys(sessions or []):
         if session not in session_table:
             raise ValueError(f"unknown session: {session}; available: {', '.join(sorted(session_table))}")
@@ -101,6 +139,7 @@ def resolve_routes(root: Path, *, sessions: list[str] | None = None,
         for path in event_table[event]:
             reasons[path].extend(selected_events[event])
     return {"source": "FCVW/CONTEXT_MAP.md", "mandatory_paths": list(reasons),
+            "section_hints": section_hints(root, set(reasons)),
             "reasons": dict(reasons), "events": sorted(selected_events),
-            "notice": "Explicit triggers and conservative file hints only; declare additional semantic events. "
+            "notice": "Explicit triggers and conservative file hints only; declare all semantic events. "
                       "File additions/deletions require event:filesystem. Automation loads every named contract."}

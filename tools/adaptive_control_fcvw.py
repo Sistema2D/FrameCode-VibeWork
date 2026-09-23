@@ -54,6 +54,9 @@ def assess(config, events, strategy):
     return {'schema': 'fcvw/adaptive-assessment@1', 'protocol_digest': digest(config),
             'events_digest': report['events_digest'], 'strategy': strategy, 'quality': comparisons,
             'decision': 'reject' if 'invariant_violation' in reasons else 'inconclusive' if reasons else 'eligible_for_review',
+            'evidence_classification': 'descriptive_screen_only',
+            'independent_review_required': True,
+            'minimum_paired_tasks': config['min_pairs'],
             'reasons': reasons, 'loop_report': report,
             'notice': 'Conservative descriptive screen, not statistical proof, authentication or promotion. Review power and rare events independently.'}
 

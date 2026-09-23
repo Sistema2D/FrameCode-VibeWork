@@ -78,11 +78,11 @@ Empty record directories keep a README only. Application examples, histories, an
 | Browse all governed Markdown | [`DOCUMENT_GRAPH.md`](DOCUMENT_GRAPH.md) | incoming links and entrypoint reachability |
 | Build optional lexical context | [`AI.md`](AI.md) | mandatory routes remain authoritative |
 
-`DOCUMENT_GRAPH.md` is a generated navigation surface for Obsidian and portable Markdown readers. It does not become a source of policy merely because it links one.
+`DOCUMENT_GRAPH.md` is a generated navigation surface for Obsidian and portable Markdown readers. It does not become a source of policy merely because it links one. Graph reachability proves navigation, not that a host activated a skill or read a rule during a real task.
 
 ## V0.18.0 retrieval quality
 
-See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Follow-up work is tracked in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [issue 56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [issue 57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57).
+See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Issues [55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57) are closed with empirical promotion criteria unmet. The source controls remain inactive without reviewed real-task evidence; see the [experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
 
 ## Local validation
 

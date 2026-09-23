@@ -16,6 +16,7 @@ from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read
 from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, string_list
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
+from path_policy_fcvw import CLEAN_ROOT_ENTRIES
 from release_layout_fcvw import is_installed_release_layout
 
 from urllib.parse import unquote
@@ -216,22 +217,6 @@ REGRESSION_TYPES = {
 }
 REGRESSION_STATUSES = {"detected", "mitigated", "resolved", "accepted", "superseded"}
 FORBIDDEN_ROOT_ENTRIES = ("FCVW - Exemplo retirado de aplicação real",)
-CLEAN_ROOT_ENTRIES = {
-    ".cursorrules",
-    ".git",
-    ".gitattributes",
-    ".github",
-    ".gitignore",
-    ".obsidian",
-    ".windsurfrules",
-    "AGENTS.md",
-    "FCVW",
-    "LICENSE",
-    "NOTICE",
-    "README.md",
-    "tools",
-}
-
 SKILL_FIELDS = (
     "schema",
     "name",

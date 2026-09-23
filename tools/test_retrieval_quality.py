@@ -49,6 +49,26 @@ class ExactIdentityTests(unittest.TestCase):
         self.assertEqual(bm25("maintain docs", [record]), [])
         self.assertTrue(bm25("AI maintain docs", [record]))
 
+    def test_temporary_test_markdown_never_enters_optional_index(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = root / '.codex-test-tmp' / 'secret.md'
+            path.parent.mkdir()
+            path.write_text('## Private fixture\nTemporary text.', encoding='utf-8')
+            self.assertEqual(build_index(root), [])
+
+    def test_benchmark_creates_requested_report_directory(self):
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / 'new' / 'benchmark.json'
+            completed = subprocess.run(
+                [sys.executable, '-B', str(Path(__file__).with_name('benchmark_retrieval_fcvw.py')),
+                 '--root', str(ROOT), '--check', '--output', str(destination)],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertEqual(json.loads(destination.read_text(encoding='utf-8'))['corpus'],
+                             'synthetic regression corpus (12 cases)')
+
 
 class RoutingTests(unittest.TestCase):
     def test_cumulative_sessions_events_files(self):
@@ -56,6 +76,7 @@ class RoutingTests(unittest.TestCase):
         expected = {"SECURITY", "DATA", "TESTS", "AI", "PLANNING", "REGRESSION_GUARDS", "ARCHITECTURAL_DECISIONS"}
         self.assertTrue({f"FCVW/{p}.md" for p in expected} <= set(result["mandatory_paths"]))
         self.assertTrue(all(result["reasons"][p] for p in result["mandatory_paths"]))
+        self.assertIn('FCVW/PLANNING.md', result['section_hints'])
 
     def test_unknown_trigger_and_path_escape_fail(self):
         for kwargs in ({"sessions": ["missing"]}, {"events": ["missing"]}, {"changed_files": ["../secret"]}):
@@ -64,6 +85,25 @@ class RoutingTests(unittest.TestCase):
         for path in ("C:\\secret", "//server/share", "/etc/passwd", "a/../b"):
             with self.assertRaises(ValueError):
                 normalized_path(path)
+
+    def test_declared_file_operation_avoids_unrelated_filesystem_route(self):
+        modified = resolve_routes(ROOT, events=['policy'],
+                                  file_changes=['modify:FCVW/README.md'], versioned_change=True)
+        self.assertNotIn('filesystem', modified['events'])
+        self.assertIn('policy', modified['events'])
+        added = resolve_routes(ROOT, events=['change'], file_changes=['add:FCVW/new.md'],
+                               versioned_change=True)
+        self.assertIn('filesystem', added['events'])
+        internal = resolve_routes(ROOT, events=['change'],
+                                  file_changes=['modify:tools/fcvw_cache.py'], versioned_change=True)
+        self.assertNotIn('public_interface', internal['events'])
+
+    def test_versioned_route_requires_declared_impact_and_changed_file(self):
+        for kwargs in ({'file_changes': ['modify:FCVW/AI.md']},
+                       {'events': ['ai']},
+                       {'events': ['ai'], 'file_changes': ['rename:../outside.md']}):
+            with self.assertRaises(ValueError):
+                resolve_routes(ROOT, versioned_change=True, **kwargs)
 
     def test_policy_paths_are_read_from_source_not_copied_in_python(self):
         with tempfile.TemporaryDirectory() as temp:

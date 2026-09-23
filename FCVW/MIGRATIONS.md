@@ -163,6 +163,12 @@ Adaptive experiments add opt-in controls and strict external JSON contracts.
 Existing default/shadow invocations remain valid. No state is migrated or loaded
 implicitly. Before using assist, obtain reviewed evidence and prepare a source-bound
 control/runtime; changing control requires revalidated state and a new scoped run.
+The unpublished V0.19.0 experimental `start`/`observe` commands now require an
+explicit trusted `--ledger` SQLite path, and controlled retrieval requires the
+same `--adaptive-ledger` path. Create a fresh external ledger; manually created
+runtime JSON is not accepted for assist until registered through `start`. Keep
+the ledger outside the release payload or under disposable `.fcvw-cache`, back it
+up with runtime files when continuing an experiment, and restrict write access.
 Reset/export/rollback operate on external derived files and preserve QA/safety stops.
 The current pilot does not satisfy activation. See the
 [experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).

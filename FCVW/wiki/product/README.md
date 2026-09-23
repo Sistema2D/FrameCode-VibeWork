@@ -45,6 +45,8 @@ divergences with provisional intent may reference blocked results. Missing acces
 alone is not an inferred discrepancy. Report user_decision_gate separately from
 execution_status: a recorded decision never erases a failed test. The checker cannot
 verify conversation truth or detect a mismatch dishonestly labeled as a pass.
+`consultation_provenance: declared_only` makes this limit explicit; only evidence
+from a trusted host can corroborate actual user messages.
 
 ## One source per claim
 
@@ -66,6 +68,12 @@ python -B tools/qa_wiki_fcvw.py --root . --inventory FCVW/wiki/product/index.md 
 ```
 
 Installed packages containing the tool use the FCVW tools directory. The first command validates structure and returns contract hashes without claiming execution. A QA run records those hashes in its Contracts table; changed behavior contracts require review and a new affected-case run. A run checks selected scope only and returns nonzero for failed, blocked, missing or not-run cases. The checker neither opens the application nor proves evidence truth or completeness of unobserved behavior. Markdown table headers and stable IDs are machine keys; human prose can be localized. Escape literal table pipes.
+
+An `in_progress` first-run inventory whose discovered surfaces are all blocked may
+contain zero mapped pages and still pass its structural check with `execution_status:
+not_run` and `checkpoint_state: blocked`. A QA run and a complete inventory still
+require mapped surfaces. The frontier and a finite time/attempt limit are the
+resumption checkpoint; no separate workflow runtime is implied.
 
 ## Current application pages
 

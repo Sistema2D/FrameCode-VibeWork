@@ -17,8 +17,9 @@ import uuid
 
 from release_layout_fcvw import governed_root
 from verify_release_fcvw import tool_directory
+from path_policy_fcvw import DISPOSABLE_PARTS
 
-IGNORED = {'.git', '.obsidian', '.fcvw-cache', '__pycache__', '.codex-test-tmp'}
+IGNORED = DISPOSABLE_PARTS
 LOCALES = {'pt-BR', 'en-US', 'es', 'de'}
 PROBE = ('import json,platform,sys; print(json.dumps(dict('
          'executable=sys.executable,version=sys.version,os=platform.system(),'
@@ -159,6 +160,7 @@ def run_checks(root: Path, output: Path, interpreters: list[str], *, timeout: in
 
 
 def main() -> int:
+    started = time.perf_counter()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', default=str(governed_root(Path(__file__))))
     parser.add_argument('--output', help='local report directory; default: ROOT/.fcvw-cache/local-checks')
@@ -166,7 +168,11 @@ def main() -> int:
     parser.add_argument('--timeout', type=int, default=900, help='timeout per command, in seconds')
     parser.add_argument('--release-dir', help='optional existing four-language ZIP set plus SHA256SUMS.txt')
     parser.add_argument('--release-source', help='trusted source matching the archives; default: --root')
+    parser.add_argument('--trace', help='opt-in content-free decision JSONL')
+    parser.add_argument('--trace-run-id', help='shared run ID required with --trace')
     args = parser.parse_args()
+    if bool(args.trace) != bool(args.trace_run_id):
+        parser.error('--trace and --trace-run-id must be used together')
     root = Path(args.root).resolve()
     try:
         report, path = run_checks(root, Path(args.output) if args.output else root / '.fcvw-cache/local-checks',
@@ -175,6 +181,12 @@ def main() -> int:
                                   release_source=Path(args.release_source) if args.release_source else None)
     except (OSError, ValueError) as exc:
         parser.exit(1, f'local validation failed: {exc}\n')
+    if args.trace:
+        from trace_fcvw import append
+        append(Path(args.trace), root, run_id=args.trace_run_id,
+               component='local_check', status=report['status'], reason='validation_suite',
+               input_digest=report['source']['tree_sha256'],
+               duration_ms=round((time.perf_counter()-started)*1000), protected=[path])
     print(f'FCVW local validation: {report["status"]}; report={path}')
     return 0 if report['status'] == 'pass' else 1
 
