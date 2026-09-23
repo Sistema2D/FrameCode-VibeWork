@@ -11,9 +11,9 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Support](https://img.shields.io/badge/Support-Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache_2.0-6f42c1?style=flat-square)](LICENSE)
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
-[![Release candidate](https://img.shields.io/badge/Candidate-v0.19.0-6f42c1?style=flat-square)](FCVW/framework-releases/V0.19.0.md)
+[![Release](https://img.shields.io/badge/Release-v0.19.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0)
 
-Ready candidate **V0.19.0** · published baseline **V0.18.0**
+Stable release **V0.19.0**
 
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
@@ -264,7 +264,7 @@ FCVW separa dois namespaces:
 - **aplicação:** `FCVW/changelogs/Vx.y.z.md` e a fonte de versão do produto;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` e [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-A [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.18.0.md](FCVW/framework-releases/V0.18.0.md).
+A [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.19.0.md](FCVW/framework-releases/V0.19.0.md).
 
 A partir da release com distribuição multilíngue, o usuário escolhe o idioma ao baixar um único template vazio (`pt-BR`, `en-US`, `es` ou `de`). Cada pasta ou asset é autônomo e monolíngue; o framework não detecta, alterna nem sincroniza idiomas durante o uso. A presença e a equivalência dos quatro templates são métricas da release.
 
@@ -560,7 +560,7 @@ FCVW separates two namespaces:
 - **application:** `FCVW/changelogs/Vx.y.z.md` and the product version source;
 - **framework:** `FCVW/framework-releases/Vx.y.z.md` and [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
 
-[V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.18.0.md](FCVW/framework-releases/V0.18.0.md).
+[V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.19.0.md](FCVW/framework-releases/V0.19.0.md).
 
 Starting with the multilingual distribution release, the user chooses a language by downloading one empty template (`pt-BR`, `en-US`, `es`, or `de`). Each folder or asset is standalone and monolingual; the framework does not detect, switch, or synchronize languages during use. Presence and parity of all four templates are release metrics.
 
@@ -617,7 +617,7 @@ V0.13 introduced ownership-aware migration, `plan@2` and `regression@1` schemas,
 
 <div align="center">
 
-Stable: [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0) · [Technical release record](FCVW/framework-releases/V0.18.0.md)
+Stable: [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) · [Technical release record](FCVW/framework-releases/V0.19.0.md)
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
 
@@ -625,6 +625,15 @@ Stable: [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v
 [PT-BR](#pt-br) · [ENG-US](#en-us) · [Top](#top)
 
 </div>
+
+## V0.19.0 — QA e validação local / QA and local validation
+
+O agente **QA** mapeia a aplicação na primeira execução, testa as superfícies acessíveis e mantém na wiki o comportamento esperado e observado. Toda divergência exige consulta ao usuário. A validação gratuita roda localmente; os controles adaptativos continuam desativados para uso operacional enquanto faltarem evidências reais independentes. Os quatro ZIPs de idioma foram verificados e publicados com checksums.
+
+**QA** maps the application on first use, tests reachable surfaces, and maintains expected and observed behavior in the wiki. Every divergence requires a user question. Free validation runs locally; adaptive controls remain disabled for operational use pending independent real-task evidence. Four verified language ZIPs are published with checksums.
+
+- [Release v0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) · [Registro técnico / Technical record](FCVW/framework-releases/V0.19.0.md)
+- [Agente QA / QA agent](FCVW/skills/QA/SKILL.md) · [Validação / Validation](FCVW/TESTS.md)
 
 ## V0.18.0 — retrieval quality / qualidade de recuperação
 
@@ -652,7 +661,7 @@ python -B tools/check_fcvw.py --root .
 
 O comando executa testes, governança, benchmark e verificação da instalação. Salva relatório JSON e logs em `.fcvw-cache/local-checks/` e retorna erro se qualquer etapa falhar. Aceita vários executáveis Python e verificação de ZIPs existentes; consulte [instruções completas](FCVW/TESTS.md). Não instala serviços nem exige conta ou cartão. A execução é manual antes de aceitar alterações; Linux só estará validado por uma execução em Linux.
 
-Run the command from the main-branch checkout to check tests, governance, benchmark and installed layout. JSON evidence and logs stay in `.fcvw-cache/local-checks/`; any failed step returns nonzero. Multiple Python executables and existing ZIP verification are supported. No service, account or card is required. Invoke it before accepting changes; other operating systems require their own actual run. Published V0.18.0 ZIPs remain unchanged; this runner is available in source for the next release.
+Run the command from the main-branch checkout to check tests, governance, benchmark and installed layout. JSON evidence and logs stay in `.fcvw-cache/local-checks/`; any failed step returns nonzero. Multiple Python executables and existing ZIP verification are supported. No service, account or card is required. Invoke it before accepting changes; other operating systems require their own actual run. The runner is included in V0.19.0; V0.18.0 ZIPs remain unchanged.
 
 ## Wiki funcional e agente QA / Product wiki and QA
 
@@ -674,7 +683,7 @@ O agente **QA** mapeia a aplicação na primeira execução: telas, botões, mod
 - [Wiki de produto / Product knowledge](FCVW/wiki/product/README.md)
 - [Templates](FCVW/wiki/templates/README.md)
 
-Disponível no código-fonte para a próxima release. A primeira execução em um projeto exige o endereço ou instruções de inicialização da aplicação e acesso ao ambiente de teste autorizado. / Available in source for the next release; actual project execution requires a target application and authorized test access.
+Incluído na V0.19.0. A primeira execução em um projeto exige o endereço ou instruções de inicialização da aplicação e acesso ao ambiente de teste autorizado. / Included in V0.19.0; actual project execution requires a target application and authorized test access.
 
 ## Avaliação do ciclo completo / Full-cycle evaluation
 
