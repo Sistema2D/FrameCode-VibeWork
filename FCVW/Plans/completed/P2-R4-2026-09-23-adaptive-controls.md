@@ -5,7 +5,7 @@ artifact_role: "record"
 record_scope: "framework"
 upgrade_strategy: "preserve"
 retrieval_scope: "exact_only"
-status: "in_progress"
+status: "completed"
 priority: "P2"
 risk: "R4"
 created_at: "2026-09-23"
@@ -74,7 +74,7 @@ caller-supplied declarations, never authentication or proof of independent revie
 - [x] QA/safety/stagnation blocks survive rollback; reactivation requires a new reviewed control.
 - [x] Metric gate exposes insufficient or inferior evidence and never automatically promotes a strategy.
 - [x] Source/installed regressions and adversarial replays pass with documented limits.
-- [ ] Issues receive verified closure with implementation/evidence links and honest treatment of unmet empirical claims.
+- [x] Issues receive verified closure with implementation/evidence links and honest treatment of unmet empirical claims.
 
 ## Dependency validation
 
@@ -188,7 +188,7 @@ independence is absent and no agent-execution/late-follow-up sample exists. No
 learning update or operational assist was activated on this evidence.
 
 Technical controls are delivered. The empirical efficacy/promotion portions cannot
-truthfully be marked completed. The user requested issue closure; prepare explicit
+truthfully be marked completed. The user requested issue closure; recorded explicit
 not-planned dispositions for the unfulfilled empirical campaign/promotion, retain
 unchecked empirical criteria and link implemented capability/evidence. Issue closure
 does not turn the missing evidence into a satisfied activation prerequisite.
@@ -198,3 +198,20 @@ measured: CLI timing includes startup but is not a with/without-model comparison
 This limitation is part of the decision to decline promotion, not a claimed saving.
 Future activation requires a new independently reviewed measured campaign. No new
 backlog issue, paid infrastructure or promise of unattended follow-up is created.
+
+
+## Verified external closeout
+
+Implementation pushed as [2014ad6](https://github.com/Sistema2D/FrameCode-VibeWork/commit/2014ad60ad5aec2ee3dbefb97f01950f3c74c2f5).
+Issues [55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55),
+[56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and
+[57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57) were closed on
+2026-09-23 with reason NOT_PLANNED, preserving their unmet empirical criteria and
+recording the delivered code, validation, negative evidence and explicit decision
+not to promote. This is not a declaration that every original empirical acceptance
+criterion passed. Technical capabilities are retained as optional experimental tools.
+
+GitHub responses were read back and matched the posted bodies/state/reason.
+Evidence: outputs/adaptive-issue-closure/verified-closures.json and per-issue
+before/after snapshots. No empirical dependency was silently waived by closure.
+The framework release remains V0.19.0 in preparation; no publication is claimed.

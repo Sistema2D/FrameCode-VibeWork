@@ -13,4 +13,3 @@ Generated from [`queue.d/`](queue.d/README.md). Edit a fragment, not this file. 
 
 | Order | Plan | Category | Blocked by | Override reason |
 |---:|---|---|---|---|
-| 1 | [P2-R4-2026-09-23-adaptive-controls](P2-R4-2026-09-23-adaptive-controls.md) | other | none | - |

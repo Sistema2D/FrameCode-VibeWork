@@ -726,3 +726,9 @@ ao rollback. A ferramenta não executa modelos nem coleta prompts automaticament
 Adaptive capabilities remain opt-in and evidence-gated. Synthetic safety tests
 verify implementation only; operational activation requires separately reviewed
 real task evidence. No paid infrastructure or always-on process is required.
+
+
+As issues #55, #56 e #57 foram encerradas com justificativas e critérios empíricos
+não atendidos preservados. Os controles estão implementados; a campanha empírica
+e a promoção remanescentes foram encerradas como “não planejado”. Isso não habilita
+a ativação. [Evidência de encerramento](FCVW/Plans/completed/P2-R4-2026-09-23-adaptive-controls.md).
