@@ -11,9 +11,9 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Support](https://img.shields.io/badge/Support-Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache_2.0-6f42c1?style=flat-square)](LICENSE)
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
-[![Release](https://img.shields.io/badge/Release-v0.18.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.18.0)
+[![Release candidate](https://img.shields.io/badge/Candidate-v0.19.0-6f42c1?style=flat-square)](FCVW/framework-releases/V0.19.0.md)
 
-Stable release **V0.18.0**
+Ready candidate **V0.19.0** · published baseline **V0.18.0**
 
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)

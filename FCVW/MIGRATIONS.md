@@ -157,13 +157,13 @@ omit the shadow flag or reinstall V0.16.0 using ownership-aware replacement.
 
 Replace framework-owned tools and policies through the role manifest and preserve project records. Rebuild disposable indexes to obtain complete bounded chunks and updated identities. Exact-only matching intentionally rejects accidental substring matches. Structured routes and budget selection are optional; CLI metadata is additive. Shadow proposals now use a larger eligible pool and may change, while delivered lexical results remain independent of shadow scoring. Repository CI is source-only and is not installed into downstream projects. To roll back, omit the new flags or restore V0.17.0 by ownership and rebuild its index.
 
-## V0.18.0 to V0.19.0 — in preparation
+## V0.18.0 to V0.19.0
 
 Adaptive experiments add opt-in controls and strict external JSON contracts.
 Existing default/shadow invocations remain valid. No state is migrated or loaded
 implicitly. Before using assist, obtain reviewed evidence and prepare a source-bound
 control/runtime; changing control requires revalidated state and a new scoped run.
-The unpublished V0.19.0 experimental `start`/`observe` commands now require an
+The V0.19.0 experimental `start`/`observe` commands require an
 explicit trusted `--ledger` SQLite path, and controlled retrieval requires the
 same `--adaptive-ledger` path. Create a fresh external ledger; manually created
 runtime JSON is not accepted for assist until registered through `start`. Keep
@@ -188,6 +188,6 @@ evidence have a blocked decision gate. Preserve their original results and appen
 dated decision evidence when reviewed; never fabricate or backdate user answers.
 Passing runs without divergences need no new table. No background scan is added.
 
-The optional local validation runner reuses existing checks and preserves project records. No persistent state migration is required. The source repository removes the hosted workflow and retires its contract; no hook, service or runner is installed. Published V0.18.0 assets remain unchanged. Use source tools until a new release is actually published.
+The optional local validation runner reuses existing checks and preserves project records. No persistent state migration is required. The source repository removes the hosted workflow and retires its contract; no hook, service or runner is installed. Published V0.18.0 assets remain unchanged. After V0.19.0 installation, run its tools from `FCVW/tools/`.
 
 QA adds optional product inventory, surface and execution templates within the existing wiki schema. Preserve populated product pages and QA audits as application records during upgrades; preserve their index as a project profile. Link existing approved specifications instead of duplicating or replacing them. The runtime field describes actual execution on any target; a browser is not mandatory. No adapters, browsers, simulators, board tooling or background service are installed. Invoke QA explicitly; first use maps the reachable application scope, then subsequent runs are selective.
