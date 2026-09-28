@@ -2094,6 +2094,19 @@ class AdrRecordTests(unittest.TestCase):
         self.assertTrue(any("title" in m for m in self.messages(title="# Choice")))
         self.assertTrue(any("invalid status" in m for m in self.messages(status="approved")))
 
+    def test_legacy_adr_without_envelope_is_a_warning(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW" / "decisions").mkdir(parents=True)
+        (root / "FCVW" / "decisions" / "ADR-0001-old.md").write_text("# ADR-0001 \u2014 Old\n", encoding="utf-8")
+        findings: list[Finding] = []
+        validate_adr_records(root, findings)
+        self.assertEqual(["warning"], [item.severity for item in findings])
+
+    def test_legacy_title_separator_is_accepted(self) -> None:
+        self.assertEqual([], self.messages(title="# ADR-0042 \u2014 Choice"))
+
     def test_superseded_adr_names_its_replacement(self) -> None:
         self.assertTrue(any("superseded_by" in m for m in self.messages(status="superseded")))
         self.assertEqual([], self.messages(status="superseded", extra='superseded_by:\n  - "ADR-0043"\n'))

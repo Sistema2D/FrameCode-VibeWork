@@ -107,7 +107,7 @@ Pages created, updated, merged, superseded, or deferred; sources and confidence;
 
 For [product pages](../QA/PRODUCT_WIKI.md), preserve the distinction between sourced expected behavior, observed behavior and exact QA runs. [QA](../QA/SKILL.md) owns first-run live mapping and functional replay; curator owns deduplication, source review and lifecycle. Do not promote an observed defect into approved intent, refresh a changed behavior hash to reuse an old pass, or claim browser execution from document review. Review only affected product pages; preserve earlier runs and unresolved expectations.
 
-## Mode: Session compaction (formerly `wiki-curator` (session compaction mode))
+## Mode: Session compaction (formerly `aicc-compact`)
 
 Create a bounded session handoff with collision-resistant identity.
 
@@ -164,7 +164,7 @@ A concise, sourced handoff that distinguishes completed work, active work, block
 - plan/status matches disk state;
 - no unsupported claim of commit, tag, test, or publication.
 
-## Mode: Memory rotation (formerly `wiki-curator` (memory rotation mode))
+## Mode: Memory rotation (formerly `memory-rotation`)
 
 Archive and curate old sessions without destroying audit evidence.
 

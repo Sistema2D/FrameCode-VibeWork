@@ -76,7 +76,7 @@ List command/profile, passed checks, new failures, reading-route gaps, baseline 
 
 Exit only when blocking findings are resolved or explicitly accepted by authorized scope, and no new debt is suppressed as legacy.
 
-## Mode: Governance and Markdown linter (formerly `governance-validator` (lint mode))
+## Mode: Governance and Markdown linter (formerly `agnix-linter`)
 
 Markdown and governance structure lint checklist.
 
@@ -120,7 +120,7 @@ Every reported path exists, each finding is reproducible, duplicate reports are 
 
 Exit when the chosen profile passes or each remaining finding has an explicit owner, reason, and follow-up path.
 
-## Mode: Wiki lint (formerly `governance-validator` (wiki lint mode))
+## Mode: Wiki lint (formerly `wiki-lint`)
 
 Validate wiki schema, links, freshness, baselines, and index coverage.
 

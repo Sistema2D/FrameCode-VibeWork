@@ -468,6 +468,8 @@ Useful repository metrics:
 - repeated clarification count;
 - validation defects caused by missing context.
 
+Recorded baseline (2026-09-28, clean template, bytes of `AGENTS.md` plus the mandatory route; no tokenizer): the sum over all 34 session and event routes fell from 563 KB in V0.19.0 to 526 KB in V0.20.0 (−6.6%) when section-routed documents count their preamble plus their largest section, and grew from 912 KB to 948 KB when every file is read whole, which is what section routes exist to avoid. 24 routes shrank or held; 10 grew by 0.1 to 2.3 KB, mostly because the single `PROJECT.md` replaced near-empty placeholder profiles. In a filled project the same content moves rather than grows. A project profile edit reads about 22 KB of mandatory context.
+
 ### Complete-chunk budget estimates
 
 For opt-in lexical selection, `--context-budget` bounds the estimated serialized optional-results array, including its metadata, rather than only excerpt characters. Complete paragraphs and code blocks are retained or skipped; required paths never consume this optional allowance. Diagnostics report every decision. This remains a Unicode-character approximation, not model usage; actual token accounting and quality validation remain in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55).

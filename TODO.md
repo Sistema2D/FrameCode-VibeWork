@@ -1,9 +1,9 @@
 # TODO — Plano de correção, simplificação e otimização do FCVW
 
 > Análise do branch `main` em V0.19.0 (commit `fdca53b`), feita em 2026-09-25 e revisada
-> criticamente no mesmo dia (seção 13).
+> criticamente no mesmo dia (seção 14).
 > Este arquivo é um backlog de trabalho, não uma política. **Cada caixa de seleção do
-> roadmap (seção 11) é um pacote de trabalho e vira um plano** `fcvw/plan@2` (ou compacto,
+> roadmap (seção 12) é um pacote de trabalho e vira um plano** `fcvw/plan@2` (ou compacto,
 > quando P4/P5-R1), conforme o [AGENTS.md](AGENTS.md). Um plano por item de ID geraria
 > cerca de 90 planos, o que contradiz o objetivo de simplificar.
 
@@ -17,7 +17,7 @@
 | Repositório e issues | público; 0 issues abertas |
 | Tamanho de `FCVW/` | 228 arquivos, 65 diretórios |
 
-**Estado de execução (2026-09-28):** as **Fases 1 e 2 foram implementadas** e
+**Estado de execução (2026-09-28):** as **Fases 1, 2 e 3 foram implementadas** e
 serão publicadas juntas em **V0.20.0** (em preparação). A V0.19.1 foi cancelada
 antes da publicação e incorporada à V0.20.0. A Fase 1 foi feita em três planos concluídos:
 
@@ -62,6 +62,7 @@ Legenda: **Prioridade** P1–P5 e **Risco** R1–R5 seguem o [PLANNING.md](FCVW/
 | G | Otimizações | 7 (+1 movido para J) | G-03: trocar heurísticas de roteamento por declaração explícita |
 | **J** | **Redução de arquivos e pastas** (objetivo central) | 1 decisão + 15 + 3 guardas | simulação: **228 → 106 arquivos, 65 → 28 diretórios** |
 | H | Vault Obsidian "supercérebro" (nova capacidade) | 12 | H-05: gate de ativação por tokens e qualidade |
+| K | Retroalimentação do uso real (extensão do feedback) | 9 | K-06: regras protegidas contra o afrouxamento pedido pela própria IA |
 
 **Ordem de execução:**
 
@@ -70,8 +71,9 @@ Legenda: **Prioridade** P1–P5 e **Risco** R1–R5 seguem o [PLANNING.md](FCVW/
 3. **Fase 3 — gatilhos:** B, C, G e D, já sobre a estrutura reduzida.
 4. **Fase 4 — operação.**
 5. **Fase 5 — vault H.**
+6. **Fase 6 — retroalimentação K** (K-01 a K-04 podem começar logo após a publicação da V0.20.0).
 
-A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heurísticas citam arquivos que a seção J funde; na ordem inversa, o trabalho seria feito duas vezes. O balanço de complexidade está na seção 12.
+A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heurísticas citam arquivos que a seção J funde; na ordem inversa, o trabalho seria feito duas vezes. O balanço de complexidade está na seção 13.
 
 ---
 
@@ -523,7 +525,79 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 
 ---
 
-## 11. Roadmap
+## 11. K — Retroalimentação do uso real e autoanálise do framework
+
+**Pedido original:** (1) uma estrutura separada das sínteses de sessão, só para o feedback da IA sobre o framework em cada sessão, e (2) um agente que confronte essas notas de uso real com o próprio framework e gere sugestões de melhoria com alta certeza. Os dois mecanismos precisam de validadores.
+
+**Decisão (revisão de 2026-09-28):** não criar estruturas novas. O framework já tem quase tudo:
+
+- a nota `type: feedback`, que exige o modelo autor, tem ciclo de vida e obriga a escrever a sugestão antes de ler notas anteriores (regra `feedback-note`);
+- a síntese de sessão (`type: session`);
+- os gates do `agent-factory` e do `self-improvement`, que já exigem evidência de recorrência.
+
+Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente autônomo recriariam a fragmentação que a seção J removeu.
+
+### Avaliação
+
+| | Retrospectiva por sessão (pedido 1) | Autoanálise do framework (pedido 2) |
+|---|---|---|
+| Pontos fortes | captura o atrito no momento em que ocorre; categorias fixas permitem contar e comparar; separa conhecimento do produto de crítica ao framework; custo baixo, porque reaproveita o feedback | fecha o ciclo uso → melhoria; prioriza por evidência; acha regras que ninguém cumpre, rotas que sempre faltam e gates sempre contornados |
+| Pontos fracos | mais cerimônia por sessão (vai contra F-08); autorrelato vago ou cortês; campos obrigatórios de "pontos fortes/fracos" induzem texto de enchimento; as notas nascem no repositório da aplicação e podem vazar código ou segredos; um validador confere estrutura, não veracidade | hoje não há corpus de uso real; "certeza" declarada por modelo não é calibrada; tende a afrouxar gates que incomodam a IA; o mesmo tipo de modelo gera e julga as notas (câmara de eco); notas são dados externos (injeção); notas envelhecem com as versões; custo de execução |
+| Viabilidade | alta, já | só depois de K-01 a K-05 e de haver notas reais de pelo menos 2 projetos |
+
+### Itens
+
+**Retrospectiva por sessão (extensão do `type: feedback`):**
+
+- **K-01 · Retrospectiva como feedback de sessão.** Usar `type: feedback` com `feedback_scope: session`, `related_session`, `related_plan` e `framework_version` (necessário para saber depois se o problema ainda existe). O corpo é **uma tabela de itens**, não seções livres:
+
+  | Categoria | Artefato (`caminho#seção` ou ID de regra) | O que aconteceu | Impacto medido | Severidade | Mudança proposta |
+  |---|---|---|---|---|---|
+
+  Categorias controladas: `blocker`, `over_strict`, `optimization`, `strength`, `weakness`. "Nenhum observado" é uma resposta válida, para não induzir texto de enchimento. O impacto é medido sempre que possível: KB de leitura obrigatória (o `retrieve_context.py` já informa), passos bloqueados, findings do validador, retrabalho. A regra de escrever a própria sugestão antes de ler notas anteriores continua valendo. — P3-R2
+- **K-02 · Gatilho proporcional.** A retrospectiva é obrigatória quando houve bloqueio, override de gate ou contorno de regra, e no fechamento de planos R3 ou acima. Nos demais casos é opcional. Limite de cerca de 40 linhas. Não entra na leitura obrigatória de nenhuma rota. — P3-R2
+- **K-03 · Privacidade e destino.** As notas são `record_scope: application` e ficam no repositório da aplicação: o guard de template limpo proíbe histórico de aplicação no framework. Elas não contêm trechos de código nem dados da aplicação e passam pela varredura de segredos (H-08). A exportação é manual e revisada por uma pessoa. O framework recebe só relatórios agregados ou planos que citam evidência anonimizada, nunca as notas. Nenhum envio é automático. — P2-R3
+- **K-04 · Validador da retrospectiva** (extensão da regra `feedback-note` ou regra nova no inventário congelado). Confere:
+  - campos obrigatórios, categoria e severidade dentro dos valores permitidos;
+  - que cada linha cita um artefato que existe na `framework_version` declarada (resolvido pela tabela de migração);
+  - que a sessão e o plano citados existem;
+  - ausência de placeholders, tamanho máximo e ausência de padrões de segredo;
+  - a ordem "sugestão antes da avaliação".
+
+  Fixtures negativas para cada caso. — P3-R2
+
+**Autoanálise (agregador determinístico, e só depois uma skill):**
+
+- **K-05 · Agregador sem IA.** Uma ferramenta agrupa as notas pelo artefato citado. Para cada grupo, calcula:
+  - ocorrências **independentes**: sessões, projetos e modelos distintos;
+  - se o artefato ainda existe na versão atual;
+  - notas que o contradizem;
+  - se já há um plano que resolveu o problema.
+
+  A **certeza é essa contagem**, reproduzível, e não a confiança declarada por um modelo. O limiar é explícito: pelo menos 3 ocorrências independentes em pelo menos 2 projetos ou 2 modelos, ou 1 bloqueio P1/P2 reproduzido por um teste que falha. A saída vai para `.fcvw-cache/` e nunca é versionada. Roda sob demanda, sem processo contínuo (cenário 1 ou 2 do `AUTOMATION.md`). — P3-R3
+- **K-06 · Regras protegidas.** Segurança, autorização, regressão, ações destrutivas e autoridade de publicação formam uma lista cujo afrouxamento só pode ser **sinalizado para decisão humana**, nunca proposto como melhoria, por mais ocorrências que tenha. É o principal antídoto contra o framework ser otimizado para o conforto da IA. — P2-R3
+- **K-07 · Skill de autoanálise** (nome provisório `framework-retrospective`). É criada **via `agent-factory`**, e só quando houver notas reais de pelo menos 2 projetos; hoje o gate a reprovaria, corretamente.
+  - Interpreta apenas os grupos que passaram do limiar do K-05.
+  - Trata as notas como dados, nunca como instruções.
+  - Só **propõe**: uma nota de proposta ou um rascunho de plano. A mudança real segue o fluxo de plano e os gates do `self-improvement` e do `agent-factory`.
+  - Toda proposta traz uma **prova**: um teste que falha hoje ou uma medição, no padrão do ensaio de migração e da medição de rotas das Fases 2 e 3.
+
+  — P3-R3
+- **K-08 · Validador das propostas.** Confere:
+  - que cada proposta cita notas que existem;
+  - que a certeza declarada é igual à recalculada pelo K-05 (divergência é erro);
+  - que a prova está anexada;
+  - que a proposta que toca regra protegida está marcada como "requer decisão humana";
+  - que o ciclo de vida aponta para o plano que a resolveu.
+
+  Teste do mecanismo com um corpus plantado: notas duplicadas, obsoletas, contraditórias e com tentativa de injeção, cada uma com o tratamento esperado. — P3-R3
+- **K-09 · Medir o próprio mecanismo.** Registrar a taxa de propostas aceitas e se as ocorrências do artefato caíram nas sessões seguintes à mudança. Se não caírem, o limiar sobe. — P4-R2
+
+**Relação com o vault (H):** as retrospectivas passam a ser uma das fontes indexadas pelo vault. Elas seguem a mesma regra do H: nascem em `shadow` e só são usadas para decisão depois de medidas.
+
+---
+
+## 12. Roadmap
 
 ### Fase 1 — Integridade e linha de base (patch V0.19.1, incorporado à V0.20.0) — **implementada**
 
@@ -552,7 +626,7 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 - [x] J-15 Skills fundidas (a renomeação `agent-*` foi barrada pelo gate do `self-improvement`: só nome, sem ganho medido)
 - [x] E-01 + E-02 + E-04 + B-05 Validador enxuto (tabela declarativa, um só rastreador de *fences*, lista única de caminhos)
 - [ ] F-04 Aliases de tradução fora do validador — **adiado**: depende do pipeline de variantes de idioma; F-03 (dividir o validador, hoje com 2.571 linhas) espera por ele
-- [ ] F-02 `SCHEMAS.md` restrito aos artefatos versionados — **passa para a Fase 3** (D-04 já saiu com F-01 e J-09; os schemas de fila foram aposentados)
+- [x] F-02 `SCHEMAS.md` restrito aos artefatos versionados — **feito na Fase 3** (D-04 já saiu com F-01 e J-09; os schemas de fila foram aposentados)
 - [x] J-G1 + J-G2 + J-G3 Guardas contra o recrescimento. Na primeira execução, elas encontraram: `Plans/` só com README no pacote instalado, exemplo de gate com `kind` inválido, `fcvw/adr@1` sem registro e dois envelopes fora do padrão
 
 **Aceite:** `FCVW/` com ≤ 110 arquivos e ≤ 30 diretórios (≤ 10 fora de `skills/`); cada ID de regra do inventário continua com fixture que falha, ou foi removido com justificativa; uma instalação V0.19.0 migrada sem perda (digests dos registros conferidos).
@@ -561,18 +635,20 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 
 **Falta para publicar a V0.20.0:** regenerar e revisar as 4 variantes de idioma, gerar pacotes e checksums, executar em Windows e macOS, e atualizar o `FRAMEWORK_LOCK.md` (seguindo o `release-checklist`).
 
-### Fase 3 — Gatilhos e documentos, sobre a nova estrutura (minor V0.21.0)
+### Fase 3 — Gatilhos e documentos, sobre a nova estrutura (incorporada à V0.20.0) — **implementada**
 
-- [ ] G-03 Remover a adivinhação semântica e avisar quando faltar evento (resolve B-08, B-09 e C-04)
-- [ ] B-06 + B-07 + C-02 + C-03 + C-08 Correções pontuais de roteamento
-- [ ] B-04 + B-03 Comparação exata e superfícies obrigatórias explícitas
-- [ ] C-05 + C-06 `trigger_keywords` opcional; gatilho no `description`
-- [ ] B-10 Schema de ADR — registro e envelope feitos na Fase 2 (`fcvw/adr@1`); falta a checagem no validador
-- [ ] G-01 + G-02 Medir de novo contra a linha de base; modo `--routes-only`
-- [ ] F-08 Caminho trivial sem plano (atualiza o AGENTS.md)
-- [ ] D-02, D-03 (ADR), D-05, D-06, D-08, D-09 + E-05, E-07, E-08 Alinhamento documental e READMEs enxutos
+- [x] G-03 Remover a adivinhação semântica e avisar quando faltar evento (resolve B-08, B-09 e C-04)
+- [x] B-06 + B-07 + C-02 + C-03 + C-08 Correções pontuais de roteamento
+- [x] B-04 + B-03 Comparação exata e superfícies obrigatórias explícitas
+- [x] C-05 + C-06 `trigger_keywords` opcional; gatilho no `description`
+- [x] B-10 Schema de ADR validado (`adr-schema`); ADRs antigas sem envelope viram aviso
+- [x] G-01 + G-02 Medir de novo contra a linha de base; modo `--routes-only`
+- [x] F-08 Caminho trivial sem plano (atualiza o AGENTS.md)
+- [x] D-02, D-03 (ADR-0012), D-05, D-06, D-08, D-09 + E-05, E-07, E-08 Alinhamento documental e READMEs enxutos
 
 **Aceite:** tabela de casos caminho → eventos (framework e app típico) testada; edição de profile do projeto ≤ 40 KB de leitura obrigatória; bytes por rota **menores ou iguais** à linha de base da Fase 1 em todas as rotas.
+
+**Resultado:** tabela com 23 casos; edição do `PROJECT.md` lê 22 KB. A soma das 34 rotas, com leitura por seção, caiu de 563 para 526 KB (−6,6%). Porém 10 rotas cresceram de 0,1 a 2,3 KB, principalmente porque um único `PROJECT.md` substituiu profiles quase vazios; num projeto preenchido o conteúdo muda de lugar, não cresce. Esse critério foi **parcialmente** atendido. O [plano da Fase 3](FCVW/Plans/completed/P2-R3-2026-09-28-phase3-triggers-and-documents.md) tem a evidência.
 
 ### Fase 4 — Operação contínua
 
@@ -590,9 +666,18 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 
 **Aceite:** gate H-05 registrado com os números brutos; ativação só se todos os critérios passarem; rollback para `shadow` testado.
 
+### Fase 6 — Retroalimentação do uso real (K)
+
+- [ ] K-01 + K-02 + K-03 + K-04 Retrospectiva de sessão como extensão do `type: feedback`, gatilho proporcional, privacidade e validador (independe do vault; pode vir logo após a V0.20.0)
+- [ ] K-05 + K-06 Agregador determinístico com limiar de certeza e lista de regras protegidas
+- [ ] K-07 + K-08 Skill de autoanálise via `agent-factory` e validador das propostas — **só quando houver notas reais de pelo menos 2 projetos**
+- [ ] K-09 Medição do próprio mecanismo
+
+**Aceite:** nenhum schema ou diretório novo; fixtures negativas para cada regra nova no inventário congelado; a certeza recalculada pela ferramenta confere com a declarada; nenhuma proposta que afrouxe regra protegida sai sem decisão humana; corpus plantado (duplicadas, obsoletas, contraditórias, injeção) tratado corretamente.
+
 ---
 
-## 12. Balanço de complexidade (o plano de fato simplifica?)
+## 13. Balanço de complexidade (o plano de fato simplifica?)
 
 Estimativas, a confirmar pelas medições das Fases 1 a 3:
 
@@ -614,7 +699,7 @@ Estimativas, a confirmar pelas medições das Fases 1 a 3:
 
 ---
 
-## 13. Riscos, cuidados e histórico de revisão
+## 14. Riscos, cuidados e histórico de revisão
 
 - A-01, A-08, J-03, J-05 e F-05 mexem no upgrade e no conteúdo instalado: exigem plano **expandido**, backup e ensaio de rollback numa instalação real anterior.
 - Mudanças em `CONTEXT_MAP.md`, `AGENTS.md` e skills disparam `event:ai` e `event:policy`: reexecutar os casos de fronteira (permitido, negado, ambíguo, injeção) de [TESTS.md](FCVW/TESTS.md).
@@ -659,4 +744,4 @@ Estimativas, a confirmar pelas medições das Fases 1 a 3:
   - A meta de arquivos contava registros, que crescem a cada mudança. A guarda J-G2 mede só a superfície fora dos registros.
   - Derivar os caminhos instalados obrigatórios da lista de fonte (E-04) quebrou o empacotamento. O mínimo estrutural do pacote continua explícito, e a completude de conteúdo continua com o validador.
 - **Encontrado pelo ensaio de migração:** o `wiki/index.md` do projeto aponta para `schema.md` e `taxonomy.md`, que foram removidos; o passo de correção está no `MIGRATIONS.md`.
-- **Adiado:** F-04/F-03 (dependem do pipeline de variantes) e F-02 (passa para a Fase 3).
+- **Adiado:** F-04/F-03 (dependem do pipeline de variantes). O F-02 foi feito na Fase 3.

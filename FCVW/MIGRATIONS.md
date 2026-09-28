@@ -284,3 +284,21 @@ Then complete these manual steps; the validator reports each one until done:
 Rehearsed on a V0.19.0 installation carrying application records, filled and
 pending profiles, and two locally edited framework policies: every
 project-owned file kept its SHA-256 digest.
+
+### Triggers and records
+
+1. **Declare semantic events.** Routing no longer guesses security, data,
+   interface or AI impact from application file names. Pass the matching
+   `--event` for application changes; the route result lists a warning when a
+   versioned application change declares none. Adding, moving, renaming or
+   deleting any file now implies `event:filesystem`.
+2. **ADRs.** Decision records are validated as `fcvw/adr@1`. An ADR without the
+   envelope is a warning, not an error: add the envelope from `TEMPLATE_ADR.md`
+   when you next edit it. A superseded ADR names its replacement in
+   `superseded_by`.
+3. **Custom skills.** `trigger_keywords` is optional; move its intent into the
+   `description` as "Use when …" and "Do not use when …".
+4. **References.** The operational index, skill catalog and session routes must
+   name a document or skill through a Markdown link or inline code; a bare prose
+   mention no longer counts.
+

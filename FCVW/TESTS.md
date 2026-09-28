@@ -172,7 +172,7 @@ $fcvwPython314 = py -3.14 -c "import sys; print(sys.executable)"
 python -B tools/check_fcvw.py --root . --python "$fcvwPython312" --python "$fcvwPython314"
 ```
 
-Repeat `--python` with executable paths on any supported host. On Linux use an installed Python interpreter and keep the resulting Linux report separately; a local run does not test other operating systems. `--timeout` controls the maximum seconds per direct command, default 900. The runner executes trusted repository code with the user's permissions.
+The tools support Python 3.10 or later and use only the standard library. Repeat `--python` with executable paths on any supported host. On Linux use an installed Python interpreter and keep the resulting Linux report separately; a local run does not test other operating systems. `--timeout` controls the maximum seconds per direct command, default 900. The runner executes trusted repository code with the user's permissions.
 
 For existing release assets add `--release-dir` pointing to a directory containing exactly four language ZIPs of one version and SHA256SUMS.txt. For older archives, also supply `--release-source` pointing to a trusted checkout of their release tag. This preserves source-code binding rather than skipping it. The runner verifies existing assets; translation review, locale parity and reproducible package construction remain separate release gates. See [the execution contract](governance/LOCAL_VALIDATION_CONTRACT.md).
 

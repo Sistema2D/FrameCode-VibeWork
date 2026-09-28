@@ -26,6 +26,8 @@ Do not treat work as complete only because the requested change succeeds. Identi
 
 Read-only queries, analysis, status checks, and reviews do not require a repository plan.
 
+A **trivial prose fix** (typo, grammar, or wording that changes no meaning) needs no plan when it touches no frontmatter, link, table, heading, code block, or `framework_policy` file; record it in a conventional commit such as `docs: fix typo in PROJECT.md`. Anything else, or any doubt, uses a plan.
+
 Every logical change batch to versioned files requires one plan under `FCVW/Plans/`. Use effort proportional to risk:
 
 - **Compact plan:** P4/P5 and R1 changes such as isolated text or metadata corrections. Uses `fcvw/plan-compact@1` and `FCVW/governance/TEMPLATE_PLAN_COMPACT.md`.
@@ -47,16 +49,7 @@ The plan may cover its own creation and the associated changelog. Do not create 
 
 ## Artifact contracts
 
-- Schemas and compatibility: `FCVW/SCHEMAS.md`, `FCVW/MIGRATIONS.md`.
-- Framework/application ownership: `FCVW/OWNERSHIP.md`.
-- Current framework baseline: `FCVW/FRAMEWORK_LOCK.md`.
-- Planning: `FCVW/PLANNING.md`.
-- Versioning and release: `FCVW/RELEASE.md`.
-- Security and AI boundaries: `FCVW/SECURITY.md`, `FCVW/AI.md`.
-- Testing: `FCVW/TESTS.md`.
-- Regression protection: `FCVW/REGRESSION_GUARDS.md`.
-- Token budget: `FCVW/AI.md` (token and context budget).
-- Declarative automation: `FCVW/AUTOMATION.md`.
+Schemas and compatibility: `FCVW/SCHEMAS.md`, `FCVW/MIGRATIONS.md`. Ownership: `FCVW/OWNERSHIP.md`. Installed baseline: `FCVW/FRAMEWORK_LOCK.md`. Planning: `FCVW/PLANNING.md`. Versioning and release: `FCVW/RELEASE.md`. Security, AI and token budget: `FCVW/SECURITY.md`, `FCVW/AI.md`. Testing: `FCVW/TESTS.md`. Regression protection: `FCVW/REGRESSION_GUARDS.md`. Declarative automation: `FCVW/AUTOMATION.md`.
 
 Use application-owned documents only after instantiation. In a clean template, placeholders are allowed only in files marked `artifact_role: project_profile` or under template/example directories.
 
@@ -87,13 +80,12 @@ The clean framework must not contain application plans, application releases, ru
 
 ## Document graph, application rules, and plan queue
 
+Commands use `FCVW/tools/` in an installed release; the framework source checkout keeps the same tools in `tools/`.
+
 - Select active work from `FCVW/Plans/in_progress/` before `pending/`. The queue is derived from plan frontmatter (`category`, `depends_on`, `blocked_external`, `before_in_progress`); there is no queue file to maintain.
-- Use `python FCVW/tools/plan_queue_fcvw.py --root . --recommend` in an installed release, or `python tools/plan_queue_fcvw.py --root . --recommend` in the framework source checkout; a queue finding blocks the recommendation.
+- Use `python FCVW/tools/plan_queue_fcvw.py --root . --recommend`; a queue finding blocks the recommendation.
 - Before executing a plan with `depends_on`, confirm its dependency table and completed prerequisite evidence agree; discontinued prerequisites never satisfy a dependency automatically.
 - For application behavior, workflow, data, permission, interface, or cross-module changes, consult `FCVW/APP_RULES.md` and record affected rule IDs in the plan.
-- Every governed Markdown artifact must be reachable from `AGENTS.md`, `README.md`, `FCVW/README.md`, a catalog linked from those entrypoints, or its canonical record directory.
-- Generated records must have an incoming catalog or relationship link and an outgoing link to their authoritative source, plan, decision, release, or governing policy.
 - Use portable relative Markdown links as the single canonical link form. A wikilink is optional and never required; do not carry the same relationship in both forms, because the two copies drift and both are then validated.
 - Never regenerate `FCVW/ROLE_MANIFEST.json` in an installed project: it is the installation baseline shipped with the release, and `upgrade_fcvw.py` replaces it only after a successful apply. Use `role_manifest_fcvw.py --output <path>` for an inspection copy.
-
-- Records are reachable through their canonical directory; policies, profiles, templates and skills must be linked from an entrypoint or catalog. No catalog is versioned: `document_graph_fcvw.py --write` writes a disposable view to `.fcvw-cache/`.
+- Policies, profiles, templates and skills must be linked from `AGENTS.md`, `README.md`, `FCVW/README.md` or a catalog they link; records are reachable through their canonical directory and link to their authoritative source. No catalog is versioned: `document_graph_fcvw.py --write` writes a disposable view to `.fcvw-cache/`.

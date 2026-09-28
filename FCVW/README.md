@@ -73,9 +73,9 @@ The namespaces must not be mixed.
 
 ## Clean baseline rule
 
-Empty record directories keep a README only. Application examples, histories, and production-derived comparison fixtures remain outside the framework project and its clean distribution.
+Record directories are created by their first record. Application examples, histories, and production-derived comparison fixtures remain outside the framework project and its clean distribution.
 
-## New operational navigation
+## Operational navigation
 
 | Need | Load first | Validation |
 |---|---|---|
@@ -86,9 +86,9 @@ Empty record directories keep a README only. Application examples, histories, an
 
 A generated catalog is a disposable view, never a source of policy. Graph reachability proves navigation, not that a host activated a skill or read a rule during a real task.
 
-## V0.18.0 retrieval quality
+## Context retrieval
 
-See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Issues [55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57) are closed with empirical promotion criteria unmet. The experimental adaptive and loop layer left the core in V0.20.0; see [ADR-0010](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0010-core-reduction.md).
+Mandatory reads come from [CONTEXT_MAP.md](CONTEXT_MAP.md) routes; `tools/retrieve_context.py` resolves them and, with an index and query, adds ranked optional chunks within an optional budget. See [usage and limits](AI.md) and [benchmark and installed verification](TESTS.md).
 
 ## Local validation
 

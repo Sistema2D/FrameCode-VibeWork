@@ -23,6 +23,8 @@ Read-only work does not create a plan. A versioned change uses one of these form
 
 The plan covers its own creation and related changelog. Group files that form one atomic outcome; do not manufacture one plan per file.
 
+A trivial prose fix needs no plan: a typo, grammar or wording correction that changes no meaning and touches no frontmatter, link, table, heading, code block or `framework_policy` file. It is recorded only in a conventional commit (`docs: …`). When in doubt, use a compact plan.
+
 ## Lifecycle
 
 ```mermaid

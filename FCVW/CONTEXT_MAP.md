@@ -90,6 +90,10 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 | `PROJECT.md` | only the section for the concern at hand (identity and scope, stack, environment, design, performance, workflows) | instantiation or a change that crosses concerns |
 | `PLANNING.md` | When planning applies; plan class; regression impact; queues | reopening a plan or revising queue policy |
 | `TESTS.md` | Minimum evidence by risk plus the row for the changed surface | defining project test strategy |
+| `MIGRATIONS.md` | Principles, then only the sections from the installed version to the target | reconstructing an old migration path |
+| `OWNERSHIP.md` | Required metadata, Upgrade algorithm and Protected paths; Filesystem layout only when paths change | changing ownership rules |
+| `INSTANTIATION.md` | the greenfield flow, or only Retroactive instantiation for an existing codebase | adapting the instantiation method |
+| `skills/governance-validator/SKILL.md` | Purpose through Validation and exit, plus only the mode section in use | combining lint modes |
 | `wiki/README.md` | Layout, Note types and Page schema; Framework feedback only for feedback notes; Memory lifecycle only for rotation or compaction | curating relations, sources or the taxonomy |
 
 ## Declared skill session type aliases

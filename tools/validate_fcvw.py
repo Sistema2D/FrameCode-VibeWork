@@ -1625,15 +1625,23 @@ def validate_adr_records(root: Path, findings: list[Finding]) -> None:
         relative = path.relative_to(root).as_posix()
         text = read_text(path)
         metadata = frontmatter(text)
-        if scalar(metadata, "schema") != "fcvw/adr@1":
-            findings.append(Finding("adr-schema", relative, "decision record must use fcvw/adr@1"))
+        schema = scalar(metadata, "schema")
+        if not schema:
+            # Accepted ADRs are immutable and the pre-V0.20.0 template had no
+            # envelope: legacy ADRs stay readable and get the envelope when edited.
+            findings.append(
+                Finding("adr-schema", relative, "legacy ADR without fcvw/adr@1; add the envelope when next edited", "warning")
+            )
+            continue
+        if schema != "fcvw/adr@1":
+            findings.append(Finding("adr-schema", relative, f"unsupported decision schema: {schema!r}"))
             continue
         check_record(root, relative, text, metadata, RECORD_SPECS["fcvw/adr@1"], findings, seen)
         record_id = scalar(metadata, "id")
         if record_id and not path.name.startswith(f"{record_id}-"):
             findings.append(Finding("adr-schema", relative, f"filename must start with {record_id}-"))
         titles = [line for _, line in outside_code_fences(text) if line.startswith("# ")]
-        if record_id and not (titles and titles[0].startswith(f"# {record_id}: ")):
+        if record_id and not (titles and re.match(rf"# {re.escape(record_id)}\s*(?::|\u2014|-)\s", titles[0])):
             findings.append(Finding("adr-schema", relative, f"title must start with '# {record_id}: '"))
         if scalar(metadata, "status") == "superseded" and not string_list(metadata, "superseded_by"):
             findings.append(Finding("adr-schema", relative, "a superseded ADR must name superseded_by"))
