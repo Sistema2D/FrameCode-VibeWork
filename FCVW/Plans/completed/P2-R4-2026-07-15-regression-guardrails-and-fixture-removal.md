@@ -18,7 +18,6 @@ context_files:
   - "FCVW/AUTOMATION.md"
   - "FCVW/wiki/README.md"
   - "FCVW/skills/governance-validator/SKILL.md"
-  - "FCVW/skills/wiki-lint/SKILL.md"
   - "FCVW/skills/release-checklist/SKILL.md"
 ---
 

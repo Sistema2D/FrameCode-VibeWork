@@ -235,7 +235,7 @@ Os 21 skills em `FCVW/skills/` são procedimentos just-in-time. Cada um declara 
 - o core permanece independente de fornecedor;
 - skills não ampliam o escopo do plano.
 
-[wiki/README.md, ciclo de memória / memory lifecycle](FCVW/wiki/README.md#memory-lifecycle) separa contexto ativo, conhecimento curado e arquivo pesquisável. A wiki guarda conhecimento reutilizável e com fontes, não uma cópia de toda sessão. Relações tipadas e digests de fontes alimentam apenas grafos e revisões derivados; não substituem os Markdown canônicos. Use `wiki-curator` para promoção e revisão de impacto e `wiki-lint` para integridade determinística e revisão semântica opcional.
+[wiki/README.md, ciclo de memória / memory lifecycle](FCVW/wiki/README.md#memory-lifecycle) separa contexto ativo, conhecimento curado e arquivo pesquisável. A wiki guarda conhecimento reutilizável e com fontes, não uma cópia de toda sessão. Relações tipadas e digests de fontes alimentam apenas grafos e revisões derivados; não substituem os Markdown canônicos. Use `wiki-curator` para promoção e revisão de impacto e `governance-validator` (wiki lint mode) para integridade determinística e revisão semântica opcional.
 
 [Navegação PT-BR](#pt-br) · [Topo](#top)
 
@@ -531,7 +531,7 @@ The 21 skills under `FCVW/skills/` are just-in-time procedures. Each declares tr
 - the core remains provider-neutral;
 - skills never expand the plan's scope.
 
-[wiki/README.md, ciclo de memória / memory lifecycle](FCVW/wiki/README.md#memory-lifecycle) separates active context, curated knowledge, and searchable archives. The wiki stores reusable, sourced knowledge rather than a copy of every session. Typed relations and source digests feed derived graphs and review findings only; they never replace canonical Markdown. Use `wiki-curator` for promotion and impact review and `wiki-lint` for deterministic integrity plus optional semantic review.
+[wiki/README.md, ciclo de memória / memory lifecycle](FCVW/wiki/README.md#memory-lifecycle) separates active context, curated knowledge, and searchable archives. The wiki stores reusable, sourced knowledge rather than a copy of every session. Typed relations and source digests feed derived graphs and review findings only; they never replace canonical Markdown. Use `wiki-curator` for promotion and impact review and `governance-validator` (wiki lint mode) for deterministic integrity plus optional semantic review.
 
 [ENG-US navigation](#en-us) · [Top](#top)
 

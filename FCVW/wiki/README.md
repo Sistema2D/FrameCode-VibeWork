@@ -16,7 +16,7 @@ The wiki is a flat, YAML-indexed knowledge vault that Obsidian or any Markdown r
 - Old sessions rotate into `archive/YYYY/` under the [memory lifecycle](#memory-lifecycle); archives are searched, not loaded by default.
 - Create notes from [the note template](../governance/TEMPLATE_NOTE.md); confirmed regressions use [the regression template](../governance/TEMPLATE_REGRESSION.md).
 - Application behavior pages and QA runs follow the [product knowledge guide](../skills/QA/PRODUCT_WIKI.md).
-- Use `wiki-curator` to promote and deduplicate and `wiki-lint` for incremental validation. Generate semantic graphs or stale reports only into `.fcvw-cache/`.
+- Use `wiki-curator` to promote and deduplicate and `governance-validator` (wiki lint mode) for incremental validation. Generate semantic graphs or stale reports only into `.fcvw-cache/`.
 
 ## Note types
 
@@ -33,7 +33,7 @@ The wiki is a flat, YAML-indexed knowledge vault that Obsidian or any Markdown r
 | `agent` | durable learning from a specialized agent procedure | `AGENT-` | prefer updating an existing canonical page; no routine narration or secrets |
 | `feedback` | an AI model's suggestion about the framework itself | `FB-` | append-only and attributed; see below |
 | `release` | reusable learning from a release | `REL-` | only when it creates reusable knowledge; release records stay formal evidence |
-| `session` | recent handoff | `SES-` | keep few; rotate with `memory-rotation` |
+| `session` | recent handoff | `SES-` | keep few; rotate with `wiki-curator` (memory rotation mode) |
 | `prompt` | tested prompt with objective, preconditions, result and limits | `PRM-` | mark obsolete prompts |
 | `question` | open question or unverified assumption | `QST-` | resolve or supersede |
 | `synthesis` | cross-cutting condensation of several sources | `SYN-` | point to every source document |
@@ -186,7 +186,7 @@ Promote only when knowledge is reusable, sourced, and not already canonical. Pre
 
 ## Validation
 
-Use `wiki-lint` in incremental mode by default. Deterministic validation owns schema, relationships, digests, cycles, conflicts, and review dates. Optional semantic review is source-bounded, produces reviewable findings, never mutates canonical knowledge, and is not a release gate without measured precision and cost evidence.
+Use `governance-validator` (wiki lint mode) in incremental mode by default. Deterministic validation owns schema, relationships, digests, cycles, conflicts, and review dates. Optional semantic review is source-bounded, produces reviewable findings, never mutates canonical knowledge, and is not a release gate without measured precision and cost evidence.
 
 Legacy pages are preserved through exact baselines; new or changed pages must comply. Confirmed reusable regressions use `fcvw/regression@1` and [the regression template](../governance/TEMPLATE_REGRESSION.md); do not create a record for an unverified suspicion or duplicate an existing canonical record.
 

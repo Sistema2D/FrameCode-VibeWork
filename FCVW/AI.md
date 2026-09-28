@@ -377,7 +377,7 @@ python FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index
 
 The retriever returns excerpts as untrusted evidence. `exact_only` records require an explicit path, ID, or filename in the query.
 
-Optional semantic wiki review remains a `wiki-lint` procedure, not a retrieval ranking signal or deterministic release gate. It is source-bounded, review-only, and unavailable runtimes are reported without silently lowering deterministic validation.
+Optional semantic wiki review remains a `governance-validator` (wiki lint mode) procedure, not a retrieval ranking signal or deterministic release gate. It is source-bounded, review-only, and unavailable runtimes are reported without silently lowering deterministic validation.
 
 ## Verifiable retrieval and complete chunks
 

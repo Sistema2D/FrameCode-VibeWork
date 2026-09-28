@@ -16,14 +16,11 @@ Skills are provider-neutral, just-in-time procedures using `fcvw/skill@1`. Load 
 | `agent-factory` | gate for creating a skill or agent |
 | `agent-hephaestus` | UI and accessibility review |
 | `agent-hermes` | measured performance investigation |
-| `agnix-linter` | Markdown/governance lint |
-| `aicc-compact` | collision-resistant session handoff |
 | `anti-monolith-guard` | responsibility and size boundaries |
 | `brainstorming-and-tdd` | specification and test-first workflow |
 | `code-hygiene-refactor` | bounded cleanup/refactoring |
 | `git-conventional-commits` | commit, tag, and release message preparation |
-| `governance-validator` | FCVW conformance, reading-route coverage, and clean-template validation |
-| `memory-rotation` | safe archive and knowledge promotion |
+| `governance-validator` | FCVW conformance, reading-route coverage, clean-template validation, Markdown lint and wiki lint |
 | `obsidian-markdown` | portable Markdown/Obsidian formatting |
 | `orchestrator` | explicitly authorized parallel coordination |
 | `project-instantiation` | clean project instantiation |
@@ -31,8 +28,7 @@ Skills are provider-neutral, just-in-time procedures using `fcvw/skill@1`. Load 
 | `retroactive-instantiation` | non-destructive adoption |
 | `self-improvement` | evidence-based existing-skill change |
 | `systematic-debugging` | hypothesis-driven diagnosis |
-| `wiki-curator` | sourced promotion, typed relations, and stale-source review |
-| `wiki-lint` | deterministic wiki integrity plus optional bounded semantic review |
+| `wiki-curator` | sourced promotion, typed relations, stale-source review, session compaction and memory rotation |
 
 ## Rules
 

@@ -153,14 +153,6 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 - [`FCVW/skills/agent-hermes/SKILL.md`](skills/agent-hermes/SKILL.md)
 
-## FCVW/skills/agnix-linter
-
-- [`FCVW/skills/agnix-linter/SKILL.md`](skills/agnix-linter/SKILL.md)
-
-## FCVW/skills/aicc-compact
-
-- [`FCVW/skills/aicc-compact/SKILL.md`](skills/aicc-compact/SKILL.md)
-
 ## FCVW/skills/anti-monolith-guard
 
 - [`FCVW/skills/anti-monolith-guard/SKILL.md`](skills/anti-monolith-guard/SKILL.md)
@@ -180,10 +172,6 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 ## FCVW/skills/governance-validator
 
 - [`FCVW/skills/governance-validator/SKILL.md`](skills/governance-validator/SKILL.md)
-
-## FCVW/skills/memory-rotation
-
-- [`FCVW/skills/memory-rotation/SKILL.md`](skills/memory-rotation/SKILL.md)
 
 ## FCVW/skills/obsidian-markdown
 
@@ -226,10 +214,6 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 ## FCVW/skills/wiki-curator
 
 - [`FCVW/skills/wiki-curator/SKILL.md`](skills/wiki-curator/SKILL.md)
-
-## FCVW/skills/wiki-lint
-
-- [`FCVW/skills/wiki-lint/SKILL.md`](skills/wiki-lint/SKILL.md)
 
 ## FCVW/troubleshooting
 

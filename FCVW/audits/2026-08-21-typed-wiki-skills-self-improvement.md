@@ -12,7 +12,7 @@ last_reviewed: "2026-08-21"
 sources:
   - "FCVW/wiki/README.md"
   - "FCVW/skills/wiki-curator/SKILL.md"
-  - "FCVW/skills/wiki-lint/SKILL.md"
+  - "FCVW/skills/governance-validator/SKILL.md"
 ---
 
 # Skill or Agent Self-Improvement: wiki-curator and wiki-lint

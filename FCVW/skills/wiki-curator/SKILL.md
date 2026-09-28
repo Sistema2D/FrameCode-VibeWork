@@ -2,15 +2,27 @@
 schema: "fcvw/skill@1"
 name: "wiki-curator"
 description: "Promote sourced reusable knowledge and merge duplicates."
-version: "1.2.1"
+version: "2.0.0"
 trigger_keywords:
   - "curate wiki"
   - "promote knowledge"
   - "continuous learning"
   - "curadoria wiki"
+  - "compact session"
+  - "close session"
+  - "handoff"
+  - "síntese de sessão"
+  - "rotate memory"
+  - "context bloat"
+  - "archive sessions"
+  - "rotacionar memória"
 session_types:
   - "wiki_maintenance"
+  - "handoff"
+  - "maintenance"
 ---
+
+
 # SKILL: Wiki Curator
 
 Maintain the LLM Wiki as a continuously improving knowledge base while preserving FCVW's pillars: updates on demand, measurable freshness, and low token cost.
@@ -46,7 +58,7 @@ Load only:
 4. the taxonomy in `wiki/README.md` when theme, tag, or freshness decisions are needed.
 5. Source files that directly triggered the curation: changed plans, changelogs, troubleshooting records, audits, decisions, sessions, or specific wiki pages.
 
-Do not read every wiki page unless `wiki-lint` reports an anomaly that requires it.
+Do not read every wiki page unless `governance-validator` (wiki lint mode) reports an anomaly that requires it.
 
 ## Curation Loop
 
@@ -59,7 +71,7 @@ Do not read every wiki page unless `wiki-lint` reports an anomaly that requires 
 7. **Review changed sources**: when a tracked `source_digest` changes, inspect only pages linked through `derived_from`; confirm, update, supersede, or invalidate them before refreshing the digest.
 8. **Update metrics**: record freshness, promotion, duplication, source-impact, and taxonomy results in the active plan.
 9. **Log curation**: summarize the curation in the active plan or session note; git history is the log.
-10. **Validate**: run deterministic `wiki-lint` for minor/major releases or when three or more wiki pages changed; semantic review remains optional and source-bounded.
+10. **Validate**: run deterministic `governance-validator` (wiki lint mode) for minor/major releases or when three or more wiki pages changed; semantic review remains optional and source-bounded.
 
 ## Tag and Theme Rules
 
@@ -107,3 +119,109 @@ Pages created, updated, merged, superseded, or deferred; sources and confidence;
 ## Product knowledge handoff
 
 For [product pages](../QA/PRODUCT_WIKI.md), preserve the distinction between sourced expected behavior, observed behavior and exact QA runs. [QA](../QA/SKILL.md) owns first-run live mapping and functional replay; curator owns deduplication, source review and lifecycle. Do not promote an observed defect into approved intent, refresh a changed behavior hash to reuse an old pass, or claim browser execution from document review. Review only affected product pages; preserve earlier runs and unresolved expectations.
+
+## Mode: Session compaction (formerly `wiki-curator` (session compaction mode))
+
+Create a bounded session handoff with collision-resistant identity.
+
+### Purpose
+
+Capture only the state required to continue work without replaying the full conversation.
+
+### Use when
+
+- an active governed batch is handed to another session or agent;
+- work stops with meaningful unresolved state;
+- a completed batch produced reusable operational context.
+
+Do not create a session file for a trivial read-only exchange or duplicate information already canonical elsewhere.
+
+### Identity
+
+Use `id: SES-YYYYMMDD-HHMMSS-<short-id>`. The short ID may be a commit prefix or random hexadecimal token. Never derive uniqueness only from “highest session number + 1”.
+
+Suggested filename: `YYYYMMDD-HHMMSS-<short-id>-<slug>.md`.
+
+### Inputs
+
+- active plan and its current state;
+- actual modified files;
+- validation evidence;
+- open risks and next authorized action.
+
+### Non-responsibilities
+
+- copying full files or chat transcripts into the handoff;
+- inventing commit, test, publication, or completion evidence;
+- treating the newest or highest sequence as relevant without checking scope;
+- deleting older sessions as part of compaction.
+
+### Procedure
+
+1. Verify actual workspace and plan state.
+2. Create the page from `governance/TEMPLATE_NOTE.md` (session block).
+3. Link canonical files rather than copying their contents.
+4. Record decisions, failures, validation, unresolved risks, and next step.
+5. Add index/log entry only when the session is useful for future retrieval.
+6. Check ID uniqueness.
+
+### Required output
+
+A concise, sourced handoff that distinguishes completed work, active work, blocked work, and optional next steps.
+
+### Validation and exit
+
+- unique ID;
+- no secrets or private runtime data;
+- links resolve;
+- plan/status matches disk state;
+- no unsupported claim of commit, tag, test, or publication.
+
+## Mode: Memory rotation (formerly `wiki-curator` (memory rotation mode))
+
+Archive and curate old sessions without destroying audit evidence.
+
+### Purpose
+
+Keep active session context bounded while preserving historical evidence and promoting sourced reusable knowledge.
+
+### Use when
+
+- active sessions exceed 10 files, 100 KB, or the project's context budget;
+- duplicated or stale session summaries impair retrieval;
+- the user requests archive, rotation, or memory consolidation.
+
+### Do not use for
+
+- deleting evidence to make validation appear clean;
+- rewriting published history;
+- replacing canonical project documents with session narrative.
+
+### Inputs
+
+- `wiki/README.md`;
+- active and archived session indexes;
+- retention/legal requirements.
+
+### Procedure
+
+1. Inventory active sessions and choose a bounded archive range.
+2. Identify decisions, patterns, failures, and unresolved conflicts.
+3. Promote only sourced, reusable knowledge; update an existing canonical page before creating a duplicate.
+4. Create `wiki/archive/YYYY/README.md` with range, sources, destination paths, and unresolved items.
+5. Move selected sessions to `wiki/archive/YYYY/`.
+6. Keep the latest 3–10 relevant sessions active.
+7. Update index, log, metrics, and backlinks.
+8. Run wiki lint in incremental mode.
+
+### Required output
+
+Record files moved, knowledge promoted, duplicates merged, unresolved conflicts, retention decision, and validation.
+
+### Validation and exit
+
+- no source session is lost;
+- archive links resolve;
+- active session IDs remain unique;
+- promoted claims cite sources;
+- active memory is within the configured budget.

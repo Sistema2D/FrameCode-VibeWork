@@ -264,7 +264,7 @@ class KnowledgeGraphTests(TemporaryRootTest):
 class WikiLintContractTests(unittest.TestCase):
     def test_semantic_review_remains_bounded_non_mutating_and_non_gating(self) -> None:
         root = governed_root(Path(__file__))
-        contract = (root / "FCVW" / "skills" / "wiki-lint" / "SKILL.md").read_text(encoding="utf-8").lower()
+        contract = (root / "FCVW" / "skills" / "governance-validator" / "SKILL.md").read_text(encoding="utf-8").lower()
 
         # Controlled values are never translated (FCVW/SCHEMAS.md), so the
         # contract is asserted on tokens rather than on localizable prose.
