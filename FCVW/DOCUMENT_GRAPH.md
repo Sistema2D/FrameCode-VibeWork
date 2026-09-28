@@ -186,11 +186,13 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/Plans/in_progress
 
+- [`FCVW/Plans/in_progress/P2-R4-2026-09-28-phase2-file-reduction.md`](Plans/in_progress/P2-R4-2026-09-28-phase2-file-reduction.md)
 - [`FCVW/Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md)
 - [`FCVW/Plans/in_progress/README.md`](Plans/in_progress/README.md)
 
 ## FCVW/Plans/in_progress/queue.d
 
+- [`FCVW/Plans/in_progress/queue.d/P2-R4-2026-09-28-phase2-file-reduction.md`](Plans/in_progress/queue.d/P2-R4-2026-09-28-phase2-file-reduction.md)
 - [`FCVW/Plans/in_progress/queue.d/README.md`](Plans/in_progress/queue.d/README.md)
 
 ## FCVW/Plans/pending

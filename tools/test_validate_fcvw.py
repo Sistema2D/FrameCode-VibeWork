@@ -863,6 +863,46 @@ class UpgradePlanTests(unittest.TestCase):
             self.assertEqual(1, role_manifest_fcvw.main())
         self.assertEqual(before, (installed / "FCVW" / "ROLE_MANIFEST.json").read_text(encoding="utf-8"))
 
+    def dropped_pair(self) -> tuple[Path, Path, Path]:
+        installed, release = self.make_pair()
+        for root in (installed, release):
+            (root / "FCVW" / "wiki" / "concepts").mkdir(parents=True)
+            (root / "FCVW" / "wiki" / "concepts" / "README.md").write_text("# Concepts\n", encoding="utf-8")
+        self.write_baseline(installed)
+        (release / "FCVW" / "wiki" / "concepts" / "README.md").unlink()
+        return installed, release, installed / "FCVW" / "wiki" / "concepts" / "README.md"
+
+    def test_prune_removes_only_unmodified_dropped_framework_files(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual("obsolete", {a.path: a for a in actions}["FCVW/wiki/concepts/README.md"].verdict)
+        upgrade_fcvw.apply_upgrade(installed, release, actions, False, prune=True)
+        self.assertFalse(dropped.exists())
+        self.assertFalse(dropped.parent.exists())
+        self.assertTrue((installed / "FCVW" / "SCOPE.md").exists())
+
+    def test_prune_keeps_locally_modified_dropped_files(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        dropped.write_text("# Concepts, curated by the project\n", encoding="utf-8")
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual("review", {a.path: a for a in actions}["FCVW/wiki/concepts/README.md"].verdict)
+        upgrade_fcvw.apply_upgrade(installed, release, actions, False, prune=True)
+        self.assertTrue(dropped.exists())
+
+    def test_unpruned_obsolete_file_can_be_pruned_later(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        upgrade_fcvw.apply_upgrade(installed, release, upgrade_fcvw.plan_upgrade(installed, release), False)
+        self.assertTrue(dropped.exists())
+        again = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual("obsolete", {a.path: a for a in again}["FCVW/wiki/concepts/README.md"].verdict)
+
+    def test_nothing_is_pruned_without_a_baseline(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        (installed / "FCVW" / "ROLE_MANIFEST.json").unlink()
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        upgrade_fcvw.apply_upgrade(installed, release, actions, False, prune=True)
+        self.assertTrue(dropped.exists())
+
     def test_untouched_policy_is_safe_to_replace(self) -> None:
         installed, release = self.make_pair()
         self.write_baseline(installed)
@@ -1745,3 +1785,142 @@ class StaticIntegrityTests(unittest.TestCase):
                 if repeated:
                     duplicates.append(f"{path.name}:{node.lineno} {', '.join(repeated)}")
         self.assertEqual([], duplicates)
+
+    RULE_PATTERNS = (
+        r"""(?:Finding|GraphFinding|QueueFinding|LocaleFinding|KnowledgeFinding|_finding|finding)\(\s*["']([a-z][a-z0-9-]+)["']""",
+        r"""rule\s*=\s*["']([a-z][a-z0-9-]+)["']""",
+    )
+    # Frozen before the V0.20.0 file reduction. Removing a rule, or silently
+    # losing one while files are merged, must change this set deliberately and
+    # be justified in the plan that does it.
+    FROZEN_RULES = {
+        "app-rules-contract",
+        "app-rules-empty",
+        "app-rules-id",
+        "app-rules-ownership",
+        "app-rules-schema",
+        "app-rules-status",
+        "application-release",
+        "audit-schema",
+        "automation-contract",
+        "baseline-config",
+        "baseline-expired",
+        "baseline-stale",
+        "canonical-metadata",
+        "character-integrity",
+        "clean-contamination",
+        "document-catalog-stale",
+        "document-heading-syntax",
+        "document-link",
+        "document-link-outside-root",
+        "document-link-syntax",
+        "document-orphan",
+        "document-orphan-exception",
+        "document-self-only",
+        "document-source-link",
+        "document-task-list-syntax",
+        "document-unreachable",
+        "duplicate-id",
+        "feedback-note",
+        "framework-index",
+        "framework-release",
+        "framework-version",
+        "frontmatter",
+        "frontmatter-date",
+        "frontmatter-list",
+        "frontmatter-ownership",
+        "frontmatter-relationship",
+        "frontmatter-retrieval",
+        "frontmatter-role",
+        "frontmatter-upgrade",
+        "instantiation",
+        "knowledge-maturity",
+        "knowledge-relation",
+        "knowledge-relation-conflict",
+        "knowledge-relation-cycle",
+        "knowledge-relation-redundant-inverse",
+        "knowledge-relation-self",
+        "knowledge-relation-target",
+        "knowledge-review-candidate",
+        "knowledge-review-due",
+        "knowledge-source",
+        "knowledge-source-stale",
+        "language-review",
+        "locale-clean-template",
+        "locale-language-metadata",
+        "locale-machine-parity",
+        "locale-markdown-structure",
+        "locale-missing",
+        "locale-package-state",
+        "locale-parity",
+        "locale-required-path",
+        "locale-review",
+        "locale-schema-parity",
+        "locale-source-baseline",
+        "locale-source-parity",
+        "locale-source-revision",
+        "markdown-fence",
+        "markdown-link",
+        "markdown-link-absolute",
+        "ownership",
+        "placeholder",
+        "plan-compact",
+        "plan-dependency-completion",
+        "plan-dependency-cycle",
+        "plan-dependency-evidence",
+        "plan-dependency-schema",
+        "plan-filename",
+        "plan-id",
+        "plan-priority",
+        "plan-queue",
+        "plan-queue-blocker",
+        "plan-queue-category",
+        "plan-queue-dependency",
+        "plan-queue-duplicate",
+        "plan-queue-entry",
+        "plan-queue-format",
+        "plan-queue-link",
+        "plan-queue-missing",
+        "plan-queue-order",
+        "plan-queue-override",
+        "plan-queue-priority",
+        "plan-queue-schema",
+        "plan-queue-stale",
+        "plan-queue-state",
+        "plan-regression",
+        "plan-risk",
+        "plan-risk-binding",
+        "plan-rollback",
+        "plan-schema",
+        "plan-state",
+        "project-profile",
+        "provider-neutrality",
+        "reading-route",
+        "regression-schema",
+        "regression-surface",
+        "required-path",
+        "scope-config",
+        "skill-catalog",
+        "skill-contract",
+        "skill-metadata",
+        "skill-name",
+        "skill-schema",
+        "troubleshooting-schema",
+        "version-namespace",
+        "wiki-id",
+        "wiki-schema",
+    }
+
+    def emitted_rules(self) -> set[str]:
+        import re
+
+        tools = Path(__file__).resolve().parent
+        source = "".join(
+            path.read_text(encoding="utf-8") for path in sorted(tools.glob("*.py")) if not path.name.startswith("test_")
+        )
+        return {rule for pattern in self.RULE_PATTERNS for rule in re.findall(pattern, source)}
+
+    def test_rule_inventory_is_frozen(self) -> None:
+        emitted = self.emitted_rules()
+        self.assertEqual(set(), self.FROZEN_RULES - emitted, "rules removed without updating the inventory")
+        self.assertEqual(set(), emitted - self.FROZEN_RULES, "new rules must be added to the inventory")

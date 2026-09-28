@@ -69,6 +69,28 @@ def load_manifest(root: Path) -> dict[str, dict[str, str]] | None:
         return None
 
 
+def dropped_action(installed_root: Path, path: str, role: str, current: dict | None, trusted: bool) -> Action:
+    """Classify a file the target release no longer ships.
+
+    Only a framework-owned file whose bytes still equal the installation
+    baseline is "obsolete" and may be pruned; anything else is kept.
+    """
+
+    if role in PRESERVED_ROLES:
+        return Action("preserve", path, role, "project artifact absent upstream")
+    try:
+        live = contained(installed_root, path)
+    except ValueError:
+        return Action("review", path, role, "manifest path escapes the tree")
+    if not live.is_file():
+        return Action("removed", path, role, "dropped by the target release; already absent")
+    if not trusted:
+        return Action("removed", path, role, "dropped by the target release; kept without a baseline")
+    if digest(live) != (current or {}).get("digest"):
+        return Action("review", path, role, "dropped by the target release but modified locally; kept")
+    return Action("obsolete", path, role, "dropped by the target release; unmodified, removed by --prune")
+
+
 def plan_upgrade(installed_root: Path, release_root: Path) -> list[Action]:
     baseline = load_manifest(installed_root)
     # Without a baseline, inventory the live tree for roles only; its digests are
@@ -86,10 +108,7 @@ def plan_upgrade(installed_root: Path, release_root: Path) -> list[Action]:
         role = (target or current or {}).get("artifact_role", "unclassified")
 
         if target is None:
-            if role in PRESERVED_ROLES:
-                actions.append(Action("preserve", path, role, "project artifact absent upstream"))
-            else:
-                actions.append(Action("removed", path, role, "dropped by the target release"))
+            actions.append(dropped_action(installed_root, path, role, current, baseline is not None))
             continue
 
         if current is None:
@@ -169,7 +188,9 @@ def existing_backups(installed_root: Path, actions: list[Action]) -> list[str]:
     return found
 
 
-def apply_upgrade(installed_root: Path, release_root: Path, actions: list[Action], accept_conflicts: bool) -> int:
+def apply_upgrade(
+    installed_root: Path, release_root: Path, actions: list[Action], accept_conflicts: bool, prune: bool = False
+) -> int:
     if accept_conflicts and (backups := existing_backups(installed_root, actions)):
         raise ValueError("earlier conflict backups would be overwritten: " + ", ".join(backups))
     applied = 0
@@ -189,12 +210,36 @@ def apply_upgrade(installed_root: Path, release_root: Path, actions: list[Action
             shutil.copy2(target, backup)
             shutil.copy2(source, target)
             applied += 1
+        elif action.verdict == "obsolete" and prune:
+            target = contained(installed_root, action.path)
+            target.unlink()
+            remove_empty_parents(installed_root, target.parent)
+            applied += 1
     # The applied release becomes the next baseline. A conflict that was kept
     # locally keeps differing from it, so the next upgrade reports it again.
+    # Obsolete files that were not pruned stay in the baseline so a later
+    # --prune can still prove they are unmodified.
+    manifest = build_manifest(release_root)
+    previous = load_manifest(installed_root) or {}
+    kept = [
+        previous[action.path]
+        for action in actions
+        if action.verdict == "obsolete" and not prune and action.path in previous
+    ]
+    manifest["files"] = sorted([*manifest["files"], *kept], key=lambda item: item["path"])
     baseline = contained(installed_root, MANIFEST_PATH.as_posix())
-    baseline.write_text(json.dumps(build_manifest(release_root), ensure_ascii=False, indent=2) + "\n",
-                        encoding="utf-8", newline="\n")
+    baseline.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return applied
+
+
+def remove_empty_parents(root: Path, folder: Path) -> None:
+    """Remove directories emptied by pruning, never the governed root itself."""
+
+    stop = {root.resolve(), (root / "FCVW").resolve()}
+    folder = folder.resolve()
+    while folder not in stop and folder.is_relative_to(root.resolve()) and not any(folder.iterdir()):
+        folder.rmdir()
+        folder = folder.parent
 
 
 def main() -> int:
@@ -206,6 +251,11 @@ def main() -> int:
         "--accept-conflicts",
         action="store_true",
         help="also replace locally modified framework files, keeping a .local backup of each",
+    )
+    parser.add_argument(
+        "--prune",
+        action="store_true",
+        help="with --apply, delete framework files dropped upstream that are identical to the baseline",
     )
     parser.add_argument("--format", choices=("text", "json"), default="text")
     args = parser.parse_args()
@@ -235,7 +285,7 @@ def main() -> int:
                    "Re-run with --accept-conflicts to replace them and keep .local backups.")
     else:
         try:
-            applied = apply_upgrade(installed_root, release_root, actions, args.accept_conflicts)
+            applied = apply_upgrade(installed_root, release_root, actions, args.accept_conflicts, args.prune)
         except ValueError as error:
             status, message = 1, f"FCVW upgrade refused: {error}"
 
