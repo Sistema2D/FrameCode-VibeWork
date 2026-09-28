@@ -698,8 +698,8 @@ evidence and reports paired descriptive comparisons. Real task efficacy requires
 appropriate independent evidence; synthetic tests and repository audits alone
 cannot establish it. Existing retrieval remains unchanged.
 
-- [Contrato / Contract](FCVW/governance/LOOP_EVALUATION_CONTRACT.md)
-- [Template](FCVW/governance/TEMPLATE_LOOP_EVALUATION.md)
+- [Contrato / Contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/LOOP_EVALUATION_CONTRACT.md)
+- [Template](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/TEMPLATE_LOOP_EVALUATION.md)
 
 ```sh
 python -B tools/loop_metrics_fcvw.py --protocol /external/protocol.json --runs /external/runs.jsonl --output /external/report.json --check
@@ -731,7 +731,7 @@ observações antigas sob o mesmo controle. O padrão
 continua lexical; consultas obrigatórias do QA e bloqueios de segurança sobrevivem
 ao rollback. A ferramenta não executa modelos nem coleta prompts automaticamente.
 
-- [Contrato, campos e comandos](FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md)
+- [Contrato, campos e comandos](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md)
 - [Decisão de arquitetura](FCVW/decisions/ADR-0009-adaptive-experiment-controls.md)
 
 Adaptive capabilities remain opt-in and evidence-gated. Synthetic safety tests

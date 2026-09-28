@@ -38,11 +38,11 @@ Execute phase 2 of the source-only maintainer backlog (`TODO.md`, section J): re
 
 ### Included
 
-Work packages executed in order, each committed with a green suite:
+Work packages, each committed with a green suite. Executed order: WP1, WP3, WP4, WP5, WP6, WP7, WP2, WP8 — J-D (WP2) runs after the consolidations so that only the final set of policies, skills and templates is linked from the indexes.
 
 1. WP1 — frozen rule-ID inventory test; upgrade `--prune` (A-08).
 2. WP2 — J-D: records are reachable through canonical record directories; catalog READMEs, empty record directories and the versioned document graph are removed (J-08, J-11, J-14).
-3. WP3 — the adaptive and loop experiment layer leaves the core; framework history leaves the installed payload (F-01, F-05, J-13).
+3. WP3 — the adaptive and loop experiment layer leaves the core (F-01). Framework history leaving the installed payload (F-05, J-13) moves after WP2, because the catalog READMEs removed there are what link to that history.
 4. WP4 — flat wiki and single note template (J-01, J-02).
 5. WP5 — queue derived from plan frontmatter; state READMEs removed (J-03, J-04).
 6. WP6 — consolidated profiles, policies and templates (J-05, J-06, J-07, J-09, J-10, J-12).
@@ -102,6 +102,7 @@ Validation rules, upgrade and packaging, retrieval routes and benchmark corpus, 
 
 | Check | Result | Evidence |
 |---|---|---|
+| WP3 experiment layer removed (F-01) | pass | 6 tools, 3 test modules (69 tests), 2 contracts and 1 template removed; `retrieve_context.py` without `--adaptive-*`/`--optional-token-budget`; frozen rule inventory unchanged; historical links pinned to revision `0b3cb54`; [ADR-0010](../../decisions/ADR-0010-core-reduction.md); 260 tests; governance 0 findings |
 | WP1 rule inventory and `--prune` | pass | 115 rule IDs frozen in `StaticIntegrityTests`; 4 prune tests (unmodified removed, modified kept, later prune, no baseline keeps); 329 tests |
 
 ### Limitations and residual risk

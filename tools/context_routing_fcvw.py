@@ -15,7 +15,7 @@ FILE_OPERATIONS = {"add", "modify", "delete", "move", "rename", "unknown"}
 POLICY_ROLES = {"framework_policy", "framework_lock", "template"}
 PRIVATE_TOOL_STEMS = {"fcvw_cache", "frontmatter_fcvw", "release_layout_fcvw",
                       "knowledge_sources_fcvw", "plan_dependencies_fcvw", "context_routing_fcvw",
-                      "context_selection_fcvw", "loop_contract_fcvw", "adaptive_control_fcvw"}
+                      "context_selection_fcvw", "trace_fcvw"}
 
 
 def normalized_path(value: str) -> str:
@@ -91,7 +91,7 @@ def changed_file_events(path: str, operation: str = "unknown", root: Path | None
     if is_policy_path(path, root) or "validate_fcvw" in stem:
         result.add("policy")
     if ("skills" in parts or stem in {"ai", "memory", "context_map"}
-            or any(s in stem for s in ("retrieve_context", "adaptive_router", "context_routing", "context_selection", "context_index"))):
+            or any(s in stem for s in ("retrieve_context", "context_routing", "context_selection", "context_index"))):
         result.add("ai")
     if parts & {"auth", "security", "permissions"} or stem in {"security", "auth", "permissions"}:
         result.add("security")

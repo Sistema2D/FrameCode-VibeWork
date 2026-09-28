@@ -379,20 +379,6 @@ The retriever returns excerpts as untrusted evidence. `exact_only` records requi
 
 Optional semantic wiki review remains a `wiki-lint` procedure, not a retrieval ranking signal or deterministic release gate. It is source-bounded, review-only, and unavailable runtimes are reported without silently lowering deterministic validation.
 
-## Optional structural routing experiment
-
-`retrieve_context.py --adaptive-mode shadow` adds a separate proposal and leaves
-mandatory paths and delivered BM25 results unchanged. Default mode is disabled.
-Callers declare applicable events through structured inputs described below,
-the active plan and explicit paths. This CLI is not a semantic trigger classifier.
-Supplied mandatory recall is not end-to-end recall.
-Only already eligible results enter scoring. No graph can restore excluded,
-nonexact historical, or filtered content. Mandatory paths are outside scoring
-and budgets. Contradictions remain counterevidence; explicit invalidation and
-supersession may inhibit optional suggestions. No learned state is read or written.
-Malformed structure falls back to baseline. Sources remain authoritative.
-See [decision, feasibility and CLI](decisions/ADR-0006-adaptive-context-routing.md).
-
 ## Verifiable retrieval and complete chunks
 
 V0.18.0 adds structured routes derived directly from [CONTEXT_MAP.md](CONTEXT_MAP.md), with no duplicate rule store. Required context stays outside optional scoring and budgets; callers must read the returned mandatory paths. The CLI does not load complete mandatory documents into its JSON response.
@@ -412,31 +398,15 @@ cross-cutting impacts. The older `--changed-file` remains conservative.
 
 Selection is opt-in through `--context-budget`. It preserves rank, keeps complete chunks, removes exact duplicate text and mandatory-path duplicates, and limits chunks per file. Oversized chunks are skipped with a reason, never cut. The estimate covers the serialized optional-results array only: Unicode characters divided by four, rounded up. It excludes mandatory documents and diagnostic metadata and is not a model token limit.
 
-Shadow scoring evaluates up to 20 eligible candidates before the delivered top-k cut. It still cannot restore excluded or nonexact history. Graph builders share one file inventory and process-local parsing cache; sources remain canonical and no persisted adaptive state is trusted. See [benchmark and installation checks](TESTS.md).
+Graph builders share one file inventory and process-local parsing cache; sources remain canonical. See [benchmark and installation checks](TESTS.md).
 
-## Optional full-cycle evaluation
+## Retired experiments
 
-Use the [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) to assess
-cost through validated completion using explicit sanitized external evidence.
-Default routing, mandatory context and QA user decisions remain unchanged.
-Shadow-only proposals cannot establish execution benefit; reports never authorize
-learning or promotion. Actual usage, estimates and unavailable measurements stay
-separate. No background collector or model invocation is installed.
-
-## Reviewed adaptive capability
-
-The [adaptive experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) adds
-explicit controls to the legacy shadow-only path. `--adaptive-mode assist` requires
-scoped control, a trusted local runtime ledger, observations and adequate reviewed evidence; learned state
-is optional. Human-reviewed adjustment feedback alone can update bounded weights.
-Missing or negative evidence cannot activate the experiment. Default retrieval and
-shadow without a control never load feedback. QA/safety stops survive rollback.
-No operational promotion or benefit is inferred from closing a tracking issue.
+The structural shadow router, loop evaluation and adaptive experiment controls left the core in V0.20.0 without reaching their activation criteria. [ADR-0010](decisions/ADR-0010-core-reduction.md) records the revision that contains them and how to restore them.
 
 ## Optional decision trace
 
-`retrieve_context.py`, `qa_wiki_fcvw.py`, `adaptive_learning_fcvw.py` and
-`check_fcvw.py` accept
+`retrieve_context.py`, `qa_wiki_fcvw.py` and `check_fcvw.py` accept
 `--trace /external/decisions.jsonl --trace-run-id TASK-ID`. Reuse the same ID to
 join their content-free decision records. The JSONL stores component, status,
 reason label, input digest when available, elapsed time and provider token count

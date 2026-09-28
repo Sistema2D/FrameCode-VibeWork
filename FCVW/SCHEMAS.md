@@ -258,45 +258,13 @@ New troubleshooting records use a collision-resistant `TRB-YYYYMMDD-<short-id>` 
 
 The record preserves identification, symptom, hypotheses, root cause, applied solution, validation, prevention, wiki-promotion decision, and final status. A navigable Markdown link connects it to its authoritative plan, policy, or evidence. Untouched historical troubleshooting without a schema remains readable; once substantively edited, migrate it through [TEMPLATE_TROUBLESHOOTING.md](governance/TEMPLATE_TROUBLESHOOTING.md).
 
-## Disposable structural routing JSON
-
-`fcvw/adaptive-structure@1` contains derived authority, sorted relative-path nodes,
-typed signed edges, a source hash and a structural hash. The router validates
-schema, authority, path bounds, uniqueness, endpoints, fixed relation weights,
-hash integrity and size limits before scoring. Hashes detect drift, not authenticity.
-The CLI rebuilds from local sources; it never trusts an imported adaptive cache.
-
-`fcvw/adaptive-shadow@1` contains mode, structural hash, unchanged mandatory paths,
-proposed optional paths, score components, bounded hop traces, selection reasons,
-excerpt-cost estimates and comparison metrics. `fcvw/adaptive-analysis@1` reports
-degrees, weak components, isolated nodes and reciprocal pairs. These are disposable
-JSON outputs validated by the routing module, not canonical Markdown records.
-Feedback and plastic-edge schemas are deferred until evidence justifies learning.
-
 ## Retrieval evaluation and selection JSON
 
 `fcvw/retrieval-benchmark@1` reports an input digest, per-case mandatory recall, optional precision, useful recall, missing useful chunks, forbidden hits, estimated optional cost, retrieval/selection latency and separately labeled task outcomes. Missing task outcomes are null, never inferred from retrieval success.
 
 External case JSONL requires `id`, `query`, nonempty `expected_mandatory` and `useful_chunks`. Optional string lists are `forbidden_chunks`, `sessions`, `events`, `changed_files` and `mandatory`. Useful IDs must exist in the paired index. Optional `outcome` accepts boolean `corrected`, boolean `validation_passed` and nonnegative integer `actual_input_tokens`; these are caller-supplied observations, not execution results produced by the benchmark.
 
-Retriever CLI results add `chunk_id`, `chunk_hash` and `excerpt_complete`. Structured inputs add `routing` with source, events and per-path reasons. Opt-in selection adds `context_selection` with decisions, budget and cost estimate; selected chunks remain in `complementary_results`. Shadow also exposes `proposed_chunk_ids`. Existing fields remain readable. See [AI](AI.md) and [test protocol](TESTS.md).
-
-## Loop evaluation JSON — opt-in
-
-`fcvw/loop-protocol@1`, `fcvw/loop-run@1` and derived `fcvw/loop-report@1` are
-defined in the [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md).
-Unlike Markdown frontmatter, these bounded JSON inputs reject unknown fields to
-reduce accidental raw-payload retention. They are external evidence, not required
-project records. Existing retrieval benchmark contracts remain unchanged.
-
-## Explicit adaptive experiment JSON
-
-Optional `fcvw/adaptive-control@1`, `fcvw/adaptive-feedback@1`,
-`fcvw/adaptive-state@1`, `fcvw/adaptive-runtime@1`,
-`fcvw/adaptive-assessment@1` and `fcvw/adaptive-selection@1` are defined by the
-[experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md). Input fields are
-strict; declarations remain caller evidence, not authentication. No existing loop,
-benchmark or legacy structural-shadow schema changes.
+Retriever CLI results add `chunk_id`, `chunk_hash` and `excerpt_complete`. Structured inputs add `routing` with source, events and per-path reasons. Opt-in selection adds `context_selection` with decisions, budget and cost estimate; selected chunks remain in `complementary_results`. Existing fields remain readable. See [AI](AI.md) and [test protocol](TESTS.md).
 
 ## Disposable decision trace JSONL
 
@@ -306,5 +274,4 @@ reason label, nullable SHA-256 input digest and duration, and nullable provider
 token count with explicit source (`provider` or `unavailable`). It records a tool
 decision, not a model call, user message, file read or independent attestation.
 Keep it outside the release payload or under `.fcvw-cache/`; reject aliasing an
-input/report path. The optional adaptive SQLite ledger is local operational
-state, not a canonical Markdown or public JSON schema.
+input/report path.

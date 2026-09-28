@@ -37,7 +37,6 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - `tools/fcvw_cache.py`
 - `tools/path_policy_fcvw.py`
 - `tools/trace_fcvw.py`
-- `tools/adaptive_runtime_ledger_fcvw.py`
 - `tools/role_manifest_fcvw.py`
 - `tools/upgrade_fcvw.py`
 - optional context tools `tools/build_context_index.py` and `tools/retrieve_context.py`
@@ -113,14 +112,6 @@ The user chooses the language by downloading exactly one variant. Each variant o
 
 Regenerate this inventory under the [document graph contract](DOCUMENT_GRAPH.md) and interpret ownership through [OWNERSHIP.md](OWNERSHIP.md).
 
-## Optional routing tools
-
-- `tools/adaptive_router_fcvw.py`
-- `tools/test_adaptive_routing.py`
-
-Installed releases place these under `FCVW/tools/`. Derived JSON stays outside
-the versioned baseline; no adaptive cache is required.
-
 ## Retrieval quality tools and repository CI
 
 - `tools/context_routing_fcvw.py`
@@ -143,22 +134,3 @@ Installed tools remain under `FCVW/tools/`. Benchmarks and caches are disposable
 
 Filled product inventories/surfaces and execution reports belong to downstream applications; the clean framework includes only guidance and reusable templates. See [product contract](wiki/product/README.md).
 
-## Optional loop evaluation
-
-- `tools/loop_contract_fcvw.py`: bounded protocol/event validation.
-- `tools/loop_metrics_fcvw.py`: deterministic local aggregation and reporting.
-- `tools/test_loop_metrics.py`: mathematical, provenance and boundary regression tests.
-- [Evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) and [blank template](governance/TEMPLATE_LOOP_EVALUATION.md).
-
-Tools install under `FCVW/tools/`; actual datasets, run evidence and pilot snapshots
-remain external or in disposable cache and never enter the clean framework.
-
-## Optional adaptive controls
-
-- `tools/adaptive_control_fcvw.py`: evidence, bounded control and runtime stops.
-- `tools/adaptive_learning_fcvw.py`: reviewed feedback replay, lifecycle and opt-in selection.
-- `tools/test_adaptive_controls.py`: synthetic boundary and source/installed CLI tests.
-- [Experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
-
-Filled control/state/runtime/evidence files stay outside clean source and packages,
-or under ignored .fcvw-cache. No database, service or collector is installed.

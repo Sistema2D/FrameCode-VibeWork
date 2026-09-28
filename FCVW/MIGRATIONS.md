@@ -172,7 +172,7 @@ the ledger outside the release payload or under disposable `.fcvw-cache`, back i
 up with runtime files when continuing an experiment, and restrict write access.
 Reset/export/rollback operate on external derived files and preserve QA/safety stops.
 The current pilot does not satisfy activation. See the
-[experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
+[experiment contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
 
 
 Loop evaluation adds optional external JSON schemas and tools; no existing benchmark,

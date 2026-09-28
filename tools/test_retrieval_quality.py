@@ -13,7 +13,6 @@ import unittest
 from unittest.mock import patch
 import zipfile
 
-from adaptive_router_fcvw import structural_graph, shadow_route
 from benchmark_retrieval_fcvw import benchmark, synthetic_corpus, validate_cases
 from build_context_index import bounded_chunks, build_index
 from context_routing_fcvw import normalized_path, resolve_routes, route_tables
@@ -228,20 +227,6 @@ class BenchmarkAndGraphTests(unittest.TestCase):
         files=markdown_files(ROOT)
         self.assertEqual(build_graph(ROOT),build_graph(ROOT,files=files))
         self.assertEqual(build_knowledge_graph(ROOT),build_knowledge_graph(ROOT,files=files))
-
-    def test_router_scans_inventory_once_and_reuses_metadata(self):
-        from adaptive_router_fcvw import markdown_files as original
-        with patch('adaptive_router_fcvw.markdown_files', wraps=original) as scan:
-            clear();first=structural_graph(ROOT)
-            self.assertEqual(scan.call_count,1)
-            self.assertEqual(first,structural_graph(ROOT))
-
-    def test_shadow_can_promote_candidate_beyond_original_top_one(self):
-        from test_adaptive_routing import graph
-        items=[chunk(score=1),chunk('b.md','Second','b.md#b',score=.99)]
-        g=graph([('a.md','b.md','supports')],nodes=('a.md','b.md'))
-        self.assertEqual(shadow_route(g,items[:1],[],top_k=1)['proposed_optional_paths'],['a.md'])
-        self.assertEqual(shadow_route(g,items,[],top_k=1)['proposed_chunk_ids'],['b.md#b'])
 
 
 class ArchiveBoundaryTests(unittest.TestCase):

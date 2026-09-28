@@ -84,7 +84,7 @@ Empty record directories keep a README only. Application examples, histories, an
 
 ## V0.18.0 retrieval quality
 
-See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Issues [55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57) are closed with empirical promotion criteria unmet. The source controls remain inactive without reviewed real-task evidence; see the [experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
+See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Issues [55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57) are closed with empirical promotion criteria unmet. The experimental adaptive and loop layer left the core in V0.20.0; see [ADR-0010](decisions/ADR-0010-core-reduction.md).
 
 ## Local validation
 
@@ -94,15 +94,3 @@ Current source validation uses the explicitly invoked [local checks](TESTS.md) a
 
 [Product wiki](wiki/product/README.md) centralizes sourced screen/control behavior and links observed execution evidence. [QA](skills/QA/SKILL.md) maps the application on first use, then performs selective functional tests and maintenance. It is invoked on demand; no background agent or new runtime dependency is activated.
 
-## Optional validated-completion evaluation
-
-The [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) and
-[template](governance/TEMPLATE_LOOP_EVALUATION.md) support explicit local measurement
-of TVC, IVC, RTR, FPVR, TTVS, RFR and UCTR. Reports preserve incomplete runs and
-evidence gaps; no learning, service or automatic promotion is enabled.
-
-## Explicit adaptive experiments
-
-[Adaptive experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md): optional
-reviewed feedback, bounded state lifecycle, evidence gates, runtime stops and
-assistance. No default learning or automatic promotion; current pilot does not qualify.

@@ -15,7 +15,7 @@ upgrade_strategy: "replace_with_migration"
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
-| Installed modules | `core, plans, compact-plans, regression-guards, records, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, fragmented-queues, role-manifest, assisted-upgrade, optional-validator, optional-shadow-routing, verified-context-routing, complete-chunk-selection, product-QA, local-validation, loop-evaluation, guarded-adaptive-assist, optional-decision-trace` |
+| Installed modules | `core, plans, compact-plans, regression-guards, records, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, fragmented-queues, role-manifest, assisted-upgrade, optional-validator, verified-context-routing, complete-chunk-selection, product-QA, local-validation, optional-decision-trace` |
 | Last migration | `V0.18.0 -> V0.19.0` |
 
 ## Schema baselines

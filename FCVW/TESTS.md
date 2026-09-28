@@ -138,14 +138,6 @@ python -B tools/locale_fcvw.py --root <release-staging-root> --require-complete 
 python -B tools/package_release_fcvw.py --root <release-staging-root> --source-root <clean-source-root> --source-revision <40-character-commit> --version <Vx.y.z> --output <asset-directory>
 ```
 
-## Structural shadow routing
-
-Run `python -B FCVW/tools/test_adaptive_routing.py` in an installed package, or
-use the source checkout tool prefix. Replay mandatory immunity, disabled and
-shadow CLI equivalence, cumulative explicit routes, missing mandatory failure,
-excluded/exact-only content, injection, invalid graph/schema/hash/weights, cycles,
-budget bounds and fallback. Synthetic fixtures verify invariants, not task quality.
-
 ## Retrieval quality and installed archives
 
 Run the following from a source checkout; installed tools use the FCVW tools directory.
@@ -196,33 +188,9 @@ their Divergences rows are missing. A decision never changes a historical verdic
 
 Run the optional selected-page checker after writing contracts/runs. It checks stable IDs, element-to-case coverage, complete inventory claims, run contract hashes, missing/duplicate results and evidence fields. It rejects passes for unknown/provisional expectations and stale contracts. It does not browse, authenticate, infer requirements or prove evidence truth. Keep the normal application tests and relevant wiki validation. Missing target execution capability is a blocked result, not an alternative definition of pass. Follow [target guidance](skills/QA/TARGETS.md) for native UI, CLI, APIs, compiled libraries, services and firmware; identify simulation separately from physical hardware coverage.
 
-## Validated-completion evaluation
-
-The optional [loop evaluator](governance/LOOP_EVALUATION_CONTRACT.md) calculates
-cost, iterations, rework, timing and quality from explicit external events. Use
-`python -B tools/loop_metrics_fcvw.py --protocol /external/protocol.json --runs /external/runs.jsonl --check`
-in source, or the installed tools prefix. Missing provider counts remain unknown;
-synthetic fixtures and deterministic repository audits do not prove agent efficacy.
-The test suite covers exact metrics, resumption/conflicting duplicates, partial
-measurements, unknown/unfinished runs, shadow attribution, QA decisions, frozen
-identity, output containment and delayed quality. No automatic evaluation is
-added to ordinary retrieval or project execution.
-
-## Adaptive control boundary replay
-
-Test [adaptive controls](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) with synthetic
-positive evidence and negative real pilot reassessment. Protect default delivery,
-source/index identity, independent evidence, holdout separation, strict feedback
-authority, bounded/decayed updates, duplicate/conflict rejection, state replay,
-export/reset/rollback, expiry, budgets, stagnation, QA/safety latches and CLI fallback.
-These tests establish implementation behavior, not causal efficacy or human authority.
-Real provider usage, independent label review, paired execution and follow-up are
-still required before interpreting full-cycle savings or non-inferiority.
-
 Cross-tool regressions cover the default local runner's disposable cache,
 temporary-file index exclusion, blocked first-run QA inventory, output-directory
-creation, known file operations, adaptive ledger restart/stale-state denial and
-content-free decision tracing. A filesystem-link upgrade denial test runs on hosts
+creation, known file operations and content-free decision tracing. A filesystem-link upgrade denial test runs on hosts
 that permit link creation and is explicitly skipped otherwise. These checks
 exercise implementation boundaries; they do not provide real-task efficacy or
 cross-operating-system coverage.

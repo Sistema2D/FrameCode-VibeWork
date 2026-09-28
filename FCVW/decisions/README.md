@@ -15,4 +15,6 @@ Store immutable ADRs that capture context, decision, alternatives, consequences,
 
 - [ADR-0008: Explicit local loop evidence](ADR-0008-loop-evaluation.md).
 
-- [ADR-0009: Adaptive experiment controls](ADR-0009-adaptive-experiment-controls.md).
+- [ADR-0009: Adaptive experiment controls](ADR-0009-adaptive-experiment-controls.md) — removed from the core by ADR-0010.
+
+- [ADR-0010: Core reduction](ADR-0010-core-reduction.md).
