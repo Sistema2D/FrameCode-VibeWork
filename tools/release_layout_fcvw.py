@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Iterable
 
@@ -59,6 +60,28 @@ def installed_path(relative: Path) -> Path | None:
     return FRAMEWORK_DIRECTORY / relative
 
 
+# Framework development history (plans, audits, troubleshooting, ADRs and release
+# records scoped to the framework) stays in the source repository. Shipping it
+# mixed the framework's history into every application's record directories.
+HISTORY_DIRECTORIES = ("FCVW/Plans/", "FCVW/audits/", "FCVW/troubleshooting/", "FCVW/decisions/", "FCVW/framework-releases/")
+_RECORD_SCOPE = re.compile(r'^record_scope:\s*"?framework"?\s*$', re.MULTILINE)
+
+
+def is_framework_history(source: Path, relative: Path) -> bool:
+    """True for a framework-scoped record inside a history directory."""
+
+    posix = relative.as_posix()
+    if not posix.startswith(HISTORY_DIRECTORIES) or source.suffix.lower() != ".md":
+        return False
+    if posix.startswith("FCVW/framework-releases/"):
+        return True  # framework release notes are framework history by definition
+    text = source.read_text(encoding="utf-8-sig")
+    if not text.startswith("---"):
+        return False
+    end = text.find("\n---", 3)
+    return bool(_RECORD_SCOPE.search(text[: end if end > 0 else len(text)]))
+
+
 def payload_mapping(source_root: Path, files: Iterable[Path]) -> dict[Path, Path]:
     """Build a collision-free installed-path to source-path mapping."""
 
@@ -71,7 +94,7 @@ def payload_mapping(source_root: Path, files: Iterable[Path]) -> dict[Path, Path
         except ValueError as error:
             raise ValueError(f"payload source is outside the variant: {source}") from error
         target = installed_path(relative)
-        if target is None:
+        if target is None or is_framework_history(source, relative):
             continue
         if target in mapping:
             first = mapping[target].relative_to(source_root).as_posix()

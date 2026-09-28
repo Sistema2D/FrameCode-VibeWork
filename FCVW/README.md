@@ -48,7 +48,7 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ### Records — preserve
 
-[Plans](Plans/README.md), `audits/`, `briefings/`, `changelogs/`, `decisions/`, `troubleshooting/`, and project notes in the [wiki](wiki/README.md). A record is reachable through its canonical directory ([ADR-0011](decisions/ADR-0011-record-reachability.md)); each record still links to its authoritative source.
+[Plans](Plans/README.md), `audits/`, `briefings/`, `changelogs/`, `decisions/`, `troubleshooting/`, and project notes in the [wiki](wiki/README.md). A record is reachable through its canonical directory ([ADR-0011](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0011-record-reachability.md)); each record still links to its authoritative source.
 
 ### Catalogs
 
@@ -62,7 +62,7 @@ The document graph catalog, the plan queue view, context indexes and knowledge g
 
 ## Framework versus application releases
 
-Current published framework: [V0.19.0](framework-releases/V0.19.0.md). Previous version: [V0.18.0](framework-releases/V0.18.0.md).
+Current published framework: [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.19.0.md). Previous version: [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.18.0.md).
 
 - FCVW releases: `framework-releases/Vx.y.z.md`.
 - Application releases: `changelogs/Vx.y.z.md`.
@@ -88,7 +88,7 @@ A generated catalog is a disposable view, never a source of policy. Graph reacha
 
 ## V0.18.0 retrieval quality
 
-See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Issues [55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57) are closed with empirical promotion criteria unmet. The experimental adaptive and loop layer left the core in V0.20.0; see [ADR-0010](decisions/ADR-0010-core-reduction.md).
+See [usage and limits](AI.md), [benchmark and installed verification](TESTS.md) and the [release record](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.18.0.md). Required routes are explained, optional chunks can be budgeted without truncation, and exact-only history no longer matches incidental substrings. Issues [55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55), [56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56) and [57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57) are closed with empirical promotion criteria unmet. The experimental adaptive and loop layer left the core in V0.20.0; see [ADR-0010](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0010-core-reduction.md).
 
 ## Local validation
 

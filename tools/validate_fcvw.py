@@ -2161,7 +2161,11 @@ def validate_version(root: Path, findings: list[Finding]) -> None:
             Finding("framework-version", readme.relative_to(root).as_posix(), f"README does not reference {version}")
         )
     release_path = root / "FCVW" / "framework-releases" / f"{version}.md"
-    if not release_path.is_file():
+    if not release_path.is_file() and is_installed_release_layout(root):
+        # Installed payloads do not ship framework history; the lock is the
+        # authoritative baseline and release notes live in the source repository.
+        pass
+    elif not release_path.is_file():
         findings.append(Finding("framework-release", release_path.relative_to(root).as_posix(), "release record missing"))
     else:
         release_metadata = frontmatter_of(release_path)

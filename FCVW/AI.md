@@ -402,7 +402,7 @@ Graph builders share one file inventory and process-local parsing cache; sources
 
 ## Retired experiments
 
-The structural shadow router, loop evaluation and adaptive experiment controls left the core in V0.20.0 without reaching their activation criteria. [ADR-0010](decisions/ADR-0010-core-reduction.md) records the revision that contains them and how to restore them.
+The structural shadow router, loop evaluation and adaptive experiment controls left the core in V0.20.0 without reaching their activation criteria. [ADR-0010](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0010-core-reduction.md) records the revision that contains them and how to restore them.
 
 ## Optional decision trace
 

@@ -62,7 +62,7 @@ An upstream release must publish a file-role manifest or equivalent migration ta
 
 - `APP_RULES.md` is a preserved project profile and is never overwritten by a framework upgrade.
 - The plan queue is derived from plan frontmatter; no queue file exists. Legacy `QUEUE.md` and `queue.d/` files are project-owned and are never deleted by an upgrade.
-- No navigation catalog is versioned; records are reachable through their canonical directory (see [ADR-0011](decisions/ADR-0011-record-reachability.md)).
+- No navigation catalog is versioned; records are reachable through their canonical directory (see [ADR-0011](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0011-record-reachability.md)).
 - Context indexes are disposable generated artifacts and never replace their source documents.
 - Knowledge graphs, stale-source reports, and aggregate queue views are disposable generated artifacts; their Markdown/frontmatter sources remain authoritative.
 - `wiki/index.md` is a small preserved project profile; framework upgrades never replace its curated active links.

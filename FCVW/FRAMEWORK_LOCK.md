@@ -40,4 +40,4 @@ upgrade_strategy: "replace_with_migration"
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.
 
-Published baseline: [V0.19.0](framework-releases/V0.19.0.md). The prior version is [V0.18.0](framework-releases/V0.18.0.md); the new record contains verified GitHub publication evidence.
+Published baseline: [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.19.0.md). The prior version is [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.18.0.md); the new record contains verified GitHub publication evidence.
