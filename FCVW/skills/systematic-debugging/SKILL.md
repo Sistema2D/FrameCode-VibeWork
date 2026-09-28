@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "systematic-debugging"
-description: "Use evidence and hypotheses to diagnose failures before fixing them."
-version: "1.2.0"
-trigger_keywords:
-  - "debug"
-  - "stack trace"
-  - "root cause"
-  - "diagnose"
-  - "depurar"
+description: "Diagnose failures with evidence and hypotheses before fixing them. Use when a check fails, behavior is unexplained or a regression appears. Do not use for planned feature work without a failure."
+version: "1.2.1"
 session_types:
   - "bugfix"
   - "troubleshooting"

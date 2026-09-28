@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""Replay labeled retrieval cases; synthetic labels never imply real task efficacy."""
+"""Replay labeled retrieval cases; synthetic labels never imply real task efficacy.
+
+Report (`fcvw/retrieval-benchmark@1`, disposable): input digest, per-case
+mandatory recall, optional precision, useful recall, missing useful chunks,
+forbidden hits, estimated optional cost, retrieval/selection latency and
+separately labeled task outcomes. Missing outcomes are null, never inferred from
+retrieval success.
+
+External case JSONL requires `id`, `query`, non-empty `expected_mandatory` and
+`useful_chunks`. Optional string lists: `forbidden_chunks`, `sessions`, `events`,
+`changed_files`, `mandatory`. Useful IDs must exist in the paired index. Optional
+`outcome` accepts boolean `corrected`, boolean `validation_passed` and a
+non-negative integer `actual_input_tokens`; these are caller observations, not
+results produced by the benchmark.
+"""
 from __future__ import annotations
 
 import argparse

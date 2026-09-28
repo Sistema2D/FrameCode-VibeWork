@@ -1,21 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "wiki-curator"
-description: "Promote sourced reusable knowledge and merge duplicates."
-version: "2.0.0"
-trigger_keywords:
-  - "curate wiki"
-  - "promote knowledge"
-  - "continuous learning"
-  - "curadoria wiki"
-  - "compact session"
-  - "close session"
-  - "handoff"
-  - "síntese de sessão"
-  - "rotate memory"
-  - "context bloat"
-  - "archive sessions"
-  - "rotacionar memória"
+description: "Promote sourced reusable knowledge, merge duplicates, compact sessions and rotate memory. Use when adding, merging, reviewing or archiving wiki notes. Do not use for framework policy changes."
+version: "2.0.1"
 session_types:
   - "wiki_maintenance"
   - "handoff"

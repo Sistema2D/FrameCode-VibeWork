@@ -190,7 +190,6 @@ SKILL_FIELDS = (
     "name",
     "description",
     "version",
-    "trigger_keywords",
     "session_types",
 )
 
@@ -838,7 +837,8 @@ def validate_character_integrity(root: Path, findings: list[Finding], scope: set
                     )
                 )
         for line_number, line in outside_code_fences(text):
-            if MANGLED_DASH.search(line):
+            # Inline code such as `a ? b : c` is literal, not damaged prose (C-08).
+            if MANGLED_DASH.search(INLINE_CODE.sub("``", line)):
                 findings.append(
                     Finding(
                         "character-integrity",
@@ -1268,9 +1268,30 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
                 validate_plan_regression(relative, metadata, text, findings)
 
 
+def referenced_names(text: str, *, tables_only: bool = False) -> set[str]:
+    """Exact names a document references: link-target path parts and inline-code tokens.
+
+    Replaces substring checks (B-04), under which `AI.md` matched `XAI.md` and the
+    skill `QA` matched any prose containing "QA".
+    """
+
+    names: set[str] = set()
+    for _, line in outside_code_fences(text):
+        if tables_only and not line.lstrip().startswith("|"):
+            continue
+        for match in MARKDOWN_LINK.finditer(line):
+            target = match.group(1).strip().strip("<>").split(maxsplit=1)[0].split("#", 1)[0]
+            names.update(part for part in Path(unquote(target)).parts if part not in {".", ".."})
+        for code in INLINE_CODE.findall(line):
+            token = code.strip("`").strip()
+            names.add(token)
+            names.update(Path(token).parts)
+    return names
+
+
 def validate_skills(root: Path, findings: list[Finding]) -> None:
     skills_root = root / "FCVW" / "skills"
-    catalog = read_text(skills_root / "README.md")
+    catalog = referenced_names(read_text(skills_root / "README.md"), tables_only=True)
     seen: dict[str, str] = {}
     for path in sorted(skills_root.glob("*/SKILL.md")):
         relative = path.relative_to(root).as_posix()
@@ -1318,8 +1339,9 @@ def validate_reading_routes(root: Path, findings: list[Finding]) -> None:
     if not all(path.is_file() for path in (context_path, index_path, agents_path)):
         return
     context = read_text(context_path)
-    fcvw_index = read_text(index_path)
-    discoverability = "\n".join((read_text(agents_path), context, fcvw_index))
+    fcvw_index = referenced_names(read_text(index_path))
+    discoverability = fcvw_index | referenced_names(read_text(agents_path)) | referenced_names(context)
+    session_rows = referenced_names(context, tables_only=True)
     for path in sorted((root / "FCVW").glob("*.md")):
         metadata = frontmatter_of(path)
         if scalar(metadata, "artifact_role") != "framework_policy":
@@ -1352,7 +1374,7 @@ def validate_reading_routes(root: Path, findings: list[Finding]) -> None:
     for path in sorted((root / "FCVW" / "skills").glob("*/SKILL.md")):
         relative = path.relative_to(root).as_posix()
         for session_type in declared_session_types(read_text(path)):
-            if f"`{session_type}`" not in context:
+            if session_type not in session_rows:
                 findings.append(
                     Finding(
                         "reading-route",
@@ -1452,6 +1474,7 @@ RECORD_ENVELOPE = ("id", "artifact_role", "owner", "upgrade_strategy", "record_s
 # One declarative contract per record schema, executed by check_record. The
 # rule IDs and messages are the public surface; the frozen rule inventory and
 # the record fixtures keep them stable.
+ADR_STATUSES = {"proposal", "accepted", "superseded", "rejected", "obsolete"}
 RECORD_SPECS: dict[str, dict] = {
     "fcvw/wiki@1": {
         "rule": "wiki-schema",
@@ -1491,6 +1514,13 @@ RECORD_SPECS: dict[str, dict] = {
         "placeholders_block_sections": True,
         "sections": ("1. Identification", "2. Symptom Description", "3. Hypotheses", "4. Root Cause",
                      "5. Solution Applied", "6. Validation", "7. Prevention", "8. Wiki Promotion", "9. Status"),
+    },
+    "fcvw/adr@1": {
+        "rule": "adr-schema",
+        "scalars": ("id", "status", "date"),
+        "fixed": {"artifact_role": "record"},
+        "id": (r"ADR-\d{4}", "ADR"),
+        "enums": {"status": ADR_STATUSES},
     },
 }
 
@@ -1583,6 +1613,30 @@ def validate_audit_records(root: Path, findings: list[Finding]) -> None:
             findings.append(Finding("audit-schema", relative, "audit must use fcvw/audit@1"))
             continue
         check_record(root, relative, text, metadata, RECORD_SPECS["fcvw/audit@1"], findings, seen)
+
+
+def validate_adr_records(root: Path, findings: list[Finding]) -> None:
+    """ADRs share one identity across filename, frontmatter and title (B-10)."""
+
+    seen: dict[str, str] = {}
+    for path in sorted((root / "FCVW" / "decisions").glob("*.md")):
+        if path.name == "README.md":
+            continue
+        relative = path.relative_to(root).as_posix()
+        text = read_text(path)
+        metadata = frontmatter(text)
+        if scalar(metadata, "schema") != "fcvw/adr@1":
+            findings.append(Finding("adr-schema", relative, "decision record must use fcvw/adr@1"))
+            continue
+        check_record(root, relative, text, metadata, RECORD_SPECS["fcvw/adr@1"], findings, seen)
+        record_id = scalar(metadata, "id")
+        if record_id and not path.name.startswith(f"{record_id}-"):
+            findings.append(Finding("adr-schema", relative, f"filename must start with {record_id}-"))
+        titles = [line for _, line in outside_code_fences(text) if line.startswith("# ")]
+        if record_id and not (titles and titles[0].startswith(f"# {record_id}: ")):
+            findings.append(Finding("adr-schema", relative, f"title must start with '# {record_id}: '"))
+        if scalar(metadata, "status") == "superseded" and not string_list(metadata, "superseded_by"):
+            findings.append(Finding("adr-schema", relative, "a superseded ADR must name superseded_by"))
 
 
 def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> None:
@@ -2498,6 +2552,7 @@ def main() -> int:
     validate_feedback_notes(root, findings)
     validate_audit_records(root, findings)
     validate_troubleshooting_records(root, findings)
+    validate_adr_records(root, findings)
     validate_profiles(root, args.profile, findings)
     validate_app_rules(root, args.profile, findings)
     validate_version(root, findings)

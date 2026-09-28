@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "agent-hephaestus"
-description: "UI, accessibility, and interaction-quality review."
-version: "1.1.1"
-trigger_keywords:
-  - "ui review"
-  - "accessibility"
-  - "ux polish"
-  - "interface"
-  - "acessibilidade"
+description: "UI, accessibility and interaction-quality review. Use when a change alters screens, components, visual tokens or keyboard and screen-reader behavior. Do not use for API or CLI interfaces (public interface review) or functional QA runs (QA)."
+version: "1.1.2"
 session_types:
   - "ui"
   - "audit"

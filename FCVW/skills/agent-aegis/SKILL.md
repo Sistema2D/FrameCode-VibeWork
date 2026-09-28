@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "agent-aegis"
-description: "Security and privacy review for scoped changes."
-version: "1.1.1"
-trigger_keywords:
-  - "security review"
-  - "vulnerability"
-  - "threat model"
-  - "harden"
-  - "segurança"
+description: "Security and privacy review for a scoped change. Use when a change touches authentication, authorization, secrets, sensitive data or destructive actions. Do not use for general code review or dependency upgrades without a security surface."
+version: "1.1.2"
 session_types:
   - "security"
   - "audit"

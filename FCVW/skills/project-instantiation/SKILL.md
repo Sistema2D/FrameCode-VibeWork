@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "project-instantiation"
-description: "Instantiate project-owned FCVW profiles from a clean baseline."
-version: "1.1.1"
-trigger_keywords:
-  - "instantiate project"
-  - "bootstrap"
-  - "new project"
-  - "instanciar"
+description: "Instantiate project-owned FCVW profiles from a clean baseline. Use when starting a new project from the framework (Phase 0 briefing and PROJECT.md). Do not use for an existing codebase (retroactive-instantiation) or for CSS frameworks named Bootstrap."
+version: "1.1.2"
 session_types:
   - "instantiation"
   - "planning"

@@ -1,15 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "QA"
-description: "Map any application on first use, choose target-specific execution and maintain sourced behavior knowledge."
-version: "1.2.0"
-trigger_keywords:
-  - "QA"
-  - "test application screens"
-  - "map application"
-  - "mapear telas"
-  - "testar aplicação"
-  - "revisar funcionamento na wiki"
+description: "Map an application on first use, test its behavior through the running target and keep a sourced product wiki. Use when asked to map screens, commands or APIs, run functional QA, or update product-behavior notes after a change. Do not use for unit-test design (brainstorming-and-tdd) or performance measurement (agent-hermes)."
+version: "1.2.1"
 session_types:
   - "product_qa"
 ---

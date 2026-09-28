@@ -128,7 +128,7 @@ Required frontmatter: `id` (`ADR-NNNN`), `status` (`proposal`, `accepted`, `supe
 
 ## Skill — `fcvw/skill@1`
 
-Required frontmatter: `schema`, `name`, `description`, `version`, `trigger_keywords`, and `session_types`.
+Required frontmatter: `schema`, `name`, `description`, `version`, and `session_types`. The `description` carries the trigger: what the skill does, then "Use when …" and "Do not use when …", naming the neighbouring skill where the boundary is close. `trigger_keywords` is deprecated and optional: no tool reads it, and short keywords collided (`tag`, `bootstrap`, `release`, `QA`).
 
 The body must define purpose, use conditions, non-responsibilities, inputs, procedure, required output, validation, and exit criteria. Provider-specific commands are adapters, not core requirements.
 
@@ -204,21 +204,18 @@ Policies and the framework lock default to canonical authority. Project profiles
 Missing optional metadata does not invalidate untouched history. Any new or substantively edited record must use the row above, and no retrieval metadata can elevate a record above its owning canonical source.
 
 New records also declare `record_scope: application | framework` when their scope determines clean-distribution eligibility. Only records explicitly scoped to `framework` may remain in a clean FCVW baseline; an absent or application scope is treated as downstream history.
+
 ## Plan queue fields — on `fcvw/plan@2` and `fcvw/plan-compact@1`
 
 Optional frontmatter on active plans: `category` (`correction | optimization | code_hygiene | visual | other`, default `other`), `blocked_external` (a specific reason of at least 12 characters) and `before_in_progress` (pending plans only, a specific reason). The queue is derived from these fields and `depends_on`; see [PLANNING.md](PLANNING.md). The former `fcvw/plan-queue@1` and `fcvw/plan-queue-entry@1` files are retired and reported as legacy.
-
-## Knowledge graph — `fcvw/knowledge-graph@1`
-
-The optional JSON graph is a disposable reconstruction of typed Markdown frontmatter. It contains nodes, explicit edges, and generated inverse edges and never replaces source pages or `fcvw/document-graph@1`. It is written only to `.fcvw-cache/` or another user-selected non-normative output path.
 
 ## Application rules — `fcvw/app-rules@1`
 
 `FCVW/APP_RULES.md` is a preserved `project_profile`. Rules use stable `APP-RULE-NNN` IDs and a controlled status of `active`, `deprecated`, or `superseded`. Every rule records non-empty sections for Rule, Affected components, Rationale and expected behavior, Exceptions, and Related records. Affected components and related records contain navigable Markdown links. Examples inside fenced code blocks do not instantiate rules.
 
-## Document graph — `fcvw/document-graph@1`
+## Document reachability
 
-The document graph is derived on demand and never versioned. Policies, profiles, templates and skills must be reachable from an official entrypoint or a catalog it links; records are reachable through their canonical record directory. Entry points and record directories are the only exceptions to the incoming-link requirement.
+Reachability is checked from the files themselves; any graph view is derived on demand and never versioned. Policies, profiles, templates and skills must be reachable from an official entrypoint or a catalog it links; records are reachable through their canonical record directory. Entry points and record directories are the only exceptions to the incoming-link requirement.
 
 Frontmatter relationships such as `context_files`, `sources`, `related_plan`, `related_release`, `related`, `supersedes`, and `superseded_by` must resolve when they identify local paths. Plain metadata identifiers do not replace a navigable Markdown relationship when Obsidian backlink behavior is required.
 
@@ -243,20 +240,6 @@ New troubleshooting records use a collision-resistant `TRB-YYYYMMDD-<short-id>` 
 
 The record preserves identification, symptom, hypotheses, root cause, applied solution, validation, prevention, wiki-promotion decision, and final status. A navigable Markdown link connects it to its authoritative plan, policy, or evidence. Untouched historical troubleshooting without a schema remains readable; once substantively edited, migrate it through [TEMPLATE_TROUBLESHOOTING.md](governance/TEMPLATE_TROUBLESHOOTING.md).
 
-## Retrieval evaluation and selection JSON
+## Derived outputs
 
-`fcvw/retrieval-benchmark@1` reports an input digest, per-case mandatory recall, optional precision, useful recall, missing useful chunks, forbidden hits, estimated optional cost, retrieval/selection latency and separately labeled task outcomes. Missing task outcomes are null, never inferred from retrieval success.
-
-External case JSONL requires `id`, `query`, nonempty `expected_mandatory` and `useful_chunks`. Optional string lists are `forbidden_chunks`, `sessions`, `events`, `changed_files` and `mandatory`. Useful IDs must exist in the paired index. Optional `outcome` accepts boolean `corrected`, boolean `validation_passed` and nonnegative integer `actual_input_tokens`; these are caller-supplied observations, not execution results produced by the benchmark.
-
-Retriever CLI results add `chunk_id`, `chunk_hash` and `excerpt_complete`. Structured inputs add `routing` with source, events and per-path reasons. Opt-in selection adds `context_selection` with decisions, budget and cost estimate; selected chunks remain in `complementary_results`. Existing fields remain readable. See [AI](AI.md) and [test protocol](TESTS.md).
-
-## Disposable decision trace JSONL
-
-`fcvw/decision-trace@1` is opt-in, content-free local evidence from selected
-tools. Each row has a caller-supplied `run_id`, timestamp, component, status,
-reason label, nullable SHA-256 input digest and duration, and nullable provider
-token count with explicit source (`provider` or `unavailable`). It records a tool
-decision, not a model call, user message, file read or independent attestation.
-Keep it outside the release payload or under `.fcvw-cache/`; reject aliasing an
-input/report path.
+Tool outputs written to `.fcvw-cache/` or a caller-chosen path are not versioned artifacts and never replace their sources: the knowledge graph (`fcvw/knowledge-graph@1`), the document graph view, the retrieval benchmark report (`fcvw/retrieval-benchmark@1`), the retriever JSON and the opt-in decision trace (`fcvw/decision-trace@1`). Their fields are documented in the module docstring of the tool that writes them (`knowledge_graph_fcvw.py`, `document_graph_fcvw.py`, `benchmark_retrieval_fcvw.py`, `retrieve_context.py`, `trace_fcvw.py`). Keep them out of the release payload.

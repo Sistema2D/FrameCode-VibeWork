@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "brainstorming-and-tdd"
-description: "Clarify behavior and use test-first implementation when applicable."
-version: "1.2.0"
-trigger_keywords:
-  - "new feature"
-  - "fix bug"
-  - "tdd"
-  - "brainstorm"
+description: "Clarify expected behavior, then implement test-first where applicable. Use when a feature or fix has unclear acceptance criteria or needs new tests. Do not use for documentation-only changes."
+version: "1.2.1"
 session_types:
   - "feature"
   - "bugfix"

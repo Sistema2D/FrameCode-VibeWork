@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Retrieve complementary FCVW context with deterministic BM25 ranking."""
+"""Retrieve complementary FCVW context with deterministic BM25 ranking.
+
+JSON output (disposable): `mandatory_paths`, `mandatory_missing` and
+`complementary_results`, whose entries carry `chunk_id`, `chunk_hash` and
+`excerpt_complete`. Structured inputs add `routing` (source, events, per-path
+reasons, section hints and warnings). Opt-in selection adds `context_selection`
+(decisions, budget, cost estimate); selected chunks stay in
+`complementary_results`. Without `--index` and `--query` only routes are resolved.
+"""
 
 from __future__ import annotations
 

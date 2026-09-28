@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "agent-hermes"
-description: "Performance investigation using reproducible measurements."
-version: "1.1.1"
-trigger_keywords:
-  - "performance"
-  - "bottleneck"
-  - "optimize"
-  - "desempenho"
-  - "lentidão"
+description: "Performance investigation with reproducible measurements. Use when latency, throughput, memory or load time must be measured or improved. Do not use for code cleanup without a measured performance goal."
+version: "1.1.2"
 session_types:
   - "performance"
   - "audit"

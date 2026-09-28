@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "anti-monolith-guard"
-description: "Prevent mixed-responsibility modules and uncontrolled file growth."
-version: "1.2.0"
-trigger_keywords:
-  - "monolith"
-  - "large file"
-  - "module boundary"
-  - "anti-monólito"
+description: "Prevent mixed-responsibility modules and uncontrolled file growth. Use before adding behavior to a large or mixed-responsibility file, or when splitting one. Do not use for small, local edits to cohesive modules."
+version: "1.2.1"
 session_types:
   - "planning"
   - "refactoring"

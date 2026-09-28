@@ -43,6 +43,7 @@ from validate_fcvw import (
     validate_version,
     validate_wiki_ids,
     validate_troubleshooting_records,
+    validate_adr_records,
     validate_skills,
 )
 
@@ -311,6 +312,20 @@ upgrade_strategy: "replace"
         findings: list[Finding] = []
         validate_reading_routes(root, findings)
         self.assertTrue(any(item.rule == "framework-index" for item in findings))
+
+    def test_policy_name_inside_a_longer_name_is_not_indexed(self) -> None:
+        temporary, root = self.make_route_root()
+        self.addCleanup(temporary.cleanup)
+        (root / "FCVW" / "README.md").write_text("# Index\n\n[XAI](XAI.md)\n", encoding="utf-8")
+        (root / "AGENTS.md").write_text("# Agents\n\nSee `XAI.md`.\n", encoding="utf-8")
+        (root / "FCVW" / "AI.md").write_text(
+            '---\nschema: "fcvw/document@1"\nartifact_role: "framework_policy"\n---\n# AI\n', encoding="utf-8"
+        )
+        findings: list[Finding] = []
+        validate_reading_routes(root, findings)
+        flagged = {(item.rule, item.path) for item in findings}
+        self.assertIn(("framework-index", "FCVW/AI.md"), flagged)
+        self.assertIn(("reading-route", "FCVW/AI.md"), flagged)
 
     def test_exact_legacy_baseline_accepts_matching_finding(self) -> None:
         entry = BaselineEntry(
@@ -586,6 +601,10 @@ class CharacterIntegrityTests(unittest.TestCase):
         findings = self.findings_for("# Title\n\n```text\nvalue ? other\n```\n")
         self.assertEqual([], [item for item in findings if "damaged dash" in item.message])
 
+
+    def test_inline_code_is_not_scanned_for_dashes(self) -> None:
+        findings = self.findings_for("# Title\n\nUse `ready ? publish : wait` here.\n")
+        self.assertEqual([], [item for item in findings if "damaged dash" in item.message])
 
 class LanguageReviewTests(unittest.TestCase):
     """The record that authorises a language asset must name that language."""
@@ -1139,6 +1158,12 @@ Exits when the block is recorded.
     def test_skill_absent_from_the_catalog_is_reported(self) -> None:
         self.assertIn("skill-catalog", self.rules(self.root(catalog="# Catalog\n\nNothing listed.\n")))
 
+    def test_catalog_prose_or_longer_name_does_not_list_a_skill(self) -> None:
+        # B-04: substring matching accepted any prose mention or a longer name.
+        self.assertIn("skill-catalog", self.rules(self.root(name="qa", catalog="# Catalog\n\nRun qa checks.\n")))
+        self.assertIn("skill-catalog", self.rules(self.root(name="qa", catalog="# Catalog\n\n| `qa-extended` | x |\n")))
+        self.assertNotIn("skill-catalog", self.rules(self.root(name="qa", catalog="# Catalog\n\n| [`qa`](qa/SKILL.md) | x |\n")))
+
     def test_provider_specific_term_is_reported(self) -> None:
         body = self.SKILL.format(name="fixture-skill").replace("Bounded.", "Run the claude code command.")
         rules = self.rules(self.root(body=body))
@@ -1413,7 +1438,7 @@ class RemainingRuleTests(unittest.TestCase):
         self.assertTrue(any(item.rule == "reading-route" for item in findings))
 
     def test_policy_listed_in_the_index_has_a_route(self) -> None:
-        root = self.route_root("# Index\n\nCONTEXT_MAP.md and ORPHANED.md\n")
+        root = self.route_root("# Index\n\n`CONTEXT_MAP.md` and [orphaned](ORPHANED.md)\n")
         findings: list[Finding] = []
         validate_reading_routes(root, findings)
         self.assertEqual([], [item for item in findings if item.rule == "reading-route"])
@@ -1857,6 +1882,7 @@ class StaticIntegrityTests(unittest.TestCase):
     # losing one while files are merged, must change this set deliberately and
     # be justified in the plan that does it.
     FROZEN_RULES = {
+        "adr-schema",
         "app-rules-contract",
         "app-rules-empty",
         "app-rules-id",
@@ -2036,3 +2062,38 @@ class SurfaceGuardTests(unittest.TestCase):
         self.assertEqual({}, duplicated, "one envelope per schema and type; reuse it instead of copying")
         unregistered = sorted({schema for schema, _ in owners if f"`{schema}`" not in schemas_text})
         self.assertEqual([], unregistered, "template schemas must be registered in SCHEMAS.md")
+
+
+class AdrRecordTests(unittest.TestCase):
+    """B-10: ADR identity and lifecycle are validated."""
+
+    GOOD = (
+        '---\nschema: "fcvw/adr@1"\nid: "ADR-0042"\nstatus: "{status}"\ndate: "2026-09-28"\n'
+        'artifact_role: "record"\nrecord_scope: "application"\n{extra}---\n\n{title}\n\n## Context\n\nText.\n'
+    )
+
+    def messages(self, name: str = "ADR-0042-choice.md", status: str = "accepted", extra: str = "",
+                 title: str = "# ADR-0042: Choice") -> list[str]:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW" / "decisions").mkdir(parents=True)
+        (root / "FCVW" / "decisions" / name).write_text(
+            self.GOOD.format(status=status, extra=extra, title=title), encoding="utf-8"
+        )
+        findings: list[Finding] = []
+        validate_adr_records(root, findings)
+        self.assertTrue(all(item.rule == "adr-schema" for item in findings))
+        return [item.message for item in findings]
+
+    def test_consistent_adr_passes(self) -> None:
+        self.assertEqual([], self.messages())
+
+    def test_filename_title_and_status_are_checked(self) -> None:
+        self.assertTrue(any("filename" in m for m in self.messages(name="ADR-0001-other.md")))
+        self.assertTrue(any("title" in m for m in self.messages(title="# Choice")))
+        self.assertTrue(any("invalid status" in m for m in self.messages(status="approved")))
+
+    def test_superseded_adr_names_its_replacement(self) -> None:
+        self.assertTrue(any("superseded_by" in m for m in self.messages(status="superseded")))
+        self.assertEqual([], self.messages(status="superseded", extra='superseded_by:\n  - "ADR-0043"\n'))

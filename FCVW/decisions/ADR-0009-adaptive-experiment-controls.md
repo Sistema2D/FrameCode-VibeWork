@@ -1,7 +1,9 @@
 ---
 schema: "fcvw/adr@1"
 id: "ADR-0009"
-status: "accepted"
+status: "superseded"
+superseded_by:
+  - "ADR-0010"
 date: "2026-09-23"
 artifact_role: "record"
 owner: "framework"

@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "obsidian-markdown"
-description: "Format portable Markdown and optional Obsidian-compatible links."
-version: "1.2.0"
-trigger_keywords:
-  - "obsidian"
-  - "wikilink"
-  - "frontmatter"
-  - "markdown note"
+description: "Format portable Markdown and optional Obsidian-compatible links. Use when writing or repairing links, callouts or embeds in governed Markdown. Do not use to validate frontmatter schemas (governance-validator)."
+version: "1.2.1"
 session_types:
   - "wiki_maintenance"
   - "documentation"

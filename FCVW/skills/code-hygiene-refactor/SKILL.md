@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "code-hygiene-refactor"
-description: "Select a bounded, behavior-preserving code-hygiene batch."
-version: "1.3.0"
-trigger_keywords:
-  - "code hygiene"
-  - "duplication"
-  - "dead code"
-  - "higiene de código"
+description: "Select a bounded, behavior-preserving cleanup batch. Use when removing duplication, dead code or stale files without changing behavior. Do not use for feature work or large restructurings (REFACTORING_GUIDE.md)."
+version: "1.3.1"
 session_types:
   - "refactoring"
   - "audit"

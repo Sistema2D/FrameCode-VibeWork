@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "release-checklist"
-description: "Prepare and validate application or framework releases."
-version: "1.1.1"
-trigger_keywords:
-  - "release"
-  - "version bump"
-  - "changelog"
-  - "publish"
-  - "publicar versão"
+description: "Prepare and validate an application or framework release. Use when changing a version, tag, changelog or release record, or publishing assets. Do not use merely to read release notes or check a release_status field."
+version: "1.1.2"
 session_types:
   - "release"
 ---

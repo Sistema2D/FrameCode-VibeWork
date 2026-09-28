@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "retroactive-instantiation"
-description: "Adopt FCVW in an existing project without overwriting history."
-version: "1.1.1"
-trigger_keywords:
-  - "retroactive instantiation"
-  - "legacy project"
-  - "migrate framework"
-  - "adoção retroativa"
+description: "Adopt FCVW in an existing project without overwriting history. Use when adding the framework to a codebase that already has code, history or documentation. Do not use for a new project (project-instantiation)."
+version: "1.1.2"
 session_types:
   - "instantiation"
   - "migration"

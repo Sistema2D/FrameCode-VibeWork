@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "agent-factory"
-description: "Evidence-based gate for creating a new skill or agent profile."
-version: "1.1.1"
-trigger_keywords:
-  - "create skill"
-  - "create agent"
-  - "new skill"
-  - "nova skill"
-  - "criar agente"
+description: "Evidence-based gate for creating a new skill or agent profile. Use when someone proposes a new skill, agent or reusable procedure. Do not use to change an existing skill (self-improvement)."
+version: "1.1.2"
 session_types:
   - "ai_governance"
   - "planning"

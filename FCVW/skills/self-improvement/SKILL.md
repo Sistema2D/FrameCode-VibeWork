@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "self-improvement"
-description: "Improve an existing skill or agent from evidence while preserving scope."
-version: "1.1.1"
-trigger_keywords:
-  - "improve skill"
-  - "skill failed"
-  - "trigger failed"
-  - "melhorar skill"
+description: "Improve an existing skill or agent from evidence while preserving its scope. Use when a skill fails, drifts from a canonical rule or needs a trigger change. Do not use to create a new skill (agent-factory)."
+version: "1.1.2"
 session_types:
   - "ai_governance"
   - "maintenance"
