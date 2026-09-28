@@ -18,7 +18,7 @@
 | Tamanho de `FCVW/` | 228 arquivos, 65 diretórios |
 
 **Estado de execução (2026-09-28):** as **Fases 1, 2 e 3 foram implementadas** e
-serão publicadas juntas em **V0.20.0** (em preparação). A V0.19.1 foi cancelada
+foram publicadas juntas na **[V0.20.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.20.0)** (2026-09-28). A V0.19.1 foi cancelada
 antes da publicação e incorporada à V0.20.0. A Fase 1 foi feita em três planos concluídos:
 
 - [upgrade seguro](FCVW/Plans/completed/P1-R4-2026-09-28-upgrade-baseline-safety.md) — A-01, A-06 e A-07;
@@ -612,7 +612,7 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 
 **Aceite:** cada bug tem um teste que falha no estado atual e passa após a correção (comprovado contra as ferramentas da V0.19.0); suíte e validador verdes.
 
-### Fase 2 — Redução (minor V0.20.0; exige migração) — **implementada; publicação pendente**
+### Fase 2 — Redução (minor V0.20.0; exige migração) — **implementada e publicada na V0.20.0**
 
 - [x] Inventário dos IDs de regra do validador congelado num teste (116 IDs)
 - [x] A-08 `--prune` no upgrade (remove só arquivos idênticos ao baseline), pré-requisito das migrações de J
@@ -633,7 +633,7 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 
 **Resultado:** 113 arquivos e 28 diretórios (9 fora de `skills/`). O excesso de 3 arquivos é o histórico criado pela própria fase; a meta contava registros, que crescem a cada mudança, e por isso a guarda J-G2 mede só a superfície fora dos diretórios de registro. Os demais critérios foram atendidos.
 
-**Falta para publicar a V0.20.0:** regenerar e revisar as 4 variantes de idioma, gerar pacotes e checksums, executar em Windows e macOS, e atualizar o `FRAMEWORK_LOCK.md` (seguindo o `release-checklist`).
+**Publicação:** a V0.20.0 foi publicada em 2026-09-28 com as 4 variantes de idioma (traduções da V0.19.0 reaproveitadas e texto novo traduzido com assistência de IA), pacotes reproduzíveis e checksums verificados. Continuam em aberto a execução em Windows e macOS e a revisão por falantes nativos.
 
 ### Fase 3 — Gatilhos e documentos, sobre a nova estrutura (incorporada à V0.20.0) — **implementada**
 

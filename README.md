@@ -11,9 +11,9 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Support](https://img.shields.io/badge/Support-Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache_2.0-6f42c1?style=flat-square)](LICENSE)
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
-[![Release](https://img.shields.io/badge/Release-v0.19.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0)
+[![Release](https://img.shields.io/badge/Release-v0.20.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.20.0)
 
-Stable release **V0.19.0** · Ready candidate **V0.20.0**
+Stable release **V0.20.0**
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
@@ -242,7 +242,7 @@ FCVW is not an agent runtime, IDE, database or substitute for tests, CI or human
 
 <div align="center">
 
-Stable: [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) · [Technical release record](FCVW/framework-releases/V0.19.0.md)
+Stable: [V0.20.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.20.0) · [Technical release record](FCVW/framework-releases/V0.20.0.md)
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
 
