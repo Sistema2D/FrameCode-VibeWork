@@ -48,7 +48,7 @@ Use this workflow when you have an existing project (with code, history, partial
 3. **Fill STACK.md**: Document existing technology stack.
 4. **Create initial wiki pages** only for reusable learnings already accumulated.
 5. **Mark historical artifacts**: Existing documentation not yet migrated to FCVW can be marked as `pre-fcvw` or left in place with a note.
-6. **Create hygiene backlog**: Record high-value cleanup candidates as `#tech-debt`, `wiki/refactorings/`, or future plans. Do not refactor during adoption unless explicitly requested.
+6. **Create hygiene backlog**: Record high-value cleanup candidates as `#tech-debt`, `wiki/` (`type: refactoring` notes), or future plans. Do not refactor during adoption unless explicitly requested.
 
 ### Phase 4 — First Plan
 

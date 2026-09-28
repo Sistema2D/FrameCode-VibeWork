@@ -50,7 +50,7 @@ Suggested filename: `YYYYMMDD-HHMMSS-<short-id>-<slug>.md`.
 ## Procedure
 
 1. Verify actual workspace and plan state.
-2. Create the page from `wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`.
+2. Create the page from `governance/TEMPLATE_NOTE.md` (session block).
 3. Link canonical files rather than copying their contents.
 4. Record decisions, failures, validation, unresolved risks, and next step.
 5. Add index/log entry only when the session is useful for future retrieval.

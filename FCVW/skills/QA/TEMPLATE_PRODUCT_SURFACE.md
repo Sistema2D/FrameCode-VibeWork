@@ -1,6 +1,6 @@
 # Template: product surface
 
-Follow the [product contract](../product/README.md).
+Follow the [product contract](PRODUCT_WIKI.md).
 
 Use a cohesive screen, modal, component, flow, cli, api, service, library, device, firmware or protocol surface. The route field may be a URL or logical entrypoint; element locators may identify commands, symbols or signals. Use the applicable execution mode from QA target guidance. Preserve expected and observed information separately; meaningful placeholders must be replaced before checking.
 

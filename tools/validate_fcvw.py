@@ -69,10 +69,9 @@ REQUIRED_PATHS = (
     "FCVW/framework-releases/README.md",
     "FCVW/examples/minimal-change/README.md",
     "FCVW/skills/README.md",
-    "FCVW/wiki/regressions/README.md",
-    "FCVW/wiki/feedback/README.md",
-    "FCVW/wiki/templates/TEMPLATE_FEEDBACK.md",
-    "FCVW/wiki/templates/TEMPLATE_REGRESSION.md",
+    "FCVW/wiki/README.md",
+    "FCVW/governance/TEMPLATE_NOTE.md",
+    "FCVW/governance/TEMPLATE_REGRESSION.md",
 )
 
 # A project rarely has every concern on day one. Without a third state the only
@@ -204,7 +203,7 @@ WIKI_TYPES = {
 # Two models may reach opposite conclusions about the same topic, and the value of
 # the surface is that both survive; consolidating them would destroy the evidence
 # the maintainer needs. This is the one wiki surface where updating a prior page
-# is forbidden rather than preferred - see FCVW/wiki/agents/README.md for the
+# is forbidden rather than preferred - see FCVW/wiki/README.md for the
 # opposite rule and why the difference is deliberate.
 FEEDBACK_STATUSES = {"open", "accepted", "declined", "applied", "superseded"}
 FEEDBACK_FIELDS = ("authored_by_model", "topic", "feedback_status")
@@ -1442,12 +1441,17 @@ def validate_feedback_notes(root: Path, findings: list[Finding]) -> None:
     to agree with it, and two independent readings are the entire point.
     """
 
-    directory = root / "FCVW" / "wiki" / "feedback"
-    if not directory.is_dir():
+    wiki = root / "FCVW" / "wiki"
+    if not wiki.is_dir():
         return
     seen: dict[str, str] = {}
-    for path in sorted(directory.glob("*.md")):
-        if path.name == "README.md":
+    for path in sorted(wiki.rglob("*.md")):
+        if path.name in {"README.md", "index.md"}:
+            continue
+        # The wiki is flat and typed: a note is feedback by its declared type.
+        # A legacy wiki/feedback/ folder still marks its notes as feedback so a
+        # note filed there with the wrong type keeps being reported.
+        if scalar(frontmatter_of(path), "type") != "feedback" and "feedback" not in path.relative_to(wiki).parts[:-1]:
             continue
         relative = path.relative_to(root).as_posix()
         text = read_text(path)
@@ -1514,7 +1518,7 @@ def _heading_position(text: str, title: str) -> int | None:
 def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
     wiki = root / "FCVW" / "wiki"
     seen: dict[str, str] = {}
-    exempt = {"README.md", "index.md", "log.md", "metrics.md", "schema.md", "taxonomy.md"}
+    exempt = {"README.md", "index.md"}
     for path in sorted(wiki.rglob("*.md")):
         if path.name in exempt or "templates" in path.parts:
             continue
@@ -1880,7 +1884,7 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
             continue
         if scalar(frontmatter_of(path), "record_scope") != "framework":
             findings.append(Finding("clean-contamination", path.relative_to(root).as_posix(), "non-framework decision in clean baseline"))
-    wiki_exempt = {"README.md", "index.md", "log.md", "metrics.md", "schema.md", "taxonomy.md"}
+    wiki_exempt = {"README.md", "index.md"}
     for path in (fcvw / "wiki").rglob("*.md"):
         if path.name in wiki_exempt or "templates" in path.parts:
             continue
@@ -1910,7 +1914,7 @@ def validate_regression_surfaces(root: Path, findings: list[Finding]) -> None:
         "FCVW/WATCHERS.md": "## Regression-prone events",
         "FCVW/SCHEMAS.md": "fcvw/regression@1",
         "FCVW/governance/TEMPLATE_PLAN.md": "## Regression impact",
-        "FCVW/wiki/templates/TEMPLATE_REGRESSION.md": "fcvw/regression@1",
+        "FCVW/governance/TEMPLATE_REGRESSION.md": "fcvw/regression@1",
         "FCVW/examples/minimal-change/plan.md": "## Regression impact",
     }
     for relative, marker in required_content.items():

@@ -17,7 +17,7 @@ context_files:
   - "FCVW/TESTS.md"
   - "FCVW/GOVERNANCE_GATES.md"
   - "FCVW/WATCHERS.md"
-  - "FCVW/wiki/schema.md"
+  - "FCVW/wiki/README.md"
   - "FCVW/skills/governance-validator/SKILL.md"
   - "FCVW/skills/wiki-lint/SKILL.md"
   - "FCVW/skills/release-checklist/SKILL.md"

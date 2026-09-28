@@ -25,7 +25,7 @@ Use when the user requests Obsidian formatting, wikilinks, embeds, callouts, not
 
 ## Inputs
 
-Target note, `wiki/schema.md`, taxonomy, source links, destination, current canonical page, and the project's decision on supported Obsidian syntax.
+Target note, `wiki/README.md`, taxonomy, source links, destination, current canonical page, and the project's decision on supported Obsidian syntax.
 
 ## Non-responsibilities
 
@@ -46,7 +46,7 @@ Target note, `wiki/schema.md`, taxonomy, source links, destination, current cano
 
 ## Formatting rules
 
-- FCVW schema values and controlled statuses come from `wiki/schema.md`; this skill does not define competing values.
+- FCVW schema values and controlled statuses come from `wiki/README.md`; this skill does not define competing values.
 - A note has one H1 and a logical heading hierarchy.
 - Internal wikilinks use the vault-relative note path or canonical title consistently.
 - Embeds use `![[note]]` or `![[note#heading]]` only for stable reusable content.

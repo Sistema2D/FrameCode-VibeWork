@@ -56,7 +56,7 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - Audits: `FCVW/audits/*.md`
 - Troubleshooting: `FCVW/troubleshooting/*.md`
 - Wiki: `FCVW/wiki/**/*.md`
-- Confirmed regression knowledge: `FCVW/wiki/regressions/*.md`
+- Confirmed regression knowledge: `FCVW/wiki/*.md` with `type: regression`
 
 ## Clean-template expectations
 
@@ -65,7 +65,7 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - Production-derived comparison fixtures are absent from the project root and clean distribution.
 - Root entries outside the documented source allowlist are rejected; Git metadata, repository-owned `.github/` configuration, and ignored local `.obsidian/` state are allowed when present.
 - Clean distribution assets exclude `.git/`, `.github/`, `.obsidian/`, caches, workspaces, and other repository/editor state unless a release contract explicitly requires an infrastructure file.
-- `FCVW/wiki/regressions/` contains only its README until a real, sourced regression is confirmed.
+- The clean wiki contains only `README.md` and `index.md`; notes, including confirmed regressions, are created only from real sourced evidence.
 - Every root framework policy is cataloged in `FCVW/README.md` and discoverable from `AGENTS.md`, `CONTEXT_MAP.md`, or that index; every project profile is cataloged and every skill session type is mapped in `CONTEXT_MAP.md`.
 
 Run the optional validator to verify the current tree instead of manually expanding every historical filename.
@@ -129,8 +129,8 @@ Installed tools remain under `FCVW/tools/`. Benchmarks and caches are disposable
 - `tools/qa_wiki_fcvw.py`
 - `tools/test_product_qa.py`
 - `FCVW/skills/QA/SKILL.md` and `FCVW/skills/QA/TARGETS.md`
-- Product knowledge guidance: `FCVW/wiki/product/README.md`.
-- QA execution guidance: `FCVW/wiki/qa/README.md`.
+- Product knowledge guidance: `FCVW/skills/QA/PRODUCT_WIKI.md`.
+- QA execution guidance: `FCVW/skills/QA/PRODUCT_WIKI.md`.
 
-Filled product inventories/surfaces and execution reports belong to downstream applications; the clean framework includes only guidance and reusable templates. See [product contract](wiki/product/README.md).
+Filled product inventories/surfaces and execution reports belong to downstream applications; the clean framework includes only guidance and reusable templates. See [product contract](skills/QA/PRODUCT_WIKI.md).
 

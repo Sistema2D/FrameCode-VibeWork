@@ -28,7 +28,7 @@ context_files:
   - "FCVW/FILESYSTEM.md"
   - "FCVW/RELEASE.md"
   - "FCVW/VERSIONING.md"
-  - "FCVW/wiki/schema.md"
+  - "FCVW/wiki/README.md"
   - "FCVW/MEMORY.md"
 ---
 

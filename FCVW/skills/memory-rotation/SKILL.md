@@ -34,7 +34,7 @@ Keep active session context bounded while preserving historical evidence and pro
 ## Inputs
 
 - `MEMORY.md`;
-- `wiki/schema.md`;
+- `wiki/README.md`;
 - active and archived session indexes;
 - retention/legal requirements.
 

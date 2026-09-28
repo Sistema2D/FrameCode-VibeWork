@@ -88,7 +88,6 @@ def governed_files(root: Path) -> list[Path]:
 # language variants; frontmatter stays authoritative wherever it exists.
 INFERRED_ROLES = (
     ("FCVW/governance/", "template", "framework", "replace"),
-    ("FCVW/wiki/templates/", "template", "framework", "replace"),
     ("FCVW/skills/", "framework_skill", "framework", "replace"),
     ("FCVW/refactoring-guide/", "framework_policy", "framework", "replace"),
     ("FCVW/examples/", "example", "framework", "replace"),

@@ -32,7 +32,7 @@ Find and implement exactly one focused optimization that preserves behavior and 
 - Follow `AGENTS.md`, `PERFORMANCE.md`, `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- For durable codebase-specific performance learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
+- For durable codebase-specific performance learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/` (`type: agent` notes) with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 

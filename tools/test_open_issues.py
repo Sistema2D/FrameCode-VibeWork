@@ -1409,11 +1409,13 @@ class ContractCompletionTests(TemporaryRootTest):
 
     def test_future_record_templates_require_role_and_portable_source_link(self) -> None:
         root = governed_root(Path(__file__))
-        templates = sorted((root / "FCVW" / "wiki" / "templates").glob("TEMPLATE_*.md"))
+        templates = sorted((root / "FCVW" / "skills" / "QA").glob("TEMPLATE_*.md"))
+        templates.append(root / "FCVW" / "governance" / "TEMPLATE_NOTE.md")
+        templates.append(root / "FCVW" / "governance" / "TEMPLATE_REGRESSION.md")
         templates.append(root / "FCVW" / "governance" / "TEMPLATE_AUDIT.md")
         templates.append(root / "FCVW" / "governance" / "TEMPLATE_LANGUAGE_REVIEW.md")
         templates.append(root / "FCVW" / "governance" / "TEMPLATE_TROUBLESHOOTING.md")
-        self.assertGreaterEqual(len(templates), 10)
+        self.assertGreaterEqual(len(templates), 8)
         for path in templates:
             text = path.read_text(encoding="utf-8-sig")
             if path.name == "TEMPLATE_PRODUCT_INDEX.md":

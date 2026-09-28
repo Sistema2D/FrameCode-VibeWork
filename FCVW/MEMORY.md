@@ -11,7 +11,7 @@ upgrade_strategy: "replace"
 
 | Layer | Location | Purpose | Default loading |
 |---|---|---|---|
-| Active handoff | `wiki/sessions/` | recent session continuity | latest relevant only |
+| Active handoff | `wiki/` (`type: session` notes) | recent session continuity | latest relevant only |
 | Curated knowledge | concepts, patterns, failures, decisions | reusable current understanding | search/on demand |
 | Archive | `wiki/archive/YYYY/` | historical evidence | search only |
 | Canonical truth | project profiles, ADRs, source code/data | authoritative current state | when applicable |

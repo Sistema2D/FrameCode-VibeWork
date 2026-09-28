@@ -16,8 +16,8 @@ owner: "framework-maintainer"
 regression_contract: "required"
 context_files:
   - "FCVW/skills/QA/SKILL.md"
-  - "FCVW/wiki/product/README.md"
-  - "FCVW/wiki/templates/TEMPLATE_QA_RUN.md"
+  - "FCVW/skills/QA/PRODUCT_WIKI.md"
+  - "FCVW/skills/QA/TEMPLATE_QA_RUN.md"
   - "FCVW/skills/self-improvement/SKILL.md"
   - "FCVW/TESTS.md"
 depends_on: []
@@ -86,7 +86,7 @@ Failed-run parsing, first-run discovery, contract hashes, unknown expectations, 
 
 ### Regression contracts consulted
 
-[Product contract](../../wiki/product/README.md), [QA](../../skills/QA/SKILL.md), [tests](../../TESTS.md) and [regression guards](../../REGRESSION_GUARDS.md).
+[Product contract](../../skills/QA/PRODUCT_WIKI.md), [QA](../../skills/QA/SKILL.md), [tests](../../TESTS.md) and [regression guards](../../REGRESSION_GUARDS.md).
 
 ### Regression checks required
 

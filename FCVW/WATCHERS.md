@@ -35,6 +35,6 @@ Use `governance/TEMPLATE_WATCHER_RULE.md`.
 | Agent, prompt, skill, memory, or retrieval rule changed | instruction/source diff | replay allowed, denied, ambiguous, unavailable, and injection cases | `AI.md` / `REGRESSION_GUARDS.md` | yes |
 | Governance schema, plan, release, or generated index changed | structural diff and validator | run positive and negative governance fixtures; check migration | `SCHEMAS.md` / `GOVERNANCE_GATES.md` | yes |
 | Bugfix touches unrelated files or responsibilities | changed-path/scope review | split the plan or explicitly expand and reassess risk | `PLANNING.md` | yes |
-| Same regression recurs | regression-ledger search | reopen root cause, strengthen permanent guardrail, link prior record | `wiki/regressions/` | yes |
+| Same regression recurs | regression-ledger search | reopen root cause, strengthen permanent guardrail, link prior record | `wiki/` (`type: regression` notes) | yes |
 
 Event detection is advisory until observed; once matched, its blocking reaction is part of the active plan. Deduplicate repeated signals by affected contract and plan ID.

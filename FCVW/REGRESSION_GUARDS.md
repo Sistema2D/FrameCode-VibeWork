@@ -67,7 +67,7 @@ A bypass requires named authority, justification, expiry or review date, residua
 When a regression is detected:
 
 1. create or update a troubleshooting record when diagnosis is non-trivial;
-2. create a `fcvw/regression@1` record under `wiki/regressions/` when the learning is reusable;
+2. create a `fcvw/regression@1` record under `wiki/` (`type: regression` notes) when the learning is reusable;
 3. identify the missing or failed guardrail;
 4. add or strengthen a replay check, policy, contract, or watcher;
 5. link the plan and application or framework release record;
@@ -82,5 +82,5 @@ Repeated recurrence of the same regression is a signal that the prior guardrail 
 - `GOVERNANCE_GATES.md` defines pass, warn, block, and bypass handling.
 - `WATCHERS.md` maps observable drift to the Regression gate.
 - `TROUBLESHOOTING.md` owns diagnosis evidence.
-- `wiki/regressions/` preserves reusable recurrence-prevention knowledge.
+- `wiki/` (`type: regression` notes) preserves reusable recurrence-prevention knowledge.
 - `AGENTS.md` prevents humans and agents from closing work on new behavior alone.

@@ -84,7 +84,7 @@ O núcleo permanece legível sem runtime específico. O validador opcional usa s
 | `framework_lock` | baseline FCVW instalada | [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md) | atualizar por mudança governada |
 | `project_profile` | verdade específica da aplicação | escopo, stack, dados, ambiente | preencher e preservar |
 | `record` | evidência histórica | planos, changelogs, ADRs, falhas | preservar; não sobrescrever em lote |
-| `template` | modelo reutilizável vazio | `FCVW/governance/`, `FCVW/wiki/templates/` | substituir quando compatível com o schema |
+| `template` | modelo reutilizável vazio | `FCVW/governance/`, `FCVW/skills/QA/TEMPLATE_*.md` | substituir quando compatível com o schema |
 | `generated` | navegação ou resumo derivado | filesystem e índices wiki | regenerar a partir do estado físico |
 | `example` | demonstração não autoritativa | [minimal-change](FCVW/examples/minimal-change/README.md) | copiar e substituir placeholders |
 
@@ -380,7 +380,7 @@ The core remains readable without a specific runtime. The optional validator use
 | `framework_lock` | installed FCVW baseline | [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md) | update through a governed change |
 | `project_profile` | application-specific truth | scope, stack, data, environment | populate and preserve |
 | `record` | historical evidence | plans, changelogs, ADRs, failures | preserve; never bulk-overwrite |
-| `template` | empty reusable model | `FCVW/governance/`, `FCVW/wiki/templates/` | replace when schema-compatible |
+| `template` | empty reusable model | `FCVW/governance/`, `FCVW/skills/QA/TEMPLATE_*.md` | replace when schema-compatible |
 | `generated` | derived navigation or summary | filesystem and wiki indexes | regenerate from physical state |
 | `example` | non-authoritative demonstration | [minimal-change](FCVW/examples/minimal-change/README.md) | copy and replace placeholders |
 
@@ -680,8 +680,8 @@ O agente **QA** mapeia a aplicação na primeira execução: telas, botões, mod
 
 - [Agente QA / QA profile](FCVW/skills/QA/SKILL.md)
 - [Modos de execução / Target execution guidance](FCVW/skills/QA/TARGETS.md)
-- [Wiki de produto / Product knowledge](FCVW/wiki/product/README.md)
-- [Templates](FCVW/wiki/templates/README.md)
+- [Wiki de produto / Product knowledge](FCVW/skills/QA/PRODUCT_WIKI.md)
+- [Templates](FCVW/governance/TEMPLATE_NOTE.md)
 
 Incluído na V0.19.0. A primeira execução em um projeto exige o endereço ou instruções de inicialização da aplicação e acesso ao ambiente de teste autorizado. / Included in V0.19.0; actual project execution requires a target application and authorized test access.
 

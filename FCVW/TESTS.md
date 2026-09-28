@@ -184,7 +184,7 @@ otherwise checkpoint the affected work and continue only independent tests. The
 selected-run checker infers unasked/pending decisions from failed cases even if
 their Divergences rows are missing. A decision never changes a historical verdict.
 
-[QA](skills/QA/SKILL.md) first maps the accessible application, then tests and maintains only affected [product surfaces](wiki/product/README.md). Test reports separate approved expected behavior from actual observations and preserve failures. Initial discovery can end in a resumable checkpoint; neither a partial inventory nor source inspection proves live coverage.
+[QA](skills/QA/SKILL.md) first maps the accessible application, then tests and maintains only affected [product surfaces](skills/QA/PRODUCT_WIKI.md). Test reports separate approved expected behavior from actual observations and preserve failures. Initial discovery can end in a resumable checkpoint; neither a partial inventory nor source inspection proves live coverage.
 
 Run the optional selected-page checker after writing contracts/runs. It checks stable IDs, element-to-case coverage, complete inventory claims, run contract hashes, missing/duplicate results and evidence fields. It rejects passes for unknown/provisional expectations and stale contracts. It does not browse, authenticate, infer requirements or prove evidence truth. Keep the normal application tests and relevant wiki validation. Missing target execution capability is a blocked result, not an alternative definition of pass. Follow [target guidance](skills/QA/TARGETS.md) for native UI, CLI, APIs, compiled libraries, services and firmware; identify simulation separately from physical hardware coverage.
 

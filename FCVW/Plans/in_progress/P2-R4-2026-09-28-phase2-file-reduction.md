@@ -102,6 +102,7 @@ Validation rules, upgrade and packaging, retrieval routes and benchmark corpus, 
 
 | Check | Result | Evidence |
 |---|---|---|
+| WP4 flat wiki (J-01, J-02) | pass | 20 scaffolding READMEs, `schema.md`, `taxonomy.md`, `log.md`, `metrics.md` and 12 wiki templates removed; rules merged into [the wiki contract](../../wiki/README.md) and [TEMPLATE_NOTE](../../governance/TEMPLATE_NOTE.md); product guide and 3 templates moved to `skills/QA/`; feedback selected by `type`; historical references to moved files updated; 260 tests; governance 0 findings |
 | WP3 experiment layer removed (F-01) | pass | 6 tools, 3 test modules (69 tests), 2 contracts and 1 template removed; `retrieve_context.py` without `--adaptive-*`/`--optional-token-budget`; frozen rule inventory unchanged; historical links pinned to revision `0b3cb54`; [ADR-0010](../../decisions/ADR-0010-core-reduction.md); 260 tests; governance 0 findings |
 | WP1 rule inventory and `--prune` | pass | 115 rule IDs frozen in `StaticIntegrityTests`; 4 prune tests (unmodified removed, modified kept, later prune, no baseline keeps); 329 tests |
 

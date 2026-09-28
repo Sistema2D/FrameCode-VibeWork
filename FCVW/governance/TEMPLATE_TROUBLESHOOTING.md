@@ -74,13 +74,13 @@ tags:
 ## 7. Prevention
 
 ```text
-<How to prevent this issue from recurring. This section feeds the wiki/failures/ knowledge page.>
+<How to prevent this issue from recurring. This section feeds the `wiki/` (`type: failure` notes)  knowledge page.>
 ```
 
 ## 8. Wiki Promotion
 
-- [ ] Failure is worth promoting to `wiki/failures/` (reusable, likely to recur)
-- Proposed wiki page: `wiki/failures/<slug>.md`
+- [ ] Failure is worth promoting to `wiki/` (`type: failure` notes) (reusable, likely to recur)
+- Proposed wiki page: `wiki/<ID>-<slug>.md` (`type: failure`)
 - Tags for wiki page: `#failure-log`
 
 ## 9. Status

@@ -1,6 +1,6 @@
 # Template: Code Hygiene Report
 
-Save in the active plan, `audits/`, or `wiki/refactorings/` depending on scope. Use this before broad cleanup, retroactive instantiation cleanup, or refactoring of duplicated/monolithic areas.
+Save in the active plan, `audits/`, or `wiki/` (`type: refactoring` notes) depending on scope. Use this before broad cleanup, retroactive instantiation cleanup, or refactoring of duplicated/monolithic areas.
 
 ```markdown
 # Code Hygiene Report: <target area>

@@ -54,7 +54,7 @@ They reside inside the `FCVW/` folder (except `AGENTS.md` which remains in the r
 They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 
 - `FCVW/governance/`
-- `FCVW/wiki/templates/`
+- `FCVW/skills/QA/TEMPLATE_*.md`
 - design-system rules in `FCVW/DESIGN.md`.
 
 ## Renaming Rules
@@ -74,8 +74,8 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 ### Placeholders
 
 - Replace placeholders like `<project name>`, `<technology>`, `<objective>`, and `<risk>` only when there is an answer in the briefing, a recorded decision, or direct confirmation from the user.
-- If the information does not exist yet, record the gap in `BRIEFING.md`, `MANIFEST.md`, or `wiki/questions/`.
-- Do not replace placeholders inside `governance/` and `wiki/templates/`, as they are reusable models.
+- If the information does not exist yet, record the gap in `BRIEFING.md`, `MANIFEST.md`, or `wiki/` (`type: question` notes).
+- Do not replace placeholders inside `governance/` and `skills/QA/TEMPLATE_*.md`, as they are reusable models.
 
 ### Initial Version
 
@@ -101,7 +101,7 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 7. Remove non-applicable sections and set each completed profile `instantiation_status` to `complete`. A profile the project does not use yet takes `not_applicable` plus a concrete `not_applicable_reason` instead of invented content; `MANIFEST.md` and `SCOPE.md` may never be waived.
 8. Create a changelog fragment in `changelogs/unreleased/{plan-name}.md`.
 9. Validate remaining placeholders according to artifact role.
-10. Update `wiki/index.md` and `wiki/log.md` if the instantiation generates reusable learning.
+10. Update `wiki/index.md` if the instantiation generates reusable learning.
 11. Run `python FCVW/tools/validate_fcvw.py --root . --profile instantiated` for an installed release (`python tools/validate_fcvw.py ...` in the framework source checkout), then complete the plan.
 
 ## Recommended Validation

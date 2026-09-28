@@ -1,6 +1,6 @@
 # Template: QA execution
 
-Follow the [product contract](../product/README.md).
+Follow the [product contract](PRODUCT_WIKI.md).
 
 Use one unique application-owned run per bounded execution. Existing passing evidence must not be relabeled after the behavior contract changes.
 

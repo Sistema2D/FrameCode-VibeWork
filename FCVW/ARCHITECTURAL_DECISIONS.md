@@ -81,7 +81,7 @@ It is not necessary to create an ADR for:
 - A change that implements an ADR must have its own plan.
 - A release that implements an ADR must cite the decision in the changelog.
 - A superseded ADR must point to the new ADR.
-- Pages in `wiki/decisions/` are syntheses of learning and do not replace the formal ADR.
+- Pages in `wiki/` (`type: decision` notes) are syntheses of learning and do not replace the formal ADR.
 
 ---
 

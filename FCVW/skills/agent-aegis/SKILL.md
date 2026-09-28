@@ -32,7 +32,7 @@ Find and address exactly one security issue or hardening opportunity that is cle
 - Follow `AGENTS.md`, `SECURITY.md`, `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- For durable codebase-specific security learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
+- For durable codebase-specific security learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/` (`type: agent` notes) with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 

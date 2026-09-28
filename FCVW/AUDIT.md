@@ -49,7 +49,7 @@ Items:
 
 This file defines the audit methodology. Formal audit reports, when created, must be kept in `FCVW/audits/` in the application repository.
 
-Reusable syntheses derived from audits can be recorded in `wiki/audits/`, provided they point to the formal report, plan, changelog, or official document used as source.
+Reusable syntheses derived from audits can be recorded in `wiki/` (`type: audit` notes), provided they point to the formal report, plan, changelog, or official document used as source.
 
 The governance wiki does not replace formal reports, plans, changelogs, or official documents.
 
@@ -147,13 +147,13 @@ Items:
 - [ ] Plans that created skills, agent profiles, command packs, or reusable operational procedures recorded recurrence, coverage gap, token/risk ROI, scope boundary, and validation task.
 - [ ] Plans that changed skills, agent profiles, triggers, or agent operating rules recorded failure/drift evidence, metric passed, scope preservation, token/risk ROI, and validation replay.
 - [ ] `skills/README.md` catalogs every active skill exactly once; `CONTEXT_MAP.md` routes only applicable skill families.
-- [ ] Wiki curation changes use `skills/wiki-curator/SKILL.md`, `wiki/taxonomy.md`, and `wiki/metrics.md` when tags, themes, grouping, freshness, or promotion are affected.
+- [ ] Wiki curation changes use `skills/wiki-curator/SKILL.md`, and the taxonomy in `wiki/README.md` when tags, themes, grouping, freshness, or promotion are affected.
 - [ ] No new agent or skill is persona-only, style-only, broader than its trigger family, or overlapping another asset by more than 50%.
 - [ ] `R4` and `R5` plans include rollback and expanded validation, and `R5` plans record explicit human approval.
 - [ ] High-risk low-priority plans were postponed, decomposed, discontinued, or explicitly justified.
 - [ ] There is no resolved issue without minimum evidence.
 - [ ] Relevant application module, screen, page, component, flow, or business-rule changes updated the application-owned module documentation defined by `APPLICATION_DOCUMENTATION.md`.
-- [ ] Durable agent pages, when used, follow `fcvw/wiki@1`, use collision-resistant IDs under `wiki/agents/`, and do not rely on shared fixed filenames.
+- [ ] Durable agent pages, when used, follow `fcvw/wiki@1`, use collision-resistant IDs under `wiki/` (`type: agent` notes), and do not rely on shared fixed filenames.
 - [ ] `DESIGN.md` reflects approved visual changes.
 - [ ] `SCOPE.md` reflects approved functional changes.
 - [ ] `WORKFLOW.md` reflects modified flows.
@@ -161,7 +161,7 @@ Items:
 - [ ] `SECURITY.md` reflects security changes.
 - [ ] `AI.md` reflects AI changes.
 - [ ] `TESTS.md` was used for validation compatible with risk.
-- [ ] The governance wiki was updated when the audit generated reusable learning, and `wiki/index.md` / `wiki/log.md` were synchronized.
+- [ ] The governance wiki was updated when the audit generated reusable learning, and `wiki/index.md` links the resulting canonical pages.
 - [ ] There are no temporary files being used as official source.
 
 ## Quick Audit Checklist for AI Agents

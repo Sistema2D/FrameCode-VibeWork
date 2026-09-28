@@ -1,6 +1,6 @@
 # Template: initial product inventory
 
-Follow the [product contract](../product/README.md).
+Follow the [product contract](PRODUCT_WIKI.md).
 
 Copy to the receiving application's product index and replace placeholders. Link it from the preserved wiki index. Do not fill this template in the clean framework.
 
@@ -26,7 +26,7 @@ Record execution modes, runtime/toolchain or hardware prerequisites, visited nav
 
 | surface_id | page | kind | route | discovery |
 |---|---|---|---|---|
-| UI-profile | FCVW/wiki/product/profile.md | screen | /profile | not_visited |
+| UI-profile | FCVW/wiki/COMP-profile.md | screen | /profile | not_visited |
 
 ## Frontier
 

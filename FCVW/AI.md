@@ -75,8 +75,8 @@ Rules:
 - allow human review when the content is critical.
 - use `skills/wiki-curator/SKILL.md` when knowledge must be promoted, revised, grouped, deduplicated, tagged, or scheduled for review;
 - prefer updating or superseding an existing wiki page before creating a new one;
-- track freshness, promotion precision, duplication, release synthesis coverage, taxonomy coverage, and cost control using `wiki/metrics.md`;
-- organize curated wiki pages with canonical tags, `theme`, and `theme_color` from `wiki/taxonomy.md`;
+- track freshness, promotion precision, duplication, release synthesis coverage, taxonomy coverage, and cost control in the curation plan or session note;
+- organize curated wiki pages with canonical tags, `theme`, and `theme_color` from the taxonomy in `wiki/README.md`;
 - use one fixed optimized curation mode only: JIT loading of index/log/schema/taxonomy/metrics plus directly triggered source records. Do not expose customizable curation cost modes.
 - treat tracked source-digest changes as review candidates for explicit `derived_from` dependents; never refresh digests or mutate dependent knowledge before review.
 - use typed relations only when their semantics improve retrieval or impact analysis, and derive inverse graph edges instead of duplicating them in pages.
@@ -171,7 +171,7 @@ Rules:
 - Memory must not store secrets unnecessarily.
 - History must respect `DATA.md` and `SECURITY.md`.
 - Learning generated from a conversation must be traceable.
-- Durable agent-specific learning uses sourced `fcvw/wiki@1` pages under `wiki/agents/` with collision-resistant IDs; shared fixed journal filenames are forbidden.
+- Durable agent-specific learning uses sourced `fcvw/wiki@1` pages under `wiki/` (`type: agent` notes) with collision-resistant IDs; shared fixed journal filenames are forbidden.
 - Agent pages store durable project-specific learning, not routine chat transcripts.
 - Reusable agent learning must be promoted, updated, or linked through `wiki-curator` instead of remaining isolated in chronological notes.
 
@@ -188,7 +188,7 @@ To prevent context bloat while preserving evidence, FCVW uses bounded session ha
 ### Compaction Standard (At Session Close)
 
 1. **Analyze changes**: review actual changed files, plan state, validation, risks, and next authorized action.
-2. **Create only when useful**: copy [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md) and use a collision-resistant `SES-YYYYMMDD-HHMMSS-<short-id>` identity.
+2. **Create only when useful**: copy [`governance/TEMPLATE_NOTE.md` (session block)](governance/TEMPLATE_NOTE.md) and use a collision-resistant `SES-YYYYMMDD-HHMMSS-<short-id>` identity.
 3. **Synthesize dense content**:
    - Write in a highly dense, telegraphic style.
    - Link repository-relative paths for modified and decisive read files.
@@ -254,7 +254,7 @@ Before recommending or integrating any third-party service, the AI agent must:
 
 1. **Discover available options**: Use available research tools to identify potential providers for the required capability. Do not rely on memory alone.
 2. **Compare against constraints**: Evaluate each option against the project's explicit constraints documented in `STACK.md`, `SCOPE.md`, `PERFORMANCE.md`, `SECURITY.md`, and `DATA.md`. Consider: free-tier limits, pricing model, data residency, latency, maintenance burden, community health, API stability, and compatibility with the existing stack.
-3. **Document reasoning**: Record the selected service, the alternatives considered, and the rationale for the choice. This documentation lives in the active plan, an ADR in `decisions/`, or a wiki page in `wiki/decisions/`.
+3. **Document reasoning**: Record the selected service, the alternatives considered, and the rationale for the choice. This documentation lives in the active plan, an ADR in `decisions/`, or a wiki page in `wiki/` (`type: decision` notes).
 4. **Install and configure**: Follow the service's official documentation for setup. Use the project's `.env.example` to document required environment variables (following `ENVIRONMENT.md` rules). Never hardcode credentials.
 
 ### Prohibited Behavior
@@ -333,7 +333,7 @@ To facilitate retrieval and visualization in Obsidian, the AI must use the follo
 - `#refactor-plan`: Plans and results of refactorings.
 - `#user-feedback`: Insights and direct requests from the user.
 
-Canonical themes, thematic colors, optional frontmatter fields, and extended tag guidance live in `wiki/taxonomy.md`. Freshness and curation metrics live in `wiki/metrics.md`.
+Canonical themes, thematic colors, optional frontmatter fields, and extended tag guidance live in the taxonomy in `wiki/README.md`. Freshness is tracked through each note's `next_review` and `last_reviewed` dates.
 
 ## Models and Templates
 

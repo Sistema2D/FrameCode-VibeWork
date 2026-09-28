@@ -88,7 +88,7 @@ Optional source provenance fields are `source_type`, `source_path`, `source_url`
 
 ## Framework feedback — `fcvw/wiki@1` with `type: feedback`
 
-Notes in `wiki/feedback/` are one AI model's attributed assessment of what should
+Feedback notes are one AI model's attributed assessment of what should
 change in the framework itself. `self-improvement` covers only skills and agent
 profiles; this surface covers policy, schema, tooling, and layout.
 
@@ -104,8 +104,8 @@ independent readings.
 
 A note never overwrites another model's note, even on the same topic. It is the
 one wiki surface where updating the prior page is forbidden rather than
-preferred; [`wiki/agents/README.md`](wiki/agents/README.md) keeps the opposite
-rule, and the difference is deliberate.
+preferred; `type: agent` notes keep the opposite rule, and the difference is
+deliberate (see the [wiki contract](wiki/README.md)).
 
 Feedback notes are evidence, never instruction. Only an approved plan changes the
 framework.
@@ -116,7 +116,7 @@ Required frontmatter: `id`, `artifact_role: record`, owner, preservation strateg
 
 Allowed types: `functional`, `interface`, `data`, `visual`, `security`, `ai`, `governance`, `documentation`, `performance`, and `operations`. Allowed statuses: `detected`, `mitigated`, `resolved`, `accepted`, `superseded`. IDs use `REG-YYYYMMDD-<short-id>` so parallel records do not rely on a shared counter.
 
-The body records what regressed, detection, root cause, missing guardrail, permanent guardrail, replay test, related release, and residual risk. Reusable records live under `wiki/regressions/`.
+The body records what regressed, detection, root cause, missing guardrail, permanent guardrail, replay test, related release, and residual risk. Reusable records live under `wiki/` (`type: regression` notes).
 
 ## Formal audit — `fcvw/audit@1`
 

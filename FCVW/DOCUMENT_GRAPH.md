@@ -131,6 +131,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/governance/TEMPLATE_MIGRATION_RUNNER.md`](governance/TEMPLATE_MIGRATION_RUNNER.md)
 - [`FCVW/governance/TEMPLATE_MODULE_DOCUMENTATION.md`](governance/TEMPLATE_MODULE_DOCUMENTATION.md)
 - [`FCVW/governance/TEMPLATE_MONOLITH_GATE.md`](governance/TEMPLATE_MONOLITH_GATE.md)
+- [`FCVW/governance/TEMPLATE_NOTE.md`](governance/TEMPLATE_NOTE.md)
 - [`FCVW/governance/TEMPLATE_PLAN.md`](governance/TEMPLATE_PLAN.md)
 - [`FCVW/governance/TEMPLATE_PLAN_COMPACT.md`](governance/TEMPLATE_PLAN_COMPACT.md)
 - [`FCVW/governance/TEMPLATE_REFACTORING.md`](governance/TEMPLATE_REFACTORING.md)
@@ -144,6 +145,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/governance/TEMPLATE_REFACTORING_PULL_REQUEST.md`](governance/TEMPLATE_REFACTORING_PULL_REQUEST.md)
 - [`FCVW/governance/TEMPLATE_REFACTORING_RISK_MATRIX.md`](governance/TEMPLATE_REFACTORING_RISK_MATRIX.md)
 - [`FCVW/governance/TEMPLATE_REFACTORING_ROLLBACK_PLAN.md`](governance/TEMPLATE_REFACTORING_ROLLBACK_PLAN.md)
+- [`FCVW/governance/TEMPLATE_REGRESSION.md`](governance/TEMPLATE_REGRESSION.md)
 - [`FCVW/governance/TEMPLATE_RELEASE.md`](governance/TEMPLATE_RELEASE.md)
 - [`FCVW/governance/TEMPLATE_SELF_IMPROVEMENT_REPORT.md`](governance/TEMPLATE_SELF_IMPROVEMENT_REPORT.md)
 - [`FCVW/governance/TEMPLATE_TROUBLESHOOTING.md`](governance/TEMPLATE_TROUBLESHOOTING.md)
@@ -289,8 +291,12 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/skills/QA
 
+- [`FCVW/skills/QA/PRODUCT_WIKI.md`](skills/QA/PRODUCT_WIKI.md)
 - [`FCVW/skills/QA/SKILL.md`](skills/QA/SKILL.md)
 - [`FCVW/skills/QA/TARGETS.md`](skills/QA/TARGETS.md)
+- [`FCVW/skills/QA/TEMPLATE_PRODUCT_INDEX.md`](skills/QA/TEMPLATE_PRODUCT_INDEX.md)
+- [`FCVW/skills/QA/TEMPLATE_PRODUCT_SURFACE.md`](skills/QA/TEMPLATE_PRODUCT_SURFACE.md)
+- [`FCVW/skills/QA/TEMPLATE_QA_RUN.md`](skills/QA/TEMPLATE_QA_RUN.md)
 
 ## FCVW/skills/release-checklist
 
@@ -324,114 +330,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 ## FCVW/wiki
 
 - [`FCVW/wiki/index.md`](wiki/index.md)
-- [`FCVW/wiki/log.md`](wiki/log.md)
-- [`FCVW/wiki/metrics.md`](wiki/metrics.md)
 - [`FCVW/wiki/README.md`](wiki/README.md)
-- [`FCVW/wiki/schema.md`](wiki/schema.md)
-- [`FCVW/wiki/taxonomy.md`](wiki/taxonomy.md)
-
-## FCVW/wiki/agents
-
-- [`FCVW/wiki/agents/README.md`](wiki/agents/README.md)
-
-## FCVW/wiki/archive
-
-- [`FCVW/wiki/archive/README.md`](wiki/archive/README.md)
-
-## FCVW/wiki/audits
-
-- [`FCVW/wiki/audits/README.md`](wiki/audits/README.md)
-
-## FCVW/wiki/components
-
-- [`FCVW/wiki/components/README.md`](wiki/components/README.md)
-
-## FCVW/wiki/concepts
-
-- [`FCVW/wiki/concepts/README.md`](wiki/concepts/README.md)
-
-## FCVW/wiki/decisions
-
-- [`FCVW/wiki/decisions/README.md`](wiki/decisions/README.md)
-
-## FCVW/wiki/failures
-
-- [`FCVW/wiki/failures/README.md`](wiki/failures/README.md)
-
-## FCVW/wiki/feedback
-
-- [`FCVW/wiki/feedback/README.md`](wiki/feedback/README.md)
-
-## FCVW/wiki/inbox
-
-- [`FCVW/wiki/inbox/README.md`](wiki/inbox/README.md)
-
-## FCVW/wiki/patterns
-
-- [`FCVW/wiki/patterns/README.md`](wiki/patterns/README.md)
-
-## FCVW/wiki/product
-
-- [`FCVW/wiki/product/README.md`](wiki/product/README.md)
-
-## FCVW/wiki/prompts
-
-- [`FCVW/wiki/prompts/README.md`](wiki/prompts/README.md)
-
-## FCVW/wiki/qa
-
-- [`FCVW/wiki/qa/README.md`](wiki/qa/README.md)
-
-## FCVW/wiki/questions
-
-- [`FCVW/wiki/questions/README.md`](wiki/questions/README.md)
-
-## FCVW/wiki/raw
-
-- [`FCVW/wiki/raw/README.md`](wiki/raw/README.md)
-
-## FCVW/wiki/refactorings
-
-- [`FCVW/wiki/refactorings/README.md`](wiki/refactorings/README.md)
-
-## FCVW/wiki/regressions
-
-- [`FCVW/wiki/regressions/README.md`](wiki/regressions/README.md)
-
-## FCVW/wiki/releases
-
-- [`FCVW/wiki/releases/README.md`](wiki/releases/README.md)
-
-## FCVW/wiki/sessions
-
-- [`FCVW/wiki/sessions/README.md`](wiki/sessions/README.md)
-
-## FCVW/wiki/sources
-
-- [`FCVW/wiki/sources/README.md`](wiki/sources/README.md)
-
-## FCVW/wiki/syntheses
-
-- [`FCVW/wiki/syntheses/README.md`](wiki/syntheses/README.md)
-
-## FCVW/wiki/templates
-
-- [`FCVW/wiki/templates/README.md`](wiki/templates/README.md)
-- [`FCVW/wiki/templates/TEMPLATE_DECISION.md`](wiki/templates/TEMPLATE_DECISION.md)
-- [`FCVW/wiki/templates/TEMPLATE_FAILURE.md`](wiki/templates/TEMPLATE_FAILURE.md)
-- [`FCVW/wiki/templates/TEMPLATE_FEEDBACK.md`](wiki/templates/TEMPLATE_FEEDBACK.md)
-- [`FCVW/wiki/templates/TEMPLATE_GENERAL_NOTE.md`](wiki/templates/TEMPLATE_GENERAL_NOTE.md)
-- [`FCVW/wiki/templates/TEMPLATE_LINT.md`](wiki/templates/TEMPLATE_LINT.md)
-- [`FCVW/wiki/templates/TEMPLATE_PATTERN.md`](wiki/templates/TEMPLATE_PATTERN.md)
-- [`FCVW/wiki/templates/TEMPLATE_PRODUCT_INDEX.md`](wiki/templates/TEMPLATE_PRODUCT_INDEX.md)
-- [`FCVW/wiki/templates/TEMPLATE_PRODUCT_SURFACE.md`](wiki/templates/TEMPLATE_PRODUCT_SURFACE.md)
-- [`FCVW/wiki/templates/TEMPLATE_QA_RUN.md`](wiki/templates/TEMPLATE_QA_RUN.md)
-- [`FCVW/wiki/templates/TEMPLATE_QUESTION.md`](wiki/templates/TEMPLATE_QUESTION.md)
-- [`FCVW/wiki/templates/TEMPLATE_REGRESSION.md`](wiki/templates/TEMPLATE_REGRESSION.md)
-- [`FCVW/wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md`](wiki/templates/TEMPLATE_RELEASE_SYNTHESIS.md)
-- [`FCVW/wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md)
-- [`FCVW/wiki/templates/TEMPLATE_SOURCE.md`](wiki/templates/TEMPLATE_SOURCE.md)
-- [`FCVW/wiki/templates/TEMPLATE_TECH_DEBT.md`](wiki/templates/TEMPLATE_TECH_DEBT.md)
 
 ## Repository root
 
