@@ -10,14 +10,13 @@ import re
 import unicodedata
 from pathlib import Path
 
-from frontmatter_fcvw import parse_frontmatter, scalar, string_list
+from frontmatter_fcvw import parse_frontmatter, scalar, scan_fences, string_list
 from knowledge_graph_fcvw import TYPED_RELATION_FIELDS
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 from path_policy_fcvw import DISPOSABLE_PARTS
 
 
 HEADING = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
-FENCE = re.compile(r"^\s*(```+|~~~+)")
 MAX_CHUNK_CHARS = 1200
 EXCLUDED_PARTS = DISPOSABLE_PARTS | {"templates", "examples"}
 
@@ -69,20 +68,11 @@ def default_authority(metadata: dict[str, object]) -> str:
 
 
 def sections(text: str) -> list[tuple[str, str]]:
-    lines = text.splitlines()
     chunks: list[tuple[str, list[str]]] = []
     heading = "Document"
     content: list[str] = []
-    fence = ""
-    for line in lines:
-        marker = FENCE.match(line)
-        if marker:
-            current = marker.group(1)
-            if not fence:
-                fence = current
-            elif current[0] == fence[0] and len(current) >= len(fence):
-                fence = ""
-        match = None if fence else HEADING.match(line)
+    for _, line, kind in scan_fences(text)[0]:
+        match = HEADING.match(line) if kind == "text" else None
         if match:
             if any(item.strip() for item in content):
                 chunks.append((heading, content))
@@ -97,16 +87,9 @@ def sections(text: str) -> list[tuple[str, str]]:
 
 def bounded_chunks(content: str, limit: int = MAX_CHUNK_CHARS) -> list[str]:
     """Keep paragraphs and fenced code atomic; oversized blocks remain complete."""
-    blocks, block, marker = [], [], ""
-    for line in content.splitlines():
-        match = FENCE.match(line)
-        if match:
-            current = match.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
-        if not line.strip() and not marker:
+    blocks, block = [], []
+    for _, line, kind in scan_fences(content)[0]:
+        if not line.strip() and kind == "text":
             if block:
                 blocks.append("\n".join(block))
                 block = []

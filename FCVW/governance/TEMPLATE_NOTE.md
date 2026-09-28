@@ -65,24 +65,9 @@ A note needs at least one navigable outgoing link to its authoritative source; n
 
 ## Visual diff record (`type: audit`, `VIS-` prefix)
 
-Use for before/after evidence of a UI change; store only non-sensitive captures in project-owned paths.
+Use for before/after evidence of a UI change; store only non-sensitive captures in project-owned paths. Use the envelope above with `type: "audit"`, a `VIS-` ID, `PROJECT.md` plus the capture and any reference mockup in `sources`, and the `visual-diff` tag; the body is:
 
 ```markdown
----
-title: "Visual Diff: <screen-or-module-name>"
-type: "audit"
-status: "draft"
-confidence: "high"
-last_reviewed: "YYYY-MM-DD"
-sources:
-  - "PROJECT.md"
-  - "runtime screenshot or manually attached evidence"
-  - "reference mockup, when the instantiated application owns one"
-tags:
-  - "visual-diff"
-  - "pixel-perfect"
----
-
 # Visual Diff: <Screen or Module Name>
 
 ## 1. Screen Reference Evidence

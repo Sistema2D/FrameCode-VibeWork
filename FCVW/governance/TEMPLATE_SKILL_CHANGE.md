@@ -1,18 +1,6 @@
 # Template: skill or agent change
 
-Use the proposal section with `agent-factory` for a new skill or agent, and the report section with `self-improvement` for a change to an existing one.
-
----
-title: "Agent or Skill Proposal: <asset-name>"
-type: "proposal"
-status: "draft"
-confidence: "medium"
-last_reviewed: "YYYY-MM-DD"
-related_version: "Vx.y.z"
-tags:
-  - "agent-factory"
-  - "skills"
----
+Use the proposal section with `agent-factory` for a new skill or agent, and the report section with `self-improvement` for a change to an existing one. Either is saved as a wiki note with the [note envelope](TEMPLATE_NOTE.md), `type: "audit"`, and the `agent-factory` or `self-improvement` tag.
 
 ## Agent or Skill Proposal: <Asset Name>
 
@@ -63,18 +51,6 @@ tags:
 - Risks:
 - Deferred alternatives:
 - Next review trigger:
-
----
-title: "Skill or Agent Self-Improvement: <asset-name>"
-type: "audit"
-status: "draft"
-confidence: "medium"
-last_reviewed: "YYYY-MM-DD"
-related_version: "Vx.y.z"
-tags:
-  - "self-improvement"
-  - "skills"
----
 
 ## Skill or Agent Self-Improvement: <Asset Name>
 

@@ -25,7 +25,7 @@ from package_release_fcvw import (
     package_files,
     sha256,
 )
-from release_layout_fcvw import governed_root, materialize_release_layout, payload_mapping, validate_release_layout
+from release_layout_fcvw import governed_root, is_installed_release_layout, materialize_release_layout, payload_mapping, validate_release_layout
 from plan_queue_fcvw import derive_queue, recommend_next_plan, validate_plan_queues
 from retrieve_context import (
     MAX_EXCERPT_CHARS,
@@ -1451,9 +1451,14 @@ class ContractCompletionTests(TemporaryRootTest):
         indexed_paths = {str(item["path"]) for item in indexed}
         self.assertNotIn("FCVW/governance/TEMPLATE_PLAN.md", indexed_paths)
         self.assertNotIn("FCVW/DOCUMENT_GRAPH.md", indexed_paths)
-        release = next(item for item in indexed if item["path"] == "FCVW/framework-releases/V0.14.0.md")
-        self.assertEqual("historical", release["authority"])
-        self.assertEqual("exact_only", release["retrieval_scope"])
+        releases = [item for item in indexed if str(item["path"]).startswith("FCVW/framework-releases/")]
+        if is_installed_release_layout(root):
+            # Framework history stays in the source repository (not shipped).
+            self.assertEqual([], releases)
+        else:
+            release = next(item for item in releases if item["path"] == "FCVW/framework-releases/V0.14.0.md")
+            self.assertEqual("historical", release["authority"])
+            self.assertEqual("exact_only", release["retrieval_scope"])
 
 
 

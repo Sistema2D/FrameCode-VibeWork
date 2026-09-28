@@ -198,6 +198,22 @@ context_files:
         self.assertIn("FCVW/audits/application.md", contaminated)
         self.assertIn("FCVW/wiki/application.md", contaminated)
 
+    def test_clean_profile_rejects_readme_only_scaffold_directories(self) -> None:
+        temporary, root = self.make_root()
+        self.addCleanup(temporary.cleanup)
+        (root / "FCVW" / "audits").mkdir()
+        (root / "FCVW" / "audits" / "README.md").write_text("# Audits\n", encoding="utf-8")
+        (root / "FCVW" / "empty").mkdir()
+        (root / "FCVW" / "placeholder").mkdir()
+        (root / "FCVW" / "placeholder" / ".gitkeep").write_text("", encoding="utf-8")
+        (root / "FCVW" / "wiki").mkdir()
+        (root / "FCVW" / "wiki" / "README.md").write_text("# Wiki\n", encoding="utf-8")
+        (root / "FCVW" / "wiki" / "index.md").write_text("# Index\n", encoding="utf-8")
+        findings: list[Finding] = []
+        validate_clean_template(root, findings)
+        scaffold = {item.path for item in findings if item.rule == "clean-scaffold-directory"}
+        self.assertEqual({"FCVW/audits", "FCVW/placeholder"}, scaffold)
+
     def test_incomplete_skill_body_fails_contract(self) -> None:
         temporary, root = self.make_root()
         self.addCleanup(temporary.cleanup)
@@ -1835,6 +1851,7 @@ class StaticIntegrityTests(unittest.TestCase):
     RULE_PATTERNS = (
         r"""(?:Finding|GraphFinding|QueueFinding|LocaleFinding|KnowledgeFinding|_finding|finding)\(\s*["']([a-z][a-z0-9-]+)["']""",
         r"""rule\s*=\s*["']([a-z][a-z0-9-]+)["']""",
+        r"""["']rule["']\s*:\s*["']([a-z][a-z0-9-]+)["']""",
     )
     # Frozen before the V0.20.0 file reduction. Removing a rule, or silently
     # losing one while files are merged, must change this set deliberately and
@@ -1855,6 +1872,7 @@ class StaticIntegrityTests(unittest.TestCase):
         "canonical-metadata",
         "character-integrity",
         "clean-contamination",
+        "clean-scaffold-directory",
         "document-catalog-stale",
         "document-heading-syntax",
         "document-link",
@@ -1960,3 +1978,61 @@ class StaticIntegrityTests(unittest.TestCase):
         emitted = self.emitted_rules()
         self.assertEqual(set(), self.FROZEN_RULES - emitted, "rules removed without updating the inventory")
         self.assertEqual(set(), emitted - self.FROZEN_RULES, "new rules must be added to the inventory")
+
+
+class SurfaceGuardTests(unittest.TestCase):
+    """Guards against the framework surface growing back (TODO J-G2, J-G3)."""
+
+    # Non-record FCVW surface after the V0.20.0 reduction. Growth above the
+    # tolerance must update this baseline in a plan that answers PLANNING.md's
+    # "What is removed in exchange?".
+    SURFACE_BASELINE = {"files": 65, "directories": 21, "bytes": 455_000}
+    SURFACE_TOLERANCE = 1.05
+
+    def source_root(self) -> Path:
+        from release_layout_fcvw import governed_root, is_installed_release_layout
+
+        root = governed_root(Path(__file__))
+        if is_installed_release_layout(root):
+            self.skipTest("surface budget applies to the framework source checkout")
+        return root
+
+    def test_framework_surface_stays_within_budget(self) -> None:
+        from document_graph_fcvw import in_record_directory
+
+        root = self.source_root()
+        core = [
+            path
+            for path in (root / "FCVW").rglob("*")
+            if path.is_file()
+            and not {"__pycache__", ".fcvw-cache"} & set(path.parts)
+            and not in_record_directory(path.relative_to(root).as_posix())
+        ]
+        measured = {
+            "files": len(core),
+            "directories": len({path.parent for path in core}),
+            "bytes": sum(path.stat().st_size for path in core),
+        }
+        for key, baseline in self.SURFACE_BASELINE.items():
+            self.assertLessEqual(measured[key], int(baseline * self.SURFACE_TOLERANCE), f"{key}: {measured}")
+
+    def test_each_template_envelope_is_registered_and_unique(self) -> None:
+        import re
+
+        root = self.source_root()
+        schemas_text = (root / "FCVW" / "SCHEMAS.md").read_text(encoding="utf-8")
+        owners: dict[tuple[str, str], set[str]] = {}
+        for path in sorted((root / "FCVW").rglob("TEMPLATE_*.md")):
+            text = path.read_text(encoding="utf-8")
+            for block in re.findall(r"^---\n(.*?)^---$", text, re.MULTILINE | re.DOTALL):
+                schema = re.search(r'^schema:\s*"([^"]+)"', block, re.MULTILINE)
+                if not schema:
+                    continue
+                kind = re.search(r'^type:\s*"([^"]+)"', block, re.MULTILINE)
+                key = (schema.group(1), kind.group(1) if kind else "")
+                owners.setdefault(key, set()).add(path.relative_to(root).as_posix())
+        self.assertTrue(owners)
+        duplicated = {key: paths for key, paths in owners.items() if len(paths) > 1}
+        self.assertEqual({}, duplicated, "one envelope per schema and type; reuse it instead of copying")
+        unregistered = sorted({schema for schema, _ in owners if f"`{schema}`" not in schemas_text})
+        self.assertEqual([], unregistered, "template schemas must be registered in SCHEMAS.md")

@@ -13,7 +13,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import quote, unquote
 
-from frontmatter_fcvw import parse_frontmatter, scalar
+from frontmatter_fcvw import parse_frontmatter, scalar, scan_fences
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 from path_policy_fcvw import DISPOSABLE_PARTS
 
@@ -23,7 +23,6 @@ MALFORMED_MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]\n]+\]\s+\(([^)\n]+)\)")
 MALFORMED_ATX_HEADING = re.compile(r"^\s*#{1,6}[^#\s]")
 MALFORMED_TASK_ITEM = re.compile(r"^\s*[-+*]\s+\[\](?:\s|$)")
 WIKILINK = re.compile(r"(?<!!)\[\[([^\]]+)\]\]")
-FENCE = re.compile(r"^\s*(```+|~~~+)")
 EXTERNAL = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
 INLINE_CODE = re.compile(r"`[^`]*`")
 DEFAULT_ENTRYPOINTS = ("AGENTS.md", "README.md", "FCVW/README.md")
@@ -70,20 +69,7 @@ class DocumentGraph:
 
 
 def _outside_fences(text: str) -> list[str]:
-    result: list[str] = []
-    marker = ""
-    for line in text.splitlines():
-        fence = FENCE.match(line)
-        if fence:
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
-            continue
-        if not marker:
-            result.append(line)
-    return result
+    return [line for _, line, kind in scan_fences(text)[0] if kind == "text"]
 
 
 def markdown_files(root: Path) -> list[Path]:

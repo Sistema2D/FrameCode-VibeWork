@@ -48,11 +48,11 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ### Records — preserve
 
-[Plans](Plans/README.md), `audits/`, `briefings/`, `changelogs/`, `decisions/`, `troubleshooting/`, and project notes in the [wiki](wiki/README.md). A record is reachable through its canonical directory ([ADR-0011](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0011-record-reachability.md)); each record still links to its authoritative source.
+`Plans/` ([lifecycle](PLANNING.md#lifecycle)), `audits/`, `briefings/`, `changelogs/`, `decisions/`, `troubleshooting/`, and project notes in the [wiki](wiki/README.md). A record is reachable through its canonical directory ([ADR-0011](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0011-record-reachability.md)); each record still links to its authoritative source.
 
 ### Catalogs
 
-[Skills](skills/README.md), [governance templates](governance/README.md), [plans](Plans/README.md) and the [wiki contract](wiki/README.md), whose curated [index](wiki/index.md) is project-owned.
+[Skills](skills/README.md), [governance templates](governance/README.md) and the [wiki contract](wiki/README.md), whose curated [index](wiki/index.md) is project-owned.
 
 ### Generated views — never versioned
 
@@ -80,7 +80,7 @@ Empty record directories keep a README only. Application examples, histories, an
 | Need | Load first | Validation |
 |---|---|---|
 | Review application-specific rules | [`APP_RULES.md`](APP_RULES.md) | unique rule IDs and project-profile ownership |
-| Select the next plan | [Plans](Plans/README.md) and `tools/plan_queue_fcvw.py --recommend` | derived queue findings |
+| Select the next plan | [PLANNING.md](PLANNING.md#priority-queue) and `tools/plan_queue_fcvw.py --recommend` | derived queue findings |
 | Browse all governed Markdown | Obsidian graph and backlinks, or `tools/document_graph_fcvw.py --write` into `.fcvw-cache/` | incoming links and entrypoint reachability |
 | Build optional lexical context | [`AI.md`](AI.md) | mandatory routes remain authoritative |
 

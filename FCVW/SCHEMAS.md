@@ -122,6 +122,10 @@ The body records what regressed, detection, root cause, missing guardrail, perma
 
 Required frontmatter: `id`, `artifact_role: record`, owner, preservation strategy, status, `created_at`, `last_reviewed`, and non-empty `sources`. The body records scope, authoritative sources through Markdown links, method, severity-classified findings, validation, limitations, residual risk, and linked follow-up.
 
+## Architecture decision — `fcvw/adr@1`
+
+Required frontmatter: `id` (`ADR-NNNN`), `status` (`proposal`, `accepted`, `superseded`, `rejected`, `obsolete`), `date`, `artifact_role: record`, and `record_scope`. Accepted decisions are immutable; a change is a new ADR that supersedes the old one. Create it from [TEMPLATE_ADR.md](governance/TEMPLATE_ADR.md).
+
 ## Skill — `fcvw/skill@1`
 
 Required frontmatter: `schema`, `name`, `description`, `version`, `trigger_keywords`, and `session_types`.
@@ -153,7 +157,7 @@ controlled values:
 deliberately keeps the template placeholders: the project is declaring that the
 concern does not apply, not pretending to have filled it in.
 
-`PROJECT.md` cannot be waived as a whole, and its *Identity and scope* section cannot appear in `not_applicable_sections`: a project always has a name and an edge. Other `PROJECT.md` sections are waived individually through `not_applicable_sections` plus `not_applicable_reason`; only waived sections may keep placeholders. `SECURITY.md`, `DATA.md` and `APP_RULES.md` are waived as whole files.
+`PROJECT.md` (`fcvw/project@1`) cannot be waived as a whole, and its *Identity and scope* section cannot appear in `not_applicable_sections`: a project always has a name and an edge. Other `PROJECT.md` sections are waived individually through `not_applicable_sections` plus `not_applicable_reason`; only waived sections may keep placeholders. `SECURITY.md`, `DATA.md` and `APP_RULES.md` are waived as whole files.
 
 Without that third state the only way to pass `--profile instantiated` would be
 to invent content for profiles the project does not use yet, and the validator
@@ -195,7 +199,7 @@ Policies and the framework lock default to canonical authority. Project profiles
 | Templates and examples | classification recommended; placeholders remain allowed | no forced rewrite | `excluded_by_default` |
 | Generated catalogs and indexes | generated role plus regenerate strategy required | regenerate | `excluded_by_default` |
 
-`wiki/index.md` is the exception: it is a small curated `project_profile` with preserve strategy. Category, stale, contradiction, orphan, unresolved, graph, and queue views remain disposable generated outputs rather than committed indexes.
+`wiki/index.md` (`fcvw/wiki-index@1`) is the exception: it is a small curated `project_profile` with preserve strategy. Category, stale, contradiction, orphan, unresolved, graph, and queue views remain disposable generated outputs rather than committed indexes.
 
 Missing optional metadata does not invalidate untouched history. Any new or substantively edited record must use the row above, and no retrieval metadata can elevate a record above its owning canonical source.
 

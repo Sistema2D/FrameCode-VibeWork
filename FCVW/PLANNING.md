@@ -36,7 +36,7 @@ stateDiagram-v2
     discontinued --> pending: explicit reconsideration
 ```
 
-Allowed statuses are `pending`, `in_progress`, `completed`, and `discontinued`. The status field must match the directory.
+Allowed statuses are `pending`, `in_progress`, `completed`, and `discontinued`. Each plan is one file under `Plans/<status>/`; the status field must match the directory, and a state directory is created by the first plan that needs it.
 
 ## Required data
 

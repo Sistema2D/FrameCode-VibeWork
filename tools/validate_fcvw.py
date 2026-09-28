@@ -13,57 +13,16 @@ from datetime import date
 from pathlib import Path
 from document_graph_fcvw import build_graph
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
-from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, string_list
+from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, scan_fences, string_list
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
-from path_policy_fcvw import CLEAN_ROOT_ENTRIES
-from release_layout_fcvw import is_installed_release_layout
+# One list for both layouts (E-04), mapped to the installed layout by installed_path.
+from path_policy_fcvw import CLEAN_ROOT_ENTRIES, REQUIRED_SOURCE_PATHS as REQUIRED_PATHS
+from release_layout_fcvw import installed_path, is_installed_release_layout
 
 from urllib.parse import unquote
 
 
-REQUIRED_PATHS = (
-    "AGENTS.md",
-    "README.md",
-    "LICENSE",
-    "NOTICE",
-    "tools/validate_fcvw.py",
-    "tools/test_validate_fcvw.py",
-    "tools/test_open_issues.py",
-    "tools/test_plan_dependencies_and_knowledge.py",
-    "tools/frontmatter_fcvw.py",
-    "tools/document_graph_fcvw.py",
-    "tools/knowledge_graph_fcvw.py",
-    "tools/knowledge_sources_fcvw.py",
-    "tools/plan_dependencies_fcvw.py",
-    "tools/plan_queue_fcvw.py",
-    "tools/build_context_index.py",
-    "tools/retrieve_context.py",
-    "tools/locale_fcvw.py",
-    "tools/package_release_fcvw.py",
-    "tools/release_layout_fcvw.py",
-    "tools/fcvw_cache.py",
-    "tools/role_manifest_fcvw.py",
-    "tools/upgrade_fcvw.py",
-    "FCVW/README.md",
-    "FCVW/APP_RULES.md",
-    "FCVW/FRAMEWORK_LOCK.md",
-    "FCVW/OWNERSHIP.md",
-    "FCVW/SCHEMAS.md",
-    "FCVW/MIGRATIONS.md",
-    "FCVW/PLANNING.md",
-    "FCVW/CONTEXT_MAP.md",
-    "FCVW/RELEASE.md",
-    "FCVW/AUTOMATION.md",
-    "FCVW/REGRESSION_GUARDS.md",
-    "FCVW/governance/TEMPLATE_PLAN.md",
-    "FCVW/governance/TEMPLATE_PLAN_COMPACT.md",
-    "FCVW/governance/TEMPLATE_AUDIT.md",
-    "FCVW/skills/README.md",
-    "FCVW/wiki/README.md",
-    "FCVW/governance/TEMPLATE_NOTE.md",
-    "FCVW/governance/TEMPLATE_REGRESSION.md",
-)
 
 # A project rarely has every concern on day one. Without a third state the only
 # way to pass `--profile instantiated` is to invent content for profiles the
@@ -772,20 +731,7 @@ def apply_legacy_baseline(
 
 
 def outside_code_fences(text: str) -> list[tuple[int, str]]:
-    lines: list[tuple[int, str]] = []
-    marker = ""
-    for number, line in enumerate(text.splitlines(), 1):
-        fence = re.match(r"^\s*(`{3,}|~{3,})", line)
-        if fence:
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
-            continue
-        if not marker:
-            lines.append((number, line))
-    return lines
+    return [(number, line) for number, line, kind in scan_fences(text)[0] if kind == "text"]
 
 
 def markdown_files(root: Path, scope: set[str] | None = None) -> list[Path]:
@@ -1023,12 +969,10 @@ def changed_markdown_since(root: Path, revision: str) -> tuple[set[str], Finding
 def validate_required(root: Path, findings: list[Finding]) -> None:
     installed = is_installed_release_layout(root)
     for relative in REQUIRED_PATHS:
-        expected = relative
-        if installed:
-            if relative == "README.md":
-                continue
-            if relative in {"LICENSE", "NOTICE"} or relative.startswith("tools/"):
-                expected = f"FCVW/{relative}"
+        target = installed_path(Path(relative)) if installed else Path(relative)
+        if target is None:
+            continue  # source-only file
+        expected = target.as_posix()
         if not (root / expected).is_file():
             findings.append(Finding("required-path", expected, "required path is missing"))
 
@@ -1048,16 +992,7 @@ def validate_markdown(root: Path, findings: list[Finding], scope: set[str] | Non
     for path in markdown_files(root, scope):
         relative = path.relative_to(root).as_posix()
         text = read_text(path)
-        marker = ""
-        for line in text.splitlines():
-            fence = re.match(r"^\s*(`{3,}|~{3,})", line)
-            if not fence:
-                continue
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
+        marker = scan_fences(text)[1]
         if marker:
             findings.append(Finding("markdown-fence", relative, f"unclosed Markdown fence: {marker}"))
         for line_number, line in outside_code_fences(text):
@@ -1093,28 +1028,20 @@ def validate_markdown(root: Path, findings: list[Finding], scope: set[str] | Non
 
 
 def level_two_section(text: str, title: str) -> str | None:
-    lines = text.splitlines()
     start: int | None = None
     body: list[str] = []
-    marker = ""
     next_heading = re.compile(r"^##\s+")
     accepted = title_aliases(title)
-    for index, line in enumerate(lines):
-        fence = re.match(r"^\s*(`{3,}|~{3,})", line)
-        if fence:
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
+    for number, line, kind in scan_fences(text)[0]:
+        if kind == "fence":
             continue
-        if not marker:
+        if kind == "text":
             if (
                 start is None
                 and line.strip().startswith("## ")
                 and normalized_title(line.strip()[3:]) in accepted
             ):
-                start = index + 1
+                start = number
                 continue
             if start is not None and next_heading.match(line.strip()):
                 return "\n".join(body).strip()
@@ -1371,7 +1298,12 @@ def validate_skills(root: Path, findings: list[Finding]) -> None:
                 normalized_title(marker)
                 for marker in (*accepted, *SKILL_BODY_TRANSLATIONS.get(concept, ()))
             }
-            if not any(any(heading.startswith(marker) for marker in markers) for heading in headings):
+            # Whole-word prefix: "## Validation and exit" matches "## validation",
+            # but "## Modifications" no longer matches the alias "## modi".
+            if not any(
+                any(heading == marker or heading.startswith(marker + " ") for marker in markers)
+                for heading in headings
+            ):
                 findings.append(Finding("skill-contract", relative, f"missing body concept: {concept}"))
 
 
@@ -1515,12 +1447,113 @@ def _heading_position(text: str, title: str) -> int | None:
     return None
 
 
+RECORD_SCOPES = {"application", "framework"}
+RECORD_ENVELOPE = ("id", "artifact_role", "owner", "upgrade_strategy", "record_scope", "retrieval_scope")
+# One declarative contract per record schema, executed by check_record. The
+# rule IDs and messages are the public surface; the frozen rule inventory and
+# the record fixtures keep them stable.
+RECORD_SPECS: dict[str, dict] = {
+    "fcvw/wiki@1": {
+        "rule": "wiki-schema",
+        "scalars": (*RECORD_ENVELOPE, "title", "type", "status", "confidence", "created_at", "last_reviewed"),
+        "lists": ("sources", "tags"),
+        "optional_lists": ("domain",),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve"},
+        "enums": {"type": WIKI_TYPES, "status": WIKI_STATUSES, "confidence": WIKI_CONFIDENCE},
+    },
+    "fcvw/regression@1": {
+        "rule": "regression-schema",
+        "scalars": (*RECORD_ENVELOPE, "title", "type", "severity", "status", "detected_at", "last_reviewed", "related_plan"),
+        "lists": ("sources", "tags"),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve"},
+        "id": (r"REG-\d{8}-[a-z0-9-]+", "regression"),
+        "enums": {"type": REGRESSION_TYPES, "severity": PLAN_RISKS, "status": REGRESSION_STATUSES},
+        "related_plan": True,
+    },
+    "fcvw/audit@1": {
+        "rule": "audit-schema",
+        "scalars": (*RECORD_ENVELOPE, "status", "created_at", "last_reviewed"),
+        "lists": ("sources",),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve"},
+        "id": (r"AUD-\d{8}-[a-z0-9-]+", "audit"),
+        "enums": {"status": {"draft", "completed", "blocked"}},
+        "sections": ("Scope", "Authoritative sources", "Method", "Findings", "Validation",
+                     "Limitations and residual risk", "Follow-up"),
+    },
+    "fcvw/troubleshooting@1": {
+        "rule": "troubleshooting-schema",
+        "scalars": (*RECORD_ENVELOPE, "title", "type", "status", "confidence", "detected_at", "last_reviewed", "related_plan"),
+        "lists": ("sources", "tags"),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve", "retrieval_scope": "search_only", "type": "failure"},
+        "id": (r"TRB-\d{8}-[a-z0-9-]+", "troubleshooting"),
+        "enums": {"status": {"draft", "in_validation", "validated", "obsolete"}, "confidence": WIKI_CONFIDENCE},
+        "related_plan": True,
+        "placeholders_block_sections": True,
+        "sections": ("1. Identification", "2. Symptom Description", "3. Hypotheses", "4. Root Cause",
+                     "5. Solution Applied", "6. Validation", "7. Prevention", "8. Wiki Promotion", "9. Status"),
+    },
+}
+
+
+def check_record(
+    root: Path,
+    relative: str,
+    text: str,
+    metadata: dict[str, FrontmatterValue],
+    spec: dict,
+    findings: list[Finding],
+    seen: dict[str, str] | None = None,
+) -> None:
+    """Apply one RECORD_SPECS contract to a record."""
+
+    rule = spec["rule"]
+
+    def report(message: str) -> None:
+        findings.append(Finding(rule, relative, message))
+
+    for field in spec["scalars"]:
+        if not scalar(metadata, field):
+            report(f"missing or empty field: {field}")
+    for field in spec.get("lists", ()):
+        if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
+            report(f"{field} must be a non-empty list")
+    for field in spec.get("optional_lists", ()):
+        if field in metadata and not isinstance(metadata.get(field), list):
+            report(f"{field} must be a first-level list")
+    for field, expected in spec.get("fixed", {}).items():
+        if scalar(metadata, field) != expected:
+            report(f"{field} must be {expected}")
+    record_id = scalar(metadata, "id")
+    if "id" in spec:
+        pattern, label = spec["id"]
+        if record_id and not re.fullmatch(pattern, record_id):
+            report(f"invalid {label} id: {record_id!r}")
+        if seen is not None:
+            if record_id in seen:
+                report(f"{label} id also used by {seen[record_id]}")
+            elif record_id:
+                seen[record_id] = relative
+    if scalar(metadata, "record_scope") not in RECORD_SCOPES:
+        report("record_scope must be application or framework")
+    for field, allowed in spec.get("enums", {}).items():
+        if scalar(metadata, field) not in allowed:
+            report(f"invalid {field}: {scalar(metadata, field)!r}")
+    related_plan = scalar(metadata, "related_plan")
+    if spec.get("related_plan") and related_plan and not PLACEHOLDER.search(related_plan):
+        if _find_plan_by_id(root, related_plan) is None:
+            report(f"related plan is missing or ambiguous: {related_plan}")
+    strict = spec.get("placeholders_block_sections", False)
+    for section in spec.get("sections", ()):
+        body = level_two_section(text, section)
+        if body is None or not body.strip() or (strict and PLACEHOLDER.search(body)):
+            report(f"missing, empty, or unresolved section: {section}" if strict else f"missing or empty section: {section}")
+
+
 def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
     wiki = root / "FCVW" / "wiki"
     seen: dict[str, str] = {}
-    exempt = {"README.md", "index.md"}
     for path in sorted(wiki.rglob("*.md")):
-        if path.name in exempt or "templates" in path.parts:
+        if path.name in {"README.md", "index.md"}:
             continue
         relative = path.relative_to(root).as_posix()
         metadata = frontmatter_of(path)
@@ -1532,100 +1565,15 @@ def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
             findings.append(Finding("duplicate-id", relative, f"wiki id also used by {seen[page_id]}"))
         seen[page_id] = relative
         schema = scalar(metadata, "schema")
-        if schema == "fcvw/wiki@1":
-            required_scalars = (
-                "id",
-                "artifact_role",
-                "owner",
-                "upgrade_strategy",
-                "record_scope",
-                "retrieval_scope",
-                "title",
-                "type",
-                "status",
-                "confidence",
-                "created_at",
-                "last_reviewed",
-            )
-            for field in required_scalars:
-                if not scalar(metadata, field):
-                    findings.append(Finding("wiki-schema", relative, f"missing or empty field: {field}"))
-            for field in ("sources", "tags"):
-                if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
-                    findings.append(Finding("wiki-schema", relative, f"{field} must be a non-empty list"))
-            if "domain" in metadata and not isinstance(metadata.get("domain"), list):
-                findings.append(Finding("wiki-schema", relative, "domain must be a first-level list"))
-            if scalar(metadata, "artifact_role") != "record":
-                findings.append(Finding("wiki-schema", relative, "artifact_role must be record"))
-            if scalar(metadata, "upgrade_strategy") != "preserve":
-                findings.append(Finding("wiki-schema", relative, "upgrade_strategy must be preserve"))
-            if scalar(metadata, "record_scope") not in {"application", "framework"}:
-                findings.append(Finding("wiki-schema", relative, "record_scope must be application or framework"))
-            if scalar(metadata, "type") not in WIKI_TYPES:
-                findings.append(Finding("wiki-schema", relative, f"invalid type: {scalar(metadata, 'type')!r}"))
-            if scalar(metadata, "status") not in WIKI_STATUSES:
-                findings.append(Finding("wiki-schema", relative, f"invalid status: {scalar(metadata, 'status')!r}"))
-            if scalar(metadata, "confidence") not in WIKI_CONFIDENCE:
-                findings.append(
-                    Finding("wiki-schema", relative, f"invalid confidence: {scalar(metadata, 'confidence')!r}")
-                )
-        elif schema == "fcvw/regression@1":
-            required_scalars = (
-                "id",
-                "artifact_role",
-                "owner",
-                "upgrade_strategy",
-                "record_scope",
-                "retrieval_scope",
-                "title",
-                "type",
-                "severity",
-                "status",
-                "detected_at",
-                "last_reviewed",
-                "related_plan",
-            )
-            for field in required_scalars:
-                if not scalar(metadata, field):
-                    findings.append(Finding("regression-schema", relative, f"missing or empty field: {field}"))
-            for field in ("sources", "tags"):
-                if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
-                    findings.append(Finding("regression-schema", relative, f"{field} must be a non-empty list"))
-            if scalar(metadata, "artifact_role") != "record":
-                findings.append(Finding("regression-schema", relative, "artifact_role must be record"))
-            if scalar(metadata, "upgrade_strategy") != "preserve":
-                findings.append(Finding("regression-schema", relative, "upgrade_strategy must be preserve"))
-            if scalar(metadata, "record_scope") not in {"application", "framework"}:
-                findings.append(
-                    Finding("regression-schema", relative, "record_scope must be application or framework")
-                )
-            if not re.fullmatch(r"REG-\d{8}-[a-z0-9-]+", page_id):
-                findings.append(Finding("regression-schema", relative, f"invalid regression id: {page_id!r}"))
-            if scalar(metadata, "type") not in REGRESSION_TYPES:
-                findings.append(
-                    Finding("regression-schema", relative, f"invalid type: {scalar(metadata, 'type')!r}")
-                )
-            if scalar(metadata, "severity") not in PLAN_RISKS:
-                findings.append(
-                    Finding("regression-schema", relative, f"invalid severity: {scalar(metadata, 'severity')!r}")
-                )
-            if scalar(metadata, "status") not in REGRESSION_STATUSES:
-                findings.append(
-                    Finding("regression-schema", relative, f"invalid status: {scalar(metadata, 'status')!r}")
-                )
-            related_plan = scalar(metadata, "related_plan")
-            if related_plan and _find_plan_by_id(root, related_plan) is None:
-                findings.append(
-                    Finding("regression-schema", relative, f"related plan is missing or ambiguous: {related_plan}")
-                )
+        if schema in {"fcvw/wiki@1", "fcvw/regression@1"}:
+            check_record(root, relative, read_text(path), metadata, RECORD_SPECS[schema], findings)
         else:
             findings.append(Finding("wiki-schema", relative, f"unsupported knowledge schema: {schema!r}"))
 
 
 def validate_audit_records(root: Path, findings: list[Finding]) -> None:
-    audits = root / "FCVW" / "audits"
-    seen_ids: dict[str, str] = {}
-    for path in sorted(audits.glob("*.md")):
+    seen: dict[str, str] = {}
+    for path in sorted((root / "FCVW" / "audits").glob("*.md")):
         if path.name == "README.md":
             continue
         relative = path.relative_to(root).as_posix()
@@ -1634,54 +1582,12 @@ def validate_audit_records(root: Path, findings: list[Finding]) -> None:
         if scalar(metadata, "schema") != "fcvw/audit@1":
             findings.append(Finding("audit-schema", relative, "audit must use fcvw/audit@1"))
             continue
-        for field in (
-            "id",
-            "artifact_role",
-            "owner",
-            "upgrade_strategy",
-            "record_scope",
-            "retrieval_scope",
-            "status",
-            "created_at",
-            "last_reviewed",
-        ):
-            if not scalar(metadata, field):
-                findings.append(Finding("audit-schema", relative, f"missing or empty field: {field}"))
-        if not isinstance(metadata.get("sources"), list) or not string_list(metadata, "sources"):
-            findings.append(Finding("audit-schema", relative, "sources must be a non-empty list"))
-        if scalar(metadata, "artifact_role") != "record":
-            findings.append(Finding("audit-schema", relative, "artifact_role must be record"))
-        if scalar(metadata, "upgrade_strategy") != "preserve":
-            findings.append(Finding("audit-schema", relative, "upgrade_strategy must be preserve"))
-        audit_id = scalar(metadata, "id")
-        if audit_id and not re.fullmatch(r"AUD-\d{8}-[a-z0-9-]+", audit_id):
-            findings.append(Finding("audit-schema", relative, f"invalid audit id: {audit_id!r}"))
-        if audit_id in seen_ids:
-            findings.append(Finding("audit-schema", relative, f"audit id also used by {seen_ids[audit_id]}"))
-        elif audit_id:
-            seen_ids[audit_id] = relative
-        if scalar(metadata, "record_scope") not in {"application", "framework"}:
-            findings.append(Finding("audit-schema", relative, "record_scope must be application or framework"))
-        if scalar(metadata, "status") not in {"draft", "completed", "blocked"}:
-            findings.append(Finding("audit-schema", relative, f"invalid status: {scalar(metadata, 'status')!r}"))
-        for section in (
-            "Scope",
-            "Authoritative sources",
-            "Method",
-            "Findings",
-            "Validation",
-            "Limitations and residual risk",
-            "Follow-up",
-        ):
-            body = level_two_section(text, section)
-            if body is None or not body.strip():
-                findings.append(Finding("audit-schema", relative, f"missing or empty section: {section}"))
+        check_record(root, relative, text, metadata, RECORD_SPECS["fcvw/audit@1"], findings, seen)
 
 
 def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> None:
-    records = root / "FCVW" / "troubleshooting"
-    seen_ids: dict[str, str] = {}
-    for path in sorted(records.glob("*.md")):
+    seen: dict[str, str] = {}
+    for path in sorted((root / "FCVW" / "troubleshooting").glob("*.md")):
         if path.name == "README.md":
             continue
         relative = path.relative_to(root).as_posix()
@@ -1698,97 +1604,7 @@ def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> Non
                 Finding("troubleshooting-schema", relative, f"unsupported troubleshooting schema: {schema!r}")
             )
             continue
-        required_scalars = (
-            "id",
-            "artifact_role",
-            "owner",
-            "upgrade_strategy",
-            "record_scope",
-            "retrieval_scope",
-            "title",
-            "type",
-            "status",
-            "confidence",
-            "detected_at",
-            "last_reviewed",
-            "related_plan",
-        )
-        for field in required_scalars:
-            if not scalar(metadata, field):
-                findings.append(Finding("troubleshooting-schema", relative, f"missing or empty field: {field}"))
-        for field in ("sources", "tags"):
-            if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
-                findings.append(
-                    Finding("troubleshooting-schema", relative, f"{field} must be a non-empty list")
-                )
-        record_id = scalar(metadata, "id")
-        if record_id and not re.fullmatch(r"TRB-\d{8}-[a-z0-9-]+", record_id):
-            findings.append(
-                Finding("troubleshooting-schema", relative, f"invalid troubleshooting id: {record_id!r}")
-            )
-        if record_id in seen_ids:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"troubleshooting id also used by {seen_ids[record_id]}",
-                )
-            )
-        elif record_id:
-            seen_ids[record_id] = relative
-        for field, expected in (
-            ("artifact_role", "record"),
-            ("upgrade_strategy", "preserve"),
-            ("retrieval_scope", "search_only"),
-            ("type", "failure"),
-        ):
-            if scalar(metadata, field) != expected:
-                findings.append(Finding("troubleshooting-schema", relative, f"{field} must be {expected}"))
-        if scalar(metadata, "record_scope") not in {"application", "framework"}:
-            findings.append(
-                Finding("troubleshooting-schema", relative, "record_scope must be application or framework")
-            )
-        if scalar(metadata, "status") not in {"draft", "in_validation", "validated", "obsolete"}:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"invalid status: {scalar(metadata, 'status')!r}",
-                )
-            )
-        if scalar(metadata, "confidence") not in WIKI_CONFIDENCE:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"invalid confidence: {scalar(metadata, 'confidence')!r}",
-                )
-            )
-        related_plan = scalar(metadata, "related_plan")
-        if related_plan and not PLACEHOLDER.search(related_plan) and _find_plan_by_id(root, related_plan) is None:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"related plan is missing or ambiguous: {related_plan}",
-                )
-            )
-        for section in (
-            "1. Identification",
-            "2. Symptom Description",
-            "3. Hypotheses",
-            "4. Root Cause",
-            "5. Solution Applied",
-            "6. Validation",
-            "7. Prevention",
-            "8. Wiki Promotion",
-            "9. Status",
-        ):
-            body = level_two_section(text, section)
-            if body is None or not body.strip() or PLACEHOLDER.search(body):
-                findings.append(
-                    Finding("troubleshooting-schema", relative, f"missing, empty, or unresolved section: {section}")
-                )
+        check_record(root, relative, text, metadata, RECORD_SPECS[schema], findings, seen)
 
 
 def without_sections(text: str, titles: set[str]) -> str:
@@ -1940,6 +1756,21 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
                     "clean-contamination",
                     path.relative_to(root).as_posix(),
                     "non-framework knowledge record in clean baseline",
+                )
+            )
+    # A directory that only holds its own README (or a placeholder) is scaffolding:
+    # record directories are created on first use. Truly empty directories are
+    # not tracked by git and never ship, so they are not reported.
+    for directory in sorted(path for path in fcvw.rglob("*") if path.is_dir()):
+        if ".fcvw-cache" in directory.parts or "__pycache__" in directory.parts:
+            continue
+        entries = {entry.name for entry in directory.iterdir()}
+        if entries and entries <= {"README.md", ".gitkeep"}:
+            findings.append(
+                Finding(
+                    "clean-scaffold-directory",
+                    directory.relative_to(root).as_posix(),
+                    "directory holds no content besides a README or placeholder; create it on first use",
                 )
             )
     forbidden_paths = ["FCVW/repository-open-graph-template.png"]

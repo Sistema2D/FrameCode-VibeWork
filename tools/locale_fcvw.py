@@ -14,7 +14,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from document_graph_fcvw import build_graph
-from frontmatter_fcvw import parse_frontmatter, scalar
+from frontmatter_fcvw import FENCE, parse_frontmatter, scalar, scan_fences
 from path_policy_fcvw import DISPOSABLE_PARTS
 
 
@@ -53,7 +53,6 @@ IGNORED_PARTS = DISPOSABLE_PARTS
 FORBIDDEN_PACKAGE_PARTS = DISPOSABLE_PARTS | {".github"}
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 INLINE_CODE = re.compile(r"`([^`\n]+)`")
-FENCE = re.compile(r"^\s*(`{3,}|~{3,})")
 HEADING = re.compile(r"^(#{1,6})\s+")
 CONTROLLED_METADATA = {
     "schema",
@@ -154,19 +153,6 @@ def markdown_machine_signature(path: Path) -> tuple[tuple[str, str], ...]:
         normalized = value.strip()
         if _machine_token(normalized):
             signature.append(("inline-code", normalized))
-    if path.name == "QUEUE.md" and "Plans" in path.parts:
-        for line in text.splitlines():
-            if not line.strip().startswith("|"):
-                continue
-            cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-            if len(cells) == 5 and cells[0].isdigit():
-                signature.extend(
-                    (
-                        ("queue-order", cells[0]),
-                        ("queue-category", cells[2]),
-                        ("queue-blocked-by", cells[3]),
-                    )
-                )
     marker = ""
     block: list[str] = []
     for line in text.splitlines(keepends=True):
@@ -188,20 +174,11 @@ def markdown_machine_signature(path: Path) -> tuple[tuple[str, str], ...]:
 
 def markdown_structure_signature(path: Path) -> tuple[str, ...]:
     structure: list[str] = []
-    marker = ""
-    for line in path.read_text(encoding="utf-8-sig").splitlines():
-        fence = FENCE.match(line)
-        if fence:
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
+    for _, line, kind in scan_fences(path.read_text(encoding="utf-8-sig"))[0]:
+        if kind != "text":
             continue
-        if not marker and (heading := HEADING.match(line)):
+        if heading := HEADING.match(line):
             structure.append(f"heading:{len(heading.group(1))}")
-            continue
-        if marker:
             continue
         if unordered := re.match(r"^(\s*)[-+*]\s+", line):
             structure.append(f"unordered-list:{len(unordered.group(1))}")
