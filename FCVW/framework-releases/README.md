@@ -26,4 +26,5 @@ Each `Vx.y.z.md` record must identify compatibility, migration, changed framewor
 
 - [V0.18.0](V0.18.0.md) — retrieval quality, explainable routes and installed validation.
 
-- [V0.19.0](V0.19.0.md) — in preparation: free local validation.
+- [V0.19.0](V0.19.0.md) — free local validation, product QA and adaptive controls.
+- [V0.19.1](V0.19.1.md) — in preparation: upgrade baseline safety, validator integrity and role-based routing.

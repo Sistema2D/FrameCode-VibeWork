@@ -7,6 +7,7 @@ Save as `Plans/pending/P{1..5}-R{1..5}-YYYY-MM-DD-<slug>.md` and replace every p
 schema: "fcvw/plan@2"
 id: "P3-R2-YYYY-MM-DD-short-description"
 artifact_role: "record"
+record_scope: "application | framework"
 upgrade_strategy: "preserve"
 retrieval_scope: "exact_only"
 status: "pending"

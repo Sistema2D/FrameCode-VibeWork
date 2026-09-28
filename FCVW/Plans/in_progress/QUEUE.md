@@ -4,7 +4,7 @@ artifact_role: "generated"
 owner: "project"
 upgrade_strategy: "regenerate"
 state: "in_progress"
-updated_at: "2026-09-23"
+updated_at: "2026-09-28"
 ---
 
 # In-progress plan queue

@@ -75,7 +75,7 @@ Run the optional validator to verify the current tree instead of manually expand
 
 - Application-specific cross-cutting rules: `FCVW/APP_RULES.md`.
 - Generated Obsidian-compatible catalog: `FCVW/DOCUMENT_GRAPH.md`.
-- Generated role inventory consumed by selective upgrade: `FCVW/ROLE_MANIFEST.json`.
+- Installation baseline consumed by selective upgrade: `FCVW/ROLE_MANIFEST.json`, generated per release payload and replaced only by the upgrade tool.
 - A merge conflict in a generated surface is never merged by hand: regenerate it.
 - Canonical queue fragments: `FCVW/Plans/{pending,in_progress}/queue.d/*.md`.
 - Generated queue view: `FCVW/Plans/{pending,in_progress}/QUEUE.md`.

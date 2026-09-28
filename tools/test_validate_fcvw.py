@@ -3,10 +3,15 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import os
+import subprocess
+import sys
 import tempfile
 import unittest
+from unittest import mock
 from datetime import date
 from pathlib import Path
 
@@ -19,6 +24,7 @@ from validate_fcvw import (
     Finding,
     apply_legacy_baseline,
     changed_markdown_since,
+    scoped_findings,
     load_legacy_baseline,
     validate_automation,
     validate_character_integrity,
@@ -36,6 +42,7 @@ from validate_fcvw import (
     validate_reading_routes,
     validate_version,
     validate_wiki_ids,
+    validate_troubleshooting_records,
     validate_skills,
 )
 
@@ -773,8 +780,92 @@ class UpgradePlanTests(unittest.TestCase):
             )
         return base / "installed", base / "release"
 
+    def write_baseline(self, installed: Path) -> None:
+        (installed / "FCVW" / "ROLE_MANIFEST.json").write_text(
+            json.dumps(role_manifest_fcvw.build_manifest(installed)), encoding="utf-8"
+        )
+
+    def edit(self, root: Path, relative: str, heading: str) -> None:
+        (root / relative).write_text(
+            '---\nschema: "fcvw/document@1"\nartifact_role: "framework_policy"\n'
+            f'owner: "framework"\nupgrade_strategy: "replace"\n---\n\n# {heading}\n',
+            encoding="utf-8",
+        )
+
+    def test_missing_baseline_never_treats_a_divergent_policy_as_safe(self) -> None:
+        # Regression: without a stored manifest the live tree used to become its
+        # own baseline, so a local edit was reported as "safe to replace".
+        installed, release = self.make_pair()
+        self.edit(installed, "FCVW/PLANNING.md", "Planning, edited locally")
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        actions = {a.path: a for a in upgrade_fcvw.plan_upgrade(installed, release)}
+        self.assertEqual("conflict", actions["FCVW/PLANNING.md"].verdict)
+        self.assertIn("no installation baseline", actions["FCVW/PLANNING.md"].detail)
+
+    def test_missing_baseline_still_recognises_identical_files(self) -> None:
+        installed, release = self.make_pair()
+        actions = {a.path: a for a in upgrade_fcvw.plan_upgrade(installed, release)}
+        self.assertEqual("unchanged", actions["FCVW/PLANNING.md"].verdict)
+
+    def test_unreadable_baseline_falls_back_to_the_safe_mode(self) -> None:
+        installed, release = self.make_pair()
+        (installed / "FCVW" / "ROLE_MANIFEST.json").write_text("{not json", encoding="utf-8")
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        actions = {a.path: a for a in upgrade_fcvw.plan_upgrade(installed, release)}
+        self.assertEqual("conflict", actions["FCVW/PLANNING.md"].verdict)
+
+    def test_apply_records_the_release_as_the_next_baseline(self) -> None:
+        installed, release = self.make_pair()
+        self.write_baseline(installed)
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        upgrade_fcvw.apply_upgrade(installed, release, upgrade_fcvw.plan_upgrade(installed, release), False)
+        stored = json.loads((installed / "FCVW" / "ROLE_MANIFEST.json").read_text(encoding="utf-8"))
+        digests = {item["path"]: item["digest"] for item in stored["files"]}
+        self.assertEqual(role_manifest_fcvw.digest(release / "FCVW" / "PLANNING.md"), digests["FCVW/PLANNING.md"])
+        again = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual([], [a.path for a in again if a.verdict in {"conflict", "replace"}])
+
+    def test_accepted_conflict_never_overwrites_an_earlier_backup(self) -> None:
+        installed, release = self.make_pair()
+        self.write_baseline(installed)
+        self.edit(installed, "FCVW/PLANNING.md", "Planning, edited locally")
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        backup = installed / "FCVW" / "PLANNING.md.local"
+        backup.write_text("earlier customisation", encoding="utf-8")
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        with self.assertRaisesRegex(ValueError, "backups would be overwritten"):
+            upgrade_fcvw.apply_upgrade(installed, release, actions, accept_conflicts=True)
+        self.assertEqual("earlier customisation", backup.read_text(encoding="utf-8"))
+        self.assertIn("edited locally", (installed / "FCVW" / "PLANNING.md").read_text(encoding="utf-8"))
+
+    def test_json_report_states_what_was_applied(self) -> None:
+        installed, release = self.make_pair()
+        self.write_baseline(installed)
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        output = io.StringIO()
+        argv = ["upgrade_fcvw.py", "--root", str(installed), "--release", str(release), "--apply", "--format", "json"]
+        with mock.patch.object(sys, "argv", argv), contextlib.redirect_stdout(output):
+            self.assertEqual(0, upgrade_fcvw.main())
+        report = json.loads(output.getvalue())
+        self.assertTrue(report["applied"])
+        self.assertEqual(1, report["files_applied"])
+        self.assertEqual("installed_manifest", report["baseline"])
+
+    def test_installed_baseline_cannot_be_regenerated_in_place(self) -> None:
+        installed, _ = self.make_pair()
+        (installed / "FCVW" / "tools").mkdir()
+        (installed / "FCVW" / "tools" / "validate_fcvw.py").write_text("", encoding="utf-8")
+        self.write_baseline(installed)
+        before = (installed / "FCVW" / "ROLE_MANIFEST.json").read_text(encoding="utf-8")
+        self.edit(installed, "FCVW/PLANNING.md", "Planning, edited locally")
+        argv = ["role_manifest_fcvw.py", "--root", str(installed), "--write"]
+        with mock.patch.object(sys, "argv", argv), contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(1, role_manifest_fcvw.main())
+        self.assertEqual(before, (installed / "FCVW" / "ROLE_MANIFEST.json").read_text(encoding="utf-8"))
+
     def test_untouched_policy_is_safe_to_replace(self) -> None:
         installed, release = self.make_pair()
+        self.write_baseline(installed)
         (release / "FCVW" / "PLANNING.md").write_text(
             '---\nschema: "fcvw/document@1"\nartifact_role: "framework_policy"\n'
             'owner: "framework"\nupgrade_strategy: "replace"\n---\n\n# Planning v2\n',
@@ -1530,3 +1621,127 @@ State the blocker vocabulary once, in `SCHEMAS.md`, and link to it.
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PhaseOneIntegrityTests(unittest.TestCase):
+    """Regressions fixed in V0.19.1; each test fails on the V0.19.0 validator."""
+
+    def plans_root(self) -> Path:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        for state in ("pending", "in_progress", "completed", "discontinued"):
+            (root / "FCVW" / "Plans" / state).mkdir(parents=True, exist_ok=True)
+        return root
+
+    def legacy_plan(self, root: Path, state: str) -> None:
+        plan_id = "P1-R5-2026-09-28-legacy-bypass"
+        (root / "FCVW" / "Plans" / state / f"{plan_id}.md").write_text(
+            f'---\nschema: "fcvw/plan@1"\nid: "{plan_id}"\nstatus: "{state}"\npriority: "P1"\nrisk: "R5"\n'
+            'created_at: "2026-09-28"\nupdated_at: "2026-09-28"\ncurrent_version: "V1"\n'
+            'expected_version: "V2"\nowner: "test"\ncontext_files:\n  - "FCVW/SECURITY.md"\n---\n\n# Remove auth\n',
+            encoding="utf-8",
+        )
+
+    def test_active_legacy_plan_cannot_bypass_the_regression_contract(self) -> None:
+        for state in ("pending", "in_progress"):
+            root = self.plans_root()
+            self.legacy_plan(root, state)
+            findings: list[Finding] = []
+            validate_plans(root, findings)
+            self.assertTrue(any("legacy history only" in item.message for item in findings), state)
+
+    def test_historical_legacy_plan_remains_readable(self) -> None:
+        root = self.plans_root()
+        self.legacy_plan(root, "completed")
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertEqual([], [item for item in findings if "legacy history only" in item.message])
+
+    def test_prose_mentioning_pending_does_not_block_completion(self) -> None:
+        root = self.plans_root()
+        body = VALID_REGRESSION.replace(
+            "- None.", "- Queue entries under Plans/pending/ were checked; no pending items remain."
+        )
+        ValidatorRegressionTests.write_plan(self, root, body)
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertEqual([], [item for item in findings if "pending regression" in item.message])
+
+    def test_pending_result_value_still_blocks_completion(self) -> None:
+        root = self.plans_root()
+        body = VALID_REGRESSION.replace("- None.", "- Result: pending")
+        ValidatorRegressionTests.write_plan(self, root, body)
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertTrue(any("pending regression" in item.message for item in findings))
+
+    def test_localized_aliases_survive_for_compact_sections(self) -> None:
+        # Duplicate dictionary keys used to drop "plano de validacao" and "zuruckrollen".
+        content = COMPACT_PLAN.replace("## Validation", "## Plano de validação").replace(
+            "## Rollback", "## Zurückrollen"
+        )
+        root = self.plans_root()
+        (root / "FCVW" / "Plans" / "pending" / "P4-R1-2026-08-28-compact-fixture.md").write_text(content, encoding="utf-8")
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertEqual([], [item for item in findings if item.rule in {"plan-compact", "plan-rollback"}])
+
+    def test_troubleshooting_record_without_schema_is_reported(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW" / "troubleshooting").mkdir(parents=True)
+        (root / "FCVW" / "troubleshooting" / "2026-09-28-unstructured.md").write_text(
+            "---\ntitle: x\n---\n# Notes\n", encoding="utf-8"
+        )
+        findings: list[Finding] = []
+        validate_troubleshooting_records(root, findings)
+        self.assertTrue(any(item.rule == "troubleshooting-schema" for item in findings))
+
+    def test_scoped_run_keeps_cross_file_findings_from_unchanged_files(self) -> None:
+        findings = [
+            Finding("document-link", "FCVW/UNCHANGED.md", "missing Markdown target: GONE.md"),
+            Finding("plan-queue-stale", "FCVW/Plans/pending/QUEUE.md", "stale"),
+            Finding("frontmatter-relationship", "FCVW/Plans/completed/X.md", "target is missing"),
+            Finding("markdown-fence", "FCVW/UNCHANGED.md", "unclosed Markdown fence"),
+        ]
+        kept = {item.rule for item in scoped_findings(findings, {"FCVW/GONE.md"})}
+        self.assertEqual({"document-link", "plan-queue-stale", "frontmatter-relationship"}, kept)
+
+    def test_scope_includes_untracked_markdown(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        git = ["git", "-c", "user.name=t", "-c", "user.email=t@example.test", "-c", "commit.gpgsign=false"]
+        try:
+            subprocess.run(["git", "init", "-q", str(root)], check=True, capture_output=True)
+            (root / "FCVW").mkdir()
+            (root / "FCVW" / "OLD.md").write_text("# Old\n", encoding="utf-8")
+            subprocess.run([*git, "-C", str(root), "add", "."], check=True, capture_output=True)
+            subprocess.run([*git, "-C", str(root), "commit", "-qm", "base"], check=True, capture_output=True)
+        except (OSError, subprocess.CalledProcessError) as error:
+            self.skipTest(f"git unavailable: {error}")
+        (root / "FCVW" / "NEW.md").write_text("# New\n", encoding="utf-8")
+        changed, error = changed_markdown_since(root, "HEAD")
+        self.assertIsNone(error)
+        self.assertIn("FCVW/NEW.md", changed)
+
+
+class StaticIntegrityTests(unittest.TestCase):
+    """Standard-library static checks; no linter dependency (ADR-0001)."""
+
+    def test_no_duplicate_constant_keys_in_dictionary_literals(self) -> None:
+        import ast
+
+        duplicates = []
+        for path in sorted(Path(__file__).resolve().parent.glob("*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Dict):
+                    continue
+                keys = [key.value for key in node.keys if isinstance(key, ast.Constant)]
+                repeated = sorted({repr(key) for key in keys if keys.count(key) > 1})
+                if repeated:
+                    duplicates.append(f"{path.name}:{node.lineno} {', '.join(repeated)}")
+        self.assertEqual([], duplicates)

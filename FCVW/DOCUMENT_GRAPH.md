@@ -3,7 +3,7 @@ schema: "fcvw/document-graph@1"
 artifact_role: "generated"
 owner: "framework"
 upgrade_strategy: "regenerate"
-last_reviewed: "2026-09-23"
+last_reviewed: "2026-09-28"
 ---
 
 # Document graph catalog
@@ -100,6 +100,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/framework-releases/V0.17.0.md`](framework-releases/V0.17.0.md)
 - [`FCVW/framework-releases/V0.18.0.md`](framework-releases/V0.18.0.md)
 - [`FCVW/framework-releases/V0.19.0.md`](framework-releases/V0.19.0.md)
+- [`FCVW/framework-releases/V0.19.1.md`](framework-releases/V0.19.1.md)
 
 ## FCVW/governance
 
@@ -158,10 +159,13 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 ## FCVW/Plans/completed
 
 - [`FCVW/Plans/completed/P1-R4-2026-07-15-fcvw-clean-framework-reconstruction.md`](Plans/completed/P1-R4-2026-07-15-fcvw-clean-framework-reconstruction.md)
+- [`FCVW/Plans/completed/P1-R4-2026-09-28-upgrade-baseline-safety.md`](Plans/completed/P1-R4-2026-09-28-upgrade-baseline-safety.md)
+- [`FCVW/Plans/completed/P2-R2-2026-09-28-role-based-policy-routing.md`](Plans/completed/P2-R2-2026-09-28-role-based-policy-routing.md)
 - [`FCVW/Plans/completed/P2-R3-2026-07-15-final-integrity-reading-routes-and-readme.md`](Plans/completed/P2-R3-2026-07-15-final-integrity-reading-routes-and-readme.md)
 - [`FCVW/Plans/completed/P2-R3-2026-07-15-v0130-github-publication.md`](Plans/completed/P2-R3-2026-07-15-v0130-github-publication.md)
 - [`FCVW/Plans/completed/P2-R3-2026-09-22-local-validation.md`](Plans/completed/P2-R3-2026-09-22-local-validation.md)
 - [`FCVW/Plans/completed/P2-R3-2026-09-22-qa-user-decision.md`](Plans/completed/P2-R3-2026-09-22-qa-user-decision.md)
+- [`FCVW/Plans/completed/P2-R3-2026-09-28-validator-integrity.md`](Plans/completed/P2-R3-2026-09-28-validator-integrity.md)
 - [`FCVW/Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md`](Plans/completed/P2-R4-2026-07-15-regression-guardrails-and-fixture-removal.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md`](Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md)
 - [`FCVW/Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md`](Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md)
@@ -433,3 +437,4 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 - [`AGENTS.md`](../AGENTS.md)
 - [`README.md`](../README.md)
+- [`TODO.md`](../TODO.md)

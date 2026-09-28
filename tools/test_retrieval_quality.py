@@ -98,6 +98,31 @@ class RoutingTests(unittest.TestCase):
                                   file_changes=['modify:tools/fcvw_cache.py'], versioned_change=True)
         self.assertNotIn('public_interface', internal['events'])
 
+    def test_project_profile_edit_does_not_trigger_framework_policy(self):
+        # Regression: every FCVW/*.md used to trigger event:policy by path depth.
+        profile = resolve_routes(ROOT, events=['change'], file_changes=['modify:FCVW/SECURITY.md'],
+                                 versioned_change=True)
+        self.assertNotIn('policy', profile['events'])
+        self.assertIn('security', profile['events'])
+        self.assertNotIn('FCVW/SCHEMAS.md', profile['mandatory_paths'])
+        policy = resolve_routes(ROOT, events=['change'], file_changes=['modify:FCVW/PLANNING.md'],
+                                versioned_change=True)
+        self.assertIn('policy', policy['events'])
+        template = resolve_routes(ROOT, events=['change'],
+                                  file_changes=['modify:FCVW/governance/TEMPLATE_PLAN.md'], versioned_change=True)
+        self.assertIn('policy', template['events'])
+
+    def test_unknown_or_deleted_root_document_stays_conservative(self):
+        deleted = resolve_routes(ROOT, events=['change'], file_changes=['delete:FCVW/REMOVED_POLICY.md'],
+                                 versioned_change=True)
+        self.assertIn('policy', deleted['events'])
+
+    def test_framework_schema_catalog_is_not_application_data(self):
+        schemas = resolve_routes(ROOT, events=['change'], file_changes=['modify:FCVW/SCHEMAS.md'],
+                                 versioned_change=True)
+        self.assertNotIn('data', schemas['events'])
+        self.assertIn('policy', schemas['events'])
+
     def test_versioned_route_requires_declared_impact_and_changed_file(self):
         for kwargs in ({'file_changes': ['modify:FCVW/AI.md']},
                        {'events': ['ai']},

@@ -41,7 +41,6 @@ jobs:
         run: |
           python FCVW/tools/plan_queue_fcvw.py --root . --write-queues
           python FCVW/tools/document_graph_fcvw.py --root . --write
-          python FCVW/tools/role_manifest_fcvw.py --root . --write
 
       - name: Fail when a derived surface was committed stale
         run: git diff --exit-code

@@ -124,7 +124,7 @@ python -B FCVW/tools/test_open_issues.py
 python -B FCVW/tools/test_plan_dependencies_and_knowledge.py
 python -B FCVW/tools/document_graph_fcvw.py --root .
 python -B FCVW/tools/knowledge_graph_fcvw.py --root .
-python -B FCVW/tools/role_manifest_fcvw.py --root . --write
+python -B FCVW/tools/role_manifest_fcvw.py --root . --output .fcvw-cache/role-manifest.json
 python -B FCVW/tools/plan_queue_fcvw.py --root . --recommend
 python -B FCVW/tools/validate_fcvw.py --root . --profile clean-template
 ```

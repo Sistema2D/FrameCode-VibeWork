@@ -52,7 +52,9 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ### Generated summaries — regenerate
 
-`DOCUMENT_GRAPH.md`, `FILESYSTEM.md`, `ROLE_MANIFEST.json`, `Plans/*/QUEUE.md`, `wiki/index.md`, `wiki/log.md`, and `wiki/metrics.md`.
+`DOCUMENT_GRAPH.md`, `FILESYSTEM.md`, `Plans/*/QUEUE.md`, `wiki/index.md`, `wiki/log.md`, and `wiki/metrics.md`.
+
+`ROLE_MANIFEST.json` is not regenerated: it is the installation baseline shipped with each release and is replaced only by the upgrade tool after a successful apply.
 
 ## Framework versus application releases
 

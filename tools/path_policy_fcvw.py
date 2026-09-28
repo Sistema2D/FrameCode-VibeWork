@@ -6,5 +6,5 @@ DISPOSABLE_PARTS = frozenset({'.git', '.obsidian', '.fcvw-cache',
 CLEAN_ROOT_ENTRIES = frozenset({
     '.cursorrules', '.git', '.gitattributes', '.github', '.gitignore',
     '.obsidian', '.fcvw-cache', '.codex-test-tmp', '.windsurfrules',
-    'AGENTS.md', 'FCVW', 'LICENSE', 'NOTICE', 'README.md', 'tools',
+    'AGENTS.md', 'FCVW', 'LICENSE', 'NOTICE', 'README.md', 'TODO.md', 'tools',
 })

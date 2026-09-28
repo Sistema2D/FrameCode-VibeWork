@@ -17,19 +17,24 @@
 | Repositório e issues | público; 0 issues abertas |
 | Tamanho de `FCVW/` | 228 arquivos, 65 diretórios |
 
+**Estado de execução (2026-09-28):** a **Fase 1 foi implementada** em V0.19.1
+(em preparação), em três planos concluídos:
+
+- [upgrade seguro](FCVW/Plans/completed/P1-R4-2026-09-28-upgrade-baseline-safety.md) — A-01, A-06 e A-07;
+- [integridade do validador](FCVW/Plans/completed/P2-R3-2026-09-28-validator-integrity.md) — B-01, B-02, A-02, A-03, A-04, A-09, G-04 e a permissão deste arquivo na raiz;
+- [roteamento por papel](FCVW/Plans/completed/P2-R2-2026-09-28-role-based-policy-routing.md) — C-01 e C-02.
+
+A evidência está no [release record V0.19.1](FCVW/framework-releases/V0.19.1.md): 324 testes, governança, benchmark e smoke de instalação passaram no Linux com Python 3.10 a 3.13. O A-08 foi movido para a Fase 2, onde é necessário.
+
 **Método:** leitura das políticas, das skills e das ferramentas em `tools/`, com
 **reprodução em cópias descartáveis** dos itens marcados como *Confirmado*. Os itens
 marcados como *Inspeção* vêm da leitura do código e ainda não foram reproduzidos. As
 metas de redução da seção J foram **simuladas por script** sobre a árvore real.
 
-**Efeito colateral deste arquivo:** o validador rejeita `TODO.md` na raiz, com duas
-ocorrências: `clean-contamination`, por estar fora de `CLEAN_ROOT_ENTRIES`, e
-`document-catalog-stale`, porque os `.md` da raiz entram no grafo. Além disso, o
-empacotador copiaria o arquivo para `FCVW/TODO.md` no pacote instalado. Antes do merge,
-escolha uma opção: (a) manter o backlog fora do `main` ou convertê-lo em planos em
-`FCVW/Plans/pending/`; ou (b) adicionar `TODO.md` a `CLEAN_ROOT_ENTRIES`
-(`tools/path_policy_fcvw.py`) e a `SOURCE_ONLY_ROOT_FILES`
-(`tools/release_layout_fcvw.py`) e regenerar o `DOCUMENT_GRAPH`.
+**Este arquivo na raiz:** resolvido pela opção (b). `TODO.md` está em
+`CLEAN_ROOT_ENTRIES` e em `SOURCE_ONLY_ROOT_FILES`: o validador o aceita e ele nunca é
+instalado. Por isso, registros distribuídos no pacote (planos e release records) não
+podem linkar este arquivo; citam-no apenas em texto.
 
 Legenda: **Prioridade** P1–P5 e **Risco** R1–R5 seguem o [PLANNING.md](FCVW/PLANNING.md).
 
@@ -63,7 +68,7 @@ A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heur
 
 ## 2. A — Falhas confirmadas ou prováveis
 
-### A-01 · `upgrade_fcvw.py` sobrescreve customizações locais sem conflito — P1-R5 · *Confirmado*
+### A-01 · `upgrade_fcvw.py` sobrescreve customizações locais sem conflito — P1-R4 · *Confirmado* · **corrigido em V0.19.1**
 
 - **Evidência:** `tools/upgrade_fcvw.py:53-61` (`load_manifest`) reconstrói o manifesto a partir da árvore **atual** quando `FCVW/ROLE_MANIFEST.json` não existe. Com isso, o digest "instalado" é igual ao digest local e nenhuma edição é detectada. O [AGENTS.md:97](AGENTS.md) manda rodar `role_manifest_fcvw.py --write` "após adicionar, mover ou remover qualquer arquivo governado", o que regrava o baseline com os digests já modificados.
 - **Reprodução:** instalação materializada → `role_manifest --write` → edição de `FCVW/PLANNING.md` → o upgrade reporta `CONFLICT` (correto). Depois de regenerar o manifesto como o AGENTS.md manda, reporta `REPLACE … safe to replace`. Sem manifesto, também reporta `REPLACE`.
@@ -74,19 +79,19 @@ A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heur
   4. `--apply` copia o manifesto da versão aplicada, que passa a ser o novo baseline.
 - **Aceite:** teste de regressão com os três cenários (manifesto original, manifesto regenerado e ausência de manifesto), todos exigindo `conflict`.
 
-### A-02 · `validate_fcvw.py --since` esconde links quebrados e filas inconsistentes — P2-R3 · *Confirmado*
+### A-02 · `validate_fcvw.py --since` esconde links quebrados e filas inconsistentes — P2-R3 · *Confirmado* · **corrigido em V0.19.1**
 
 - **Evidência:** `REPOSITORY_WIDE_RULES` (`tools/validate_fcvw.py:942`) lista `queue` e `plan-queue`, mas as regras reais se chamam `plan-queue-stale`, `plan-queue-missing`, `plan-queue-entry` etc. Também ficam de fora `document-link`, `document-orphan`, `document-unreachable`, `knowledge-*`, `plan-dependency-*`, `framework-index` e `markdown-link`. Além disso, `validate_markdown` só lê os arquivos do escopo e não verifica links **para** arquivos removidos.
 - **Reprodução:** remover `FCVW/troubleshooting/2026-07-27-…md` e regenerar o `DOCUMENT_GRAPH`. A validação completa dá **6 erros**; com `--since HEAD~2`, **0 erros** (`scoped_out=3`).
 - **Correção:** marcar o escopo no próprio `Finding` (`scope="repository"|"file"`) em vez de manter uma lista de nomes. Sempre avaliar os links de entrada de arquivos removidos ou renomeados. Incluir no escopo os arquivos não rastreados (`git status --porcelain`).
 - **Aceite:** testes com arquivo removido, renomeado, novo não rastreado e fila obsoleta, todos falhando com `--since`.
 
-### A-03 · Chaves duplicadas em `LOCALIZED_TITLES` descartam aliases — P3-R2 · *Confirmado*
+### A-03 · Chaves duplicadas em `LOCALIZED_TITLES` descartam aliases — P3-R2 · *Confirmado* · **corrigido em V0.19.1**
 
 - **Evidência:** `tools/validate_fcvw.py:405`. As chaves `"validation"` e `"rollback"` aparecem duas vezes; o Python mantém só a última. Somem `validation plan`, `plano de validacao`, `rueckabwicklung`, `zuruckrollen` e `reversion`.
-- **Correção imediata:** mesclar os conjuntos e adicionar um teste com stdlib (`ast`) que proíba chaves duplicadas em literais (ver G-04). A correção definitiva é a remoção desses dicionários do código-fonte (B-05/F-04).
+- **Correção imediata (feita):** mesclar os conjuntos e adicionar um teste com stdlib (`ast`) que proíba chaves duplicadas em literais (ver G-04). A correção definitiva é a remoção desses dicionários do código-fonte (B-05/F-04).
 
-### A-04 · Falso positivo "completed plan has pending regression evidence" — P3-R2 · *Inspeção*
+### A-04 · Falso positivo "completed plan has pending regression evidence" — P3-R2 · *Inspeção* · **corrigido em V0.19.1**
 
 - **Evidência:** `tools/validate_fcvw.py:1133` usa `re.search(r"\bpending\b", section)` em toda a seção *Regression impact*. Citar `Plans/pending/` ou "no pending items" bloqueia a conclusão.
 - **Correção:** procurar apenas valores de resultado (células de tabela ou `result: pending`), ignorando código inline.
@@ -96,11 +101,11 @@ A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heur
 - **Evidência:** `artifact_role: generated` e `upgrade_strategy: regenerate`, mas nenhuma ferramenta o gera. A lista é manual e já está incompleta (falta `tools/test_trace_fcvw.py`, por exemplo).
 - **Correção:** **não** criar um gerador. Fundir as regras e os globs no `OWNERSHIP.md` e eliminar a lista de arquivos (J-09).
 
-### A-06 · O backup `.local` do upgrade é sobrescrito sem aviso — P3-R3 · *Inspeção*
+### A-06 · O backup `.local` do upgrade é sobrescrito sem aviso — P3-R3 · *Inspeção* · **corrigido em V0.19.1**
 
 - `tools/upgrade_fcvw.py:156`: um segundo `--accept-conflicts` sobrescreve o `.local` anterior. **Correção:** recusar quando o `.local` já existe.
 
-### A-07 · A saída JSON do upgrade sempre informa `"applied": false` — P4-R1 · *Inspeção*
+### A-07 · A saída JSON do upgrade sempre informa `"applied": false` — P4-R1 · *Inspeção* · **corrigido em V0.19.1**
 
 - `tools/upgrade_fcvw.py:194`: o JSON é impresso antes do apply. **Correção:** emitir o JSON depois do apply, com os valores reais.
 
@@ -108,7 +113,7 @@ A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heur
 
 - O verdict `removed` é ignorado pelo `apply_upgrade`. Políticas obsoletas continuam instaladas, roteadas e validadas. **Correção:** exigir `--prune`, que remove apenas os arquivos cujo digest ainda é igual ao do baseline e reporta os demais como `conflict`. Essa correção é necessária para que a redução J chegue às instalações existentes.
 
-### A-09 · Os templates de plano falham na validação do próprio framework — P4-R1 · *Inspeção*
+### A-09 · Os templates de plano falham na validação do próprio framework — P4-R1 · *Inspeção* · **corrigido em V0.19.1**
 
 - **Evidência:** nem `TEMPLATE_PLAN.md` nem `TEMPLATE_PLAN_COMPACT.md` trazem `record_scope`. No repositório do framework, `validate_clean_template` exige `record_scope: framework`, então um plano copiado do template gera `clean-contamination`. Em projetos de aplicação, que usam o perfil `instantiated`, o problema não ocorre.
 - **Correção:** incluir `record_scope: "<application|framework>"` nos dois templates.
@@ -117,13 +122,13 @@ A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heur
 
 ## 3. B — Gatilhos que podem **não** disparar (falsos negativos)
 
-### B-01 · Plano novo com `fcvw/plan@1` escapa de todo o controle — P1-R4 · *Confirmado*
+### B-01 · Plano novo com `fcvw/plan@1` escapa de todo o controle — P1-R4 · *Confirmado* · **corrigido em V0.19.1**
 
 - **Evidência:** `PLAN_SCHEMAS` aceita `fcvw/plan@1` (`validate_fcvw.py:131`), e as regras de regressão e de risco retornam cedo para qualquer schema diferente de `plan@2` (linhas 1097 e 1156).
 - **Reprodução:** um plano **P1-R5** em `pending/` com `context_files: [FCVW/SECURITY.md]`, sem corpo, sem *Regression impact* e sem *Rollback*, recebe **0 findings**.
 - **Correção:** aceitar `plan@1` somente com `status` `completed` ou `discontinued` (os 3 registros históricos). Em `pending/` e `in_progress/`, exigir `plan@2` ou `plan-compact@1`.
 
-### B-02 · Registro de troubleshooting sem `schema` não é validado — P2-R3 · *Confirmado*
+### B-02 · Registro de troubleshooting sem `schema` não é validado — P2-R3 · *Confirmado* · **corrigido em V0.19.1**
 
 - `validate_fcvw.py:1641` (`if not schema: continue`). No perfil `instantiated`, onde a checagem de contaminação não roda, um registro sem frontmatter passa limpo. **Correção:** todo `.md` em `troubleshooting/` exige `fcvw/troubleshooting@1` ou uma entrada no baseline legado.
 
@@ -165,12 +170,12 @@ A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heur
 
 ## 4. C — Gatilhos disparados **por engano** (falsos positivos)
 
-### C-01 · Qualquer `FCVW/*.md` dispara `event:policy`, inclusive profiles do projeto — P2-R2 · *Confirmado*
+### C-01 · Qualquer `FCVW/*.md` dispara `event:policy`, inclusive profiles do projeto — P2-R2 · *Confirmado* · **corrigido em V0.19.1**
 
 - **Evidência:** `context_routing_fcvw.py:70` (`path.count("/") == 1`). Um typo corrigido em `FCVW/SECURITY.md` numa sessão `documentation` gera 11 leituras obrigatórias, **~110 KB (~27 mil tokens estimados)**, incluindo `SCHEMAS.md` (25 KB) e `AUDIT.md`.
-- **Correção:** decidir pelo `artifact_role` do frontmatter (`framework_policy` e `template` disparam `policy`; `project_profile` dispara só o evento do seu domínio). Essa correção independe da reorganização da seção J e pode ser antecipada para a Fase 1.
+- **Correção:** decidir pelo `artifact_role` do frontmatter (`framework_policy` e `template` disparam `policy`; `project_profile` dispara só o evento do seu domínio). **Feito em V0.19.1.** Medido com `resolve_routes` (sessão `documentation`, evento `change`): `SCOPE.md` 62,0 → 28,6 KB; `SECURITY.md` 83,6 → 50,2 KB (a rota de segurança continua, como deve); `SCHEMAS.md` 81,8 → 62,1 KB. A meta de ≤ 40 KB para profiles vale para os que não são alvo de gatilho de domínio.
 
-### C-02 · `SCHEMAS.md` dispara `event:data` — P3-R2 · *Inspeção*
+### C-02 · `SCHEMAS.md` dispara `event:data` — P3-R2 · *Inspeção* · **corrigido em V0.19.1**
 
 - O stem `schemas` está na lista de `data` e carrega `DATA.md`, que no template limpo é placeholder. **Correção:** remover o stem (fica coberto pelo mapeamento por papel de C-01).
 
@@ -265,8 +270,8 @@ A redução vem **antes** do ajuste de gatilhos porque o `CONTEXT_MAP` e as heur
 - **G-01 · Orçamento de contexto medido:** registrar na Fase 1 a **linha de base** (bytes por rota de sessão e evento, com o método de estimativa), repetir a medição após as Fases 2 e 3 e publicar o resultado no `TOKEN_BUDGET` (que J-09 funde em `AI.md`). Teto de teste: edição de profile do projeto ≤ 40 KB. — P2-R2
 - **G-02 · Rotas sem índice BM25:** hoje `retrieve_context.py` exige `--index` e `--query` mesmo para obter só as rotas obrigatórias. Tornar os dois opcionais (modo `--routes-only`) **no próprio arquivo**, sem criar uma ferramenta nova. — P3-R2
 - **G-03 · Trocar heurísticas semânticas por declaração explícita (simplificação):** o CLI deixa de adivinhar `security`, `data`, `public_interface` e `ai` a partir de nomes de arquivos da aplicação. Mantém só o que é inequívoco: operações de arquivo (`filesystem`) e caminhos do próprio framework, classificados pelo `artifact_role` (C-01). Quando `--versioned-change` recebe arquivos de código sem nenhum evento semântico declarado, o CLI **avisa** e lista os eventos a considerar. Isso resolve B-08, B-09 e C-04 **removendo** código em vez de criar um motor de padrões configuráveis. — P2-R3
-- **G-04 · Checagem estática sem dependência:** um teste com stdlib (`ast`) para chaves duplicadas, nomes não usados e imports mortos, que teria pegado o A-03. Usar `ruff` apenas como opção local, respeitando a ADR-0001 (zero dependência). — P4-R1
-- **G-05 · CI hospedado (decisão do mantenedor):** o repositório é público, então os runners padrão do GitHub Actions são gratuitos. Porém, o `LOCAL_VALIDATION_CONTRACT` registra a decisão explícita de substituir o CI hospedado. **Não reativar sem nova autorização.** Se autorizado: um workflow mínimo (Linux/Windows/macOS × Python 3.10 e o mais recente) rodando `check_fcvw.py`, com actions fixadas por SHA e `contents: read`. — P3-R3
+- **G-04 · Checagem estática sem dependência (chaves duplicadas: feito em V0.19.1):** um teste com stdlib (`ast`) para chaves duplicadas, nomes não usados e imports mortos, que teria pegado o A-03. Usar `ruff` apenas como opção local, respeitando a ADR-0001 (zero dependência). — P4-R1
+- **G-05 · CI hospedado (decisão do mantenedor):** o repositório é público, então os runners padrão do GitHub Actions são gratuitos. Porém, o plano de validação local registra que a conta do mantenedor não pode custear o Actions (issue 58, fechada como *not planned*), e o `LOCAL_VALIDATION_CONTRACT` registra a decisão de substituir o CI hospedado. **Não reativar sem nova autorização.** Se autorizado: um workflow mínimo (Linux/Windows/macOS × Python 3.10 e o mais recente) rodando `check_fcvw.py`, com actions fixadas por SHA e `contents: read`. — P3-R3
 - **G-06 · Hook opcional de validação incremental** (`validate_fcvw.py --since HEAD`), documentado no `AUTOMATION.md` e **não versionado no core**. Depende de A-02. — P5-R2
 - **G-07 · Evidência de plataforma:** registrar no próximo release record o que esta análise executou (Linux com Python 3.10 a 3.13, suíte OK) e reduzir os *Known gaps*; macOS continua não verificado. — P5-R1
 - **G-08 · *Movido para J-14.***
@@ -511,20 +516,23 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 
 ## 11. Roadmap
 
-### Fase 1 — Integridade e linha de base (patch V0.19.1)
+### Fase 1 — Integridade e linha de base (patch V0.19.1) — **implementada; publicação pendente**
 
-- [ ] Medir a linha de base: arquivos, diretórios e bytes de `FCVW/`, bytes por rota (G-01) e inventário de IDs de regra com fixtures
-- [ ] A-01 + A-08 Upgrade: manifesto distribuído como baseline, modo seguro e `--prune` (**P1-R5**, plano expandido, rollback ensaiado)
-- [ ] B-01 + B-02 Plano `plan@1` só em histórico; troubleshooting sem schema vira finding
-- [ ] A-02 Escopo de `--since`
-- [ ] A-03 + G-04 Chaves duplicadas e teste estático com stdlib
-- [ ] C-01 Roteamento de `FCVW/*.md` por `artifact_role` (economia imediata de tokens)
-- [ ] A-04, A-06, A-07, A-09 Correções pontuais
+- [x] Medir a linha de base: arquivos e diretórios de `FCVW/` (seção 0) e bytes por rota (C-01). O inventário de IDs de regra com fixtures passa para o início da Fase 2, que é quem depende dele
+- [x] A-01 Upgrade: baseline preservado, modo seguro sem baseline, novo baseline após o apply (P1-R4: só adiciona recusas; A-08, que remove arquivos, foi para a Fase 2)
+- [x] B-01 + B-02 Plano `plan@1` só em histórico; troubleshooting sem schema vira finding
+- [x] A-02 Escopo de `--since`
+- [x] A-03 + G-04 Chaves duplicadas e teste estático com stdlib
+- [x] C-01 (+ C-02) Roteamento de `FCVW/*.md` por `artifact_role`
+- [x] A-04, A-06, A-07, A-09 Correções pontuais
+- [ ] Publicar V0.19.1: 4 variantes de idioma, pacotes, checksums e execução em Windows/macOS (seguindo o `release-checklist`)
 
-**Aceite:** cada bug tem um teste que falha no estado atual e passa após a correção; suíte e validador verdes.
+**Aceite:** cada bug tem um teste que falha no estado atual e passa após a correção (comprovado contra as ferramentas da V0.19.0); suíte e validador verdes.
 
 ### Fase 2 — Redução (minor V0.20.0; exige migração)
 
+- [ ] Inventário dos IDs de regra do validador, com uma fixture negativa por regra
+- [ ] A-08 `--prune` no upgrade (remove só arquivos idênticos ao baseline), pré-requisito das migrações de J
 - [ ] J-D Decisão sobre navegabilidade de registros (ADR)
 - [ ] F-01 + F-05/J-13 Camada adaptativa/loop e histórico do framework fora do core e do pacote
 - [ ] J-01 + J-02 Wiki plana e template único de nota
@@ -583,7 +591,7 @@ Estimativas, a confirmar pelas medições das Fases 1 a 3:
 | Validador: aliases de tradução (F-04/B-05) | ~−310 linhas | ~+50 no empacotador | |
 | Validador: registros declarativos (E-01) | ~−390 linhas | ~+150 | |
 | Roteamento (G-03) | heurísticas semânticas | aviso de evento ausente | menos falsos positivos e negativos |
-| Correções A/B | — | ~+250 LOC + testes | integridade |
+| Correções A/B/C da Fase 1 (medido) | — | +~180 LOC nas ferramentas, +~240 LOC de testes | integridade |
 | Vault (H) | — | 1 tipo, 3 campos, varredura de segredos, métricas: ~+300 LOC; 1 template | capacidade nova, **em `shadow` até o gate** |
 | Artefatos gerados versionados | `DOCUMENT_GRAPH`, 2 `QUEUE.md`, `wiki/log`, `wiki/metrics`, `FILESYSTEM` | — | menos conflitos de merge; a ADR-0001 volta a valer |
 | Leitura obrigatória (edição de profile) | ~110 KB | — | meta ≤ 40 KB |

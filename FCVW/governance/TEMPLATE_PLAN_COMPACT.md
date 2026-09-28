@@ -18,6 +18,7 @@ a regression contract must argue that waiver in `fcvw/plan@2`.
 schema: "fcvw/plan-compact@1"
 id: "P4-R1-YYYY-MM-DD-short-description"
 artifact_role: "record"
+record_scope: "application | framework"
 upgrade_strategy: "preserve"
 retrieval_scope: "exact_only"
 status: "pending"

@@ -129,6 +129,10 @@ COMPACT_PLAN_SECTIONS = ("Objective", "Affected files", "Validation", "Rollback"
 COMPACT_PLAN_PRIORITIES = {"P4", "P5"}
 COMPACT_PLAN_RISKS = {"R1"}
 PLAN_SCHEMAS = {"fcvw/plan@1", "fcvw/plan@2", COMPACT_PLAN_SCHEMA}
+# fcvw/plan@1 has no regression contract at all, so it stays readable only as
+# history. An active plan in that schema would bypass every regression rule.
+LEGACY_PLAN_SCHEMA = "fcvw/plan@1"
+LEGACY_PLAN_STATES = {"completed", "discontinued"}
 # Risk classes that may never waive the regression contract. REGRESSION_GUARDS.md
 # and TESTS.md already say so in prose; this makes it machine-enforced.
 REGRESSION_REQUIRED_RISKS = {"R3", "R4", "R5"}
@@ -147,6 +151,12 @@ GENERIC_JUSTIFICATIONS = (
     "no impact",
 )
 MINIMUM_JUSTIFICATION = 40
+# A result still waiting: a table cell, a "result:"/"status:" value, or a bare
+# list item. Prose that merely mentions Plans/pending/ or "no pending items" is
+# not a recorded result and must not block completion.
+PENDING_RESULT = re.compile(
+    r"(?im)(?:\|\s*pending\s*(?=\|)|^\s*(?:[-*]\s*)?(?:result|status)\s*:\s*`?pending\b|^\s*[-*]?\s*pending\s*\.?\s*$)"
+)
 INVISIBLE_CHARACTERS = {
     "\u200b": "zero-width space",
     "\u200c": "zero-width non-joiner",
@@ -412,7 +422,7 @@ LOCALIZED_TITLES = {
         "arquivos ou limites afetados",
     },
     "validation": {"validacao", "validacion", "validierung", "validation plan", "plano de validacao"},
-    "rollback": {"reversao", "reversion", "rueckabwicklung", "zuruckrollen"},
+    "rollback": {"reversao", "reversion", "revertir", "rueckabwicklung", "zuruckrollen"},
     "regression guardrails": {
         "protetores de regressao",
         "barandillas de regresion",
@@ -475,7 +485,6 @@ LOCALIZED_TITLES = {
     },
     "schema changes": {"mudancas de esquema", "cambios de esquema", "schemaanderungen"},
     "migration": {"migracao", "migracion"},
-    "validation": {"validacao", "validacion", "validierung"},
     "language-variant parity and review evidence": {
         "paridade entre variantes de idioma e evidencias de revisao",
         "paridad de variantes linguisticas y evidencia de revision",
@@ -501,7 +510,6 @@ LOCALIZED_TITLES = {
         "nachgelagerte aufbewahrungsregeln",
     },
     "known gaps": {"lacunas conhecidas", "brechas conocidas", "bekannte lucken"},
-    "rollback": {"reversao", "revertir"},
     "publication evidence": {
         "evidencia de publicacao",
         "prueba de publicacion",
@@ -941,20 +949,35 @@ def validate_language_review(root: Path, findings: list[Finding]) -> None:
 
 REPOSITORY_WIDE_RULES = {
     "required-path",
-    "clean-root",
     "clean-contamination",
-    "document-catalog-stale",
-    "plan-queue",
-    "queue",
-    "version",
+    "framework-version",
     "framework-release",
+    "framework-index",
     "application-release",
     "language-review",
     "baseline-config",
     "reading-route",
     "skill-catalog",
     "duplicate-id",
+    "frontmatter-relationship",
+    "regression-surface",
 }
+# Rule families that compare files with each other. Matching by prefix keeps a
+# newly added rule of the family repository-wide; an exact list silently drifted
+# (it named "queue" while the real rules are "plan-queue-*").
+REPOSITORY_WIDE_PREFIXES = ("plan-queue", "plan-dependency", "document-", "knowledge-")
+
+
+def is_repository_wide(rule: str) -> bool:
+    return rule in REPOSITORY_WIDE_RULES or rule.startswith(REPOSITORY_WIDE_PREFIXES)
+
+
+def scoped_findings(findings: list[Finding], scope: set[str]) -> list[Finding]:
+    """Keep repository-wide findings plus per-file findings inside the scope."""
+
+    return [
+        item for item in findings if is_repository_wide(item.rule) or normalized_finding_path(item.path) in scope
+    ]
 
 
 def changed_markdown_since(root: Path, revision: str) -> tuple[set[str], Finding | None]:
@@ -980,7 +1003,22 @@ def changed_markdown_since(root: Path, revision: str) -> tuple[set[str], Finding
     if result.returncode != 0:
         message = result.stderr.strip().splitlines()[-1] if result.stderr.strip() else "unknown git error"
         return set(), Finding("scope-config", revision, f"--since is not a usable git revision: {message}")
-    return {normalized_finding_path(line) for line in result.stdout.splitlines() if line.strip()}, None
+    changed = {normalized_finding_path(line) for line in result.stdout.splitlines() if line.strip()}
+    # A new file is part of the change before it is ever added to the index.
+    try:
+        untracked = subprocess.run(
+            ["git", "ls-files", "--others", "--exclude-standard", "--", "*.md"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return set(), Finding("scope-config", str(root), f"--since could not list untracked files: {error}")
+    if untracked.returncode == 0:
+        changed |= {normalized_finding_path(line) for line in untracked.stdout.splitlines() if line.strip()}
+    return changed, None
 
 
 def validate_required(root: Path, findings: list[Finding]) -> None:
@@ -1130,7 +1168,7 @@ def validate_plan_regression(
                     f"not_applicable Justification restates the waiver instead of arguing it: {reason[:60]!r}",
                 )
             )
-    if scalar(metadata, "status") == "completed" and re.search(r"\bpending\b", section, re.I):
+    if scalar(metadata, "status") == "completed" and PENDING_RESULT.search(section):
         findings.append(Finding("plan-regression", relative, "completed plan has pending regression evidence"))
     rollback = level_two_section(text, "Rollback")
     if rollback is None:
@@ -1240,6 +1278,14 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
             schema = scalar(metadata, "schema")
             if schema not in PLAN_SCHEMAS:
                 findings.append(Finding("plan-schema", relative, "plan must use a supported FCVW plan schema"))
+            elif schema == LEGACY_PLAN_SCHEMA and state not in LEGACY_PLAN_STATES:
+                findings.append(
+                    Finding(
+                        "plan-schema",
+                        relative,
+                        "fcvw/plan@1 is legacy history only; an active plan uses fcvw/plan@2 or fcvw/plan-compact@1",
+                    )
+                )
             if schema == COMPACT_PLAN_SCHEMA:
                 required_fields = COMPACT_PLAN_FIELDS
             elif schema == "fcvw/plan@2":
@@ -1639,6 +1685,9 @@ def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> Non
         metadata = frontmatter(text)
         schema = scalar(metadata, "schema")
         if not schema:
+            findings.append(
+                Finding("troubleshooting-schema", relative, "troubleshooting record must declare fcvw/troubleshooting@1")
+            )
             continue
         if schema != "fcvw/troubleshooting@1":
             findings.append(
@@ -2612,11 +2661,7 @@ def main() -> int:
 
     scoped_out = 0
     if scope is not None:
-        kept = [
-            item
-            for item in findings
-            if item.rule in REPOSITORY_WIDE_RULES or normalized_finding_path(item.path) in scope
-        ]
+        kept = scoped_findings(findings, scope)
         scoped_out = len(findings) - len(kept)
         findings = kept
 

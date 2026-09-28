@@ -6,9 +6,13 @@ from pathlib import Path, PurePosixPath
 import re
 
 from document_graph_fcvw import _outside_fences
-from fcvw_cache import read_text
+from fcvw_cache import frontmatter, read_text
+from frontmatter_fcvw import scalar
 
 FILE_OPERATIONS = {"add", "modify", "delete", "move", "rename", "unknown"}
+# Roles whose change is a framework policy change. A project profile such as
+# FCVW/SECURITY.md lives beside the policies but only triggers its own domain.
+POLICY_ROLES = {"framework_policy", "framework_lock", "template"}
 PRIVATE_TOOL_STEMS = {"fcvw_cache", "frontmatter_fcvw", "release_layout_fcvw",
                       "knowledge_sources_fcvw", "plan_dependencies_fcvw", "context_routing_fcvw",
                       "context_selection_fcvw", "loop_contract_fcvw", "adaptive_control_fcvw"}
@@ -57,7 +61,24 @@ def route_tables(root: Path) -> tuple[dict[str, list[str]], dict[str, list[str]]
     return sessions, events
 
 
-def changed_file_events(path: str, operation: str = "unknown") -> set[str]:
+def declared_role(root: Path | None, path: str) -> str | None:
+    """The artifact_role of an existing governed Markdown file, if declared."""
+    if root is None or not path.endswith(".md") or not (root / path).is_file():
+        return None
+    return scalar(frontmatter(root / path), "artifact_role") or None
+
+
+def is_policy_path(path: str, root: Path | None) -> bool:
+    if path == "AGENTS.md" or path.startswith("FCVW/governance/"):
+        return True
+    if not (path.startswith("FCVW/") and path.count("/") == 1):
+        return False
+    role = declared_role(root, path)
+    # Unknown (deleted, unreadable or undeclared) stays conservative.
+    return role is None or role in POLICY_ROLES
+
+
+def changed_file_events(path: str, operation: str = "unknown", root: Path | None = None) -> set[str]:
     path = normalized_path(path)
     if operation not in FILE_OPERATIONS:
         raise ValueError(f"unknown file operation: {operation}")
@@ -67,15 +88,14 @@ def changed_file_events(path: str, operation: str = "unknown") -> set[str]:
     result = {"change"}
     if lowered.endswith(".md") and operation != "modify":
         result.add("filesystem")
-    if (path == "AGENTS.md" or (path.startswith("FCVW/") and path.count("/") == 1)
-            or "validate_fcvw" in stem):
+    if is_policy_path(path, root) or "validate_fcvw" in stem:
         result.add("policy")
     if ("skills" in parts or stem in {"ai", "memory", "context_map"}
             or any(s in stem for s in ("retrieve_context", "adaptive_router", "context_routing", "context_selection", "context_index"))):
         result.add("ai")
     if parts & {"auth", "security", "permissions"} or stem in {"security", "auth", "permissions"}:
         result.add("security")
-    if parts & {"migrations", "database"} or stem in {"data", "schemas", "migrations"}:
+    if parts & {"migrations", "database"} or stem in {"data", "migrations"}:
         result.add("data")
     if "framework-releases" in parts or "changelogs" in parts or stem in {"release", "versioning", "framework_lock"}:
         result.add("release")
@@ -119,14 +139,14 @@ def resolve_routes(root: Path, *, sessions: list[str] | None = None,
         selected_events[event].append(f"explicit:event:{event}")
     for changed in changed_files or []:
         path = normalized_path(changed)
-        for event in sorted(changed_file_events(path)):
+        for event in sorted(changed_file_events(path, root=root)):
             selected_events[event].append(f"changed-file:{path}:event:{event}")
     for value in file_changes or []:
         operation, separator, raw_path = value.partition(":")
         if not separator:
             raise ValueError("file change must be OPERATION:repository-relative-path")
         path = normalized_path(raw_path)
-        for event in sorted(changed_file_events(path, operation)):
+        for event in sorted(changed_file_events(path, operation, root)):
             selected_events[event].append(f"file-change:{operation}:{path}:event:{event}")
     for session in dict.fromkeys(sessions or []):
         if session not in session_table:

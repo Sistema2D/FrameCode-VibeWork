@@ -12,7 +12,8 @@ FRAMEWORK_DIRECTORY = Path("FCVW")
 # Provider bridges are only read by their tools at the repository root, so the
 # contained layout keeps them there instead of burying them inside FCVW/.
 ROOT_BRIDGES = (Path(".cursorrules"), Path(".windsurfrules"))
-SOURCE_ONLY_ROOT_FILES = {Path("README.md"), Path(".gitignore")}
+# The maintainer backlog (TODO.md) is source-only, like README.md: never installed.
+SOURCE_ONLY_ROOT_FILES = {Path("README.md"), Path(".gitignore"), Path("TODO.md")}
 REQUIRED_INSTALLED_PATHS = {
     ENTRYPOINT,
     FRAMEWORK_DIRECTORY / "README.md",

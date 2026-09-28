@@ -57,7 +57,8 @@ Required migration:
 3. Move `.cursorrules` and `.windsurfrules` from `FCVW/` to the repository root
    if the previous installation has them. Inside `FCVW/` they have no effect.
 4. Generate `FCVW/ROLE_MANIFEST.json` with
-   `python FCVW/tools/role_manifest_fcvw.py --root . --write`. Without it, the
+   `python FCVW/tools/role_manifest_fcvw.py --root . --write` immediately after
+   replacing the framework files, and never again afterwards. Without it, the
    next upgrade cannot tell a locally edited policy from an untouched one.
 5. Adopt fragmented queues when convenient: create `Plans/<state>/queue.d/` and
    move one `QUEUE.md` row at a time into an `fcvw/plan-queue-entry@1` fragment.
@@ -191,3 +192,18 @@ Passing runs without divergences need no new table. No background scan is added.
 The optional local validation runner reuses existing checks and preserves project records. No persistent state migration is required. The source repository removes the hosted workflow and retires its contract; no hook, service or runner is installed. Published V0.18.0 assets remain unchanged. After V0.19.0 installation, run its tools from `FCVW/tools/`.
 
 QA adds optional product inventory, surface and execution templates within the existing wiki schema. Preserve populated product pages and QA audits as application records during upgrades; preserve their index as a project profile. Link existing approved specifications instead of duplicating or replacing them. The runtime field describes actual execution on any target; a browser is not mandatory. No adapters, browsers, simulators, board tooling or background service are installed. Invoke QA explicitly; first use maps the reachable application scope, then subsequent runs are selective.
+
+## V0.19.0 to V0.19.1
+
+1. Do not regenerate `FCVW/ROLE_MANIFEST.json`. It is the installation baseline;
+   `role_manifest_fcvw.py --write` now refuses to overwrite it in an installed
+   layout. If it was regenerated after local edits, compare each framework file
+   with the release you installed before upgrading; the upgrade tool now reports
+   every unverifiable difference as a conflict instead of replacing it.
+2. Convert any `fcvw/plan@1` plan in `pending/` or `in_progress/` to
+   `fcvw/plan@2` with a Regression impact and Rollback section. Completed and
+   discontinued legacy plans stay valid without edits.
+3. Add `schema: "fcvw/troubleshooting@1"` and its required fields to troubleshooting
+   records that lack a schema, or list them in an incremental legacy baseline.
+4. `--since` now keeps cross-file findings (links, graph, queues, knowledge,
+   dependencies) from unchanged files; expect them in scoped runs.

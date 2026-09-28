@@ -94,6 +94,6 @@ The clean framework must not contain application plans, application releases, ru
 - Every governed Markdown artifact must be reachable from `AGENTS.md`, `README.md`, `FCVW/README.md`, or a catalog linked from those entrypoints.
 - Generated records must have an incoming catalog or relationship link and an outgoing link to their authoritative source, plan, decision, release, or governing policy.
 - Use portable relative Markdown links as the single canonical link form. A wikilink is optional and never required; do not carry the same relationship in both forms, because the two copies drift and both are then validated.
-- Regenerate `FCVW/ROLE_MANIFEST.json` with `python FCVW/tools/role_manifest_fcvw.py --root . --write` after adding, moving, or removing any governed file; it is the role inventory that selective upgrade consumes.
+- Never regenerate `FCVW/ROLE_MANIFEST.json` in an installed project: it is the installation baseline shipped with the release, and `upgrade_fcvw.py` replaces it only after a successful apply. Use `role_manifest_fcvw.py --output <path>` for an inspection copy.
 
 - Regenerate `FCVW/DOCUMENT_GRAPH.md` with `python FCVW/tools/document_graph_fcvw.py --root . --write` in an installed release, or the source-checkout equivalent under `tools/`, after adding, moving, or removing governed Markdown.
