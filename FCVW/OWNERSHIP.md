@@ -17,7 +17,7 @@ Ownership determines what an FCVW upgrade may replace.
 | `template` | Reusable empty model | `governance/` | replace when schema-compatible |
 | `record` | Historical evidence | plans, changelogs, ADRs, failures | preserve; never bulk-overwrite |
 | `generated` | Derived navigation or metrics | `DOCUMENT_GRAPH.md`, indexes | regenerate from current state |
-| `example` | Non-authoritative sample | `examples/` | replace; never instantiate as truth |
+| `example` | Non-authoritative sample | filled examples inside templates | replace; never instantiate as truth |
 
 ## Required metadata
 

@@ -143,3 +143,8 @@ The plan must sit in the directory matching its status and contain at least one 
 
 - <Gap, owner, and follow-up; or `None`.>
 ```
+
+## Smallest complete chain
+
+For a low-risk application change: copy this template (or the compact one) into `FCVW/Plans/<state>/`, replace every placeholder, implement and validate only the approved scope, add an unreleased changelog fragment from [TEMPLATE_RELEASE.md](TEMPLATE_RELEASE.md#minimal-unreleased-fragment) that links the plan, and move the plan through the lifecycle without changing its ID.
+

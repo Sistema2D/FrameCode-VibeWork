@@ -61,7 +61,6 @@ REQUIRED_PATHS = (
     "FCVW/governance/TEMPLATE_PLAN_COMPACT.md",
     "FCVW/governance/TEMPLATE_AUDIT.md",
     "FCVW/framework-releases/README.md",
-    "FCVW/examples/minimal-change/README.md",
     "FCVW/skills/README.md",
     "FCVW/wiki/README.md",
     "FCVW/governance/TEMPLATE_NOTE.md",

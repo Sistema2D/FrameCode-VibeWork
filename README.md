@@ -86,7 +86,7 @@ O núcleo permanece legível sem runtime específico. O validador opcional usa s
 | `record` | evidência histórica | planos, changelogs, ADRs, falhas | preservar; não sobrescrever em lote |
 | `template` | modelo reutilizável vazio | `FCVW/governance/`, `FCVW/skills/QA/TEMPLATE_*.md` | substituir quando compatível com o schema |
 | `generated` | navegação ou resumo derivado | filesystem e índices wiki | regenerar a partir do estado físico |
-| `example` | demonstração não autoritativa | [minimal-change](FCVW/examples/minimal-change/README.md) | copiar e substituir placeholders |
+| `example` | demonstração não autoritativa | [cadeia mínima](FCVW/governance/TEMPLATE_PLAN.md#smallest-complete-chain) | copiar e substituir placeholders |
 
 Consulte [OWNERSHIP.md](FCVW/OWNERSHIP.md) e [SCHEMAS.md](FCVW/SCHEMAS.md) para os contratos completos.
 
@@ -382,7 +382,7 @@ The core remains readable without a specific runtime. The optional validator use
 | `record` | historical evidence | plans, changelogs, ADRs, failures | preserve; never bulk-overwrite |
 | `template` | empty reusable model | `FCVW/governance/`, `FCVW/skills/QA/TEMPLATE_*.md` | replace when schema-compatible |
 | `generated` | derived navigation or summary | filesystem and wiki indexes | regenerate from physical state |
-| `example` | non-authoritative demonstration | [minimal-change](FCVW/examples/minimal-change/README.md) | copy and replace placeholders |
+| `example` | non-authoritative demonstration | [smallest chain](FCVW/governance/TEMPLATE_PLAN.md#smallest-complete-chain) | copy and replace placeholders |
 
 See [OWNERSHIP.md](FCVW/OWNERSHIP.md) and [SCHEMAS.md](FCVW/SCHEMAS.md) for the complete contracts.
 

@@ -42,3 +42,41 @@ related_plans:
 ## Publication evidence
 ## Post-release validation
 ```
+
+## Minimal unreleased fragment
+
+The smallest valid fragment under `FCVW/changelogs/unreleased/` (the directory is created by the first fragment):
+
+```markdown
+---
+schema: "fcvw/changelog@1"
+version: "Vx.y.z"
+date: "YYYY-MM-DD"
+release_status: "unreleased"
+release_type: "patch"
+related_plans:
+  - "P3-R1-YYYY-MM-DD-short-slug"
+---
+
+# Application Vx.y.z
+
+## Summary
+
+<User-visible outcome.>
+
+## Affected areas
+
+- `<path or module>` — <change>.
+
+## Validation
+
+- `<command>` — <observed result>.
+
+## Known gaps
+
+<None, or explicit gap.>
+
+## Rollback
+
+<Safe reversal procedure.>
+```

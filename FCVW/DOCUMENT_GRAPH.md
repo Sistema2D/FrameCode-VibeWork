@@ -65,16 +65,6 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/decisions/ADR-0010-core-reduction.md`](decisions/ADR-0010-core-reduction.md)
 - [`FCVW/decisions/README.md`](decisions/README.md)
 
-## FCVW/examples
-
-- [`FCVW/examples/README.md`](examples/README.md)
-
-## FCVW/examples/minimal-change
-
-- [`FCVW/examples/minimal-change/changelog.md`](examples/minimal-change/changelog.md)
-- [`FCVW/examples/minimal-change/plan.md`](examples/minimal-change/plan.md)
-- [`FCVW/examples/minimal-change/README.md`](examples/minimal-change/README.md)
-
 ## FCVW/framework-releases
 
 - [`FCVW/framework-releases/README.md`](framework-releases/README.md)
