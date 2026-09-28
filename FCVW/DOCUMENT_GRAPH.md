@@ -18,30 +18,23 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/ARCHITECTURAL_DECISIONS.md`](ARCHITECTURAL_DECISIONS.md)
 - [`FCVW/AUDIT.md`](AUDIT.md)
 - [`FCVW/AUTOMATION.md`](AUTOMATION.md)
-- [`FCVW/BRIEFING.md`](BRIEFING.md)
 - [`FCVW/CONTEXT_MAP.md`](CONTEXT_MAP.md)
 - [`FCVW/DATA.md`](DATA.md)
-- [`FCVW/DESIGN.md`](DESIGN.md)
-- [`FCVW/ENVIRONMENT.md`](ENVIRONMENT.md)
 - [`FCVW/FRAMEWORK_LOCK.md`](FRAMEWORK_LOCK.md)
 - [`FCVW/INSTANTIATION.md`](INSTANTIATION.md)
-- [`FCVW/MANIFEST.md`](MANIFEST.md)
 - [`FCVW/MIGRATIONS.md`](MIGRATIONS.md)
 - [`FCVW/OWNERSHIP.md`](OWNERSHIP.md)
-- [`FCVW/PERFORMANCE.md`](PERFORMANCE.md)
 - [`FCVW/PLANNING.md`](PLANNING.md)
+- [`FCVW/PROJECT.md`](PROJECT.md)
 - [`FCVW/README.md`](README.md)
 - [`FCVW/REFACTORING.md`](REFACTORING.md)
 - [`FCVW/REFACTORING_GUIDE.md`](REFACTORING_GUIDE.md)
 - [`FCVW/REGRESSION_GUARDS.md`](REGRESSION_GUARDS.md)
 - [`FCVW/RELEASE.md`](RELEASE.md)
 - [`FCVW/SCHEMAS.md`](SCHEMAS.md)
-- [`FCVW/SCOPE.md`](SCOPE.md)
 - [`FCVW/SECURITY.md`](SECURITY.md)
-- [`FCVW/STACK.md`](STACK.md)
 - [`FCVW/TESTS.md`](TESTS.md)
 - [`FCVW/TROUBLESHOOTING.md`](TROUBLESHOOTING.md)
-- [`FCVW/WORKFLOW.md`](WORKFLOW.md)
 
 ## FCVW/audits
 
@@ -212,6 +205,7 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 
 ## FCVW/skills/project-instantiation
 
+- [`FCVW/skills/project-instantiation/BRIEFING.md`](skills/project-instantiation/BRIEFING.md)
 - [`FCVW/skills/project-instantiation/SKILL.md`](skills/project-instantiation/SKILL.md)
 
 ## FCVW/skills/QA

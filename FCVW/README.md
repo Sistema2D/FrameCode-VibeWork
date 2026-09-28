@@ -23,7 +23,7 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 |---|---|---|
 | Orient a session | `CONTEXT_MAP.md` | domain document |
 | Resolve file-reading triggers | `CONTEXT_MAP.md` event table | active plan `context_files` |
-| Instantiate a new project | `INSTANTIATION.md` | `BRIEFING.md`, `MANIFEST.md` |
+| Instantiate a new project | `INSTANTIATION.md` | the [briefing questionnaire](skills/project-instantiation/BRIEFING.md), `PROJECT.md` (identity and scope) |
 | Adopt in an existing project | `INSTANTIATION.md` (retroactive mode) | `MIGRATIONS.md` |
 | Plan a change | `PLANNING.md` | `governance/TEMPLATE_PLAN.md` |
 | Protect existing behavior | `REGRESSION_GUARDS.md` | `TESTS.md`, `AUTOMATION.md` gates |
@@ -42,7 +42,7 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 
 ### Project profiles — instantiate and preserve
 
-`APP_RULES.md`, `BRIEFING.md`, `DATA.md`, `DESIGN.md`, `ENVIRONMENT.md`, `MANIFEST.md`, `PERFORMANCE.md`, `SCOPE.md`, `SECURITY.md`, `STACK.md`, and `WORKFLOW.md`.
+`PROJECT.md` (identity and scope, stack, environment, design, performance, workflows), `SECURITY.md`, `DATA.md`, and `APP_RULES.md`. The Phase 0 [briefing questionnaire](skills/project-instantiation/BRIEFING.md) is framework guidance used by the instantiation skill.
 
 Some profiles contain generic guidance plus clearly marked project sections. Framework upgrades must never overwrite populated project values.
 
@@ -63,7 +63,7 @@ Current published framework: [V0.19.0](framework-releases/V0.19.0.md). Previous 
 - FCVW releases: `framework-releases/Vx.y.z.md`.
 - Application releases: `changelogs/Vx.y.z.md`.
 - Installed FCVW baseline: `FRAMEWORK_LOCK.md`.
-- Application version: project `MANIFEST.md` or the application's runtime version source.
+- Application version: project `PROJECT.md` (identity and scope) or the application's runtime version source.
 
 The namespaces must not be mixed.
 

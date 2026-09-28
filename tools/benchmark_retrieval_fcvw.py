@@ -21,7 +21,7 @@ def synthetic_corpus() -> tuple[list[dict], list[dict]]:
         ("security", "rotate authentication credentials", "security", ["SECURITY", "DATA", "REGRESSION_GUARDS"]),
         ("migration", "database migration rollback", "migration", ["DATA", "TESTS", "REGRESSION_GUARDS"]),
         ("ai", "retrieval injection defense", "ai_governance", ["AI", "SECURITY"]),
-        ("ui", "keyboard focus accessibility", "ui", ["DESIGN", "TESTS", "REGRESSION_GUARDS"]),
+        ("ui", "keyboard focus accessibility", "ui", ["PROJECT", "TESTS", "REGRESSION_GUARDS"]),
         ("refactoring", "extract module preserve behavior", "refactoring", ["REFACTORING", "PLANNING", "REGRESSION_GUARDS"]),
         ("documentation", "document public interface", "documentation", ["OWNERSHIP"]),
         ("release", "publish version checksums", "release", ["RELEASE", "REGRESSION_GUARDS", "skills/release-checklist/SKILL"]),

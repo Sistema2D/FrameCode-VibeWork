@@ -153,8 +153,7 @@ controlled values:
 deliberately keeps the template placeholders: the project is declaring that the
 concern does not apply, not pretending to have filled it in.
 
-`MANIFEST.md` and `SCOPE.md` may never be waived. Identity and boundary always
-apply: a project always has a name and an edge.
+`PROJECT.md` cannot be waived as a whole, and its *Identity and scope* section cannot appear in `not_applicable_sections`: a project always has a name and an edge. Other `PROJECT.md` sections are waived individually through `not_applicable_sections` plus `not_applicable_reason`; only waived sections may keep placeholders. `SECURITY.md`, `DATA.md` and `APP_RULES.md` are waived as whole files.
 
 Without that third state the only way to pass `--profile instantiated` would be
 to invent content for profiles the project does not use yet, and the validator

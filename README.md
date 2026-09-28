@@ -102,7 +102,7 @@ Consulte [OWNERSHIP.md](FCVW/OWNERSHIP.md) e [SCHEMAS.md](FCVW/SCHEMAS.md) para 
 2. Classifique a sessão em [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md).
 3. Siga [INSTANTIATION.md](FCVW/INSTANTIATION.md) e execute o briefing necessário.
 4. Preencha os arquivos `artifact_role: project_profile` apenas com fatos aprovados.
-5. Defina a fonte de versão da aplicação em [MANIFEST.md](FCVW/MANIFEST.md) ou no runtime documentado.
+5. Defina a fonte de versão da aplicação em [MANIFEST.md](FCVW/PROJECT.md#identity-and-scope) ou no runtime documentado.
 6. Crie o primeiro plano `fcvw/plan@2` em `FCVW/Plans/pending/`.
 7. Quando os perfis estiverem completos, execute o validador com `--profile instantiated`.
 
@@ -398,7 +398,7 @@ See [OWNERSHIP.md](FCVW/OWNERSHIP.md) and [SCHEMAS.md](FCVW/SCHEMAS.md) for the 
 2. Classify the session through [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md).
 3. Follow [INSTANTIATION.md](FCVW/INSTANTIATION.md) and complete the necessary briefing.
 4. Populate `artifact_role: project_profile` files only with approved facts.
-5. Define the application version source in [MANIFEST.md](FCVW/MANIFEST.md) or the documented runtime.
+5. Define the application version source in [MANIFEST.md](FCVW/PROJECT.md#identity-and-scope) or the documented runtime.
 6. Create the first `fcvw/plan@2` under `FCVW/Plans/pending/`.
 7. When profiles are complete, run the validator with `--profile instantiated`.
 

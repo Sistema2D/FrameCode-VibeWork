@@ -54,7 +54,7 @@ tags:
 
 - [ ] `skills/README.md` updated when a skill/profile is created.
 - [ ] `CONTEXT_MAP.md` updated when the asset affects session routing.
-- [ ] `STACK.md` updated when the active skill catalog changes.
+- [ ] `PROJECT.md` (stack) updated when the active skill catalog changes.
 - [ ] `AGENTS.md` updated only if the behavior must be base-loaded.
 - [ ] Changelog and active plan cite the proposal.
 
@@ -115,6 +115,6 @@ tags:
 
 - [ ] `skills/README.md` updated if trigger, name, or summary changed.
 - [ ] `CONTEXT_MAP.md` updated if routing changed.
-- [ ] `STACK.md` updated if active catalog changed.
+- [ ] `PROJECT.md` (stack) updated if active catalog changed.
 - [ ] Changelog and active plan cite the report.
 - [ ] Session synthesis records invoked skills and next review trigger.

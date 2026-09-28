@@ -73,19 +73,28 @@ REQUIRED_PATHS = (
 # project does not use yet, so the validator would be measuring fiction.
 INSTANTIATION_STATUSES = {"pending", "complete", "not_applicable"}
 # Identity and scope always apply: a project always has a name and a boundary.
-INSTANTIATION_REQUIRED_PROFILES = {"MANIFEST.md", "SCOPE.md"}
+INSTANTIATION_REQUIRED_PROFILES = {"PROJECT.md", "MANIFEST.md", "SCOPE.md"}
+# PROJECT.md holds several concerns; a concern that does not apply yet is waived
+# per section. Identity and scope can never be waived.
+PROJECT_PROFILE = "PROJECT.md"
+UNWAIVABLE_PROJECT_SECTIONS = {"identity and scope"}
 MINIMUM_INSTANTIATION_REASON = 40
 
 PROJECT_PROFILES = (
-    "BRIEFING.md",
+    "PROJECT.md",
+    "SECURITY.md",
     "DATA.md",
     "APP_RULES.md",
+)
+# Pre-V0.20.0 profiles. A populated copy is project-owned and survives upgrades,
+# so it keeps being validated until its content is merged into PROJECT.md.
+LEGACY_PROJECT_PROFILES = (
+    "BRIEFING.md",
     "DESIGN.md",
     "ENVIRONMENT.md",
     "MANIFEST.md",
     "PERFORMANCE.md",
     "SCOPE.md",
-    "SECURITY.md",
     "STACK.md",
     "WORKFLOW.md",
 )
@@ -1785,8 +1794,31 @@ def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> Non
                 )
 
 
+def without_sections(text: str, titles: set[str]) -> str:
+    """Drop the level-two sections whose normalized titles are listed."""
+
+    kept: list[str] = []
+    skipping = False
+    for line in text.splitlines():
+        if line.startswith("## "):
+            skipping = normalized_title(line[3:]) in titles
+        if not skipping:
+            kept.append(line)
+    return "\n".join(kept)
+
+
 def validate_profiles(root: Path, profile: str, findings: list[Finding]) -> None:
-    for name in PROJECT_PROFILES:
+    legacy = [name for name in LEGACY_PROJECT_PROFILES if (root / "FCVW" / name).is_file()]
+    for name in legacy:
+        findings.append(
+            Finding(
+                "profile-legacy",
+                f"FCVW/{name}",
+                "legacy profile; merge its content into PROJECT.md (see MIGRATIONS.md) and delete it",
+                severity="warning",
+            )
+        )
+    for name in (*PROJECT_PROFILES, *legacy):
         path = root / "FCVW" / name
         relative = path.relative_to(root).as_posix()
         if not path.is_file():
@@ -1806,6 +1838,28 @@ def validate_profiles(root: Path, profile: str, findings: list[Finding]) -> None
                     f"{sorted(INSTANTIATION_STATUSES)}",
                 )
             )
+        waived_sections: set[str] = set()
+        if name == PROJECT_PROFILE:
+            declared = string_list(metadata, "not_applicable_sections")
+            waived_sections = {normalized_title(item) for item in declared}
+            headings = {normalized_title(line[3:]) for line in text.splitlines() if line.startswith("## ")}
+            for title in sorted(waived_sections - headings):
+                findings.append(Finding("instantiation", relative, f"not_applicable_sections names no section: {title!r}"))
+            if waived_sections & UNWAIVABLE_PROJECT_SECTIONS:
+                findings.append(
+                    Finding("instantiation", relative, "identity and scope always apply and cannot be waived")
+                )
+            if waived_sections and profile in {"instantiated", "strict", "incremental"}:
+                reason = scalar(metadata, "not_applicable_reason").strip()
+                if len(reason) < MINIMUM_INSTANTIATION_REASON:
+                    findings.append(
+                        Finding(
+                            "instantiation",
+                            relative,
+                            "not_applicable_sections requires a not_applicable_reason of at least "
+                            f"{MINIMUM_INSTANTIATION_REASON} characters",
+                        )
+                    )
         if profile in {"instantiated", "strict", "incremental"}:
             if status == "not_applicable":
                 if name in INSTANTIATION_REQUIRED_PROFILES:
@@ -1832,7 +1886,8 @@ def validate_profiles(root: Path, profile: str, findings: list[Finding]) -> None
                 continue
             if status != "complete":
                 findings.append(Finding("instantiation", relative, "profile is not complete"))
-            if PLACEHOLDER.search(text):
+            # Waived sections keep their placeholders; every other section must be filled.
+            if PLACEHOLDER.search(without_sections(text, waived_sections)):
                 findings.append(Finding("placeholder", relative, "instantiated profile contains placeholders"))
 
 

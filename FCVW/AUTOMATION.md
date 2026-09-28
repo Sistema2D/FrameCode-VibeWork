@@ -78,7 +78,7 @@ In Scenario 1, a watcher is evaluated when an authorized human or agent observes
 | Observed event | Detection method | Required reaction | Contract owner | Blocking? |
 |---|---|---|---|---|
 | Existing public API, CLI, or file format changed | interface/contract diff | run Regression gate, test consumers, update compatibility contract | `REGRESSION_GUARDS.md` / `TESTS.md` | yes |
-| Existing UI flow or state changed | route/component/state and visual diff | replay primary, adjacent, error, keyboard, and supported viewport states | `DESIGN.md` / `TESTS.md` | yes |
+| Existing UI flow or state changed | route/component/state and visual diff | replay primary, adjacent, error, keyboard, and supported viewport states | `PROJECT.md` (design) / `TESTS.md` | yes |
 | Data schema, migration, import/export, or retention changed | model/migration diff | validate prior data, reconciliation, backup, recovery, and rollback | `DATA.md` / `TESTS.md` | yes |
 | Authentication, permission, or destructive boundary changed | security and denial-path diff | run allowed/denied misuse cases and security gate | `SECURITY.md` / `REGRESSION_GUARDS.md` | yes |
 | Agent, prompt, skill, memory, or retrieval rule changed | instruction/source diff | replay allowed, denied, ambiguous, unavailable, and injection cases | `AI.md` / `REGRESSION_GUARDS.md` | yes |

@@ -50,9 +50,9 @@ YYYY-MM-DD
 -
 
 ## Relationship with Documents
-- `SCOPE.md`:
-- `STACK.md`:
-- `WORKFLOW.md`:
+- `PROJECT.md` (identity and scope):
+- `PROJECT.md` (stack):
+- `PROJECT.md` (workflows):
 - `DATA.md`:
 - `SECURITY.md`:
 - `AI.md`:

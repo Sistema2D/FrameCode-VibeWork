@@ -56,7 +56,7 @@ Do not modify a skill or agent when:
 - the edit broadens the skill into a catch-all procedure;
 - another skill already owns the proposed responsibility;
 - the change adds examples that should live in a template, plan, or wiki note;
-- the edit changes triggers without checking `skills/README.md`, `CONTEXT_MAP.md`, and `STACK.md`.
+- the edit changes triggers without checking `skills/README.md`, `CONTEXT_MAP.md`, and `PROJECT.md` (stack).
 
 ## Safe Improvement Sequence
 

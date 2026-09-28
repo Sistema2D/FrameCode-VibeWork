@@ -1245,7 +1245,7 @@ instantiation_status: "{status}"
 `<placeholder>`
 """
 
-    def rules(self, status: str, extra: str = "", name: str = "DESIGN.md") -> list[Finding]:
+    def rules(self, status: str, extra: str = "", name: str = "SECURITY.md") -> list[Finding]:
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
@@ -1273,12 +1273,51 @@ instantiation_status: "{status}"
 
     def test_identity_and_scope_cannot_be_waived(self) -> None:
         reason = "This product has no user interface at this stage of the roadmap."
-        for profile in ("MANIFEST.md", "SCOPE.md"):
-            with self.subTest(profile=profile):
-                findings = self.rules(
-                    "not_applicable", extra=f'not_applicable_reason: "{reason}"\n', name=profile
-                )
-                self.assertTrue(any("cannot be waived" in item.message for item in findings))
+        findings = self.rules("not_applicable", extra=f'not_applicable_reason: "{reason}"\n', name="PROJECT.md")
+        self.assertTrue(any("cannot be waived" in item.message for item in findings))
+        section = self.project(["Identity and scope"], reason)
+        self.assertTrue(any("cannot be waived" in item.message for item in section))
+
+    def project(self, waived: list[str], reason: str, placeholder_in: str = "Performance") -> list[Finding]:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW").mkdir(parents=True, exist_ok=True)
+        for profile in PROJECT_PROFILES:
+            body = self.PROFILE.format(status="complete", extra="").replace("`<placeholder>`", "Filled in.")
+            (root / "FCVW" / profile).write_text(body, encoding="utf-8")
+        listed = "".join(f'  - "{title}"\n' for title in waived)
+        sections = {"Identity and scope": "Filled in.", "Stack": "Filled in.", "Performance": "Filled in."}
+        sections[placeholder_in] = "`<budget>`"
+        (root / "FCVW" / "PROJECT.md").write_text(
+            '---\nschema: "fcvw/project@1"\nartifact_role: "project_profile"\nowner: "project"\n'
+            'upgrade_strategy: "preserve"\ninstantiation_status: "complete"\n'
+            f'not_applicable_sections:\n{listed}not_applicable_reason: "{reason}"\n---\n\n# Project\n\n'
+            + "".join(f"## {title}\n\n{text}\n\n" for title, text in sections.items()),
+            encoding="utf-8",
+        )
+        findings: list[Finding] = []
+        validate_profiles(root, "instantiated", findings)
+        return findings
+
+    def test_waived_project_section_may_keep_placeholders(self) -> None:
+        reason = "The product is an internal batch job with no latency budget yet."
+        self.assertEqual([], self.project(["Performance"], reason))
+
+    def test_placeholder_in_a_section_that_was_not_waived_fails(self) -> None:
+        reason = "The product is an internal batch job with no latency budget yet."
+        rules = {item.rule for item in self.project(["Stack"], reason)}
+        self.assertIn("placeholder", rules)
+
+    def test_waived_section_needs_a_reason_and_must_exist(self) -> None:
+        messages = [item.message for item in self.project(["Performance", "Mobile"], "short")]
+        self.assertTrue(any("not_applicable_reason" in message for message in messages))
+        self.assertTrue(any("names no section" in message for message in messages))
+
+    def test_legacy_profile_is_still_validated_and_flagged(self) -> None:
+        findings = self.rules("pending", name="STACK.md")
+        self.assertIn("profile-legacy", {item.rule for item in findings})
+        self.assertTrue(any(item.path == "FCVW/STACK.md" and item.rule == "instantiation" for item in findings))
 
     def test_uncontrolled_status_is_reported(self) -> None:
         rules = {item.rule for item in self.rules("halfway")}
@@ -1871,6 +1910,7 @@ class StaticIntegrityTests(unittest.TestCase):
         "markdown-link-absolute",
         "ownership",
         "placeholder",
+        "profile-legacy",
         "plan-compact",
         "plan-dependency-completion",
         "plan-dependency-cycle",

@@ -1,16 +1,15 @@
 ---
-schema: "fcvw/project-briefing@1"
-artifact_role: "project_profile"
-owner: "project"
-upgrade_strategy: "preserve"
-instantiation_status: "pending"
+schema: "fcvw/document@1"
+artifact_role: "framework_policy"
+owner: "framework"
+upgrade_strategy: "replace"
 ---
 
 # Initial Project Briefing
 
 Methodological document to conduct **Phase 0 — Discovery and Briefing** before the development or restructuring of an application.
 
-This file defines the questions, minimum criteria, and completion rules to be used by humans and AI agents to collect the necessary information before generating or updating `SCOPE.md`, `STACK.md`, `DESIGN.md`, `WORKFLOW.md`, `PLANNING.md`, `RELEASE.md`, `SECURITY.md`, `DATA.md`, `AI.md`, and other official project documents.
+This file defines the questions, minimum criteria, and completion rules to be used by humans and AI agents to collect the necessary information before generating or updating `PROJECT.md`, `PLANNING.md`, `RELEASE.md`, `SECURITY.md`, `DATA.md`, `AI.md`, and other official project documents.
 
 ## Objective
 
@@ -27,10 +26,10 @@ This file will serve as the initial source of project understanding. After the o
 ## Relationship with Other Documents
 
 - `AGENTS.md`: triggers this process when the user requests the creation or restructuring of an application.
-- `SCOPE.md`: filled out based on the answers about objective, audience, boundaries, and features.
-- `STACK.md`: filled out based on technical decisions.
-- `DESIGN.md`: filled out based on visual preferences and UX criteria.
-- `WORKFLOW.md`: filled out based on flows, screens, modules, and events.
+- `PROJECT.md` identity and scope: filled out based on the answers about objective, audience, boundaries, and features.
+- `PROJECT.md` stack: filled out based on technical decisions.
+- `PROJECT.md` design: filled out based on visual preferences and UX criteria.
+- `PROJECT.md` workflows: filled out based on flows, screens, modules, and events.
 - `SECURITY.md`: filled out based on risks, permissions, sensitive data, and integrations.
 - `DATA.md`: filled out based on persistence, files, database, retention, and migration.
 - `AI.md`: filled out based on the role of AI, models, context, memory, RAG, and boundaries of action.

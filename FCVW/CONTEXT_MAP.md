@@ -25,25 +25,25 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | Session family | Trigger cues | Load immediately | Load on demand | Usually skip |
 |---|---|---|---|---|
 | Query / orientation | explain, locate, status, how FCVW works; no mutation | `FRAMEWORK_LOCK.md`, `README.md`, relevant index | one canonical source | plans and history |
-| Analysis / review | compare, critique, inspect, identify gaps | relevant domain policy, `SCOPE.md` when instantiated | `AUDIT.md`, recent exact records | unrelated histories |
+| Analysis / review | compare, critique, inspect, identify gaps | relevant domain policy, `PROJECT.md` when instantiated | `AUDIT.md`, recent exact records | unrelated histories |
 | Planning (`planning`) | create/review/reopen a plan, estimate priority/risk | `PLANNING.md`, `SCHEMAS.md`, `REGRESSION_GUARDS.md` | security/data/design/test policy by surface | release history |
-| New feature (`feature`) | add behavior, screen, endpoint, workflow, integration | `SCOPE.md`, `PLANNING.md`, `REGRESSION_GUARDS.md` | `DESIGN.md`, `DATA.md`, `SECURITY.md`, `AI.md`, `APPLICATION_DOCUMENTATION.md` | release until closeout |
+| New feature (`feature`) | add behavior, screen, endpoint, workflow, integration | `PROJECT.md`, `PLANNING.md`, `REGRESSION_GUARDS.md` | `DATA.md`, `SECURITY.md`, `AI.md`, `APPLICATION_DOCUMENTATION.md` | release until closeout |
 | Bugfix / troubleshooting (`bugfix`, `troubleshooting`) | defect, exception, failed build, unexpected behavior | `TROUBLESHOOTING.md`, `PLANNING.md`, `REGRESSION_GUARDS.md` | matching failure record, `TESTS.md`, affected domain | unrelated redesign |
 | Regression analysis | previously working behavior broke, recurring defect | `REGRESSION_GUARDS.md`, `TESTS.md`, affected contract | `wiki/` (`type: regression` notes), troubleshooting, prior plan/release | unrelated wiki history |
 | Product QA (`product_qa`) | first-run mapping, test running application, maintain UI or non-GUI behavior wiki | `skills/QA/SKILL.md`, `APPLICATION_DOCUMENTATION.md`, `TESTS.md`, `SECURITY.md`, `skills/QA/PRODUCT_WIKI.md` | selected product inventory/pages, approved requirements, exact QA runs | unrelated wiki history and full DOM dumps |
-| UI / accessibility (`ui`) | layout, interaction, focus, keyboard, contrast, copy | `DESIGN.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | `agent-hephaestus`, `WORKFLOW.md` | data unless state/persistence changes |
+| UI / accessibility (`ui`) | layout, interaction, focus, keyboard, contrast, copy | `PROJECT.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | `agent-hephaestus` | data unless state/persistence changes |
 | Security / privacy (`security`) | auth, permission, secrets, sensitive data, destructive action | `SECURITY.md`, `DATA.md`, `REGRESSION_GUARDS.md` | `agent-aegis`, `TESTS.md`, environment | unrelated UX |
-| Data / migration (`migration`) | schema, persistence, import/export, retention, file format | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | `SECURITY.md`, `ENVIRONMENT.md`, migration/rollback record | unrelated UI |
-| Performance (`performance`) | latency, memory, bundle, startup, capacity, bottleneck | `PERFORMANCE.md`, `TESTS.md` | `agent-hermes`, `STACK.md`, environment | full wiki |
+| Data / migration (`migration`) | schema, persistence, import/export, retention, file format | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | `SECURITY.md`, `PROJECT.md`, migration/rollback record | unrelated UI |
+| Performance (`performance`) | latency, memory, bundle, startup, capacity, bottleneck | `PROJECT.md`, `TESTS.md` | `agent-hermes`, environment | full wiki |
 | Refactoring (`refactoring`) | behavior-preserving structure, monolith, duplication, dead code | `REFACTORING.md` relevant sections, `PLANNING.md`, `REGRESSION_GUARDS.md` | `REFACTORING_GUIDE.md` section for the stage, characterization tests, hygiene skills | release until closeout |
-| Architecture / public interface | module boundary, API/CLI/file contract, runtime topology | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `REGRESSION_GUARDS.md` | `STACK.md`, `WORKFLOW.md`, `DATA.md`, ADR template | routine histories |
+| Architecture / public interface | module boundary, API/CLI/file contract, runtime topology | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `REGRESSION_GUARDS.md` | `PROJECT.md`, `DATA.md`, ADR template | routine histories |
 | Documentation / file movement (`documentation`) | add/move/delete/rename Markdown, docs, generated index | `OWNERSHIP.md`, relevant document contract | `APPLICATION_DOCUMENTATION.md`, `obsidian-markdown`, validator | application runtime docs unless affected |
-| Environment / deploy | configuration, environment variable, port, packaging, promotion, recovery | `ENVIRONMENT.md`, `STACK.md`, `SECURITY.md`, `REGRESSION_GUARDS.md` | `WORKFLOW.md`, `TESTS.md`, release policy | design/wiki |
-| Dependency / toolchain | add/remove/update package, runtime, compiler, SDK, external service | `STACK.md`, `SECURITY.md`, `ARCHITECTURAL_DECISIONS.md` | `ENVIRONMENT.md`, license/release evidence, `TESTS.md` | unrelated product history |
+| Environment / deploy | configuration, environment variable, port, packaging, promotion, recovery | `PROJECT.md`, `SECURITY.md`, `REGRESSION_GUARDS.md` | `TESTS.md`, release policy | design/wiki |
+| Dependency / toolchain | add/remove/update package, runtime, compiler, SDK, external service | `PROJECT.md`, `SECURITY.md`, `ARCHITECTURAL_DECISIONS.md` | license/release evidence, `TESTS.md` | unrelated product history |
 | Testing / QA | test strategy, validation gap, flaky test, acceptance evidence | `TESTS.md`, `REGRESSION_GUARDS.md` | affected domain, troubleshooting, governance gate | full plans archive |
 | AI governance / skill change (`ai_governance`) | model, prompt, tool, agent, skill, retrieval, provider, memory boundary | `AI.md` relevant sections, `SECURITY.md` | `agent-factory` or `self-improvement`, `wiki/README.md`, `TESTS.md` | unrelated application domains |
 | Wiki / memory (`wiki_maintenance`) | curate, promote, deduplicate, archive, session knowledge, source impact, typed relations | `wiki/README.md` | `wiki-curator`, `wiki-lint`, taxonomy/metrics, disposable knowledge graph | full session archive by default |
-| Instantiation (`instantiation`) | new clean project, briefing, bootstrap, existing-app adoption | `INSTANTIATION.md` (new or retroactive mode), `OWNERSHIP.md` | `BRIEFING.md`, project profiles, migration | unrelated framework history |
+| Instantiation (`instantiation`) | new clean project, briefing, bootstrap, existing-app adoption | `INSTANTIATION.md` (new or retroactive mode), `OWNERSHIP.md` | `skills/project-instantiation/BRIEFING.md`, project profiles, migration | unrelated framework history |
 | Framework upgrade (`framework_upgrade`) | install/sync/merge FCVW version | `FRAMEWORK_LOCK.md`, `OWNERSHIP.md`, `MIGRATIONS.md` | target framework release, validator | application history except preservation scan |
 | Declarative automation | hook, watcher, daemon, gate, scheduled/observed reaction | `AUTOMATION.md` (the section for the contract kind) | corresponding governance template, runtime adapter only if authorized | unrelated automation types |
 | Git / repository mutation (`git`) | stage, commit, branch, tag, push, merge, PR | `git-conventional-commits`, active plan, status/diff evidence | `release-checklist`, version/release docs | unrelated history |
@@ -63,8 +63,8 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 | `event:change` Any versioned change | `PLANNING.md`, `REGRESSION_GUARDS.md` | active plan, regression contract, rollback |
 | `event:filesystem` Add, move, rename, generate, or delete a file/directory | `OWNERSHIP.md` | ownership role, path/index synchronization |
 | `event:policy` Root entrypoint, canonical FCVW policy, schema, template, or validator changes | `SCHEMAS.md`, `OWNERSHIP.md`, `AUDIT.md` | compatibility and governance validation |
-| `event:public_interface` Public API, CLI, event, file format, module boundary, or primary workflow changes | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `WORKFLOW.md` | consumer impact, ADR decision, documentation update |
-| `event:dependency` Dependency, runtime, build tool, SDK, or external service changes | `STACK.md`, `ENVIRONMENT.md`, `SECURITY.md` | compatibility, source/license, failure/rollback evidence |
+| `event:public_interface` Public API, CLI, event, file format, module boundary, or primary workflow changes | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `PROJECT.md` | consumer impact, ADR decision, documentation update |
+| `event:dependency` Dependency, runtime, build tool, SDK, or external service changes | `PROJECT.md`, `SECURITY.md` | compatibility, source/license, failure/rollback evidence |
 | `event:security` Authentication, authorization, secret, sensitive data, destructive action | `SECURITY.md`, `DATA.md`, `TESTS.md` | misuse/denial cases, residual risk, rollback |
 | `event:data` Persistence, schema, import/export, retention, or migration changes | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | old-data compatibility, reconciliation, recovery |
 | `event:ai` AI instruction, prompt, skill, agent, memory, retrieval, or tool boundary changes | `AI.md`, `SECURITY.md`, `TESTS.md` | allowed/denied boundary replay; factory or improvement gate |
@@ -82,11 +82,12 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 | `REFACTORING.md` | Central principle and block criteria; risk/tests; chosen checklist; anti-monolith/hygiene gate | a systemic refactor needs the full lifecycle |
 | `REFACTORING_GUIDE.md` | only the section for the current stage (decision guide, smells map, risk matrix, rollback, stopping criteria) | the refactor spans several stages |
 | `TROUBLESHOOTING.md` | Mandatory consultation and plan relationship; recommended consultation; closure criteria | creating or closing a durable failure record |
-| `BRIEFING.md` | Activation and gap levels, then only relevant questionnaire domains; closure rule last | performing full Phase 0 discovery |
+| `skills/project-instantiation/BRIEFING.md` | Activation and gap levels, then only relevant questionnaire domains; closure rule last | performing full Phase 0 discovery |
 | `AUDIT.md` | matching audit type or quick checklist; pre-release checklist only at release | running a repository-wide or release audit |
 | `APPLICATION_DOCUMENTATION.md` | When documentation is required and minimum module scope | designing the full downstream documentation tree |
 | `ARCHITECTURAL_DECISIONS.md` | When to create/not create an ADR and acceptance checklist | authoring or superseding an ADR |
 | `SCHEMAS.md` | Common fields plus only the schema of the artifact at hand | changing a schema or auditing compatibility |
+| `PROJECT.md` | only the section for the concern at hand (identity and scope, stack, environment, design, performance, workflows) | instantiation or a change that crosses concerns |
 | `PLANNING.md` | When planning applies; plan class; regression impact; queues | reopening a plan or revising queue policy |
 | `TESTS.md` | Minimum evidence by risk plus the row for the changed surface | defining project test strategy |
 

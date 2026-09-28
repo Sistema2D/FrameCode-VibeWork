@@ -40,11 +40,8 @@ Use this document when:
 
 They reside inside the `FCVW/` folder (except `AGENTS.md` which remains in the root as the bridge entrypoint) and must be filled with real application data:
 
-- `FCVW/MANIFEST.md`
-- `FCVW/STACK.md`
-- `FCVW/SCOPE.md`
-- `FCVW/DESIGN.md`, when there is UI
-- `FCVW/WORKFLOW.md`
+- `FCVW/PROJECT.md`: identity and scope, stack, environment, design (when there is UI), performance and workflows
+- `FCVW/SECURITY.md`
 - `FCVW/DATA.md`, when there is persistence
 - `FCVW/AI.md`, when there are AI features
 - `AGENTS.md` (at the root)
@@ -55,7 +52,6 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 
 - `FCVW/governance/`
 - `FCVW/skills/QA/TEMPLATE_*.md`
-- design-system rules in `FCVW/DESIGN.md`.
 
 ## Renaming Rules
 
@@ -68,18 +64,18 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 ### Document Titles
 
 - Replace generic titles only in root canonical documents.
-- Preserve technical prefixes when they identify the role of the file, e.g., `AGENTS.md`, `STACK.md`, and `DESIGN.md`.
-- Do not rename official files without updating `AGENTS.md`, `MANIFEST.md`, and cross-references.
+- Preserve technical prefixes when they identify the role of the file, e.g., `AGENTS.md` and `PROJECT.md`.
+- Do not rename official files without updating `AGENTS.md`, `PROJECT.md` (identity and scope), and cross-references.
 
 ### Placeholders
 
 - Replace placeholders like `<project name>`, `<technology>`, `<objective>`, and `<risk>` only when there is an answer in the briefing, a recorded decision, or direct confirmation from the user.
-- If the information does not exist yet, record the gap in `BRIEFING.md`, `MANIFEST.md`, or `wiki/` (`type: question` notes).
+- If the information does not exist yet, record the gap in the [briefing questionnaire](skills/project-instantiation/BRIEFING.md), `PROJECT.md` (identity and scope), or `wiki/` (`type: question` notes).
 - Do not replace placeholders inside `governance/` and `skills/QA/TEMPLATE_*.md`, as they are reusable models.
 
 ### Initial Version
 
-- Define one canonical application version source, reference it from `MANIFEST.md`, and create the first application changelog.
+- Define one canonical application version source, reference it from `PROJECT.md` (identity and scope), and create the first application changelog.
 - Use `V0.1.0` when there is a usable initial scope.
 - Use `V0.0.1` when the change is only structural, documental, or preparatory.
 
@@ -92,13 +88,13 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 
 ## Instantiation Flow
 
-1. Read `AGENTS.md`, this file, and `BRIEFING.md`.
+1. Read `AGENTS.md`, this file, and the [briefing questionnaire](skills/project-instantiation/BRIEFING.md).
 2. Confirm if the current directory is the original framework or a derived application.
 3. Record or update a plan in `FCVW/Plans/`.
-4. Fill in `BRIEFING.md` with known answers.
+4. Fill in the [briefing questionnaire](skills/project-instantiation/BRIEFING.md) with known answers.
 5. Update application-owned profiles, choose one application version source, and create or update the root `README.md` for the application.
-6. Translate `DESIGN.md` YAML tokens into a physical codebase configuration file (e.g., `tailwind.config.js`, `index.css`, or `theme.ts`) to establish the UI foundation.
-7. Remove non-applicable sections and set each completed profile `instantiation_status` to `complete`. A profile the project does not use yet takes `not_applicable` plus a concrete `not_applicable_reason` instead of invented content; `MANIFEST.md` and `SCOPE.md` may never be waived.
+6. Translate `PROJECT.md` (design) YAML tokens into a physical codebase configuration file (e.g., `tailwind.config.js`, `index.css`, or `theme.ts`) to establish the UI foundation.
+7. Remove non-applicable sections and set each completed profile `instantiation_status` to `complete`. A `PROJECT.md` section the project does not use yet goes into `not_applicable_sections` with a concrete `not_applicable_reason` instead of invented content; `SECURITY.md`, `DATA.md` and `APP_RULES.md` may take `not_applicable` as a whole. *Identity and scope* is never waived.
 8. Create a changelog fragment in `changelogs/unreleased/{plan-name}.md`.
 9. Validate remaining placeholders according to artifact role.
 10. Update `wiki/index.md` if the instantiation generates reusable learning.
@@ -151,7 +147,7 @@ Use this workflow when you have an existing project (with code, history, partial
 #### Phase 1 — Assessment
 
 1. **Map existing structure**: Inventory all directories, configuration files, documentation, and data schemas.
-2. **Identify governance gaps**: Compare the repository with `MANIFEST.md` and the filesystem layout in `OWNERSHIP.md`; record which canonical profiles and record directories are missing.
+2. **Identify governance gaps**: Compare the repository with `PROJECT.md` (identity and scope) and the filesystem layout in `OWNERSHIP.md`; record which canonical profiles and record directories are missing.
 3. **Record baseline**: Create a record in `FCVW/briefings/` describing the pre-adoption state.
 4. **Run hygiene triage**: Load `skills/code-hygiene-refactor/SKILL.md` and identify duplicate snippets, stale files, dead code candidates, catch-all modules, and monolithic files without modifying application code.
 5. **Run anti-monolith triage**: Load `skills/anti-monolith-guard/SKILL.md` for any large or mixed-responsibility area that will receive new FCVW-driven changes.

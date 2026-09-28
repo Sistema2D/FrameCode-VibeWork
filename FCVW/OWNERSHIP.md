@@ -13,7 +13,7 @@ Ownership determines what an FCVW upgrade may replace.
 |---|---|---|---|
 | `framework_policy` | Generic operating rule | `PLANNING.md`, `RELEASE.md` | replace when compatible |
 | `framework_lock` | Installed baseline | `FRAMEWORK_LOCK.md` | update through migration |
-| `project_profile` | Application-specific truth | `MANIFEST.md`, `SCOPE.md` | preserve; merge deliberately |
+| `project_profile` | Application-specific truth | `PROJECT.md`, `SECURITY.md`, `DATA.md`, `APP_RULES.md` | preserve; merge deliberately |
 | `template` | Reusable empty model | `governance/` | replace when schema-compatible |
 | `record` | Historical evidence | plans, changelogs, ADRs, failures | preserve; never bulk-overwrite |
 | `generated` | Derived navigation or metrics | `DOCUMENT_GRAPH.md`, indexes | regenerate from current state |

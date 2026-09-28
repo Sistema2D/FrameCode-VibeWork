@@ -25,7 +25,7 @@ Use only for a verified clean-template workspace becoming a new application. Exi
 
 ## Inputs
 
-`INSTANTIATION.md`, `BRIEFING.md`, `OWNERSHIP.md`, `FRAMEWORK_LOCK.md`, and user-approved product context.
+`INSTANTIATION.md`, `skills/project-instantiation/BRIEFING.md`, `OWNERSHIP.md`, `FRAMEWORK_LOCK.md`, and user-approved product context.
 
 ## Procedure
 

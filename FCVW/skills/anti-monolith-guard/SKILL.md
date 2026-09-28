@@ -63,7 +63,7 @@ Stop and split the work before editing if any gate fails:
 
 ## Recommended Size Budgets
 
-These are code-oriented governance defaults, not universal rules. Apply them only after the applicability classification. A project may resize them in `STACK.md` or `APPLICATION_DOCUMENTATION.md` when architecture, security, integrity, or performance evidence requires a different budget.
+These are code-oriented governance defaults, not universal rules. Apply them only after the applicability classification. A project may resize them in `PROJECT.md` (stack) or `APPLICATION_DOCUMENTATION.md` when architecture, security, integrity, or performance evidence requires a different budget.
 
 | Artifact | Warning | Block unless justified |
 |---|---:|---:|

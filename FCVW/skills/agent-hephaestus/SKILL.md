@@ -29,7 +29,7 @@ Find and implement exactly one focused UX/accessibility improvement that preserv
 
 ## Mandatory Governance
 
-- Follow `AGENTS.md`, `DESIGN.md`, `PLANNING.md`, and `TESTS.md`.
+- Follow `AGENTS.md`, `PROJECT.md` (design), `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
 - For durable codebase-specific UX learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/` (`type: agent` notes) with a collision-resistant ID; do not rely on a shared fixed journal filename.
@@ -48,7 +48,7 @@ Stop before implementation if the improvement requires:
 
 1. Accessibility labels, roles, focus, keyboard, and contrast.
 2. Interaction states: loading, disabled, error, empty, success.
-3. Alignment, spacing, hierarchy, and repetition against `DESIGN.md`.
+3. Alignment, spacing, hierarchy, and repetition against `PROJECT.md` (design).
 4. Microcopy clarity for the selected workflow.
 
 ## Output Required

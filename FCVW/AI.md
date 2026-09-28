@@ -253,9 +253,9 @@ To prevent the AI agent from recommending outdated, insecure, or inappropriate t
 Before recommending or integrating any third-party service, the AI agent must:
 
 1. **Discover available options**: Use available research tools to identify potential providers for the required capability. Do not rely on memory alone.
-2. **Compare against constraints**: Evaluate each option against the project's explicit constraints documented in `STACK.md`, `SCOPE.md`, `PERFORMANCE.md`, `SECURITY.md`, and `DATA.md`. Consider: free-tier limits, pricing model, data residency, latency, maintenance burden, community health, API stability, and compatibility with the existing stack.
+2. **Compare against constraints**: Evaluate each option against the project's explicit constraints documented in `PROJECT.md` (stack, identity and scope, performance), `SECURITY.md`, and `DATA.md`. Consider: free-tier limits, pricing model, data residency, latency, maintenance burden, community health, API stability, and compatibility with the existing stack.
 3. **Document reasoning**: Record the selected service, the alternatives considered, and the rationale for the choice. This documentation lives in the active plan, an ADR in `decisions/`, or a wiki page in `wiki/` (`type: decision` notes).
-4. **Install and configure**: Follow the service's official documentation for setup. Use the project's `.env.example` to document required environment variables (following `ENVIRONMENT.md` rules). Never hardcode credentials.
+4. **Install and configure**: Follow the service's official documentation for setup. Use the project's `.env.example` to document required environment variables (following `PROJECT.md` (environment) rules). Never hardcode credentials.
 
 ### Prohibited Behavior
 
@@ -277,7 +277,7 @@ When a third-party service requires API credentials:
 
 Research may be skipped only when:
 
-- The service is already integrated and documented in the project (verify via `STACK.md`, existing configuration, or imports).
+- The service is already integrated and documented in the project (verify via `PROJECT.md` (stack), existing configuration, or imports).
 - The user explicitly specifies the exact provider, version, and configuration to use.
 - The task is a direct bugfix or upgrade of an already-integrated service.
 

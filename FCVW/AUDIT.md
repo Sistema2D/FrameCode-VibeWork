@@ -62,7 +62,7 @@ Verifies coherence of the release.
 Items:
 
 - version in code;
-- version in `STACK.md`;
+- version in `PROJECT.md` (stack);
 - corresponding changelog;
 - release status;
 - related plans;
@@ -135,7 +135,7 @@ Items:
 - [ ] `AGENTS.md` cites all relevant official documents.
 - [ ] The repository root remains clean for framework distribution: bridge/public files such as `README.md`, `AGENTS.md`, `.gitignore`, `.cursorrules`, `.windsurfrules`, and `.github/` may exist; ignored `.obsidian/` state may exist only in the local source checkout and must be absent from release assets; no permanent root `docs/`, root `package.json`, root `package-lock.json`, root `tests/`, or framework-owned generated site artifacts are present.
 - [ ] The framework baseline does not contain `FCVW/docs/`; public documentation sites belong to external repositories or deployment pipelines.
-- [ ] `STACK.md` records the correct version.
+- [ ] `PROJECT.md` (stack) records the correct version.
 - [ ] `changelogs/Vx.y.z.md` exists.
 - [ ] The changelog cites related plans.
 - [ ] All completed plans are in `Plans/completed`.
@@ -154,9 +154,9 @@ Items:
 - [ ] There is no resolved issue without minimum evidence.
 - [ ] Relevant application module, screen, page, component, flow, or business-rule changes updated the application-owned module documentation defined by `APPLICATION_DOCUMENTATION.md`.
 - [ ] Durable agent pages, when used, follow `fcvw/wiki@1`, use collision-resistant IDs under `wiki/` (`type: agent` notes), and do not rely on shared fixed filenames.
-- [ ] `DESIGN.md` reflects approved visual changes.
-- [ ] `SCOPE.md` reflects approved functional changes.
-- [ ] `WORKFLOW.md` reflects modified flows.
+- [ ] `PROJECT.md` (design) reflects approved visual changes.
+- [ ] `PROJECT.md` (identity and scope) reflects approved functional changes.
+- [ ] `PROJECT.md` (workflows) reflects modified flows.
 - [ ] `DATA.md` reflects persistence changes.
 - [ ] `SECURITY.md` reflects security changes.
 - [ ] `AI.md` reflects AI changes.

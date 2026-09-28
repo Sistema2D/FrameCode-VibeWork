@@ -38,9 +38,9 @@ If the external behavior needs to change, the modification is not just refactori
 - `PLANNING.md`: operational priority/risk gates for triage, review, rollback, validation, blocking, and decomposition.
 - `RELEASE.md`: version increment, changelog, rollback.
 - `TROUBLESHOOTING.md`: consult when refactoring is linked to failures or regressions.
-- `DESIGN.md`: consult when refactoring affects the interface or visual components.
-- `WORKFLOW.md`: update when refactoring alters the operational workflow.
-- `SCOPE.md`: update only if refactoring reveals or requires a formal scope change.
+- `PROJECT.md` (design): consult when refactoring affects the interface or visual components.
+- `PROJECT.md` (workflows): update when refactoring alters the operational workflow.
+- `PROJECT.md` (identity and scope): update only if refactoring reveals or requires a formal scope change.
 
 ## 4. Mandatory Rule
 
@@ -241,8 +241,8 @@ A refactoring can only be considered completed when:
 - [ ] Is there a test plan?
 - [ ] Is there a rollback plan for R4/R5?
 - [ ] Was `TROUBLESHOOTING.md` consulted if there is a relationship with a failure?
-- [ ] Was `DESIGN.md` consulted if there is an impact on UI?
-- [ ] Will `WORKFLOW.md` be updated if there is an impact on workflow?
+- [ ] Was `PROJECT.md` (design) consulted if there is an impact on UI?
+- [ ] Will `PROJECT.md` (workflows) be updated if there is an impact on workflow?
 
 ### During Refactoring
 
