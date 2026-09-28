@@ -48,5 +48,5 @@ Default retrieval output is unchanged. Callers that passed `--adaptive-*` or `--
 
 ## Relationships
 
-- [Phase 2 plan](../Plans/in_progress/P2-R4-2026-09-28-phase2-file-reduction.md).
+- [Phase 2 plan](../Plans/completed/P2-R4-2026-09-28-phase2-file-reduction.md).
 - [AI governance](../AI.md).

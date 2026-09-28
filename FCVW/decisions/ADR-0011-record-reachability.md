@@ -35,5 +35,5 @@ Existing downstream records stay valid without edits. A downstream `FCVW/DOCUMEN
 
 ## Relationships
 
-- [Phase 2 plan](../Plans/in_progress/P2-R4-2026-09-28-phase2-file-reduction.md).
+- [Phase 2 plan](../Plans/completed/P2-R4-2026-09-28-phase2-file-reduction.md).
 - [Ownership and filesystem layout](../OWNERSHIP.md).

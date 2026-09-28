@@ -17,14 +17,23 @@
 | Repositório e issues | público; 0 issues abertas |
 | Tamanho de `FCVW/` | 228 arquivos, 65 diretórios |
 
-**Estado de execução (2026-09-28):** a **Fase 1 foi implementada** em V0.19.1
-(em preparação), em três planos concluídos:
+**Estado de execução (2026-09-28):** as **Fases 1 e 2 foram implementadas** e
+serão publicadas juntas em **V0.20.0** (em preparação). A V0.19.1 foi cancelada
+antes da publicação e incorporada à V0.20.0. A Fase 1 foi feita em três planos concluídos:
 
 - [upgrade seguro](FCVW/Plans/completed/P1-R4-2026-09-28-upgrade-baseline-safety.md) — A-01, A-06 e A-07;
 - [integridade do validador](FCVW/Plans/completed/P2-R3-2026-09-28-validator-integrity.md) — B-01, B-02, A-02, A-03, A-04, A-09, G-04 e a permissão deste arquivo na raiz;
 - [roteamento por papel](FCVW/Plans/completed/P2-R2-2026-09-28-role-based-policy-routing.md) — C-01 e C-02.
 
-A evidência está no [release record V0.19.1](FCVW/framework-releases/V0.19.1.md): 324 testes, governança, benchmark e smoke de instalação passaram no Linux com Python 3.10 a 3.13. O A-08 foi movido para a Fase 2, onde é necessário.
+A evidência da Fase 1 está no [release record V0.19.1](FCVW/framework-releases/V0.19.1.md): 324 testes, governança, benchmark e smoke de instalação passaram no Linux com Python 3.10 a 3.13. O A-08 foi movido para a Fase 2, onde é necessário.
+
+A Fase 2 está no [plano de redução](FCVW/Plans/completed/P2-R4-2026-09-28-phase2-file-reduction.md) e no [release record V0.20.0](FCVW/framework-releases/V0.20.0.md). Resultados medidos:
+
+- `FCVW/` passou de 228 para 113 arquivos e de 65 para 28 diretórios (9 fora de `skills/`). Fora dos diretórios de registro são 65 arquivos.
+- O pacote instalado passou de 273 para 103 arquivos, de 66 para 24 diretórios e de 1.457 para 1.019 KB.
+- Nenhum ID de regra se perdeu sem justificativa: 12 IDs `plan-queue-*` foram aposentados e 3 foram criados.
+- Um ensaio de migração a partir de uma instalação V0.19.0 manteve os digests SHA-256 de todos os 20 arquivos do projeto.
+- 268 testes e o runner local passaram no Python 3.10 a 3.13.
 
 **Método:** leitura das políticas, das skills e das ferramentas em `tools/`, com
 **reprodução em cópias descartáveis** dos itens marcados como *Confirmado*. Os itens
@@ -507,7 +516,7 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 
 **Cuidados obrigatórios:**
 
-- **Nenhum registro é apagado:** em projetos instalados, o upgrade (com `--prune`, A-08) **move** notas e registros para os novos caminhos, a partir de uma tabela caminho antigo → novo em `MIGRATIONS.md`, sempre com `--dry-run` primeiro. Por isso a Fase 1 (A-01 e A-08) precede a Fase 2.
+- **Nenhum registro é apagado:** em projetos instalados, o upgrade **preserva** profiles e registros do projeto. O `--prune` (A-08) remove apenas arquivos do framework idênticos ao baseline. A fusão dos profiles antigos no `PROJECT.md` e a correção de links do `wiki/index.md` são **manuais**, guiadas pela tabela caminho antigo → novo em `MIGRATIONS.md` e pelos findings do validador, sempre com dry run primeiro. Por isso a Fase 1 (A-01 e A-08) precede a Fase 2. *(Revisado na execução: mover registros automaticamente arriscaria perder conteúdo editado pelo projeto.)*
 - **Prova de que nenhuma regra se perdeu:** antes da Fase 2, inventariar os IDs de regra emitidos pelo validador (mais de 80) e garantir uma fixture negativa por regra. Depois da redução, cada ID continua com fixture que falha, ou foi removido com justificativa no plano. Isso é necessário porque boa parte dos 305 testes referencia caminhos que vão mudar e precisará ser reescrita.
 - Atualizar juntos: `REQUIRED_PATHS` (na lista única de E-04), rotas do `CONTEXT_MAP.md`, inferência de papéis do `role_manifest_fcvw.py`, empacotamento das 4 variantes de idioma e links.
 - **Uma consolidação por plano**, sempre com a suíte verde antes da próxima.
@@ -516,7 +525,7 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 
 ## 11. Roadmap
 
-### Fase 1 — Integridade e linha de base (patch V0.19.1) — **implementada; publicação pendente**
+### Fase 1 — Integridade e linha de base (patch V0.19.1, incorporado à V0.20.0) — **implementada**
 
 - [x] Medir a linha de base: arquivos e diretórios de `FCVW/` (seção 0) e bytes por rota (C-01). O inventário de IDs de regra com fixtures passa para o início da Fase 2, que é quem depende dele
 - [x] A-01 Upgrade: baseline preservado, modo seguro sem baseline, novo baseline após o apply (P1-R4: só adiciona recusas; A-08, que remove arquivos, foi para a Fase 2)
@@ -525,27 +534,32 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 - [x] A-03 + G-04 Chaves duplicadas e teste estático com stdlib
 - [x] C-01 (+ C-02) Roteamento de `FCVW/*.md` por `artifact_role`
 - [x] A-04, A-06, A-07, A-09 Correções pontuais
-- [ ] Publicar V0.19.1: 4 variantes de idioma, pacotes, checksums e execução em Windows/macOS (seguindo o `release-checklist`)
+- [x] ~~Publicar V0.19.1~~ — cancelada; publicada junto com a Fase 2 em V0.20.0
 
 **Aceite:** cada bug tem um teste que falha no estado atual e passa após a correção (comprovado contra as ferramentas da V0.19.0); suíte e validador verdes.
 
-### Fase 2 — Redução (minor V0.20.0; exige migração)
+### Fase 2 — Redução (minor V0.20.0; exige migração) — **implementada; publicação pendente**
 
-- [ ] Inventário dos IDs de regra do validador, com uma fixture negativa por regra
-- [ ] A-08 `--prune` no upgrade (remove só arquivos idênticos ao baseline), pré-requisito das migrações de J
-- [ ] J-D Decisão sobre navegabilidade de registros (ADR)
-- [ ] F-01 + F-05/J-13 Camada adaptativa/loop e histórico do framework fora do core e do pacote
-- [ ] J-01 + J-02 Wiki plana e template único de nota
-- [ ] J-03 + J-04 Fila derivada do frontmatter; READMEs de estado removidos
-- [ ] J-05 `PROJECT.md` (mantendo `SECURITY`, `DATA` e `APP_RULES` separados)
-- [ ] J-06 + J-07 + J-12 Templates e políticas de automação e refatoração consolidados
-- [ ] J-08 + J-09 + J-10 + J-11 + J-14 READMEs de catálogo, políticas sobrepostas, exemplos, diretórios vazios e `DOCUMENT_GRAPH`
-- [ ] J-15 Skills fundidas e renomeadas
-- [ ] E-01 + E-02 + E-04 + F-04 + B-05 Validador enxuto (tabela declarativa, aliases fora do código-fonte, lista única de caminhos); F-03 só se ainda necessário
-- [ ] F-02 `SCHEMAS.md` restrito aos artefatos versionados (D-04 some junto com F-01 e J-09)
-- [ ] J-G1 + J-G2 + J-G3 Guardas contra o recrescimento
+- [x] Inventário dos IDs de regra do validador congelado num teste (116 IDs)
+- [x] A-08 `--prune` no upgrade (remove só arquivos idênticos ao baseline), pré-requisito das migrações de J
+- [x] J-D Decisão sobre navegabilidade de registros (ADR)
+- [x] F-01 + F-05/J-13 Camada adaptativa/loop e histórico do framework fora do core e do pacote
+- [x] J-01 + J-02 Wiki plana e template único de nota
+- [x] J-03 + J-04 Fila derivada do frontmatter; READMEs de estado removidos
+- [x] J-05 `PROJECT.md` (mantendo `SECURITY`, `DATA` e `APP_RULES` separados)
+- [x] J-06 + J-07 + J-12 Templates e políticas de automação e refatoração consolidados
+- [x] J-08 + J-09 + J-10 + J-11 + J-14 READMEs de catálogo, políticas sobrepostas, exemplos, diretórios vazios e `DOCUMENT_GRAPH`
+- [x] J-15 Skills fundidas (a renomeação `agent-*` foi barrada pelo gate do `self-improvement`: só nome, sem ganho medido)
+- [x] E-01 + E-02 + E-04 + B-05 Validador enxuto (tabela declarativa, um só rastreador de *fences*, lista única de caminhos)
+- [ ] F-04 Aliases de tradução fora do validador — **adiado**: depende do pipeline de variantes de idioma; F-03 (dividir o validador, hoje com 2.571 linhas) espera por ele
+- [ ] F-02 `SCHEMAS.md` restrito aos artefatos versionados — **passa para a Fase 3** (D-04 já saiu com F-01 e J-09; os schemas de fila foram aposentados)
+- [x] J-G1 + J-G2 + J-G3 Guardas contra o recrescimento. Na primeira execução, elas encontraram: `Plans/` só com README no pacote instalado, exemplo de gate com `kind` inválido, `fcvw/adr@1` sem registro e dois envelopes fora do padrão
 
 **Aceite:** `FCVW/` com ≤ 110 arquivos e ≤ 30 diretórios (≤ 10 fora de `skills/`); cada ID de regra do inventário continua com fixture que falha, ou foi removido com justificativa; uma instalação V0.19.0 migrada sem perda (digests dos registros conferidos).
+
+**Resultado:** 113 arquivos e 28 diretórios (9 fora de `skills/`). O excesso de 3 arquivos é o histórico criado pela própria fase; a meta contava registros, que crescem a cada mudança, e por isso a guarda J-G2 mede só a superfície fora dos diretórios de registro. Os demais critérios foram atendidos.
+
+**Falta para publicar a V0.20.0:** regenerar e revisar as 4 variantes de idioma, gerar pacotes e checksums, executar em Windows e macOS, e atualizar o `FRAMEWORK_LOCK.md` (seguindo o `release-checklist`).
 
 ### Fase 3 — Gatilhos e documentos, sobre a nova estrutura (minor V0.21.0)
 
@@ -553,7 +567,7 @@ J-08, J-11 e J-14 dependem desta decisão. Sem ela, a alternativa é manter o `D
 - [ ] B-06 + B-07 + C-02 + C-03 + C-08 Correções pontuais de roteamento
 - [ ] B-04 + B-03 Comparação exata e superfícies obrigatórias explícitas
 - [ ] C-05 + C-06 `trigger_keywords` opcional; gatilho no `description`
-- [ ] B-10 Schema de ADR
+- [ ] B-10 Schema de ADR — registro e envelope feitos na Fase 2 (`fcvw/adr@1`); falta a checagem no validador
 - [ ] G-01 + G-02 Medir de novo contra a linha de base; modo `--routes-only`
 - [ ] F-08 Caminho trivial sem plano (atualiza o AGENTS.md)
 - [ ] D-02, D-03 (ADR), D-05, D-06, D-08, D-09 + E-05, E-07, E-08 Alinhamento documental e READMEs enxutos
@@ -584,12 +598,12 @@ Estimativas, a confirmar pelas medições das Fases 1 a 3:
 
 | Área | Remove | Adiciona | Resultado esperado |
 |---|---|---|---|
-| Arquivos em `FCVW/` (J, simulado) | −130 | +8 (fusões e movimentações) | **228 → 106** |
-| Diretórios em `FCVW/` (J, simulado) | −37 | 0 | **65 → 28** (10 fora de `skills/`) |
-| Pacote instalado (J-13) | ~−40 arquivos, ~−300 KB de histórico e experimentos | — | instalação menor e sem histórico alheio |
+| Arquivos em `FCVW/` (J, simulado) | −130 | +8 (fusões e movimentações) | **228 → 106** (medido: **113**, com 8 registros criados pela própria fase) |
+| Diretórios em `FCVW/` (J, simulado) | −37 | 0 | **65 → 28** (10 fora de `skills/`); medido: **28** (9 fora de `skills/`) |
+| Pacote instalado (J-13) | ~−40 arquivos, ~−300 KB de histórico e experimentos | — | medido: **273 → 103 arquivos, 1.457 → 1.019 KB**, sem histórico do framework |
 | Ferramentas: camada adaptativa/loop (F-01) | ~−1.400 LOC + ~860 LOC de testes | — | core menor |
-| Validador: aliases de tradução (F-04/B-05) | ~−310 linhas | ~+50 no empacotador | |
-| Validador: registros declarativos (E-01) | ~−390 linhas | ~+150 | |
+| Validador: aliases de tradução (F-04/B-05) | ~−310 linhas | ~+50 no empacotador | B-05 feito; F-04 adiado |
+| Validador: registros declarativos (E-01) | ~−390 linhas | ~+150 | medido na Fase 2 inteira: **2.675 → 2.571 linhas**, já somando `PROJECT.md`, fila derivada e guardas |
 | Roteamento (G-03) | heurísticas semânticas | aviso de evento ausente | menos falsos positivos e negativos |
 | Correções A/B/C da Fase 1 (medido) | — | +~180 LOC nas ferramentas, +~240 LOC de testes | integridade |
 | Vault (H) | — | 1 tipo, 3 campos, varredura de segredos, métricas: ~+300 LOC; 1 template | capacidade nova, **em `shadow` até o gate** |
@@ -637,3 +651,12 @@ Estimativas, a confirmar pelas medições das Fases 1 a 3:
   - O monitor automático do gate virou revisão por release (H-05).
   - A obrigação de um plano por item virou um plano por pacote do roadmap.
 - **Condicionado a decisão do mantenedor:** CI hospedado (G-05), porque contraria uma decisão registrada.
+
+**Execução da Fase 2 (2026-09-28):**
+
+- **Corrigido pela execução:**
+  - O upgrade **não move** registros; ele preserva tudo do projeto e deixa as fusões manuais, guiadas pelo `MIGRATIONS.md` (ver os cuidados de J).
+  - A meta de arquivos contava registros, que crescem a cada mudança. A guarda J-G2 mede só a superfície fora dos registros.
+  - Derivar os caminhos instalados obrigatórios da lista de fonte (E-04) quebrou o empacotamento. O mínimo estrutural do pacote continua explícito, e a completude de conteúdo continua com o validador.
+- **Encontrado pelo ensaio de migração:** o `wiki/index.md` do projeto aponta para `schema.md` e `taxonomy.md`, que foram removidos; o passo de correção está no `MIGRATIONS.md`.
+- **Adiado:** F-04/F-03 (dependem do pipeline de variantes) e F-02 (passa para a Fase 3).
