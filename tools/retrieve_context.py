@@ -277,8 +277,8 @@ def main() -> int:
     started = time.perf_counter()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
-    parser.add_argument("--index", required=True)
-    parser.add_argument("--query", required=True)
+    parser.add_argument("--index", help="context index; omit with --query to resolve mandatory routes only")
+    parser.add_argument("--query")
     parser.add_argument("--active-plan")
     parser.add_argument("--language")
     parser.add_argument("--top-k", type=int, default=8)
@@ -304,6 +304,11 @@ def main() -> int:
     args = parser.parse_args()
     if bool(args.trace) != bool(args.trace_run_id):
         parser.error("--trace and --trace-run-id must be used together")
+    if bool(args.index) != bool(args.query):
+        parser.error("--index and --query must be used together; omit both for routes only")
+    routes_only = not args.index
+    if routes_only and args.context_budget is not None:
+        parser.error("--context-budget requires --index and --query")
     root = Path(args.root).resolve()
     active_plan = Path(args.active_plan) if args.active_plan else None
     if active_plan and not active_plan.is_absolute():
@@ -324,8 +329,8 @@ def main() -> int:
     if args.relation and not args.knowledge_graph:
         parser.error("--relation requires --knowledge-graph")
     knowledge_graph = load_knowledge_graph(Path(args.knowledge_graph)) if args.knowledge_graph else None
-    records = load_records(Path(args.index))
-    candidates = bm25(
+    records = [] if routes_only else load_records(Path(args.index))
+    candidates = [] if routes_only else bm25(
             args.query,
             records,
             language=args.language,
@@ -363,7 +368,7 @@ def main() -> int:
         append(Path(args.trace), root, run_id=args.trace_run_id, component='retrieval',
                status='blocked' if mandatory_missing else 'pass',
                reason='mandatory_missing' if mandatory_missing else 'lexical_selection',
-               input_digest=hashlib.sha256(Path(args.index).read_bytes()).hexdigest(),
+               input_digest=None if routes_only else hashlib.sha256(Path(args.index).read_bytes()).hexdigest(),
                duration_ms=round((time.perf_counter()-started)*1000),
                protected=[Path(p) for p in (args.index, args.knowledge_graph) if p])
     print(json.dumps(result, ensure_ascii=False, indent=2))

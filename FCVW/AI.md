@@ -392,9 +392,17 @@ In a source checkout use root tools instead. Rebuild old indexes: sections now s
 
 For changed files, `--file-change OPERATION:PATH` distinguishes an edit from an
 addition, move, rename or deletion; `--versioned-change` requires an explicit
-`--event` impact and at least one file declaration. This checks declarations, not
-their semantic truth. A host must still identify hidden security, data and other
-cross-cutting impacts. The older `--changed-file` remains conservative.
+`--event` impact and at least one file declaration. Paths imply only facts: any
+addition, deletion, move or rename implies `event:filesystem`, a
+`.github/workflows/` file implies `event:automation`, and framework paths imply
+their own surfaces (policies, skills, AI bridges, release records, tools).
+Application paths never imply security, data, interface or AI impact, because a
+file name does not show it; when a versioned change touches application files
+without any of those events, the result carries a `warnings` entry listing the
+events to consider. The host declares them. The older `--changed-file` treats the
+operation as unknown and adds `event:filesystem` only for Markdown.
+
+Omit `--index` and `--query` to resolve mandatory routes only; no index is built or read.
 
 Selection is opt-in through `--context-budget`. It preserves rank, keeps complete chunks, removes exact duplicate text and mandatory-path duplicates, and limits chunks per file. Oversized chunks are skipped with a reason, never cut. The estimate covers the serialized optional-results array only: Unicode characters divided by four, rounded up. It excludes mandatory documents and diagnostic metadata and is not a model token limit.
 
