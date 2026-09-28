@@ -11,16 +11,12 @@ Reusable empty models. Templates keep placeholders on purpose and are replaced o
 | [TEMPLATE_ADR.md](TEMPLATE_ADR.md) | architecture decision record |
 | [TEMPLATE_TROUBLESHOOTING.md](TEMPLATE_TROUBLESHOOTING.md) | failure diagnosis record |
 | [TEMPLATE_AUDIT.md](TEMPLATE_AUDIT.md) | formal audit |
-| [TEMPLATE_NOTE.md](TEMPLATE_NOTE.md) | every wiki note type |
+| [TEMPLATE_NOTE.md](TEMPLATE_NOTE.md) | every wiki note type, including visual diff records |
 | [TEMPLATE_REGRESSION.md](TEMPLATE_REGRESSION.md) | confirmed reusable regression |
 | [TEMPLATE_REFACTORING.md](TEMPLATE_REFACTORING.md) | refactoring plan and every lifecycle stage, hygiene and monolith gates |
-| [TEMPLATE_APP_DOC.md](TEMPLATE_APP_DOC.md) | application documentation: docs README, module, flow, API, data schema, AI feature |
+| [TEMPLATE_APP_DOC.md](TEMPLATE_APP_DOC.md) | application documentation: docs README, module, flow, API, data schema, AI feature, environment and secrets, data migration runner |
 | [TEMPLATE_SKILL_CHANGE.md](TEMPLATE_SKILL_CHANGE.md) | new skill or agent proposal and self-improvement report |
 | [TEMPLATE_AUTOMATION_CONTRACT.md](TEMPLATE_AUTOMATION_CONTRACT.md) | hook, watcher, daemon or governance gate contract |
-| [TEMPLATE_ENV.md](TEMPLATE_ENV.md) | environment description |
-| [TEMPLATE_BRIEFING.md](TEMPLATE_BRIEFING.md) | project briefing |
-| [TEMPLATE_VISUAL_DIFF.md](TEMPLATE_VISUAL_DIFF.md) | visual before/after evidence |
-| [TEMPLATE_MIGRATION_RUNNER.md](TEMPLATE_MIGRATION_RUNNER.md) | data migration runner |
 | [TEMPLATE_LEGACY_BASELINE.md](TEMPLATE_LEGACY_BASELINE.md) | incremental validation baseline |
 | [TEMPLATE_LANGUAGE_REVIEW.md](TEMPLATE_LANGUAGE_REVIEW.md) | language-specific release review |
 

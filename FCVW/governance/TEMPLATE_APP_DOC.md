@@ -1,6 +1,6 @@
 # Template: application documentation
 
-Sections for application-owned documentation under the rules of [APPLICATION_DOCUMENTATION.md](../APPLICATION_DOCUMENTATION.md): the docs folder README, a module, a flow, an API, a data schema and an AI feature. Copy only the section that matches the document being written.
+Sections for application-owned documentation under the rules of [APPLICATION_DOCUMENTATION.md](../APPLICATION_DOCUMENTATION.md): the docs folder README, a module, a flow, an API, a data schema, an AI feature, environment and secrets, and a data migration runner. Copy only the section that matches the document being written.
 
 ## Application Documentation
 
@@ -360,3 +360,134 @@ Copy this content to a new file or inside a plan when defining a new AI feature.
 
 - <Mandatory test cases for this feature.>
 ```
+
+## Template: Project Environment & Secrets Configuration
+
+Save a completed copy of this document as your project's local configurations if applicable.
+
+---
+
+### 1. Required Variables Reference
+
+Document all variables needed for local operation here.
+
+| Variable Name | Role | Expected Value Format | Default Value | Notes |
+|---|---|---|---|---|
+| `PORT` | Local server port | Integer (e.g., 3000) | `3000` | — |
+| `DB_CONNECTION` | Database connection string | URI string | `postgresql://localhost:5432` | Local dev DB |
+| `USE_MOCKS` | Flag for sandbox mock data | Boolean (`true`/`false`) | `true` | Set true for AI agents |
+| `API_GATEWAY_URL` | Microservices entry | URL | `https://dev.api.internal` | Local fallback available |
+
+---
+
+### 2. Secrets Insertion Procedures
+
+Provide precise instructions on how developers and CI/CD pipelines should retrieve and inject active secrets:
+
+#### 2.1 Local Workspace Injection
+1. Copy `.env.example` to `.env` in the project root.
+2. Request a developer sandbox account from the Lead Developer.
+3. Replace the placeholder tokens in `.env` with your sandbox credentials.
+4. **Never commit the `.env` file.**
+
+#### 2.2 CI/CD Integration
+* In your CI/CD platform (e.g., GitHub Actions, GitLab CI), navigate to Repository Settings -> Secrets.
+* Inject all variables required by tests and builds using their exact names listed in the table above.
+
+## Template: data migration runner
+
+This generic template implements the "Automated Schema Update Engine" described in `FCVW/DATA.md` Section 12.
+When instantiating a new project, the AI agent or developer must adapt this logic into the actual application codebase (e.g., in Node.js, Python, or Go) to ensure databases are safely upgraded on startup.
+
+### The Logic (Pseudo-code / Node.js standard)
+
+```javascript
+/**
+ * FCVW Automated Schema Update Engine
+ * Runs on application startup.
+ * Ensures the database schema matches the version recorded in FCVW/DATA.md
+ */
+
+const fs = require('fs');
+const path = require('path');
+const db = require('./db_connection'); // Your SQLite or Postgres driver
+
+const TARGET_VERSION = 3; // Must match the version defined in DATA.md
+
+async function runMigrations() {
+  console.log("Checking database schema version...");
+
+  // 1. Check current schema metadata
+  // Create table if it does not exist (for brand new databases)
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS schema_metadata (
+        version INTEGER PRIMARY KEY,
+        applied_at TEXT NOT NULL,
+        description TEXT NOT NULL
+    );
+  `);
+
+  const row = await db.get("SELECT MAX(version) as current_version FROM schema_metadata");
+  const currentVersion = row?.current_version || 0;
+
+  if (currentVersion >= TARGET_VERSION) {
+    console.log(`Database is up to date (Version ${currentVersion}).`);
+    return;
+  }
+
+  console.log(`Upgrading database from version ${currentVersion} to ${TARGET_VERSION}...`);
+
+  // 2. Automated Backup
+  const dbPath = path.join(__dirname, '../data/app.db');
+  const backupPath = path.join(__dirname, '../data/app.db.bak');
+  if (fs.existsSync(dbPath)) {
+      fs.copyFileSync(dbPath, backupPath);
+      console.log("Backup created at app.db.bak");
+  }
+
+  // 3. Apply Migrations Sequentially
+  for (let v = currentVersion + 1; v <= TARGET_VERSION; v++) {
+    const migrationFile = path.join(__dirname, `../data/migrations/V${v}.sql`);
+
+    if (!fs.existsSync(migrationFile)) {
+      throw new Error(`Migration file missing: V${v}.sql`);
+    }
+
+    const sqlScript = fs.readFileSync(migrationFile, 'utf8');
+
+    try {
+      // Execute in strict transaction
+      await db.exec('BEGIN TRANSACTION;');
+      await db.exec(sqlScript);
+      await db.exec(`
+        INSERT INTO schema_metadata (version, applied_at, description)
+        VALUES (${v}, datetime('now'), 'Applied migration V${v}');
+      `);
+      await db.exec('COMMIT;');
+      console.log(`Migration V${v} applied successfully.`);
+    } catch (error) {
+      // 4. Failure Recovery / Rollback
+      await db.exec('ROLLBACK TRANSACTION;');
+      console.error(`FATAL: Migration V${v} failed! Rolled back transaction.`, error);
+
+      // Restore backup if it existed
+      if (fs.existsSync(backupPath)) {
+          fs.copyFileSync(backupPath, dbPath);
+          console.log("Restored previous database state from backup.");
+      }
+
+      process.exit(1); // Halt application to prevent silent corruption
+    }
+  }
+
+  console.log("All migrations applied successfully.");
+}
+
+module.exports = runMigrations;
+```
+
+### How to use this template
+1. In Phase 0 of a new project, copy this logic into a file like `src/db/migrate.js` or `src/db/migrate.py`.
+2. Connect it to your actual database driver.
+3. Call it right before starting your local server or API.
+4. Delete this template from your project if you don't need to keep it in `governance/`.

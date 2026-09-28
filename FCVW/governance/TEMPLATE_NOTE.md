@@ -62,3 +62,54 @@ A note needs at least one navigable outgoing link to its authoritative source; n
 
 - `source`: `source_type` (`repository_file | web | document | dataset | issue | api | conversation | other`), `source_path`, `source_url`, `source_digest: "sha256:<64-lowercase-hex>"`, `ingested_at`, `last_checked`.
 - `feedback`: `authored_by_model`, `topic` (kebab-case), `feedback_status` (`open | accepted | declined | applied | superseded`), optional `related_feedback` and `related_plan`. Write **Suggestion** before reading earlier notes on the same topic; the validator enforces the order.
+
+## Visual diff record (`type: audit`, `VIS-` prefix)
+
+Use for before/after evidence of a UI change; store only non-sensitive captures in project-owned paths.
+
+```markdown
+---
+title: "Visual Diff: <screen-or-module-name>"
+type: "audit"
+status: "draft"
+confidence: "high"
+last_reviewed: "YYYY-MM-DD"
+sources:
+  - "PROJECT.md"
+  - "runtime screenshot or manually attached evidence"
+  - "reference mockup, when the instantiated application owns one"
+tags:
+  - "visual-diff"
+  - "pixel-perfect"
+---
+
+# Visual Diff: <Screen or Module Name>
+
+## 1. Screen Reference Evidence
+
+- **Design target:** `<describe token/spec/mockup source without linking to non-existent framework paths>`
+- **Actual UI:** `<describe screenshot, browser capture, or manual observation>`
+- **Evidence owner:** `<application path, issue, or artifact owner>`
+
+---
+
+## 2. Pixel Bounding Box Mapping and Comparison
+
+| Element | Bounding Box in Design (px) | Bounding Box in Code (px) | Delta / Drift (px) | Status |
+|---|---|---|---|---|
+| `<Element Name 1>` | `Top: Ypx, W: Wpx` | `Top: Ypx, W: Wpx` | `0px` | OK |
+| `<Element Name 2>` | `Padding: Ypx` | `Padding: Ypx` | `+Xpx` | Action Required |
+
+---
+
+## 3. Discrepancy and Action Checklist
+
+Use the checklist below to execute precise visual fixes in the style source owned by the instantiated application:
+
+- [ ] **`<Component-1> Adjustments`:**
+  - Target: `<css-selector-1>`
+  - Action: `<specific spacing/sizing adjustments in pixels>`
+- [ ] **`<Component-2> Adjustments`:**
+  - Target: `<css-selector-2>`
+  - Action: `<specific spacing/sizing adjustments in pixels>`
+```

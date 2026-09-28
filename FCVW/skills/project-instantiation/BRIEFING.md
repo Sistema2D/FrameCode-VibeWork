@@ -224,7 +224,7 @@ Examples:
 ## Models and Templates
 
 To perform the initial survey of a new project, use the template in:
-`governance/TEMPLATE_BRIEFING.md`
+the [briefing record template](#briefing-record-template) below
 
 ## Phase 0 Closure Rule
 
@@ -235,3 +235,62 @@ Phase 0 can only be marked as completed when:
 - the agent has indicated which official documents will be created or updated;
 - the user has approved the minimum starting scope;
 - any assumed premise is recorded.
+
+## Briefing record template
+
+Save the completed record as `FCVW/briefings/INITIAL_BRIEFING.md`:
+
+```markdown
+# Initial Briefing: <Project Name>
+
+## Status
+`in_progress` / `approved`
+
+## Dates
+- Creation: YYYY-MM-DD
+- Update: YYYY-MM-DD
+
+## 1. Identification
+- Name:
+- Type: <web / desktop / cli / etc>
+- Platform:
+- Audience:
+- Objective:
+
+## 2. Scope
+- P1 Features:
+- P2 Features:
+- Out of scope:
+
+## 3. Technologies (Stack)
+- Frontend:
+- Backend:
+- AI/Models:
+- Persistence:
+
+## 4. AI and Data
+- AI Role:
+- AI Boundaries:
+- Sensitive Data:
+- Backup:
+
+## 5. Design and UX
+- Style:
+- Theme: <light / dark / both>
+- Key components:
+
+## 6. Application Rules
+- Cross-cutting business rules:
+- Workflow, permission, calculation, or synchronization constraints:
+- Affected components:
+- Rule owners and exception authority:
+
+## 7. Risks and Gaps
+- Critical:
+- Relevant:
+
+## 8. Next Steps
+- [ ] Fill `PROJECT.md` identity and scope
+- [ ] Fill `PROJECT.md` stack
+- [ ] Instantiate APP_RULES.md
+```
