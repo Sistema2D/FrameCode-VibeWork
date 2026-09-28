@@ -11,7 +11,7 @@ upgrade_strategy: "replace_with_migration"
 |---|---|
 | Framework | `FrameCode VibeWork` |
 | Installed version | `V0.20.0` |
-| Release state | `ready` |
+| Release state | `published` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
@@ -40,4 +40,4 @@ upgrade_strategy: "replace_with_migration"
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.
 
-Ready candidate: [V0.20.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.20.0.md). The last published baseline is [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.19.0.md).
+Published baseline: [V0.20.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.20.0.md). The prior version is [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.19.0.md); the new record contains verified GitHub publication evidence.
