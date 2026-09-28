@@ -47,7 +47,6 @@
 - Relevant:
 
 ## 8. Next Steps
-- [ ] Create MANIFEST.md
-- [ ] Create SCOPE.md
-- [ ] Create STACK.md
+- [ ] Fill `PROJECT.md` identity and scope
+- [ ] Fill `PROJECT.md` stack
 - [ ] Instantiate APP_RULES.md

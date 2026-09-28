@@ -219,7 +219,7 @@ YYYY-MM-DD
 - [ ] Every generated record links its authoritative source, plan, decision, release, or governing policy.
 - [ ] Standard relative Markdown links provide portable Obsidian backlinks.
 - [ ] Queues and catalogs contain no stale, duplicate, or missing records.
-- [ ] `DOCUMENT_GRAPH.md` was regenerated after structural changes.
+- [ ] Structural changes left no orphan or unreachable document (validator `document-*` rules).
 
 ## Proportionality audit
 

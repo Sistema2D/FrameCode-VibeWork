@@ -14,7 +14,6 @@ import zipfile
 from pathlib import Path
 from path_policy_fcvw import DISPOSABLE_PARTS
 
-from document_graph_fcvw import render_catalog
 from frontmatter_fcvw import parse_frontmatter, scalar
 from locale_fcvw import RELEASE_VARIANTS, LocaleFinding, validate_release_variants
 from role_manifest_fcvw import MANIFEST_PATH, build_manifest
@@ -157,8 +156,6 @@ def create_archives(staging_root: Path, output_root: Path, version: str, *, repl
                     raise FileNotFoundError(f"release variant is missing: {variant}")
                 installed = layout_root / language
                 materialize_release_layout(variant, installed, package_files(variant))
-                graph_path = installed / "FCVW" / "DOCUMENT_GRAPH.md"
-                graph_path.write_text(render_catalog(installed, graph_path), encoding="utf-8", newline="\n")
                 # The role manifest records a path and a digest per file, so a
                 # manifest built from the source tree would describe paths the
                 # payload does not have and digests the packager just changed.

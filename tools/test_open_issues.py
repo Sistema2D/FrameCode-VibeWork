@@ -335,13 +335,26 @@ class DocumentGraphTests(TemporaryRootTest):
         (root / "README.md").write_text("[FCVW](FCVW/README.md)\n", encoding="utf-8")
         (root / "FCVW" / "README.md").write_text("[Graph](DOCUMENT_GRAPH.md)\n", encoding="utf-8")
 
-    def test_catalog_makes_every_document_reachable(self) -> None:
+    def test_legacy_catalog_does_not_make_documents_reachable(self) -> None:
+        # Regression (ADR-0011): a catalog that links everything used to make
+        # every orphan reachable, so the rule verified nothing.
         _, root = self.make_root()
         self.write_entrypoints(root)
         (root / "FCVW" / "note.md").write_text("# Note\n", encoding="utf-8")
         catalog = root / "FCVW" / "DOCUMENT_GRAPH.md"
         catalog.write_text(render_catalog(root, catalog), encoding="utf-8")
-        self.assertEqual((), build_graph(root).findings)
+        rules = {item.rule for item in build_graph(root).findings if item.path == "FCVW/note.md"}
+        self.assertEqual({"document-orphan", "document-unreachable"}, rules)
+
+    def test_records_are_reachable_through_their_canonical_directory(self) -> None:
+        _, root = self.make_root()
+        self.write_entrypoints(root)
+        (root / "FCVW" / "decisions").mkdir()
+        (root / "FCVW" / "decisions" / "ADR-0001-x.md").write_text(
+            '---\nartifact_role: "record"\n---\n# ADR\n\n[Source](../README.md)\n', encoding="utf-8"
+        )
+        findings = [item for item in build_graph(root).findings if item.path.startswith("FCVW/decisions/")]
+        self.assertEqual([], findings)
 
     def test_nested_catalog_uses_links_relative_to_its_own_directory(self) -> None:
         _, root = self.make_root()
@@ -474,11 +487,10 @@ class DocumentGraphTests(TemporaryRootTest):
     def test_record_requires_authoritative_outgoing_relationship(self) -> None:
         _, root = self.make_root()
         self.write_entrypoints(root)
-        record = root / "FCVW" / "session.md"
+        (root / "FCVW" / "wiki").mkdir()
+        record = root / "FCVW" / "wiki" / "session.md"
         record.write_text('---\nartifact_role: "record"\n---\n# Session\n', encoding="utf-8")
-        catalog = root / "FCVW" / "DOCUMENT_GRAPH.md"
-        catalog.write_text(render_catalog(root, catalog), encoding="utf-8")
-        rules = {item.rule for item in build_graph(root).findings if item.path == "FCVW/session.md"}
+        rules = {item.rule for item in build_graph(root).findings if item.path == "FCVW/wiki/session.md"}
         self.assertEqual({"document-source-link"}, rules)
 
     def test_orphan_exception_requires_owned_time_bounded_justification(self) -> None:

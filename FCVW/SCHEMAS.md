@@ -214,7 +214,7 @@ The optional JSON graph is a disposable reconstruction of typed Markdown frontma
 
 ## Document graph — `fcvw/document-graph@1`
 
-`FCVW/DOCUMENT_GRAPH.md` is generated and regenerated. Each governed Markdown artifact must be reachable from an official entrypoint or explicit catalog. Entry points are the only default exception to the incoming-link requirement.
+The document graph is derived on demand and never versioned. Policies, profiles, templates and skills must be reachable from an official entrypoint or a catalog it links; records are reachable through their canonical record directory. Entry points and record directories are the only exceptions to the incoming-link requirement.
 
 Frontmatter relationships such as `context_files`, `sources`, `related_plan`, `related_release`, `related`, `supersedes`, and `superseded_by` must resolve when they identify local paths. Plain metadata identifiers do not replace a navigable Markdown relationship when Obsidian backlink behavior is required.
 

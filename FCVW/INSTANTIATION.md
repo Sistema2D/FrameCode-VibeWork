@@ -120,7 +120,7 @@ Instantiation is not a global textual replacement. It is a controlled migration 
 
 During Phase 0, review `APP_RULES.md` with briefing evidence. Set `instantiation_status: complete` only after known cross-cutting rules are recorded or the absence of current rules is explicitly justified.
 
-Create the first plan in `pending/`, add it to `pending/QUEUE.md`, then move both plan state and queue membership transactionally. After generated records or documentation are added, regenerate `DOCUMENT_GRAPH.md` and require zero blocking orphans before closeout.
+Create the first plan in `pending/` with its `category`, then move it through the lifecycle; the queue is derived from the plans. After records or documentation are added, require zero blocking orphans from the validator before closeout.
 
 ## Retroactive instantiation
 
@@ -162,9 +162,9 @@ Use this workflow when you have an existing project (with code, history, partial
 
 #### Phase 3 — Backfill
 
-1. **Fill BRIEFING.md**: Document the project's origin, scope, and current state.
-2. **Fill MANIFEST.md** §1: Set project name, version, lead, and repository URL.
-3. **Fill STACK.md**: Document existing technology stack.
+1. **Record the briefing** in `briefings/` using the [briefing questionnaire](skills/project-instantiation/BRIEFING.md): the project's origin, scope, and current state.
+2. **Fill `PROJECT.md` identity and scope**: project name, version, lead, and repository URL.
+3. **Fill `PROJECT.md` stack**: the existing technology stack.
 4. **Create initial wiki pages** only for reusable learnings already accumulated.
 5. **Mark historical artifacts**: Existing documentation not yet migrated to FCVW can be marked as `pre-fcvw` or left in place with a note.
 6. **Create hygiene backlog**: Record high-value cleanup candidates as `#tech-debt`, `wiki/` (`type: refactoring` notes), or future plans. Do not refactor during adoption unless explicitly requested.
@@ -203,6 +203,6 @@ During retroactive adoption:
 
 1. inventory business rules already enforced by code, tests, workflows, and user-facing behavior;
 2. promote only confirmed application rules to `FCVW/APP_RULES.md`, with stable IDs and affected boundaries;
-3. build `FCVW/DOCUMENT_GRAPH.md` after the adopted files are linked from official entrypoints;
+3. link the adopted policies and profiles from official entrypoints and let the validator check reachability;
 4. report pre-existing orphan records explicitly instead of inventing relationships; and
 5. if an incremental orphan baseline is temporarily approved for legacy content, restrict it to exact paths and never add new artifacts to it.

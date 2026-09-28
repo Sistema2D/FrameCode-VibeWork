@@ -38,21 +38,25 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 
 ### Framework policies — replace on compatible upgrades
 
-`AI.md`, `APPLICATION_DOCUMENTATION.md`, `ARCHITECTURAL_DECISIONS.md`, `AUDIT.md`, `AUTOMATION.md`, `CONTEXT_MAP.md`, `INSTANTIATION.md`, `MIGRATIONS.md`, `OWNERSHIP.md`, `PLANNING.md`, this `README.md`, `REFACTORING.md`, `REFACTORING_GUIDE.md`, `REGRESSION_GUARDS.md`, `RELEASE.md`, `SCHEMAS.md`, `TESTS.md`, and `TROUBLESHOOTING.md`.
+[AI.md](AI.md), [APPLICATION_DOCUMENTATION.md](APPLICATION_DOCUMENTATION.md), [ARCHITECTURAL_DECISIONS.md](ARCHITECTURAL_DECISIONS.md), [AUDIT.md](AUDIT.md), [AUTOMATION.md](AUTOMATION.md), [CONTEXT_MAP.md](CONTEXT_MAP.md), [INSTANTIATION.md](INSTANTIATION.md), [MIGRATIONS.md](MIGRATIONS.md), [OWNERSHIP.md](OWNERSHIP.md), [PLANNING.md](PLANNING.md), this `README.md`, [REFACTORING.md](REFACTORING.md), [REFACTORING_GUIDE.md](REFACTORING_GUIDE.md), [REGRESSION_GUARDS.md](REGRESSION_GUARDS.md), [RELEASE.md](RELEASE.md), [SCHEMAS.md](SCHEMAS.md), [TESTS.md](TESTS.md), and [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ### Project profiles — instantiate and preserve
 
-`PROJECT.md` (identity and scope, stack, environment, design, performance, workflows), `SECURITY.md`, `DATA.md`, and `APP_RULES.md`. The Phase 0 [briefing questionnaire](skills/project-instantiation/BRIEFING.md) is framework guidance used by the instantiation skill.
+[PROJECT.md](PROJECT.md) (identity and scope, stack, environment, design, performance, workflows), [SECURITY.md](SECURITY.md), [DATA.md](DATA.md), and [APP_RULES.md](APP_RULES.md). The Phase 0 [briefing questionnaire](skills/project-instantiation/BRIEFING.md) is framework guidance used by the instantiation skill.
 
 Some profiles contain generic guidance plus clearly marked project sections. Framework upgrades must never overwrite populated project values.
 
 ### Records — preserve
 
-`Plans/`, `audits/`, `briefings/`, `changelogs/`, `decisions/`, `troubleshooting/`, and project-created pages under `wiki/`.
+[Plans](Plans/README.md), `audits/`, `briefings/`, `changelogs/`, `decisions/`, `troubleshooting/`, and project notes in the [wiki](wiki/README.md). A record is reachable through its canonical directory ([ADR-0011](decisions/ADR-0011-record-reachability.md)); each record still links to its authoritative source.
 
-### Generated summaries — regenerate
+### Catalogs
 
-`DOCUMENT_GRAPH.md`. `wiki/index.md` is a curated project file, not a generated one.
+[Skills](skills/README.md), [governance templates](governance/README.md), [plans](Plans/README.md) and the [wiki contract](wiki/README.md), whose curated [index](wiki/index.md) is project-owned.
+
+### Generated views — never versioned
+
+The document graph catalog, the plan queue view, context indexes and knowledge graphs are written to `.fcvw-cache/` on demand.
 
 `ROLE_MANIFEST.json` is not regenerated: it is the installation baseline shipped with each release and is replaced only by the upgrade tool after a successful apply.
 
@@ -77,10 +81,10 @@ Empty record directories keep a README only. Application examples, histories, an
 |---|---|---|
 | Review application-specific rules | [`APP_RULES.md`](APP_RULES.md) | unique rule IDs and project-profile ownership |
 | Select the next plan | [Plans](Plans/README.md) and `tools/plan_queue_fcvw.py --recommend` | derived queue findings |
-| Browse all governed Markdown | [`DOCUMENT_GRAPH.md`](DOCUMENT_GRAPH.md) | incoming links and entrypoint reachability |
+| Browse all governed Markdown | Obsidian graph and backlinks, or `tools/document_graph_fcvw.py --write` into `.fcvw-cache/` | incoming links and entrypoint reachability |
 | Build optional lexical context | [`AI.md`](AI.md) | mandatory routes remain authoritative |
 
-`DOCUMENT_GRAPH.md` is a generated navigation surface for Obsidian and portable Markdown readers. It does not become a source of policy merely because it links one. Graph reachability proves navigation, not that a host activated a skill or read a rule during a real task.
+A generated catalog is a disposable view, never a source of policy. Graph reachability proves navigation, not that a host activated a skill or read a rule during a real task.
 
 ## V0.18.0 retrieval quality
 

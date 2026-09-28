@@ -5,7 +5,7 @@ status: "draft"
 confidence: "high"
 last_reviewed: "YYYY-MM-DD"
 sources:
-  - "DESIGN.md"
+  - "PROJECT.md"
   - "runtime screenshot or manually attached evidence"
   - "reference mockup, when the instantiated application owns one"
 tags:

@@ -177,7 +177,7 @@ Rules:
 
 ## AI Interaction Context Compression (AICC)
 
-To prevent context bloat while preserving evidence, FCVW uses bounded session handoffs and the memory lifecycle in `wiki/README.md`. Token savings are measured under `TOKEN_BUDGET.md`; they are not assumed.
+To prevent context bloat while preserving evidence, FCVW uses bounded session handoffs and the memory lifecycle in `wiki/README.md`. Token savings are measured under [the token and context budget](#token-and-context-budget); they are not assumed.
 
 ### Ingestion Standard (At Session Start)
 

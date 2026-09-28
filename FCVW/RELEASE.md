@@ -73,7 +73,7 @@ Prepare the four complete variants under an external or disposable staging root 
 python tools/locale_fcvw.py --root <release-staging-root> --require-complete --source-root <clean-source-root> --source-revision <40-character-commit>
 ```
 
-The `en-US` functional manifest must exactly match that source; release-only review evidence is compared across variants but is not required in the source baseline. The authoritative validator that launches the release check validates the source and every pre-package variant; candidate copies of `tools/validate_fcvw.py` are compared for parity but are not executed before trust is established. Packaging then validates the mapped installed layout independently. Every approved `LANGUAGE_REVIEW.md` must name the same immutable revision. Each installed variant contains a regenerated local `DOCUMENT_GRAPH.md`; links cannot escape to another language variant to mask missing adapted content.
+The `en-US` functional manifest must exactly match that source; release-only review evidence is compared across variants but is not required in the source baseline. The authoritative validator that launches the release check validates the source and every pre-package variant; candidate copies of `tools/validate_fcvw.py` are compared for parity but are not executed before trust is established. Packaging then validates the mapped installed layout independently. Every approved `LANGUAGE_REVIEW.md` must name the same immutable revision. Each installed variant is internally reachable without any generated catalog.
 
 After the gate passes, create and inspect deterministic assets:
 

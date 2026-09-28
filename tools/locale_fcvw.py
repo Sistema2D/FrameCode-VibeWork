@@ -31,7 +31,6 @@ REQUIRED_VARIANT_PATHS = {
     "LICENSE",
     "NOTICE",
     "FCVW/README.md",
-    "FCVW/DOCUMENT_GRAPH.md",
     "FCVW/LANGUAGE_REVIEW.md",
     "tools/validate_fcvw.py",
     "tools/document_graph_fcvw.py",

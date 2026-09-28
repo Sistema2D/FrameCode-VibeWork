@@ -11,7 +11,7 @@ import sys
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from document_graph_fcvw import build_graph, render_catalog
+from document_graph_fcvw import build_graph
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, string_list
 from knowledge_graph_fcvw import build_knowledge_graph
@@ -47,7 +47,6 @@ REQUIRED_PATHS = (
     "tools/upgrade_fcvw.py",
     "FCVW/README.md",
     "FCVW/APP_RULES.md",
-    "FCVW/DOCUMENT_GRAPH.md",
     "FCVW/FRAMEWORK_LOCK.md",
     "FCVW/OWNERSHIP.md",
     "FCVW/SCHEMAS.md",
@@ -60,7 +59,6 @@ REQUIRED_PATHS = (
     "FCVW/governance/TEMPLATE_PLAN.md",
     "FCVW/governance/TEMPLATE_PLAN_COMPACT.md",
     "FCVW/governance/TEMPLATE_AUDIT.md",
-    "FCVW/framework-releases/README.md",
     "FCVW/skills/README.md",
     "FCVW/wiki/README.md",
     "FCVW/governance/TEMPLATE_NOTE.md",
@@ -2490,57 +2488,21 @@ def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
                     )
 
 
-STALE_CATALOG_DERIVED_RULES = {"document-orphan", "document-unreachable"}
-
-
 def validate_document_graph(root: Path, findings: list[Finding]) -> None:
     graph = build_graph(root)
     catalog = root / "FCVW" / "DOCUMENT_GRAPH.md"
     if catalog.is_file():
-        actual_text = read_text(catalog)
-        expected_text = render_catalog(root, catalog)
-        actual_entries = tuple(
-            sorted(
-                (link.group(1), tuple(INLINE_CODE.findall(line)))
-                for _, line in outside_code_fences(actual_text)
-                for link in MARKDOWN_LINK.finditer(line)
-            )
-        )
-        expected_entries = tuple(
-            sorted(
-                (link.group(1), tuple(INLINE_CODE.findall(line)))
-                for _, line in outside_code_fences(expected_text)
-                for link in MARKDOWN_LINK.finditer(line)
-            )
-        )
-    else:
-        actual_entries = ()
-        expected_entries = ()
-    stale = catalog.is_file() and actual_entries != expected_entries
-    graph_findings = [
-        Finding(item.rule, item.path, item.message, item.severity) for item in graph.findings
-    ]
-    if stale:
-        # Orphan and reachability findings are derived from the generated
-        # catalog, so a stale catalog reports every governed artifact twice.
-        # One actionable finding replaces that noise; the derived rules are
-        # re-evaluated for real once the catalog is regenerated.
-        suppressed = sum(1 for item in graph_findings if item.rule in STALE_CATALOG_DERIVED_RULES)
-        graph_findings = [item for item in graph_findings if item.rule not in STALE_CATALOG_DERIVED_RULES]
-        detail = (
-            f"; {suppressed} derived orphan/reachability finding(s) suppressed until it is regenerated"
-            if suppressed
-            else ""
-        )
+        # Pre-V0.20.0 versioned catalog. Reachability no longer counts it, so it
+        # is only noise and a merge-conflict source.
         findings.append(
             Finding(
                 "document-catalog-stale",
                 "FCVW/DOCUMENT_GRAPH.md",
-                "generated catalog does not match the current Markdown filesystem"
-                f"{detail}",
+                "legacy versioned catalog is ignored; delete it (write views to .fcvw-cache/ instead)",
+                severity="warning",
             )
         )
-    findings.extend(graph_findings)
+    findings.extend(Finding(item.rule, item.path, item.message, item.severity) for item in graph.findings)
 
 
 def validate_knowledge_graph(root: Path, findings: list[Finding]) -> None:

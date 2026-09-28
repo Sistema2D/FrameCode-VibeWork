@@ -102,7 +102,7 @@ Consulte [OWNERSHIP.md](FCVW/OWNERSHIP.md) e [SCHEMAS.md](FCVW/SCHEMAS.md) para 
 2. Classifique a sessão em [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md).
 3. Siga [INSTANTIATION.md](FCVW/INSTANTIATION.md) e execute o briefing necessário.
 4. Preencha os arquivos `artifact_role: project_profile` apenas com fatos aprovados.
-5. Defina a fonte de versão da aplicação em [MANIFEST.md](FCVW/PROJECT.md#identity-and-scope) ou no runtime documentado.
+5. Defina a fonte de versão da aplicação em [PROJECT.md](FCVW/PROJECT.md#identity-and-scope) ou no runtime documentado.
 6. Crie o primeiro plano `fcvw/plan@2` em `FCVW/Plans/pending/`.
 7. Quando os perfis estiverem completos, execute o validador com `--profile instantiated`.
 
@@ -112,7 +112,7 @@ Use [INSTANTIATION.md, modo retroativo / retroactive mode](FCVW/INSTANTIATION.md
 
 #### Manutenção do próprio FCVW
 
-Leia [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.md), [MIGRATIONS.md](FCVW/MIGRATIONS.md) e o release alvo. Use planos com `record_scope: framework`, registre mudanças em `FCVW/framework-releases/` e valide com `clean-template`.
+Leia [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.md), [MIGRATIONS.md](FCVW/MIGRATIONS.md) e o release alvo. Use planos com `record_scope: framework`, registre mudanças em `FCVW/framework-releases/` e valide com `clean-template`. O backlog de manutenção está em [TODO.md](TODO.md).
 
 [Navegação PT-BR](#pt-br) · [Topo](#top)
 
@@ -398,7 +398,7 @@ See [OWNERSHIP.md](FCVW/OWNERSHIP.md) and [SCHEMAS.md](FCVW/SCHEMAS.md) for the 
 2. Classify the session through [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md).
 3. Follow [INSTANTIATION.md](FCVW/INSTANTIATION.md) and complete the necessary briefing.
 4. Populate `artifact_role: project_profile` files only with approved facts.
-5. Define the application version source in [MANIFEST.md](FCVW/PROJECT.md#identity-and-scope) or the documented runtime.
+5. Define the application version source in [PROJECT.md](FCVW/PROJECT.md#identity-and-scope) or the documented runtime.
 6. Create the first `fcvw/plan@2` under `FCVW/Plans/pending/`.
 7. When profiles are complete, run the validator with `--profile instantiated`.
 
@@ -408,7 +408,7 @@ Use [INSTANTIATION.md, modo retroativo / retroactive mode](FCVW/INSTANTIATION.md
 
 #### Maintaining FCVW itself
 
-Read [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.md), [MIGRATIONS.md](FCVW/MIGRATIONS.md), and the target release. Use plans with `record_scope: framework`, record changes under `FCVW/framework-releases/`, and validate with `clean-template`.
+Read [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.md), [MIGRATIONS.md](FCVW/MIGRATIONS.md), and the target release. Use plans with `record_scope: framework`, record changes under `FCVW/framework-releases/`, and validate with `clean-template`. The maintainer backlog is [TODO.md](TODO.md).
 
 [ENG-US navigation](#en-us) · [Top](#top)
 
@@ -685,61 +685,6 @@ O agente **QA** mapeia a aplicação na primeira execução: telas, botões, mod
 
 Incluído na V0.19.0. A primeira execução em um projeto exige o endereço ou instruções de inicialização da aplicação e acesso ao ambiente de teste autorizado. / Included in V0.19.0; actual project execution requires a target application and authorized test access.
 
-## Avaliação do ciclo completo / Full-cycle evaluation
+## Experimentos retirados / Retired experiments
 
-O avaliador local da [issue #55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55)
-mede tokens até conclusão validada (quando disponíveis), iterações, retrabalho,
-aprovação inicial, tempo, repetição de falhas e utilidade do contexto. Consome
-registros externos explícitos; preserva tarefas incompletas e separa medições,
-estimativas e dados ausentes. Não executa modelos nem promove estratégias.
-
-The optional evaluator binds runs to a frozen protocol, deduplicates resumed
-evidence and reports paired descriptive comparisons. Real task efficacy requires
-appropriate independent evidence; synthetic tests and repository audits alone
-cannot establish it. Existing retrieval remains unchanged.
-
-- [Contrato / Contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/LOOP_EVALUATION_CONTRACT.md)
-- [Template](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/TEMPLATE_LOOP_EVALUATION.md)
-
-```sh
-python -B tools/loop_metrics_fcvw.py --protocol /external/protocol.json --runs /external/runs.jsonl --output /external/report.json --check
-```
-
-No pacote instalado, use `FCVW/tools/`. A ferramenta não depende de GitHub Actions
-pago. `--check` retorna falha para evidência inconclusiva ou invariantes violados;
-um relatório válido não representa autorização para aprendizagem ou assistência.
-
-
-O piloto inicial executou 24 auditorias do repositório em oito domínios. Preservou
-100% do contexto obrigatório, mas registrou perda de recall útil com orçamento no
-caso de UI e uma proposta sombra proibida pelos rótulos do piloto. Não há medição
-de tokens do provedor nem evidência de superioridade em tarefas executadas por IA.
-A validação empírica necessária à ativação permanece sem evidência suficiente. Resultados e limitações:
-[plano concluído de implementação e piloto](FCVW/Plans/completed/P2-R4-2026-09-22-loop-evaluation.md).
-
-
-## Experimentos adaptativos com controle explícito
-
-A implementação das issues #56/#57 acrescenta feedback humano revisado, pesos
-limitados, replay/exportação/reset/rollback e assistência opcional. Os controles
-validam a evidência da #55 antes de permitir ativação. O piloto atual não passa:
-nenhuma economia de tokens, não inferioridade ou promoção operacional é presumida.
-
-`--adaptive-mode assist` exige arquivos externos de controle e observação e um
-registro local SQLite explícito (`--adaptive-ledger`) que impede reinícios e
-observações antigas sob o mesmo controle. O padrão
-continua lexical; consultas obrigatórias do QA e bloqueios de segurança sobrevivem
-ao rollback. A ferramenta não executa modelos nem coleta prompts automaticamente.
-
-- [Contrato, campos e comandos](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md)
-- [Decisão de arquitetura](FCVW/decisions/ADR-0009-adaptive-experiment-controls.md)
-
-Adaptive capabilities remain opt-in and evidence-gated. Synthetic safety tests
-verify implementation only; operational activation requires separately reviewed
-real task evidence. No paid infrastructure or always-on process is required.
-
-
-As issues #55, #56 e #57 foram encerradas com justificativas e critérios empíricos
-não atendidos preservados. Os controles estão implementados; a campanha empírica
-e a promoção remanescentes foram encerradas como “não planejado”. Isso não habilita
-a ativação. [Evidência de encerramento](FCVW/Plans/completed/P2-R4-2026-09-23-adaptive-controls.md).
+A avaliação de ciclo completo e os experimentos adaptativos saíram do núcleo na V0.20.0; veja a [ADR-0010](FCVW/decisions/ADR-0010-core-reduction.md). / Full-cycle evaluation and adaptive experiments left the core in V0.20.0; see [ADR-0010](FCVW/decisions/ADR-0010-core-reduction.md).

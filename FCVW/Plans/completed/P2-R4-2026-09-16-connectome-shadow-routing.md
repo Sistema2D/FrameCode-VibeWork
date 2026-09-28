@@ -129,7 +129,7 @@ new release. No new permission or delegated agent is required.
 
 ## Related records
 
-- [Framework releases](../../framework-releases/README.md)
+- [Framework releases](https://github.com/Sistema2D/FrameCode-VibeWork/blob/a392c87423a87aa184829738c985483658ba4594/FCVW/framework-releases/README.md)
 
 ## Validation executed
 

@@ -13,7 +13,6 @@ import sys
 import tempfile
 import zipfile
 
-from document_graph_fcvw import render_catalog
 from package_release_fcvw import FORBIDDEN_ARCHIVE_PARTS
 from release_layout_fcvw import materialize_release_layout, validate_release_layout, governed_root
 from role_manifest_fcvw import build_manifest
@@ -88,8 +87,6 @@ def smoke_source(source_root: Path, *, run_tests: bool = False) -> None:
     with tempfile.TemporaryDirectory(prefix="fcvw-source-smoke-") as temp:
         installed = Path(temp) / "installed"
         materialize_release_layout(source_root, installed, files)
-        graph = installed / "FCVW/DOCUMENT_GRAPH.md"
-        graph.write_text(render_catalog(installed, graph), encoding="utf-8")
         (installed / "FCVW/ROLE_MANIFEST.json").write_text(json.dumps(build_manifest(installed), indent=2), encoding="utf-8")
         validate_installed(installed, source_root, run_tests=run_tests)
 

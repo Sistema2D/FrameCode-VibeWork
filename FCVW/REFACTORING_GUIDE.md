@@ -20,33 +20,33 @@ Governance structure for deciding, executing, reviewing, and auditing refactorin
 
 ### How to Use
 
-1. Start with [`01-decision-guide.md`](#01--decision-guide) to identify the technical scenario.
-2. Use [`08-code-smells-map.md`](#08--code-smells-map) when the problem is perceived as a "code smell", but the technique is not yet clear.
-3. For large codebases, first fill out [`10-code-inventory-and-classification.md`](#10--code-inventory-and-classification), [`11-refactoring-risk-matrix.md`](#11--refactoring-risk-matrix), and [`16-dependency-and-impact-map.md`](#16--dependency-and-impact-map).
+1. Start with [section 01](#01--decision-guide) to identify the technical scenario.
+2. Use [section 08](#08--code-smells-map) when the problem is perceived as a "code smell", but the technique is not yet clear.
+3. For large codebases, first fill out [section 10](#10--code-inventory-and-classification), [section 11](#11--refactoring-risk-matrix), and [section 16](#16--dependency-and-impact-map).
 4. Define tests, pipeline, rollback, and an incremental plan before opening PRs with medium, high, or critical risk.
-5. Use [`20-templates.md`](governance/TEMPLATE_REFACTORING.md) to copy the necessary templates.
-6. Use [`09-pr-checklist.md`](#09--refactoring-pull-request-checklist) before opening or approving a Pull Request.
+5. Use [TEMPLATE_REFACTORING.md](governance/TEMPLATE_REFACTORING.md) to copy the necessary templates.
+6. Use [section 09](#09--refactoring-pull-request-checklist) before opening or approving a Pull Request.
 
 ### Governance Files
 
 | File | Purpose |
 |---|---|
-| [`00-general-governance.md`](#00--general-refactoring-governance) | Universal rules, roles, entry and exit criteria, risks, and approval levels. |
-| [`01-decision-guide.md`](#01--decision-guide) | Decision-making guide to identify the scenario and direct to the applicable file. |
-| [`02-refactoring-catalog.md`](#02--refactoring-catalog) | Symptom-to-family routing for the classic catalog, general family rules, and the mandatory FCVW governance for each. The literature is referenced, not reproduced. |
-| [`08-code-smells-map.md`](#08--code-smells-map) | Diagnostic map by code smell, providing directions to applicable techniques. |
-| [`09-pr-checklist.md`](#09--refactoring-pull-request-checklist) | Objective checklist for review, evidence, tests, rollback, and acceptance. |
-| [`10-code-inventory-and-classification.md`](#10--code-inventory-and-classification) | Inventory of modules, dependencies, criticality, owners, coverage, and critical points. |
-| [`11-refactoring-risk-matrix.md`](#11--refactoring-risk-matrix) | Risk scoring matrix and mandatory controls by level. |
-| [`12-testing-strategy-before-refactoring.md`](#12--testing-strategy-before-refactoring) | Testing strategy for characterization, regression, integration, contract, e2e, and smoke tests. |
-| [`13-ci-cd-pipeline-and-quality-gates.md`](#13--cicd-pipeline-and-quality-gates) | Minimum CI/CD and quality gates for safe merge/deploy. |
-| [`14-rollback-plan.md`](#14--rollback-plan) | Rollback strategies, triggers, and post-rollback validation. |
-| [`15-incremental-refactoring-plan.md`](#15--incremental-refactoring-plan) | Splitting large refactorings into small, reversible increments. |
-| [`16-dependency-and-impact-map.md`](#16--dependency-and-impact-map) | Mapping of direct and indirect consumers, contracts, data, events, and configuration. |
-| [`17-branch-and-pull-request-policy.md`](#17--branch-and-pull-request-policy) | Rules for branches, commits, PRs, approvals, and merges. |
-| [`18-behavioral-refactoring-vs-rewrite.md`](#18--behavioral-refactoring-vs-rewrite) | Separation between pure refactoring, feature, fix, partial rewrite, and total rewrite. |
-| [`19-stopping-criteria.md`](#19--stopping-criteria) | Criteria to pause, split, replan, revert, or cancel refactorings. |
-| [`20-templates.md`](governance/TEMPLATE_REFACTORING.md) | Templates index for practical application of the governance. |
+| [section 00](#00--general-refactoring-governance) | Universal rules, roles, entry and exit criteria, risks, and approval levels. |
+| [section 01](#01--decision-guide) | Decision-making guide to identify the scenario and direct to the applicable file. |
+| [section 02](#02--refactoring-catalog) | Symptom-to-family routing for the classic catalog, general family rules, and the mandatory FCVW governance for each. The literature is referenced, not reproduced. |
+| [section 08](#08--code-smells-map) | Diagnostic map by code smell, providing directions to applicable techniques. |
+| [section 09](#09--refactoring-pull-request-checklist) | Objective checklist for review, evidence, tests, rollback, and acceptance. |
+| [section 10](#10--code-inventory-and-classification) | Inventory of modules, dependencies, criticality, owners, coverage, and critical points. |
+| [section 11](#11--refactoring-risk-matrix) | Risk scoring matrix and mandatory controls by level. |
+| [section 12](#12--testing-strategy-before-refactoring) | Testing strategy for characterization, regression, integration, contract, e2e, and smoke tests. |
+| [section 13](#13--cicd-pipeline-and-quality-gates) | Minimum CI/CD and quality gates for safe merge/deploy. |
+| [section 14](#14--rollback-plan) | Rollback strategies, triggers, and post-rollback validation. |
+| [section 15](#15--incremental-refactoring-plan) | Splitting large refactorings into small, reversible increments. |
+| [section 16](#16--dependency-and-impact-map) | Mapping of direct and indirect consumers, contracts, data, events, and configuration. |
+| [section 17](#17--branch-and-pull-request-policy) | Rules for branches, commits, PRs, approvals, and merges. |
+| [section 18](#18--behavioral-refactoring-vs-rewrite) | Separation between pure refactoring, feature, fix, partial rewrite, and total rewrite. |
+| [section 19](#19--stopping-criteria) | Criteria to pause, split, replan, revert, or cancel refactorings. |
+| [TEMPLATE_REFACTORING.md](governance/TEMPLATE_REFACTORING.md) | Templates index for practical application of the governance. |
 
 ### Templates
 
@@ -189,20 +189,20 @@ Use this file to identify the refactoring scenario and direct the team to the ap
 
 | Observed Symptom | Confirmation Question | Applicable File |
 |---|---|---|
-| Long method, difficult to understand, or with blocks that seem to have their own intention. | Are there excerpts that could have their own name? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Complex expression, confusing temporary variable, or algorithm difficult to replace. | Is the difficulty inside a method? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Method or field seems to belong to another class. | Does another class use this behavior/data more? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Class does too much work or almost nothing. | Is the responsibility incorrectly concentrated or dispersed? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Excessive dependency through call chains or useless delegation. | Does the client know too many objects or is there an intermediate without value? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Primitive data represent domain concepts. | Does the data have its own rule, validation, unit, format, or behavior? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Public fields, exposed collections, heterogeneous array, or magic number. | Is the data vulnerable to improper alteration? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Complex, duplicated, nested, or type-based conditional. | Does the decision logic hinder reading, extension, or testing? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Many `null`s, control flags, or implicit premises. | Is there a special flow that should be explicit? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Method has a bad name, too many parameters, unused parameter, or complex constructor. | Is the call interface confusing or unstable? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Method returns a value and changes state at the same time. | Does the call mix query and command? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Inheritance contains duplication, misplaced subclasses, or excessive hierarchy. | Is the problem in the abstraction between classes? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| Delegation replaces inheritance or inheritance replaces delegation improperly. | Is the "is-a" or "has-a" relationship poorly modeled? | [`02-refactoring-catalog.md`](#02--refactoring-catalog) |
-| The problem was perceived as a code smell, but the technique is still unclear. | Which smell closest matches the case? | [`08-code-smells-map.md`](#08--code-smells-map) |
+| Long method, difficult to understand, or with blocks that seem to have their own intention. | Are there excerpts that could have their own name? | [section 02](#02--refactoring-catalog) |
+| Complex expression, confusing temporary variable, or algorithm difficult to replace. | Is the difficulty inside a method? | [section 02](#02--refactoring-catalog) |
+| Method or field seems to belong to another class. | Does another class use this behavior/data more? | [section 02](#02--refactoring-catalog) |
+| Class does too much work or almost nothing. | Is the responsibility incorrectly concentrated or dispersed? | [section 02](#02--refactoring-catalog) |
+| Excessive dependency through call chains or useless delegation. | Does the client know too many objects or is there an intermediate without value? | [section 02](#02--refactoring-catalog) |
+| Primitive data represent domain concepts. | Does the data have its own rule, validation, unit, format, or behavior? | [section 02](#02--refactoring-catalog) |
+| Public fields, exposed collections, heterogeneous array, or magic number. | Is the data vulnerable to improper alteration? | [section 02](#02--refactoring-catalog) |
+| Complex, duplicated, nested, or type-based conditional. | Does the decision logic hinder reading, extension, or testing? | [section 02](#02--refactoring-catalog) |
+| Many `null`s, control flags, or implicit premises. | Is there a special flow that should be explicit? | [section 02](#02--refactoring-catalog) |
+| Method has a bad name, too many parameters, unused parameter, or complex constructor. | Is the call interface confusing or unstable? | [section 02](#02--refactoring-catalog) |
+| Method returns a value and changes state at the same time. | Does the call mix query and command? | [section 02](#02--refactoring-catalog) |
+| Inheritance contains duplication, misplaced subclasses, or excessive hierarchy. | Is the problem in the abstraction between classes? | [section 02](#02--refactoring-catalog) |
+| Delegation replaces inheritance or inheritance replaces delegation improperly. | Is the "is-a" or "has-a" relationship poorly modeled? | [section 02](#02--refactoring-catalog) |
+| The problem was perceived as a code smell, but the technique is still unclear. | Which smell closest matches the case? | [section 08](#08--code-smells-map) |
 
 ### Decision Flow
 
@@ -266,16 +266,16 @@ After identifying the technical scenario, apply the operational triage below.
 
 | Condition | Mandatory File |
 |---|---|
-| Refactoring involves more than one module, folder, or package. | [`10-code-inventory-and-classification.md`](#10--code-inventory-and-classification) |
-| Refactoring involves critical, public area, without tests or with unknown dependencies. | [`11-refactoring-risk-matrix.md`](#11--refactoring-risk-matrix) |
-| Legacy code, without coverage or with poorly documented behavior. | [`12-testing-strategy-before-refactoring.md`](#12--testing-strategy-before-refactoring) |
-| PR depends on build, tests, lint, static analysis, or controlled deploy. | [`13-ci-cd-pipeline-and-quality-gates.md`](#13--cicd-pipeline-and-quality-gates) |
-| Medium, high, or critical risk refactoring. | [`14-rollback-plan.md`](#14--rollback-plan) |
-| Large change, with many files or multiple stages. | [`15-incremental-refactoring-plan.md`](#15--incremental-refactoring-plan) |
-| Move, rename, extract class, alter signature, contract, or data. | [`16-dependency-and-impact-map.md`](#16--dependency-and-impact-map) |
-| Open PR, define branch, review, or approve. | [`17-branch-and-pull-request-policy.md`](#17--branch-and-pull-request-policy) |
-| Doubt whether the change is a refactoring, bugfix, feature, or rewrite. | [`18-behavioral-refactoring-vs-rewrite.md`](#18--behavioral-refactoring-vs-rewrite) |
-| Scope grew, tests failed, or unforeseen risks emerged. | [`19-stopping-criteria.md`](#19--stopping-criteria) |
+| Refactoring involves more than one module, folder, or package. | [section 10](#10--code-inventory-and-classification) |
+| Refactoring involves critical, public area, without tests or with unknown dependencies. | [section 11](#11--refactoring-risk-matrix) |
+| Legacy code, without coverage or with poorly documented behavior. | [section 12](#12--testing-strategy-before-refactoring) |
+| PR depends on build, tests, lint, static analysis, or controlled deploy. | [section 13](#13--cicd-pipeline-and-quality-gates) |
+| Medium, high, or critical risk refactoring. | [section 14](#14--rollback-plan) |
+| Large change, with many files or multiple stages. | [section 15](#15--incremental-refactoring-plan) |
+| Move, rename, extract class, alter signature, contract, or data. | [section 16](#16--dependency-and-impact-map) |
+| Open PR, define branch, review, or approve. | [section 17](#17--branch-and-pull-request-policy) |
+| Doubt whether the change is a refactoring, bugfix, feature, or rewrite. | [section 18](#18--behavioral-refactoring-vs-rewrite) |
+| Scope grew, tests failed, or unforeseen risks emerged. | [section 19](#19--stopping-criteria) |
 
 ### Recommended Full Flow
 
@@ -313,17 +313,17 @@ To optimize tokens, read only what is necessary for the current activity.
 
 | Situation | Read | Observation |
 |---|---|---|
-| Common base (once per session or opening) | [`00-general-governance.md`](#00--general-refactoring-governance) | Does not need to be reread for each activity. |
-| Doubt if it is pure refactoring | [`18-behavioral-refactoring-vs-rewrite.md`](#18--behavioral-refactoring-vs-rewrite) | Classifies refactoring vs fix/feature/rewrite. |
-| Symptom inside method/expression | [`02-refactoring-catalog.md`](#02--refactoring-catalog) | Use when the problem is inside the method. |
-| Complex conditional, flags, or `null` | [`02-refactoring-catalog.md`](#02--refactoring-catalog) | Use when the decision is difficult to read/test. |
-| Responsibility between classes/objects | [`02-refactoring-catalog.md`](#02--refactoring-catalog) | Method/field in the wrong place, class too large/small. |
-| Data/encapsulation problem | [`02-refactoring-catalog.md`](#02--refactoring-catalog) | Primitives, exposed collections, type codes. |
-| Confusing call interface | [`02-refactoring-catalog.md`](#02--refactoring-catalog) | Bad name, many parameters, mixed return/effect. |
-| Abstraction, inheritance, or delegation | [`02-refactoring-catalog.md`](#02--refactoring-catalog) | Excessive hierarchy, improper inheritance. |
-| Smell without clear technique | [`08-code-smells-map.md`](#08--code-smells-map) | Use to discover the technical file. |
+| Common base (once per session or opening) | [section 00](#00--general-refactoring-governance) | Does not need to be reread for each activity. |
+| Doubt if it is pure refactoring | [section 18](#18--behavioral-refactoring-vs-rewrite) | Classifies refactoring vs fix/feature/rewrite. |
+| Symptom inside method/expression | [section 02](#02--refactoring-catalog) | Use when the problem is inside the method. |
+| Complex conditional, flags, or `null` | [section 02](#02--refactoring-catalog) | Use when the decision is difficult to read/test. |
+| Responsibility between classes/objects | [section 02](#02--refactoring-catalog) | Method/field in the wrong place, class too large/small. |
+| Data/encapsulation problem | [section 02](#02--refactoring-catalog) | Primitives, exposed collections, type codes. |
+| Confusing call interface | [section 02](#02--refactoring-catalog) | Bad name, many parameters, mixed return/effect. |
+| Abstraction, inheritance, or delegation | [section 02](#02--refactoring-catalog) | Excessive hierarchy, improper inheritance. |
+| Smell without clear technique | [section 08](#08--code-smells-map) | Use to discover the technical file. |
 | Specific operational conditions | Table “Operational Layer for Large Bases” | Read only the file(s) pointed to by the condition. |
-| Needs template | [`20-templates.md`](governance/TEMPLATE_REFACTORING.md) | Copy only the applicable template. |
+| Needs template | [TEMPLATE_REFACTORING.md](governance/TEMPLATE_REFACTORING.md) | Copy only the applicable template. |
 
 ## 02 — Refactoring Catalog
 
@@ -358,26 +358,26 @@ technique. The governance column names what must exist in the active plan.
 
 | Observed symptom | Catalog family | Mandatory FCVW governance |
 |---|---|---|
-| Long method, unclear expression, confusing temporary variable | Composing methods | [`11-refactoring-risk-matrix.md`](#11--refactoring-risk-matrix) |
-| Responsibility on the wrong object, feature envy, inappropriate intimacy | Moving features between objects | [`16-dependency-and-impact-map.md`](#16--dependency-and-impact-map) |
-| Public field, type code, exposed collection, bidirectional association | Organizing data | [`12-testing-strategy-before-refactoring.md`](#12--testing-strategy-before-refactoring) |
-| Complex conditional, duplicated branch, nesting, control flag | Simplifying conditional expressions | [`12-testing-strategy-before-refactoring.md`](#12--testing-strategy-before-refactoring) |
-| Poor name, long parameter list, overloaded constructor, exception used as flow | Making method calls simpler | [`09-pr-checklist.md`](#09--refactoring-pull-request-checklist) |
-| Wrong hierarchy, duplication across subclasses, inheritance used as a shortcut | Dealing with generalization | [`18-behavioral-refactoring-vs-rewrite.md`](#18--behavioral-refactoring-vs-rewrite) |
+| Long method, unclear expression, confusing temporary variable | Composing methods | [section 11](#11--refactoring-risk-matrix) |
+| Responsibility on the wrong object, feature envy, inappropriate intimacy | Moving features between objects | [section 16](#16--dependency-and-impact-map) |
+| Public field, type code, exposed collection, bidirectional association | Organizing data | [section 12](#12--testing-strategy-before-refactoring) |
+| Complex conditional, duplicated branch, nesting, control flag | Simplifying conditional expressions | [section 12](#12--testing-strategy-before-refactoring) |
+| Poor name, long parameter list, overloaded constructor, exception used as flow | Making method calls simpler | [section 09](#09--refactoring-pull-request-checklist) |
+| Wrong hierarchy, duplication across subclasses, inheritance used as a shortcut | Dealing with generalization | [section 18](#18--behavioral-refactoring-vs-rewrite) |
 
 ### Where the FCVW-specific policy lives
 
 The rest of this guide was not condensed, because it carries its own rules
 rather than reproducing literature:
 
-- decision and inventory: [`01-decision-guide.md`](#01--decision-guide),
-  [`10-code-inventory-and-classification.md`](#10--code-inventory-and-classification);
-- risk, testing, and stopping: [`11-refactoring-risk-matrix.md`](#11--refactoring-risk-matrix),
-  [`12-testing-strategy-before-refactoring.md`](#12--testing-strategy-before-refactoring),
-  [`19-stopping-criteria.md`](#19--stopping-criteria);
-- execution and rollback: [`15-incremental-refactoring-plan.md`](#15--incremental-refactoring-plan),
-  [`14-rollback-plan.md`](#14--rollback-plan);
-- boundaries: [`18-behavioral-refactoring-vs-rewrite.md`](#18--behavioral-refactoring-vs-rewrite).
+- decision and inventory: [section 01](#01--decision-guide),
+  [section 10](#10--code-inventory-and-classification);
+- risk, testing, and stopping: [section 11](#11--refactoring-risk-matrix),
+  [section 12](#12--testing-strategy-before-refactoring),
+  [section 19](#19--stopping-criteria);
+- execution and rollback: [section 15](#15--incremental-refactoring-plan),
+  [section 14](#14--rollback-plan);
+- boundaries: [section 18](#18--behavioral-refactoring-vs-rewrite).
 
 Top-level refactoring policy stays in [`REFACTORING.md`](REFACTORING.md), and
 the size and responsibility gate in
@@ -385,7 +385,7 @@ the size and responsibility gate in
 
 ### Relationships
 
-Governed by [`00-general-governance.md`](#00--general-refactoring-governance) and
+Governed by [section 00](#00--general-refactoring-governance) and
 catalogued in [How to use this guide](#how-to-use-this-guide).
 
 ## 08 — Code Smells Map
