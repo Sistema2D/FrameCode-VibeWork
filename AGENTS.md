@@ -85,11 +85,11 @@ The clean framework must not contain application plans, application releases, ru
 - Version surfaces agree.
 - No unrelated or application-owned content entered the clean baseline.
 
-## Document graph, application rules, and plan queues
+## Document graph, application rules, and plan queue
 
-- Select active work from `FCVW/Plans/in_progress/` before `pending/`; repair an invalid queue before implementation. The canonical queue is `Plans/<state>/queue.d/<plan-id>.md`, one fragment per plan; `QUEUE.md` is the generated view, regenerated with `python FCVW/tools/plan_queue_fcvw.py --root . --write-queues`.
+- Select active work from `FCVW/Plans/in_progress/` before `pending/`. The queue is derived from plan frontmatter (`category`, `depends_on`, `blocked_external`, `before_in_progress`); there is no queue file to maintain.
 - Use `python FCVW/tools/plan_queue_fcvw.py --root . --recommend` in an installed release, or `python tools/plan_queue_fcvw.py --root . --recommend` in the framework source checkout; a queue finding blocks the recommendation.
-- Before executing a plan with `depends_on`, confirm its dependency table, completed prerequisite evidence, and queue blockers agree; discontinued prerequisites never satisfy a dependency automatically.
+- Before executing a plan with `depends_on`, confirm its dependency table and completed prerequisite evidence agree; discontinued prerequisites never satisfy a dependency automatically.
 - For application behavior, workflow, data, permission, interface, or cross-module changes, consult `FCVW/APP_RULES.md` and record affected rule IDs in the plan.
 - Every governed Markdown artifact must be reachable from `AGENTS.md`, `README.md`, `FCVW/README.md`, or a catalog linked from those entrypoints.
 - Generated records must have an incoming catalog or relationship link and an outgoing link to their authoritative source, plan, decision, release, or governing policy.

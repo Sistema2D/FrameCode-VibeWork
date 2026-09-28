@@ -39,7 +39,6 @@ jobs:
       # against the current filesystem, and a stale catalog is a failure.
       - name: Regenerate derived surfaces
         run: |
-          python FCVW/tools/plan_queue_fcvw.py --root . --write-queues
           python FCVW/tools/document_graph_fcvw.py --root . --write
 
       - name: Fail when a derived surface was committed stale

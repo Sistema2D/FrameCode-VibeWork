@@ -52,7 +52,7 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ### Generated summaries — regenerate
 
-`DOCUMENT_GRAPH.md`, `FILESYSTEM.md`, and `Plans/*/QUEUE.md`. `wiki/index.md` is a curated project file, not a generated one.
+`DOCUMENT_GRAPH.md` and `FILESYSTEM.md`. `wiki/index.md` is a curated project file, not a generated one.
 
 `ROLE_MANIFEST.json` is not regenerated: it is the installation baseline shipped with each release and is replaced only by the upgrade tool after a successful apply.
 
@@ -76,7 +76,7 @@ Empty record directories keep a README only. Application examples, histories, an
 | Need | Load first | Validation |
 |---|---|---|
 | Review application-specific rules | [`APP_RULES.md`](APP_RULES.md) | unique rule IDs and project-profile ownership |
-| Select the next plan | [`Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md), then [`Plans/pending/QUEUE.md`](Plans/pending/QUEUE.md) | queue/state consistency |
+| Select the next plan | [Plans](Plans/README.md) and `tools/plan_queue_fcvw.py --recommend` | derived queue findings |
 | Browse all governed Markdown | [`DOCUMENT_GRAPH.md`](DOCUMENT_GRAPH.md) | incoming links and entrypoint reachability |
 | Build optional lexical context | [`AI.md`](AI.md) | mandatory routes remain authoritative |
 

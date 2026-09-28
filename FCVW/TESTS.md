@@ -94,9 +94,9 @@ Use `governance/TEMPLATE_PLAN.md` to record change-specific validation and `REGR
 
 ## Document graph and queue evidence
 
-Structural changes must test valid and negative cases for incoming links, entrypoint reachability, broken/ambiguous targets, self-only links, inline-code examples, source-relative destinations, spaces in paths, queue absence, duplicate/stale IDs, exact state-directory targets, status mismatch, category and P1-P5 order, blocker lifecycle, and justified cross-state override.
+Structural changes must test valid and negative cases for incoming links, entrypoint reachability, broken/ambiguous targets, self-only links, inline-code examples, source-relative destinations, spaces in paths, derived queue order (category, P1-P5, blockers), invalid category, vague external blockers, misplaced cross-state overrides and legacy queue files.
 
-Plan-dependency changes additionally test flat-list enforcement, missing/ambiguous/self references, duplicate IDs, cycles, queue parity, completed prerequisites without evidence, satisfied evidence, discontinued invalidation, and completed dependent plans with unresolved prerequisites. Aggregate queue output must be derived from both canonical queues and remain disposable.
+Plan-dependency changes additionally test flat-list enforcement, missing/ambiguous/self references, duplicate IDs, cycles, completed prerequisites without evidence, satisfied evidence, discontinued invalidation, and completed dependent plans with unresolved prerequisites. Queue output is derived from plan frontmatter and remains disposable.
 
 An index that merely contains a path does not prove a meaningful record relationship. Generated plans, audits, troubleshooting records, releases, regressions, and session syntheses also link their authoritative parent or source.
 

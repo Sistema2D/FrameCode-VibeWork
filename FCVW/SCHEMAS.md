@@ -196,32 +196,14 @@ Policies and the framework lock default to canonical authority. Project profiles
 | Templates and examples | classification recommended; placeholders remain allowed | no forced rewrite | `excluded_by_default` |
 | Generated catalogs and indexes | generated role plus regenerate strategy required | regenerate | `excluded_by_default` |
 
-`wiki/index.md` is the exception: it is a small curated `project_profile` with preserve strategy. Category, stale, contradiction, orphan, unresolved, graph, and aggregate queue views remain disposable generated outputs rather than committed indexes.
+`wiki/index.md` is the exception: it is a small curated `project_profile` with preserve strategy. Category, stale, contradiction, orphan, unresolved, graph, and queue views remain disposable generated outputs rather than committed indexes.
 
 Missing optional metadata does not invalidate untouched history. Any new or substantively edited record must use the row above, and no retrieval metadata can elevate a record above its owning canonical source.
 
 New records also declare `record_scope: application | framework` when their scope determines clean-distribution eligibility. Only records explicitly scoped to `framework` may remain in a clean FCVW baseline; an absent or application scope is treated as downstream history.
-## Plan queue entry — `fcvw/plan-queue-entry@1`
+## Plan queue fields — on `fcvw/plan@2` and `fcvw/plan-compact@1`
 
-The canonical source of a queue is one fragment per plan in
-`Plans/<state>/queue.d/<plan-id>.md`. One file per plan exists for an operational
-reason: changing the queue no longer requires every parallel branch to edit the
-same file, which was a guaranteed source of merge conflict. It is the same
-pattern already used by `changelogs/unreleased/`.
-
-Required frontmatter: `schema`, `artifact_role: project_profile`,
-`owner: project`, `upgrade_strategy: preserve`, `plan`, `order`, and `category`.
-Optional: `blocked_by` and `override_reason`.
-
-The filename must equal `plan`. `order` is a unique integer within the queue.
-`category` uses the same controlled values as the aggregate queue. The body
-contains a navigable Markdown link to the plan.
-
-## Plan queue — `fcvw/plan-queue@1`
-
-Required frontmatter: `schema`, `artifact_role`, `owner`, `upgrade_strategy`, `state`, and `updated_at`. Allowed states are `pending` and `in_progress`. The table contains order, Markdown-linked plan ID, category, blocker, and override reason. When `queue.d/` exists, `QUEUE.md` is a generated view (`artifact_role: generated`, `upgrade_strategy: regenerate`) and the fragments are canonical; regenerate it with `python FCVW/tools/plan_queue_fcvw.py --root . --write-queues`. A project that still keeps rows directly in `QUEUE.md` stays valid as a preserved `project_profile`: fragments only take over when the directory exists, so the migration is incremental and non-destructive.
-
-Each link resolves exactly to the named plan in the queue's own state directory. `none`, `-`, or an empty blocker means unblocked. Internal blockers are comma-separated unresolved `depends_on` plan IDs; an external blocker uses `external: <specific reason>`. A completed prerequisite remains blocked until its dependency row records `satisfied` with evidence; a discontinued prerequisite is `invalidated` and remains blocked pending explicit replanning. Pending work may preempt in-progress work only with `before_in_progress: <specific reason>` in its override column. Within one category, P1 through P5 is the mandatory tie-break order unless a concrete override explains the inversion.
+Optional frontmatter on active plans: `category` (`correction | optimization | code_hygiene | visual | other`, default `other`), `blocked_external` (a specific reason of at least 12 characters) and `before_in_progress` (pending plans only, a specific reason). The queue is derived from these fields and `depends_on`; see [PLANNING.md](PLANNING.md). The former `fcvw/plan-queue@1` and `fcvw/plan-queue-entry@1` files are retired and reported as legacy.
 
 ## Knowledge graph — `fcvw/knowledge-graph@1`
 

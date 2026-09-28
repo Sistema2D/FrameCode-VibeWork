@@ -76,12 +76,11 @@ Run the optional validator to verify the current tree instead of manually expand
 - Generated Obsidian-compatible catalog: `FCVW/DOCUMENT_GRAPH.md`.
 - Installation baseline consumed by selective upgrade: `FCVW/ROLE_MANIFEST.json`, generated per release payload and replaced only by the upgrade tool.
 - A merge conflict in a generated surface is never merged by hand: regenerate it.
-- Canonical queue fragments: `FCVW/Plans/{pending,in_progress}/queue.d/*.md`.
-- Generated queue view: `FCVW/Plans/{pending,in_progress}/QUEUE.md`.
+- Plan queue: derived from plan frontmatter; no queue file.
 - Optional disposable context indexes: user-selected output path; never a normative source or distributable record.
 - Optional disposable knowledge graphs, source-review reports, and aggregate queue views: `.fcvw-cache/` or another user-selected output path; never normative or distributable records.
 
-Every governed Markdown file is linked from an official entrypoint, a domain catalog, a queue, or `DOCUMENT_GRAPH.md`. File movement requires link-graph regeneration and validation.
+Every governed Markdown file is linked from an official entrypoint, a domain catalog, or `DOCUMENT_GRAPH.md`. File movement requires link-graph regeneration and validation.
 
 ## Installed release root
 

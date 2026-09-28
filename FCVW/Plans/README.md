@@ -1,19 +1,13 @@
 # Plans
 
-This directory stores formal change plans for the project, organized by status.
+Formal change plans, one file per plan, in a directory that matches its `status`: `pending/`, `in_progress/`, `completed/` or `discontinued/`. A state directory is created by the first plan that needs it. The method is in [PLANNING.md](../PLANNING.md).
 
-- `pending/` — Plans approved but not yet started.
-- `in_progress/` — Plans actively being executed.
-- `completed/` — Validated and closed plans.
-- `discontinued/` — Canceled plans with justification.
+## Queue
 
-For the planning methodology, see `FCVW/PLANNING.md`.
+There is no queue file. Each active plan declares `category` (`correction`, `optimization`, `code_hygiene`, `visual` or `other`; default `other`), and optionally `blocked_external: <specific reason>` or, for a pending plan, `before_in_progress: <specific reason>`. Blockers also come from unresolved `depends_on`. The order is derived:
 
-## Operational queues
+```sh
+python FCVW/tools/plan_queue_fcvw.py --root . --recommend
+```
 
-- [`in_progress/QUEUE.md`](in_progress/QUEUE.md) — first source for the next executable plan.
-- [`pending/QUEUE.md`](pending/QUEUE.md) — ordered backlog after active work.
-
-Every plan in either active directory appears exactly once in its queue. Completed and discontinued plans remain reachable through [`../DOCUMENT_GRAPH.md`](../DOCUMENT_GRAPH.md) and their related release, changelog, decision, regression, or audit records.
-
-Blocking plan prerequisites are declared durably through `depends_on` and a Dependency validation table. Queue blocker cells contain only unresolved prerequisite IDs or a specific external condition. The two queues remain canonical; a combined view may be generated to `.fcvw-cache/` with `tools/plan_queue_fcvw.py --output`.
+Use `tools/` instead of `FCVW/tools/` in the framework source checkout. `--output .fcvw-cache/plan-queue.md` writes a disposable view.

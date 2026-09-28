@@ -48,8 +48,6 @@ REQUIRED_PATHS = (
     "FCVW/README.md",
     "FCVW/APP_RULES.md",
     "FCVW/DOCUMENT_GRAPH.md",
-    "FCVW/Plans/pending/QUEUE.md",
-    "FCVW/Plans/in_progress/QUEUE.md",
     "FCVW/FRAMEWORK_LOCK.md",
     "FCVW/OWNERSHIP.md",
     "FCVW/SCHEMAS.md",
@@ -2502,7 +2500,7 @@ def validate_knowledge_graph(root: Path, findings: list[Finding]) -> None:
 
 
 def validate_queues(root: Path, findings: list[Finding]) -> None:
-    findings.extend(Finding(item.rule, item.path, item.message) for item in validate_plan_queues(root))
+    findings.extend(Finding(item.rule, item.path, item.message, item.severity) for item in validate_plan_queues(root))
 
 
 def validate_app_rules(root: Path, profile: str, findings: list[Finding]) -> None:

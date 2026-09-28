@@ -24,23 +24,6 @@ class TemporaryRootTest(unittest.TestCase):
 
 class PlanDependencyTests(TemporaryRootTest):
     @staticmethod
-    def queue_text(state: str, rows: list[str]) -> str:
-        return (
-            "---\n"
-            'schema: "fcvw/plan-queue@1"\n'
-            'artifact_role: "project_profile"\n'
-            'owner: "project"\n'
-            'upgrade_strategy: "preserve"\n'
-            f'state: "{state}"\n'
-            'updated_at: "2026-08-21"\n'
-            "---\n\n"
-            "| Order | Plan | Category | Blocked by | Override reason |\n"
-            "|---:|---|---|---|---|\n"
-            + "\n".join(rows)
-            + "\n"
-        )
-
-    @staticmethod
     def plan_text(
         plan_id: str,
         status: str,
@@ -84,10 +67,6 @@ class PlanDependencyTests(TemporaryRootTest):
             states[state].mkdir(parents=True)
         return root, states
 
-    def write_empty_queues(self, states: dict[str, Path]) -> None:
-        for state in ("pending", "in_progress"):
-            (states[state] / "QUEUE.md").write_text(self.queue_text(state, []), encoding="utf-8")
-
     def test_completed_dependency_requires_and_accepts_evidence(self) -> None:
         root, states = self.setup_root()
         prerequisite = "P2-R2-2026-08-21-prerequisite"
@@ -104,11 +83,6 @@ class PlanDependencyTests(TemporaryRootTest):
             ),
             encoding="utf-8",
         )
-        (states["pending"] / "QUEUE.md").write_text(
-            self.queue_text("pending", [f"| 1 | [{dependent}]({dependent}.md) | correction | none | none |"]),
-            encoding="utf-8",
-        )
-        (states["in_progress"] / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
         self.assertEqual([], validate_plan_queues(root))
         self.assertEqual(dependent, (recommend_next_plan(root) or (None, None))[1].plan_id)
 
@@ -122,11 +96,6 @@ class PlanDependencyTests(TemporaryRootTest):
         (states["pending"] / f"{plan_id}.md").write_text(
             self.plan_text(plan_id, "pending", dependencies=[]), encoding="utf-8"
         )
-        (states["pending"] / "QUEUE.md").write_text(
-            self.queue_text("pending", [f"| 1 | [{plan_id}]({plan_id}.md) | correction | none | none |"]),
-            encoding="utf-8",
-        )
-        (states["in_progress"] / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
         self.assertEqual([], validate_plan_queues(root))
 
     def test_pending_and_invalidated_dependencies_remain_blocked(self) -> None:
@@ -145,18 +114,10 @@ class PlanDependencyTests(TemporaryRootTest):
             ),
             encoding="utf-8",
         )
-        (states["pending"] / "QUEUE.md").write_text(
-            self.queue_text(
-                "pending",
-                [f"| 1 | [{dependent}]({dependent}.md) | correction | {prerequisite} | none |"],
-            ),
-            encoding="utf-8",
-        )
-        (states["in_progress"] / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
         self.assertEqual([], validate_plan_queues(root))
         self.assertIsNone(recommend_next_plan(root))
 
-    def test_cycles_and_queue_mismatch_fail(self) -> None:
+    def test_dependency_cycles_fail(self) -> None:
         root, states = self.setup_root()
         first = "P2-R2-2026-08-21-first"
         second = "P3-R2-2026-08-21-second"
@@ -166,37 +127,19 @@ class PlanDependencyTests(TemporaryRootTest):
         (states["pending"] / f"{second}.md").write_text(
             self.plan_text(second, "pending", dependencies=[first]), encoding="utf-8"
         )
-        (states["pending"] / "QUEUE.md").write_text(
-            self.queue_text(
-                "pending",
-                [
-                    f"| 1 | [{first}]({first}.md) | correction | none | none |",
-                    f"| 2 | [{second}]({second}.md) | correction | {first} | none |",
-                ],
-            ),
-            encoding="utf-8",
-        )
-        (states["in_progress"] / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
         rules = {finding.rule for finding in validate_plan_queues(root)}
         self.assertIn("plan-dependency-cycle", rules)
-        self.assertIn("plan-queue-dependency", rules)
 
-    def test_aggregate_view_is_derived_from_both_queues(self) -> None:
+    def test_aggregate_view_is_derived_from_plans(self) -> None:
         root, states = self.setup_root()
         active = "P2-R2-2026-08-21-active"
         pending = "P3-R2-2026-08-21-pending"
         (states["in_progress"] / f"{active}.md").write_text(self.plan_text(active, "in_progress"), encoding="utf-8")
         (states["pending"] / f"{pending}.md").write_text(self.plan_text(pending, "pending"), encoding="utf-8")
-        (states["in_progress"] / "QUEUE.md").write_text(
-            self.queue_text("in_progress", [f"| 1 | [{active}]({active}.md) | correction | none | none |"]), encoding="utf-8"
-        )
-        (states["pending"] / "QUEUE.md").write_text(
-            self.queue_text("pending", [f"| 1 | [{pending}]({pending}.md) | correction | none | none |"]), encoding="utf-8"
-        )
         rendered = render_aggregate_queue(root)
         self.assertIn(f"| in_progress | 1 | {active}", rendered)
         self.assertIn(f"| pending | 1 | {pending}", rendered)
-        self.assertIn(f"{active} | correction | none | yes", rendered)
+        self.assertIn(f"{active} | other | none | yes", rendered)
 
 
 class KnowledgeGraphTests(TemporaryRootTest):

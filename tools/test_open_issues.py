@@ -26,7 +26,7 @@ from package_release_fcvw import (
     sha256,
 )
 from release_layout_fcvw import governed_root, materialize_release_layout, payload_mapping, validate_release_layout
-from plan_queue_fcvw import recommend_next_plan, validate_plan_queues
+from plan_queue_fcvw import derive_queue, recommend_next_plan, validate_plan_queues
 from retrieve_context import (
     MAX_EXCERPT_CHARS,
     MAX_TOP_K,
@@ -546,199 +546,93 @@ class DocumentGraphTests(TemporaryRootTest):
 
 
 class QueueTests(TemporaryRootTest):
-    @staticmethod
-    def queue_text(state: str, rows: list[str]) -> str:
-        return (
-            "---\n"
-            'schema: "fcvw/plan-queue@1"\n'
-            'artifact_role: "project_profile"\n'
-            'owner: "project"\n'
-            'upgrade_strategy: "preserve"\n'
-            f'state: "{state}"\n'
-            'updated_at: "2026-07-27"\n'
-            "---\n\n"
-            "| Order | Plan | Category | Blocked by | Override reason |\n"
-            "|---:|---|---|---|---|\n"
-            + "\n".join(rows)
-            + "\n"
-        )
+    """The queue is derived from plan frontmatter; there is no queue file."""
 
     @staticmethod
-    def plan_text(plan_id: str, state: str, priority: str | None = None) -> str:
-        priority = priority or plan_id.split("-", 1)[0]
+    def plan_text(plan_id: str, state: str, extra: str = "") -> str:
         return (
             "---\n"
             'schema: "fcvw/plan@2"\n'
             f'id: "{plan_id}"\n'
             f'status: "{state}"\n'
-            f'priority: "{priority}"\n'
+            f'priority: "{plan_id.split("-")[0]}"\n'
             f'risk: "{plan_id.split("-")[1]}"\n'
-            'created_at: "2026-07-27"\n'
+            f'created_at: "{"-".join(plan_id.split("-")[2:5])}"\n'
             'updated_at: "2026-07-27"\n'
             'current_version: "V0.13.0"\n'
             'expected_version: "V0.14.0"\n'
             'owner: "fixture"\n'
             'regression_contract: "required"\n'
+            f"{extra}"
             "context_files:\n"
             '  - "FCVW/SCHEMAS.md"\n'
             "---\n"
         )
 
-    def setup_queues(self, root: Path) -> tuple[Path, Path]:
-        pending = root / "FCVW" / "Plans" / "pending"
-        in_progress = root / "FCVW" / "Plans" / "in_progress"
-        pending.mkdir(parents=True)
-        in_progress.mkdir(parents=True)
-        return pending, in_progress
+    def write(self, root: Path, state: str, plan_id: str, extra: str = "") -> None:
+        folder = root / "FCVW" / "Plans" / state
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / f"{plan_id}.md").write_text(self.plan_text(plan_id, state, extra), encoding="utf-8")
 
-    def test_valid_queues_and_in_progress_recommendation(self) -> None:
+    def recommended(self, root: Path) -> str | None:
+        result = recommend_next_plan(root)
+        return result[1].plan_id if result else None
+
+    def test_in_progress_is_recommended_before_pending(self) -> None:
         _, root = self.make_root()
-        pending, in_progress = self.setup_queues(root)
-        pending_id = "P3-R2-2026-07-27-pending-plan"
-        active_id = "P2-R3-2026-07-27-active-plan"
-        (pending / f"{pending_id}.md").write_text(self.plan_text(pending_id, "pending"), encoding="utf-8")
-        (in_progress / f"{active_id}.md").write_text(
-            self.plan_text(active_id, "in_progress"),
-            encoding="utf-8",
-        )
-        (pending / "QUEUE.md").write_text(
-            self.queue_text("pending", [f"| 1 | [{pending_id}]({pending_id}.md) | correction | none | none |"]),
-            encoding="utf-8",
-        )
-        (in_progress / "QUEUE.md").write_text(
-            self.queue_text("in_progress", [f"| 1 | [{active_id}]({active_id}.md) | optimization | none | none |"]),
-            encoding="utf-8",
-        )
+        self.write(root, "pending", "P1-R2-2026-07-27-urgent-pending", 'category: "correction"\n')
+        self.write(root, "in_progress", "P3-R2-2026-07-27-active", 'category: "visual"\n')
         self.assertEqual([], validate_plan_queues(root))
-        state, entry = recommend_next_plan(root) or (None, None)
-        self.assertEqual("in_progress", state)
-        self.assertEqual(active_id, entry.plan_id if entry else None)
+        self.assertEqual("P3-R2-2026-07-27-active", self.recommended(root))
 
-    def test_localized_queue_header_preserves_positional_machine_contract(self) -> None:
+    def test_order_is_category_then_priority_then_date(self) -> None:
         _, root = self.make_root()
-        pending, in_progress = self.setup_queues(root)
-        plan_id = "P2-R2-2026-07-27-localized-queue"
-        (pending / f"{plan_id}.md").write_text(self.plan_text(plan_id, "pending"), encoding="utf-8")
-        localized = self.queue_text(
-            "pending",
-            [f"| 1 | [{plan_id}]({plan_id}.md) | correction | none | none |"],
-        ).replace(
-            "| Order | Plan | Category | Blocked by | Override reason |",
-            "| Ordem | Plano | Categoria | Bloqueado por | Motivo da substituição |",
+        self.write(root, "pending", "P1-R2-2026-07-27-visual", 'category: "visual"\n')
+        self.write(root, "pending", "P3-R2-2026-07-27-correction-low", 'category: "correction"\n')
+        self.write(root, "pending", "P2-R2-2026-07-28-correction-high", 'category: "correction"\n')
+        self.write(root, "pending", "P2-R2-2026-07-26-correction-older", 'category: "correction"\n')
+        entries, findings = derive_queue(root)
+        self.assertEqual([], findings)
+        self.assertEqual(
+            [
+                "P2-R2-2026-07-26-correction-older",
+                "P2-R2-2026-07-28-correction-high",
+                "P3-R2-2026-07-27-correction-low",
+                "P1-R2-2026-07-27-visual",
+            ],
+            [entry.plan_id for entry in entries],
         )
-        (pending / "QUEUE.md").write_text(localized, encoding="utf-8")
-        (in_progress / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
-        self.assertEqual([], validate_plan_queues(root))
 
-    def test_missing_plan_and_priority_inversion_fail(self) -> None:
+    def test_before_in_progress_preempts_only_with_a_specific_reason(self) -> None:
         _, root = self.make_root()
-        pending, in_progress = self.setup_queues(root)
-        visual_id = "P3-R2-2026-07-27-visual-plan"
-        correction_id = "P2-R2-2026-07-27-correction-plan"
-        for plan_id in (visual_id, correction_id):
-            (pending / f"{plan_id}.md").write_text(self.plan_text(plan_id, "pending"), encoding="utf-8")
-        (pending / "QUEUE.md").write_text(
-            self.queue_text(
-                "pending",
-                [
-                    f"| 1 | [{visual_id}]({visual_id}.md) | visual | none | none |",
-                    f"| 2 | [{correction_id}]({correction_id}.md) | correction | none | none |",
-                ],
-            ),
-            encoding="utf-8",
-        )
-        (in_progress / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
+        self.write(root, "in_progress", "P3-R2-2026-07-27-active")
+        self.write(root, "pending", "P2-R2-2026-07-27-hotfix", 'before_in_progress: "explicitly approved urgent correction"\n')
+        self.assertEqual("P2-R2-2026-07-27-hotfix", self.recommended(root))
+        self.write(root, "in_progress", "P4-R2-2026-07-27-misplaced", 'before_in_progress: "not allowed in progress"\n')
+        self.assertIn("plan-queue-override", {item.rule for item in validate_plan_queues(root)})
+        self.assertIsNone(self.recommended(root))
+
+    def test_invalid_category_and_vague_external_blocker_fail(self) -> None:
+        _, root = self.make_root()
+        self.write(root, "pending", "P3-R2-2026-07-27-typo", 'category: "corection"\nblocked_external: "wait"\n')
         rules = {item.rule for item in validate_plan_queues(root)}
-        self.assertIn("plan-queue-priority", rules)
-        (pending / f"{correction_id}.md").unlink()
-        rules = {item.rule for item in validate_plan_queues(root)}
-        self.assertIn("plan-queue-stale", rules)
+        self.assertIn("plan-queue-category", rules)
+        self.assertIn("plan-queue-blocker", rules)
 
-    def test_queue_link_must_resolve_to_matching_plan(self) -> None:
+    def test_external_blocker_moves_the_plan_behind_unblocked_work(self) -> None:
         _, root = self.make_root()
-        pending, in_progress = self.setup_queues(root)
-        decisions = root / "FCVW" / "decisions"
-        decisions.mkdir()
-        plan_id = "P2-R2-2026-07-27-link-target"
-        (pending / f"{plan_id}.md").write_text(self.plan_text(plan_id, "pending"), encoding="utf-8")
-        (decisions / f"{plan_id}.md").write_text("# Decision\n", encoding="utf-8")
-        (pending / "QUEUE.md").write_text(
-            self.queue_text(
-                "pending",
-                [f"| 1 | [{plan_id}](../../decisions/{plan_id}.md) | correction | none | none |"],
-            ),
-            encoding="utf-8",
-        )
-        (in_progress / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
-        self.assertTrue(any(item.rule == "plan-queue-link" for item in validate_plan_queues(root)))
+        self.write(root, "pending", "P1-R2-2026-07-27-waiting", 'blocked_external: "vendor API credentials pending"\n')
+        self.write(root, "pending", "P5-R2-2026-07-27-ready")
+        self.assertEqual("P5-R2-2026-07-27-ready", self.recommended(root))
 
-    def test_priority_tie_break_and_cross_state_override(self) -> None:
+    def test_legacy_queue_files_are_reported_but_not_blocking(self) -> None:
         _, root = self.make_root()
-        pending, in_progress = self.setup_queues(root)
-        lower = "P4-R2-2026-07-27-lower"
-        higher = "P2-R2-2026-07-27-higher"
-        active = "P3-R2-2026-07-27-active"
-        for plan_id in (lower, higher):
-            (pending / f"{plan_id}.md").write_text(self.plan_text(plan_id, "pending"), encoding="utf-8")
-        (in_progress / f"{active}.md").write_text(
-            self.plan_text(active, "in_progress"),
-            encoding="utf-8",
-        )
-        (pending / "QUEUE.md").write_text(
-            self.queue_text(
-                "pending",
-                [
-                    f"| 1 | [{lower}]({lower}.md) | correction | none | none |",
-                    f"| 2 | [{higher}]({higher}.md) | correction | none | none |",
-                ],
-            ),
-            encoding="utf-8",
-        )
-        (in_progress / "QUEUE.md").write_text(
-            self.queue_text(
-                "in_progress",
-                [f"| 1 | [{active}]({active}.md) | correction | none | none |"],
-            ),
-            encoding="utf-8",
-        )
-        self.assertTrue(any(item.rule == "plan-queue-priority" for item in validate_plan_queues(root)))
-        (pending / "QUEUE.md").write_text(
-            self.queue_text(
-                "pending",
-                [
-                    f"| 1 | [{higher}]({higher}.md) | correction | none | "
-                    "before_in_progress: explicitly approved urgent correction |",
-                    f"| 2 | [{lower}]({lower}.md) | correction | none | none |",
-                ],
-            ),
-            encoding="utf-8",
-        )
-        self.assertEqual([], validate_plan_queues(root))
-        state, entry = recommend_next_plan(root) or (None, None)
-        self.assertEqual("pending", state)
-        self.assertEqual(higher, entry.plan_id if entry else None)
-
-    def test_internal_blocker_requires_declared_dependency(self) -> None:
-        _, root = self.make_root()
-        pending, in_progress = self.setup_queues(root)
-        completed = root / "FCVW" / "Plans" / "completed"
-        completed.mkdir()
-        dependency = "P2-R2-2026-07-27-finished"
-        blocked = "P3-R2-2026-07-27-blocked"
-        (completed / f"{dependency}.md").write_text(
-            self.plan_text(dependency, "completed"),
-            encoding="utf-8",
-        )
-        (pending / f"{blocked}.md").write_text(self.plan_text(blocked, "pending"), encoding="utf-8")
-        (pending / "QUEUE.md").write_text(
-            self.queue_text(
-                "pending",
-                [f"| 1 | [{blocked}]({blocked}.md) | correction | {dependency} | none |"],
-            ),
-            encoding="utf-8",
-        )
-        (in_progress / "QUEUE.md").write_text(self.queue_text("in_progress", []), encoding="utf-8")
-        self.assertTrue(any(item.rule == "plan-queue-dependency" for item in validate_plan_queues(root)))
+        self.write(root, "pending", "P3-R2-2026-07-27-plan")
+        (root / "FCVW" / "Plans" / "pending" / "QUEUE.md").write_text("# Old queue\n", encoding="utf-8")
+        findings = validate_plan_queues(root)
+        self.assertEqual({"plan-queue-legacy"}, {item.rule for item in findings})
+        self.assertEqual({"warning"}, {item.severity for item in findings})
+        self.assertEqual("P3-R2-2026-07-27-plan", self.recommended(root))
 
 
 class RetrievalTests(TemporaryRootTest):
@@ -1480,28 +1374,6 @@ class ContractCompletionTests(TemporaryRootTest):
         )
         note_findings = [item for item in build_graph(root).findings if item.path == "FCVW/note.md"]
         self.assertEqual([], note_findings)
-
-    def test_queue_duplicate_and_wrong_state_fail(self) -> None:
-        _, root = self.make_root()
-        pending, in_progress = QueueTests.setup_queues(self, root)
-        plan_id = "P2-R2-2026-07-27-duplicate-plan"
-        (pending / f"{plan_id}.md").write_text(
-            QueueTests.plan_text(plan_id, "pending"),
-            encoding="utf-8",
-        )
-        row = f"| 1 | [{plan_id}]({plan_id}.md) | correction | none | none |"
-        duplicate = f"| 2 | [{plan_id}]({plan_id}.md) | correction | none | none |"
-        (pending / "QUEUE.md").write_text(
-            QueueTests.queue_text("in_progress", [row, duplicate]),
-            encoding="utf-8",
-        )
-        (in_progress / "QUEUE.md").write_text(
-            QueueTests.queue_text("in_progress", []),
-            encoding="utf-8",
-        )
-        rules = {item.rule for item in validate_plan_queues(root)}
-        self.assertIn("plan-queue-duplicate", rules)
-        self.assertIn("plan-queue-state", rules)
 
     def test_app_rules_malformed_and_valid_states(self) -> None:
         _, root = self.make_root()

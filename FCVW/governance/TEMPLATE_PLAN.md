@@ -21,6 +21,7 @@ owner: "<human-or-agent-role>"
 regression_contract: "required | not_applicable"
 context_files:
   - "path/to/file"
+category: "other"            # correction | optimization | code_hygiene | visual | other
 depends_on: []
 ---
 
@@ -122,7 +123,7 @@ For `regression_contract: not_applicable`, replace the subsections with `Justifi
 - Regression gate:
 - Security/data/refactoring/skill/release gate:
 - Decomposition required:
-The plan must be listed by its state queue and contain at least one portable Markdown link to an authoritative source or related record before closeout.
+The plan must sit in the directory matching its status and contain at least one portable Markdown link to an authoritative source or related record before closeout.
 
 
 ## Related records

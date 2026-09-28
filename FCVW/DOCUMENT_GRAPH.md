@@ -178,31 +178,10 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/Plans/completed/P2-R4-2026-09-23-audit-remediation.md`](Plans/completed/P2-R4-2026-09-23-audit-remediation.md)
 - [`FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md`](Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
 - [`FCVW/Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md`](Plans/completed/P3-R2-2026-07-15-bilingual-readme-navigation-and-badges.md)
-- [`FCVW/Plans/completed/README.md`](Plans/completed/README.md)
-
-## FCVW/Plans/discontinued
-
-- [`FCVW/Plans/discontinued/README.md`](Plans/discontinued/README.md)
 
 ## FCVW/Plans/in_progress
 
 - [`FCVW/Plans/in_progress/P2-R4-2026-09-28-phase2-file-reduction.md`](Plans/in_progress/P2-R4-2026-09-28-phase2-file-reduction.md)
-- [`FCVW/Plans/in_progress/QUEUE.md`](Plans/in_progress/QUEUE.md)
-- [`FCVW/Plans/in_progress/README.md`](Plans/in_progress/README.md)
-
-## FCVW/Plans/in_progress/queue.d
-
-- [`FCVW/Plans/in_progress/queue.d/P2-R4-2026-09-28-phase2-file-reduction.md`](Plans/in_progress/queue.d/P2-R4-2026-09-28-phase2-file-reduction.md)
-- [`FCVW/Plans/in_progress/queue.d/README.md`](Plans/in_progress/queue.d/README.md)
-
-## FCVW/Plans/pending
-
-- [`FCVW/Plans/pending/QUEUE.md`](Plans/pending/QUEUE.md)
-- [`FCVW/Plans/pending/README.md`](Plans/pending/README.md)
-
-## FCVW/Plans/pending/queue.d
-
-- [`FCVW/Plans/pending/queue.d/README.md`](Plans/pending/queue.d/README.md)
 
 ## FCVW/refactoring-guide
 
