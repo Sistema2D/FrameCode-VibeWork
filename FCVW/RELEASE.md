@@ -32,7 +32,7 @@ Publication status for a changelog and external tag/release status are separate 
 2. Classify each path by ownership and upgrade action.
 3. Document schema and compatibility changes in `MIGRATIONS.md`.
 4. Validate both the framework source and a clean-template fixture.
-5. Verify the clean artifact excludes downstream/application histories, credentials, app licenses, comparison examples, caches, and local editor state such as `.obsidian/`. Governed records of the framework's own development may remain because they carry version, migration, and regression traceability.
+5. Verify the clean artifact excludes downstream/application histories, credentials, app licenses, comparison examples, caches, and local editor state such as `.obsidian/`. Records of the framework's own development stay in the source repository and are left out of the package; shipped policies link to them by repository URL.
 6. Commit the immutable content baseline and record that earlier commit in `source_revision`; this field is not the hash of the commit that contains itself.
 7. Complete language reviews against that content baseline and run all release gates.
 8. Mark the release and `FRAMEWORK_LOCK.md` as `ready`, commit that state, and use this second revision for the tag and exact asset input.
@@ -55,13 +55,13 @@ Monitor primary workflows, security/authentication, data integrity, logs, and ro
 
 ## Language-specific GitHub release contract
 
-Framework releases publish independent clean empty-template variants for `pt-BR`, `en-US`, `es`, and `de`. Each artifact is self-contained after extraction, excludes downstream/application-generated history, passes clean-template validation, and has an external SHA-256 entry. Governed framework history follows the same clean-baseline rule as the source.
+Framework releases publish independent clean empty-template variants for `pt-BR`, `en-US`, `es`, and `de`. Each artifact is self-contained after extraction, excludes downstream/application-generated history, passes clean-template validation, and has an external SHA-256 entry. Framework development history is not part of the package.
 
 Recommended asset names are `FrameCode-VibeWork-Vx.y.z-pt-BR.zip`, `-en-US.zip`, `-es.zip`, and `-de.zip`, plus `SHA256SUMS.txt`. GitHub-generated source archives are source snapshots and must not be described as clean templates.
 
 The user chooses the framework language by downloading one asset. A downloaded variant contains no automatic language selector, fallback, synchronization process, or dependency on the other variants. The four-language requirement measures release completeness; it is not a runtime feature. Starting with V0.15.0, it does change the installed package boundary: the template root contains only `AGENTS.md` and `FCVW/`, while the governed source and pre-package staging remain conventional development trees.
 
-Every V0.15.0-or-later ZIP must have one conventional archive wrapper whose first-level payload is exactly `AGENTS.md` and `FCVW/`. The packager relocates root tools, legal notices, and provider bridges under `FCVW/`, excludes repository-only root `README.md` and `.gitignore`, rejects path collisions or additional root entries, regenerates the local document graph, and preserves deterministic bytes/checksums. Removing `FCVW/` is the bounded filesystem uninstall; `AGENTS.md` requires a separate review because downstream users may customize it.
+Every V0.15.0-or-later ZIP must have one conventional archive wrapper whose first-level payload is exactly `AGENTS.md` and `FCVW/`. The packager relocates root tools, legal notices, and provider bridges under `FCVW/`, excludes repository-only root `README.md` and `.gitignore`, rejects path collisions or additional root entries, leaves out framework history (records with `record_scope: framework` and every framework release record), and preserves deterministic bytes/checksums. Removing `FCVW/` is the bounded filesystem uninstall; `AGENTS.md` requires a separate review because downstream users may customize it.
 
 Application and framework GitHub release notes use the same sections: summary, included plans, added/changed/fixed/removed behavior, compatibility, migration, validation, known gaps, rollback, assets, checksums, and publication evidence.
 
