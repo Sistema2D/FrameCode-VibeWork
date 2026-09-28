@@ -24,13 +24,13 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 | Orient a session | `CONTEXT_MAP.md` | domain document |
 | Resolve file-reading triggers | `CONTEXT_MAP.md` event table | active plan `context_files` |
 | Instantiate a new project | `INSTANTIATION.md` | `BRIEFING.md`, `MANIFEST.md` |
-| Adopt in an existing project | `RETROACTIVE_INSTANTIATION.md` | `MIGRATIONS.md` |
+| Adopt in an existing project | `INSTANTIATION.md` (retroactive mode) | `MIGRATIONS.md` |
 | Plan a change | `PLANNING.md` | `governance/TEMPLATE_PLAN.md` |
 | Protect existing behavior | `REGRESSION_GUARDS.md` | `TESTS.md`, `AUTOMATION.md` gates |
 | Debug a failure | `TROUBLESHOOTING.md` | relevant failure record |
-| Release | `skills/release-checklist/SKILL.md` | `VERSIONING.md`, `RELEASE.md` |
+| Release | `skills/release-checklist/SKILL.md` | `RELEASE.md` |
 | Validate governance | `skills/governance-validator/SKILL.md` | `SCHEMAS.md` |
-| Curate memory | `MEMORY.md` | `wiki/README.md` |
+| Curate memory | `wiki/README.md` | `skills/wiki-curator/SKILL.md` |
 | Define automation | `AUTOMATION.md` | hook, watcher, daemon, or gate contract |
 | Upgrade the framework | `OWNERSHIP.md` | `tools/upgrade_fcvw.py --root . --release <target>` |
 
@@ -38,7 +38,7 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 
 ### Framework policies — replace on compatible upgrades
 
-`AI.md`, `APPLICATION_DOCUMENTATION.md`, `ARCHITECTURAL_DECISIONS.md`, `AUDIT.md`, `AUTOMATION.md`, `CONTEXT_MAP.md`, `INSTANTIATION.md`, `MEMORY.md`, `MIGRATIONS.md`, `OWNERSHIP.md`, `PLANNING.md`, this `README.md`, `REFACTORING.md`, `REFACTORING_GUIDE.md`, `REGRESSION_GUARDS.md`, `RELEASE.md`, `RETROACTIVE_INSTANTIATION.md`, `SCHEMAS.md`, `TESTS.md`, `TOKEN_BUDGET.md`, `TROUBLESHOOTING.md`, `VERSIONING.md`.
+`AI.md`, `APPLICATION_DOCUMENTATION.md`, `ARCHITECTURAL_DECISIONS.md`, `AUDIT.md`, `AUTOMATION.md`, `CONTEXT_MAP.md`, `INSTANTIATION.md`, `MIGRATIONS.md`, `OWNERSHIP.md`, `PLANNING.md`, this `README.md`, `REFACTORING.md`, `REFACTORING_GUIDE.md`, `REGRESSION_GUARDS.md`, `RELEASE.md`, `SCHEMAS.md`, `TESTS.md`, and `TROUBLESHOOTING.md`.
 
 ### Project profiles — instantiate and preserve
 
@@ -52,7 +52,7 @@ Some profiles contain generic guidance plus clearly marked project sections. Fra
 
 ### Generated summaries — regenerate
 
-`DOCUMENT_GRAPH.md` and `FILESYSTEM.md`. `wiki/index.md` is a curated project file, not a generated one.
+`DOCUMENT_GRAPH.md`. `wiki/index.md` is a curated project file, not a generated one.
 
 `ROLE_MANIFEST.json` is not regenerated: it is the installation baseline shipped with each release and is replaced only by the upgrade tool after a successful apply.
 

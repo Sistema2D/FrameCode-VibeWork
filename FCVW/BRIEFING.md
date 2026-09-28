@@ -10,7 +10,7 @@ instantiation_status: "pending"
 
 Methodological document to conduct **Phase 0 — Discovery and Briefing** before the development or restructuring of an application.
 
-This file defines the questions, minimum criteria, and completion rules to be used by humans and AI agents to collect the necessary information before generating or updating `SCOPE.md`, `STACK.md`, `DESIGN.md`, `WORKFLOW.md`, `PLANNING.md`, `VERSIONING.md`, `SECURITY.md`, `DATA.md`, `AI.md`, and other official project documents.
+This file defines the questions, minimum criteria, and completion rules to be used by humans and AI agents to collect the necessary information before generating or updating `SCOPE.md`, `STACK.md`, `DESIGN.md`, `WORKFLOW.md`, `PLANNING.md`, `RELEASE.md`, `SECURITY.md`, `DATA.md`, `AI.md`, and other official project documents.
 
 ## Objective
 
@@ -35,7 +35,7 @@ This file will serve as the initial source of project understanding. After the o
 - `DATA.md`: filled out based on persistence, files, database, retention, and migration.
 - `AI.md`: filled out based on the role of AI, models, context, memory, RAG, and boundaries of action.
 - `PLANNING.md`: guides subsequent plans.
-- `VERSIONING.md`: guides the initial version and future releases.
+- `RELEASE.md`: guides the initial version and future releases.
 
 ## Mandatory Activation Rule
 

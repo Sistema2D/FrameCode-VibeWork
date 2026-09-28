@@ -16,7 +16,6 @@ context_files:
   - "FCVW/PLANNING.md"
   - "FCVW/TESTS.md"
   - "FCVW/AUTOMATION.md"
-  - "FCVW/AUTOMATION.md"
   - "FCVW/wiki/README.md"
   - "FCVW/skills/governance-validator/SKILL.md"
   - "FCVW/skills/wiki-lint/SKILL.md"

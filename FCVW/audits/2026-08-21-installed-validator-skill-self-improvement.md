@@ -10,7 +10,7 @@ status: "completed"
 created_at: "2026-08-21"
 last_reviewed: "2026-08-21"
 sources:
-  - "FCVW/FILESYSTEM.md"
+  - "FCVW/OWNERSHIP.md"
   - "FCVW/skills/governance-validator/SKILL.md"
   - "FCVW/Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md"
 ---
@@ -23,7 +23,7 @@ Patch only the command-location guidance in the existing `governance-validator` 
 
 ## Authoritative sources
 
-- [Filesystem contract](../FILESYSTEM.md)
+- [Filesystem contract](../OWNERSHIP.md#filesystem-layout)
 - [Release contract](../RELEASE.md)
 - [Completed implementation plan](../Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md)
 

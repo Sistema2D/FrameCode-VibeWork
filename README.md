@@ -108,7 +108,7 @@ Consulte [OWNERSHIP.md](FCVW/OWNERSHIP.md) e [SCHEMAS.md](FCVW/SCHEMAS.md) para 
 
 #### Aplicação existente
 
-Use [RETROACTIVE_INSTANTIATION.md](FCVW/RETROACTIVE_INSTANTIATION.md). O fluxo inventaria o projeto, preserva código e histórico, classifica ownership e só então integra as políticas do FCVW. A adoção não autoriza refatoração ou limpeza destrutiva implícita.
+Use [INSTANTIATION.md, modo retroativo / retroactive mode](FCVW/INSTANTIATION.md#retroactive-instantiation). O fluxo inventaria o projeto, preserva código e histórico, classifica ownership e só então integra as políticas do FCVW. A adoção não autoriza refatoração ou limpeza destrutiva implícita.
 
 #### Manutenção do próprio FCVW
 
@@ -235,7 +235,7 @@ Os 21 skills em `FCVW/skills/` são procedimentos just-in-time. Cada um declara 
 - o core permanece independente de fornecedor;
 - skills não ampliam o escopo do plano.
 
-[MEMORY.md](FCVW/MEMORY.md) separa contexto ativo, conhecimento curado e arquivo pesquisável. A wiki guarda conhecimento reutilizável e com fontes, não uma cópia de toda sessão. Relações tipadas e digests de fontes alimentam apenas grafos e revisões derivados; não substituem os Markdown canônicos. Use `wiki-curator` para promoção e revisão de impacto e `wiki-lint` para integridade determinística e revisão semântica opcional.
+[wiki/README.md, ciclo de memória / memory lifecycle](FCVW/wiki/README.md#memory-lifecycle) separa contexto ativo, conhecimento curado e arquivo pesquisável. A wiki guarda conhecimento reutilizável e com fontes, não uma cópia de toda sessão. Relações tipadas e digests de fontes alimentam apenas grafos e revisões derivados; não substituem os Markdown canônicos. Use `wiki-curator` para promoção e revisão de impacto e `wiki-lint` para integridade determinística e revisão semântica opcional.
 
 [Navegação PT-BR](#pt-br) · [Topo](#top)
 
@@ -301,7 +301,7 @@ Uma mudança do FCVW não incrementa a versão da aplicação. `published` só �
 | [tools/validate_fcvw.py](tools/validate_fcvw.py) | validador determinístico opcional |
 | [tools/test_validate_fcvw.py](tools/test_validate_fcvw.py) | testes de regressão do validador |
 
-[FILESYSTEM.md](FCVW/FILESYSTEM.md) resume o contrato físico; o disco é a fonte de verdade para existência de arquivos.
+[OWNERSHIP.md, layout de arquivos / filesystem layout](FCVW/OWNERSHIP.md#filesystem-layout) resume o contrato físico; o disco é a fonte de verdade para existência de arquivos.
 
 [Navegação PT-BR](#pt-br) · [Topo](#top)
 
@@ -404,7 +404,7 @@ See [OWNERSHIP.md](FCVW/OWNERSHIP.md) and [SCHEMAS.md](FCVW/SCHEMAS.md) for the 
 
 #### Existing application
 
-Use [RETROACTIVE_INSTANTIATION.md](FCVW/RETROACTIVE_INSTANTIATION.md). The flow inventories the project, preserves code and history, classifies ownership, and only then integrates FCVW policies. Adoption does not implicitly authorize refactoring or destructive cleanup.
+Use [INSTANTIATION.md, modo retroativo / retroactive mode](FCVW/INSTANTIATION.md#retroactive-instantiation). The flow inventories the project, preserves code and history, classifies ownership, and only then integrates FCVW policies. Adoption does not implicitly authorize refactoring or destructive cleanup.
 
 #### Maintaining FCVW itself
 
@@ -531,7 +531,7 @@ The 21 skills under `FCVW/skills/` are just-in-time procedures. Each declares tr
 - the core remains provider-neutral;
 - skills never expand the plan's scope.
 
-[MEMORY.md](FCVW/MEMORY.md) separates active context, curated knowledge, and searchable archives. The wiki stores reusable, sourced knowledge rather than a copy of every session. Typed relations and source digests feed derived graphs and review findings only; they never replace canonical Markdown. Use `wiki-curator` for promotion and impact review and `wiki-lint` for deterministic integrity plus optional semantic review.
+[wiki/README.md, ciclo de memória / memory lifecycle](FCVW/wiki/README.md#memory-lifecycle) separates active context, curated knowledge, and searchable archives. The wiki stores reusable, sourced knowledge rather than a copy of every session. Typed relations and source digests feed derived graphs and review findings only; they never replace canonical Markdown. Use `wiki-curator` for promotion and impact review and `wiki-lint` for deterministic integrity plus optional semantic review.
 
 [ENG-US navigation](#en-us) · [Top](#top)
 
@@ -597,7 +597,7 @@ An FCVW change does not increment an application's version. `published` is used 
 | [tools/validate_fcvw.py](tools/validate_fcvw.py) | optional deterministic validator |
 | [tools/test_validate_fcvw.py](tools/test_validate_fcvw.py) | validator regression tests |
 
-[FILESYSTEM.md](FCVW/FILESYSTEM.md) summarizes the physical contract; disk is the source of truth for file existence.
+[OWNERSHIP.md, layout de arquivos / filesystem layout](FCVW/OWNERSHIP.md#filesystem-layout) summarizes the physical contract; disk is the source of truth for file existence.
 
 [ENG-US navigation](#en-us) · [Top](#top)
 

@@ -29,7 +29,7 @@ Find structural and knowledge-quality problems without forcing bulk rewrites of 
 
 ## Inputs
 
-`MEMORY.md`, `wiki/README.md`, `wiki/index.md`, changed pages, and optional legacy baseline.
+`wiki/README.md`, `wiki/index.md`, changed pages, and optional legacy baseline.
 
 ## Checks
 

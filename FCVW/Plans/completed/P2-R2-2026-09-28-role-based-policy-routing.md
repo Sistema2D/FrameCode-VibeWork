@@ -17,7 +17,6 @@ regression_contract: "required"
 context_files:
   - "FCVW/CONTEXT_MAP.md"
   - "FCVW/AI.md"
-  - "FCVW/TOKEN_BUDGET.md"
 depends_on: []
 ---
 

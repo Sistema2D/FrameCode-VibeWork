@@ -177,7 +177,7 @@ Rules:
 
 ## AI Interaction Context Compression (AICC)
 
-To prevent context bloat while preserving evidence, FCVW uses bounded session handoffs and the lifecycle in `MEMORY.md`. Token savings are measured under `TOKEN_BUDGET.md`; they are not assumed.
+To prevent context bloat while preserving evidence, FCVW uses bounded session handoffs and the memory lifecycle in `wiki/README.md`. Token savings are measured under `TOKEN_BUDGET.md`; they are not assumed.
 
 ### Ingestion Standard (At Session Start)
 
@@ -299,7 +299,7 @@ Recommended criteria:
 
 ## Token Efficiency and Performance Rules for AI Agents
 
-Use [the token budget](TOKEN_BUDGET.md) for context tiers, measurement and
+Use [the token budget](#token-and-context-budget) for context tiers, measurement and
 compact evidence. [The context map](CONTEXT_MAP.md) owns cumulative mandatory
 reads and section-level disclosure; safety, QA decisions and changed boundaries
 are never omitted to save tokens. For wiki curation, use the fixed selective mode
@@ -414,3 +414,52 @@ only when a trusted caller supplies one; missing usage is `unavailable`, never
 zero. A trace inside the framework must live under `.fcvw-cache/`. It does not
 attest that the host read a file, called an LLM or consulted the user; a trusted
 host adapter must supply those events separately before making such claims.
+
+## Token and context budget
+
+Token efficiency means loading the smallest evidence set that preserves correctness, safety, and scope.
+
+### Default strategy
+
+1. Read `AGENTS.md` and one `CONTEXT_MAP.md` row.
+2. Add the active plan's `context_files` and every matching mandatory event trigger; these routes are cumulative.
+3. Prefer current canonical documents over historical sessions.
+4. Search archives before opening many files.
+5. Load the relevant sections of long policies first, using the section routes in `CONTEXT_MAP.md`.
+6. Load a JIT skill instead of several long documents when the skill fully covers the operation.
+7. Put detailed evidence in repository records and keep user-facing updates compact.
+8. Keep command output and repeated status checks proportional to the decision;
+   avoid loading complete large files when a named section suffices.
+
+### Context tiers
+
+| Tier | Content | Default |
+|---|---|---|
+| Always | user request, AGENTS, context route | yes |
+| Active | plan, changed files, directly affected policy | yes |
+| Supporting | tests, failure record, decision, recent handoff | as needed |
+| Archive | old plans, sessions, releases, logs | search only |
+
+### Guardrails
+
+- Never omit a mandatory event-triggered route—including security, data, AI, public interface, filesystem, automation, release, destructive-action, or approval context—to save tokens.
+- Do not load all of `wiki/`, `Plans/`, or `changelogs/` by default.
+- Avoid repeating full file contents in plans and session syntheses; link paths and retain decisive evidence.
+- Rotate indexes and archive old sessions when active navigation becomes noisy.
+- Ask only when missing information materially affects correctness, authority, safety, or product direction.
+
+### Measurement
+
+Token-saving claims must record the model/tokenizer or approximation method, compared context sets, date, and result. Do not publish unsupported percentage savings.
+
+Useful repository metrics:
+
+- bytes/estimated tokens in the default context route;
+- number of files loaded per session type;
+- archive versus active-memory size;
+- repeated clarification count;
+- validation defects caused by missing context.
+
+### Complete-chunk budget estimates
+
+For opt-in lexical selection, `--context-budget` bounds the estimated serialized optional-results array, including its metadata, rather than only excerpt characters. Complete paragraphs and code blocks are retained or skipped; required paths never consume this optional allowance. Diagnostics report every decision. This remains a Unicode-character approximation, not model usage; actual token accounting and quality validation remain in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55).

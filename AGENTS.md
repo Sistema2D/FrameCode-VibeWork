@@ -51,11 +51,11 @@ The plan may cover its own creation and the associated changelog. Do not create 
 - Framework/application ownership: `FCVW/OWNERSHIP.md`.
 - Current framework baseline: `FCVW/FRAMEWORK_LOCK.md`.
 - Planning: `FCVW/PLANNING.md`.
-- Versioning and release: `FCVW/VERSIONING.md`, `FCVW/RELEASE.md`.
+- Versioning and release: `FCVW/RELEASE.md`.
 - Security and AI boundaries: `FCVW/SECURITY.md`, `FCVW/AI.md`.
 - Testing: `FCVW/TESTS.md`.
 - Regression protection: `FCVW/REGRESSION_GUARDS.md`.
-- Token budget: `FCVW/TOKEN_BUDGET.md`.
+- Token budget: `FCVW/AI.md` (token and context budget).
 - Declarative automation: `FCVW/AUTOMATION.md`.
 
 Use application-owned documents only after instantiation. In a clean template, placeholders are allowed only in files marked `artifact_role: project_profile` or under template/example directories.
@@ -81,7 +81,7 @@ The clean framework must not contain application plans, application releases, ru
 - Acceptance criteria and validation evidence are recorded.
 - Regression impact has final evidence, explicit limitations, and no unresolved blocking condition.
 - Canonical documents and templates remain synchronized.
-- `FILESYSTEM.md` is regenerated when paths change.
+- The filesystem layout in `OWNERSHIP.md` still describes every path class after a path change.
 - Version surfaces agree.
 - No unrelated or application-owned content entered the clean baseline.
 

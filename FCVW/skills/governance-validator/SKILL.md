@@ -49,7 +49,7 @@ Evaluate the human-readable FCVW invariants. The optional script automates deter
 7. Placeholder policy by profile.
 8. Clean-template contamination.
 9. Framework lock, release record, and migration coherence.
-10. `FILESYSTEM.md` canonical path/glob coverage.
+10. The filesystem layout in `OWNERSHIP.md` covers every path class.
 11. Operational-index and reading-route coverage for every root framework policy, project profile, and declared skill session type.
 
 ## Optional execution

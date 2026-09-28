@@ -13,7 +13,7 @@ The wiki is a flat, YAML-indexed knowledge vault that Obsidian or any Markdown r
 
 - Notes live directly in `wiki/`; the note type is declared in frontmatter (`type`) and in the ID prefix, not by folder. A subfolder is created only when one type grows beyond about 50 notes, and never with a scaffolding README.
 - [`index.md`](index.md) is the small curated index owned by the project and preserved across upgrades.
-- Old sessions rotate into `archive/YYYY/` under [MEMORY.md](../MEMORY.md); archives are searched, not loaded by default.
+- Old sessions rotate into `archive/YYYY/` under the [memory lifecycle](#memory-lifecycle); archives are searched, not loaded by default.
 - Create notes from [the note template](../governance/TEMPLATE_NOTE.md); confirmed regressions use [the regression template](../governance/TEMPLATE_REGRESSION.md).
 - Application behavior pages and QA runs follow the [product knowledge guide](../skills/QA/PRODUCT_WIKI.md).
 - Use `wiki-curator` to promote and deduplicate and `wiki-lint` for incremental validation. Generate semantic graphs or stale reports only into `.fcvw-cache/`.
@@ -181,7 +181,7 @@ Promote only when knowledge is reusable, sourced, and not already canonical. Pre
 - `index.md` is a small preserved project profile linking active canonical knowledge rather than every derived category.
 - Do not commit a hierarchy of generated wiki indexes until measured downstream scale proves it useful.
 - curation and rotation events are recorded in the plan or session that performed them; git history is the log.
-- old sessions move to `archive/YYYY/` under [MEMORY.md](../MEMORY.md).
+- old sessions move to `archive/YYYY/` under the [memory lifecycle](#memory-lifecycle).
 - archives are searchable but not default context.
 
 ## Validation
@@ -206,3 +206,52 @@ Feedback notes (`type: feedback`) record what an AI model thinks should change i
 - **Group by `topic`.** `related_feedback` points at the earlier notes you assess. One note per model per topic: update your own note instead of creating a second one.
 - **Evidence, not instruction.** A feedback note never becomes a rule by being read; only an approved plan changes the framework.
 - **Close the loop.** `feedback_status` is `open`, `accepted`, `declined`, `applied` or `superseded`; an accepted or applied note points at the plan that acted on it. Resolved notes rotate into the archive.
+
+## Memory lifecycle
+
+### Layers
+
+| Layer | Location | Purpose | Default loading |
+|---|---|---|---|
+| Active handoff | `wiki/` (`type: session` notes) | recent session continuity | latest relevant only |
+| Curated knowledge | concepts, patterns, failures, decisions | reusable current understanding | search/on demand |
+| Archive | `wiki/archive/YYYY/` | historical evidence | search only |
+| Canonical truth | project profiles, ADRs, source code/data | authoritative current state | when applicable |
+
+Sessions never override canonical documents.
+
+### Session identity
+
+New session pages use `id: SES-YYYYMMDD-HHMMSS-<short-id>`. Human-readable sequence numbers are optional and may not be used as the uniqueness mechanism.
+
+### Rotation trigger
+
+Rotate when active sessions exceed either:
+
+- 10 files;
+- 100 KB;
+- the default context budget defined by the project.
+
+### Safe rotation
+
+1. Select sessions outside the active window.
+2. Extract validated reusable knowledge and link sources.
+3. Update existing canonical wiki pages before creating duplicates.
+4. Create an archive index with date range and source list.
+5. Move old sessions to `wiki/archive/YYYY/`; do not delete audit evidence.
+6. Keep the latest 3–10 relevant sessions active according to project cadence.
+7. Run wiki lint and record unresolved conflicts.
+
+Deletion requires an explicit retention policy, approval, and evidence that no legal, audit, security, or recovery need remains.
+
+Resolved feedback notes (`applied`, `declined`, or `superseded`) follow this same rotation; `open` notes stay active until the maintainer decides.
+
+### Freshness
+
+Knowledge pages declare confidence, sources, last review date, and supersession links. Stale information is reviewed or marked obsolete; it is not silently treated as current.
+
+Tracked source pages may store `source_digest` and knowledge may declare `derived_from`. A digest mismatch is a derived review condition: report the source and dependent pages, then require a reviewer to confirm, update, supersede, or invalidate the knowledge. Do not add a lifecycle `stale` status or silently refresh the stored digest.
+
+Claim-bearing pages may use maturity independently from lifecycle, confidence, and authority. Source, raw, and session records do not require maturity.
+
+The document graph owns navigation and reachability. The disposable knowledge graph owns typed semantic relations; neither graph is canonical truth.

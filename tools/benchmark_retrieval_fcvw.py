@@ -23,8 +23,8 @@ def synthetic_corpus() -> tuple[list[dict], list[dict]]:
         ("ai", "retrieval injection defense", "ai_governance", ["AI", "SECURITY"]),
         ("ui", "keyboard focus accessibility", "ui", ["DESIGN", "TESTS", "REGRESSION_GUARDS"]),
         ("refactoring", "extract module preserve behavior", "refactoring", ["REFACTORING", "PLANNING", "REGRESSION_GUARDS"]),
-        ("documentation", "document public interface", "documentation", ["OWNERSHIP", "FILESYSTEM"]),
-        ("release", "publish version checksums", "release", ["VERSIONING", "RELEASE", "REGRESSION_GUARDS", "skills/release-checklist/SKILL"]),
+        ("documentation", "document public interface", "documentation", ["OWNERSHIP"]),
+        ("release", "publish version checksums", "release", ["RELEASE", "REGRESSION_GUARDS", "skills/release-checklist/SKILL"]),
         ("troubleshooting", "diagnose failed startup", "troubleshooting", ["TROUBLESHOOTING", "PLANNING", "REGRESSION_GUARDS"]),
     ]
     records, cases = [], []

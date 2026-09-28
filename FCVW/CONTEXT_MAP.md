@@ -37,20 +37,20 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | Performance (`performance`) | latency, memory, bundle, startup, capacity, bottleneck | `PERFORMANCE.md`, `TESTS.md` | `agent-hermes`, `STACK.md`, environment | full wiki |
 | Refactoring (`refactoring`) | behavior-preserving structure, monolith, duplication, dead code | `REFACTORING.md` relevant sections, `PLANNING.md`, `REGRESSION_GUARDS.md` | `REFACTORING_GUIDE.md` section for the stage, characterization tests, hygiene skills | release until closeout |
 | Architecture / public interface | module boundary, API/CLI/file contract, runtime topology | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `REGRESSION_GUARDS.md` | `STACK.md`, `WORKFLOW.md`, `DATA.md`, ADR template | routine histories |
-| Documentation / file movement (`documentation`) | add/move/delete/rename Markdown, docs, generated index | `OWNERSHIP.md`, `FILESYSTEM.md`, relevant document contract | `APPLICATION_DOCUMENTATION.md`, `obsidian-markdown`, validator | application runtime docs unless affected |
+| Documentation / file movement (`documentation`) | add/move/delete/rename Markdown, docs, generated index | `OWNERSHIP.md`, relevant document contract | `APPLICATION_DOCUMENTATION.md`, `obsidian-markdown`, validator | application runtime docs unless affected |
 | Environment / deploy | configuration, environment variable, port, packaging, promotion, recovery | `ENVIRONMENT.md`, `STACK.md`, `SECURITY.md`, `REGRESSION_GUARDS.md` | `WORKFLOW.md`, `TESTS.md`, release policy | design/wiki |
 | Dependency / toolchain | add/remove/update package, runtime, compiler, SDK, external service | `STACK.md`, `SECURITY.md`, `ARCHITECTURAL_DECISIONS.md` | `ENVIRONMENT.md`, license/release evidence, `TESTS.md` | unrelated product history |
 | Testing / QA | test strategy, validation gap, flaky test, acceptance evidence | `TESTS.md`, `REGRESSION_GUARDS.md` | affected domain, troubleshooting, governance gate | full plans archive |
-| AI governance / skill change (`ai_governance`) | model, prompt, tool, agent, skill, retrieval, provider, memory boundary | `AI.md` relevant sections, `SECURITY.md` | `agent-factory` or `self-improvement`, `MEMORY.md`, `TESTS.md` | unrelated application domains |
-| Wiki / memory (`wiki_maintenance`) | curate, promote, deduplicate, archive, session knowledge, source impact, typed relations | `MEMORY.md`, `wiki/README.md` | `wiki-curator`, `wiki-lint`, taxonomy/metrics, disposable knowledge graph | full session archive by default |
-| Instantiation (`instantiation`) | new clean project, briefing, bootstrap, existing-app adoption | `INSTANTIATION.md` or `RETROACTIVE_INSTANTIATION.md`, `OWNERSHIP.md` | `BRIEFING.md`, project profiles, migration | unrelated framework history |
+| AI governance / skill change (`ai_governance`) | model, prompt, tool, agent, skill, retrieval, provider, memory boundary | `AI.md` relevant sections, `SECURITY.md` | `agent-factory` or `self-improvement`, `wiki/README.md`, `TESTS.md` | unrelated application domains |
+| Wiki / memory (`wiki_maintenance`) | curate, promote, deduplicate, archive, session knowledge, source impact, typed relations | `wiki/README.md` | `wiki-curator`, `wiki-lint`, taxonomy/metrics, disposable knowledge graph | full session archive by default |
+| Instantiation (`instantiation`) | new clean project, briefing, bootstrap, existing-app adoption | `INSTANTIATION.md` (new or retroactive mode), `OWNERSHIP.md` | `BRIEFING.md`, project profiles, migration | unrelated framework history |
 | Framework upgrade (`framework_upgrade`) | install/sync/merge FCVW version | `FRAMEWORK_LOCK.md`, `OWNERSHIP.md`, `MIGRATIONS.md` | target framework release, validator | application history except preservation scan |
 | Declarative automation | hook, watcher, daemon, gate, scheduled/observed reaction | `AUTOMATION.md` (the section for the contract kind) | corresponding governance template, runtime adapter only if authorized | unrelated automation types |
 | Git / repository mutation (`git`) | stage, commit, branch, tag, push, merge, PR | `git-conventional-commits`, active plan, status/diff evidence | `release-checklist`, version/release docs | unrelated history |
-| Release (`release`) | version bump, changelog, artifact, tag, publish | `release-checklist`, `VERSIONING.md`, `RELEASE.md`, `REGRESSION_GUARDS.md` | application changelog or framework release, migration/rollback | unrelated old releases |
+| Release (`release`) | version bump, changelog, artifact, tag, publish | `release-checklist`, `RELEASE.md`, `REGRESSION_GUARDS.md` | application changelog or framework release, migration/rollback | unrelated old releases |
 | Incident / urgent containment | outage, data/security event, stop-the-bleeding request | `TROUBLESHOOTING.md`, `SECURITY.md` or `DATA.md`, `REGRESSION_GUARDS.md` | environment/deploy, rollback, incident records | feature work and broad refactor |
-| Governance audit / maintenance (`audit`, `maintenance`) | integrity, lint, drift, cleanup, over-engineering, policy review | `governance-validator`, `SCHEMAS.md`, `AUDIT.md` relevant checklist | `FILESYSTEM.md`, `OWNERSHIP.md`, `agnix-linter`, hygiene skills | product docs unless a finding crosses scope |
-| Closeout / handoff (`handoff`) | finish, resume later, transfer context, archive session | active plan, `REGRESSION_GUARDS.md`, `AUDIT.md` closeout checklist | `aicc-compact`, `MEMORY.md`, release record | unrelated archived sessions |
+| Governance audit / maintenance (`audit`, `maintenance`) | integrity, lint, drift, cleanup, over-engineering, policy review | `governance-validator`, `SCHEMAS.md`, `AUDIT.md` relevant checklist | `OWNERSHIP.md`, `agnix-linter`, hygiene skills | product docs unless a finding crosses scope |
+| Closeout / handoff (`handoff`) | finish, resume later, transfer context, archive session | active plan, `REGRESSION_GUARDS.md`, `AUDIT.md` closeout checklist | `aicc-compact`, `wiki/README.md`, release record | unrelated archived sessions |
 | Multi-agent (`multi_agent`) | explicit delegation, parallel agents, work packages | active plan, `orchestrator`, ownership/lock metadata | each delegated skill and exact files | old handoffs |
 | Framework feedback (`framework_feedback`) | suggest a framework change, disagree with a prior note, review the feedback backlog | `wiki/README.md`, `governance/TEMPLATE_NOTE.md` | notes on the same `topic`, `PLANNING.md`, affected policy | unrelated application domains |
 
@@ -61,7 +61,7 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 | Observed event or changed boundary | Mandatory read before action | Required evidence |
 |---|---|---|
 | `event:change` Any versioned change | `PLANNING.md`, `REGRESSION_GUARDS.md` | active plan, regression contract, rollback |
-| `event:filesystem` Add, move, rename, generate, or delete a file/directory | `OWNERSHIP.md`, `FILESYSTEM.md` | ownership role, path/index synchronization |
+| `event:filesystem` Add, move, rename, generate, or delete a file/directory | `OWNERSHIP.md` | ownership role, path/index synchronization |
 | `event:policy` Root entrypoint, canonical FCVW policy, schema, template, or validator changes | `SCHEMAS.md`, `OWNERSHIP.md`, `AUDIT.md` | compatibility and governance validation |
 | `event:public_interface` Public API, CLI, event, file format, module boundary, or primary workflow changes | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `WORKFLOW.md` | consumer impact, ADR decision, documentation update |
 | `event:dependency` Dependency, runtime, build tool, SDK, or external service changes | `STACK.md`, `ENVIRONMENT.md`, `SECURITY.md` | compatibility, source/license, failure/rollback evidence |
@@ -70,7 +70,7 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 | `event:ai` AI instruction, prompt, skill, agent, memory, retrieval, or tool boundary changes | `AI.md`, `SECURITY.md`, `TESTS.md` | allowed/denied boundary replay; factory or improvement gate |
 | `event:failure` Failure, failed check, unexplained behavior, or known regression | `TROUBLESHOOTING.md`, `REGRESSION_GUARDS.md` | hypothesis/evidence and permanent replay decision |
 | `event:automation` Hook, watcher, daemon, or gate contract changes | `AUTOMATION.md` | trigger, permissions, evidence, failure policy, disable/rollback |
-| `event:release` Version, changelog, artifact, tag, deploy, or publication changes | `VERSIONING.md`, `RELEASE.md`, `release-checklist` | namespace, included plans, validation, authority |
+| `event:release` Version, changelog, artifact, tag, deploy, or publication changes | `RELEASE.md`, `release-checklist` | namespace, included plans, validation, authority |
 | `event:closeout` Plan completion or session handoff | `AUDIT.md` closeout checklist, `REGRESSION_GUARDS.md` | final results, limitations, release/changelog, next state |
 
 

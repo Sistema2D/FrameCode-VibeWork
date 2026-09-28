@@ -25,11 +25,8 @@ context_files:
   - "FCVW/AI.md"
   - "FCVW/SECURITY.md"
   - "FCVW/AUDIT.md"
-  - "FCVW/FILESYSTEM.md"
   - "FCVW/RELEASE.md"
-  - "FCVW/VERSIONING.md"
   - "FCVW/wiki/README.md"
-  - "FCVW/MEMORY.md"
 ---
 
 # Plan dependencies and typed knowledge

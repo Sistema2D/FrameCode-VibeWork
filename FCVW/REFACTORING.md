@@ -36,7 +36,7 @@ If the external behavior needs to change, the modification is not just refactori
 - `AGENTS.md`: general conduct, precedence of instructions, mandatory plans, and changelog.
 - `PLANNING.md`: plan creation, priority, risk, acceptance criteria, and tests.
 - `PLANNING.md`: operational priority/risk gates for triage, review, rollback, validation, blocking, and decomposition.
-- `VERSIONING.md`: version increment, changelog, rollback.
+- `RELEASE.md`: version increment, changelog, rollback.
 - `TROUBLESHOOTING.md`: consult when refactoring is linked to failures or regressions.
 - `DESIGN.md`: consult when refactoring affects the interface or visual components.
 - `WORKFLOW.md`: update when refactoring alters the operational workflow.
