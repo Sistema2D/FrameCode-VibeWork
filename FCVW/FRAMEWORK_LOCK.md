@@ -10,34 +10,34 @@ upgrade_strategy: "replace_with_migration"
 | Field | Value |
 |---|---|
 | Framework | `FrameCode VibeWork` |
-| Installed version | `V0.19.0` |
-| Release state | `published` |
+| Installed version | `V0.20.0` |
+| Release state | `ready` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
-| Installed modules | `core, plans, compact-plans, regression-guards, records, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, fragmented-queues, role-manifest, assisted-upgrade, optional-validator, verified-context-routing, complete-chunk-selection, product-QA, local-validation, optional-decision-trace` |
-| Last migration | `V0.18.0 -> V0.19.0` |
+| Installed modules | `core, plans, compact-plans, derived-queue, regression-guards, records, record-reachability, project-profile, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, role-manifest, assisted-upgrade, optional-validator, verified-context-routing, complete-chunk-selection, product-QA, local-validation, optional-decision-trace` |
+| Last migration | `V0.19.0 -> V0.20.0` |
 
 ## Schema baselines
 
 | Artifact | Schema |
 |---|---|
 | Plan | `fcvw/plan@2` (`fcvw/plan@1` legacy-readable) |
+| Compact plan | `fcvw/plan-compact@1` |
 | Application changelog | `fcvw/changelog@1` |
 | Framework release | `fcvw/framework-release@1` |
-| Project manifest | `fcvw/project-manifest@1` |
+| Project profile | `fcvw/project@1` |
 | Wiki page | `fcvw/wiki@1` |
 | Regression record | `fcvw/regression@1` |
+| Architecture decision | `fcvw/adr@1` |
 | Skill | `fcvw/skill@1` |
 | Automation contract | `fcvw/automation@1` |
-| Plan queue | `fcvw/plan-queue@1` |
 | Application rules | `fcvw/app-rules@1` |
-| Document graph | `fcvw/document-graph@1` |
 | Language review | `fcvw/language-review@1` |
 | Formal audit | `fcvw/audit@1` |
 | Troubleshooting | `fcvw/troubleshooting@1` |
-| Knowledge graph | `fcvw/knowledge-graph@1` |
+| Legacy validation baseline | `fcvw/legacy-baseline@1` |
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.
 
-Published baseline: [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.19.0.md). The prior version is [V0.18.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.18.0.md); the new record contains verified GitHub publication evidence.
+Ready candidate: [V0.20.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.20.0.md). The last published baseline is [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.19.0.md).
