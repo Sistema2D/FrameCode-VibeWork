@@ -87,7 +87,7 @@ Stop creation when any condition is true:
 
 ## Output Required
 
-For every allowed creation, create or fill `governance/TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md` and record the compact block below in the active plan:
+For every allowed creation, create or fill the proposal section of `governance/TEMPLATE_SKILL_CHANGE.md` and record the compact block below in the active plan:
 
 ```markdown
 ## Agent/Skill Creation Gate

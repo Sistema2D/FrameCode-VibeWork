@@ -297,7 +297,7 @@ Uma mudança do FCVW não incrementa a versão da aplicação. `published` só �
 | `FCVW/governance/` | templates reutilizáveis |
 | `FCVW/wiki/` | memória técnica, regressões e índices |
 | `FCVW/skills/` | procedimentos sob demanda |
-| `FCVW/refactoring-guide/` | técnicas e gates de refatoração |
+| `FCVW/REFACTORING_GUIDE.md` | técnicas e gates de refatoração |
 | [tools/validate_fcvw.py](tools/validate_fcvw.py) | validador determinístico opcional |
 | [tools/test_validate_fcvw.py](tools/test_validate_fcvw.py) | testes de regressão do validador |
 
@@ -593,7 +593,7 @@ An FCVW change does not increment an application's version. `published` is used 
 | `FCVW/governance/` | reusable templates |
 | `FCVW/wiki/` | technical memory, regressions, and indexes |
 | `FCVW/skills/` | on-demand procedures |
-| `FCVW/refactoring-guide/` | refactoring techniques and gates |
+| `FCVW/REFACTORING_GUIDE.md` | refactoring techniques and gates |
 | [tools/validate_fcvw.py](tools/validate_fcvw.py) | optional deterministic validator |
 | [tools/test_validate_fcvw.py](tools/test_validate_fcvw.py) | validator regression tests |
 

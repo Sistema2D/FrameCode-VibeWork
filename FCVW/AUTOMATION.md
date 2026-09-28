@@ -35,4 +35,4 @@ Executable implementation requires a separate plan, security review, environment
 
 ## Local framework validation
 
-The user-authorized [local validation contract](governance/LOCAL_VALIDATION_CONTRACT.md) implements Scenario 2. A maintainer explicitly invokes the runner; no hosted service, payment, credentials, scheduler or background process is required. The previous [hosted contract](governance/CI_CONTRACT.md) is retired and its source workflow removed. Downloading a template does not activate automation.
+The user-authorized [local validation contract](governance/LOCAL_VALIDATION_CONTRACT.md) implements Scenario 2. A maintainer explicitly invokes the runner; no hosted service, payment, credentials, scheduler or background process is required. The previous [hosted contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/5c3ed95a27d02ce1939bb937af7ab11dfee9c71d/FCVW/governance/CI_CONTRACT.md) is retired and its source workflow removed. Downloading a template does not activate automation.

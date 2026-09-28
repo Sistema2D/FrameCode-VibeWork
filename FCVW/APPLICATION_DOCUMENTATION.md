@@ -52,9 +52,7 @@ Create this structure in the downstream application when module documentation be
 
 Use the framework templates as source:
 
-- `FCVW/governance/TEMPLATE_APP_DOCS_README.md`
-- `FCVW/governance/TEMPLATE_MODULE_DOCUMENTATION.md`
-- `FCVW/governance/TEMPLATE_FLOW_DOCUMENTATION.md`
+- `FCVW/governance/TEMPLATE_APP_DOC.md` (docs README, module, flow, API, data schema and AI feature sections)
 
 ## When Documentation Is Required
 

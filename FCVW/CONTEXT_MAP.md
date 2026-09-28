@@ -35,7 +35,7 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | Security / privacy (`security`) | auth, permission, secrets, sensitive data, destructive action | `SECURITY.md`, `DATA.md`, `REGRESSION_GUARDS.md` | `agent-aegis`, `TESTS.md`, environment | unrelated UX |
 | Data / migration (`migration`) | schema, persistence, import/export, retention, file format | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | `SECURITY.md`, `ENVIRONMENT.md`, migration/rollback record | unrelated UI |
 | Performance (`performance`) | latency, memory, bundle, startup, capacity, bottleneck | `PERFORMANCE.md`, `TESTS.md` | `agent-hermes`, `STACK.md`, environment | full wiki |
-| Refactoring (`refactoring`) | behavior-preserving structure, monolith, duplication, dead code | `REFACTORING.md` relevant sections, `PLANNING.md`, `REGRESSION_GUARDS.md` | refactoring guide, characterization tests, hygiene skills | release until closeout |
+| Refactoring (`refactoring`) | behavior-preserving structure, monolith, duplication, dead code | `REFACTORING.md` relevant sections, `PLANNING.md`, `REGRESSION_GUARDS.md` | `REFACTORING_GUIDE.md` section for the stage, characterization tests, hygiene skills | release until closeout |
 | Architecture / public interface | module boundary, API/CLI/file contract, runtime topology | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `REGRESSION_GUARDS.md` | `STACK.md`, `WORKFLOW.md`, `DATA.md`, ADR template | routine histories |
 | Documentation / file movement (`documentation`) | add/move/delete/rename Markdown, docs, generated index | `OWNERSHIP.md`, `FILESYSTEM.md`, relevant document contract | `APPLICATION_DOCUMENTATION.md`, `obsidian-markdown`, validator | application runtime docs unless affected |
 | Environment / deploy | configuration, environment variable, port, packaging, promotion, recovery | `ENVIRONMENT.md`, `STACK.md`, `SECURITY.md`, `REGRESSION_GUARDS.md` | `WORKFLOW.md`, `TESTS.md`, release policy | design/wiki |
@@ -80,6 +80,7 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 |---|---|---|
 | `AI.md` | usage type; Instruction hierarchy and Prompt injection; Memory/AICC; ASE; Third-party research; or AI quality checklist | the task crosses more than one AI boundary |
 | `REFACTORING.md` | Central principle and block criteria; risk/tests; chosen checklist; anti-monolith/hygiene gate | a systemic refactor needs the full lifecycle |
+| `REFACTORING_GUIDE.md` | only the section for the current stage (decision guide, smells map, risk matrix, rollback, stopping criteria) | the refactor spans several stages |
 | `TROUBLESHOOTING.md` | Mandatory consultation and plan relationship; recommended consultation; closure criteria | creating or closing a durable failure record |
 | `BRIEFING.md` | Activation and gap levels, then only relevant questionnaire domains; closure rule last | performing full Phase 0 discovery |
 | `AUDIT.md` | matching audit type or quick checklist; pre-release checklist only at release | running a repository-wide or release audit |

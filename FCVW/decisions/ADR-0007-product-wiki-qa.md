@@ -25,7 +25,7 @@ A browser-only agent would exclude headless and physical systems. A universal au
 
 ## Agent proposal: problem and existing coverage
 
-This section fills the [agent proposal](../governance/TEMPLATE_AGENT_OR_SKILL_PROPOSAL.md) for the [implementation plan](../Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md), priority P2/risk R4. Recurrence and percentage coverage have not been measured. The user's explicit creation instruction takes precedence over speculative quantitative gate estimates.
+This section fills the [agent proposal](../governance/TEMPLATE_SKILL_CHANGE.md) for the [implementation plan](../Plans/completed/P2-R4-2026-09-22-product-wiki-qa.md), priority P2/risk R4. Recurrence and percentage coverage have not been measured. The user's explicit creation instruction takes precedence over speculative quantitative gate estimates.
 
 | Existing asset | Coverage evidence | Gap |
 |---|---|---|
@@ -45,7 +45,7 @@ Asset: agent profile [QA](../skills/QA/SKILL.md), maintained by the framework ma
 
 ## Curator improvement report
 
-This section fills the [self-improvement report](../governance/TEMPLATE_SELF_IMPROVEMENT_REPORT.md). Canonical product documentation now distinguishes expected behavior from observations; the curator needed an explicit handoff preserving that distinction. Rule drift is the evidence metric. No independent failure count or numerical token improvement is claimed.
+This section fills the [self-improvement report](../governance/TEMPLATE_SKILL_CHANGE.md). Canonical product documentation now distinguishes expected behavior from observations; the curator needed an explicit handoff preserving that distinction. Rule drift is the evidence metric. No independent failure count or numerical token improvement is claimed.
 
 Before: generic curation had no product-specific execution boundary. After: a compact product-knowledge section links QA, preserves approved sources and immutable run history, and prohibits turning defects into intended behavior. Existing triggers and responsibilities remain; the skill receives a patch version. Catalog changes are limited to the new QA profile. Replay checks preserve an expected/observed mismatch and reject stale or unapproved passes; results are recorded in the linked plan. Remaining risk: source interpretation and actual execution still depend on the host agent and target capabilities.
 

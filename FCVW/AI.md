@@ -338,7 +338,7 @@ Canonical themes, thematic colors, optional frontmatter fields, and extended tag
 ## Models and Templates
 
 To create new AI feature specifications, use the template in:
-`governance/TEMPLATE_AI_RESOURCE.md`
+the AI feature section of `governance/TEMPLATE_APP_DOC.md`
 
 ## FCVW-RAG Lite
 

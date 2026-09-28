@@ -115,7 +115,7 @@ Classify each finding before editing:
 
 ## Output Required
 
-Create or fill a report using `governance/TEMPLATE_CODE_HYGIENE_REPORT.md` when the scan is module-level or systemic. For local scans, add this compact block to the active plan:
+Create or fill a report using the code hygiene section of `governance/TEMPLATE_REFACTORING.md` when the scan is module-level or systemic. For local scans, add this compact block to the active plan:
 
 ```markdown
 ## Code Hygiene Scan

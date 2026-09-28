@@ -11,7 +11,7 @@ Rules, criteria, and metrics for refactoring AI-assisted applications.
 
 This document is a stack-agnostic methodological guide. Applicable to web, desktop, mobile applications, backend services, APIs, libraries, native Windows applications, local AI systems, and cloud AI systems.
 
-> For detailed metrics, dependency mapping, characterization tests, rollback, and post-validation, consult `refactoring-guide/README.md`.
+> For detailed metrics, dependency mapping, characterization tests, rollback, and post-validation, consult the [refactoring guide](REFACTORING_GUIDE.md).
 
 ## 1. Objective
 
@@ -125,7 +125,7 @@ R4 and R5 refactorings must have explicit rollback and expanded regression valid
 
 Refactoring plans must also record the operational score and gates defined in `PLANNING.md`. High-risk low-priority refactorings must not be executed automatically only because their risk score is high; postpone, decompose, or justify them explicitly.
 
-> For candidacy, risk, dependency, rollback, and post-validation guidance, consult `refactoring-guide/README.md`.
+> For candidacy, risk, dependency, rollback, and post-validation guidance, consult the [refactoring guide](REFACTORING_GUIDE.md).
 
 ## 13. Priority Code Smells
 

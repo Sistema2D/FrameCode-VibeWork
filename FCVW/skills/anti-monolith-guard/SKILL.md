@@ -55,7 +55,7 @@ Stop and split the work before editing if any gate fails:
 | Gate | Pass condition | If it fails |
 |---|---|---|
 | Single responsibility | The file has one primary reason to change. | Split into module, service, component, adapter, or utility. |
-| Boundary named | Inputs, outputs, owner, and public contract are stated. | Create a module boundary note using `governance/TEMPLATE_MONOLITH_GATE.md`. |
+| Boundary named | Inputs, outputs, owner, and public contract are stated. | Create a module boundary note using the monolith gate section of `governance/TEMPLATE_REFACTORING.md`. |
 | Size budget | Planned file growth is small and reviewable. | Split the plan or create extraction task first. |
 | Duplication check | Similar code was searched and reused or centralized. | Load `code-hygiene-refactor` before adding code. |
 | Test/validation path | There is a specific validation for the new boundary. | Do not proceed beyond planning. |

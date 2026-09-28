@@ -23,7 +23,7 @@ rollback: "Stop invoking the runner; individual validation commands remain avail
 
 ## Scope and authority
 
-The optional local command implements [AUTOMATION.md](../AUTOMATION.md) Scenario 2 and [TESTS.md](../TESTS.md). It replaces the [retired hosted contract](CI_CONTRACT.md), with no hosted account, paid runner, scheduler, Git hook or background service. Run it only against trusted code and interpreters. Executed tests have the current user's permissions and are not sandboxed by this wrapper.
+The optional local command implements [AUTOMATION.md](../AUTOMATION.md) Scenario 2 and [TESTS.md](../TESTS.md). It replaces the [retired hosted contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/5c3ed95a27d02ce1939bb937af7ab11dfee9c71d/FCVW/governance/CI_CONTRACT.md), with no hosted account, paid runner, scheduler, Git hook or background service. Run it only against trusted code and interpreters. Executed tests have the current user's permissions and are not sandboxed by this wrapper.
 
 ## Checks and evidence
 

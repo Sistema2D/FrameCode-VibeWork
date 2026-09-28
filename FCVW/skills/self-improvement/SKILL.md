@@ -70,7 +70,7 @@ Do not modify a skill or agent when:
 
 ## Output Required
 
-Create or fill `governance/TEMPLATE_SELF_IMPROVEMENT_REPORT.md` and record this compact block in the active plan:
+Create or fill the report section of `governance/TEMPLATE_SKILL_CHANGE.md` and record this compact block in the active plan:
 
 ```markdown
 ## Skill/Agent Self-Improvement Gate

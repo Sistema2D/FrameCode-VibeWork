@@ -48,7 +48,7 @@ The physical filesystem is the source of truth. This document summarizes canonic
 - Reusable templates: `FCVW/governance/*.md`
 - Illustrative fixtures: `FCVW/examples/**/*.md`
 - JIT skills: `FCVW/skills/*/SKILL.md`
-- Refactoring guidance: `FCVW/refactoring-guide/*.md`
+- Refactoring guidance: `FCVW/REFACTORING_GUIDE.md`
 - Framework releases: `FCVW/framework-releases/*.md`
 - Plans: `FCVW/Plans/{pending,in_progress,completed,discontinued}/*.md`
 - Application changelogs: `FCVW/changelogs/*.md` and `unreleased/*.md`

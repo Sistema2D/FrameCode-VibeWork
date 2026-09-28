@@ -38,7 +38,7 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 
 ### Framework policies — replace on compatible upgrades
 
-`AI.md`, `APPLICATION_DOCUMENTATION.md`, `ARCHITECTURAL_DECISIONS.md`, `AUDIT.md`, `AUTOMATION.md`, `CONTEXT_MAP.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md`, `HOOKS.md`, `INSTANTIATION.md`, `MEMORY.md`, `MIGRATIONS.md`, `OWNERSHIP.md`, `PLANNING.md`, this `README.md`, `REFACTORING.md`, `REGRESSION_GUARDS.md`, `RELEASE.md`, `RETROACTIVE_INSTANTIATION.md`, `SCHEMAS.md`, `TESTS.md`, `TOKEN_BUDGET.md`, `TROUBLESHOOTING.md`, `VERSIONING.md`, and `WATCHERS.md`.
+`AI.md`, `APPLICATION_DOCUMENTATION.md`, `ARCHITECTURAL_DECISIONS.md`, `AUDIT.md`, `AUTOMATION.md`, `CONTEXT_MAP.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md`, `HOOKS.md`, `INSTANTIATION.md`, `MEMORY.md`, `MIGRATIONS.md`, `OWNERSHIP.md`, `PLANNING.md`, this `README.md`, `REFACTORING.md`, `REFACTORING_GUIDE.md`, `REGRESSION_GUARDS.md`, `RELEASE.md`, `RETROACTIVE_INSTANTIATION.md`, `SCHEMAS.md`, `TESTS.md`, `TOKEN_BUDGET.md`, `TROUBLESHOOTING.md`, `VERSIONING.md`, and `WATCHERS.md`.
 
 ### Project profiles — instantiate and preserve
 

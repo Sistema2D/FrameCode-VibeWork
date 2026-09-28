@@ -89,7 +89,6 @@ def governed_files(root: Path) -> list[Path]:
 INFERRED_ROLES = (
     ("FCVW/governance/", "template", "framework", "replace"),
     ("FCVW/skills/", "framework_skill", "framework", "replace"),
-    ("FCVW/refactoring-guide/", "framework_policy", "framework", "replace"),
     ("FCVW/examples/", "example", "framework", "replace"),
     # Every framework release record is framework history by definition, whether
     # or not the individual file declares record_scope.
