@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "self-improvement"
-description: "Improve an existing skill or agent from evidence while preserving scope."
-version: "1.1.1"
-trigger_keywords:
-  - "improve skill"
-  - "skill failed"
-  - "trigger failed"
-  - "melhorar skill"
+description: "Improve an existing skill or agent from evidence while preserving its scope. Use when a skill fails, drifts from a canonical rule or needs a trigger change. Do not use to create a new skill (agent-factory)."
+version: "1.1.2"
 session_types:
   - "ai_governance"
   - "maintenance"
@@ -56,7 +51,7 @@ Do not modify a skill or agent when:
 - the edit broadens the skill into a catch-all procedure;
 - another skill already owns the proposed responsibility;
 - the change adds examples that should live in a template, plan, or wiki note;
-- the edit changes triggers without checking `skills/README.md`, `CONTEXT_MAP.md`, and `STACK.md`.
+- the edit changes triggers without checking `skills/README.md`, `CONTEXT_MAP.md`, and `PROJECT.md` (stack).
 
 ## Safe Improvement Sequence
 
@@ -70,7 +65,7 @@ Do not modify a skill or agent when:
 
 ## Output Required
 
-Create or fill `governance/TEMPLATE_SELF_IMPROVEMENT_REPORT.md` and record this compact block in the active plan:
+Create or fill the report section of `governance/TEMPLATE_SKILL_CHANGE.md` and record this compact block in the active plan:
 
 ```markdown
 ## Skill/Agent Self-Improvement Gate

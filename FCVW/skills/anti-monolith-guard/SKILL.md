@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "anti-monolith-guard"
-description: "Prevent mixed-responsibility modules and uncontrolled file growth."
-version: "1.2.0"
-trigger_keywords:
-  - "monolith"
-  - "large file"
-  - "module boundary"
-  - "anti-monólito"
+description: "Prevent mixed-responsibility modules and uncontrolled file growth. Use before adding behavior to a large or mixed-responsibility file, or when splitting one. Do not use for small, local edits to cohesive modules."
+version: "1.2.1"
 session_types:
   - "planning"
   - "refactoring"
@@ -55,7 +50,7 @@ Stop and split the work before editing if any gate fails:
 | Gate | Pass condition | If it fails |
 |---|---|---|
 | Single responsibility | The file has one primary reason to change. | Split into module, service, component, adapter, or utility. |
-| Boundary named | Inputs, outputs, owner, and public contract are stated. | Create a module boundary note using `governance/TEMPLATE_MONOLITH_GATE.md`. |
+| Boundary named | Inputs, outputs, owner, and public contract are stated. | Create a module boundary note using the monolith gate section of `governance/TEMPLATE_REFACTORING.md`. |
 | Size budget | Planned file growth is small and reviewable. | Split the plan or create extraction task first. |
 | Duplication check | Similar code was searched and reused or centralized. | Load `code-hygiene-refactor` before adding code. |
 | Test/validation path | There is a specific validation for the new boundary. | Do not proceed beyond planning. |
@@ -63,7 +58,7 @@ Stop and split the work before editing if any gate fails:
 
 ## Recommended Size Budgets
 
-These are code-oriented governance defaults, not universal rules. Apply them only after the applicability classification. A project may resize them in `STACK.md` or `APPLICATION_DOCUMENTATION.md` when architecture, security, integrity, or performance evidence requires a different budget.
+These are code-oriented governance defaults, not universal rules. Apply them only after the applicability classification. A project may resize them in `PROJECT.md` (stack) or `APPLICATION_DOCUMENTATION.md` when architecture, security, integrity, or performance evidence requires a different budget.
 
 | Artifact | Warning | Block unless justified |
 |---|---:|---:|

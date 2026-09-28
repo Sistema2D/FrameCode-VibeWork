@@ -11,28 +11,24 @@ Skills are provider-neutral, just-in-time procedures using `fcvw/skill@1`. Load 
 
 | Skill | Responsibility |
 |---|---|
-| `QA` | first-run application mapping, live functional testing and product-wiki maintenance |
-| `agent-aegis` | security and privacy review |
-| `agent-factory` | gate for creating a skill or agent |
-| `agent-hephaestus` | UI and accessibility review |
-| `agent-hermes` | measured performance investigation |
-| `agnix-linter` | Markdown/governance lint |
-| `aicc-compact` | collision-resistant session handoff |
-| `anti-monolith-guard` | responsibility and size boundaries |
-| `brainstorming-and-tdd` | specification and test-first workflow |
-| `code-hygiene-refactor` | bounded cleanup/refactoring |
-| `git-conventional-commits` | commit, tag, and release message preparation |
-| `governance-validator` | FCVW conformance, reading-route coverage, and clean-template validation |
-| `memory-rotation` | safe archive and knowledge promotion |
-| `obsidian-markdown` | portable Markdown/Obsidian formatting |
-| `orchestrator` | explicitly authorized parallel coordination |
-| `project-instantiation` | clean project instantiation |
-| `release-checklist` | application or framework release |
-| `retroactive-instantiation` | non-destructive adoption |
-| `self-improvement` | evidence-based existing-skill change |
-| `systematic-debugging` | hypothesis-driven diagnosis |
-| `wiki-curator` | sourced promotion, typed relations, and stale-source review |
-| `wiki-lint` | deterministic wiki integrity plus optional bounded semantic review |
+| [`QA`](QA/SKILL.md) | first-run application mapping, live functional testing and product-wiki maintenance |
+| [`agent-aegis`](agent-aegis/SKILL.md) | security and privacy review |
+| [`agent-factory`](agent-factory/SKILL.md) | gate for creating a skill or agent |
+| [`agent-hephaestus`](agent-hephaestus/SKILL.md) | UI and accessibility review |
+| [`agent-hermes`](agent-hermes/SKILL.md) | measured performance investigation |
+| [`anti-monolith-guard`](anti-monolith-guard/SKILL.md) | responsibility and size boundaries |
+| [`brainstorming-and-tdd`](brainstorming-and-tdd/SKILL.md) | specification and test-first workflow |
+| [`code-hygiene-refactor`](code-hygiene-refactor/SKILL.md) | bounded cleanup/refactoring |
+| [`git-conventional-commits`](git-conventional-commits/SKILL.md) | commit, tag, and release message preparation |
+| [`governance-validator`](governance-validator/SKILL.md) | FCVW conformance, reading-route coverage, clean-template validation, Markdown lint and wiki lint |
+| [`obsidian-markdown`](obsidian-markdown/SKILL.md) | portable Markdown/Obsidian formatting |
+| [`orchestrator`](orchestrator/SKILL.md) | explicitly authorized parallel coordination |
+| [`project-instantiation`](project-instantiation/SKILL.md) | clean project instantiation |
+| [`release-checklist`](release-checklist/SKILL.md) | application or framework release |
+| [`retroactive-instantiation`](retroactive-instantiation/SKILL.md) | non-destructive adoption |
+| [`self-improvement`](self-improvement/SKILL.md) | evidence-based existing-skill change |
+| [`systematic-debugging`](systematic-debugging/SKILL.md) | hypothesis-driven diagnosis |
+| [`wiki-curator`](wiki-curator/SKILL.md) | sourced promotion, typed relations, stale-source review, session compaction and memory rotation |
 
 ## Rules
 

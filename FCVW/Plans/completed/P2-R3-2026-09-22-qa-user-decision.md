@@ -16,8 +16,8 @@ owner: "framework-maintainer"
 regression_contract: "required"
 context_files:
   - "FCVW/skills/QA/SKILL.md"
-  - "FCVW/wiki/product/README.md"
-  - "FCVW/wiki/templates/TEMPLATE_QA_RUN.md"
+  - "FCVW/skills/QA/PRODUCT_WIKI.md"
+  - "FCVW/skills/QA/TEMPLATE_QA_RUN.md"
   - "FCVW/skills/self-improvement/SKILL.md"
   - "FCVW/TESTS.md"
 depends_on: []
@@ -65,7 +65,7 @@ Reuse the selected-page checker and existing Markdown tables. No service or depe
 
 ## Self-improvement report
 
-This fills the [report template](../../governance/TEMPLATE_SELF_IMPROVEMENT_REPORT.md). Before: discrepancies were retained, but consultation was not mandatory. After: each divergence requires a question and user-sourced direction, measured independently from test success. Rule drift passes; recurrence, failure count and numerical token ROI are unmeasured. Scope preservation passes; unchanged triggers and additive output preserve normal passing runs. Historical failing runs remain readable but lack decision evidence and cannot authorize new actions. Changes belong to the QA procedure, product contract and run template; no catalog trigger or base route changes. Replay evidence and remaining limits are recorded below. Next review follows an actual unasked divergence or false decision attribution.
+This fills the [report template](../../governance/TEMPLATE_SKILL_CHANGE.md). Before: discrepancies were retained, but consultation was not mandatory. After: each divergence requires a question and user-sourced direction, measured independently from test success. Rule drift passes; recurrence, failure count and numerical token ROI are unmeasured. Scope preservation passes; unchanged triggers and additive output preserve normal passing runs. Historical failing runs remain readable but lack decision evidence and cannot authorize new actions. Changes belong to the QA procedure, product contract and run template; no catalog trigger or base route changes. Replay evidence and remaining limits are recorded below. Next review follows an actual unasked divergence or false decision attribution.
 
 ## Acceptance criteria
 
@@ -86,7 +86,7 @@ Failed-run parsing, first-run discovery, contract hashes, unknown expectations, 
 
 ### Regression contracts consulted
 
-[Product contract](../../wiki/product/README.md), [QA](../../skills/QA/SKILL.md), [tests](../../TESTS.md) and [regression guards](../../REGRESSION_GUARDS.md).
+[Product contract](../../skills/QA/PRODUCT_WIKI.md), [QA](../../skills/QA/SKILL.md), [tests](../../TESTS.md) and [regression guards](../../REGRESSION_GUARDS.md).
 
 ### Regression checks required
 

@@ -57,6 +57,6 @@ The existing `FCVW/` directory already owns the framework namespace. Reusing it 
 ## Relationships
 
 - Implementation plan: [single-folder release layout](../Plans/completed/P2-R4-2026-08-21-single-folder-release-layout.md).
-- Governing policies: [Filesystem](../FILESYSTEM.md), [Ownership](../OWNERSHIP.md), [Release](../RELEASE.md), and [Migrations](../MIGRATIONS.md).
+- Governing policies: [Filesystem](../OWNERSHIP.md#filesystem-layout), [Ownership](../OWNERSHIP.md), [Release](../RELEASE.md), and [Migrations](../MIGRATIONS.md).
 - Related decision: [ADR-0004](ADR-0004-multilingual-source-and-release-model.md).
 - Framework release: [V0.15.0](../framework-releases/V0.15.0.md).

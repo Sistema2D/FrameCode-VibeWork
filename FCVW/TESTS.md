@@ -94,9 +94,9 @@ Use `governance/TEMPLATE_PLAN.md` to record change-specific validation and `REGR
 
 ## Document graph and queue evidence
 
-Structural changes must test valid and negative cases for incoming links, entrypoint reachability, broken/ambiguous targets, self-only links, inline-code examples, source-relative destinations, spaces in paths, queue absence, duplicate/stale IDs, exact state-directory targets, status mismatch, category and P1-P5 order, blocker lifecycle, and justified cross-state override.
+Structural changes must test valid and negative cases for incoming links, entrypoint reachability, broken/ambiguous targets, self-only links, inline-code examples, source-relative destinations, spaces in paths, derived queue order (category, P1-P5, blockers), invalid category, vague external blockers, misplaced cross-state overrides and legacy queue files.
 
-Plan-dependency changes additionally test flat-list enforcement, missing/ambiguous/self references, duplicate IDs, cycles, queue parity, completed prerequisites without evidence, satisfied evidence, discontinued invalidation, and completed dependent plans with unresolved prerequisites. Aggregate queue output must be derived from both canonical queues and remain disposable.
+Plan-dependency changes additionally test flat-list enforcement, missing/ambiguous/self references, duplicate IDs, cycles, completed prerequisites without evidence, satisfied evidence, discontinued invalidation, and completed dependent plans with unresolved prerequisites. Queue output is derived from plan frontmatter and remains disposable.
 
 An index that merely contains a path does not prove a meaningful record relationship. Generated plans, audits, troubleshooting records, releases, regressions, and session syntheses also link their authoritative parent or source.
 
@@ -124,7 +124,7 @@ python -B FCVW/tools/test_open_issues.py
 python -B FCVW/tools/test_plan_dependencies_and_knowledge.py
 python -B FCVW/tools/document_graph_fcvw.py --root .
 python -B FCVW/tools/knowledge_graph_fcvw.py --root .
-python -B FCVW/tools/role_manifest_fcvw.py --root . --write
+python -B FCVW/tools/role_manifest_fcvw.py --root . --output .fcvw-cache/role-manifest.json
 python -B FCVW/tools/plan_queue_fcvw.py --root . --recommend
 python -B FCVW/tools/validate_fcvw.py --root . --profile clean-template
 ```
@@ -137,14 +137,6 @@ The language gate is separate and runs only against prepared release artifacts:
 python -B tools/locale_fcvw.py --root <release-staging-root> --require-complete --source-root <clean-source-root> --source-revision <40-character-commit>
 python -B tools/package_release_fcvw.py --root <release-staging-root> --source-root <clean-source-root> --source-revision <40-character-commit> --version <Vx.y.z> --output <asset-directory>
 ```
-
-## Structural shadow routing
-
-Run `python -B FCVW/tools/test_adaptive_routing.py` in an installed package, or
-use the source checkout tool prefix. Replay mandatory immunity, disabled and
-shadow CLI equivalence, cumulative explicit routes, missing mandatory failure,
-excluded/exact-only content, injection, invalid graph/schema/hash/weights, cycles,
-budget bounds and fallback. Synthetic fixtures verify invariants, not task quality.
 
 ## Retrieval quality and installed archives
 
@@ -180,7 +172,7 @@ $fcvwPython314 = py -3.14 -c "import sys; print(sys.executable)"
 python -B tools/check_fcvw.py --root . --python "$fcvwPython312" --python "$fcvwPython314"
 ```
 
-Repeat `--python` with executable paths on any supported host. On Linux use an installed Python interpreter and keep the resulting Linux report separately; a local run does not test other operating systems. `--timeout` controls the maximum seconds per direct command, default 900. The runner executes trusted repository code with the user's permissions.
+The tools support Python 3.10 or later and use only the standard library. Repeat `--python` with executable paths on any supported host. On Linux use an installed Python interpreter and keep the resulting Linux report separately; a local run does not test other operating systems. `--timeout` controls the maximum seconds per direct command, default 900. The runner executes trusted repository code with the user's permissions.
 
 For existing release assets add `--release-dir` pointing to a directory containing exactly four language ZIPs of one version and SHA256SUMS.txt. For older archives, also supply `--release-source` pointing to a trusted checkout of their release tag. This preserves source-code binding rather than skipping it. The runner verifies existing assets; translation review, locale parity and reproducible package construction remain separate release gates. See [the execution contract](governance/LOCAL_VALIDATION_CONTRACT.md).
 
@@ -192,37 +184,13 @@ otherwise checkpoint the affected work and continue only independent tests. The
 selected-run checker infers unasked/pending decisions from failed cases even if
 their Divergences rows are missing. A decision never changes a historical verdict.
 
-[QA](skills/QA/SKILL.md) first maps the accessible application, then tests and maintains only affected [product surfaces](wiki/product/README.md). Test reports separate approved expected behavior from actual observations and preserve failures. Initial discovery can end in a resumable checkpoint; neither a partial inventory nor source inspection proves live coverage.
+[QA](skills/QA/SKILL.md) first maps the accessible application, then tests and maintains only affected [product surfaces](skills/QA/PRODUCT_WIKI.md). Test reports separate approved expected behavior from actual observations and preserve failures. Initial discovery can end in a resumable checkpoint; neither a partial inventory nor source inspection proves live coverage.
 
 Run the optional selected-page checker after writing contracts/runs. It checks stable IDs, element-to-case coverage, complete inventory claims, run contract hashes, missing/duplicate results and evidence fields. It rejects passes for unknown/provisional expectations and stale contracts. It does not browse, authenticate, infer requirements or prove evidence truth. Keep the normal application tests and relevant wiki validation. Missing target execution capability is a blocked result, not an alternative definition of pass. Follow [target guidance](skills/QA/TARGETS.md) for native UI, CLI, APIs, compiled libraries, services and firmware; identify simulation separately from physical hardware coverage.
 
-## Validated-completion evaluation
-
-The optional [loop evaluator](governance/LOOP_EVALUATION_CONTRACT.md) calculates
-cost, iterations, rework, timing and quality from explicit external events. Use
-`python -B tools/loop_metrics_fcvw.py --protocol /external/protocol.json --runs /external/runs.jsonl --check`
-in source, or the installed tools prefix. Missing provider counts remain unknown;
-synthetic fixtures and deterministic repository audits do not prove agent efficacy.
-The test suite covers exact metrics, resumption/conflicting duplicates, partial
-measurements, unknown/unfinished runs, shadow attribution, QA decisions, frozen
-identity, output containment and delayed quality. No automatic evaluation is
-added to ordinary retrieval or project execution.
-
-## Adaptive control boundary replay
-
-Test [adaptive controls](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) with synthetic
-positive evidence and negative real pilot reassessment. Protect default delivery,
-source/index identity, independent evidence, holdout separation, strict feedback
-authority, bounded/decayed updates, duplicate/conflict rejection, state replay,
-export/reset/rollback, expiry, budgets, stagnation, QA/safety latches and CLI fallback.
-These tests establish implementation behavior, not causal efficacy or human authority.
-Real provider usage, independent label review, paired execution and follow-up are
-still required before interpreting full-cycle savings or non-inferiority.
-
 Cross-tool regressions cover the default local runner's disposable cache,
 temporary-file index exclusion, blocked first-run QA inventory, output-directory
-creation, known file operations, adaptive ledger restart/stale-state denial and
-content-free decision tracing. A filesystem-link upgrade denial test runs on hosts
+creation, known file operations and content-free decision tracing. A filesystem-link upgrade denial test runs on hosts
 that permit link creation and is explicitly skipped otherwise. These checks
 exercise implementation boundaries; they do not provide real-task efficacy or
 cross-operating-system coverage.

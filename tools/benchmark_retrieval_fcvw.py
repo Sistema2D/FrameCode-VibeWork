@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""Replay labeled retrieval cases; synthetic labels never imply real task efficacy."""
+"""Replay labeled retrieval cases; synthetic labels never imply real task efficacy.
+
+Report (`fcvw/retrieval-benchmark@1`, disposable): input digest, per-case
+mandatory recall, optional precision, useful recall, missing useful chunks,
+forbidden hits, estimated optional cost, retrieval/selection latency and
+separately labeled task outcomes. Missing outcomes are null, never inferred from
+retrieval success.
+
+External case JSONL requires `id`, `query`, non-empty `expected_mandatory` and
+`useful_chunks`. Optional string lists: `forbidden_chunks`, `sessions`, `events`,
+`changed_files`, `mandatory`. Useful IDs must exist in the paired index. Optional
+`outcome` accepts boolean `corrected`, boolean `validation_passed` and a
+non-negative integer `actual_input_tokens`; these are caller observations, not
+results produced by the benchmark.
+"""
 from __future__ import annotations
 
 import argparse
@@ -21,10 +35,10 @@ def synthetic_corpus() -> tuple[list[dict], list[dict]]:
         ("security", "rotate authentication credentials", "security", ["SECURITY", "DATA", "REGRESSION_GUARDS"]),
         ("migration", "database migration rollback", "migration", ["DATA", "TESTS", "REGRESSION_GUARDS"]),
         ("ai", "retrieval injection defense", "ai_governance", ["AI", "SECURITY"]),
-        ("ui", "keyboard focus accessibility", "ui", ["DESIGN", "TESTS", "REGRESSION_GUARDS"]),
+        ("ui", "keyboard focus accessibility", "ui", ["PROJECT", "TESTS", "REGRESSION_GUARDS"]),
         ("refactoring", "extract module preserve behavior", "refactoring", ["REFACTORING", "PLANNING", "REGRESSION_GUARDS"]),
-        ("documentation", "document public interface", "documentation", ["OWNERSHIP", "FILESYSTEM"]),
-        ("release", "publish version checksums", "release", ["VERSIONING", "RELEASE", "REGRESSION_GUARDS", "skills/release-checklist/SKILL"]),
+        ("documentation", "document public interface", "documentation", ["OWNERSHIP"]),
+        ("release", "publish version checksums", "release", ["RELEASE", "REGRESSION_GUARDS", "skills/release-checklist/SKILL"]),
         ("troubleshooting", "diagnose failed startup", "troubleshooting", ["TROUBLESHOOTING", "PLANNING", "REGRESSION_GUARDS"]),
     ]
     records, cases = [], []

@@ -1,17 +1,21 @@
 # Template: ADR (Architecture Decision Record)
 
-Use this template to record technical decisions that affect the structure of the project.
+Use this template to record technical decisions that affect the structure of the project. Save as `decisions/ADR-XXXX-<slug>.md`.
 
 ```markdown
-# ADR-XXXX — <Decision Title>
+---
+schema: "fcvw/adr@1"
+id: "ADR-XXXX"
+status: "proposal | accepted | superseded | rejected | obsolete"
+date: "YYYY-MM-DD"
+artifact_role: "record"
+owner: "<accountable-owner>"
+upgrade_strategy: "preserve"
+record_scope: "<application | framework>"
+retrieval_scope: "routed"
+---
 
-## Status
-
-`proposal` / `accepted` / `superseded` / `rejected` / `obsolete`
-
-## Date
-
-YYYY-MM-DD
+# ADR-XXXX: <Decision Title>
 
 ## Context
 
@@ -50,9 +54,9 @@ YYYY-MM-DD
 -
 
 ## Relationship with Documents
-- `SCOPE.md`:
-- `STACK.md`:
-- `WORKFLOW.md`:
+- `PROJECT.md` (identity and scope):
+- `PROJECT.md` (stack):
+- `PROJECT.md` (workflows):
 - `DATA.md`:
 - `SECURITY.md`:
 - `AI.md`:

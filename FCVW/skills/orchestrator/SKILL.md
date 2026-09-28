@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "orchestrator"
-description: "Coordinate explicitly authorized parallel work across non-overlapping scopes."
-version: "1.2.0"
-trigger_keywords:
-  - "parallel tasks"
-  - "multi-agent"
-  - "orchestrate"
-  - "subagents"
+description: "Coordinate explicitly authorized parallel work across non-overlapping scopes. Use only when the user authorizes several agents or parallel sessions. Do not use for sequential single-agent work."
+version: "1.2.1"
 session_types:
   - "planning"
   - "multi_agent"

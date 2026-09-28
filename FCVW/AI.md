@@ -75,8 +75,8 @@ Rules:
 - allow human review when the content is critical.
 - use `skills/wiki-curator/SKILL.md` when knowledge must be promoted, revised, grouped, deduplicated, tagged, or scheduled for review;
 - prefer updating or superseding an existing wiki page before creating a new one;
-- track freshness, promotion precision, duplication, release synthesis coverage, taxonomy coverage, and cost control using `wiki/metrics.md`;
-- organize curated wiki pages with canonical tags, `theme`, and `theme_color` from `wiki/taxonomy.md`;
+- track freshness, promotion precision, duplication, release synthesis coverage, taxonomy coverage, and cost control in the curation plan or session note;
+- organize curated wiki pages with canonical tags, `theme`, and `theme_color` from the taxonomy in `wiki/README.md`;
 - use one fixed optimized curation mode only: JIT loading of index/log/schema/taxonomy/metrics plus directly triggered source records. Do not expose customizable curation cost modes.
 - treat tracked source-digest changes as review candidates for explicit `derived_from` dependents; never refresh digests or mutate dependent knowledge before review.
 - use typed relations only when their semantics improve retrieval or impact analysis, and derive inverse graph edges instead of duplicating them in pages.
@@ -171,13 +171,13 @@ Rules:
 - Memory must not store secrets unnecessarily.
 - History must respect `DATA.md` and `SECURITY.md`.
 - Learning generated from a conversation must be traceable.
-- Durable agent-specific learning uses sourced `fcvw/wiki@1` pages under `wiki/agents/` with collision-resistant IDs; shared fixed journal filenames are forbidden.
+- Durable agent-specific learning uses sourced `fcvw/wiki@1` pages under `wiki/` (`type: agent` notes) with collision-resistant IDs; shared fixed journal filenames are forbidden.
 - Agent pages store durable project-specific learning, not routine chat transcripts.
 - Reusable agent learning must be promoted, updated, or linked through `wiki-curator` instead of remaining isolated in chronological notes.
 
 ## AI Interaction Context Compression (AICC)
 
-To prevent context bloat while preserving evidence, FCVW uses bounded session handoffs and the lifecycle in `MEMORY.md`. Token savings are measured under `TOKEN_BUDGET.md`; they are not assumed.
+To prevent context bloat while preserving evidence, FCVW uses bounded session handoffs and the memory lifecycle in `wiki/README.md`. Token savings are measured under [the token and context budget](#token-and-context-budget); they are not assumed.
 
 ### Ingestion Standard (At Session Start)
 
@@ -188,7 +188,7 @@ To prevent context bloat while preserving evidence, FCVW uses bounded session ha
 ### Compaction Standard (At Session Close)
 
 1. **Analyze changes**: review actual changed files, plan state, validation, risks, and next authorized action.
-2. **Create only when useful**: copy [`wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md`](wiki/templates/TEMPLATE_SESSION_SYNTHESIS.md) and use a collision-resistant `SES-YYYYMMDD-HHMMSS-<short-id>` identity.
+2. **Create only when useful**: copy [`governance/TEMPLATE_NOTE.md` (session block)](governance/TEMPLATE_NOTE.md) and use a collision-resistant `SES-YYYYMMDD-HHMMSS-<short-id>` identity.
 3. **Synthesize dense content**:
    - Write in a highly dense, telegraphic style.
    - Link repository-relative paths for modified and decisive read files.
@@ -253,9 +253,9 @@ To prevent the AI agent from recommending outdated, insecure, or inappropriate t
 Before recommending or integrating any third-party service, the AI agent must:
 
 1. **Discover available options**: Use available research tools to identify potential providers for the required capability. Do not rely on memory alone.
-2. **Compare against constraints**: Evaluate each option against the project's explicit constraints documented in `STACK.md`, `SCOPE.md`, `PERFORMANCE.md`, `SECURITY.md`, and `DATA.md`. Consider: free-tier limits, pricing model, data residency, latency, maintenance burden, community health, API stability, and compatibility with the existing stack.
-3. **Document reasoning**: Record the selected service, the alternatives considered, and the rationale for the choice. This documentation lives in the active plan, an ADR in `decisions/`, or a wiki page in `wiki/decisions/`.
-4. **Install and configure**: Follow the service's official documentation for setup. Use the project's `.env.example` to document required environment variables (following `ENVIRONMENT.md` rules). Never hardcode credentials.
+2. **Compare against constraints**: Evaluate each option against the project's explicit constraints documented in `PROJECT.md` (stack, identity and scope, performance), `SECURITY.md`, and `DATA.md`. Consider: free-tier limits, pricing model, data residency, latency, maintenance burden, community health, API stability, and compatibility with the existing stack.
+3. **Document reasoning**: Record the selected service, the alternatives considered, and the rationale for the choice. This documentation lives in the active plan, an ADR in `decisions/`, or a wiki page in `wiki/` (`type: decision` notes).
+4. **Install and configure**: Follow the service's official documentation for setup. Use the project's `.env.example` to document required environment variables (following `PROJECT.md` (environment) rules). Never hardcode credentials.
 
 ### Prohibited Behavior
 
@@ -277,7 +277,7 @@ When a third-party service requires API credentials:
 
 Research may be skipped only when:
 
-- The service is already integrated and documented in the project (verify via `STACK.md`, existing configuration, or imports).
+- The service is already integrated and documented in the project (verify via `PROJECT.md` (stack), existing configuration, or imports).
 - The user explicitly specifies the exact provider, version, and configuration to use.
 - The task is a direct bugfix or upgrade of an already-integrated service.
 
@@ -299,7 +299,7 @@ Recommended criteria:
 
 ## Token Efficiency and Performance Rules for AI Agents
 
-Use [the token budget](TOKEN_BUDGET.md) for context tiers, measurement and
+Use [the token budget](#token-and-context-budget) for context tiers, measurement and
 compact evidence. [The context map](CONTEXT_MAP.md) owns cumulative mandatory
 reads and section-level disclosure; safety, QA decisions and changed boundaries
 are never omitted to save tokens. For wiki curation, use the fixed selective mode
@@ -333,12 +333,12 @@ To facilitate retrieval and visualization in Obsidian, the AI must use the follo
 - `#refactor-plan`: Plans and results of refactorings.
 - `#user-feedback`: Insights and direct requests from the user.
 
-Canonical themes, thematic colors, optional frontmatter fields, and extended tag guidance live in `wiki/taxonomy.md`. Freshness and curation metrics live in `wiki/metrics.md`.
+Canonical themes, thematic colors, optional frontmatter fields, and extended tag guidance live in the taxonomy in `wiki/README.md`. Freshness is tracked through each note's `next_review` and `last_reviewed` dates.
 
 ## Models and Templates
 
 To create new AI feature specifications, use the template in:
-`governance/TEMPLATE_AI_RESOURCE.md`
+the AI feature section of `governance/TEMPLATE_APP_DOC.md`
 
 ## FCVW-RAG Lite
 
@@ -377,21 +377,7 @@ python FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index
 
 The retriever returns excerpts as untrusted evidence. `exact_only` records require an explicit path, ID, or filename in the query.
 
-Optional semantic wiki review remains a `wiki-lint` procedure, not a retrieval ranking signal or deterministic release gate. It is source-bounded, review-only, and unavailable runtimes are reported without silently lowering deterministic validation.
-
-## Optional structural routing experiment
-
-`retrieve_context.py --adaptive-mode shadow` adds a separate proposal and leaves
-mandatory paths and delivered BM25 results unchanged. Default mode is disabled.
-Callers declare applicable events through structured inputs described below,
-the active plan and explicit paths. This CLI is not a semantic trigger classifier.
-Supplied mandatory recall is not end-to-end recall.
-Only already eligible results enter scoring. No graph can restore excluded,
-nonexact historical, or filtered content. Mandatory paths are outside scoring
-and budgets. Contradictions remain counterevidence; explicit invalidation and
-supersession may inhibit optional suggestions. No learned state is read or written.
-Malformed structure falls back to baseline. Sources remain authoritative.
-See [decision, feasibility and CLI](decisions/ADR-0006-adaptive-context-routing.md).
+Optional semantic wiki review remains a `governance-validator` (wiki lint mode) procedure, not a retrieval ranking signal or deterministic release gate. It is source-bounded, review-only, and unavailable runtimes are reported without silently lowering deterministic validation.
 
 ## Verifiable retrieval and complete chunks
 
@@ -406,37 +392,29 @@ In a source checkout use root tools instead. Rebuild old indexes: sections now s
 
 For changed files, `--file-change OPERATION:PATH` distinguishes an edit from an
 addition, move, rename or deletion; `--versioned-change` requires an explicit
-`--event` impact and at least one file declaration. This checks declarations, not
-their semantic truth. A host must still identify hidden security, data and other
-cross-cutting impacts. The older `--changed-file` remains conservative.
+`--event` impact and at least one file declaration. Paths imply only facts: any
+addition, deletion, move or rename implies `event:filesystem`, a
+`.github/workflows/` file implies `event:automation`, and framework paths imply
+their own surfaces (policies, skills, AI bridges, release records, tools).
+Application paths never imply security, data, interface or AI impact, because a
+file name does not show it; when a versioned change touches application files
+without any of those events, the result carries a `warnings` entry listing the
+events to consider. The host declares them. The older `--changed-file` treats the
+operation as unknown and adds `event:filesystem` only for Markdown.
+
+Omit `--index` and `--query` to resolve mandatory routes only; no index is built or read.
 
 Selection is opt-in through `--context-budget`. It preserves rank, keeps complete chunks, removes exact duplicate text and mandatory-path duplicates, and limits chunks per file. Oversized chunks are skipped with a reason, never cut. The estimate covers the serialized optional-results array only: Unicode characters divided by four, rounded up. It excludes mandatory documents and diagnostic metadata and is not a model token limit.
 
-Shadow scoring evaluates up to 20 eligible candidates before the delivered top-k cut. It still cannot restore excluded or nonexact history. Graph builders share one file inventory and process-local parsing cache; sources remain canonical and no persisted adaptive state is trusted. See [benchmark and installation checks](TESTS.md).
+Graph builders share one file inventory and process-local parsing cache; sources remain canonical. See [benchmark and installation checks](TESTS.md).
 
-## Optional full-cycle evaluation
+## Retired experiments
 
-Use the [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md) to assess
-cost through validated completion using explicit sanitized external evidence.
-Default routing, mandatory context and QA user decisions remain unchanged.
-Shadow-only proposals cannot establish execution benefit; reports never authorize
-learning or promotion. Actual usage, estimates and unavailable measurements stay
-separate. No background collector or model invocation is installed.
-
-## Reviewed adaptive capability
-
-The [adaptive experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) adds
-explicit controls to the legacy shadow-only path. `--adaptive-mode assist` requires
-scoped control, a trusted local runtime ledger, observations and adequate reviewed evidence; learned state
-is optional. Human-reviewed adjustment feedback alone can update bounded weights.
-Missing or negative evidence cannot activate the experiment. Default retrieval and
-shadow without a control never load feedback. QA/safety stops survive rollback.
-No operational promotion or benefit is inferred from closing a tracking issue.
+The structural shadow router, loop evaluation and adaptive experiment controls left the core in V0.20.0 without reaching their activation criteria. [ADR-0010](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0010-core-reduction.md) records the revision that contains them and how to restore them.
 
 ## Optional decision trace
 
-`retrieve_context.py`, `qa_wiki_fcvw.py`, `adaptive_learning_fcvw.py` and
-`check_fcvw.py` accept
+`retrieve_context.py`, `qa_wiki_fcvw.py` and `check_fcvw.py` accept
 `--trace /external/decisions.jsonl --trace-run-id TASK-ID`. Reuse the same ID to
 join their content-free decision records. The JSONL stores component, status,
 reason label, input digest when available, elapsed time and provider token count
@@ -444,3 +422,54 @@ only when a trusted caller supplies one; missing usage is `unavailable`, never
 zero. A trace inside the framework must live under `.fcvw-cache/`. It does not
 attest that the host read a file, called an LLM or consulted the user; a trusted
 host adapter must supply those events separately before making such claims.
+
+## Token and context budget
+
+Token efficiency means loading the smallest evidence set that preserves correctness, safety, and scope.
+
+### Default strategy
+
+1. Read `AGENTS.md` and one `CONTEXT_MAP.md` row.
+2. Add the active plan's `context_files` and every matching mandatory event trigger; these routes are cumulative.
+3. Prefer current canonical documents over historical sessions.
+4. Search archives before opening many files.
+5. Load the relevant sections of long policies first, using the section routes in `CONTEXT_MAP.md`.
+6. Load a JIT skill instead of several long documents when the skill fully covers the operation.
+7. Put detailed evidence in repository records and keep user-facing updates compact.
+8. Keep command output and repeated status checks proportional to the decision;
+   avoid loading complete large files when a named section suffices.
+
+### Context tiers
+
+| Tier | Content | Default |
+|---|---|---|
+| Always | user request, AGENTS, context route | yes |
+| Active | plan, changed files, directly affected policy | yes |
+| Supporting | tests, failure record, decision, recent handoff | as needed |
+| Archive | old plans, sessions, releases, logs | search only |
+
+### Guardrails
+
+- Never omit a mandatory event-triggered route—including security, data, AI, public interface, filesystem, automation, release, destructive-action, or approval context—to save tokens.
+- Do not load all of `wiki/`, `Plans/`, or `changelogs/` by default.
+- Avoid repeating full file contents in plans and session syntheses; link paths and retain decisive evidence.
+- Rotate indexes and archive old sessions when active navigation becomes noisy.
+- Ask only when missing information materially affects correctness, authority, safety, or product direction.
+
+### Measurement
+
+Token-saving claims must record the model/tokenizer or approximation method, compared context sets, date, and result. Do not publish unsupported percentage savings.
+
+Useful repository metrics:
+
+- bytes/estimated tokens in the default context route;
+- number of files loaded per session type;
+- archive versus active-memory size;
+- repeated clarification count;
+- validation defects caused by missing context.
+
+Recorded baseline (2026-09-28, clean template, bytes of `AGENTS.md` plus the mandatory route; no tokenizer): the sum over all 34 session and event routes fell from 563 KB in V0.19.0 to 526 KB in V0.20.0 (−6.6%) when section-routed documents count their preamble plus their largest section, and grew from 912 KB to 948 KB when every file is read whole, which is what section routes exist to avoid. 24 routes shrank or held; 10 grew by 0.1 to 2.3 KB, mostly because the single `PROJECT.md` replaced near-empty placeholder profiles. In a filled project the same content moves rather than grows. A project profile edit reads about 22 KB of mandatory context.
+
+### Complete-chunk budget estimates
+
+For opt-in lexical selection, `--context-budget` bounds the estimated serialized optional-results array, including its metadata, rather than only excerpt characters. Complete paragraphs and code blocks are retained or skipped; required paths never consume this optional allowance. Diagnostics report every decision. This remains a Unicode-character approximation, not model usage; actual token accounting and quality validation remain in [issue 55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55).

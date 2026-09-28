@@ -11,88 +11,46 @@ import sys
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from document_graph_fcvw import build_graph, render_catalog
+from document_graph_fcvw import build_graph
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
-from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, string_list
+from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, scan_fences, string_list
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
-from path_policy_fcvw import CLEAN_ROOT_ENTRIES
-from release_layout_fcvw import is_installed_release_layout
+# One list for both layouts (E-04), mapped to the installed layout by installed_path.
+from path_policy_fcvw import CLEAN_ROOT_ENTRIES, REQUIRED_SOURCE_PATHS as REQUIRED_PATHS
+from release_layout_fcvw import installed_path, is_installed_release_layout
 
 from urllib.parse import unquote
 
 
-REQUIRED_PATHS = (
-    "AGENTS.md",
-    "README.md",
-    "LICENSE",
-    "NOTICE",
-    "tools/validate_fcvw.py",
-    "tools/test_validate_fcvw.py",
-    "tools/test_open_issues.py",
-    "tools/test_plan_dependencies_and_knowledge.py",
-    "tools/frontmatter_fcvw.py",
-    "tools/document_graph_fcvw.py",
-    "tools/knowledge_graph_fcvw.py",
-    "tools/knowledge_sources_fcvw.py",
-    "tools/plan_dependencies_fcvw.py",
-    "tools/plan_queue_fcvw.py",
-    "tools/build_context_index.py",
-    "tools/retrieve_context.py",
-    "tools/locale_fcvw.py",
-    "tools/package_release_fcvw.py",
-    "tools/release_layout_fcvw.py",
-    "tools/fcvw_cache.py",
-    "tools/role_manifest_fcvw.py",
-    "tools/upgrade_fcvw.py",
-    "FCVW/README.md",
-    "FCVW/APP_RULES.md",
-    "FCVW/DOCUMENT_GRAPH.md",
-    "FCVW/Plans/pending/QUEUE.md",
-    "FCVW/Plans/in_progress/QUEUE.md",
-    "FCVW/FRAMEWORK_LOCK.md",
-    "FCVW/OWNERSHIP.md",
-    "FCVW/SCHEMAS.md",
-    "FCVW/MIGRATIONS.md",
-    "FCVW/PLANNING.md",
-    "FCVW/CONTEXT_MAP.md",
-    "FCVW/VERSIONING.md",
-    "FCVW/RELEASE.md",
-    "FCVW/MEMORY.md",
-    "FCVW/AUTOMATION.md",
-    "FCVW/REGRESSION_GUARDS.md",
-    "FCVW/FILESYSTEM.md",
-    "FCVW/governance/TEMPLATE_PLAN.md",
-    "FCVW/governance/TEMPLATE_PLAN_COMPACT.md",
-    "FCVW/governance/TEMPLATE_CI_WORKFLOW.md",
-    "FCVW/governance/TEMPLATE_AUDIT.md",
-    "FCVW/framework-releases/README.md",
-    "FCVW/examples/minimal-change/README.md",
-    "FCVW/skills/README.md",
-    "FCVW/wiki/regressions/README.md",
-    "FCVW/wiki/feedback/README.md",
-    "FCVW/wiki/templates/TEMPLATE_FEEDBACK.md",
-    "FCVW/wiki/templates/TEMPLATE_REGRESSION.md",
-)
 
 # A project rarely has every concern on day one. Without a third state the only
 # way to pass `--profile instantiated` is to invent content for profiles the
 # project does not use yet, so the validator would be measuring fiction.
 INSTANTIATION_STATUSES = {"pending", "complete", "not_applicable"}
 # Identity and scope always apply: a project always has a name and a boundary.
-INSTANTIATION_REQUIRED_PROFILES = {"MANIFEST.md", "SCOPE.md"}
+INSTANTIATION_REQUIRED_PROFILES = {"PROJECT.md", "MANIFEST.md", "SCOPE.md"}
+# PROJECT.md holds several concerns; a concern that does not apply yet is waived
+# per section. Identity and scope can never be waived.
+PROJECT_PROFILE = "PROJECT.md"
+UNWAIVABLE_PROJECT_SECTIONS = {"identity and scope"}
 MINIMUM_INSTANTIATION_REASON = 40
 
 PROJECT_PROFILES = (
-    "BRIEFING.md",
+    "PROJECT.md",
+    "SECURITY.md",
     "DATA.md",
     "APP_RULES.md",
+)
+# Pre-V0.20.0 profiles. A populated copy is project-owned and survives upgrades,
+# so it keeps being validated until its content is merged into PROJECT.md.
+LEGACY_PROJECT_PROFILES = (
+    "BRIEFING.md",
     "DESIGN.md",
     "ENVIRONMENT.md",
     "MANIFEST.md",
     "PERFORMANCE.md",
     "SCOPE.md",
-    "SECURITY.md",
     "STACK.md",
     "WORKFLOW.md",
 )
@@ -129,6 +87,10 @@ COMPACT_PLAN_SECTIONS = ("Objective", "Affected files", "Validation", "Rollback"
 COMPACT_PLAN_PRIORITIES = {"P4", "P5"}
 COMPACT_PLAN_RISKS = {"R1"}
 PLAN_SCHEMAS = {"fcvw/plan@1", "fcvw/plan@2", COMPACT_PLAN_SCHEMA}
+# fcvw/plan@1 has no regression contract at all, so it stays readable only as
+# history. An active plan in that schema would bypass every regression rule.
+LEGACY_PLAN_SCHEMA = "fcvw/plan@1"
+LEGACY_PLAN_STATES = {"completed", "discontinued"}
 # Risk classes that may never waive the regression contract. REGRESSION_GUARDS.md
 # and TESTS.md already say so in prose; this makes it machine-enforced.
 REGRESSION_REQUIRED_RISKS = {"R3", "R4", "R5"}
@@ -147,6 +109,12 @@ GENERIC_JUSTIFICATIONS = (
     "no impact",
 )
 MINIMUM_JUSTIFICATION = 40
+# A result still waiting: a table cell, a "result:"/"status:" value, or a bare
+# list item. Prose that merely mentions Plans/pending/ or "no pending items" is
+# not a recorded result and must not block completion.
+PENDING_RESULT = re.compile(
+    r"(?im)(?:\|\s*pending\s*(?=\|)|^\s*(?:[-*]\s*)?(?:result|status)\s*:\s*`?pending\b|^\s*[-*]?\s*pending\s*\.?\s*$)"
+)
 INVISIBLE_CHARACTERS = {
     "\u200b": "zero-width space",
     "\u200c": "zero-width non-joiner",
@@ -194,7 +162,7 @@ WIKI_TYPES = {
 # Two models may reach opposite conclusions about the same topic, and the value of
 # the surface is that both survive; consolidating them would destroy the evidence
 # the maintainer needs. This is the one wiki surface where updating a prior page
-# is forbidden rather than preferred - see FCVW/wiki/agents/README.md for the
+# is forbidden rather than preferred - see FCVW/wiki/README.md for the
 # opposite rule and why the difference is deliberate.
 FEEDBACK_STATUSES = {"open", "accepted", "declined", "applied", "superseded"}
 FEEDBACK_FIELDS = ("authored_by_model", "topic", "feedback_status")
@@ -222,7 +190,6 @@ SKILL_FIELDS = (
     "name",
     "description",
     "version",
-    "trigger_keywords",
     "session_types",
 )
 
@@ -412,7 +379,7 @@ LOCALIZED_TITLES = {
         "arquivos ou limites afetados",
     },
     "validation": {"validacao", "validacion", "validierung", "validation plan", "plano de validacao"},
-    "rollback": {"reversao", "reversion", "rueckabwicklung", "zuruckrollen"},
+    "rollback": {"reversao", "reversion", "revertir", "rueckabwicklung", "zuruckrollen"},
     "regression guardrails": {
         "protetores de regressao",
         "barandillas de regresion",
@@ -475,7 +442,6 @@ LOCALIZED_TITLES = {
     },
     "schema changes": {"mudancas de esquema", "cambios de esquema", "schemaanderungen"},
     "migration": {"migracao", "migracion"},
-    "validation": {"validacao", "validacion", "validierung"},
     "language-variant parity and review evidence": {
         "paridade entre variantes de idioma e evidencias de revisao",
         "paridad de variantes linguisticas y evidencia de revision",
@@ -501,7 +467,6 @@ LOCALIZED_TITLES = {
         "nachgelagerte aufbewahrungsregeln",
     },
     "known gaps": {"lacunas conhecidas", "brechas conocidas", "bekannte lucken"},
-    "rollback": {"reversao", "revertir"},
     "publication evidence": {
         "evidencia de publicacao",
         "prueba de publicacion",
@@ -765,20 +730,7 @@ def apply_legacy_baseline(
 
 
 def outside_code_fences(text: str) -> list[tuple[int, str]]:
-    lines: list[tuple[int, str]] = []
-    marker = ""
-    for number, line in enumerate(text.splitlines(), 1):
-        fence = re.match(r"^\s*(`{3,}|~{3,})", line)
-        if fence:
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
-            continue
-        if not marker:
-            lines.append((number, line))
-    return lines
+    return [(number, line) for number, line, kind in scan_fences(text)[0] if kind == "text"]
 
 
 def markdown_files(root: Path, scope: set[str] | None = None) -> list[Path]:
@@ -885,7 +837,8 @@ def validate_character_integrity(root: Path, findings: list[Finding], scope: set
                     )
                 )
         for line_number, line in outside_code_fences(text):
-            if MANGLED_DASH.search(line):
+            # Inline code such as `a ? b : c` is literal, not damaged prose (C-08).
+            if MANGLED_DASH.search(INLINE_CODE.sub("``", line)):
                 findings.append(
                     Finding(
                         "character-integrity",
@@ -941,20 +894,35 @@ def validate_language_review(root: Path, findings: list[Finding]) -> None:
 
 REPOSITORY_WIDE_RULES = {
     "required-path",
-    "clean-root",
     "clean-contamination",
-    "document-catalog-stale",
-    "plan-queue",
-    "queue",
-    "version",
+    "framework-version",
     "framework-release",
+    "framework-index",
     "application-release",
     "language-review",
     "baseline-config",
     "reading-route",
     "skill-catalog",
     "duplicate-id",
+    "frontmatter-relationship",
+    "regression-surface",
 }
+# Rule families that compare files with each other. Matching by prefix keeps a
+# newly added rule of the family repository-wide; an exact list silently drifted
+# (it named "queue" while the real rules are "plan-queue-*").
+REPOSITORY_WIDE_PREFIXES = ("plan-queue", "plan-dependency", "document-", "knowledge-")
+
+
+def is_repository_wide(rule: str) -> bool:
+    return rule in REPOSITORY_WIDE_RULES or rule.startswith(REPOSITORY_WIDE_PREFIXES)
+
+
+def scoped_findings(findings: list[Finding], scope: set[str]) -> list[Finding]:
+    """Keep repository-wide findings plus per-file findings inside the scope."""
+
+    return [
+        item for item in findings if is_repository_wide(item.rule) or normalized_finding_path(item.path) in scope
+    ]
 
 
 def changed_markdown_since(root: Path, revision: str) -> tuple[set[str], Finding | None]:
@@ -980,18 +948,31 @@ def changed_markdown_since(root: Path, revision: str) -> tuple[set[str], Finding
     if result.returncode != 0:
         message = result.stderr.strip().splitlines()[-1] if result.stderr.strip() else "unknown git error"
         return set(), Finding("scope-config", revision, f"--since is not a usable git revision: {message}")
-    return {normalized_finding_path(line) for line in result.stdout.splitlines() if line.strip()}, None
+    changed = {normalized_finding_path(line) for line in result.stdout.splitlines() if line.strip()}
+    # A new file is part of the change before it is ever added to the index.
+    try:
+        untracked = subprocess.run(
+            ["git", "ls-files", "--others", "--exclude-standard", "--", "*.md"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return set(), Finding("scope-config", str(root), f"--since could not list untracked files: {error}")
+    if untracked.returncode == 0:
+        changed |= {normalized_finding_path(line) for line in untracked.stdout.splitlines() if line.strip()}
+    return changed, None
 
 
 def validate_required(root: Path, findings: list[Finding]) -> None:
     installed = is_installed_release_layout(root)
     for relative in REQUIRED_PATHS:
-        expected = relative
-        if installed:
-            if relative == "README.md":
-                continue
-            if relative in {"LICENSE", "NOTICE"} or relative.startswith("tools/"):
-                expected = f"FCVW/{relative}"
+        target = installed_path(Path(relative)) if installed else Path(relative)
+        if target is None:
+            continue  # source-only file
+        expected = target.as_posix()
         if not (root / expected).is_file():
             findings.append(Finding("required-path", expected, "required path is missing"))
 
@@ -1011,16 +992,7 @@ def validate_markdown(root: Path, findings: list[Finding], scope: set[str] | Non
     for path in markdown_files(root, scope):
         relative = path.relative_to(root).as_posix()
         text = read_text(path)
-        marker = ""
-        for line in text.splitlines():
-            fence = re.match(r"^\s*(`{3,}|~{3,})", line)
-            if not fence:
-                continue
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
+        marker = scan_fences(text)[1]
         if marker:
             findings.append(Finding("markdown-fence", relative, f"unclosed Markdown fence: {marker}"))
         for line_number, line in outside_code_fences(text):
@@ -1056,28 +1028,20 @@ def validate_markdown(root: Path, findings: list[Finding], scope: set[str] | Non
 
 
 def level_two_section(text: str, title: str) -> str | None:
-    lines = text.splitlines()
     start: int | None = None
     body: list[str] = []
-    marker = ""
     next_heading = re.compile(r"^##\s+")
     accepted = title_aliases(title)
-    for index, line in enumerate(lines):
-        fence = re.match(r"^\s*(`{3,}|~{3,})", line)
-        if fence:
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
+    for number, line, kind in scan_fences(text)[0]:
+        if kind == "fence":
             continue
-        if not marker:
+        if kind == "text":
             if (
                 start is None
                 and line.strip().startswith("## ")
                 and normalized_title(line.strip()[3:]) in accepted
             ):
-                start = index + 1
+                start = number
                 continue
             if start is not None and next_heading.match(line.strip()):
                 return "\n".join(body).strip()
@@ -1130,7 +1094,7 @@ def validate_plan_regression(
                     f"not_applicable Justification restates the waiver instead of arguing it: {reason[:60]!r}",
                 )
             )
-    if scalar(metadata, "status") == "completed" and re.search(r"\bpending\b", section, re.I):
+    if scalar(metadata, "status") == "completed" and PENDING_RESULT.search(section):
         findings.append(Finding("plan-regression", relative, "completed plan has pending regression evidence"))
     rollback = level_two_section(text, "Rollback")
     if rollback is None:
@@ -1240,6 +1204,14 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
             schema = scalar(metadata, "schema")
             if schema not in PLAN_SCHEMAS:
                 findings.append(Finding("plan-schema", relative, "plan must use a supported FCVW plan schema"))
+            elif schema == LEGACY_PLAN_SCHEMA and state not in LEGACY_PLAN_STATES:
+                findings.append(
+                    Finding(
+                        "plan-schema",
+                        relative,
+                        "fcvw/plan@1 is legacy history only; an active plan uses fcvw/plan@2 or fcvw/plan-compact@1",
+                    )
+                )
             if schema == COMPACT_PLAN_SCHEMA:
                 required_fields = COMPACT_PLAN_FIELDS
             elif schema == "fcvw/plan@2":
@@ -1296,9 +1268,30 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
                 validate_plan_regression(relative, metadata, text, findings)
 
 
+def referenced_names(text: str, *, tables_only: bool = False) -> set[str]:
+    """Exact names a document references: link-target path parts and inline-code tokens.
+
+    Replaces substring checks (B-04), under which `AI.md` matched `XAI.md` and the
+    skill `QA` matched any prose containing "QA".
+    """
+
+    names: set[str] = set()
+    for _, line in outside_code_fences(text):
+        if tables_only and not line.lstrip().startswith("|"):
+            continue
+        for match in MARKDOWN_LINK.finditer(line):
+            target = match.group(1).strip().strip("<>").split(maxsplit=1)[0].split("#", 1)[0]
+            names.update(part for part in Path(unquote(target)).parts if part not in {".", ".."})
+        for code in INLINE_CODE.findall(line):
+            token = code.strip("`").strip()
+            names.add(token)
+            names.update(Path(token).parts)
+    return names
+
+
 def validate_skills(root: Path, findings: list[Finding]) -> None:
     skills_root = root / "FCVW" / "skills"
-    catalog = read_text(skills_root / "README.md")
+    catalog = referenced_names(read_text(skills_root / "README.md"), tables_only=True)
     seen: dict[str, str] = {}
     for path in sorted(skills_root.glob("*/SKILL.md")):
         relative = path.relative_to(root).as_posix()
@@ -1326,7 +1319,12 @@ def validate_skills(root: Path, findings: list[Finding]) -> None:
                 normalized_title(marker)
                 for marker in (*accepted, *SKILL_BODY_TRANSLATIONS.get(concept, ()))
             }
-            if not any(any(heading.startswith(marker) for marker in markers) for heading in headings):
+            # Whole-word prefix: "## Validation and exit" matches "## validation",
+            # but "## Modifications" no longer matches the alias "## modi".
+            if not any(
+                any(heading == marker or heading.startswith(marker + " ") for marker in markers)
+                for heading in headings
+            ):
                 findings.append(Finding("skill-contract", relative, f"missing body concept: {concept}"))
 
 
@@ -1341,8 +1339,9 @@ def validate_reading_routes(root: Path, findings: list[Finding]) -> None:
     if not all(path.is_file() for path in (context_path, index_path, agents_path)):
         return
     context = read_text(context_path)
-    fcvw_index = read_text(index_path)
-    discoverability = "\n".join((read_text(agents_path), context, fcvw_index))
+    fcvw_index = referenced_names(read_text(index_path))
+    discoverability = fcvw_index | referenced_names(read_text(agents_path)) | referenced_names(context)
+    session_rows = referenced_names(context, tables_only=True)
     for path in sorted((root / "FCVW").glob("*.md")):
         metadata = frontmatter_of(path)
         if scalar(metadata, "artifact_role") != "framework_policy":
@@ -1375,7 +1374,7 @@ def validate_reading_routes(root: Path, findings: list[Finding]) -> None:
     for path in sorted((root / "FCVW" / "skills").glob("*/SKILL.md")):
         relative = path.relative_to(root).as_posix()
         for session_type in declared_session_types(read_text(path)):
-            if f"`{session_type}`" not in context:
+            if session_type not in session_rows:
                 findings.append(
                     Finding(
                         "reading-route",
@@ -1396,12 +1395,17 @@ def validate_feedback_notes(root: Path, findings: list[Finding]) -> None:
     to agree with it, and two independent readings are the entire point.
     """
 
-    directory = root / "FCVW" / "wiki" / "feedback"
-    if not directory.is_dir():
+    wiki = root / "FCVW" / "wiki"
+    if not wiki.is_dir():
         return
     seen: dict[str, str] = {}
-    for path in sorted(directory.glob("*.md")):
-        if path.name == "README.md":
+    for path in sorted(wiki.rglob("*.md")):
+        if path.name in {"README.md", "index.md"}:
+            continue
+        # The wiki is flat and typed: a note is feedback by its declared type.
+        # A legacy wiki/feedback/ folder still marks its notes as feedback so a
+        # note filed there with the wrong type keeps being reported.
+        if scalar(frontmatter_of(path), "type") != "feedback" and "feedback" not in path.relative_to(wiki).parts[:-1]:
             continue
         relative = path.relative_to(root).as_posix()
         text = read_text(path)
@@ -1465,12 +1469,121 @@ def _heading_position(text: str, title: str) -> int | None:
     return None
 
 
+RECORD_SCOPES = {"application", "framework"}
+RECORD_ENVELOPE = ("id", "artifact_role", "owner", "upgrade_strategy", "record_scope", "retrieval_scope")
+# One declarative contract per record schema, executed by check_record. The
+# rule IDs and messages are the public surface; the frozen rule inventory and
+# the record fixtures keep them stable.
+ADR_STATUSES = {"proposal", "accepted", "superseded", "rejected", "obsolete"}
+RECORD_SPECS: dict[str, dict] = {
+    "fcvw/wiki@1": {
+        "rule": "wiki-schema",
+        "scalars": (*RECORD_ENVELOPE, "title", "type", "status", "confidence", "created_at", "last_reviewed"),
+        "lists": ("sources", "tags"),
+        "optional_lists": ("domain",),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve"},
+        "enums": {"type": WIKI_TYPES, "status": WIKI_STATUSES, "confidence": WIKI_CONFIDENCE},
+    },
+    "fcvw/regression@1": {
+        "rule": "regression-schema",
+        "scalars": (*RECORD_ENVELOPE, "title", "type", "severity", "status", "detected_at", "last_reviewed", "related_plan"),
+        "lists": ("sources", "tags"),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve"},
+        "id": (r"REG-\d{8}-[a-z0-9-]+", "regression"),
+        "enums": {"type": REGRESSION_TYPES, "severity": PLAN_RISKS, "status": REGRESSION_STATUSES},
+        "related_plan": True,
+    },
+    "fcvw/audit@1": {
+        "rule": "audit-schema",
+        "scalars": (*RECORD_ENVELOPE, "status", "created_at", "last_reviewed"),
+        "lists": ("sources",),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve"},
+        "id": (r"AUD-\d{8}-[a-z0-9-]+", "audit"),
+        "enums": {"status": {"draft", "completed", "blocked"}},
+        "sections": ("Scope", "Authoritative sources", "Method", "Findings", "Validation",
+                     "Limitations and residual risk", "Follow-up"),
+    },
+    "fcvw/troubleshooting@1": {
+        "rule": "troubleshooting-schema",
+        "scalars": (*RECORD_ENVELOPE, "title", "type", "status", "confidence", "detected_at", "last_reviewed", "related_plan"),
+        "lists": ("sources", "tags"),
+        "fixed": {"artifact_role": "record", "upgrade_strategy": "preserve", "retrieval_scope": "search_only", "type": "failure"},
+        "id": (r"TRB-\d{8}-[a-z0-9-]+", "troubleshooting"),
+        "enums": {"status": {"draft", "in_validation", "validated", "obsolete"}, "confidence": WIKI_CONFIDENCE},
+        "related_plan": True,
+        "placeholders_block_sections": True,
+        "sections": ("1. Identification", "2. Symptom Description", "3. Hypotheses", "4. Root Cause",
+                     "5. Solution Applied", "6. Validation", "7. Prevention", "8. Wiki Promotion", "9. Status"),
+    },
+    "fcvw/adr@1": {
+        "rule": "adr-schema",
+        "scalars": ("id", "status", "date"),
+        "fixed": {"artifact_role": "record"},
+        "id": (r"ADR-\d{4}", "ADR"),
+        "enums": {"status": ADR_STATUSES},
+    },
+}
+
+
+def check_record(
+    root: Path,
+    relative: str,
+    text: str,
+    metadata: dict[str, FrontmatterValue],
+    spec: dict,
+    findings: list[Finding],
+    seen: dict[str, str] | None = None,
+) -> None:
+    """Apply one RECORD_SPECS contract to a record."""
+
+    rule = spec["rule"]
+
+    def report(message: str) -> None:
+        findings.append(Finding(rule, relative, message))
+
+    for field in spec["scalars"]:
+        if not scalar(metadata, field):
+            report(f"missing or empty field: {field}")
+    for field in spec.get("lists", ()):
+        if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
+            report(f"{field} must be a non-empty list")
+    for field in spec.get("optional_lists", ()):
+        if field in metadata and not isinstance(metadata.get(field), list):
+            report(f"{field} must be a first-level list")
+    for field, expected in spec.get("fixed", {}).items():
+        if scalar(metadata, field) != expected:
+            report(f"{field} must be {expected}")
+    record_id = scalar(metadata, "id")
+    if "id" in spec:
+        pattern, label = spec["id"]
+        if record_id and not re.fullmatch(pattern, record_id):
+            report(f"invalid {label} id: {record_id!r}")
+        if seen is not None:
+            if record_id in seen:
+                report(f"{label} id also used by {seen[record_id]}")
+            elif record_id:
+                seen[record_id] = relative
+    if scalar(metadata, "record_scope") not in RECORD_SCOPES:
+        report("record_scope must be application or framework")
+    for field, allowed in spec.get("enums", {}).items():
+        if scalar(metadata, field) not in allowed:
+            report(f"invalid {field}: {scalar(metadata, field)!r}")
+    related_plan = scalar(metadata, "related_plan")
+    if spec.get("related_plan") and related_plan and not PLACEHOLDER.search(related_plan):
+        if _find_plan_by_id(root, related_plan) is None:
+            report(f"related plan is missing or ambiguous: {related_plan}")
+    strict = spec.get("placeholders_block_sections", False)
+    for section in spec.get("sections", ()):
+        body = level_two_section(text, section)
+        if body is None or not body.strip() or (strict and PLACEHOLDER.search(body)):
+            report(f"missing, empty, or unresolved section: {section}" if strict else f"missing or empty section: {section}")
+
+
 def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
     wiki = root / "FCVW" / "wiki"
     seen: dict[str, str] = {}
-    exempt = {"README.md", "index.md", "log.md", "metrics.md", "schema.md", "taxonomy.md"}
     for path in sorted(wiki.rglob("*.md")):
-        if path.name in exempt or "templates" in path.parts:
+        if path.name in {"README.md", "index.md"}:
             continue
         relative = path.relative_to(root).as_posix()
         metadata = frontmatter_of(path)
@@ -1482,100 +1595,15 @@ def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
             findings.append(Finding("duplicate-id", relative, f"wiki id also used by {seen[page_id]}"))
         seen[page_id] = relative
         schema = scalar(metadata, "schema")
-        if schema == "fcvw/wiki@1":
-            required_scalars = (
-                "id",
-                "artifact_role",
-                "owner",
-                "upgrade_strategy",
-                "record_scope",
-                "retrieval_scope",
-                "title",
-                "type",
-                "status",
-                "confidence",
-                "created_at",
-                "last_reviewed",
-            )
-            for field in required_scalars:
-                if not scalar(metadata, field):
-                    findings.append(Finding("wiki-schema", relative, f"missing or empty field: {field}"))
-            for field in ("sources", "tags"):
-                if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
-                    findings.append(Finding("wiki-schema", relative, f"{field} must be a non-empty list"))
-            if "domain" in metadata and not isinstance(metadata.get("domain"), list):
-                findings.append(Finding("wiki-schema", relative, "domain must be a first-level list"))
-            if scalar(metadata, "artifact_role") != "record":
-                findings.append(Finding("wiki-schema", relative, "artifact_role must be record"))
-            if scalar(metadata, "upgrade_strategy") != "preserve":
-                findings.append(Finding("wiki-schema", relative, "upgrade_strategy must be preserve"))
-            if scalar(metadata, "record_scope") not in {"application", "framework"}:
-                findings.append(Finding("wiki-schema", relative, "record_scope must be application or framework"))
-            if scalar(metadata, "type") not in WIKI_TYPES:
-                findings.append(Finding("wiki-schema", relative, f"invalid type: {scalar(metadata, 'type')!r}"))
-            if scalar(metadata, "status") not in WIKI_STATUSES:
-                findings.append(Finding("wiki-schema", relative, f"invalid status: {scalar(metadata, 'status')!r}"))
-            if scalar(metadata, "confidence") not in WIKI_CONFIDENCE:
-                findings.append(
-                    Finding("wiki-schema", relative, f"invalid confidence: {scalar(metadata, 'confidence')!r}")
-                )
-        elif schema == "fcvw/regression@1":
-            required_scalars = (
-                "id",
-                "artifact_role",
-                "owner",
-                "upgrade_strategy",
-                "record_scope",
-                "retrieval_scope",
-                "title",
-                "type",
-                "severity",
-                "status",
-                "detected_at",
-                "last_reviewed",
-                "related_plan",
-            )
-            for field in required_scalars:
-                if not scalar(metadata, field):
-                    findings.append(Finding("regression-schema", relative, f"missing or empty field: {field}"))
-            for field in ("sources", "tags"):
-                if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
-                    findings.append(Finding("regression-schema", relative, f"{field} must be a non-empty list"))
-            if scalar(metadata, "artifact_role") != "record":
-                findings.append(Finding("regression-schema", relative, "artifact_role must be record"))
-            if scalar(metadata, "upgrade_strategy") != "preserve":
-                findings.append(Finding("regression-schema", relative, "upgrade_strategy must be preserve"))
-            if scalar(metadata, "record_scope") not in {"application", "framework"}:
-                findings.append(
-                    Finding("regression-schema", relative, "record_scope must be application or framework")
-                )
-            if not re.fullmatch(r"REG-\d{8}-[a-z0-9-]+", page_id):
-                findings.append(Finding("regression-schema", relative, f"invalid regression id: {page_id!r}"))
-            if scalar(metadata, "type") not in REGRESSION_TYPES:
-                findings.append(
-                    Finding("regression-schema", relative, f"invalid type: {scalar(metadata, 'type')!r}")
-                )
-            if scalar(metadata, "severity") not in PLAN_RISKS:
-                findings.append(
-                    Finding("regression-schema", relative, f"invalid severity: {scalar(metadata, 'severity')!r}")
-                )
-            if scalar(metadata, "status") not in REGRESSION_STATUSES:
-                findings.append(
-                    Finding("regression-schema", relative, f"invalid status: {scalar(metadata, 'status')!r}")
-                )
-            related_plan = scalar(metadata, "related_plan")
-            if related_plan and _find_plan_by_id(root, related_plan) is None:
-                findings.append(
-                    Finding("regression-schema", relative, f"related plan is missing or ambiguous: {related_plan}")
-                )
+        if schema in {"fcvw/wiki@1", "fcvw/regression@1"}:
+            check_record(root, relative, read_text(path), metadata, RECORD_SPECS[schema], findings)
         else:
             findings.append(Finding("wiki-schema", relative, f"unsupported knowledge schema: {schema!r}"))
 
 
 def validate_audit_records(root: Path, findings: list[Finding]) -> None:
-    audits = root / "FCVW" / "audits"
-    seen_ids: dict[str, str] = {}
-    for path in sorted(audits.glob("*.md")):
+    seen: dict[str, str] = {}
+    for path in sorted((root / "FCVW" / "audits").glob("*.md")):
         if path.name == "README.md":
             continue
         relative = path.relative_to(root).as_posix()
@@ -1584,54 +1612,14 @@ def validate_audit_records(root: Path, findings: list[Finding]) -> None:
         if scalar(metadata, "schema") != "fcvw/audit@1":
             findings.append(Finding("audit-schema", relative, "audit must use fcvw/audit@1"))
             continue
-        for field in (
-            "id",
-            "artifact_role",
-            "owner",
-            "upgrade_strategy",
-            "record_scope",
-            "retrieval_scope",
-            "status",
-            "created_at",
-            "last_reviewed",
-        ):
-            if not scalar(metadata, field):
-                findings.append(Finding("audit-schema", relative, f"missing or empty field: {field}"))
-        if not isinstance(metadata.get("sources"), list) or not string_list(metadata, "sources"):
-            findings.append(Finding("audit-schema", relative, "sources must be a non-empty list"))
-        if scalar(metadata, "artifact_role") != "record":
-            findings.append(Finding("audit-schema", relative, "artifact_role must be record"))
-        if scalar(metadata, "upgrade_strategy") != "preserve":
-            findings.append(Finding("audit-schema", relative, "upgrade_strategy must be preserve"))
-        audit_id = scalar(metadata, "id")
-        if audit_id and not re.fullmatch(r"AUD-\d{8}-[a-z0-9-]+", audit_id):
-            findings.append(Finding("audit-schema", relative, f"invalid audit id: {audit_id!r}"))
-        if audit_id in seen_ids:
-            findings.append(Finding("audit-schema", relative, f"audit id also used by {seen_ids[audit_id]}"))
-        elif audit_id:
-            seen_ids[audit_id] = relative
-        if scalar(metadata, "record_scope") not in {"application", "framework"}:
-            findings.append(Finding("audit-schema", relative, "record_scope must be application or framework"))
-        if scalar(metadata, "status") not in {"draft", "completed", "blocked"}:
-            findings.append(Finding("audit-schema", relative, f"invalid status: {scalar(metadata, 'status')!r}"))
-        for section in (
-            "Scope",
-            "Authoritative sources",
-            "Method",
-            "Findings",
-            "Validation",
-            "Limitations and residual risk",
-            "Follow-up",
-        ):
-            body = level_two_section(text, section)
-            if body is None or not body.strip():
-                findings.append(Finding("audit-schema", relative, f"missing or empty section: {section}"))
+        check_record(root, relative, text, metadata, RECORD_SPECS["fcvw/audit@1"], findings, seen)
 
 
-def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> None:
-    records = root / "FCVW" / "troubleshooting"
-    seen_ids: dict[str, str] = {}
-    for path in sorted(records.glob("*.md")):
+def validate_adr_records(root: Path, findings: list[Finding]) -> None:
+    """ADRs share one identity across filename, frontmatter and title (B-10)."""
+
+    seen: dict[str, str] = {}
+    for path in sorted((root / "FCVW" / "decisions").glob("*.md")):
         if path.name == "README.md":
             continue
         relative = path.relative_to(root).as_posix()
@@ -1639,107 +1627,73 @@ def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> Non
         metadata = frontmatter(text)
         schema = scalar(metadata, "schema")
         if not schema:
+            # Accepted ADRs are immutable and the pre-V0.20.0 template had no
+            # envelope: legacy ADRs stay readable and get the envelope when edited.
+            findings.append(
+                Finding("adr-schema", relative, "legacy ADR without fcvw/adr@1; add the envelope when next edited", "warning")
+            )
+            continue
+        if schema != "fcvw/adr@1":
+            findings.append(Finding("adr-schema", relative, f"unsupported decision schema: {schema!r}"))
+            continue
+        check_record(root, relative, text, metadata, RECORD_SPECS["fcvw/adr@1"], findings, seen)
+        record_id = scalar(metadata, "id")
+        if record_id and not path.name.startswith(f"{record_id}-"):
+            findings.append(Finding("adr-schema", relative, f"filename must start with {record_id}-"))
+        titles = [line for _, line in outside_code_fences(text) if line.startswith("# ")]
+        if record_id and not (titles and re.match(rf"# {re.escape(record_id)}\s*(?::|\u2014|-)\s", titles[0])):
+            findings.append(Finding("adr-schema", relative, f"title must start with '# {record_id}: '"))
+        if scalar(metadata, "status") == "superseded" and not string_list(metadata, "superseded_by"):
+            findings.append(Finding("adr-schema", relative, "a superseded ADR must name superseded_by"))
+
+
+def validate_troubleshooting_records(root: Path, findings: list[Finding]) -> None:
+    seen: dict[str, str] = {}
+    for path in sorted((root / "FCVW" / "troubleshooting").glob("*.md")):
+        if path.name == "README.md":
+            continue
+        relative = path.relative_to(root).as_posix()
+        text = read_text(path)
+        metadata = frontmatter(text)
+        schema = scalar(metadata, "schema")
+        if not schema:
+            findings.append(
+                Finding("troubleshooting-schema", relative, "troubleshooting record must declare fcvw/troubleshooting@1")
+            )
             continue
         if schema != "fcvw/troubleshooting@1":
             findings.append(
                 Finding("troubleshooting-schema", relative, f"unsupported troubleshooting schema: {schema!r}")
             )
             continue
-        required_scalars = (
-            "id",
-            "artifact_role",
-            "owner",
-            "upgrade_strategy",
-            "record_scope",
-            "retrieval_scope",
-            "title",
-            "type",
-            "status",
-            "confidence",
-            "detected_at",
-            "last_reviewed",
-            "related_plan",
-        )
-        for field in required_scalars:
-            if not scalar(metadata, field):
-                findings.append(Finding("troubleshooting-schema", relative, f"missing or empty field: {field}"))
-        for field in ("sources", "tags"):
-            if not isinstance(metadata.get(field), list) or not string_list(metadata, field):
-                findings.append(
-                    Finding("troubleshooting-schema", relative, f"{field} must be a non-empty list")
-                )
-        record_id = scalar(metadata, "id")
-        if record_id and not re.fullmatch(r"TRB-\d{8}-[a-z0-9-]+", record_id):
-            findings.append(
-                Finding("troubleshooting-schema", relative, f"invalid troubleshooting id: {record_id!r}")
-            )
-        if record_id in seen_ids:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"troubleshooting id also used by {seen_ids[record_id]}",
-                )
-            )
-        elif record_id:
-            seen_ids[record_id] = relative
-        for field, expected in (
-            ("artifact_role", "record"),
-            ("upgrade_strategy", "preserve"),
-            ("retrieval_scope", "search_only"),
-            ("type", "failure"),
-        ):
-            if scalar(metadata, field) != expected:
-                findings.append(Finding("troubleshooting-schema", relative, f"{field} must be {expected}"))
-        if scalar(metadata, "record_scope") not in {"application", "framework"}:
-            findings.append(
-                Finding("troubleshooting-schema", relative, "record_scope must be application or framework")
-            )
-        if scalar(metadata, "status") not in {"draft", "in_validation", "validated", "obsolete"}:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"invalid status: {scalar(metadata, 'status')!r}",
-                )
-            )
-        if scalar(metadata, "confidence") not in WIKI_CONFIDENCE:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"invalid confidence: {scalar(metadata, 'confidence')!r}",
-                )
-            )
-        related_plan = scalar(metadata, "related_plan")
-        if related_plan and not PLACEHOLDER.search(related_plan) and _find_plan_by_id(root, related_plan) is None:
-            findings.append(
-                Finding(
-                    "troubleshooting-schema",
-                    relative,
-                    f"related plan is missing or ambiguous: {related_plan}",
-                )
-            )
-        for section in (
-            "1. Identification",
-            "2. Symptom Description",
-            "3. Hypotheses",
-            "4. Root Cause",
-            "5. Solution Applied",
-            "6. Validation",
-            "7. Prevention",
-            "8. Wiki Promotion",
-            "9. Status",
-        ):
-            body = level_two_section(text, section)
-            if body is None or not body.strip() or PLACEHOLDER.search(body):
-                findings.append(
-                    Finding("troubleshooting-schema", relative, f"missing, empty, or unresolved section: {section}")
-                )
+        check_record(root, relative, text, metadata, RECORD_SPECS[schema], findings, seen)
+
+
+def without_sections(text: str, titles: set[str]) -> str:
+    """Drop the level-two sections whose normalized titles are listed."""
+
+    kept: list[str] = []
+    skipping = False
+    for line in text.splitlines():
+        if line.startswith("## "):
+            skipping = normalized_title(line[3:]) in titles
+        if not skipping:
+            kept.append(line)
+    return "\n".join(kept)
 
 
 def validate_profiles(root: Path, profile: str, findings: list[Finding]) -> None:
-    for name in PROJECT_PROFILES:
+    legacy = [name for name in LEGACY_PROJECT_PROFILES if (root / "FCVW" / name).is_file()]
+    for name in legacy:
+        findings.append(
+            Finding(
+                "profile-legacy",
+                f"FCVW/{name}",
+                "legacy profile; merge its content into PROJECT.md (see MIGRATIONS.md) and delete it",
+                severity="warning",
+            )
+        )
+    for name in (*PROJECT_PROFILES, *legacy):
         path = root / "FCVW" / name
         relative = path.relative_to(root).as_posix()
         if not path.is_file():
@@ -1759,6 +1713,28 @@ def validate_profiles(root: Path, profile: str, findings: list[Finding]) -> None
                     f"{sorted(INSTANTIATION_STATUSES)}",
                 )
             )
+        waived_sections: set[str] = set()
+        if name == PROJECT_PROFILE:
+            declared = string_list(metadata, "not_applicable_sections")
+            waived_sections = {normalized_title(item) for item in declared}
+            headings = {normalized_title(line[3:]) for line in text.splitlines() if line.startswith("## ")}
+            for title in sorted(waived_sections - headings):
+                findings.append(Finding("instantiation", relative, f"not_applicable_sections names no section: {title!r}"))
+            if waived_sections & UNWAIVABLE_PROJECT_SECTIONS:
+                findings.append(
+                    Finding("instantiation", relative, "identity and scope always apply and cannot be waived")
+                )
+            if waived_sections and profile in {"instantiated", "strict", "incremental"}:
+                reason = scalar(metadata, "not_applicable_reason").strip()
+                if len(reason) < MINIMUM_INSTANTIATION_REASON:
+                    findings.append(
+                        Finding(
+                            "instantiation",
+                            relative,
+                            "not_applicable_sections requires a not_applicable_reason of at least "
+                            f"{MINIMUM_INSTANTIATION_REASON} characters",
+                        )
+                    )
         if profile in {"instantiated", "strict", "incremental"}:
             if status == "not_applicable":
                 if name in INSTANTIATION_REQUIRED_PROFILES:
@@ -1785,7 +1761,8 @@ def validate_profiles(root: Path, profile: str, findings: list[Finding]) -> None
                 continue
             if status != "complete":
                 findings.append(Finding("instantiation", relative, "profile is not complete"))
-            if PLACEHOLDER.search(text):
+            # Waived sections keep their placeholders; every other section must be filled.
+            if PLACEHOLDER.search(without_sections(text, waived_sections)):
                 findings.append(Finding("placeholder", relative, "instantiated profile contains placeholders"))
 
 
@@ -1831,7 +1808,7 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
             continue
         if scalar(frontmatter_of(path), "record_scope") != "framework":
             findings.append(Finding("clean-contamination", path.relative_to(root).as_posix(), "non-framework decision in clean baseline"))
-    wiki_exempt = {"README.md", "index.md", "log.md", "metrics.md", "schema.md", "taxonomy.md"}
+    wiki_exempt = {"README.md", "index.md"}
     for path in (fcvw / "wiki").rglob("*.md"):
         if path.name in wiki_exempt or "templates" in path.parts:
             continue
@@ -1841,6 +1818,21 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
                     "clean-contamination",
                     path.relative_to(root).as_posix(),
                     "non-framework knowledge record in clean baseline",
+                )
+            )
+    # A directory that only holds its own README (or a placeholder) is scaffolding:
+    # record directories are created on first use. Truly empty directories are
+    # not tracked by git and never ship, so they are not reported.
+    for directory in sorted(path for path in fcvw.rglob("*") if path.is_dir()):
+        if ".fcvw-cache" in directory.parts or "__pycache__" in directory.parts:
+            continue
+        entries = {entry.name for entry in directory.iterdir()}
+        if entries and entries <= {"README.md", ".gitkeep"}:
+            findings.append(
+                Finding(
+                    "clean-scaffold-directory",
+                    directory.relative_to(root).as_posix(),
+                    "directory holds no content besides a README or placeholder; create it on first use",
                 )
             )
     forbidden_paths = ["FCVW/repository-open-graph-template.png"]
@@ -1853,41 +1845,43 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
 
 def validate_regression_surfaces(root: Path, findings: list[Finding]) -> None:
     required_content = {
-        "AGENTS.md": "FCVW/REGRESSION_GUARDS.md",
-        "FCVW/REGRESSION_GUARDS.md": "# Regression guardrails",
-        "FCVW/PLANNING.md": "fcvw/plan@2",
-        "FCVW/TESTS.md": "## Minimum regression evidence by risk",
-        "FCVW/GOVERNANCE_GATES.md": "| Regression |",
-        "FCVW/WATCHERS.md": "## Regression-prone events",
-        "FCVW/SCHEMAS.md": "fcvw/regression@1",
-        "FCVW/governance/TEMPLATE_PLAN.md": "## Regression impact",
-        "FCVW/wiki/templates/TEMPLATE_REGRESSION.md": "fcvw/regression@1",
-        "FCVW/examples/minimal-change/plan.md": "## Regression impact",
+        "AGENTS.md": ("FCVW/REGRESSION_GUARDS.md",),
+        "FCVW/REGRESSION_GUARDS.md": ("# Regression guardrails",),
+        "FCVW/PLANNING.md": ("fcvw/plan@2",),
+        "FCVW/TESTS.md": ("## Minimum regression evidence by risk",),
+        "FCVW/AUTOMATION.md": ("| Regression |", "## Regression-prone events"),
+        "FCVW/SCHEMAS.md": ("fcvw/regression@1",),
+        "FCVW/governance/TEMPLATE_PLAN.md": ("## Regression impact",),
+        "FCVW/governance/TEMPLATE_REGRESSION.md": ("fcvw/regression@1",),
     }
-    for relative, marker in required_content.items():
+    for relative, markers in required_content.items():
         path = root / relative
         if not path.is_file():
+            # A removed surface removes its own check; report it explicitly
+            # instead of relying on an incidental broken link elsewhere.
+            findings.append(Finding("regression-surface", relative, "regression surface is missing"))
             continue
         text = read_text(path)
-        present = marker in text
-        heading_match = re.fullmatch(r"(#{1,6})\s+(.+)", marker)
-        if heading_match:
-            present = has_localized_heading(
-                text,
-                len(heading_match.group(1)),
-                heading_match.group(2),
-                include_fences=relative.startswith("FCVW/governance/TEMPLATE_"),
-            )
-        elif marker.startswith("| Regression |"):
-            accepted = title_aliases("Regression")
-            present = any(
-                len(cells := [cell.strip() for cell in line.strip().strip("|").split("|")]) >= 1
-                and normalized_title(cells[0]) in accepted
-                for line in text.splitlines()
-                if line.strip().startswith("|")
-            )
-        if not present:
-            findings.append(Finding("regression-surface", relative, f"required marker is missing: {marker}"))
+        for marker in markers:
+            present = marker in text
+            heading_match = re.fullmatch(r"(#{1,6})\s+(.+)", marker)
+            if heading_match:
+                present = has_localized_heading(
+                    text,
+                    len(heading_match.group(1)),
+                    heading_match.group(2),
+                    include_fences=relative.startswith("FCVW/governance/TEMPLATE_"),
+                )
+            elif marker.startswith("| Regression |"):
+                accepted = title_aliases("Regression")
+                present = any(
+                    len(cells := [cell.strip() for cell in line.strip().strip("|").split("|")]) >= 1
+                    and normalized_title(cells[0]) in accepted
+                    for line in text.splitlines()
+                    if line.strip().startswith("|")
+                )
+            if not present:
+                findings.append(Finding("regression-surface", relative, f"required marker is missing: {marker}"))
 
 
 def _find_plan_by_id(root: Path, plan_id: str) -> Path | None:
@@ -2060,7 +2054,11 @@ def validate_version(root: Path, findings: list[Finding]) -> None:
             Finding("framework-version", readme.relative_to(root).as_posix(), f"README does not reference {version}")
         )
     release_path = root / "FCVW" / "framework-releases" / f"{version}.md"
-    if not release_path.is_file():
+    if not release_path.is_file() and is_installed_release_layout(root):
+        # Installed payloads do not ship framework history; the lock is the
+        # authoritative baseline and release notes live in the source repository.
+        pass
+    elif not release_path.is_file():
         findings.append(Finding("framework-release", release_path.relative_to(root).as_posix(), "release record missing"))
     else:
         release_metadata = frontmatter_of(release_path)
@@ -2387,57 +2385,21 @@ def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
                     )
 
 
-STALE_CATALOG_DERIVED_RULES = {"document-orphan", "document-unreachable"}
-
-
 def validate_document_graph(root: Path, findings: list[Finding]) -> None:
     graph = build_graph(root)
     catalog = root / "FCVW" / "DOCUMENT_GRAPH.md"
     if catalog.is_file():
-        actual_text = read_text(catalog)
-        expected_text = render_catalog(root, catalog)
-        actual_entries = tuple(
-            sorted(
-                (link.group(1), tuple(INLINE_CODE.findall(line)))
-                for _, line in outside_code_fences(actual_text)
-                for link in MARKDOWN_LINK.finditer(line)
-            )
-        )
-        expected_entries = tuple(
-            sorted(
-                (link.group(1), tuple(INLINE_CODE.findall(line)))
-                for _, line in outside_code_fences(expected_text)
-                for link in MARKDOWN_LINK.finditer(line)
-            )
-        )
-    else:
-        actual_entries = ()
-        expected_entries = ()
-    stale = catalog.is_file() and actual_entries != expected_entries
-    graph_findings = [
-        Finding(item.rule, item.path, item.message, item.severity) for item in graph.findings
-    ]
-    if stale:
-        # Orphan and reachability findings are derived from the generated
-        # catalog, so a stale catalog reports every governed artifact twice.
-        # One actionable finding replaces that noise; the derived rules are
-        # re-evaluated for real once the catalog is regenerated.
-        suppressed = sum(1 for item in graph_findings if item.rule in STALE_CATALOG_DERIVED_RULES)
-        graph_findings = [item for item in graph_findings if item.rule not in STALE_CATALOG_DERIVED_RULES]
-        detail = (
-            f"; {suppressed} derived orphan/reachability finding(s) suppressed until it is regenerated"
-            if suppressed
-            else ""
-        )
+        # Pre-V0.20.0 versioned catalog. Reachability no longer counts it, so it
+        # is only noise and a merge-conflict source.
         findings.append(
             Finding(
                 "document-catalog-stale",
                 "FCVW/DOCUMENT_GRAPH.md",
-                "generated catalog does not match the current Markdown filesystem"
-                f"{detail}",
+                "legacy versioned catalog is ignored; delete it (write views to .fcvw-cache/ instead)",
+                severity="warning",
             )
         )
-    findings.extend(graph_findings)
+    findings.extend(Finding(item.rule, item.path, item.message, item.severity) for item in graph.findings)
 
 
 def validate_knowledge_graph(root: Path, findings: list[Finding]) -> None:
@@ -2449,7 +2411,7 @@ def validate_knowledge_graph(root: Path, findings: list[Finding]) -> None:
 
 
 def validate_queues(root: Path, findings: list[Finding]) -> None:
-    findings.extend(Finding(item.rule, item.path, item.message) for item in validate_plan_queues(root))
+    findings.extend(Finding(item.rule, item.path, item.message, item.severity) for item in validate_plan_queues(root))
 
 
 def validate_app_rules(root: Path, profile: str, findings: list[Finding]) -> None:
@@ -2598,6 +2560,7 @@ def main() -> int:
     validate_feedback_notes(root, findings)
     validate_audit_records(root, findings)
     validate_troubleshooting_records(root, findings)
+    validate_adr_records(root, findings)
     validate_profiles(root, args.profile, findings)
     validate_app_rules(root, args.profile, findings)
     validate_version(root, findings)
@@ -2612,11 +2575,7 @@ def main() -> int:
 
     scoped_out = 0
     if scope is not None:
-        kept = [
-            item
-            for item in findings
-            if item.rule in REPOSITORY_WIDE_RULES or normalized_finding_path(item.path) in scope
-        ]
+        kept = scoped_findings(findings, scope)
         scoped_out = len(findings) - len(kept)
         findings = kept
 

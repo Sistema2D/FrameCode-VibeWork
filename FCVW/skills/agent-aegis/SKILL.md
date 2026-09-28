@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "agent-aegis"
-description: "Security and privacy review for scoped changes."
-version: "1.1.1"
-trigger_keywords:
-  - "security review"
-  - "vulnerability"
-  - "threat model"
-  - "harden"
-  - "segurança"
+description: "Security and privacy review for a scoped change. Use when a change touches authentication, authorization, secrets, sensitive data or destructive actions. Do not use for general code review or dependency upgrades without a security surface."
+version: "1.1.2"
 session_types:
   - "security"
   - "audit"
@@ -32,7 +26,7 @@ Find and address exactly one security issue or hardening opportunity that is cle
 - Follow `AGENTS.md`, `SECURITY.md`, `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- For durable codebase-specific security learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
+- For durable codebase-specific security learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/` (`type: agent` notes) with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 

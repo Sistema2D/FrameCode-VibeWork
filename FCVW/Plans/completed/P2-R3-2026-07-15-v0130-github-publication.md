@@ -17,7 +17,6 @@ context_files:
   - "FCVW/MIGRATIONS.md"
   - "FCVW/OWNERSHIP.md"
   - "FCVW/RELEASE.md"
-  - "FCVW/VERSIONING.md"
   - "FCVW/framework-releases/V0.13.0.md"
   - "FCVW/skills/release-checklist/SKILL.md"
 ---

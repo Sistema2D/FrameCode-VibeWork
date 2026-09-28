@@ -23,7 +23,7 @@ from pathlib import Path
 
 from fcvw_cache import frontmatter as cache_frontmatter
 from frontmatter_fcvw import scalar
-from release_layout_fcvw import ROOT_BRIDGES
+from release_layout_fcvw import ROOT_BRIDGES, is_installed_release_layout
 from path_policy_fcvw import DISPOSABLE_PARTS
 
 MANIFEST_SCHEMA = "fcvw/role-manifest@1"
@@ -88,10 +88,7 @@ def governed_files(root: Path) -> list[Path]:
 # language variants; frontmatter stays authoritative wherever it exists.
 INFERRED_ROLES = (
     ("FCVW/governance/", "template", "framework", "replace"),
-    ("FCVW/wiki/templates/", "template", "framework", "replace"),
     ("FCVW/skills/", "framework_skill", "framework", "replace"),
-    ("FCVW/refactoring-guide/", "framework_policy", "framework", "replace"),
-    ("FCVW/examples/", "example", "framework", "replace"),
     # Every framework release record is framework history by definition, whether
     # or not the individual file declares record_scope.
     ("FCVW/framework-releases/", FRAMEWORK_HISTORY_ROLE, "framework", "replace"),
@@ -191,7 +188,11 @@ def build_manifest(root: Path) -> dict[str, object]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
-    parser.add_argument("--write", action="store_true", help=f"write {MANIFEST_PATH.as_posix()}")
+    parser.add_argument(
+        "--write",
+        action="store_true",
+        help=f"write {MANIFEST_PATH.as_posix()}; refused over an installed release baseline",
+    )
     parser.add_argument("--output", help="write the manifest to an explicit path instead")
     args = parser.parse_args()
 
@@ -203,6 +204,17 @@ def main() -> int:
         target = Path(args.output) if args.output else root / MANIFEST_PATH
         if not target.is_absolute():
             target = root / target
+        # In an installed release the stored manifest is the upgrade baseline: it
+        # records the shipped digests. Rewriting it from the live tree would turn
+        # every local edit into "upstream" content and let an upgrade overwrite it.
+        if (target.resolve() == (root / MANIFEST_PATH).resolve() and target.is_file()
+                and is_installed_release_layout(root)):
+            print(
+                f"FCVW role manifest: refused to overwrite the installation baseline {MANIFEST_PATH.as_posix()}; "
+                "use --output for an inspection copy",
+                file=sys.stderr,
+            )
+            return 1
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(payload, encoding="utf-8", newline="\n")
         print(f"FCVW role manifest: files={len(manifest['files'])} output={target}")

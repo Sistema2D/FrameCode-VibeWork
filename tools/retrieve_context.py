@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Retrieve complementary FCVW context with deterministic BM25 ranking."""
+"""Retrieve complementary FCVW context with deterministic BM25 ranking.
+
+JSON output (disposable): `mandatory_paths`, `mandatory_missing` and
+`complementary_results`, whose entries carry `chunk_id`, `chunk_hash` and
+`excerpt_complete`. Structured inputs add `routing` (source, events, per-path
+reasons, section hints and warnings). Opt-in selection adds `context_selection`
+(decisions, budget, cost estimate); selected chunks stay in
+`complementary_results`. Without `--index` and `--query` only routes are resolved.
+"""
 
 from __future__ import annotations
 
@@ -277,8 +285,8 @@ def main() -> int:
     started = time.perf_counter()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
-    parser.add_argument("--index", required=True)
-    parser.add_argument("--query", required=True)
+    parser.add_argument("--index", help="context index; omit with --query to resolve mandatory routes only")
+    parser.add_argument("--query")
     parser.add_argument("--active-plan")
     parser.add_argument("--language")
     parser.add_argument("--top-k", type=int, default=8)
@@ -289,13 +297,6 @@ def main() -> int:
     parser.add_argument("--knowledge-graph")
     parser.add_argument("--relation", action="append", default=[])
     parser.add_argument("--graph-limit", type=int, default=4)
-    parser.add_argument("--adaptive-mode", choices=["disabled", "shadow", "assist"], default="disabled")
-    parser.add_argument("--adaptive-control", help="explicit reviewed external experiment control")
-    parser.add_argument("--adaptive-runtime", help="latest external run observation and persistent stop latch")
-    parser.add_argument("--adaptive-ledger", help="trusted persistent run registry required with adaptive control")
-    parser.add_argument("--adaptive-state", help="optional reviewed feedback state; never loaded by default")
-    parser.add_argument("--adaptive-hops", type=int, choices=range(4), default=2)
-    parser.add_argument("--optional-token-budget", type=int, default=2000)
     parser.add_argument("--session", action="append", default=[])
     parser.add_argument("--event", action="append", default=[])
     parser.add_argument("--changed-file", action="append", default=[])
@@ -307,16 +308,15 @@ def main() -> int:
     parser.add_argument("--trace-run-id", help="shared run ID required with --trace")
     parser.add_argument("--context-budget", type=int, help="opt in to complete-chunk selection with an estimated JSON token budget")
     parser.add_argument("--max-chunks-per-file", type=int, default=2)
-    parser.add_argument("--candidate-k", type=int, default=20, help="eligible pool for selection and shadow, bounded at 20")
+    parser.add_argument("--candidate-k", type=int, default=20, help="eligible pool for selection, bounded at 20")
     args = parser.parse_args()
     if bool(args.trace) != bool(args.trace_run_id):
         parser.error("--trace and --trace-run-id must be used together")
-    if (args.adaptive_runtime or args.adaptive_state) and not args.adaptive_control:
-        parser.error("adaptive runtime/state requires --adaptive-control")
-    if args.adaptive_control and not args.adaptive_ledger:
-        parser.error("adaptive control requires --adaptive-ledger")
-    if args.adaptive_ledger and not args.adaptive_control:
-        parser.error("adaptive ledger requires --adaptive-control")
+    if bool(args.index) != bool(args.query):
+        parser.error("--index and --query must be used together; omit both for routes only")
+    routes_only = not args.index
+    if routes_only and args.context_budget is not None:
+        parser.error("--context-budget requires --index and --query")
     root = Path(args.root).resolve()
     active_plan = Path(args.active_plan) if args.active_plan else None
     if active_plan and not active_plan.is_absolute():
@@ -337,8 +337,8 @@ def main() -> int:
     if args.relation and not args.knowledge_graph:
         parser.error("--relation requires --knowledge-graph")
     knowledge_graph = load_knowledge_graph(Path(args.knowledge_graph)) if args.knowledge_graph else None
-    records = load_records(Path(args.index))
-    candidates = bm25(
+    records = [] if routes_only else load_records(Path(args.index))
+    candidates = [] if routes_only else bm25(
             args.query,
             records,
             language=args.language,
@@ -370,72 +370,17 @@ def main() -> int:
             parser.error(str(error))
         result["complementary_results"] = selection.pop("results")
         result["context_selection"] = selection
-    if args.adaptive_mode == "shadow" and not args.adaptive_control:
-        from adaptive_router_fcvw import shadow_route, structural_graph
-
-        try:
-            result["adaptive_shadow"] = shadow_route(
-                structural_graph(root), candidates, mandatory,
-                hops=args.adaptive_hops, budget=args.optional_token_budget,
-                top_k=min(max(args.top_k, 0), MAX_TOP_K),
-            )
-        except (OSError, ValueError) as error:
-            result["adaptive_shadow"] = {"mode": "shadow", "status": "fallback",
-                                         "reason": str(error), "baseline_preserved": True}
-    if args.adaptive_control or args.adaptive_mode == "assist":
-        from adaptive_learning_fcvw import select
-        from check_fcvw import snapshot
-        from loop_contract_fcvw import read_json, require
-        import hashlib
-
-        decision = {"status": "fallback", "execution_blocked": True, "baseline_preserved": True}
-        try:
-            require(args.adaptive_control and args.adaptive_runtime, "assist requires explicit control and runtime")
-            require(not mandatory_missing, "mandatory files missing")
-            config = read_json(Path(args.adaptive_control))
-            current = read_json(Path(args.adaptive_runtime))
-            from adaptive_runtime_ledger_fcvw import verify_latest
-            verify_latest(Path(args.adaptive_ledger), root, config, current)
-            state = None
-            state_error = None
-            if args.adaptive_state:
-                try:
-                    state = read_json(Path(args.adaptive_state))
-                except (ValueError, OSError, RecursionError) as error:
-                    state_error = str(error)
-            by_id = {r.get("chunk_id"): r for r in records}
-            complete = [{**r, "excerpt": by_id[r["chunk_id"]]["content"], "excerpt_complete": True} for r in candidates]
-            decision = select(config, current, complete, mandatory, root=root,
-                              source_digest=snapshot(root)["tree_sha256"],
-                              index_digest=hashlib.sha256(Path(args.index).read_bytes()).hexdigest(),
-                              mode=args.adaptive_mode, state=state, top_k=min(max(args.top_k, 0), MAX_TOP_K),
-                              per_file=args.max_chunks_per_file, budget=args.context_budget)
-            if state_error and not decision["execution_blocked"] and args.adaptive_mode != "disabled":
-                decision.update(status="fallback", reason="state unavailable: " + state_error,
-                                baseline_preserved=True, results=None)
-            chosen = decision.pop("results", None)
-            if decision["status"] == "active":
-                result["complementary_results"] = chosen
-                result["context_selection"] = {k:v for k,v in decision["selection"].items() if k != "results"}
-            if "selection" in decision:
-                decision["selection"].pop("results", None)
-        except (ValueError, OSError, KeyError, TypeError, RecursionError) as error:
-            decision["reason"] = str(error)
-        result["adaptive_experiment"] = decision
     if args.trace:
         from trace_fcvw import append
         import hashlib
-        experiment = result.get('adaptive_experiment', {})
         append(Path(args.trace), root, run_id=args.trace_run_id, component='retrieval',
-               status='blocked' if mandatory_missing or experiment.get('execution_blocked') else 'pass',
-               reason='mandatory_missing' if mandatory_missing else
-                      'adaptive_decision' if experiment else 'lexical_selection',
-               input_digest=hashlib.sha256(Path(args.index).read_bytes()).hexdigest(),
+               status='blocked' if mandatory_missing else 'pass',
+               reason='mandatory_missing' if mandatory_missing else 'lexical_selection',
+               input_digest=None if routes_only else hashlib.sha256(Path(args.index).read_bytes()).hexdigest(),
                duration_ms=round((time.perf_counter()-started)*1000),
-               protected=[Path(p) for p in (args.index, args.knowledge_graph, args.adaptive_control,
-                                             args.adaptive_runtime, args.adaptive_state, args.adaptive_ledger) if p])
+               protected=[Path(p) for p in (args.index, args.knowledge_graph) if p])
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 1 if mandatory_missing or result.get("adaptive_experiment", {}).get("execution_blocked") else 0
+    return 1 if mandatory_missing else 0
 
 
 if __name__ == "__main__":

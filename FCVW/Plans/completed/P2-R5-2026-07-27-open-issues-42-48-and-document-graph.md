@@ -24,8 +24,6 @@ context_files:
   - "FCVW/AUDIT.md"
   - "FCVW/AI.md"
   - "FCVW/RELEASE.md"
-  - "FCVW/VERSIONING.md"
-  - "FCVW/FILESYSTEM.md"
 ---
 
 # Implement open issues 42-48 and document-graph integrity

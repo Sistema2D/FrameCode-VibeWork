@@ -16,7 +16,6 @@ context_files:
   - "README.md"
   - "FCVW/PLANNING.md"
   - "FCVW/REGRESSION_GUARDS.md"
-  - "FCVW/VERSIONING.md"
   - "FCVW/RELEASE.md"
   - "FCVW/framework-releases/V0.13.1.md"
 ---

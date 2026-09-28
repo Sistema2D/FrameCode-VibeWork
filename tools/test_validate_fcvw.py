@@ -3,10 +3,15 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import os
+import subprocess
+import sys
 import tempfile
 import unittest
+from unittest import mock
 from datetime import date
 from pathlib import Path
 
@@ -19,6 +24,7 @@ from validate_fcvw import (
     Finding,
     apply_legacy_baseline,
     changed_markdown_since,
+    scoped_findings,
     load_legacy_baseline,
     validate_automation,
     validate_character_integrity,
@@ -36,6 +42,8 @@ from validate_fcvw import (
     validate_reading_routes,
     validate_version,
     validate_wiki_ids,
+    validate_troubleshooting_records,
+    validate_adr_records,
     validate_skills,
 )
 
@@ -191,6 +199,22 @@ context_files:
         self.assertIn("FCVW/audits/application.md", contaminated)
         self.assertIn("FCVW/wiki/application.md", contaminated)
 
+    def test_clean_profile_rejects_readme_only_scaffold_directories(self) -> None:
+        temporary, root = self.make_root()
+        self.addCleanup(temporary.cleanup)
+        (root / "FCVW" / "audits").mkdir()
+        (root / "FCVW" / "audits" / "README.md").write_text("# Audits\n", encoding="utf-8")
+        (root / "FCVW" / "empty").mkdir()
+        (root / "FCVW" / "placeholder").mkdir()
+        (root / "FCVW" / "placeholder" / ".gitkeep").write_text("", encoding="utf-8")
+        (root / "FCVW" / "wiki").mkdir()
+        (root / "FCVW" / "wiki" / "README.md").write_text("# Wiki\n", encoding="utf-8")
+        (root / "FCVW" / "wiki" / "index.md").write_text("# Index\n", encoding="utf-8")
+        findings: list[Finding] = []
+        validate_clean_template(root, findings)
+        scaffold = {item.path for item in findings if item.rule == "clean-scaffold-directory"}
+        self.assertEqual({"FCVW/audits", "FCVW/placeholder"}, scaffold)
+
     def test_incomplete_skill_body_fails_contract(self) -> None:
         temporary, root = self.make_root()
         self.addCleanup(temporary.cleanup)
@@ -288,6 +312,20 @@ upgrade_strategy: "replace"
         findings: list[Finding] = []
         validate_reading_routes(root, findings)
         self.assertTrue(any(item.rule == "framework-index" for item in findings))
+
+    def test_policy_name_inside_a_longer_name_is_not_indexed(self) -> None:
+        temporary, root = self.make_route_root()
+        self.addCleanup(temporary.cleanup)
+        (root / "FCVW" / "README.md").write_text("# Index\n\n[XAI](XAI.md)\n", encoding="utf-8")
+        (root / "AGENTS.md").write_text("# Agents\n\nSee `XAI.md`.\n", encoding="utf-8")
+        (root / "FCVW" / "AI.md").write_text(
+            '---\nschema: "fcvw/document@1"\nartifact_role: "framework_policy"\n---\n# AI\n', encoding="utf-8"
+        )
+        findings: list[Finding] = []
+        validate_reading_routes(root, findings)
+        flagged = {(item.rule, item.path) for item in findings}
+        self.assertIn(("framework-index", "FCVW/AI.md"), flagged)
+        self.assertIn(("reading-route", "FCVW/AI.md"), flagged)
 
     def test_exact_legacy_baseline_accepts_matching_finding(self) -> None:
         entry = BaselineEntry(
@@ -564,6 +602,10 @@ class CharacterIntegrityTests(unittest.TestCase):
         self.assertEqual([], [item for item in findings if "damaged dash" in item.message])
 
 
+    def test_inline_code_is_not_scanned_for_dashes(self) -> None:
+        findings = self.findings_for("# Title\n\nUse `ready ? publish : wait` here.\n")
+        self.assertEqual([], [item for item in findings if "damaged dash" in item.message])
+
 class LanguageReviewTests(unittest.TestCase):
     """The record that authorises a language asset must name that language."""
 
@@ -773,8 +815,132 @@ class UpgradePlanTests(unittest.TestCase):
             )
         return base / "installed", base / "release"
 
+    def write_baseline(self, installed: Path) -> None:
+        (installed / "FCVW" / "ROLE_MANIFEST.json").write_text(
+            json.dumps(role_manifest_fcvw.build_manifest(installed)), encoding="utf-8"
+        )
+
+    def edit(self, root: Path, relative: str, heading: str) -> None:
+        (root / relative).write_text(
+            '---\nschema: "fcvw/document@1"\nartifact_role: "framework_policy"\n'
+            f'owner: "framework"\nupgrade_strategy: "replace"\n---\n\n# {heading}\n',
+            encoding="utf-8",
+        )
+
+    def test_missing_baseline_never_treats_a_divergent_policy_as_safe(self) -> None:
+        # Regression: without a stored manifest the live tree used to become its
+        # own baseline, so a local edit was reported as "safe to replace".
+        installed, release = self.make_pair()
+        self.edit(installed, "FCVW/PLANNING.md", "Planning, edited locally")
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        actions = {a.path: a for a in upgrade_fcvw.plan_upgrade(installed, release)}
+        self.assertEqual("conflict", actions["FCVW/PLANNING.md"].verdict)
+        self.assertIn("no installation baseline", actions["FCVW/PLANNING.md"].detail)
+
+    def test_missing_baseline_still_recognises_identical_files(self) -> None:
+        installed, release = self.make_pair()
+        actions = {a.path: a for a in upgrade_fcvw.plan_upgrade(installed, release)}
+        self.assertEqual("unchanged", actions["FCVW/PLANNING.md"].verdict)
+
+    def test_unreadable_baseline_falls_back_to_the_safe_mode(self) -> None:
+        installed, release = self.make_pair()
+        (installed / "FCVW" / "ROLE_MANIFEST.json").write_text("{not json", encoding="utf-8")
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        actions = {a.path: a for a in upgrade_fcvw.plan_upgrade(installed, release)}
+        self.assertEqual("conflict", actions["FCVW/PLANNING.md"].verdict)
+
+    def test_apply_records_the_release_as_the_next_baseline(self) -> None:
+        installed, release = self.make_pair()
+        self.write_baseline(installed)
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        upgrade_fcvw.apply_upgrade(installed, release, upgrade_fcvw.plan_upgrade(installed, release), False)
+        stored = json.loads((installed / "FCVW" / "ROLE_MANIFEST.json").read_text(encoding="utf-8"))
+        digests = {item["path"]: item["digest"] for item in stored["files"]}
+        self.assertEqual(role_manifest_fcvw.digest(release / "FCVW" / "PLANNING.md"), digests["FCVW/PLANNING.md"])
+        again = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual([], [a.path for a in again if a.verdict in {"conflict", "replace"}])
+
+    def test_accepted_conflict_never_overwrites_an_earlier_backup(self) -> None:
+        installed, release = self.make_pair()
+        self.write_baseline(installed)
+        self.edit(installed, "FCVW/PLANNING.md", "Planning, edited locally")
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        backup = installed / "FCVW" / "PLANNING.md.local"
+        backup.write_text("earlier customisation", encoding="utf-8")
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        with self.assertRaisesRegex(ValueError, "backups would be overwritten"):
+            upgrade_fcvw.apply_upgrade(installed, release, actions, accept_conflicts=True)
+        self.assertEqual("earlier customisation", backup.read_text(encoding="utf-8"))
+        self.assertIn("edited locally", (installed / "FCVW" / "PLANNING.md").read_text(encoding="utf-8"))
+
+    def test_json_report_states_what_was_applied(self) -> None:
+        installed, release = self.make_pair()
+        self.write_baseline(installed)
+        self.edit(release, "FCVW/PLANNING.md", "Planning v2")
+        output = io.StringIO()
+        argv = ["upgrade_fcvw.py", "--root", str(installed), "--release", str(release), "--apply", "--format", "json"]
+        with mock.patch.object(sys, "argv", argv), contextlib.redirect_stdout(output):
+            self.assertEqual(0, upgrade_fcvw.main())
+        report = json.loads(output.getvalue())
+        self.assertTrue(report["applied"])
+        self.assertEqual(1, report["files_applied"])
+        self.assertEqual("installed_manifest", report["baseline"])
+
+    def test_installed_baseline_cannot_be_regenerated_in_place(self) -> None:
+        installed, _ = self.make_pair()
+        (installed / "FCVW" / "tools").mkdir()
+        (installed / "FCVW" / "tools" / "validate_fcvw.py").write_text("", encoding="utf-8")
+        self.write_baseline(installed)
+        before = (installed / "FCVW" / "ROLE_MANIFEST.json").read_text(encoding="utf-8")
+        self.edit(installed, "FCVW/PLANNING.md", "Planning, edited locally")
+        argv = ["role_manifest_fcvw.py", "--root", str(installed), "--write"]
+        with mock.patch.object(sys, "argv", argv), contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(1, role_manifest_fcvw.main())
+        self.assertEqual(before, (installed / "FCVW" / "ROLE_MANIFEST.json").read_text(encoding="utf-8"))
+
+    def dropped_pair(self) -> tuple[Path, Path, Path]:
+        installed, release = self.make_pair()
+        for root in (installed, release):
+            (root / "FCVW" / "wiki" / "concepts").mkdir(parents=True)
+            (root / "FCVW" / "wiki" / "concepts" / "README.md").write_text("# Concepts\n", encoding="utf-8")
+        self.write_baseline(installed)
+        (release / "FCVW" / "wiki" / "concepts" / "README.md").unlink()
+        return installed, release, installed / "FCVW" / "wiki" / "concepts" / "README.md"
+
+    def test_prune_removes_only_unmodified_dropped_framework_files(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual("obsolete", {a.path: a for a in actions}["FCVW/wiki/concepts/README.md"].verdict)
+        upgrade_fcvw.apply_upgrade(installed, release, actions, False, prune=True)
+        self.assertFalse(dropped.exists())
+        self.assertFalse(dropped.parent.exists())
+        self.assertTrue((installed / "FCVW" / "SCOPE.md").exists())
+
+    def test_prune_keeps_locally_modified_dropped_files(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        dropped.write_text("# Concepts, curated by the project\n", encoding="utf-8")
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual("review", {a.path: a for a in actions}["FCVW/wiki/concepts/README.md"].verdict)
+        upgrade_fcvw.apply_upgrade(installed, release, actions, False, prune=True)
+        self.assertTrue(dropped.exists())
+
+    def test_unpruned_obsolete_file_can_be_pruned_later(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        upgrade_fcvw.apply_upgrade(installed, release, upgrade_fcvw.plan_upgrade(installed, release), False)
+        self.assertTrue(dropped.exists())
+        again = upgrade_fcvw.plan_upgrade(installed, release)
+        self.assertEqual("obsolete", {a.path: a for a in again}["FCVW/wiki/concepts/README.md"].verdict)
+
+    def test_nothing_is_pruned_without_a_baseline(self) -> None:
+        installed, release, dropped = self.dropped_pair()
+        (installed / "FCVW" / "ROLE_MANIFEST.json").unlink()
+        actions = upgrade_fcvw.plan_upgrade(installed, release)
+        upgrade_fcvw.apply_upgrade(installed, release, actions, False, prune=True)
+        self.assertTrue(dropped.exists())
+
     def test_untouched_policy_is_safe_to_replace(self) -> None:
         installed, release = self.make_pair()
+        self.write_baseline(installed)
         (release / "FCVW" / "PLANNING.md").write_text(
             '---\nschema: "fcvw/document@1"\nartifact_role: "framework_policy"\n'
             'owner: "framework"\nupgrade_strategy: "replace"\n---\n\n# Planning v2\n',
@@ -992,6 +1158,12 @@ Exits when the block is recorded.
     def test_skill_absent_from_the_catalog_is_reported(self) -> None:
         self.assertIn("skill-catalog", self.rules(self.root(catalog="# Catalog\n\nNothing listed.\n")))
 
+    def test_catalog_prose_or_longer_name_does_not_list_a_skill(self) -> None:
+        # B-04: substring matching accepted any prose mention or a longer name.
+        self.assertIn("skill-catalog", self.rules(self.root(name="qa", catalog="# Catalog\n\nRun qa checks.\n")))
+        self.assertIn("skill-catalog", self.rules(self.root(name="qa", catalog="# Catalog\n\n| `qa-extended` | x |\n")))
+        self.assertNotIn("skill-catalog", self.rules(self.root(name="qa", catalog="# Catalog\n\n| [`qa`](qa/SKILL.md) | x |\n")))
+
     def test_provider_specific_term_is_reported(self) -> None:
         body = self.SKILL.format(name="fixture-skill").replace("Bounded.", "Run the claude code command.")
         rules = self.rules(self.root(body=body))
@@ -1048,14 +1220,21 @@ class RegressionSurfaceTests(unittest.TestCase):
     """The regression contract must stay reachable from every surface that cites it."""
 
     def test_intact_surfaces_pass(self) -> None:
+        from release_layout_fcvw import governed_root
+
+        findings: list[Finding] = []
+        validate_regression_surfaces(governed_root(Path(__file__)), findings)
+        self.assertEqual([], findings)
+
+    def test_missing_surface_is_reported(self) -> None:
+        # Regression (B-03): a deleted surface used to skip its own check.
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
         (root / "FCVW").mkdir(parents=True, exist_ok=True)
-        (root / "FCVW" / "REGRESSION_GUARDS.md").write_text("# Regression guardrails\n", encoding="utf-8")
         findings: list[Finding] = []
         validate_regression_surfaces(root, findings)
-        self.assertEqual([], findings)
+        self.assertIn("FCVW/AUTOMATION.md", {item.path for item in findings if item.message == "regression surface is missing"})
 
     def test_missing_marker_is_reported(self) -> None:
         temporary = tempfile.TemporaryDirectory()
@@ -1107,7 +1286,7 @@ instantiation_status: "{status}"
 `<placeholder>`
 """
 
-    def rules(self, status: str, extra: str = "", name: str = "DESIGN.md") -> list[Finding]:
+    def rules(self, status: str, extra: str = "", name: str = "SECURITY.md") -> list[Finding]:
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
@@ -1135,12 +1314,51 @@ instantiation_status: "{status}"
 
     def test_identity_and_scope_cannot_be_waived(self) -> None:
         reason = "This product has no user interface at this stage of the roadmap."
-        for profile in ("MANIFEST.md", "SCOPE.md"):
-            with self.subTest(profile=profile):
-                findings = self.rules(
-                    "not_applicable", extra=f'not_applicable_reason: "{reason}"\n', name=profile
-                )
-                self.assertTrue(any("cannot be waived" in item.message for item in findings))
+        findings = self.rules("not_applicable", extra=f'not_applicable_reason: "{reason}"\n', name="PROJECT.md")
+        self.assertTrue(any("cannot be waived" in item.message for item in findings))
+        section = self.project(["Identity and scope"], reason)
+        self.assertTrue(any("cannot be waived" in item.message for item in section))
+
+    def project(self, waived: list[str], reason: str, placeholder_in: str = "Performance") -> list[Finding]:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW").mkdir(parents=True, exist_ok=True)
+        for profile in PROJECT_PROFILES:
+            body = self.PROFILE.format(status="complete", extra="").replace("`<placeholder>`", "Filled in.")
+            (root / "FCVW" / profile).write_text(body, encoding="utf-8")
+        listed = "".join(f'  - "{title}"\n' for title in waived)
+        sections = {"Identity and scope": "Filled in.", "Stack": "Filled in.", "Performance": "Filled in."}
+        sections[placeholder_in] = "`<budget>`"
+        (root / "FCVW" / "PROJECT.md").write_text(
+            '---\nschema: "fcvw/project@1"\nartifact_role: "project_profile"\nowner: "project"\n'
+            'upgrade_strategy: "preserve"\ninstantiation_status: "complete"\n'
+            f'not_applicable_sections:\n{listed}not_applicable_reason: "{reason}"\n---\n\n# Project\n\n'
+            + "".join(f"## {title}\n\n{text}\n\n" for title, text in sections.items()),
+            encoding="utf-8",
+        )
+        findings: list[Finding] = []
+        validate_profiles(root, "instantiated", findings)
+        return findings
+
+    def test_waived_project_section_may_keep_placeholders(self) -> None:
+        reason = "The product is an internal batch job with no latency budget yet."
+        self.assertEqual([], self.project(["Performance"], reason))
+
+    def test_placeholder_in_a_section_that_was_not_waived_fails(self) -> None:
+        reason = "The product is an internal batch job with no latency budget yet."
+        rules = {item.rule for item in self.project(["Stack"], reason)}
+        self.assertIn("placeholder", rules)
+
+    def test_waived_section_needs_a_reason_and_must_exist(self) -> None:
+        messages = [item.message for item in self.project(["Performance", "Mobile"], "short")]
+        self.assertTrue(any("not_applicable_reason" in message for message in messages))
+        self.assertTrue(any("names no section" in message for message in messages))
+
+    def test_legacy_profile_is_still_validated_and_flagged(self) -> None:
+        findings = self.rules("pending", name="STACK.md")
+        self.assertIn("profile-legacy", {item.rule for item in findings})
+        self.assertTrue(any(item.path == "FCVW/STACK.md" and item.rule == "instantiation" for item in findings))
 
     def test_uncontrolled_status_is_reported(self) -> None:
         rules = {item.rule for item in self.rules("halfway")}
@@ -1220,7 +1438,7 @@ class RemainingRuleTests(unittest.TestCase):
         self.assertTrue(any(item.rule == "reading-route" for item in findings))
 
     def test_policy_listed_in_the_index_has_a_route(self) -> None:
-        root = self.route_root("# Index\n\nCONTEXT_MAP.md and ORPHANED.md\n")
+        root = self.route_root("# Index\n\n`CONTEXT_MAP.md` and [orphaned](ORPHANED.md)\n")
         findings: list[Finding] = []
         validate_reading_routes(root, findings)
         self.assertEqual([], [item for item in findings if item.rule == "reading-route"])
@@ -1530,3 +1748,365 @@ State the blocker vocabulary once, in `SCHEMAS.md`, and link to it.
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PhaseOneIntegrityTests(unittest.TestCase):
+    """Regressions fixed in V0.19.1; each test fails on the V0.19.0 validator."""
+
+    def plans_root(self) -> Path:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        for state in ("pending", "in_progress", "completed", "discontinued"):
+            (root / "FCVW" / "Plans" / state).mkdir(parents=True, exist_ok=True)
+        return root
+
+    def legacy_plan(self, root: Path, state: str) -> None:
+        plan_id = "P1-R5-2026-09-28-legacy-bypass"
+        (root / "FCVW" / "Plans" / state / f"{plan_id}.md").write_text(
+            f'---\nschema: "fcvw/plan@1"\nid: "{plan_id}"\nstatus: "{state}"\npriority: "P1"\nrisk: "R5"\n'
+            'created_at: "2026-09-28"\nupdated_at: "2026-09-28"\ncurrent_version: "V1"\n'
+            'expected_version: "V2"\nowner: "test"\ncontext_files:\n  - "FCVW/SECURITY.md"\n---\n\n# Remove auth\n',
+            encoding="utf-8",
+        )
+
+    def test_active_legacy_plan_cannot_bypass_the_regression_contract(self) -> None:
+        for state in ("pending", "in_progress"):
+            root = self.plans_root()
+            self.legacy_plan(root, state)
+            findings: list[Finding] = []
+            validate_plans(root, findings)
+            self.assertTrue(any("legacy history only" in item.message for item in findings), state)
+
+    def test_historical_legacy_plan_remains_readable(self) -> None:
+        root = self.plans_root()
+        self.legacy_plan(root, "completed")
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertEqual([], [item for item in findings if "legacy history only" in item.message])
+
+    def test_prose_mentioning_pending_does_not_block_completion(self) -> None:
+        root = self.plans_root()
+        body = VALID_REGRESSION.replace(
+            "- None.", "- Queue entries under Plans/pending/ were checked; no pending items remain."
+        )
+        ValidatorRegressionTests.write_plan(self, root, body)
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertEqual([], [item for item in findings if "pending regression" in item.message])
+
+    def test_pending_result_value_still_blocks_completion(self) -> None:
+        root = self.plans_root()
+        body = VALID_REGRESSION.replace("- None.", "- Result: pending")
+        ValidatorRegressionTests.write_plan(self, root, body)
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertTrue(any("pending regression" in item.message for item in findings))
+
+    def test_localized_aliases_survive_for_compact_sections(self) -> None:
+        # Duplicate dictionary keys used to drop "plano de validacao" and "zuruckrollen".
+        content = COMPACT_PLAN.replace("## Validation", "## Plano de validação").replace(
+            "## Rollback", "## Zurückrollen"
+        )
+        root = self.plans_root()
+        (root / "FCVW" / "Plans" / "pending" / "P4-R1-2026-08-28-compact-fixture.md").write_text(content, encoding="utf-8")
+        findings: list[Finding] = []
+        validate_plans(root, findings)
+        self.assertEqual([], [item for item in findings if item.rule in {"plan-compact", "plan-rollback"}])
+
+    def test_troubleshooting_record_without_schema_is_reported(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW" / "troubleshooting").mkdir(parents=True)
+        (root / "FCVW" / "troubleshooting" / "2026-09-28-unstructured.md").write_text(
+            "---\ntitle: x\n---\n# Notes\n", encoding="utf-8"
+        )
+        findings: list[Finding] = []
+        validate_troubleshooting_records(root, findings)
+        self.assertTrue(any(item.rule == "troubleshooting-schema" for item in findings))
+
+    def test_scoped_run_keeps_cross_file_findings_from_unchanged_files(self) -> None:
+        findings = [
+            Finding("document-link", "FCVW/UNCHANGED.md", "missing Markdown target: GONE.md"),
+            Finding("plan-queue-stale", "FCVW/Plans/pending/QUEUE.md", "stale"),
+            Finding("frontmatter-relationship", "FCVW/Plans/completed/X.md", "target is missing"),
+            Finding("markdown-fence", "FCVW/UNCHANGED.md", "unclosed Markdown fence"),
+        ]
+        kept = {item.rule for item in scoped_findings(findings, {"FCVW/GONE.md"})}
+        self.assertEqual({"document-link", "plan-queue-stale", "frontmatter-relationship"}, kept)
+
+    def test_scope_includes_untracked_markdown(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        git = ["git", "-c", "user.name=t", "-c", "user.email=t@example.test", "-c", "commit.gpgsign=false"]
+        try:
+            subprocess.run(["git", "init", "-q", str(root)], check=True, capture_output=True)
+            (root / "FCVW").mkdir()
+            (root / "FCVW" / "OLD.md").write_text("# Old\n", encoding="utf-8")
+            subprocess.run([*git, "-C", str(root), "add", "."], check=True, capture_output=True)
+            subprocess.run([*git, "-C", str(root), "commit", "-qm", "base"], check=True, capture_output=True)
+        except (OSError, subprocess.CalledProcessError) as error:
+            self.skipTest(f"git unavailable: {error}")
+        (root / "FCVW" / "NEW.md").write_text("# New\n", encoding="utf-8")
+        changed, error = changed_markdown_since(root, "HEAD")
+        self.assertIsNone(error)
+        self.assertIn("FCVW/NEW.md", changed)
+
+
+class StaticIntegrityTests(unittest.TestCase):
+    """Standard-library static checks; no linter dependency (ADR-0001)."""
+
+    def test_no_duplicate_constant_keys_in_dictionary_literals(self) -> None:
+        import ast
+
+        duplicates = []
+        for path in sorted(Path(__file__).resolve().parent.glob("*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Dict):
+                    continue
+                keys = [key.value for key in node.keys if isinstance(key, ast.Constant)]
+                repeated = sorted({repr(key) for key in keys if keys.count(key) > 1})
+                if repeated:
+                    duplicates.append(f"{path.name}:{node.lineno} {', '.join(repeated)}")
+        self.assertEqual([], duplicates)
+
+    RULE_PATTERNS = (
+        r"""(?:Finding|GraphFinding|QueueFinding|LocaleFinding|KnowledgeFinding|_finding|finding)\(\s*["']([a-z][a-z0-9-]+)["']""",
+        r"""rule\s*=\s*["']([a-z][a-z0-9-]+)["']""",
+        r"""["']rule["']\s*:\s*["']([a-z][a-z0-9-]+)["']""",
+    )
+    # Frozen before the V0.20.0 file reduction. Removing a rule, or silently
+    # losing one while files are merged, must change this set deliberately and
+    # be justified in the plan that does it.
+    FROZEN_RULES = {
+        "adr-schema",
+        "app-rules-contract",
+        "app-rules-empty",
+        "app-rules-id",
+        "app-rules-ownership",
+        "app-rules-schema",
+        "app-rules-status",
+        "application-release",
+        "audit-schema",
+        "automation-contract",
+        "baseline-config",
+        "baseline-expired",
+        "baseline-stale",
+        "canonical-metadata",
+        "character-integrity",
+        "clean-contamination",
+        "clean-scaffold-directory",
+        "document-catalog-stale",
+        "document-heading-syntax",
+        "document-link",
+        "document-link-outside-root",
+        "document-link-syntax",
+        "document-orphan",
+        "document-orphan-exception",
+        "document-self-only",
+        "document-source-link",
+        "document-task-list-syntax",
+        "document-unreachable",
+        "duplicate-id",
+        "feedback-note",
+        "framework-index",
+        "framework-release",
+        "framework-version",
+        "frontmatter",
+        "frontmatter-date",
+        "frontmatter-list",
+        "frontmatter-ownership",
+        "frontmatter-relationship",
+        "frontmatter-retrieval",
+        "frontmatter-role",
+        "frontmatter-upgrade",
+        "instantiation",
+        "knowledge-maturity",
+        "knowledge-relation",
+        "knowledge-relation-conflict",
+        "knowledge-relation-cycle",
+        "knowledge-relation-redundant-inverse",
+        "knowledge-relation-self",
+        "knowledge-relation-target",
+        "knowledge-review-candidate",
+        "knowledge-review-due",
+        "knowledge-source",
+        "knowledge-source-stale",
+        "language-review",
+        "locale-clean-template",
+        "locale-language-metadata",
+        "locale-machine-parity",
+        "locale-markdown-structure",
+        "locale-missing",
+        "locale-package-state",
+        "locale-parity",
+        "locale-required-path",
+        "locale-review",
+        "locale-schema-parity",
+        "locale-source-baseline",
+        "locale-source-parity",
+        "locale-source-revision",
+        "markdown-fence",
+        "markdown-link",
+        "markdown-link-absolute",
+        "ownership",
+        "placeholder",
+        "profile-legacy",
+        "plan-compact",
+        "plan-dependency-completion",
+        "plan-dependency-cycle",
+        "plan-dependency-evidence",
+        "plan-dependency-schema",
+        "plan-filename",
+        "plan-id",
+        "plan-priority",
+        "plan-queue-blocker",
+        "plan-queue-category",
+        "plan-queue-legacy",
+        "plan-queue-override",
+        "plan-regression",
+        "plan-risk",
+        "plan-risk-binding",
+        "plan-rollback",
+        "plan-schema",
+        "plan-state",
+        "project-profile",
+        "provider-neutrality",
+        "reading-route",
+        "regression-schema",
+        "regression-surface",
+        "required-path",
+        "scope-config",
+        "skill-catalog",
+        "skill-contract",
+        "skill-metadata",
+        "skill-name",
+        "skill-schema",
+        "troubleshooting-schema",
+        "version-namespace",
+        "wiki-id",
+        "wiki-schema",
+    }
+
+    def emitted_rules(self) -> set[str]:
+        import re
+
+        tools = Path(__file__).resolve().parent
+        source = "".join(
+            path.read_text(encoding="utf-8") for path in sorted(tools.glob("*.py")) if not path.name.startswith("test_")
+        )
+        return {rule for pattern in self.RULE_PATTERNS for rule in re.findall(pattern, source)}
+
+    def test_rule_inventory_is_frozen(self) -> None:
+        emitted = self.emitted_rules()
+        self.assertEqual(set(), self.FROZEN_RULES - emitted, "rules removed without updating the inventory")
+        self.assertEqual(set(), emitted - self.FROZEN_RULES, "new rules must be added to the inventory")
+
+
+class SurfaceGuardTests(unittest.TestCase):
+    """Guards against the framework surface growing back (TODO J-G2, J-G3)."""
+
+    # Non-record FCVW surface after the V0.20.0 reduction. Growth above the
+    # tolerance must update this baseline in a plan that answers PLANNING.md's
+    # "What is removed in exchange?".
+    SURFACE_BASELINE = {"files": 65, "directories": 21, "bytes": 455_000}
+    SURFACE_TOLERANCE = 1.05
+
+    def source_root(self) -> Path:
+        from release_layout_fcvw import governed_root, is_installed_release_layout
+
+        root = governed_root(Path(__file__))
+        if is_installed_release_layout(root):
+            self.skipTest("surface budget applies to the framework source checkout")
+        return root
+
+    def test_framework_surface_stays_within_budget(self) -> None:
+        from document_graph_fcvw import in_record_directory
+
+        root = self.source_root()
+        core = [
+            path
+            for path in (root / "FCVW").rglob("*")
+            if path.is_file()
+            and not {"__pycache__", ".fcvw-cache"} & set(path.parts)
+            and not in_record_directory(path.relative_to(root).as_posix())
+        ]
+        measured = {
+            "files": len(core),
+            "directories": len({path.parent for path in core}),
+            "bytes": sum(path.stat().st_size for path in core),
+        }
+        for key, baseline in self.SURFACE_BASELINE.items():
+            self.assertLessEqual(measured[key], int(baseline * self.SURFACE_TOLERANCE), f"{key}: {measured}")
+
+    def test_each_template_envelope_is_registered_and_unique(self) -> None:
+        import re
+
+        root = self.source_root()
+        schemas_text = (root / "FCVW" / "SCHEMAS.md").read_text(encoding="utf-8")
+        owners: dict[tuple[str, str], set[str]] = {}
+        for path in sorted((root / "FCVW").rglob("TEMPLATE_*.md")):
+            text = path.read_text(encoding="utf-8")
+            for block in re.findall(r"^---\n(.*?)^---$", text, re.MULTILINE | re.DOTALL):
+                schema = re.search(r'^schema:\s*"([^"]+)"', block, re.MULTILINE)
+                if not schema:
+                    continue
+                kind = re.search(r'^type:\s*"([^"]+)"', block, re.MULTILINE)
+                key = (schema.group(1), kind.group(1) if kind else "")
+                owners.setdefault(key, set()).add(path.relative_to(root).as_posix())
+        self.assertTrue(owners)
+        duplicated = {key: paths for key, paths in owners.items() if len(paths) > 1}
+        self.assertEqual({}, duplicated, "one envelope per schema and type; reuse it instead of copying")
+        unregistered = sorted({schema for schema, _ in owners if f"`{schema}`" not in schemas_text})
+        self.assertEqual([], unregistered, "template schemas must be registered in SCHEMAS.md")
+
+
+class AdrRecordTests(unittest.TestCase):
+    """B-10: ADR identity and lifecycle are validated."""
+
+    GOOD = (
+        '---\nschema: "fcvw/adr@1"\nid: "ADR-0042"\nstatus: "{status}"\ndate: "2026-09-28"\n'
+        'artifact_role: "record"\nrecord_scope: "application"\n{extra}---\n\n{title}\n\n## Context\n\nText.\n'
+    )
+
+    def messages(self, name: str = "ADR-0042-choice.md", status: str = "accepted", extra: str = "",
+                 title: str = "# ADR-0042: Choice") -> list[str]:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW" / "decisions").mkdir(parents=True)
+        (root / "FCVW" / "decisions" / name).write_text(
+            self.GOOD.format(status=status, extra=extra, title=title), encoding="utf-8"
+        )
+        findings: list[Finding] = []
+        validate_adr_records(root, findings)
+        self.assertTrue(all(item.rule == "adr-schema" for item in findings))
+        return [item.message for item in findings]
+
+    def test_consistent_adr_passes(self) -> None:
+        self.assertEqual([], self.messages())
+
+    def test_filename_title_and_status_are_checked(self) -> None:
+        self.assertTrue(any("filename" in m for m in self.messages(name="ADR-0001-other.md")))
+        self.assertTrue(any("title" in m for m in self.messages(title="# Choice")))
+        self.assertTrue(any("invalid status" in m for m in self.messages(status="approved")))
+
+    def test_legacy_adr_without_envelope_is_a_warning(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "FCVW" / "decisions").mkdir(parents=True)
+        (root / "FCVW" / "decisions" / "ADR-0001-old.md").write_text("# ADR-0001 \u2014 Old\n", encoding="utf-8")
+        findings: list[Finding] = []
+        validate_adr_records(root, findings)
+        self.assertEqual(["warning"], [item.severity for item in findings])
+
+    def test_legacy_title_separator_is_accepted(self) -> None:
+        self.assertEqual([], self.messages(title="# ADR-0042 \u2014 Choice"))
+
+    def test_superseded_adr_names_its_replacement(self) -> None:
+        self.assertTrue(any("superseded_by" in m for m in self.messages(status="superseded")))
+        self.assertEqual([], self.messages(status="superseded", extra='superseded_by:\n  - "ADR-0043"\n'))

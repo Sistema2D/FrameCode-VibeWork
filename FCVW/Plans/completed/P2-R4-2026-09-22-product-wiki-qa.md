@@ -19,7 +19,7 @@ context_files:
   - "FCVW/AI.md"
   - "FCVW/SECURITY.md"
   - "FCVW/TESTS.md"
-  - "FCVW/wiki/schema.md"
+  - "FCVW/wiki/README.md"
   - "FCVW/skills/agent-factory/SKILL.md"
   - "FCVW/skills/self-improvement/SKILL.md"
 depends_on: []
@@ -108,7 +108,7 @@ Wiki ownership/authority, source freshness, skill activation, retrieval boundari
 
 ### Regression contracts consulted
 
-- [Application documentation](../../APPLICATION_DOCUMENTATION.md), [wiki schema](../../wiki/schema.md), [tests](../../TESTS.md), [AI](../../AI.md).
+- [Application documentation](../../APPLICATION_DOCUMENTATION.md), [wiki schema](../../wiki/README.md), [tests](../../TESTS.md), [AI](../../AI.md).
 
 ### Regression checks required
 

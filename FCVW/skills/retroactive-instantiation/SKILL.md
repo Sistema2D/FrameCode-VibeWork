@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "retroactive-instantiation"
-description: "Adopt FCVW in an existing project without overwriting history."
-version: "1.1.1"
-trigger_keywords:
-  - "retroactive instantiation"
-  - "legacy project"
-  - "migrate framework"
-  - "adoção retroativa"
+description: "Adopt FCVW in an existing project without overwriting history. Use when adding the framework to a codebase that already has code, history or documentation. Do not use for a new project (project-instantiation)."
+version: "1.1.2"
 session_types:
   - "instantiation"
   - "migration"
@@ -33,17 +28,17 @@ Use `project-instantiation` instead for blank or fresh Phase 0 projects.
 
 ## Mandatory Source of Truth
 
-Read and follow `FCVW/RETROACTIVE_INSTANTIATION.md`.
+Read and follow the retroactive mode of `FCVW/INSTANTIATION.md`.
 
 This skill is only the JIT trigger and compact checklist. Do not duplicate or override the canonical workflow.
 
 ## Inputs
 
-Existing repository and history, current application documentation, `RETROACTIVE_INSTANTIATION.md`, `OWNERSHIP.md`, framework lock and migration, project authority, and baseline build/test/deploy evidence.
+Existing repository and history, current application documentation, `INSTANTIATION.md` (retroactive mode), `OWNERSHIP.md`, framework lock and migration, project authority, and baseline build/test/deploy evidence.
 
 ## Execution Checklist
 
-1. Read `AGENTS.md`, `FCVW/RETROACTIVE_INSTANTIATION.md`, and `FCVW/CONTEXT_MAP.md`.
+1. Read `AGENTS.md`, the retroactive mode of `FCVW/INSTANTIATION.md`, and `FCVW/CONTEXT_MAP.md`.
 2. Inspect the current repository and classify it:
    - Case A: no FCVW present;
    - Case B: older FCVW present;

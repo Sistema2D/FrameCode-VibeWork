@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "agent-hermes"
-description: "Performance investigation using reproducible measurements."
-version: "1.1.1"
-trigger_keywords:
-  - "performance"
-  - "bottleneck"
-  - "optimize"
-  - "desempenho"
-  - "lentidão"
+description: "Performance investigation with reproducible measurements. Use when latency, throughput, memory or load time must be measured or improved. Do not use for code cleanup without a measured performance goal."
+version: "1.1.2"
 session_types:
   - "performance"
   - "audit"
@@ -29,10 +23,10 @@ Find and implement exactly one focused optimization that preserves behavior and 
 
 ## Mandatory Governance
 
-- Follow `AGENTS.md`, `PERFORMANCE.md`, `PLANNING.md`, and `TESTS.md`.
+- Follow `AGENTS.md`, `PROJECT.md` (performance), `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- For durable codebase-specific performance learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
+- For durable codebase-specific performance learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/` (`type: agent` notes) with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 

@@ -13,7 +13,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import quote, unquote
 
-from frontmatter_fcvw import parse_frontmatter, scalar
+from frontmatter_fcvw import parse_frontmatter, scalar, scan_fences
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
 from path_policy_fcvw import DISPOSABLE_PARTS
 
@@ -23,12 +23,32 @@ MALFORMED_MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]\n]+\]\s+\(([^)\n]+)\)")
 MALFORMED_ATX_HEADING = re.compile(r"^\s*#{1,6}[^#\s]")
 MALFORMED_TASK_ITEM = re.compile(r"^\s*[-+*]\s+\[\](?:\s|$)")
 WIKILINK = re.compile(r"(?<!!)\[\[([^\]]+)\]\]")
-FENCE = re.compile(r"^\s*(```+|~~~+)")
 EXTERNAL = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
 INLINE_CODE = re.compile(r"`[^`]*`")
 DEFAULT_ENTRYPOINTS = ("AGENTS.md", "README.md", "FCVW/README.md")
 NON_AUTHORITATIVE_RELATIONSHIPS = {"FCVW/DOCUMENT_GRAPH.md"}
 ORPHAN_EXCEPTION_FIELDS = ("orphan_reason", "orphan_owner", "orphan_review_due")
+# Records are reachable through their canonical directory (ADR-0011): a folder
+# of plans, decisions or notes is its own catalog, so no README or generated
+# catalog has to link every record. Records must still link to their source.
+RECORD_DIRECTORIES = (
+    "FCVW/Plans/",
+    "FCVW/decisions/",
+    "FCVW/audits/",
+    "FCVW/troubleshooting/",
+    "FCVW/framework-releases/",
+    "FCVW/changelogs/",
+    "FCVW/briefings/",
+    "FCVW/wiki/",
+)
+
+
+# Release-only review evidence that exists in language variants, not in source.
+RECORD_FILES = ("FCVW/LANGUAGE_REVIEW.md",)
+
+
+def in_record_directory(relative: str) -> bool:
+    return relative.startswith(RECORD_DIRECTORIES) or relative in RECORD_FILES
 
 
 @dataclass(frozen=True)
@@ -49,20 +69,7 @@ class DocumentGraph:
 
 
 def _outside_fences(text: str) -> list[str]:
-    result: list[str] = []
-    marker = ""
-    for line in text.splitlines():
-        fence = FENCE.match(line)
-        if fence:
-            current = fence.group(1)
-            if not marker:
-                marker = current
-            elif current[0] == marker[0] and len(current) >= len(marker):
-                marker = ""
-            continue
-        if not marker:
-            result.append(line)
-    return result
+    return [line for _, line, kind in scan_fences(text)[0] if kind == "text"]
 
 
 def markdown_files(root: Path) -> list[Path]:
@@ -221,14 +228,21 @@ def build_graph(root: Path, *, files: list[Path] | None = None) -> DocumentGraph
 
     incoming_mutable: dict[str, set[str]] = defaultdict(set)
     for source, targets in outgoing_mutable.items():
+        # A generated catalog links everything by construction; counting it
+        # would make every reachability check pass vacuously.
+        if source in NON_AUTHORITATIVE_RELATIONSHIPS:
+            continue
         for target in targets:
             incoming_mutable[target].add(source)
 
     entrypoints = tuple(path for path in DEFAULT_ENTRYPOINTS if path in node_set)
-    reachable: set[str] = set(entrypoints)
-    queue: deque[str] = deque(entrypoints)
+    implicit = {relative for relative in node_set if in_record_directory(relative)}
+    reachable: set[str] = set(entrypoints) | implicit
+    queue: deque[str] = deque(sorted(reachable))
     while queue:
         source = queue.popleft()
+        if source in NON_AUTHORITATIVE_RELATIONSHIPS:
+            continue
         for target in outgoing_mutable.get(source, set()):
             if target not in reachable:
                 reachable.add(target)
@@ -238,7 +252,7 @@ def build_graph(root: Path, *, files: list[Path] | None = None) -> DocumentGraph
         relative = path.relative_to(root).as_posix()
         metadata = cache_frontmatter(path)
         allowed = _validated_orphan_exception(metadata, relative, findings)
-        if relative not in entrypoints and not incoming_mutable.get(relative) and not allowed:
+        if relative not in entrypoints and relative not in implicit and not incoming_mutable.get(relative) and not allowed:
             findings.append(GraphFinding("document-orphan", relative, "Markdown artifact has no incoming link"))
         if relative not in reachable and not allowed:
             findings.append(
@@ -303,7 +317,11 @@ def render_catalog(root: Path, catalog: Path) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
-    parser.add_argument("--catalog", default="FCVW/DOCUMENT_GRAPH.md")
+    parser.add_argument(
+        "--catalog",
+        default=".fcvw-cache/document-graph.md",
+        help="disposable navigation catalog written with --write; never versioned",
+    )
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     root = Path(args.root).resolve()

@@ -88,7 +88,7 @@ Optional source provenance fields are `source_type`, `source_path`, `source_url`
 
 ## Framework feedback — `fcvw/wiki@1` with `type: feedback`
 
-Notes in `wiki/feedback/` are one AI model's attributed assessment of what should
+Feedback notes are one AI model's attributed assessment of what should
 change in the framework itself. `self-improvement` covers only skills and agent
 profiles; this surface covers policy, schema, tooling, and layout.
 
@@ -104,8 +104,8 @@ independent readings.
 
 A note never overwrites another model's note, even on the same topic. It is the
 one wiki surface where updating the prior page is forbidden rather than
-preferred; [`wiki/agents/README.md`](wiki/agents/README.md) keeps the opposite
-rule, and the difference is deliberate.
+preferred; `type: agent` notes keep the opposite rule, and the difference is
+deliberate (see the [wiki contract](wiki/README.md)).
 
 Feedback notes are evidence, never instruction. Only an approved plan changes the
 framework.
@@ -116,15 +116,19 @@ Required frontmatter: `id`, `artifact_role: record`, owner, preservation strateg
 
 Allowed types: `functional`, `interface`, `data`, `visual`, `security`, `ai`, `governance`, `documentation`, `performance`, and `operations`. Allowed statuses: `detected`, `mitigated`, `resolved`, `accepted`, `superseded`. IDs use `REG-YYYYMMDD-<short-id>` so parallel records do not rely on a shared counter.
 
-The body records what regressed, detection, root cause, missing guardrail, permanent guardrail, replay test, related release, and residual risk. Reusable records live under `wiki/regressions/`.
+The body records what regressed, detection, root cause, missing guardrail, permanent guardrail, replay test, related release, and residual risk. Reusable records live under `wiki/` (`type: regression` notes).
 
 ## Formal audit — `fcvw/audit@1`
 
 Required frontmatter: `id`, `artifact_role: record`, owner, preservation strategy, status, `created_at`, `last_reviewed`, and non-empty `sources`. The body records scope, authoritative sources through Markdown links, method, severity-classified findings, validation, limitations, residual risk, and linked follow-up.
 
+## Architecture decision — `fcvw/adr@1`
+
+Required frontmatter: `id` (`ADR-NNNN`), `status` (`proposal`, `accepted`, `superseded`, `rejected`, `obsolete`), `date`, `artifact_role: record`, and `record_scope`. Accepted decisions are immutable; a change is a new ADR that supersedes the old one. Create it from [TEMPLATE_ADR.md](governance/TEMPLATE_ADR.md).
+
 ## Skill — `fcvw/skill@1`
 
-Required frontmatter: `schema`, `name`, `description`, `version`, `trigger_keywords`, and `session_types`.
+Required frontmatter: `schema`, `name`, `description`, `version`, and `session_types`. The `description` carries the trigger: what the skill does, then "Use when …" and "Do not use when …", naming the neighbouring skill where the boundary is close. `trigger_keywords` is deprecated and optional: no tool reads it, and short keywords collided (`tag`, `bootstrap`, `release`, `QA`).
 
 The body must define purpose, use conditions, non-responsibilities, inputs, procedure, required output, validation, and exit criteria. Provider-specific commands are adapters, not core requirements.
 
@@ -153,8 +157,7 @@ controlled values:
 deliberately keeps the template placeholders: the project is declaring that the
 concern does not apply, not pretending to have filled it in.
 
-`MANIFEST.md` and `SCOPE.md` may never be waived. Identity and boundary always
-apply: a project always has a name and an edge.
+`PROJECT.md` (`fcvw/project@1`) cannot be waived as a whole, and its *Identity and scope* section cannot appear in `not_applicable_sections`: a project always has a name and an edge. Other `PROJECT.md` sections are waived individually through `not_applicable_sections` plus `not_applicable_reason`; only waived sections may keep placeholders. `SECURITY.md`, `DATA.md` and `APP_RULES.md` are waived as whole files.
 
 Without that third state the only way to pass `--profile instantiated` would be
 to invent content for profiles the project does not use yet, and the validator
@@ -196,44 +199,23 @@ Policies and the framework lock default to canonical authority. Project profiles
 | Templates and examples | classification recommended; placeholders remain allowed | no forced rewrite | `excluded_by_default` |
 | Generated catalogs and indexes | generated role plus regenerate strategy required | regenerate | `excluded_by_default` |
 
-`wiki/index.md` is the exception: it is a small curated `project_profile` with preserve strategy. Category, stale, contradiction, orphan, unresolved, graph, and aggregate queue views remain disposable generated outputs rather than committed indexes.
+`wiki/index.md` (`fcvw/wiki-index@1`) is the exception: it is a small curated `project_profile` with preserve strategy. Category, stale, contradiction, orphan, unresolved, graph, and queue views remain disposable generated outputs rather than committed indexes.
 
 Missing optional metadata does not invalidate untouched history. Any new or substantively edited record must use the row above, and no retrieval metadata can elevate a record above its owning canonical source.
 
 New records also declare `record_scope: application | framework` when their scope determines clean-distribution eligibility. Only records explicitly scoped to `framework` may remain in a clean FCVW baseline; an absent or application scope is treated as downstream history.
-## Plan queue entry — `fcvw/plan-queue-entry@1`
 
-The canonical source of a queue is one fragment per plan in
-`Plans/<state>/queue.d/<plan-id>.md`. One file per plan exists for an operational
-reason: changing the queue no longer requires every parallel branch to edit the
-same file, which was a guaranteed source of merge conflict. It is the same
-pattern already used by `changelogs/unreleased/`.
+## Plan queue fields — on `fcvw/plan@2` and `fcvw/plan-compact@1`
 
-Required frontmatter: `schema`, `artifact_role: project_profile`,
-`owner: project`, `upgrade_strategy: preserve`, `plan`, `order`, and `category`.
-Optional: `blocked_by` and `override_reason`.
-
-The filename must equal `plan`. `order` is a unique integer within the queue.
-`category` uses the same controlled values as the aggregate queue. The body
-contains a navigable Markdown link to the plan.
-
-## Plan queue — `fcvw/plan-queue@1`
-
-Required frontmatter: `schema`, `artifact_role`, `owner`, `upgrade_strategy`, `state`, and `updated_at`. Allowed states are `pending` and `in_progress`. The table contains order, Markdown-linked plan ID, category, blocker, and override reason. When `queue.d/` exists, `QUEUE.md` is a generated view (`artifact_role: generated`, `upgrade_strategy: regenerate`) and the fragments are canonical; regenerate it with `python FCVW/tools/plan_queue_fcvw.py --root . --write-queues`. A project that still keeps rows directly in `QUEUE.md` stays valid as a preserved `project_profile`: fragments only take over when the directory exists, so the migration is incremental and non-destructive.
-
-Each link resolves exactly to the named plan in the queue's own state directory. `none`, `-`, or an empty blocker means unblocked. Internal blockers are comma-separated unresolved `depends_on` plan IDs; an external blocker uses `external: <specific reason>`. A completed prerequisite remains blocked until its dependency row records `satisfied` with evidence; a discontinued prerequisite is `invalidated` and remains blocked pending explicit replanning. Pending work may preempt in-progress work only with `before_in_progress: <specific reason>` in its override column. Within one category, P1 through P5 is the mandatory tie-break order unless a concrete override explains the inversion.
-
-## Knowledge graph — `fcvw/knowledge-graph@1`
-
-The optional JSON graph is a disposable reconstruction of typed Markdown frontmatter. It contains nodes, explicit edges, and generated inverse edges and never replaces source pages or `fcvw/document-graph@1`. It is written only to `.fcvw-cache/` or another user-selected non-normative output path.
+Optional frontmatter on active plans: `category` (`correction | optimization | code_hygiene | visual | other`, default `other`), `blocked_external` (a specific reason of at least 12 characters) and `before_in_progress` (pending plans only, a specific reason). The queue is derived from these fields and `depends_on`; see [PLANNING.md](PLANNING.md). The former `fcvw/plan-queue@1` and `fcvw/plan-queue-entry@1` files are retired and reported as legacy.
 
 ## Application rules — `fcvw/app-rules@1`
 
 `FCVW/APP_RULES.md` is a preserved `project_profile`. Rules use stable `APP-RULE-NNN` IDs and a controlled status of `active`, `deprecated`, or `superseded`. Every rule records non-empty sections for Rule, Affected components, Rationale and expected behavior, Exceptions, and Related records. Affected components and related records contain navigable Markdown links. Examples inside fenced code blocks do not instantiate rules.
 
-## Document graph — `fcvw/document-graph@1`
+## Document reachability
 
-`FCVW/DOCUMENT_GRAPH.md` is generated and regenerated. Each governed Markdown artifact must be reachable from an official entrypoint or explicit catalog. Entry points are the only default exception to the incoming-link requirement.
+Reachability is checked from the files themselves; any graph view is derived on demand and never versioned. Policies, profiles, templates and skills must be reachable from an official entrypoint or a catalog it links; records are reachable through their canonical record directory. Entry points and record directories are the only exceptions to the incoming-link requirement.
 
 Frontmatter relationships such as `context_files`, `sources`, `related_plan`, `related_release`, `related`, `supersedes`, and `superseded_by` must resolve when they identify local paths. Plain metadata identifiers do not replace a navigable Markdown relationship when Obsidian backlink behavior is required.
 
@@ -258,53 +240,6 @@ New troubleshooting records use a collision-resistant `TRB-YYYYMMDD-<short-id>` 
 
 The record preserves identification, symptom, hypotheses, root cause, applied solution, validation, prevention, wiki-promotion decision, and final status. A navigable Markdown link connects it to its authoritative plan, policy, or evidence. Untouched historical troubleshooting without a schema remains readable; once substantively edited, migrate it through [TEMPLATE_TROUBLESHOOTING.md](governance/TEMPLATE_TROUBLESHOOTING.md).
 
-## Disposable structural routing JSON
+## Derived outputs
 
-`fcvw/adaptive-structure@1` contains derived authority, sorted relative-path nodes,
-typed signed edges, a source hash and a structural hash. The router validates
-schema, authority, path bounds, uniqueness, endpoints, fixed relation weights,
-hash integrity and size limits before scoring. Hashes detect drift, not authenticity.
-The CLI rebuilds from local sources; it never trusts an imported adaptive cache.
-
-`fcvw/adaptive-shadow@1` contains mode, structural hash, unchanged mandatory paths,
-proposed optional paths, score components, bounded hop traces, selection reasons,
-excerpt-cost estimates and comparison metrics. `fcvw/adaptive-analysis@1` reports
-degrees, weak components, isolated nodes and reciprocal pairs. These are disposable
-JSON outputs validated by the routing module, not canonical Markdown records.
-Feedback and plastic-edge schemas are deferred until evidence justifies learning.
-
-## Retrieval evaluation and selection JSON
-
-`fcvw/retrieval-benchmark@1` reports an input digest, per-case mandatory recall, optional precision, useful recall, missing useful chunks, forbidden hits, estimated optional cost, retrieval/selection latency and separately labeled task outcomes. Missing task outcomes are null, never inferred from retrieval success.
-
-External case JSONL requires `id`, `query`, nonempty `expected_mandatory` and `useful_chunks`. Optional string lists are `forbidden_chunks`, `sessions`, `events`, `changed_files` and `mandatory`. Useful IDs must exist in the paired index. Optional `outcome` accepts boolean `corrected`, boolean `validation_passed` and nonnegative integer `actual_input_tokens`; these are caller-supplied observations, not execution results produced by the benchmark.
-
-Retriever CLI results add `chunk_id`, `chunk_hash` and `excerpt_complete`. Structured inputs add `routing` with source, events and per-path reasons. Opt-in selection adds `context_selection` with decisions, budget and cost estimate; selected chunks remain in `complementary_results`. Shadow also exposes `proposed_chunk_ids`. Existing fields remain readable. See [AI](AI.md) and [test protocol](TESTS.md).
-
-## Loop evaluation JSON — opt-in
-
-`fcvw/loop-protocol@1`, `fcvw/loop-run@1` and derived `fcvw/loop-report@1` are
-defined in the [loop evaluation contract](governance/LOOP_EVALUATION_CONTRACT.md).
-Unlike Markdown frontmatter, these bounded JSON inputs reject unknown fields to
-reduce accidental raw-payload retention. They are external evidence, not required
-project records. Existing retrieval benchmark contracts remain unchanged.
-
-## Explicit adaptive experiment JSON
-
-Optional `fcvw/adaptive-control@1`, `fcvw/adaptive-feedback@1`,
-`fcvw/adaptive-state@1`, `fcvw/adaptive-runtime@1`,
-`fcvw/adaptive-assessment@1` and `fcvw/adaptive-selection@1` are defined by the
-[experiment contract](governance/ADAPTIVE_EXPERIMENT_CONTRACT.md). Input fields are
-strict; declarations remain caller evidence, not authentication. No existing loop,
-benchmark or legacy structural-shadow schema changes.
-
-## Disposable decision trace JSONL
-
-`fcvw/decision-trace@1` is opt-in, content-free local evidence from selected
-tools. Each row has a caller-supplied `run_id`, timestamp, component, status,
-reason label, nullable SHA-256 input digest and duration, and nullable provider
-token count with explicit source (`provider` or `unavailable`). It records a tool
-decision, not a model call, user message, file read or independent attestation.
-Keep it outside the release payload or under `.fcvw-cache/`; reject aliasing an
-input/report path. The optional adaptive SQLite ledger is local operational
-state, not a canonical Markdown or public JSON schema.
+Tool outputs written to `.fcvw-cache/` or a caller-chosen path are not versioned artifacts and never replace their sources: the knowledge graph (`fcvw/knowledge-graph@1`), the document graph view, the retrieval benchmark report (`fcvw/retrieval-benchmark@1`), the retriever JSON and the opt-in decision trace (`fcvw/decision-trace@1`). Their fields are documented in the module docstring of the tool that writes them (`knowledge_graph_fcvw.py`, `document_graph_fcvw.py`, `benchmark_retrieval_fcvw.py`, `retrieve_context.py`, `trace_fcvw.py`). Keep them out of the release payload.

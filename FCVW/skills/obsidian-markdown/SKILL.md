@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "obsidian-markdown"
-description: "Format portable Markdown and optional Obsidian-compatible links."
-version: "1.2.0"
-trigger_keywords:
-  - "obsidian"
-  - "wikilink"
-  - "frontmatter"
-  - "markdown note"
+description: "Format portable Markdown and optional Obsidian-compatible links. Use when writing or repairing links, callouts or embeds in governed Markdown. Do not use to validate frontmatter schemas (governance-validator)."
+version: "1.2.1"
 session_types:
   - "wiki_maintenance"
   - "documentation"
@@ -25,7 +20,7 @@ Use when the user requests Obsidian formatting, wikilinks, embeds, callouts, not
 
 ## Inputs
 
-Target note, `wiki/schema.md`, taxonomy, source links, destination, current canonical page, and the project's decision on supported Obsidian syntax.
+Target note, `wiki/README.md`, taxonomy, source links, destination, current canonical page, and the project's decision on supported Obsidian syntax.
 
 ## Non-responsibilities
 
@@ -46,7 +41,7 @@ Target note, `wiki/schema.md`, taxonomy, source links, destination, current cano
 
 ## Formatting rules
 
-- FCVW schema values and controlled statuses come from `wiki/schema.md`; this skill does not define competing values.
+- FCVW schema values and controlled statuses come from `wiki/README.md`; this skill does not define competing values.
 - A note has one H1 and a logical heading hierarchy.
 - Internal wikilinks use the vault-relative note path or canonical title consistently.
 - Embeds use `![[note]]` or `![[note#heading]]` only for stable reusable content.

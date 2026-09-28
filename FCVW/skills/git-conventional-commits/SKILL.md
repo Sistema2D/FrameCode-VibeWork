@@ -1,13 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "git-conventional-commits"
-description: "Prepare scoped conventional commits, tags, and release messages."
-version: "1.2.0"
-trigger_keywords:
-  - "commit"
-  - "tag"
-  - "push"
-  - "conventional commit"
+description: "Prepare scoped conventional commit, tag and release messages. Use when committing, tagging or writing release notes. Do not use for frontmatter or wiki tags."
+version: "1.2.1"
 session_types:
   - "git"
   - "release"

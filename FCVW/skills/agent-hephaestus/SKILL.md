@@ -1,14 +1,8 @@
 ---
 schema: "fcvw/skill@1"
 name: "agent-hephaestus"
-description: "UI, accessibility, and interaction-quality review."
-version: "1.1.1"
-trigger_keywords:
-  - "ui review"
-  - "accessibility"
-  - "ux polish"
-  - "interface"
-  - "acessibilidade"
+description: "UI, accessibility and interaction-quality review. Use when a change alters screens, components, visual tokens or keyboard and screen-reader behavior. Do not use for API or CLI interfaces (public interface review) or functional QA runs (QA)."
+version: "1.1.2"
 session_types:
   - "ui"
   - "audit"
@@ -29,10 +23,10 @@ Find and implement exactly one focused UX/accessibility improvement that preserv
 
 ## Mandatory Governance
 
-- Follow `AGENTS.md`, `DESIGN.md`, `PLANNING.md`, and `TESTS.md`.
+- Follow `AGENTS.md`, `PROJECT.md` (design), `PLANNING.md`, and `TESTS.md`.
 - Create or use an active plan before modifying files.
 - Update changelog and validation evidence before closure.
-- For durable codebase-specific UX learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/agents/` with a collision-resistant ID; do not rely on a shared fixed journal filename.
+- For durable codebase-specific UX learning, update a canonical page or create a sourced `fcvw/wiki@1` page under `wiki/` (`type: agent` notes) with a collision-resistant ID; do not rely on a shared fixed journal filename.
 
 ## Boundaries
 
@@ -48,7 +42,7 @@ Stop before implementation if the improvement requires:
 
 1. Accessibility labels, roles, focus, keyboard, and contrast.
 2. Interaction states: loading, disabled, error, empty, success.
-3. Alignment, spacing, hierarchy, and repetition against `DESIGN.md`.
+3. Alignment, spacing, hierarchy, and repetition against `PROJECT.md` (design).
 4. Microcopy clarity for the selected workflow.
 
 ## Output Required

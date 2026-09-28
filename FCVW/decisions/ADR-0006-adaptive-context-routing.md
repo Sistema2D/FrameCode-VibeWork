@@ -1,7 +1,9 @@
 ---
 schema: "fcvw/adr@1"
 id: "ADR-0006"
-status: "accepted"
+status: "superseded"
+superseded_by:
+  - "ADR-0010"
 date: "2026-09-16"
 artifact_role: "record"
 owner: "framework"
@@ -81,7 +83,7 @@ statistical rich-club analysis and full motif discovery remain unimplemented.
 
 ## Relationships
 
-- [AI contract](../AI.md), [token budget](../TOKEN_BUDGET.md), [schemas](../SCHEMAS.md).
+- [AI contract](../AI.md), [token budget](../AI.md#token-and-context-budget), [schemas](../SCHEMAS.md).
 - [Release V0.17.0](../framework-releases/V0.17.0.md).
 
 Later extension: [ADR-0009](ADR-0009-adaptive-experiment-controls.md) adds gated

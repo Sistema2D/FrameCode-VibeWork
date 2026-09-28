@@ -16,7 +16,7 @@ related_version: "V0.14.0"
 related_plan: "P2-R5-2026-07-27-open-issues-42-48-and-document-graph"
 sources:
   - "FCVW/Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md"
-  - "FCVW/FILESYSTEM.md"
+  - "FCVW/OWNERSHIP.md"
   - "FCVW/AUDIT.md"
   - "FCVW/framework-releases/V0.14.0.md"
 tags:
@@ -34,7 +34,7 @@ tags:
 - **Affected version:** `V0.14.0`
 - **Affected surface:** external GitHub Pages repository setting `main:/docs`
 - **Related plan:** [Open issues 42-48 and document graph](../Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md)
-- **Governing contracts:** [filesystem](../FILESYSTEM.md), [audit](../AUDIT.md), and [release](../RELEASE.md)
+- **Governing contracts:** [filesystem](../OWNERSHIP.md#filesystem-layout), [audit](../AUDIT.md), and [release](../RELEASE.md)
 
 ## 2. Symptom Description
 

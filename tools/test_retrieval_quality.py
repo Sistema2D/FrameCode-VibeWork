@@ -13,10 +13,9 @@ import unittest
 from unittest.mock import patch
 import zipfile
 
-from adaptive_router_fcvw import structural_graph, shadow_route
 from benchmark_retrieval_fcvw import benchmark, synthetic_corpus, validate_cases
 from build_context_index import bounded_chunks, build_index
-from context_routing_fcvw import normalized_path, resolve_routes, route_tables
+from context_routing_fcvw import changed_file_events, normalized_path, resolve_routes, route_tables
 from context_selection_fcvw import estimated_tokens, select_chunks
 from document_graph_fcvw import build_graph, markdown_files
 from fcvw_cache import clear
@@ -26,6 +25,8 @@ from retrieve_context import bm25, exact_requested
 from verify_release_fcvw import verify_archive, validate_installed
 
 ROOT = governed_root(Path(__file__))
+# Framework tools live in tools/ in the source checkout and FCVW/tools/ when installed.
+TOOLS = "tools/" if (ROOT / "tools" / "validate_fcvw.py").is_file() else "FCVW/tools/"
 
 
 def chunk(path="a.md", text="Useful paragraph.", ident="a.md#one", score=1):
@@ -72,7 +73,7 @@ class ExactIdentityTests(unittest.TestCase):
 
 class RoutingTests(unittest.TestCase):
     def test_cumulative_sessions_events_files(self):
-        result = resolve_routes(ROOT, sessions=["security"], events=["data"], changed_files=["tools/retrieve_context.py"])
+        result = resolve_routes(ROOT, sessions=["security"], events=["data"], changed_files=[TOOLS + "retrieve_context.py"])
         expected = {"SECURITY", "DATA", "TESTS", "AI", "PLANNING", "REGRESSION_GUARDS", "ARCHITECTURAL_DECISIONS"}
         self.assertTrue({f"FCVW/{p}.md" for p in expected} <= set(result["mandatory_paths"]))
         self.assertTrue(all(result["reasons"][p] for p in result["mandatory_paths"]))
@@ -95,8 +96,97 @@ class RoutingTests(unittest.TestCase):
                                versioned_change=True)
         self.assertIn('filesystem', added['events'])
         internal = resolve_routes(ROOT, events=['change'],
-                                  file_changes=['modify:tools/fcvw_cache.py'], versioned_change=True)
+                                  file_changes=['modify:' + TOOLS + 'fcvw_cache.py'], versioned_change=True)
         self.assertNotIn('public_interface', internal['events'])
+
+    def test_project_profile_edit_does_not_trigger_framework_policy(self):
+        # Regression: every FCVW/*.md used to trigger event:policy by path depth.
+        profile = resolve_routes(ROOT, events=['change'], file_changes=['modify:FCVW/SECURITY.md'],
+                                 versioned_change=True)
+        self.assertNotIn('policy', profile['events'])
+        self.assertIn('security', profile['events'])
+        self.assertNotIn('FCVW/SCHEMAS.md', profile['mandatory_paths'])
+        policy = resolve_routes(ROOT, events=['change'], file_changes=['modify:FCVW/PLANNING.md'],
+                                versioned_change=True)
+        self.assertIn('policy', policy['events'])
+        template = resolve_routes(ROOT, events=['change'],
+                                  file_changes=['modify:FCVW/governance/TEMPLATE_PLAN.md'], versioned_change=True)
+        self.assertIn('policy', template['events'])
+
+    def test_unknown_or_deleted_root_document_stays_conservative(self):
+        deleted = resolve_routes(ROOT, events=['change'], file_changes=['delete:FCVW/REMOVED_POLICY.md'],
+                                 versioned_change=True)
+        self.assertIn('policy', deleted['events'])
+
+    def test_framework_schema_catalog_is_not_application_data(self):
+        schemas = resolve_routes(ROOT, events=['change'], file_changes=['modify:FCVW/SCHEMAS.md'],
+                                 versioned_change=True)
+        self.assertNotIn('data', schemas['events'])
+        self.assertIn('policy', schemas['events'])
+
+    # Phase 3 case table: path + operation -> implied events. Application paths
+    # imply only file operations; framework paths keep their exact surfaces.
+    PATH_EVENT_CASES = (
+        ("modify", "src/auth_service.py", {"change"}),
+        ("modify", "src/skills/memory.py", {"change"}),
+        ("modify", "app/migrations/0001.sql", {"change"}),
+        ("modify", "api/public.py", {"change"}),
+        ("add", "src/new_module.py", {"change", "filesystem"}),
+        ("delete", "assets/logo.png", {"change", "filesystem"}),
+        ("rename", ".cursorrules", {"change", "filesystem", "policy", "ai"}),
+        ("modify", "AGENTS.md", {"change", "policy", "ai"}),
+        ("modify", ".windsurfrules", {"change", "policy", "ai"}),
+        ("modify", ".github/FUNDING.yml", {"change"}),
+        ("modify", ".github/workflows/ci.yml", {"change", "automation"}),
+        ("modify", "FCVW/SECURITY.md", {"change", "security"}),
+        ("modify", "FCVW/DATA.md", {"change", "data"}),
+        ("modify", "FCVW/PROJECT.md", {"change"}),
+        ("modify", "FCVW/AUTOMATION.md", {"change", "policy", "automation"}),
+        ("modify", "FCVW/skills/QA/SKILL.md", {"change", "ai"}),
+        ("modify", "FCVW/AI.md", {"change", "policy", "ai"}),
+        ("modify", "FCVW/framework-releases/V0.20.0.md", {"change", "release"}),
+        ("modify", TOOLS + "retrieve_context.py", {"change", "ai", "public_interface"}),
+        ("modify", TOOLS + "validate_fcvw.py", {"change", "policy", "public_interface"}),
+        ("modify", TOOLS + "fcvw_cache.py", {"change"}),
+        ("unknown", "FCVW/wiki/note.md", {"change", "filesystem"}),
+        ("unknown", "src/app.py", {"change"}),
+    )
+
+    def test_path_event_case_table(self):
+        for operation, path, expected in self.PATH_EVENT_CASES:
+            with self.subTest(path=path, operation=operation):
+                self.assertEqual(expected, changed_file_events(path, operation, ROOT))
+
+    def test_application_change_without_semantic_event_warns(self):
+        silent = resolve_routes(ROOT, events=["change"], file_changes=["modify:src/auth_service.py"],
+                                versioned_change=True)
+        self.assertEqual(1, len(silent["warnings"]))
+        self.assertIn("event:security", silent["warnings"][0])
+        self.assertIn("src/auth_service.py", silent["warnings"][0])
+        declared = resolve_routes(ROOT, events=["change", "security"],
+                                  file_changes=["modify:src/auth_service.py"], versioned_change=True)
+        self.assertEqual([], declared["warnings"])
+        self.assertIn("FCVW/SECURITY.md", declared["mandatory_paths"])
+        framework = resolve_routes(ROOT, events=["change"], file_changes=["modify:FCVW/PLANNING.md"],
+                                   versioned_change=True)
+        self.assertEqual([], framework["warnings"])
+
+    def test_section_hints_accept_nested_paths(self):
+        result = resolve_routes(ROOT, sessions=["wiki_maintenance"])
+        self.assertIn("FCVW/wiki/README.md", result["section_hints"])
+
+    def test_routes_only_cli_needs_no_index(self):
+        script = str(Path(__file__).with_name("retrieve_context.py"))
+        run = subprocess.run([sys.executable, "-B", script, "--root", str(ROOT), "--event", "security",
+                              "--file-change", "modify:src/app.py", "--versioned-change"],
+                             capture_output=True, text=True)
+        self.assertEqual(0, run.returncode, run.stderr)
+        result = json.loads(run.stdout)
+        self.assertIn("FCVW/SECURITY.md", result["mandatory_paths"])
+        self.assertEqual([], result["complementary_results"])
+        half = subprocess.run([sys.executable, "-B", script, "--root", str(ROOT), "--query", "x"],
+                              capture_output=True, text=True)
+        self.assertNotEqual(0, half.returncode)
 
     def test_versioned_route_requires_declared_impact_and_changed_file(self):
         for kwargs in ({'file_changes': ['modify:FCVW/AI.md']},
@@ -203,20 +293,6 @@ class BenchmarkAndGraphTests(unittest.TestCase):
         files=markdown_files(ROOT)
         self.assertEqual(build_graph(ROOT),build_graph(ROOT,files=files))
         self.assertEqual(build_knowledge_graph(ROOT),build_knowledge_graph(ROOT,files=files))
-
-    def test_router_scans_inventory_once_and_reuses_metadata(self):
-        from adaptive_router_fcvw import markdown_files as original
-        with patch('adaptive_router_fcvw.markdown_files', wraps=original) as scan:
-            clear();first=structural_graph(ROOT)
-            self.assertEqual(scan.call_count,1)
-            self.assertEqual(first,structural_graph(ROOT))
-
-    def test_shadow_can_promote_candidate_beyond_original_top_one(self):
-        from test_adaptive_routing import graph
-        items=[chunk(score=1),chunk('b.md','Second','b.md#b',score=.99)]
-        g=graph([('a.md','b.md','supports')],nodes=('a.md','b.md'))
-        self.assertEqual(shadow_route(g,items[:1],[],top_k=1)['proposed_optional_paths'],['a.md'])
-        self.assertEqual(shadow_route(g,items,[],top_k=1)['proposed_chunk_ids'],['b.md#b'])
 
 
 class ArchiveBoundaryTests(unittest.TestCase):

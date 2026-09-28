@@ -12,6 +12,30 @@ FrontmatterValue: TypeAlias = str | list[str]
 KEY = re.compile(r"^[A-Za-z_][A-Za-z0-9_-]*$")
 LIST_ITEM = re.compile(r"^  -\s*(.*)$")
 UNSUPPORTED_VALUE = re.compile(r"^(?:[>|!]|&\S|\*\S)")
+FENCE = re.compile(r"^\s*(`{3,}|~{3,})")
+
+
+def scan_fences(text: str) -> tuple[list[tuple[int, str, str]], str]:
+    """Classify each line as 'fence', 'code' or 'text' and return any unclosed fence.
+
+    The single fence tracker shared by the tools: a fence closes only with the
+    same character and at least the opening length.
+    """
+
+    lines: list[tuple[int, str, str]] = []
+    marker = ""
+    for number, line in enumerate(text.splitlines(), 1):
+        fence = FENCE.match(line)
+        if fence:
+            current = fence.group(1)
+            if not marker:
+                marker = current
+            elif current[0] == marker[0] and len(current) >= len(marker):
+                marker = ""
+            lines.append((number, line, "fence"))
+        else:
+            lines.append((number, line, "code" if marker else "text"))
+    return lines, marker
 
 
 @dataclass(frozen=True)

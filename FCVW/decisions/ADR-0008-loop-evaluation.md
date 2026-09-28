@@ -1,7 +1,9 @@
 ---
 schema: "fcvw/adr@1"
 id: "ADR-0008"
-status: "accepted"
+status: "superseded"
+superseded_by:
+  - "ADR-0010"
 date: "2026-09-22"
 artifact_role: "record"
 owner: "framework"
@@ -48,7 +50,7 @@ result and cannot enable issues 56/57 automatically.
 ## Validation, migration and rollback
 
 See the [implementation plan](../Plans/completed/P2-R4-2026-09-22-loop-evaluation.md),
-[contract](../governance/LOOP_EVALUATION_CONTRACT.md), [schemas](../SCHEMAS.md) and
+[contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/LOOP_EVALUATION_CONTRACT.md), [schemas](../SCHEMAS.md) and
 [V0.19.0 preparation](../framework-releases/V0.19.0.md). New JSON contracts do not
 modify prior benchmark input or output. Stop invoking the evaluator to roll back;
 retain external evidence and preserve application-owned data.

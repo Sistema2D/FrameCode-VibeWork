@@ -13,8 +13,7 @@ Scoped planning · regression protection · selective context · controlled tech
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
 [![Release](https://img.shields.io/badge/Release-v0.19.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0)
 
-Stable release **V0.19.0**
-
+Stable release **V0.19.0** · Ready candidate **V0.20.0**
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
@@ -27,94 +26,38 @@ Stable release **V0.19.0**
 
 ## Português (Brasil) · PT-BR
 
-### Navegação
-
-- [Visão geral](#pt-visao-geral)
-- [Princípios e artefatos](#pt-principios)
-- [Como começar](#pt-comecar)
-- [Fluxo de uma mudança](#pt-fluxo)
-- [Leitura seletiva](#pt-contexto)
-- [Planos e regressões](#pt-regressoes)
-- [Validação](#pt-validacao)
-- [Skills, wiki e memória](#pt-conhecimento)
-- [Automação declarativa](#pt-automacao)
-- [Versões e releases](#pt-versoes)
-- [Mapa do repositório](#pt-mapa)
-- [Limites e estado atual](#pt-limites)
-
-[Mudar para English (US)](#en-us) · [Voltar ao topo](#top)
+[Visão geral](#pt-visao-geral) · [Como começar](#pt-comecar) · [Fluxo de uma mudança](#pt-fluxo) · [Validação](#pt-validacao) · [Mapa](#pt-mapa) · [Versões](#pt-versoes) · [English (US)](#en-us)
 
 <a id="pt-visao-geral"></a>
 
 ### Visão geral
 
-FrameCode VibeWork (FCVW) é uma camada portátil de governança em Markdown para projetos desenvolvidos por pessoas e agentes de IA. Ele transforma uma solicitação em uma cadeia verificável de contexto, plano, execução, evidência, registro de versão e conhecimento reutilizável.
+FrameCode VibeWork (FCVW) é uma camada portátil de governança em Markdown para projetos desenvolvidos por pessoas e agentes de IA. Uma solicitação vira uma cadeia verificável: contexto mínimo, plano, execução no escopo, evidência, registro de versão e conhecimento reutilizável.
 
-O framework reduz problemas recorrentes no desenvolvimento assistido:
+Ele ataca problemas recorrentes do desenvolvimento assistido: mudanças sem escopo ou rollback, agentes que leem pouco contexto (ou o repositório inteiro), conclusão sem prova de não regressão, políticas do framework misturadas com dados do projeto, memória de sessões sem curadoria e automações alegadas sem gatilho, permissão ou evidência.
 
-- mudanças feitas sem escopo, evidência ou rollback;
-- agentes que leem contexto insuficiente — ou o repositório inteiro sem necessidade;
-- conclusão baseada apenas no novo comportamento, sem prova de não regressão;
-- mistura entre políticas do framework, perfis do projeto e registros históricos;
-- documentação, versão e implementação divergentes;
-- memória de sessões sem curadoria;
-- skills redundantes, específicas de fornecedor ou sem critério de saída;
-- automações alegadas sem trigger, permissão, evidência ou política de falha.
+Os documentos Markdown são a fonte normativa. As ferramentas em Python (3.10 ou mais recente, só biblioteca padrão) são opcionais e automatizam as invariantes determinísticas.
 
-O núcleo permanece legível sem runtime específico. O validador opcional usa somente a biblioteca padrão do Python para automatizar invariantes determinísticas; os documentos continuam sendo a fonte normativa.
+**Princípios:** escopo antes da mutação; contexto seletivo; evidência antes da conclusão; novo comportamento **e** preservação do que já funcionava; ownership explícito; histórico não é política atual; automação só com contrato observável; nenhuma autoridade presumida para commit, tag, publicação ou ação destrutiva.
 
-[Navegação PT-BR](#pt-br) · [English (US)](#en-us) · [Topo](#top)
+| Papel | Representa | Atualização |
+|---|---|---|
+| `framework_policy` | regra genérica do FCVW | substituída no upgrade, com migração quando preciso |
+| `framework_lock` | baseline instalada ([FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md)) | mudança governada |
+| `project_profile` | verdade da aplicação ([PROJECT.md](FCVW/PROJECT.md), segurança, dados, regras) | preenchida e preservada |
+| `record` | evidência histórica: planos, changelogs, ADRs, falhas | preservada, nunca sobrescrita em lote |
+| `template` | modelo vazio em `FCVW/governance/` | substituído quando compatível |
 
-<a id="pt-principios"></a>
-
-### Princípios e artefatos
-
-1. **Escopo antes da mutação:** uma mudança versionada nasce em um plano.
-2. **Contexto seletivo:** leia contratos acionados pelo evento e domínio, não todos os arquivos.
-3. **Evidência antes da conclusão:** registre resultado observado, limitações e risco residual.
-4. **Novo comportamento mais preservação:** prove o que mudou e o que continuou funcionando.
-5. **Ownership explícito:** políticas, perfis, registros, templates e arquivos gerados evoluem de formas diferentes.
-6. **História não é política atual:** registros explicam o passado; documentos canônicos definem o presente.
-7. **Automação observável:** triggers, ações, permissões, falhas e rollback são declarados antes do adapter executável.
-8. **Sem autoridade presumida:** commit, push, tag, publicação, deploy e ações destrutivas exigem autorização compatível.
-
-| Papel | Representa | Exemplos | Atualização |
-|---|---|---|---|
-| `framework_policy` | regra genérica do FCVW | planejamento, testes, regressão | substituir com compatibilidade e migração |
-| `framework_lock` | baseline FCVW instalada | [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md) | atualizar por mudança governada |
-| `project_profile` | verdade específica da aplicação | escopo, stack, dados, ambiente | preencher e preservar |
-| `record` | evidência histórica | planos, changelogs, ADRs, falhas | preservar; não sobrescrever em lote |
-| `template` | modelo reutilizável vazio | `FCVW/governance/`, `FCVW/wiki/templates/` | substituir quando compatível com o schema |
-| `generated` | navegação ou resumo derivado | filesystem e índices wiki | regenerar a partir do estado físico |
-| `example` | demonstração não autoritativa | [minimal-change](FCVW/examples/minimal-change/README.md) | copiar e substituir placeholders |
-
-Consulte [OWNERSHIP.md](FCVW/OWNERSHIP.md) e [SCHEMAS.md](FCVW/SCHEMAS.md) para os contratos completos.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
+Contratos completos em [OWNERSHIP.md](FCVW/OWNERSHIP.md) e [SCHEMAS.md](FCVW/SCHEMAS.md).
 
 <a id="pt-comecar"></a>
 
 ### Como começar
 
-#### Projeto novo
-
-1. Leia [AGENTS.md](AGENTS.md), o entrypoint operacional.
-2. Classifique a sessão em [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md).
-3. Siga [INSTANTIATION.md](FCVW/INSTANTIATION.md) e execute o briefing necessário.
-4. Preencha os arquivos `artifact_role: project_profile` apenas com fatos aprovados.
-5. Defina a fonte de versão da aplicação em [MANIFEST.md](FCVW/MANIFEST.md) ou no runtime documentado.
-6. Crie o primeiro plano `fcvw/plan@2` em `FCVW/Plans/pending/`.
-7. Quando os perfis estiverem completos, execute o validador com `--profile instantiated`.
-
-#### Aplicação existente
-
-Use [RETROACTIVE_INSTANTIATION.md](FCVW/RETROACTIVE_INSTANTIATION.md). O fluxo inventaria o projeto, preserva código e histórico, classifica ownership e só então integra as políticas do FCVW. A adoção não autoriza refatoração ou limpeza destrutiva implícita.
-
-#### Manutenção do próprio FCVW
-
-Leia [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.md), [MIGRATIONS.md](FCVW/MIGRATIONS.md) e o release alvo. Use planos com `record_scope: framework`, registre mudanças em `FCVW/framework-releases/` e valide com `clean-template`.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
+- **Projeto novo:** leia [AGENTS.md](AGENTS.md), classifique a sessão no [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) e siga [INSTANTIATION.md](FCVW/INSTANTIATION.md). Preencha o [PROJECT.md](FCVW/PROJECT.md) só com fatos aprovados; seções que não se aplicam vão para `not_applicable_sections`. Crie o primeiro plano em `FCVW/Plans/pending/` e valide com `--profile instantiated`.
+- **Aplicação existente:** use o [modo retroativo](FCVW/INSTANTIATION.md#retroactive-instantiation). Ele inventaria o projeto e preserva código e histórico; adotar o FCVW não autoriza refatoração.
+- **Upgrade:** rode `upgrade_fcvw.py` da nova release em modo de simulação e siga o [MIGRATIONS.md](FCVW/MIGRATIONS.md). Profiles e registros do projeto são sempre preservados.
+- **Manter o próprio FCVW:** planos com `record_scope: framework`, registros em `FCVW/framework-releases/` e validação `clean-template`. O backlog está em [TODO.md](TODO.md).
 
 <a id="pt-fluxo"></a>
 
@@ -122,158 +65,41 @@ Leia [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.
 
 ```mermaid
 flowchart LR
-    A["Solicitação"] --> B["Classificar sessão e gatilhos"]
-    B --> C["Carregar contexto mínimo"]
-    C --> D["Plano plan@2"]
-    D --> E["Implementação com escopo"]
+    A["Solicitação"] --> B["Sessão e gatilhos"]
+    B --> C["Contexto mínimo"]
+    C --> D["Plano"]
+    D --> E["Implementação no escopo"]
     E --> F["Validação e regressão"]
-    F --> G{"Gate passou?"}
-    G -- "não" --> H["Corrigir, reduzir, bloquear ou registrar risco"]
-    H --> F
-    G -- "sim" --> I["Changelog ou framework release"]
-    I --> J["Plano concluído e conhecimento útil"]
+    F --> G{"Gate ok?"}
+    G -- "não" --> E
+    G -- "sim" --> H["Changelog e plano concluído"]
 ```
 
-Para uma mudança versionada:
+1. Procure trabalho relacionado em `Plans/in_progress/` e `pending/`.
+2. Crie ou retome um plano com objetivo, limites, risco, critérios de aceite, impacto de regressão e rollback. Mudanças P4/P5 com R1 usam o plano compacto.
+3. Mova o plano para `in_progress/` e altere só o que está no escopo.
+4. Colete evidência proporcional ao risco e registre a mudança em `changelogs/` (aplicação) ou `framework-releases/` (FCVW).
+5. Conclua o plano quando não houver resultado de regressão pendente.
 
-1. verifique planos relacionados em `pending/` e `in_progress/`;
-2. crie ou retome um plano com objetivo, limites, risco, aceitação, impacto de regressão e rollback;
-3. mova o plano para `in_progress` antes da implementação;
-4. altere apenas os limites autorizados;
-5. execute evidência proporcional ao risco e ao raio de dependência;
-6. registre mudança da aplicação em `changelogs/` ou do FCVW em `framework-releases/`;
-7. conclua o plano apenas sem resultado regressivo pendente ou gate bloqueante.
+Consultas, análises e revisões não exigem plano. A correção de um erro de digitação em prosa também não: sem mexer em frontmatter, links, tabelas, código ou políticas, basta um commit convencional (ver [PLANNING.md](FCVW/PLANNING.md)).
 
-Consultas e análises somente leitura não exigem plano. Criar ou alterar arquivos depois da análise exige.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
-
-<a id="pt-contexto"></a>
-
-### Leitura seletiva
-
-[CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) combina quatro fontes: tipo da sessão, `context_files` do plano ativo, eventos obrigatórios detectados e escalada justificada quando a evidência cruza outro domínio.
-
-| Evento observado | Contratos adicionados |
-|---|---|
-| arquivo criado, movido ou removido | ownership e filesystem |
-| API, CLI, formato ou fluxo público alterado | decisões arquiteturais, documentação e workflow |
-| dependência, runtime ou serviço externo alterado | stack, ambiente e segurança |
-| autenticação, permissão ou dado sensível | segurança, dados e testes |
-| persistência ou migração | dados, testes e regressão |
-| prompt, skill, agente, memória ou ferramenta de IA | AI, segurança e boundary replay |
-| hook, watcher, daemon ou gate | automação e o contrato específico |
-| versão, tag, artefato ou publicação | versionamento, release e checklist |
-| fechamento ou handoff | auditoria, regressão, memória e estado do plano |
-
-Documentos longos possuem rotas por seção. Se nenhum cenário corresponder, use o fallback do mapa; carregar toda a wiki ou todos os planos não é o fallback. O validador bloqueia políticas órfãs e tipos de sessão de skills sem rota.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
-
-<a id="pt-regressoes"></a>
-
-### Planos e regressões
-
-Planos atuais usam `fcvw/plan@2` e registram:
-
-- comportamentos existentes possivelmente afetados;
-- contratos consultados;
-- checks de preservação selecionados;
-- evidência final;
-- limitações e risco residual.
-
-`regression_contract: not_applicable` exige justificativa específica e não elimina validações estruturais aplicáveis. Planos históricos `fcvw/plan@1` permanecem legíveis e só migram quando substantivamente reabertos.
-
-Consulte [REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md) para blockers e [TESTS.md](FCVW/TESTS.md) para evidência proporcional ao risco. Regressões confirmadas e reutilizáveis usam `fcvw/regression@1`.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
+A leitura obrigatória vem do [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md): tipo de sessão, `context_files` do plano ativo e eventos declarados (segurança, dados, interface pública, IA, automação, release). O caminho de um arquivo só indica fatos inequívocos, como uma adição ou uma política do framework. O impacto semântico em arquivos da aplicação é declarado por quem faz a mudança, e a ferramenta avisa quando nenhum evento foi declarado.
 
 <a id="pt-validacao"></a>
 
 ### Validação
 
-```powershell
-python -m py_compile tools/validate_fcvw.py tools/test_validate_fcvw.py
-python tools/test_validate_fcvw.py
-python tools/test_open_issues.py
-python tools/document_graph_fcvw.py --root .
-python tools/knowledge_graph_fcvw.py --root .
-python tools/validate_fcvw.py --root . --profile clean-template
+No checkout-fonte as ferramentas ficam em `tools/`; numa instalação, em `FCVW/tools/`.
+
+```sh
+python tools/check_fcvw.py                                         # testes, governança, benchmark e smoke de instalação
+python tools/validate_fcvw.py --root . --profile clean-template     # template limpo
+python tools/validate_fcvw.py --root . --profile instantiated       # projeto instanciado
+python tools/plan_queue_fcvw.py --root . --recommend                # próximo plano
+python tools/retrieve_context.py --root . --session feature --event security   # leituras obrigatórias
 ```
 
-Depois de instanciar os perfis da aplicação:
-
-```powershell
-python tools/validate_fcvw.py --root . --profile instantiated
-```
-
-Durante migração com dívida legada revisada:
-
-```powershell
-python tools/validate_fcvw.py --root . --profile incremental --baseline path/to/legacy-baseline.md
-```
-
-| Perfil | Uso |
-|---|---|
-| `clean-template` | permite placeholders somente nos papéis apropriados e bloqueia contaminação |
-| `instantiated` | exige perfis completos e sem placeholders pendentes |
-| `incremental` | bloqueia dívida nova e separa achados cobertos por baseline exato e temporário |
-| `strict` | trata todo achado aplicável como bloqueante |
-
-O validador cobre caminhos, metadados, links, fences Markdown, planos, regressões, skills, rotas, wiki, ownership, contaminação e versões. Ele não substitui testes da aplicação, análise jurídica ou revisão humana de alto risco.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
-
-<a id="pt-conhecimento"></a>
-
-### Skills, wiki e memória
-
-Os 21 skills em `FCVW/skills/` são procedimentos just-in-time. Cada um declara triggers, tipos de sessão, propósito, limites, inputs, procedimento, output e critérios de saída. O [catálogo de skills](FCVW/skills/README.md) é a fonte de descoberta.
-
-- novos skills ou agentes passam por `agent-factory`;
-- alterações em assets existentes passam por `self-improvement`;
-- o core permanece independente de fornecedor;
-- skills não ampliam o escopo do plano.
-
-[MEMORY.md](FCVW/MEMORY.md) separa contexto ativo, conhecimento curado e arquivo pesquisável. A wiki guarda conhecimento reutilizável e com fontes, não uma cópia de toda sessão. Relações tipadas e digests de fontes alimentam apenas grafos e revisões derivados; não substituem os Markdown canônicos. Use `wiki-curator` para promoção e revisão de impacto e `wiki-lint` para integridade determinística e revisão semântica opcional.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
-
-<a id="pt-automacao"></a>
-
-### Automação declarativa
-
-[AUTOMATION.md](FCVW/AUTOMATION.md) define três cenários:
-
-| Cenário | Significado |
-|---|---|
-| 1 | contratos somente Markdown, avaliados por pessoa ou agente autorizado |
-| 2 | adapter local opcional, habilitado explicitamente pelo projeto |
-| 3 | CI, scheduler ou serviço externo com autorização e evidência próprias |
-
-Os tipos são [hooks](FCVW/HOOKS.md), [watchers](FCVW/WATCHERS.md), [daemons](FCVW/DAEMONS.md) e [governance gates](FCVW/GOVERNANCE_GATES.md). Um contrato não prova que um processo esteja rodando. Uma implementação executável precisa de trigger, precondições, ações, evidência, retry, timeout, permissões, failure policy e rollback.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
-
-<a id="pt-versoes"></a>
-
-### Versões e releases
-
-FCVW separa dois namespaces:
-
-- **aplicação:** `FCVW/changelogs/Vx.y.z.md` e a fonte de versão do produto;
-- **framework:** `FCVW/framework-releases/Vx.y.z.md` e [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
-
-A [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) está publicada com quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es` e `de`). O usuário escolhe uma língua ao baixar seu ZIP; não existe seleção automática, fallback ou árvore multilíngue durante o uso. O registro técnico está em [FCVW/framework-releases/V0.19.0.md](FCVW/framework-releases/V0.19.0.md).
-
-A partir da release com distribuição multilíngue, o usuário escolhe o idioma ao baixar um único template vazio (`pt-BR`, `en-US`, `es` ou `de`). Cada pasta ou asset é autônomo e monolíngue; o framework não detecta, alterna nem sincroniza idiomas durante o uso. A presença e a equivalência dos quatro templates são métricas da release.
-
-Nos assets preparados a partir da V0.16.0, a raiz do template contém `AGENTS.md`, `FCVW/` e as pontes de provedor opcionais `.cursorrules` e `.windsurfrules`, que só funcionam na raiz. Ferramentas, licença e notice ficam contidos em `FCVW/`; assim, após preservar registros do projeto, remover o framework significa apagar essa pasta e revisar separadamente o `AGENTS.md`. O repositório-fonte continua mantendo `README.md`, `tools/` e infraestrutura Git em seus caminhos convencionais de desenvolvimento.
-
-
-Uma mudança do FCVW não incrementa a versão da aplicação. `published` só é usado após publicação real; tag, push, deploy e release externo exigem autoridade e evidência separadas.
-
-[Navegação PT-BR](#pt-br) · [Topo](#top)
+O perfil `incremental` aceita uma baseline de débito legado revisada; `strict` trata todo finding como bloqueante. O validador cobre caminhos, metadados, links, planos, regressões, skills, rotas de leitura, wiki, ADRs, ownership e versões. Ele não substitui os testes da aplicação nem a revisão humana de alto risco.
 
 <a id="pt-mapa"></a>
 
@@ -281,41 +107,27 @@ Uma mudança do FCVW não incrementa a versão da aplicação. `published` só �
 
 | Caminho | Responsabilidade |
 |---|---|
-| [AGENTS.md](AGENTS.md) | ordem operacional, mudanças, leitura e fechamento |
-| `.cursorrules`, `.windsurfrules` | bridges opcionais que encaminham para `AGENTS.md` |
+| [AGENTS.md](AGENTS.md) | ordem de operação, mudanças, leitura e encerramento |
+| `.cursorrules`, `.windsurfrules` | pontes legadas que apontam para o `AGENTS.md` |
 | [FCVW/README.md](FCVW/README.md) | índice canônico do framework |
-| [FCVW/CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) | rotas por sessão, evento, seção e tipo de skill |
-| [FCVW/PLANNING.md](FCVW/PLANNING.md) | schema e lifecycle de planos |
-| [FCVW/REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md) | preservação de comportamento e Regression gate |
-| [FCVW/TESTS.md](FCVW/TESTS.md) | evidência proporcional ao risco |
-| [FCVW/OWNERSHIP.md](FCVW/OWNERSHIP.md) | substituir, preservar, mesclar ou regenerar |
-| [FCVW/SCHEMAS.md](FCVW/SCHEMAS.md) | contratos verificáveis e compatibilidade |
-| [FCVW/MIGRATIONS.md](FCVW/MIGRATIONS.md) | upgrade sem sobrescrever o projeto |
-| `FCVW/Plans/` | fila e histórico de mudanças governadas |
-| `FCVW/changelogs/` | releases da aplicação |
-| `FCVW/framework-releases/` | releases do FCVW |
-| `FCVW/governance/` | templates reutilizáveis |
-| `FCVW/wiki/` | memória técnica, regressões e índices |
-| `FCVW/skills/` | procedimentos sob demanda |
-| `FCVW/refactoring-guide/` | técnicas e gates de refatoração |
-| [tools/validate_fcvw.py](tools/validate_fcvw.py) | validador determinístico opcional |
-| [tools/test_validate_fcvw.py](tools/test_validate_fcvw.py) | testes de regressão do validador |
+| [FCVW/CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) | rotas por sessão, evento e seção |
+| [FCVW/PLANNING.md](FCVW/PLANNING.md), [REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md), [TESTS.md](FCVW/TESTS.md) | planos, preservação e evidência |
+| [FCVW/PROJECT.md](FCVW/PROJECT.md) | perfil único do projeto |
+| `FCVW/Plans/`, `changelogs/`, `framework-releases/`, `decisions/` | registros |
+| `FCVW/governance/` | templates |
+| `FCVW/wiki/` | memória técnica ([contrato](FCVW/wiki/README.md)) |
+| `FCVW/skills/` | 18 procedimentos sob demanda ([catálogo](FCVW/skills/README.md)) |
+| `tools/` | ferramentas opcionais e seus testes |
 
-[FILESYSTEM.md](FCVW/FILESYSTEM.md) resume o contrato físico; o disco é a fonte de verdade para existência de arquivos.
+<a id="pt-versoes"></a>
 
-[Navegação PT-BR](#pt-br) · [Topo](#top)
+### Versões e limites
 
-<a id="pt-limites"></a>
+Aplicação e framework têm versões separadas: `FCVW/changelogs/` e a fonte de versão do produto, contra `FCVW/framework-releases/` e o `FRAMEWORK_LOCK.md`. Cada release publica quatro templates monolíngues independentes (`pt-BR`, `en-US`, `es`, `de`); o idioma é escolhido no download. O pacote instalado contém só `AGENTS.md`, `FCVW/` e as pontes opcionais; remover o framework é apagar `FCVW/` depois de preservar os registros do projeto. As novidades de cada versão estão nos [release records](https://github.com/Sistema2D/FrameCode-VibeWork/tree/main/FCVW/framework-releases).
 
-### Limites e estado atual
+O FCVW não é runtime de agente, IDE, banco de dados nem substituto de testes, CI ou revisão humana, e não autoriza por si só mudanças em sistemas externos.
 
-FCVW não é um runtime de agentes, IDE, banco de dados, substituto de testes/CI/revisão humana ou autorização automática para modificar sistemas externos. Também não garante que um adapter externo respeitará instruções Markdown.
-
-O template limpo contém políticas, perfis vazios, templates, skills e registros do próprio desenvolvimento do framework. Não contém credenciais, dados de produção, screenshots, histórico de aplicação ou fixtures derivadas de aplicações reais.
-
-V0.13 introduziu ownership e migração seletiva, schemas `plan@2` e `regression@1`, namespaces separados, guardrails de regressão, memória não destrutiva, IDs seguros para concorrência, skills independentes de fornecedor, automação observável e validação de rotas/políticas órfãs.
-
-[Mudar para English (US)](#en-us) · [Navegação PT-BR](#pt-br) · [Topo](#top)
+[English (US)](#en-us) · [Topo](#top)
 
 ---
 
@@ -323,94 +135,38 @@ V0.13 introduziu ownership e migração seletiva, schemas `plan@2` e `regression
 
 ## English (United States) · ENG-US
 
-### Navigation
-
-- [Overview](#en-overview)
-- [Principles and artifacts](#en-principles)
-- [Getting started](#en-getting-started)
-- [Change lifecycle](#en-lifecycle)
-- [Selective context](#en-context)
-- [Plans and regressions](#en-regressions)
-- [Validation](#en-validation)
-- [Skills, wiki, and memory](#en-knowledge)
-- [Declarative automation](#en-automation)
-- [Versions and releases](#en-versions)
-- [Repository map](#en-map)
-- [Limits and current state](#en-limits)
-
-[Mudar para Português (Brasil)](#pt-br) · [Back to top](#top)
+[Overview](#en-overview) · [Getting started](#en-getting-started) · [Change lifecycle](#en-lifecycle) · [Validation](#en-validation) · [Map](#en-map) · [Versions](#en-versions) · [Português (Brasil)](#pt-br)
 
 <a id="en-overview"></a>
 
 ### Overview
 
-FrameCode VibeWork (FCVW) is a portable Markdown governance layer for projects developed by people and AI agents. It turns a request into a verifiable chain of context, planning, scoped execution, evidence, version records, and reusable knowledge.
+FrameCode VibeWork (FCVW) is a portable Markdown governance layer for projects developed by people and AI agents. A request becomes a verifiable chain: minimum context, plan, scoped execution, evidence, version record and reusable knowledge.
 
-The framework reduces recurring problems in AI-assisted development:
+It targets recurring problems of AI-assisted development: changes without scope or rollback, agents reading too little context (or the whole repository), completion without regression evidence, framework policy mixed with project data, uncurated session memory, and claimed automation without trigger, permission or evidence.
 
-- changes made without scope, evidence, or rollback;
-- agents reading too little context—or the entire repository without need;
-- completion based only on new behavior, without regression evidence;
-- framework policy, project profiles, and historical records being mixed together;
-- documentation, version, and implementation drift;
-- uncurated session memory;
-- redundant, provider-specific, or open-ended skills;
-- claimed automation without triggers, permissions, evidence, or failure policy.
+Markdown documents are normative. The Python tools (3.10 or later, standard library only) are optional and automate the deterministic invariants.
 
-The core remains readable without a specific runtime. The optional validator uses only the Python standard library to automate deterministic invariants; Markdown documents remain normative.
+**Principles:** scope before mutation; selective context; evidence before completion; new behavior **and** preservation of what already worked; explicit ownership; history is not current policy; automation only with an observable contract; no presumed authority for commits, tags, publication or destructive actions.
 
-[ENG-US navigation](#en-us) · [Português (Brasil)](#pt-br) · [Top](#top)
+| Role | Represents | Update rule |
+|---|---|---|
+| `framework_policy` | generic FCVW rule | replaced on upgrade, with a migration when needed |
+| `framework_lock` | installed baseline ([FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md)) | governed change |
+| `project_profile` | application truth ([PROJECT.md](FCVW/PROJECT.md), security, data, rules) | populated and preserved |
+| `record` | historical evidence: plans, changelogs, ADRs, failures | preserved, never bulk-overwritten |
+| `template` | empty model in `FCVW/governance/` | replaced when compatible |
 
-<a id="en-principles"></a>
-
-### Principles and artifacts
-
-1. **Scope before mutation:** every versioned change begins with a plan.
-2. **Selective context:** read contracts triggered by the event and domain, not every file.
-3. **Evidence before completion:** record observed results, limitations, and residual risk.
-4. **New behavior plus preservation:** prove what changed and what kept working.
-5. **Explicit ownership:** policies, profiles, records, templates, and generated files evolve differently.
-6. **History is not current policy:** records explain the past; canonical documents define the present.
-7. **Observable automation:** triggers, actions, permissions, failures, and rollback are declared before an executable adapter.
-8. **No presumed authority:** commits, pushes, tags, publication, deployments, and destructive actions require compatible authorization.
-
-| Role | Represents | Examples | Update rule |
-|---|---|---|---|
-| `framework_policy` | generic FCVW rule | planning, tests, regression | replace with compatibility and migration |
-| `framework_lock` | installed FCVW baseline | [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md) | update through a governed change |
-| `project_profile` | application-specific truth | scope, stack, data, environment | populate and preserve |
-| `record` | historical evidence | plans, changelogs, ADRs, failures | preserve; never bulk-overwrite |
-| `template` | empty reusable model | `FCVW/governance/`, `FCVW/wiki/templates/` | replace when schema-compatible |
-| `generated` | derived navigation or summary | filesystem and wiki indexes | regenerate from physical state |
-| `example` | non-authoritative demonstration | [minimal-change](FCVW/examples/minimal-change/README.md) | copy and replace placeholders |
-
-See [OWNERSHIP.md](FCVW/OWNERSHIP.md) and [SCHEMAS.md](FCVW/SCHEMAS.md) for the complete contracts.
-
-[ENG-US navigation](#en-us) · [Top](#top)
+Complete contracts are in [OWNERSHIP.md](FCVW/OWNERSHIP.md) and [SCHEMAS.md](FCVW/SCHEMAS.md).
 
 <a id="en-getting-started"></a>
 
 ### Getting started
 
-#### New project
-
-1. Read [AGENTS.md](AGENTS.md), the operational entrypoint.
-2. Classify the session through [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md).
-3. Follow [INSTANTIATION.md](FCVW/INSTANTIATION.md) and complete the necessary briefing.
-4. Populate `artifact_role: project_profile` files only with approved facts.
-5. Define the application version source in [MANIFEST.md](FCVW/MANIFEST.md) or the documented runtime.
-6. Create the first `fcvw/plan@2` under `FCVW/Plans/pending/`.
-7. When profiles are complete, run the validator with `--profile instantiated`.
-
-#### Existing application
-
-Use [RETROACTIVE_INSTANTIATION.md](FCVW/RETROACTIVE_INSTANTIATION.md). The flow inventories the project, preserves code and history, classifies ownership, and only then integrates FCVW policies. Adoption does not implicitly authorize refactoring or destructive cleanup.
-
-#### Maintaining FCVW itself
-
-Read [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.md), [MIGRATIONS.md](FCVW/MIGRATIONS.md), and the target release. Use plans with `record_scope: framework`, record changes under `FCVW/framework-releases/`, and validate with `clean-template`.
-
-[ENG-US navigation](#en-us) · [Top](#top)
+- **New project:** read [AGENTS.md](AGENTS.md), classify the session in [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) and follow [INSTANTIATION.md](FCVW/INSTANTIATION.md). Fill [PROJECT.md](FCVW/PROJECT.md) with approved facts only; sections that do not apply go into `not_applicable_sections`. Create the first plan under `FCVW/Plans/pending/` and validate with `--profile instantiated`.
+- **Existing application:** use the [retroactive mode](FCVW/INSTANTIATION.md#retroactive-instantiation). It inventories the project and preserves code and history; adopting FCVW does not authorize refactoring.
+- **Upgrade:** run the new release's `upgrade_fcvw.py` as a dry run and follow [MIGRATIONS.md](FCVW/MIGRATIONS.md). Project profiles and records are always preserved.
+- **Maintaining FCVW itself:** plans with `record_scope: framework`, records under `FCVW/framework-releases/` and `clean-template` validation. The backlog is [TODO.md](TODO.md).
 
 <a id="en-lifecycle"></a>
 
@@ -418,158 +174,41 @@ Read [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md), [OWNERSHIP.md](FCVW/OWNERSHIP.
 
 ```mermaid
 flowchart LR
-    A["Request"] --> B["Classify session and triggers"]
-    B --> C["Load minimum context"]
-    C --> D["plan@2 plan"]
+    A["Request"] --> B["Session and triggers"]
+    B --> C["Minimum context"]
+    C --> D["Plan"]
     D --> E["Scoped implementation"]
     E --> F["Validation and regression"]
     F --> G{"Gate passed?"}
-    G -- "no" --> H["Fix, reduce, block, or record risk"]
-    H --> F
-    G -- "yes" --> I["Changelog or framework release"]
-    I --> J["Completed plan and useful knowledge"]
+    G -- "no" --> E
+    G -- "yes" --> H["Changelog and completed plan"]
 ```
 
-For a versioned change:
+1. Look for related work in `Plans/in_progress/` and `pending/`.
+2. Create or resume a plan with objective, limits, risk, acceptance criteria, regression impact and rollback. P4/P5 changes with R1 use the compact plan.
+3. Move the plan to `in_progress/` and change only what is in scope.
+4. Collect evidence proportional to risk and record the change in `changelogs/` (application) or `framework-releases/` (FCVW).
+5. Complete the plan when no regression result is pending.
 
-1. inspect related plans under `pending/` and `in_progress/`;
-2. create or resume a plan with objective, limits, risk, acceptance, regression impact, and rollback;
-3. move the plan to `in_progress` before implementation;
-4. modify only authorized boundaries;
-5. collect evidence proportional to risk and dependency radius;
-6. record application changes in `changelogs/` or FCVW changes in `framework-releases/`;
-7. complete the plan only when no regression result is pending and no blocking gate remains.
+Queries, analyses and reviews need no plan. Neither does a typo fix in prose: without touching frontmatter, links, tables, code or policies, a conventional commit is enough (see [PLANNING.md](FCVW/PLANNING.md)).
 
-Read-only queries and analyses do not require a plan. Creating or changing files after the analysis does.
-
-[ENG-US navigation](#en-us) · [Top](#top)
-
-<a id="en-context"></a>
-
-### Selective context
-
-[CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) combines four sources: session type, the active plan's `context_files`, detected mandatory events, and justified escalation when evidence crosses another domain.
-
-| Observed event | Additional contracts |
-|---|---|
-| file created, moved, or removed | ownership and filesystem |
-| public API, CLI, format, or workflow changed | architectural decisions, documentation, and workflow |
-| dependency, runtime, or external service changed | stack, environment, and security |
-| authentication, permission, or sensitive data | security, data, and tests |
-| persistence or migration | data, tests, and regression |
-| AI prompt, skill, agent, memory, or tool | AI, security, and boundary replay |
-| hook, watcher, daemon, or gate | automation and the specific contract |
-| version, tag, artifact, or publication | versioning, release, and checklist |
-| closeout or handoff | audit, regression, memory, and plan state |
-
-Long documents have section-level routes. If no scenario matches, use the map's fallback; loading the entire wiki or every plan is not the fallback. The validator blocks orphan policies and skill session types without routes.
-
-[ENG-US navigation](#en-us) · [Top](#top)
-
-<a id="en-regressions"></a>
-
-### Plans and regressions
-
-Current plans use `fcvw/plan@2` and record:
-
-- existing behaviors that may be affected;
-- consulted contracts;
-- selected preservation checks;
-- final evidence;
-- limitations and residual risk.
-
-`regression_contract: not_applicable` requires a specific justification and does not remove applicable structural validation. Historical `fcvw/plan@1` files remain readable and migrate only when substantively reopened.
-
-See [REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md) for blockers and [TESTS.md](FCVW/TESTS.md) for risk-proportional evidence. Confirmed reusable regressions use `fcvw/regression@1`.
-
-[ENG-US navigation](#en-us) · [Top](#top)
+Mandatory reading comes from [CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md): session type, the active plan's `context_files` and declared events (security, data, public interface, AI, automation, release). A file path only implies unambiguous facts, such as an addition or a framework policy. Semantic impact on application files is declared by whoever makes the change, and the tool warns when none was declared.
 
 <a id="en-validation"></a>
 
 ### Validation
 
-```powershell
-python -m py_compile tools/validate_fcvw.py tools/test_validate_fcvw.py
-python tools/test_validate_fcvw.py
-python tools/validate_fcvw.py --root . --profile clean-template
-python tools/test_open_issues.py
-python tools/document_graph_fcvw.py --root .
-python tools/knowledge_graph_fcvw.py --root .
+Tools live in `tools/` in the source checkout and in `FCVW/tools/` when installed.
+
+```sh
+python tools/check_fcvw.py                                         # tests, governance, benchmark, installed smoke
+python tools/validate_fcvw.py --root . --profile clean-template     # clean template
+python tools/validate_fcvw.py --root . --profile instantiated       # instantiated project
+python tools/plan_queue_fcvw.py --root . --recommend                # next plan
+python tools/retrieve_context.py --root . --session feature --event security   # mandatory reads
 ```
 
-After application profiles are instantiated:
-
-```powershell
-python tools/validate_fcvw.py --root . --profile instantiated
-```
-
-During a migration with reviewed legacy debt:
-
-```powershell
-python tools/validate_fcvw.py --root . --profile incremental --baseline path/to/legacy-baseline.md
-```
-
-| Profile | Use |
-|---|---|
-| `clean-template` | allows placeholders only in appropriate roles and blocks contamination |
-| `instantiated` | requires complete profiles without unresolved placeholders |
-| `incremental` | blocks new debt and separates exact, temporary legacy-baseline findings |
-| `strict` | treats every applicable finding as blocking |
-
-The validator covers paths, metadata, links, Markdown fences, plans, regressions, skills, routes, wiki, ownership, contamination, and versions. It does not replace application tests, legal analysis, or high-risk human review.
-
-[ENG-US navigation](#en-us) · [Top](#top)
-
-<a id="en-knowledge"></a>
-
-### Skills, wiki, and memory
-
-The 21 skills under `FCVW/skills/` are just-in-time procedures. Each declares triggers, session types, purpose, boundaries, inputs, procedure, output, and exit criteria. The [skills catalog](FCVW/skills/README.md) is the discovery source.
-
-- new skills or agents go through `agent-factory`;
-- changes to existing assets go through `self-improvement`;
-- the core remains provider-neutral;
-- skills never expand the plan's scope.
-
-[MEMORY.md](FCVW/MEMORY.md) separates active context, curated knowledge, and searchable archives. The wiki stores reusable, sourced knowledge rather than a copy of every session. Typed relations and source digests feed derived graphs and review findings only; they never replace canonical Markdown. Use `wiki-curator` for promotion and impact review and `wiki-lint` for deterministic integrity plus optional semantic review.
-
-[ENG-US navigation](#en-us) · [Top](#top)
-
-<a id="en-automation"></a>
-
-### Declarative automation
-
-[AUTOMATION.md](FCVW/AUTOMATION.md) defines three scenarios:
-
-| Scenario | Meaning |
-|---|---|
-| 1 | Markdown-only contracts evaluated by an authorized person or agent |
-| 2 | optional local adapter explicitly enabled by the project |
-| 3 | CI, scheduler, or external service with its own authorization and evidence |
-
-Contract types are [hooks](FCVW/HOOKS.md), [watchers](FCVW/WATCHERS.md), [daemons](FCVW/DAEMONS.md), and [governance gates](FCVW/GOVERNANCE_GATES.md). A contract does not prove that a process is running. Executable implementations need a trigger, preconditions, actions, evidence, retry, timeout, permissions, failure policy, and rollback.
-
-[ENG-US navigation](#en-us) · [Top](#top)
-
-<a id="en-versions"></a>
-
-### Versions and releases
-
-FCVW separates two namespaces:
-
-- **application:** `FCVW/changelogs/Vx.y.z.md` and the product version source;
-- **framework:** `FCVW/framework-releases/Vx.y.z.md` and [FRAMEWORK_LOCK.md](FCVW/FRAMEWORK_LOCK.md).
-
-[V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) is published with four independent monolingual templates (`pt-BR`, `en-US`, `es`, and `de`). The user chooses one language by downloading its ZIP; there is no automatic selection, fallback, or multilingual runtime tree. The technical record is [FCVW/framework-releases/V0.19.0.md](FCVW/framework-releases/V0.19.0.md).
-
-Starting with the multilingual distribution release, the user chooses a language by downloading one empty template (`pt-BR`, `en-US`, `es`, or `de`). Each folder or asset is standalone and monolingual; the framework does not detect, switch, or synchronize languages during use. Presence and parity of all four templates are release metrics.
-
-In assets prepared from V0.16.0 onward, the template root contains `AGENTS.md`, `FCVW/`, and the optional provider bridges `.cursorrules` and `.windsurfrules`, which only work at the root. Tools, license, and notice are contained by `FCVW/`; after preserving project records, framework removal means deleting that directory and reviewing `AGENTS.md` separately. The source repository keeps `README.md`, `tools/`, and Git infrastructure in their conventional development paths.
-
-An FCVW change does not increment an application's version. `published` is used only after real publication; tags, pushes, deployments, and external releases require separate authority and evidence.
-
-
-[ENG-US navigation](#en-us) · [Top](#top)
+The `incremental` profile accepts a reviewed legacy-debt baseline; `strict` treats every finding as blocking. The validator covers paths, metadata, links, plans, regressions, skills, reading routes, wiki, ADRs, ownership and versions. It does not replace application tests or high-risk human review.
 
 <a id="en-map"></a>
 
@@ -577,41 +216,27 @@ An FCVW change does not increment an application's version. `published` is used 
 
 | Path | Responsibility |
 |---|---|
-| [AGENTS.md](AGENTS.md) | operating order, changes, reading, and closeout |
-| `.cursorrules`, `.windsurfrules` | optional bridges pointing tools to `AGENTS.md` |
+| [AGENTS.md](AGENTS.md) | operating order, changes, reading and closeout |
+| `.cursorrules`, `.windsurfrules` | legacy bridges pointing to `AGENTS.md` |
 | [FCVW/README.md](FCVW/README.md) | canonical framework index |
-| [FCVW/CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) | session, event, section, and skill-type routes |
-| [FCVW/PLANNING.md](FCVW/PLANNING.md) | plan schema and lifecycle |
-| [FCVW/REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md) | behavior preservation and Regression gate |
-| [FCVW/TESTS.md](FCVW/TESTS.md) | risk-proportional evidence |
-| [FCVW/OWNERSHIP.md](FCVW/OWNERSHIP.md) | replace, preserve, merge, or regenerate |
-| [FCVW/SCHEMAS.md](FCVW/SCHEMAS.md) | machine-checkable contracts and compatibility |
-| [FCVW/MIGRATIONS.md](FCVW/MIGRATIONS.md) | upgrades without overwriting the project |
-| `FCVW/Plans/` | governed change queue and history |
-| `FCVW/changelogs/` | application releases |
-| `FCVW/framework-releases/` | FCVW releases |
-| `FCVW/governance/` | reusable templates |
-| `FCVW/wiki/` | technical memory, regressions, and indexes |
-| `FCVW/skills/` | on-demand procedures |
-| `FCVW/refactoring-guide/` | refactoring techniques and gates |
-| [tools/validate_fcvw.py](tools/validate_fcvw.py) | optional deterministic validator |
-| [tools/test_validate_fcvw.py](tools/test_validate_fcvw.py) | validator regression tests |
+| [FCVW/CONTEXT_MAP.md](FCVW/CONTEXT_MAP.md) | session, event and section routes |
+| [FCVW/PLANNING.md](FCVW/PLANNING.md), [REGRESSION_GUARDS.md](FCVW/REGRESSION_GUARDS.md), [TESTS.md](FCVW/TESTS.md) | plans, preservation and evidence |
+| [FCVW/PROJECT.md](FCVW/PROJECT.md) | single project profile |
+| `FCVW/Plans/`, `changelogs/`, `framework-releases/`, `decisions/` | records |
+| `FCVW/governance/` | templates |
+| `FCVW/wiki/` | technical memory ([contract](FCVW/wiki/README.md)) |
+| `FCVW/skills/` | 18 on-demand procedures ([catalog](FCVW/skills/README.md)) |
+| `tools/` | optional tools and their tests |
 
-[FILESYSTEM.md](FCVW/FILESYSTEM.md) summarizes the physical contract; disk is the source of truth for file existence.
+<a id="en-versions"></a>
 
-[ENG-US navigation](#en-us) · [Top](#top)
+### Versions and limits
 
-<a id="en-limits"></a>
+Application and framework versions are separate: `FCVW/changelogs/` and the product version source, versus `FCVW/framework-releases/` and `FRAMEWORK_LOCK.md`. Each release publishes four independent monolingual templates (`pt-BR`, `en-US`, `es`, `de`); the language is chosen at download. The installed package contains only `AGENTS.md`, `FCVW/` and the optional bridges; removing the framework means deleting `FCVW/` after preserving the project's records. What changed in each version is in the [release records](https://github.com/Sistema2D/FrameCode-VibeWork/tree/main/FCVW/framework-releases).
 
-### Limits and current state
+FCVW is not an agent runtime, IDE, database or substitute for tests, CI or human review, and it does not by itself authorize changes to external systems.
 
-FCVW is not an agent runtime, IDE, database, substitute for tests/CI/human review, or automatic authorization to modify external systems. It also cannot guarantee that an external adapter will honor Markdown instructions.
-
-The clean template contains policies, empty project profiles, templates, skills, and records of the framework's own development. It contains no credentials, production data, screenshots, application history, or fixtures derived from real applications.
-
-V0.13 introduced ownership-aware migration, `plan@2` and `regression@1` schemas, separate version namespaces, regression guardrails, non-destructive memory, concurrency-safe IDs, provider-neutral skills, observable automation, and orphan-policy/reading-route validation.
-
-[Mudar para Português (Brasil)](#pt-br) · [ENG-US navigation](#en-us) · [Top](#top)
+[Português (Brasil)](#pt-br) · [Top](#top)
 
 ---
 
@@ -621,125 +246,4 @@ Stable: [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v
 
 [Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [LinkedIn](https://www.linkedin.com/in/hugoaraujo92/) · [Buy Me a Coffee](https://buymeacoffee.com/hugomelovek)
 
-
-[PT-BR](#pt-br) · [ENG-US](#en-us) · [Top](#top)
-
 </div>
-
-## V0.19.0 — QA e validação local / QA and local validation
-
-O agente **QA** mapeia a aplicação na primeira execução, testa as superfícies acessíveis e mantém na wiki o comportamento esperado e observado. Toda divergência exige consulta ao usuário. A validação gratuita roda localmente; os controles adaptativos continuam desativados para uso operacional enquanto faltarem evidências reais independentes. Os quatro ZIPs de idioma foram verificados e publicados com checksums.
-
-**QA** maps the application on first use, tests reachable surfaces, and maintains expected and observed behavior in the wiki. Every divergence requires a user question. Free validation runs locally; adaptive controls remain disabled for operational use pending independent real-task evidence. Four verified language ZIPs are published with checksums.
-
-- [Release v0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.19.0) · [Registro técnico / Technical record](FCVW/framework-releases/V0.19.0.md)
-- [Agente QA / QA agent](FCVW/skills/QA/SKILL.md) · [Validação / Validation](FCVW/TESTS.md)
-
-## V0.18.0 — retrieval quality / qualidade de recuperação
-
-A V0.18.0 corrige correspondências acidentais no histórico, explica rotas obrigatórias e permite selecionar trechos completos por orçamento opcional. O benchmark contém 12 casos sintéticos rotulados; os testes locais verificaram Windows, Python 3.12/3.14 e pacotes instalados. A estimativa de tokens não mede consumo do modelo e o modo adaptativo continua somente sombra.
-
-V0.18.0 fixes incidental history matches, explains mandatory routes and adds optional complete-chunk budget selection. Its benchmark contains 12 labeled synthetic cases; local checks covered Windows, Python 3.12/3.14 and installed packages. Token estimates are not model usage and adaptive routing remains shadow-only.
-
-- [Uso / Usage](FCVW/AI.md)
-- [Validação / Validation](FCVW/TESTS.md)
-- [Registro técnico / Technical record](FCVW/framework-releases/V0.18.0.md)
-- [Avaliação real / Real-task evaluation #55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55)
-- [Aprendizagem reversível / Reversible learning #56](https://github.com/Sistema2D/FrameCode-VibeWork/issues/56)
-- [Assistência condicionada / Guarded assist #57](https://github.com/Sistema2D/FrameCode-VibeWork/issues/57)
-
-A [issue #58](https://github.com/Sistema2D/FrameCode-VibeWork/issues/58) foi encerrada por decisão do mantenedor. A validação atual é local e não depende de GitHub Actions ou pagamento. / Issue #58 was closed by the maintainer; current validation runs locally without GitHub Actions or payment.
-
-
-## Validação local gratuita / Free local validation
-
-No checkout da branch principal, execute:
-
-```sh
-python -B tools/check_fcvw.py --root .
-```
-
-O comando executa testes, governança, benchmark e verificação da instalação. Salva relatório JSON e logs em `.fcvw-cache/local-checks/` e retorna erro se qualquer etapa falhar. Aceita vários executáveis Python e verificação de ZIPs existentes; consulte [instruções completas](FCVW/TESTS.md). Não instala serviços nem exige conta ou cartão. A execução é manual antes de aceitar alterações; Linux só estará validado por uma execução em Linux.
-
-Run the command from the main-branch checkout to check tests, governance, benchmark and installed layout. JSON evidence and logs stay in `.fcvw-cache/local-checks/`; any failed step returns nonzero. Multiple Python executables and existing ZIP verification are supported. No service, account or card is required. Invoke it before accepting changes; other operating systems require their own actual run. The runner is included in V0.19.0; V0.18.0 ZIPs remain unchanged.
-
-## Wiki funcional e agente QA / Product wiki and QA
-
-**Decisão obrigatória:** sempre que houver divergência entre comportamento esperado
-e observado, o QA pergunta ao usuário qual caminho seguir e registra a resposta.
-A métrica exige 100% das divergências consultadas e zero decisões pendentes antes
-de agir sobre elas. Sem resposta, alterações dependentes ficam bloqueadas.
-
-**Mandatory decision:** QA asks the user about every expected/actual divergence.
-Consultation coverage must be 100%, with no pending decisions before dependent
-changes. User decisions are recorded separately from the original test results.
-
-O agente **QA** mapeia a aplicação na primeira execução: telas, botões, modais, campos, fluxos e estados acessíveis. Em aplicações sem interface gráfica, mapeia comandos, APIs, bibliotecas, serviços, protocolos e entradas/saídas. Registra finalidade, contexto de uso, regras conhecidas e lacunas na wiki; depois revisa apenas áreas afetadas. Comportamento esperado precisa de fonte aprovada, e comportamento observado fica ligado à evidência do teste. Falhas não viram requisitos automaticamente.
-
-**QA** first maps the accessible application, then tests and maintains selected product knowledge. Unknown requirements, inaccessible roles and untested areas remain explicit. The multidisciplinary profile selects browser, native UI, terminal, protocol client, compiled harness, simulator or authorized hardware tools according to the target; no background crawler or runtime dependency is installed. Initial mapping can resume from a checkpoint. Structural checks validate declared coverage and evidence fields, not the truth of execution.
-
-- [Agente QA / QA profile](FCVW/skills/QA/SKILL.md)
-- [Modos de execução / Target execution guidance](FCVW/skills/QA/TARGETS.md)
-- [Wiki de produto / Product knowledge](FCVW/wiki/product/README.md)
-- [Templates](FCVW/wiki/templates/README.md)
-
-Incluído na V0.19.0. A primeira execução em um projeto exige o endereço ou instruções de inicialização da aplicação e acesso ao ambiente de teste autorizado. / Included in V0.19.0; actual project execution requires a target application and authorized test access.
-
-## Avaliação do ciclo completo / Full-cycle evaluation
-
-O avaliador local da [issue #55](https://github.com/Sistema2D/FrameCode-VibeWork/issues/55)
-mede tokens até conclusão validada (quando disponíveis), iterações, retrabalho,
-aprovação inicial, tempo, repetição de falhas e utilidade do contexto. Consome
-registros externos explícitos; preserva tarefas incompletas e separa medições,
-estimativas e dados ausentes. Não executa modelos nem promove estratégias.
-
-The optional evaluator binds runs to a frozen protocol, deduplicates resumed
-evidence and reports paired descriptive comparisons. Real task efficacy requires
-appropriate independent evidence; synthetic tests and repository audits alone
-cannot establish it. Existing retrieval remains unchanged.
-
-- [Contrato / Contract](FCVW/governance/LOOP_EVALUATION_CONTRACT.md)
-- [Template](FCVW/governance/TEMPLATE_LOOP_EVALUATION.md)
-
-```sh
-python -B tools/loop_metrics_fcvw.py --protocol /external/protocol.json --runs /external/runs.jsonl --output /external/report.json --check
-```
-
-No pacote instalado, use `FCVW/tools/`. A ferramenta não depende de GitHub Actions
-pago. `--check` retorna falha para evidência inconclusiva ou invariantes violados;
-um relatório válido não representa autorização para aprendizagem ou assistência.
-
-
-O piloto inicial executou 24 auditorias do repositório em oito domínios. Preservou
-100% do contexto obrigatório, mas registrou perda de recall útil com orçamento no
-caso de UI e uma proposta sombra proibida pelos rótulos do piloto. Não há medição
-de tokens do provedor nem evidência de superioridade em tarefas executadas por IA.
-A validação empírica necessária à ativação permanece sem evidência suficiente. Resultados e limitações:
-[plano concluído de implementação e piloto](FCVW/Plans/completed/P2-R4-2026-09-22-loop-evaluation.md).
-
-
-## Experimentos adaptativos com controle explícito
-
-A implementação das issues #56/#57 acrescenta feedback humano revisado, pesos
-limitados, replay/exportação/reset/rollback e assistência opcional. Os controles
-validam a evidência da #55 antes de permitir ativação. O piloto atual não passa:
-nenhuma economia de tokens, não inferioridade ou promoção operacional é presumida.
-
-`--adaptive-mode assist` exige arquivos externos de controle e observação e um
-registro local SQLite explícito (`--adaptive-ledger`) que impede reinícios e
-observações antigas sob o mesmo controle. O padrão
-continua lexical; consultas obrigatórias do QA e bloqueios de segurança sobrevivem
-ao rollback. A ferramenta não executa modelos nem coleta prompts automaticamente.
-
-- [Contrato, campos e comandos](FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md)
-- [Decisão de arquitetura](FCVW/decisions/ADR-0009-adaptive-experiment-controls.md)
-
-Adaptive capabilities remain opt-in and evidence-gated. Synthetic safety tests
-verify implementation only; operational activation requires separately reviewed
-real task evidence. No paid infrastructure or always-on process is required.
-
-
-As issues #55, #56 e #57 foram encerradas com justificativas e critérios empíricos
-não atendidos preservados. Os controles estão implementados; a campanha empírica
-e a promoção remanescentes foram encerradas como “não planejado”. Isso não habilita
-a ativação. [Evidência de encerramento](FCVW/Plans/completed/P2-R4-2026-09-23-adaptive-controls.md).

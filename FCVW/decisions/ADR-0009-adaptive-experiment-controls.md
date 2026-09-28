@@ -1,7 +1,9 @@
 ---
 schema: "fcvw/adr@1"
 id: "ADR-0009"
-status: "accepted"
+status: "superseded"
+superseded_by:
+  - "ADR-0010"
 date: "2026-09-23"
 artifact_role: "record"
 owner: "framework"
@@ -50,7 +52,7 @@ distributed lock, tamper-proof audit service or authoritative identity provider 
 ## Compatibility, validation and rollback
 
 Additive CLI flags and JSON contracts. Existing commands and schemas remain readable.
-Use [the contract](../governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) and
+Use [the contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md) and
 [implementation plan](../Plans/completed/P2-R4-2026-09-23-adaptive-controls.md)
 for tests, negative pilot evidence and residual risks. Disable assistance, retain
 stop evidence, and restore or reset explicit state. Revalidate before reactivation.

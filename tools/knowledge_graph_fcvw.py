@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Build and validate the disposable FCVW typed knowledge graph."""
+"""Build and validate the disposable FCVW typed knowledge graph.
+
+The JSON graph (`fcvw/knowledge-graph@1`) reconstructs typed Markdown
+frontmatter: nodes, explicit edges and generated inverse edges. It never
+replaces the source pages and is written only to `.fcvw-cache/` or another
+caller-chosen, non-normative path.
+"""
 
 from __future__ import annotations
 

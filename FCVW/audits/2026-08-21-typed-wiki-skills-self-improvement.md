@@ -10,9 +10,9 @@ status: "completed"
 created_at: "2026-08-21"
 last_reviewed: "2026-08-21"
 sources:
-  - "FCVW/wiki/schema.md"
+  - "FCVW/wiki/README.md"
   - "FCVW/skills/wiki-curator/SKILL.md"
-  - "FCVW/skills/wiki-lint/SKILL.md"
+  - "FCVW/skills/governance-validator/SKILL.md"
 ---
 
 # Skill or Agent Self-Improvement: wiki-curator and wiki-lint
@@ -23,7 +23,7 @@ Review and update only the existing wiki curation and lint skills after typed re
 
 ## Authoritative sources
 
-- [Wiki schema](../wiki/schema.md)
+- [Wiki schema](../wiki/README.md)
 - [AI policy](../AI.md)
 - [Completed implementation plan](../Plans/completed/P2-R4-2026-08-21-plan-dependencies-and-typed-knowledge.md)
 

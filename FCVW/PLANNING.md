@@ -23,6 +23,8 @@ Read-only work does not create a plan. A versioned change uses one of these form
 
 The plan covers its own creation and related changelog. Group files that form one atomic outcome; do not manufacture one plan per file.
 
+A trivial prose fix needs no plan: a typo, grammar or wording correction that changes no meaning and touches no frontmatter, link, table, heading, code block or `framework_policy` file. It is recorded only in a conventional commit (`docs: …`). When in doubt, use a compact plan.
+
 ## Lifecycle
 
 ```mermaid
@@ -36,7 +38,7 @@ stateDiagram-v2
     discontinued --> pending: explicit reconsideration
 ```
 
-Allowed statuses are `pending`, `in_progress`, `completed`, and `discontinued`. The status field must match the directory.
+Allowed statuses are `pending`, `in_progress`, `completed`, and `discontinued`. Each plan is one file under `Plans/<status>/`; the status field must match the directory, and a state directory is created by the first plan that needs it.
 
 ## Required data
 
@@ -120,20 +122,22 @@ A plan is completed only when:
 
 Legacy plans retain their original schema. Apply the current schema when a legacy plan is substantively reopened.
 
-## Priority queues
+## Priority queue
 
-The canonical queue for each state is the set of fragments in `Plans/<state>/queue.d/`, one per plan, using `fcvw/plan-queue-entry@1`. `Plans/in_progress/QUEUE.md` and `Plans/pending/QUEUE.md` are the generated aggregate view. A prior project that keeps rows directly in `QUEUE.md` stays valid until it migrates. Every plan in either directory appears exactly once in its matching queue. Queue changes and plan lifecycle changes form one transaction, and with fragments that transaction touches only the plan and its own fragment.
+There is no queue file: the queue is derived from the plans in `Plans/in_progress/` and `Plans/pending/`. Each active plan may declare, in its frontmatter:
 
-Recommendation order is:
+- `category`: `correction`, `optimization`, `code_hygiene`, `visual` or `other` (default `other`);
+- `blocked_external: <specific reason>` for a non-plan condition;
+- `before_in_progress: <specific reason>` for a pending plan that must run before active work.
 
-1. valid in-progress entries before pending entries, unless a pending entry has an explicit `before_in_progress: <specific reason>` override;
-2. unblocked entries before entries with unresolved dependencies;
+Blockers are the unresolved `depends_on` IDs plus any external reason. Recommendation order is:
+
+1. an unblocked pending plan with `before_in_progress`, then in-progress plans, then pending plans;
+2. unblocked plans before blocked plans;
 3. `correction`, `optimization`, `code_hygiene`, `visual`, then `other`;
-4. P1 through P5 within the same category, then explicit row order.
+4. P1 through P5 within the same category, then `created_at`, then ID.
 
-A plan link must resolve exactly to the plan file in the queue's matching state directory. Use `none`, `-`, or an empty blocker for unblocked work; use comma-separated unresolved `depends_on` IDs for internal dependencies and `external: <specific reason>` for external dependencies. Unknown, self-referential, satisfied, or queue-only internal blockers are invalid; discontinued prerequisites remain unresolved as explicitly invalidated dependencies.
-
-A category or same-category priority inversion requires a concrete override reason. Missing, stale, duplicate, wrong-target, or wrong-state queues block implementation until repaired; a provisional recommendation may be displayed but is not authoritative.
+Because the order is computed, no inversion or row order needs justifying and the queue can never disagree with the plans. `python FCVW/tools/plan_queue_fcvw.py --root . --recommend` prints the next plan; `--output .fcvw-cache/plan-queue.md` writes a disposable view. An invalid category, a vague external reason or a misplaced `before_in_progress` blocks the recommendation. Pre-V0.20.0 `QUEUE.md` files and `queue.d/` fragments are ignored and reported until their fields move into the plans.
 
 ## Plan dependencies
 
@@ -141,13 +145,11 @@ A category or same-category priority inversion requires a concrete override reas
 
 A plan with `depends_on` contains a machine-readable `## Dependency validation` table with five columns: Dependency, Blocking reason, Unblock criteria, Status, and Evidence. Allowed dependency statuses are `pending`, `satisfied`, and `invalidated`.
 
-- `pending` remains unresolved and appears in the matching queue's `Blocked by` column;
-- `satisfied` requires the prerequisite plan to be `completed` plus concrete validation evidence, and is removed from the queue blocker column without deleting the historical `depends_on` relation;
+- `pending` remains unresolved and blocks the plan in the derived queue;
+- `satisfied` requires the prerequisite plan to be `completed` plus concrete validation evidence, and stops blocking without deleting the historical `depends_on` relation;
 - `invalidated` applies when the prerequisite was `discontinued`; it remains blocking until the dependent plan is explicitly replanned, replaced, or discontinued;
 - dependency cycles, missing or ambiguous plan IDs, self-dependencies, and evidence-free satisfaction are invalid;
-- the queue's internal blockers must equal unresolved `depends_on` IDs, while `external: <specific reason>` remains available for non-plan conditions.
-
-The two state queues remain canonical operational indexes. `python tools/plan_queue_fcvw.py --root . --output .fcvw-cache/plan-queue.md` may generate a combined human view, but that output is disposable and never a third source of truth.
+- `blocked_external: <specific reason>` remains available for non-plan conditions.
 
 ## Solution proportionality
 
@@ -183,4 +185,4 @@ advisory or blocking gate used for application work applies here.
 
 ## Document relationships
 
-Plans link affected policies and profiles through `context_files`, use portable Markdown links for related records, and remain reachable through their queue or generated plan index. A plan may not close while its related changelog, release, decision, regression, or validation evidence is an orphan.
+Plans link affected policies and profiles through `context_files`, use portable Markdown links for related records, and remain reachable through their state directory. A plan may not close while its related changelog, release, decision, regression, or validation evidence is an orphan.

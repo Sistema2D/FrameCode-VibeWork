@@ -73,4 +73,4 @@ The integrated approach covers the decision points already owned by planning, co
 ## Relationships
 
 - Completed implementation plan: [P2-R5 open-issues update](../Plans/completed/P2-R5-2026-07-27-open-issues-42-48-and-document-graph.md).
-- Governing policies: [Planning](../PLANNING.md), [Governance gates](../GOVERNANCE_GATES.md), and [Audit](../AUDIT.md).
+- Governing policies: [Planning](../PLANNING.md), [Governance gates](../AUTOMATION.md#governance-gates), and [Audit](../AUDIT.md).

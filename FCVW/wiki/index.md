@@ -13,4 +13,4 @@ Promote and link current canonical pages here after instantiation. This small cu
 
 ## Relationships
 
-Curated under the governed knowledge structure in the [wiki operating contract](README.md), [schema](schema.md), and [taxonomy](taxonomy.md).
+Curated under the [wiki contract](README.md).

@@ -11,7 +11,7 @@ Rules, criteria, and metrics for refactoring AI-assisted applications.
 
 This document is a stack-agnostic methodological guide. Applicable to web, desktop, mobile applications, backend services, APIs, libraries, native Windows applications, local AI systems, and cloud AI systems.
 
-> For detailed metrics, dependency mapping, characterization tests, rollback, and post-validation, consult `refactoring-guide/README.md`.
+> For detailed metrics, dependency mapping, characterization tests, rollback, and post-validation, consult the [refactoring guide](REFACTORING_GUIDE.md).
 
 ## 1. Objective
 
@@ -36,11 +36,11 @@ If the external behavior needs to change, the modification is not just refactori
 - `AGENTS.md`: general conduct, precedence of instructions, mandatory plans, and changelog.
 - `PLANNING.md`: plan creation, priority, risk, acceptance criteria, and tests.
 - `PLANNING.md`: operational priority/risk gates for triage, review, rollback, validation, blocking, and decomposition.
-- `VERSIONING.md`: version increment, changelog, rollback.
+- `RELEASE.md`: version increment, changelog, rollback.
 - `TROUBLESHOOTING.md`: consult when refactoring is linked to failures or regressions.
-- `DESIGN.md`: consult when refactoring affects the interface or visual components.
-- `WORKFLOW.md`: update when refactoring alters the operational workflow.
-- `SCOPE.md`: update only if refactoring reveals or requires a formal scope change.
+- `PROJECT.md` (design): consult when refactoring affects the interface or visual components.
+- `PROJECT.md` (workflows): update when refactoring alters the operational workflow.
+- `PROJECT.md` (identity and scope): update only if refactoring reveals or requires a formal scope change.
 
 ## 4. Mandatory Rule
 
@@ -125,7 +125,7 @@ R4 and R5 refactorings must have explicit rollback and expanded regression valid
 
 Refactoring plans must also record the operational score and gates defined in `PLANNING.md`. High-risk low-priority refactorings must not be executed automatically only because their risk score is high; postpone, decompose, or justify them explicitly.
 
-> For candidacy, risk, dependency, rollback, and post-validation guidance, consult `refactoring-guide/README.md`.
+> For candidacy, risk, dependency, rollback, and post-validation guidance, consult the [refactoring guide](REFACTORING_GUIDE.md).
 
 ## 13. Priority Code Smells
 
@@ -241,8 +241,8 @@ A refactoring can only be considered completed when:
 - [ ] Is there a test plan?
 - [ ] Is there a rollback plan for R4/R5?
 - [ ] Was `TROUBLESHOOTING.md` consulted if there is a relationship with a failure?
-- [ ] Was `DESIGN.md` consulted if there is an impact on UI?
-- [ ] Will `WORKFLOW.md` be updated if there is an impact on workflow?
+- [ ] Was `PROJECT.md` (design) consulted if there is an impact on UI?
+- [ ] Will `PROJECT.md` (workflows) be updated if there is an impact on workflow?
 
 ### During Refactoring
 
@@ -301,7 +301,7 @@ When in doubt between refactoring now or preserving stability, prioritize stabil
 ## 24. Technical Debt & Refactoring Ledger
 
 To ensure that temporary shortcuts or non-blocking design flaws do not accumulate silently:
-1. **Mandatory Logging:** Any compromise in design patterns, missing test cases, or temporary workarounds must be logged as a `#tech-debt` item in the wiki using the template: `wiki/templates/TEMPLATE_TECH_DEBT.md`.
+1. **Mandatory Logging:** Any compromise in design patterns, missing test cases, or temporary workarounds must be logged as a `#tech-debt` item in the wiki using the template: `governance/TEMPLATE_NOTE.md` (technical debt block).
 2. **Refactoring Priority Alignment:** Remediation plans for high-severity technical debt must be scheduled into the priority list (P1-P5) in future change plans.
 3. **Continuous Pay-Down:** When modifying a file or module that contains an active `#tech-debt` wiki card, evaluate if part or all of that debt can be safely paid down (refactored) as part of the preparatory work of your active plan, moving the wiki card status to `obsolete` or `superseded` upon completion.
 

@@ -41,7 +41,7 @@ Recommended workflow:
 5. Update the issue with handlings, results, and validation.
 6. Close the issue only after objective confirmation.
 
-When a failure generates reusable learning, the governance `wiki/` should be evaluated to receive a synthesis in `wiki/failures/` or `wiki/patterns/`.
+When a failure generates reusable learning, the governance `wiki/` should be evaluated to receive a synthesis in `wiki/` (`type: failure` notes) or `wiki/` (`type: pattern` notes).
 
 ## Location of Records
 

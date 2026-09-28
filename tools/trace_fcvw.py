@@ -1,4 +1,12 @@
-"""Opt-in, content-free cross-tool decision events; the caller supplies one run ID."""
+"""Opt-in, content-free cross-tool decision events; the caller supplies one run ID.
+
+Each JSONL row (`fcvw/decision-trace@1`, disposable) has the caller's `run_id`,
+a timestamp, component, status, reason label, nullable SHA-256 input digest and
+duration, and a nullable provider token count with its source (`provider` or
+`unavailable`). It records a tool decision, not a model call, user message, file
+read or attestation. Keep it outside the release payload or under
+`.fcvw-cache/`; aliasing an input or report path is rejected.
+"""
 
 from __future__ import annotations
 
