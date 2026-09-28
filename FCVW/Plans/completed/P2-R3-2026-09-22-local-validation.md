@@ -17,7 +17,6 @@ regression_contract: "required"
 context_files:
   - "FCVW/TESTS.md"
   - "FCVW/AUTOMATION.md"
-  - "FCVW/GOVERNANCE_GATES.md"
   - "FCVW/OWNERSHIP.md"
   - "FCVW/SECURITY.md"
 depends_on: []

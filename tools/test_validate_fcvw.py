@@ -1179,14 +1179,21 @@ class RegressionSurfaceTests(unittest.TestCase):
     """The regression contract must stay reachable from every surface that cites it."""
 
     def test_intact_surfaces_pass(self) -> None:
+        from release_layout_fcvw import governed_root
+
+        findings: list[Finding] = []
+        validate_regression_surfaces(governed_root(Path(__file__)), findings)
+        self.assertEqual([], findings)
+
+    def test_missing_surface_is_reported(self) -> None:
+        # Regression (B-03): a deleted surface used to skip its own check.
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
         (root / "FCVW").mkdir(parents=True, exist_ok=True)
-        (root / "FCVW" / "REGRESSION_GUARDS.md").write_text("# Regression guardrails\n", encoding="utf-8")
         findings: list[Finding] = []
         validate_regression_surfaces(root, findings)
-        self.assertEqual([], findings)
+        self.assertIn("FCVW/AUTOMATION.md", {item.path for item in findings if item.message == "regression surface is missing"})
 
     def test_missing_marker_is_reported(self) -> None:
         temporary = tempfile.TemporaryDirectory()

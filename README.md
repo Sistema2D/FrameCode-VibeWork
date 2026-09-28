@@ -251,7 +251,7 @@ Os 21 skills em `FCVW/skills/` são procedimentos just-in-time. Cada um declara 
 | 2 | adapter local opcional, habilitado explicitamente pelo projeto |
 | 3 | CI, scheduler ou serviço externo com autorização e evidência próprias |
 
-Os tipos são [hooks](FCVW/HOOKS.md), [watchers](FCVW/WATCHERS.md), [daemons](FCVW/DAEMONS.md) e [governance gates](FCVW/GOVERNANCE_GATES.md). Um contrato não prova que um processo esteja rodando. Uma implementação executável precisa de trigger, precondições, ações, evidência, retry, timeout, permissões, failure policy e rollback.
+Os tipos são [hooks](FCVW/AUTOMATION.md#hooks), [watchers](FCVW/AUTOMATION.md#watchers), [daemons](FCVW/AUTOMATION.md#daemons-maintenance-loops) e [governance gates](FCVW/AUTOMATION.md#governance-gates). Um contrato não prova que um processo esteja rodando. Uma implementação executável precisa de trigger, precondições, ações, evidência, retry, timeout, permissões, failure policy e rollback.
 
 [Navegação PT-BR](#pt-br) · [Topo](#top)
 
@@ -547,7 +547,7 @@ The 21 skills under `FCVW/skills/` are just-in-time procedures. Each declares tr
 | 2 | optional local adapter explicitly enabled by the project |
 | 3 | CI, scheduler, or external service with its own authorization and evidence |
 
-Contract types are [hooks](FCVW/HOOKS.md), [watchers](FCVW/WATCHERS.md), [daemons](FCVW/DAEMONS.md), and [governance gates](FCVW/GOVERNANCE_GATES.md). A contract does not prove that a process is running. Executable implementations need a trigger, preconditions, actions, evidence, retry, timeout, permissions, failure policy, and rollback.
+Contract types are [hooks](FCVW/AUTOMATION.md#hooks), [watchers](FCVW/AUTOMATION.md#watchers), [daemons](FCVW/AUTOMATION.md#daemons-maintenance-loops), and [governance gates](FCVW/AUTOMATION.md#governance-gates). A contract does not prove that a process is running. Executable implementations need a trigger, preconditions, actions, evidence, retry, timeout, permissions, failure policy, and rollback.
 
 [ENG-US navigation](#en-us) · [Top](#top)
 

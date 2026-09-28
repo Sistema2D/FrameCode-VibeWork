@@ -26,7 +26,7 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 | Instantiate a new project | `INSTANTIATION.md` | `BRIEFING.md`, `MANIFEST.md` |
 | Adopt in an existing project | `RETROACTIVE_INSTANTIATION.md` | `MIGRATIONS.md` |
 | Plan a change | `PLANNING.md` | `governance/TEMPLATE_PLAN.md` |
-| Protect existing behavior | `REGRESSION_GUARDS.md` | `TESTS.md`, `GOVERNANCE_GATES.md` |
+| Protect existing behavior | `REGRESSION_GUARDS.md` | `TESTS.md`, `AUTOMATION.md` gates |
 | Debug a failure | `TROUBLESHOOTING.md` | relevant failure record |
 | Release | `skills/release-checklist/SKILL.md` | `VERSIONING.md`, `RELEASE.md` |
 | Validate governance | `skills/governance-validator/SKILL.md` | `SCHEMAS.md` |
@@ -38,7 +38,7 @@ This directory is the governance layer installed in a project. V0.19.0 is the cu
 
 ### Framework policies — replace on compatible upgrades
 
-`AI.md`, `APPLICATION_DOCUMENTATION.md`, `ARCHITECTURAL_DECISIONS.md`, `AUDIT.md`, `AUTOMATION.md`, `CONTEXT_MAP.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md`, `HOOKS.md`, `INSTANTIATION.md`, `MEMORY.md`, `MIGRATIONS.md`, `OWNERSHIP.md`, `PLANNING.md`, this `README.md`, `REFACTORING.md`, `REFACTORING_GUIDE.md`, `REGRESSION_GUARDS.md`, `RELEASE.md`, `RETROACTIVE_INSTANTIATION.md`, `SCHEMAS.md`, `TESTS.md`, `TOKEN_BUDGET.md`, `TROUBLESHOOTING.md`, `VERSIONING.md`, and `WATCHERS.md`.
+`AI.md`, `APPLICATION_DOCUMENTATION.md`, `ARCHITECTURAL_DECISIONS.md`, `AUDIT.md`, `AUTOMATION.md`, `CONTEXT_MAP.md`, `INSTANTIATION.md`, `MEMORY.md`, `MIGRATIONS.md`, `OWNERSHIP.md`, `PLANNING.md`, this `README.md`, `REFACTORING.md`, `REFACTORING_GUIDE.md`, `REGRESSION_GUARDS.md`, `RELEASE.md`, `RETROACTIVE_INSTANTIATION.md`, `SCHEMAS.md`, `TESTS.md`, `TOKEN_BUDGET.md`, `TROUBLESHOOTING.md`, `VERSIONING.md`.
 
 ### Project profiles — instantiate and preserve
 

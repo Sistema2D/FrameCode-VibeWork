@@ -20,14 +20,11 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/AUTOMATION.md`](AUTOMATION.md)
 - [`FCVW/BRIEFING.md`](BRIEFING.md)
 - [`FCVW/CONTEXT_MAP.md`](CONTEXT_MAP.md)
-- [`FCVW/DAEMONS.md`](DAEMONS.md)
 - [`FCVW/DATA.md`](DATA.md)
 - [`FCVW/DESIGN.md`](DESIGN.md)
 - [`FCVW/ENVIRONMENT.md`](ENVIRONMENT.md)
 - [`FCVW/FILESYSTEM.md`](FILESYSTEM.md)
 - [`FCVW/FRAMEWORK_LOCK.md`](FRAMEWORK_LOCK.md)
-- [`FCVW/GOVERNANCE_GATES.md`](GOVERNANCE_GATES.md)
-- [`FCVW/HOOKS.md`](HOOKS.md)
 - [`FCVW/INSTANTIATION.md`](INSTANTIATION.md)
 - [`FCVW/MANIFEST.md`](MANIFEST.md)
 - [`FCVW/MEMORY.md`](MEMORY.md)
@@ -49,7 +46,6 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/TOKEN_BUDGET.md`](TOKEN_BUDGET.md)
 - [`FCVW/TROUBLESHOOTING.md`](TROUBLESHOOTING.md)
 - [`FCVW/VERSIONING.md`](VERSIONING.md)
-- [`FCVW/WATCHERS.md`](WATCHERS.md)
 - [`FCVW/WORKFLOW.md`](WORKFLOW.md)
 
 ## FCVW/audits
@@ -113,11 +109,8 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/governance/TEMPLATE_AUDIT.md`](governance/TEMPLATE_AUDIT.md)
 - [`FCVW/governance/TEMPLATE_AUTOMATION_CONTRACT.md`](governance/TEMPLATE_AUTOMATION_CONTRACT.md)
 - [`FCVW/governance/TEMPLATE_BRIEFING.md`](governance/TEMPLATE_BRIEFING.md)
-- [`FCVW/governance/TEMPLATE_DAEMON_LOOP.md`](governance/TEMPLATE_DAEMON_LOOP.md)
 - [`FCVW/governance/TEMPLATE_ENV.md`](governance/TEMPLATE_ENV.md)
 - [`FCVW/governance/TEMPLATE_FRAMEWORK_RELEASE.md`](governance/TEMPLATE_FRAMEWORK_RELEASE.md)
-- [`FCVW/governance/TEMPLATE_GOVERNANCE_GATE_REPORT.md`](governance/TEMPLATE_GOVERNANCE_GATE_REPORT.md)
-- [`FCVW/governance/TEMPLATE_HOOK_CHECK.md`](governance/TEMPLATE_HOOK_CHECK.md)
 - [`FCVW/governance/TEMPLATE_LANGUAGE_REVIEW.md`](governance/TEMPLATE_LANGUAGE_REVIEW.md)
 - [`FCVW/governance/TEMPLATE_LEGACY_BASELINE.md`](governance/TEMPLATE_LEGACY_BASELINE.md)
 - [`FCVW/governance/TEMPLATE_MIGRATION_RUNNER.md`](governance/TEMPLATE_MIGRATION_RUNNER.md)
@@ -130,7 +123,6 @@ Generated navigation for governed Markdown artifacts. The physical files and the
 - [`FCVW/governance/TEMPLATE_SKILL_CHANGE.md`](governance/TEMPLATE_SKILL_CHANGE.md)
 - [`FCVW/governance/TEMPLATE_TROUBLESHOOTING.md`](governance/TEMPLATE_TROUBLESHOOTING.md)
 - [`FCVW/governance/TEMPLATE_VISUAL_DIFF.md`](governance/TEMPLATE_VISUAL_DIFF.md)
-- [`FCVW/governance/TEMPLATE_WATCHER_RULE.md`](governance/TEMPLATE_WATCHER_RULE.md)
 
 ## FCVW/Plans
 

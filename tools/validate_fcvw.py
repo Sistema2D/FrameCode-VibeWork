@@ -1903,41 +1903,43 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
 
 def validate_regression_surfaces(root: Path, findings: list[Finding]) -> None:
     required_content = {
-        "AGENTS.md": "FCVW/REGRESSION_GUARDS.md",
-        "FCVW/REGRESSION_GUARDS.md": "# Regression guardrails",
-        "FCVW/PLANNING.md": "fcvw/plan@2",
-        "FCVW/TESTS.md": "## Minimum regression evidence by risk",
-        "FCVW/GOVERNANCE_GATES.md": "| Regression |",
-        "FCVW/WATCHERS.md": "## Regression-prone events",
-        "FCVW/SCHEMAS.md": "fcvw/regression@1",
-        "FCVW/governance/TEMPLATE_PLAN.md": "## Regression impact",
-        "FCVW/governance/TEMPLATE_REGRESSION.md": "fcvw/regression@1",
-        "FCVW/examples/minimal-change/plan.md": "## Regression impact",
+        "AGENTS.md": ("FCVW/REGRESSION_GUARDS.md",),
+        "FCVW/REGRESSION_GUARDS.md": ("# Regression guardrails",),
+        "FCVW/PLANNING.md": ("fcvw/plan@2",),
+        "FCVW/TESTS.md": ("## Minimum regression evidence by risk",),
+        "FCVW/AUTOMATION.md": ("| Regression |", "## Regression-prone events"),
+        "FCVW/SCHEMAS.md": ("fcvw/regression@1",),
+        "FCVW/governance/TEMPLATE_PLAN.md": ("## Regression impact",),
+        "FCVW/governance/TEMPLATE_REGRESSION.md": ("fcvw/regression@1",),
     }
-    for relative, marker in required_content.items():
+    for relative, markers in required_content.items():
         path = root / relative
         if not path.is_file():
+            # A removed surface removes its own check; report it explicitly
+            # instead of relying on an incidental broken link elsewhere.
+            findings.append(Finding("regression-surface", relative, "regression surface is missing"))
             continue
         text = read_text(path)
-        present = marker in text
-        heading_match = re.fullmatch(r"(#{1,6})\s+(.+)", marker)
-        if heading_match:
-            present = has_localized_heading(
-                text,
-                len(heading_match.group(1)),
-                heading_match.group(2),
-                include_fences=relative.startswith("FCVW/governance/TEMPLATE_"),
-            )
-        elif marker.startswith("| Regression |"):
-            accepted = title_aliases("Regression")
-            present = any(
-                len(cells := [cell.strip() for cell in line.strip().strip("|").split("|")]) >= 1
-                and normalized_title(cells[0]) in accepted
-                for line in text.splitlines()
-                if line.strip().startswith("|")
-            )
-        if not present:
-            findings.append(Finding("regression-surface", relative, f"required marker is missing: {marker}"))
+        for marker in markers:
+            present = marker in text
+            heading_match = re.fullmatch(r"(#{1,6})\s+(.+)", marker)
+            if heading_match:
+                present = has_localized_heading(
+                    text,
+                    len(heading_match.group(1)),
+                    heading_match.group(2),
+                    include_fences=relative.startswith("FCVW/governance/TEMPLATE_"),
+                )
+            elif marker.startswith("| Regression |"):
+                accepted = title_aliases("Regression")
+                present = any(
+                    len(cells := [cell.strip() for cell in line.strip().strip("|").split("|")]) >= 1
+                    and normalized_title(cells[0]) in accepted
+                    for line in text.splitlines()
+                    if line.strip().startswith("|")
+                )
+            if not present:
+                findings.append(Finding("regression-surface", relative, f"required marker is missing: {marker}"))
 
 
 def _find_plan_by_id(root: Path, plan_id: str) -> Path | None:

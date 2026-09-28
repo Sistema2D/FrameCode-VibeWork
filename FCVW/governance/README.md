@@ -23,7 +23,6 @@ Reusable empty models. Templates keep placeholders on purpose and are replaced o
 | [TEMPLATE_MIGRATION_RUNNER.md](TEMPLATE_MIGRATION_RUNNER.md) | data migration runner |
 | [TEMPLATE_LEGACY_BASELINE.md](TEMPLATE_LEGACY_BASELINE.md) | incremental validation baseline |
 | [TEMPLATE_LANGUAGE_REVIEW.md](TEMPLATE_LANGUAGE_REVIEW.md) | language-specific release review |
-| [TEMPLATE_HOOK_CHECK.md](TEMPLATE_HOOK_CHECK.md) | hook check (merged into the automation contract in the next step) |
 
 ## Framework automation record
 

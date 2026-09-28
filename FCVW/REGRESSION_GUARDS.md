@@ -79,8 +79,7 @@ Repeated recurrence of the same regression is a signal that the prior guardrail 
 
 - `PLANNING.md` and `governance/TEMPLATE_PLAN.md` define the plan body and lifecycle.
 - `TESTS.md` defines risk-proportional execution evidence.
-- `GOVERNANCE_GATES.md` defines pass, warn, block, and bypass handling.
-- `WATCHERS.md` maps observable drift to the Regression gate.
+- `AUTOMATION.md` defines gate outcomes (pass, warn, block, bypass) and maps observable drift to the Regression gate.
 - `TROUBLESHOOTING.md` owns diagnosis evidence.
 - `wiki/` (`type: regression` notes) preserves reusable recurrence-prevention knowledge.
 - `AGENTS.md` prevents humans and agents from closing work on new behavior alone.

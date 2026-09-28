@@ -45,7 +45,7 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | Wiki / memory (`wiki_maintenance`) | curate, promote, deduplicate, archive, session knowledge, source impact, typed relations | `MEMORY.md`, `wiki/README.md` | `wiki-curator`, `wiki-lint`, taxonomy/metrics, disposable knowledge graph | full session archive by default |
 | Instantiation (`instantiation`) | new clean project, briefing, bootstrap, existing-app adoption | `INSTANTIATION.md` or `RETROACTIVE_INSTANTIATION.md`, `OWNERSHIP.md` | `BRIEFING.md`, project profiles, migration | unrelated framework history |
 | Framework upgrade (`framework_upgrade`) | install/sync/merge FCVW version | `FRAMEWORK_LOCK.md`, `OWNERSHIP.md`, `MIGRATIONS.md` | target framework release, validator | application history except preservation scan |
-| Declarative automation | hook, watcher, daemon, gate, scheduled/observed reaction | `AUTOMATION.md` plus exactly one of `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, `GOVERNANCE_GATES.md` | corresponding governance template, runtime adapter only if authorized | unrelated automation types |
+| Declarative automation | hook, watcher, daemon, gate, scheduled/observed reaction | `AUTOMATION.md` (the section for the contract kind) | corresponding governance template, runtime adapter only if authorized | unrelated automation types |
 | Git / repository mutation (`git`) | stage, commit, branch, tag, push, merge, PR | `git-conventional-commits`, active plan, status/diff evidence | `release-checklist`, version/release docs | unrelated history |
 | Release (`release`) | version bump, changelog, artifact, tag, publish | `release-checklist`, `VERSIONING.md`, `RELEASE.md`, `REGRESSION_GUARDS.md` | application changelog or framework release, migration/rollback | unrelated old releases |
 | Incident / urgent containment | outage, data/security event, stop-the-bleeding request | `TROUBLESHOOTING.md`, `SECURITY.md` or `DATA.md`, `REGRESSION_GUARDS.md` | environment/deploy, rollback, incident records | feature work and broad refactor |
@@ -69,7 +69,7 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 | `event:data` Persistence, schema, import/export, retention, or migration changes | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | old-data compatibility, reconciliation, recovery |
 | `event:ai` AI instruction, prompt, skill, agent, memory, retrieval, or tool boundary changes | `AI.md`, `SECURITY.md`, `TESTS.md` | allowed/denied boundary replay; factory or improvement gate |
 | `event:failure` Failure, failed check, unexplained behavior, or known regression | `TROUBLESHOOTING.md`, `REGRESSION_GUARDS.md` | hypothesis/evidence and permanent replay decision |
-| `event:automation` Hook, watcher, daemon, or gate contract changes | `AUTOMATION.md` and matching `HOOKS.md`, `WATCHERS.md`, `DAEMONS.md`, or `GOVERNANCE_GATES.md` | trigger, permissions, evidence, failure policy, disable/rollback |
+| `event:automation` Hook, watcher, daemon, or gate contract changes | `AUTOMATION.md` | trigger, permissions, evidence, failure policy, disable/rollback |
 | `event:release` Version, changelog, artifact, tag, deploy, or publication changes | `VERSIONING.md`, `RELEASE.md`, `release-checklist` | namespace, included plans, validation, authority |
 | `event:closeout` Plan completion or session handoff | `AUDIT.md` closeout checklist, `REGRESSION_GUARDS.md` | final results, limitations, release/changelog, next state |
 
