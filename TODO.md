@@ -680,7 +680,8 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 ### Fora das fases — integração com harnesses (servidor MCP publicado na V0.22.0)
 
 - [x] Servidor MCP opcional e somente leitura (`tools/mcp_server_fcvw.py`) em vez de um harness próprio — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-optional-mcp-server.md), [ADR-0013](FCVW/decisions/ADR-0013-optional-mcp-server.md).
-- [ ] Hooks por harness (início de sessão com a rota, plano exigido antes de editar, validação ao encerrar), só depois de medir tokens e qualidade como no H-05.
+- [x] Hooks opcionais para Claude Code e Codex (`tools/hook_fcvw.py`), medidos em testes A/B e distribuídos como opt-in com contrato `fcvw/automation@1` — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-harness-hooks.md), [ADR-0014](FCVW/decisions/ADR-0014-optional-harness-hooks.md) (V0.23.0, em preparação).
+- [ ] Ativação por padrão só com amostra maior (critério do H-05: pelo menos 10 planos comparáveis).
 
 **Aceite:** nenhum schema ou diretório novo; fixtures negativas para cada regra nova no inventário congelado; a certeza recalculada pela ferramenta confere com a declarada; nenhuma proposta que afrouxe regra protegida sai sem decisão humana; corpus plantado (duplicadas, obsoletas, contraditórias, injeção) tratado corretamente.
 
