@@ -677,7 +677,7 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 
 - [x] Leitura por recorte (`ranges` na saída de rotas), âncoras por seção (links e `source_digest`), sucessor de links quebrados (`--fix-moved-links`), `evidence_method`/`verified_by` na wiki e histórico de campos no `SCHEMAS.md` — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-connectome-data-practices.md). Adianta parte de H-02, H-06 e H-07 (âncora por seção em fontes Markdown) e fornece a tabela de migração que o K-04 pede.
 
-### Fora das fases — integração com harnesses (servidor MCP publicado na V0.22.0)
+### Fora das fases — integração com harnesses (servidor MCP publicado na V0.22.0; hooks e contratos declarativos na V0.23.0)
 
 - [x] Servidor MCP opcional e somente leitura (`tools/mcp_server_fcvw.py`) em vez de um harness próprio — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-optional-mcp-server.md), [ADR-0013](FCVW/decisions/ADR-0013-optional-mcp-server.md).
 - [x] Hooks opcionais para Claude Code e Codex (`tools/hook_fcvw.py`), medidos em testes A/B e distribuídos como opt-in com contrato `fcvw/automation@1` — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-harness-hooks.md), [ADR-0014](FCVW/decisions/ADR-0014-optional-harness-hooks.md) (V0.23.0, em preparação).
