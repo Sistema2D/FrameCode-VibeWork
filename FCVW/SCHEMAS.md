@@ -140,6 +140,8 @@ The body must define purpose, use conditions, non-responsibilities, inputs, proc
 
 Required: `id`, `kind`, `status`, `trigger`, `preconditions`, `actions`, `evidence`, `failure_policy`, `rollback`, and `owner`.
 
+Optional binding (since V0.23.0): `implementation` (repository path of the executable), `hook_events` (`session-start`, `pre-edit`, `stop`) and `harnesses` (`claude-code`, `codex`). A hook contract that names `hook_fcvw.py` is the switch those hooks read: they act only while its `status` is `active`, and the validator reports any configured FCVW hook without an active contract, or an active contract whose configuration does not run it (`automation-binding`).
+
 ## Legacy validation baseline — `fcvw/legacy-baseline@1`
 
 Required frontmatter: `created_at`, `review_due`, and `owner`. Each Markdown table row requires exact path, rule ID, complete existing finding message, justification, owner, and review date.
@@ -257,6 +259,7 @@ Frontmatter fields added after V0.13.0, the first versioned frontmatter contract
 | `category`, `blocked_external`, `before_in_progress` in plan frontmatter; `not_applicable_sections` | plans; `PROJECT.md` | V0.20.0 |
 | ~~`Plans/*/QUEUE.md` and `queue.d/` queue data~~; ~~`fcvw/plan@1` for pending or active plans~~ | plans | removed V0.20.0 |
 | `source_path` with `#anchor`; `evidence_method`, `verified_by` | `fcvw/wiki@1` | V0.21.0 |
+| `implementation`, `hook_events`, `harnesses` | `fcvw/automation@1` | V0.23.0 |
 
 ## Derived outputs
 

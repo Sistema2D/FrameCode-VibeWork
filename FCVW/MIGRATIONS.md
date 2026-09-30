@@ -340,3 +340,7 @@ Additive; nothing to migrate. `FCVW/tools/hook_fcvw.py` adds opt-in hooks for
 Claude Code and Codex. To enable them, add the configuration from
 `AUTOMATION.md` and record an `fcvw/automation@1` contract with
 `scenario: "2"` and `authorized_by`; `FCVW_HOOKS=off` disables them.
+The contract is the switch: it must name `implementation`, `hook_events` and
+`harnesses` (see the ready template in `TEMPLATE_AUTOMATION_CONTRACT.md`), and
+the hooks act only while it is `active`. The new `automation-binding` rule
+reports configured hooks without such a contract, and the reverse.

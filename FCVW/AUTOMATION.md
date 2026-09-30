@@ -65,7 +65,7 @@ Scenario 1 hooks are Markdown checklists. Do not claim a Git hook is installed u
 | `pre-edit` | `PreToolUse` on edits | denies edits to versioned files while no plan is in `Plans/in_progress/` (a plan completed in uncommitted work still counts) |
 | `stop` | `Stop` | validates changes since `HEAD`; errors keep the agent working once |
 
-A project enables them only by decision: it adds the harness configuration below and records an `fcvw/automation@1` contract (`kind: hook`, `scenario: "2"`, `authorized_by`), linked from `PROJECT.md` so it stays reachable. `FCVW_HOOKS=off` disables every hook. The hooks read files and run the validator; they never write, change git or call the network. Shell commands are not inspected, so an edit made through a shell escapes `pre-edit`.
+The contract is the switch. A project enables the hooks by adding the harness configuration below and an `fcvw/automation@1` contract from the [ready template](governance/TEMPLATE_AUTOMATION_CONTRACT.md#template-fcvw-harness-hooks), with `implementation`, `hook_events`, `harnesses` and `authorized_by`, linked from `PROJECT.md`. Each hook acts only while such a contract is `active`; `paused` or `retired` turns it off without touching the configuration. The validator reports a configured hook without an active contract, and an active contract whose configuration does not run it (`automation-binding`). `FCVW_HOOKS=off` remains the emergency switch for one session. The hooks read files and run the validator; they never write, change git or call the network. Shell commands are not inspected, so an edit made through a shell escapes `pre-edit`.
 
 Claude Code, `.claude/settings.json`:
 

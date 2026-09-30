@@ -64,6 +64,94 @@ Use `TEMPLATE_AUTOMATION_CONTRACT.md` with `kind: hook` and add:
 - Follow-up:
 ```
 
+## Template: FCVW harness hooks
+
+Ready contract for `FCVW/tools/hook_fcvw.py`. Keep only the `hook_events` and `harnesses` the project configures; the validator checks that both sides match, and the hooks act only while `status` is `active`. Link the saved contract from `PROJECT.md`.
+
+```markdown
+---
+schema: "fcvw/automation@1"
+id: "AUT-YYYY-MM-DD-harness-hooks"
+kind: "hook"
+status: "active"
+owner: "<owner>"
+scenario: "2"
+execution_mode: "scenario_2"
+authorized_by: "<person and date who enabled the hooks>"
+implementation: "FCVW/tools/hook_fcvw.py"
+hook_events:
+  - "session-start"
+  - "pre-edit"
+  - "stop"
+harnesses:
+  - "claude-code"
+  - "codex"
+trigger: "SessionStart, PreToolUse on file edits and Stop of the listed harnesses"
+preconditions: "python3 available; Codex project trusted"
+actions: "session-start adds FCVW status; pre-edit denies versioned edits without a plan in progress; stop validates changes since HEAD"
+evidence: "harness transcript (hook events) and the plan's validation section"
+failure_policy: "deny edits without a plan; stop continues once on validation errors; tool errors or timeouts allow"
+rollback: "set status to paused or retired; FCVW_HOOKS=off for one session; remove the harness configuration"
+created_at: "YYYY-MM-DD"
+updated_at: "YYYY-MM-DD"
+---
+
+# FCVW harness hooks
+
+## Trigger and scope
+
+Agent sessions in this repository run by the listed harnesses (`.claude/settings.json`, `.codex/hooks.json`).
+
+## Preconditions and permissions
+
+Read access to the repository and permission to run `python3`. The hooks write nothing, change no git state and call no network.
+
+## Ordered actions
+
+1. Session start: add plans in progress and routing guidance.
+2. Before an edit: deny it when no plan is in `FCVW/Plans/in_progress/` and none was completed in uncommitted work.
+3. Before the agent stops: validate changes since `HEAD`.
+
+## Evidence
+
+Hook events in the harness transcript; validation results in the active plan.
+
+## Pass, warn, block, and failure policy
+
+Deny edits without a plan. Stop continues once with the listed errors. A hook error or timeout allows the action.
+
+## Idempotency, retry, and concurrency
+
+Stateless checks; safe to repeat. The stop hook does not block twice in one stop cycle.
+
+## Timeout and stop conditions
+
+Stop validation times out after 120 seconds and then allows.
+
+## Rollback or disable
+
+Set `status` to `paused` (every hook stops acting) or `retired`; `FCVW_HOOKS=off` for one session.
+
+## Validation
+
+`validate_fcvw.py` checks that the contract and the harness configuration match (`automation-binding`).
+
+## Lifecycle event
+
+`pre_edit | session_close | custom`
+
+## Checks
+
+- [ ] Plan in progress before versioned edits; decision in the harness transcript.
+
+## Bypass
+
+- Authority: <owner>.
+- Justification: trivial prose fixes allowed by AGENTS.md.
+- Expiry: per session (`FCVW_HOOKS=off`).
+- Follow-up: none.
+```
+
 ## Template: watcher rule
 
 Use `TEMPLATE_AUTOMATION_CONTRACT.md` with `kind: watcher` and add:
