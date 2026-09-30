@@ -673,7 +673,7 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 - [ ] K-07 + K-08 Skill de autoanálise via `agent-factory` e validador das propostas — **só quando houver notas reais de pelo menos 2 projetos**
 - [ ] K-09 Medição do próprio mecanismo
 
-### Fora das fases — práticas de dados do FlyWire (V0.21.0, em preparação)
+### Fora das fases — práticas de dados do FlyWire (publicado na V0.21.0)
 
 - [x] Leitura por recorte (`ranges` na saída de rotas), âncoras por seção (links e `source_digest`), sucessor de links quebrados (`--fix-moved-links`), `evidence_method`/`verified_by` na wiki e histórico de campos no `SCHEMAS.md` — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-connectome-data-practices.md). Adianta parte de H-02, H-06 e H-07 (âncora por seção em fontes Markdown) e fornece a tabela de migração que o K-04 pede.
 
