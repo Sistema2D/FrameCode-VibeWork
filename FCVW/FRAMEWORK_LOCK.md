@@ -10,13 +10,13 @@ upgrade_strategy: "replace_with_migration"
 | Field | Value |
 |---|---|
 | Framework | `FrameCode VibeWork` |
-| Installed version | `V0.20.0` |
-| Release state | `published` |
+| Installed version | `V0.21.0` |
+| Release state | `ready` |
 | Source | `https://github.com/Sistema2D/FrameCode-VibeWork` |
 | License | `Apache-2.0` |
 | Installed profile | `clean-template` |
-| Installed modules | `core, plans, compact-plans, derived-queue, regression-guards, records, record-reachability, project-profile, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, role-manifest, assisted-upgrade, optional-validator, verified-context-routing, complete-chunk-selection, product-QA, local-validation, optional-decision-trace` |
-| Last migration | `V0.19.0 -> V0.20.0` |
+| Installed modules | `core, plans, compact-plans, derived-queue, regression-guards, records, record-reachability, project-profile, wiki, typed-knowledge, framework-feedback, skills, declarative-automation, contained-release-layout, role-manifest, assisted-upgrade, optional-validator, verified-context-routing, section-ranges, section-anchors, complete-chunk-selection, product-QA, local-validation, optional-decision-trace` |
+| Last migration | `V0.20.0 -> V0.21.0` |
 
 ## Schema baselines
 
@@ -40,4 +40,4 @@ upgrade_strategy: "replace_with_migration"
 
 Downstream projects update this file only through a governed framework migration. Application releases never change `Installed version`.
 
-Published baseline: [V0.20.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.20.0.md). The prior version is [V0.19.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.19.0.md); the new record contains verified GitHub publication evidence.
+Ready candidate: [V0.21.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.21.0.md). The last published baseline is [V0.20.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.20.0.md).
