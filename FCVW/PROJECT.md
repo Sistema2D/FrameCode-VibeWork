@@ -122,7 +122,7 @@ Do not copy the application version into multiple documents unless it is derived
 
 ### Governance layer
 
-- Framework: FrameCode VibeWork `V0.13.0`.
+- Framework: FrameCode VibeWork; the installed version is in `FRAMEWORK_LOCK.md`.
 - Plans: `FCVW/Plans/`.
 - Application releases: `FCVW/changelogs/`.
 - Framework baseline: `FCVW/FRAMEWORK_LOCK.md`.

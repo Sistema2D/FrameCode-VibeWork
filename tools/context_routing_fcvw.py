@@ -253,6 +253,12 @@ def resolve_routes(root: Path, *, sessions: list[str] | None = None,
             raise ValueError(f"unknown event: {event}; available: {', '.join(sorted(event_table))}")
         for path in event_table[event]:
             reasons[path].extend(selected_events[event])
+    # CONTEXT_MAP cross-cutting trigger: application behaviour changes read the
+    # project's rules, once the project has instantiated them.
+    rules = root / "FCVW/APP_RULES.md" if root is not None else None
+    if application and rules is not None and rules.is_file() \
+            and scalar(frontmatter(rules), "instantiation_status") == "complete":
+        reasons["FCVW/APP_RULES.md"].extend(f"application-file:{path}" for path in application)
     return {"source": "FCVW/CONTEXT_MAP.md", "mandatory_paths": list(reasons),
             "section_hints": section_hints(root, set(reasons)),
             "reasons": dict(reasons), "events": sorted(selected_events), "warnings": warnings,
