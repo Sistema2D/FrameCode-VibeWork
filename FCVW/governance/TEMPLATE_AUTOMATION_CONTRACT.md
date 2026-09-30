@@ -126,7 +126,7 @@ Stateless checks; safe to repeat. The stop hook does not block twice in one stop
 
 ## Timeout and stop conditions
 
-Stop validation times out after 120 seconds and then allows.
+Stop validation times out after 100 seconds, inside the 120-second harness timeout, and then allows.
 
 ## Rollback or disable
 
@@ -138,7 +138,7 @@ Set `status` to `paused` (every hook stops acting) or `retired`; `FCVW_HOOKS=off
 
 ## Lifecycle event
 
-`pre_edit | session_close | custom`
+`pre_edit`, `session_close` and `custom` (session start)
 
 ## Checks
 

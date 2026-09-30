@@ -827,6 +827,9 @@ def validate_automation(root: Path, findings: list[Finding], scope: set[str] | N
         implementation = scalar(metadata, "implementation")
         if implementation and not implementation_exists(root, implementation):
             findings.append(Finding("automation-contract", relative, f"implementation is missing: {implementation}"))
+        if Path(implementation).name == "hook_fcvw.py" and scalar(metadata, "kind") != "hook":
+            findings.append(Finding("automation-contract", relative,
+                                    'an implementation of hook_fcvw.py needs kind: "hook"; the hooks ignore this contract'))
         for field, allowed in (("hook_events", HOOK_EVENTS), ("harnesses", HARNESSES)):
             if field in metadata and not isinstance(metadata.get(field), list):
                 findings.append(Finding("automation-contract", relative, f"{field} must be a first-level list"))
@@ -855,7 +858,8 @@ def validate_automation_binding(root: Path, findings: list[Finding]) -> None:
     """
 
     contracts = hook_contracts(root)
-    configured = configured_hooks(root)
+    uninspected: set[str] = set()
+    configured = configured_hooks(root, uninspected)
     for harness, events in sorted(configured.items()):
         for event in sorted(events):
             covering = [c for c in contracts if event in c["events"] and harness in c["harnesses"]]
@@ -878,6 +882,9 @@ def validate_automation_binding(root: Path, findings: list[Finding]) -> None:
             missing = sorted(set(contract["events"]) - configured.get(harness, set()))
             if harness not in HARNESS_CONFIGS:
                 findings.append(Finding("automation-binding", contract["path"], "active hook contract declares no harness"))
+            elif harness in uninspected:
+                findings.append(Finding("automation-binding", contract["path"],
+                                        f"{harness} configuration is TOML and needs Python 3.11+ to be checked", "warning"))
             elif missing:
                 findings.append(Finding("automation-binding", contract["path"],
                                         f"active contract declares {', '.join(missing)} for {harness}, "

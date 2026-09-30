@@ -27,6 +27,7 @@ import argparse
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -37,11 +38,13 @@ EDIT_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit", "apply_patch"}
 PATCH_PATH = re.compile(r"^\*\*\* (?:Update|Add|Delete) File: (.+?)\s*$|^\*\*\* Move to: (.+?)\s*$", re.M)
 # Paths an agent may create or change while opening a plan, plus disposable state.
 PLAN_FREE_PREFIXES = ("FCVW/Plans/", ".fcvw-cache/", ".git/")
-VALIDATE_TIMEOUT = 120
+# Below the 120-second harness timeout the documented configuration sets, so a slow
+# validation ends here and allows the stop instead of being killed by the harness.
+VALIDATE_TIMEOUT = 100
 HOOK_EVENTS = ("session-start", "pre-edit", "stop")
 HARNESSES = ("claude-code", "codex")
 SCRIPT_NAME = "hook_fcvw.py"
-HOOK_COMMAND = re.compile(r"hook_fcvw\.py[\"']?\s+(session-start|pre-edit|stop)\b")
+HOOK_SCRIPT = re.compile(r"hook_fcvw\.py[\"']?(?=\s|$)")
 HARNESS_CONFIGS = {
     "claude-code": (".claude/settings.json", ".claude/settings.local.json"),
     "codex": (".codex/hooks.json", ".codex/config.toml"),
@@ -93,8 +96,32 @@ def active_events(root: Path) -> set[str]:
     return {event for contract in hook_contracts(root) if contract["status"] == "active" for event in contract["events"]}
 
 
-def configured_hooks(root: Path) -> dict[str, set[str]]:
-    """Events of this script that each harness configuration file runs."""
+def command_events(command: str) -> set[str]:
+    """Hook events a harness command passes to this script, options before or after the event."""
+
+    events = set()
+    for match in HOOK_SCRIPT.finditer(command):
+        rest = command[match.end():]
+        try:
+            words = shlex.split(rest)
+        except ValueError:
+            words = rest.split()
+        for word in words:
+            if word in HOOK_EVENTS:
+                events.add(word)
+                break
+            if word in {"&&", "||", ";", "|"}:
+                break
+    return events
+
+
+def configured_hooks(root: Path, uninspected: set[str] | None = None) -> dict[str, set[str]]:
+    """Events of this script that each harness configuration file runs.
+
+    A harness whose configuration exists but cannot be read here (TOML on
+    Python 3.10) is added to `uninspected`, so callers do not mistake it for
+    a configuration that runs nothing.
+    """
 
     configured: dict[str, set[str]] = {}
     for harness, files in HARNESS_CONFIGS.items():
@@ -108,6 +135,8 @@ def configured_hooks(root: Path) -> dict[str, set[str]]:
                     try:
                         import tomllib
                     except ImportError:  # Python 3.10: TOML hooks are not inspected
+                        if uninspected is not None and "hook_fcvw.py" in text:
+                            uninspected.add(harness)
                         continue
                     data = tomllib.loads(text)
                 else:
@@ -128,7 +157,7 @@ def configured_hooks(root: Path) -> dict[str, set[str]]:
 
             collect(data.get("hooks", {}))
             for command in commands:
-                configured.setdefault(harness, set()).update(HOOK_COMMAND.findall(command))
+                configured.setdefault(harness, set()).update(command_events(command))
     return configured
 
 
@@ -186,12 +215,22 @@ def git_ignored(root: Path, relative: str) -> bool:
     return run.returncode == 0
 
 
+def tool_path(root: Path, name: str) -> str:
+    """Where a sibling tool lives for this repository: tools/ in the source, FCVW/tools/ when installed."""
+
+    try:
+        return (Path(__file__).resolve().parent / name).relative_to(root).as_posix()
+    except ValueError:
+        return f"FCVW/tools/{name}"
+
+
 def session_start(root: Path, payload: dict) -> tuple[int, str, str]:
     active = plans(root, "in_progress")
     pending = plans(root, "pending")
     lines = [
         "FCVW governs this repository. Read AGENTS.md first.",
-        "Mandatory reading: call the fcvw_routes MCP tool (or tools/retrieve_context.py) with the session, "
+        "Mandatory reading: call the fcvw_routes MCP tool (or "
+        f"{tool_path(root, 'retrieve_context.py')}) with the session, "
         "events and changed files, then read only the returned ranges.",
         "Versioned changes need a plan in FCVW/Plans/in_progress/ before any edit; the pre-edit hook enforces it.",
         f"Plans in progress: {', '.join(active) if active else 'none'}.",
@@ -225,6 +264,19 @@ def pre_edit(root: Path, payload: dict) -> tuple[int, str, str]:
     return 0, json.dumps(output), ""
 
 
+def caused_errors(findings: list[dict], changed: set[str]) -> list[dict]:
+    """Only what the uncommitted work caused: errors on a changed file, or naming one
+    (a renamed heading breaks links elsewhere). Older debt never traps the agent."""
+
+    # Whole file names only: a change to PROJECT.md does not claim TEMPLATE_PROJECT.md.
+    names = [re.compile(rf"(?<![\w.-]){re.escape(Path(path).name)}(?![\w-])") for path in changed if Path(path).name]
+    return [
+        item for item in findings
+        if isinstance(item, dict) and item.get("severity") == "error"
+        and (item.get("path") in changed or any(name.search(str(item.get("message", ""))) for name in names))
+    ]
+
+
 def stop(root: Path, payload: dict, profile: str) -> tuple[int, str, str]:
     if payload.get("stop_hook_active"):
         return 0, "", ""  # already asked once in this stop cycle; never loop
@@ -244,15 +296,8 @@ def stop(root: Path, payload: dict, profile: str) -> tuple[int, str, str]:
         report = json.loads(run.stdout)
     except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError):
         return 0, "", ""  # a broken validator run never traps the agent
-    # Only what the uncommitted work caused: findings on a changed file, or naming one
-    # (a renamed heading breaks links elsewhere). Older debt never traps the agent.
     changed = {line[3:].split(" -> ")[-1].strip().strip('"') for line in status.stdout.splitlines()}
-    names = {Path(path).name for path in changed}
-    errors = [
-        item for item in report.get("findings", [])
-        if item.get("severity") == "error"
-        and (item.get("path") in changed or any(name and name in item.get("message", "") for name in names))
-    ]
+    errors = caused_errors(report.get("findings", []), changed)
     if not errors:
         return 0, "", ""
     listed = "\n".join(f"- [{item['rule']}] {item['path']}: {item['message']}" for item in errors[:MAX_REPORTED])
@@ -264,7 +309,7 @@ def stop(root: Path, payload: dict, profile: str) -> tuple[int, str, str]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
-    parser.add_argument("event", choices=("session-start", "pre-edit", "stop"))
+    parser.add_argument("event", choices=HOOK_EVENTS)
     parser.add_argument("--root", help="repository root; default: nearest governed root above the hook cwd")
     parser.add_argument("--profile", default="instantiated",
                         choices=("clean-template", "instantiated", "incremental", "strict"))
