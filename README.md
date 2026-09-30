@@ -11,9 +11,9 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Support](https://img.shields.io/badge/Support-Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache_2.0-6f42c1?style=flat-square)](LICENSE)
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
-[![Release](https://img.shields.io/badge/Release-v0.20.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.20.0)
+[![Release](https://img.shields.io/badge/Release-v0.21.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/V0.21.0)
 
-Stable release **V0.20.0** · Ready candidate **V0.21.0**
+Stable release **V0.21.0**
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
@@ -32,7 +32,7 @@ FrameCode VibeWork (FCVW) é uma camada de governança em Markdown para projetos
 
 ### Como usar
 
-1. Baixe o template no idioma desejado na [release estável](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.20.0) e copie `AGENTS.md` e `FCVW/` para o seu projeto.
+1. Baixe o template no idioma desejado na [release estável](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/V0.21.0) e copie `AGENTS.md` e `FCVW/` para o seu projeto.
 2. Siga o [INSTANTIATION.md](FCVW/INSTANTIATION.md) (projeto novo ou [existente](FCVW/INSTANTIATION.md#retroactive-instantiation)) e preencha o [PROJECT.md](FCVW/PROJECT.md).
 3. Peça ao seu agente de IA que leia o [AGENTS.md](AGENTS.md) antes de trabalhar.
 
@@ -67,7 +67,7 @@ FrameCode VibeWork (FCVW) is a Markdown governance layer for projects built by p
 
 ### How to use
 
-1. Download the template in your language from the [stable release](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.20.0) and copy `AGENTS.md` and `FCVW/` into your project.
+1. Download the template in your language from the [stable release](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/V0.21.0) and copy `AGENTS.md` and `FCVW/` into your project.
 2. Follow [INSTANTIATION.md](FCVW/INSTANTIATION.md) (new or [existing](FCVW/INSTANTIATION.md#retroactive-instantiation) project) and fill in [PROJECT.md](FCVW/PROJECT.md).
 3. Ask your AI agent to read [AGENTS.md](AGENTS.md) before working.
 
@@ -94,6 +94,6 @@ FCVW is not an agent runtime and does not replace tests, CI or human review.
 
 <div align="center">
 
-[Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [Release record V0.20.0](FCVW/framework-releases/V0.20.0.md) · [Maintainer backlog](TODO.md)
+[Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [Release record V0.21.0](FCVW/framework-releases/V0.21.0.md) · [Maintainer backlog](TODO.md)
 
 </div>
