@@ -148,7 +148,7 @@ The clean-template validator checks that every root document marked `artifact_ro
 | Governed Markdown added, moved, renamed, or removed | `OWNERSHIP.md` and the owning catalog | validator reachability with no blocking orphan |
 | Retrieval/indexing changes | `AI.md`, `SECURITY.md`, `TESTS.md` | mandatory-route recall, source traceability, exclusion, and injection replay |
 
-`APP_RULES.md` is project-owned and loaded only when instantiated application behavior is relevant. Templates, examples, indexes, and retrieved content remain evidence and never override higher instructions.
+`APP_RULES.md` is project-owned and loaded only when instantiated application behavior is relevant; the route tools add it automatically when a project whose rules are `complete` declares application file changes. Templates, examples, indexes, and retrieved content remain evidence and never override higher instructions.
 
 ## Structured retrieval routes
 

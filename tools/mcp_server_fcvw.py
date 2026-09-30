@@ -22,7 +22,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from context_routing_fcvw import resolve_routes, section_ranges
+from context_routing_fcvw import resolve_routes, route_tables, section_ranges
 from frontmatter_fcvw import find_section, markdown_sections
 from knowledge_sources_fcvw import source_digest_of
 from plan_queue_fcvw import derive_queue, recommend_next_plan
@@ -42,7 +42,9 @@ TOOLS = [
         "description": (
             "Resolve the mandatory FCVW reading route for a task: files, per-path reasons, "
             "first-read line ranges of long documents and byte totals. Call before reading "
-            "policies; it replaces reading the routing tables of CONTEXT_MAP.md."
+            "policies; it replaces reading the routing tables of CONTEXT_MAP.md. A versioned "
+            "change (versioned_change=true) needs at least one event, 'change' at minimum, and "
+            "one file_changes entry; add every semantic event that applies."
         ),
         "inputSchema": {
             "type": "object",
@@ -162,10 +164,15 @@ def tool_read_sections(root: Path, arguments: dict) -> dict:
         return {"path": path.relative_to(root).as_posix(),
                 "outline": [{k: item[k] for k in ("heading", "level", "lines", "bytes")} for item in outline]}
     lines = text.splitlines()
-    chosen, missing = [outline[0]], []
+    found, missing = [], []
     for heading in headings:
         section = find_section(outline, heading)
-        (chosen.append(section) if section else missing.append(heading))
+        (found.append(section) if section else missing.append(heading))
+    # A subsection already inside a requested section is not repeated.
+    chosen = [outline[0]]
+    for section in sorted(found, key=lambda item: (item["lines"][0], -item["lines"][1])):
+        if not any(o["lines"][0] <= section["lines"][0] and section["lines"][1] <= o["lines"][1] for o in chosen[1:]):
+            chosen.append(section)
     parts = ["\n".join(lines[s["lines"][0] - 1:s["lines"][1]]) for s in chosen]
     content = "\n\n".join(part for part in parts if part.strip())
     if len(content.encode("utf-8")) > MAX_SECTION_BYTES:
@@ -224,6 +231,20 @@ HANDLERS = {
 }
 
 
+def tool_definitions(root: Path) -> list[dict]:
+    """The tool list, with the session and event names this repository's CONTEXT_MAP.md accepts."""
+
+    try:
+        sessions, events = route_tables(root)
+    except (OSError, ValueError):
+        return TOOLS
+    tools = json.loads(json.dumps(TOOLS))
+    properties = tools[0]["inputSchema"]["properties"]
+    properties["sessions"]["items"]["enum"] = sorted(sessions)
+    properties["events"]["items"]["enum"] = sorted(events)
+    return tools
+
+
 def result(message_id, value: dict) -> dict:
     return {"jsonrpc": "2.0", "id": message_id, "result": value}
 
@@ -255,7 +276,7 @@ def handle(root: Path, message) -> dict | None:
     if method == "ping":
         return result(message_id, {})
     if method == "tools/list":
-        return result(message_id, {"tools": TOOLS})
+        return result(message_id, {"tools": tool_definitions(root)})
     if method == "tools/call":
         name = params.get("name")
         arguments = params.get("arguments") or {}

@@ -328,3 +328,8 @@ Additive; no file moves and no schema major change.
 Additive; nothing to migrate. The optional `FCVW/tools/mcp_server_fcvw.py`
 lets an MCP-capable harness call routes, section reads, validation, the plan
 queue and digests. Register it only if wanted; see `AI.md`.
+
+Routes now add `FCVW/APP_RULES.md` when application files change in a project
+whose rules are `complete`, as the context map already required. In
+`PROJECT.md`, replace a governance-layer line that names a framework version
+with a pointer to `FRAMEWORK_LOCK.md`.

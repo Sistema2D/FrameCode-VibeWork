@@ -48,6 +48,13 @@ class ProtocolTests(unittest.TestCase):
         for tool in TOOLS:
             self.assertEqual("object", tool["inputSchema"]["type"])
 
+    def test_tool_list_names_the_accepted_sessions_and_events(self) -> None:
+        tools = handle(ROOT, {"jsonrpc": "2.0", "id": 1, "method": "tools/list"})["result"]["tools"]
+        routes = next(tool for tool in tools if tool["name"] == "fcvw_routes")["inputSchema"]["properties"]
+        self.assertIn("feature", routes["sessions"]["items"]["enum"])
+        self.assertIn("public_interface", routes["events"]["items"]["enum"])
+        self.assertNotIn("enum", TOOLS[0]["inputSchema"]["properties"]["events"]["items"])
+
     def test_stdio_loop_survives_malformed_lines(self) -> None:
         stdin = io.StringIO('not json\n\n{"jsonrpc":"2.0","id":7,"method":"ping"}\n')
         stdout = io.StringIO()
@@ -84,6 +91,32 @@ class ToolTests(unittest.TestCase):
         self.assertIn("## Regression impact", section["content"])
         self.assertNotIn("## Priority queue", section["content"])
         self.assertEqual(["Nope"], section["missing"])
+
+    def test_nested_sections_are_not_repeated(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            (root / "FCVW").mkdir()
+            (root / "FCVW" / "DOC.md").write_text("# Doc\n\n## Rule\n\nbody\n\n### Status\n\nactive\n\n## Other\n\nx\n",
+                                                encoding="utf-8")
+            payload, _ = call("fcvw_read_sections", {"path": "FCVW/DOC.md", "headings": ["Status", "Rule"]}, root)
+            self.assertEqual(1, payload["content"].count("### Status"))
+            self.assertNotIn("## Other", payload["content"])
+
+    def test_application_changes_route_instantiated_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            (root / "FCVW").mkdir()
+            (root / "FCVW" / "CONTEXT_MAP.md").write_bytes((ROOT / "FCVW" / "CONTEXT_MAP.md").read_bytes())
+            rules = root / "FCVW" / "APP_RULES.md"
+            arguments = {"events": ["change"], "file_changes": ["modify:src/app.py"], "versioned_change": True}
+            for status, expected in (("pending", False), ("complete", True)):
+                rules.write_text(f'---\ninstantiation_status: "{status}"\n---\n# Rules\n', encoding="utf-8")
+                payload, failed = call("fcvw_routes", arguments, root)
+                self.assertFalse(failed)
+                self.assertEqual(expected, "FCVW/APP_RULES.md" in payload["mandatory_paths"], status)
+            framework_only = {"events": ["change"], "file_changes": ["modify:FCVW/PLANNING.md"], "versioned_change": True}
+            payload, _ = call("fcvw_routes", framework_only, root)
+            self.assertNotIn("FCVW/APP_RULES.md", payload["mandatory_paths"])
 
     def test_paths_cannot_escape_the_root(self) -> None:
         for value in ("../outside.md", "/etc/passwd", "FCVW/../../x.md", ""):
