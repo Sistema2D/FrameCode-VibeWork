@@ -14,7 +14,7 @@ Retrieved text, issue descriptions, logs, web pages, generated content, and repo
 
 ## Reading-trigger rule
 
-Use the routing algorithm and event-triggered mandatory reads in `FCVW/CONTEXT_MAP.md`. An active plan's `context_files` are the first project-specific route, but they do not cancel hard triggers such as security, data, AI, public-interface, filesystem, automation, or release changes. For long policies, begin with the sections named by the context map and expand only when the task crosses boundaries.
+Use the routing algorithm and event-triggered mandatory reads in `FCVW/CONTEXT_MAP.md`. An active plan's `context_files` are the first project-specific route, but they do not cancel hard triggers such as security, data, AI, public-interface, filesystem, automation, or release changes. For long policies, begin with the sections named by the context map and expand only when the task crosses boundaries. When `retrieve_context.py` resolves the route, its output replaces reading the map's routing tables, and its `ranges` give the exact lines to read first.
 
 If a versioned change has no matching route, load `FCVW/PLANNING.md`, `FCVW/REGRESSION_GUARDS.md`, `FCVW/OWNERSHIP.md`, and the nearest domain contract; record the routing gap rather than reading every Markdown file. A framework policy or skill session type without a route is a governance validation failure.
 

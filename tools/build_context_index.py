@@ -150,6 +150,7 @@ def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, ob
                     "authority": default_authority(metadata),
                     "type": scalar(metadata, "type"),
                     "confidence": scalar(metadata, "confidence"),
+                    "evidence_method": scalar(metadata, "evidence_method"),
                     "maturity": scalar(metadata, "maturity"),
                     "language": scalar(metadata, "language"),
                     "retrieval_scope": scope,

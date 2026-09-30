@@ -89,6 +89,16 @@ domain:
   - "<bounded-domain>"
 ```
 
+Claims may also record how they were established:
+
+```yaml
+evidence_method: "test | tool | human_review | code_reading | external_source | ai_inference"
+verified_by:
+  - "<plan-id | repository-path[::test] | https-url>"
+```
+
+Keep inferred and verified knowledge apart: a `validated` page that declares a method must cite resolvable `verified_by` evidence, and `ai_inference` alone never validates. Retrieval labels `ai_inference` results as unverified.
+
 `maturity` is not required for `source`, `raw`, or `session` pages. Deprecation remains a lifecycle concern expressed by `status: obsolete | superseded`; it is not a maturity value.
 
 ## Typed relationships
@@ -146,6 +156,8 @@ source_digest: "sha256:<64-lowercase-hex>"
 ingested_at: "YYYY-MM-DD"
 last_checked: "YYYY-MM-DD"
 ```
+
+For a Markdown source, prefer `source_path: "<path>#<heading-anchor>"`: the digest then covers only that section, so edits elsewhere in the file raise no review (`knowledge_graph_fcvw.py --digest PATH#anchor` prints it). A whole-file digest stays the rule for code.
 
 Use `source_digest`, not `content_hash`: the context index already uses `content_hash` as a legacy alias for the indexed chunk hash and exposes the unambiguous `chunk_hash`. A digest mismatch is a derived stale finding. It never rewrites the stored digest, page status, or dependent knowledge.
 

@@ -78,23 +78,26 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 
 | Document | Read only these sections first | Expand when |
 |---|---|---|
-| `AI.md` | usage type; Instruction hierarchy and Prompt injection; Memory/AICC; ASE; Third-party research; or AI quality checklist | the task crosses more than one AI boundary |
-| `REFACTORING.md` | Central principle and block criteria; risk/tests; chosen checklist; anti-monolith/hygiene gate | a systemic refactor needs the full lifecycle |
-| `REFACTORING_GUIDE.md` | only the section for the current stage (decision guide, smells map, risk matrix, rollback, stopping criteria) | the refactor spans several stages |
-| `TROUBLESHOOTING.md` | Mandatory consultation and plan relationship; recommended consultation; closure criteria | creating or closing a durable failure record |
-| `skills/project-instantiation/BRIEFING.md` | Activation and gap levels, then only relevant questionnaire domains; closure rule last | performing full Phase 0 discovery |
-| `AUDIT.md` | matching audit type or quick checklist; pre-release checklist only at release | running a repository-wide or release audit |
-| `APPLICATION_DOCUMENTATION.md` | When documentation is required and minimum module scope | designing the full downstream documentation tree |
-| `ARCHITECTURAL_DECISIONS.md` | When to create/not create an ADR and acceptance checklist | authoring or superseding an ADR |
-| `SCHEMAS.md` | Common fields plus only the schema of the artifact at hand | changing a schema or auditing compatibility |
-| `PROJECT.md` | only the section for the concern at hand (identity and scope, stack, environment, design, performance, workflows) | instantiation or a change that crosses concerns |
-| `PLANNING.md` | When planning applies; plan class; regression impact; queues | reopening a plan or revising queue policy |
-| `TESTS.md` | Minimum evidence by risk plus the row for the changed surface | defining project test strategy |
-| `MIGRATIONS.md` | Principles, then only the sections from the installed version to the target | reconstructing an old migration path |
-| `OWNERSHIP.md` | Required metadata, Upgrade algorithm and Protected paths; Filesystem layout only when paths change | changing ownership rules |
-| `INSTANTIATION.md` | the greenfield flow, or only Retroactive instantiation for an existing codebase | adapting the instantiation method |
-| `skills/governance-validator/SKILL.md` | Purpose through Validation and exit, plus only the mode section in use | combining lint modes |
-| `wiki/README.md` | Layout, Note types and Page schema; Framework feedback only for feedback notes; Memory lifecycle only for rotation or compaction | curating relations, sources or the taxonomy |
+| `CONTEXT_MAP.md` | `Routing algorithm`, `Missing-route and escalation rules` and `Cross-cutting application-rule and graph triggers`, when `retrieve_context.py` resolved the route | no route output exists: read `Session routing` and `Event-triggered mandatory reads` |
+| `AI.md` | One of: `AI Usage Types`; `Instruction Hierarchy` with `Prompt Injection`; `Memory and History` with `AI Interaction Context Compression (AICC)`; `AI Skills Engine (ASE)`; `Third-Party Service Research`; `AI Quality Evaluation` | the task crosses more than one AI boundary |
+| `REFACTORING.md` | `2. Central Principle`, `14. Entry and Block Criteria`, `18. Minimum Tests by Risk`, `20. Checklists` (the chosen checklist) and `25. Anti-Monolith and Code Hygiene Gates` | a systemic refactor needs the full lifecycle |
+| `REFACTORING_GUIDE.md` | One of: `01 — Decision Guide`; `08 — Code Smells Map`; `00 — General Refactoring Governance` (risk, entry, exit and rollback); `09 — Refactoring Pull Request Checklist` | the refactor spans several stages |
+| `TROUBLESHOOTING.md` | `Mandatory Consultation Rule`, `Relationship with Change Plans` and `Criteria to Close an Issue` | creating or closing a durable failure record |
+| `skills/project-instantiation/BRIEFING.md` | `Mandatory Activation Rule`, `Gap Levels` and `Phase 0 Closure Rule`, then only the relevant questionnaire domains | performing full Phase 0 discovery |
+| `AUDIT.md` | One of: `Audit Types` (the matching type); `Quick Audit Checklist for AI Agents` | a repository-wide audit; `Minimum Audit Checklist Before Release` only at release |
+| `APPLICATION_DOCUMENTATION.md` | `When Documentation Is Required` and `Minimum Module Document Scope` | designing the full downstream documentation tree |
+| `ARCHITECTURAL_DECISIONS.md` | `When to Create an ADR`, `When Not to Create an ADR` and `Checklist Before Accepting an ADR` | authoring or superseding an ADR |
+| `SCHEMAS.md` | `Common fields` plus only the schema of the artifact at hand | changing a schema or auditing compatibility |
+| `PROJECT.md` | One of: `Identity and scope`; `Stack`; `Environment`; `Design`; `Performance`; `Workflows` | instantiation or a change that crosses concerns |
+| `PLANNING.md` | `When planning applies`, `Regression impact` and `Priority queue` | reopening a plan or revising queue policy |
+| `TESTS.md` | `Minimum regression evidence by risk` plus the changed-surface row of `Evidence matrix by change surface` | defining project test strategy |
+| `MIGRATIONS.md` | `Principles`, then only the sections from the installed version to the target | reconstructing an old migration path |
+| `OWNERSHIP.md` | `Required metadata`, `Upgrade algorithm` and `Protected paths` | paths change (`Filesystem layout`) or ownership rules change |
+| `INSTANTIATION.md` | One of: `Instantiation Flow` (greenfield); `Retroactive instantiation` (existing codebase) | adapting the instantiation method |
+| `skills/governance-validator/SKILL.md` | `Purpose`, `Profiles`, `Inputs`, `Checks`, `Optional execution`, `Non-responsibilities`, `Required output` and `Validation and exit`, plus only the mode section in use | combining lint modes |
+| `wiki/README.md` | `Layout`, `Note types` and `Page schema` | curating relations, sources or the taxonomy; `Framework feedback` for feedback notes; `Memory lifecycle` for rotation or compaction |
+
+Backticked names in the middle column are exact section headings; `One of:` lists alternatives. Tools read only that column, so conditional sections belong in the last one.
 
 ## Declared skill session type aliases
 
@@ -149,7 +152,11 @@ The clean-template validator checks that every root document marked `artifact_ro
 
 ## Structured retrieval routes
 
-The routing output includes `section_hints` for selected long policies so the
-host can read the first relevant sections before expanding a document.
+The routing output includes `section_hints` and, under `ranges`, the first-read
+line range and byte size of each named section of every routed long document,
+plus `context_bytes` (whole files versus first reads). Read those ranges
+instead of whole files; when the route output exists it replaces reading this
+map's routing tables. An unresolved heading is listed and its whole file is
+counted, so the fallback reads more, never less.
 
 Repeat `--session` and `--event` to accumulate immediate required reads. For a versioned change, use `--versioned-change` with at least one explicit impact `--event` and a changed file. Prefer `--file-change modify:PATH`, `add:PATH`, `delete:PATH`, `move:PATH` or `rename:PATH` when the operation is known. The older `--changed-file PATH` treats the operation as unknown. Additions, moves, renames and deletions of any file add `event:filesystem`; edits do not. Application paths imply no semantic event; the result warns when a versioned application change declares none. Stable `event:` identifiers are machine keys; descriptions remain human-readable. The CLI reports each reason and unions paths with the entrypoints, active plan and explicit `--mandatory` paths. Unknown identifiers fail closed. The host classifies semantic impacts such as permission changes; the flag checks that a declaration exists, not that it is true or exhaustive. See [retrieval usage](AI.md).

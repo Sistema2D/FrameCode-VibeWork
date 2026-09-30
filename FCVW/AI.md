@@ -429,11 +429,11 @@ Token efficiency means loading the smallest evidence set that preserves correctn
 
 ### Default strategy
 
-1. Read `AGENTS.md` and one `CONTEXT_MAP.md` row.
+1. Read `AGENTS.md` and one `CONTEXT_MAP.md` row, or the route output of `retrieve_context.py`, which replaces the routing tables.
 2. Add the active plan's `context_files` and every matching mandatory event trigger; these routes are cumulative.
 3. Prefer current canonical documents over historical sessions.
 4. Search archives before opening many files.
-5. Load the relevant sections of long policies first, using the section routes in `CONTEXT_MAP.md`.
+5. Load the relevant sections of long policies first, using the section routes in `CONTEXT_MAP.md` or the line `ranges` of the route output.
 6. Load a JIT skill instead of several long documents when the skill fully covers the operation.
 7. Put detailed evidence in repository records and keep user-facing updates compact.
 8. Keep command output and repeated status checks proportional to the decision;
@@ -469,6 +469,8 @@ Useful repository metrics:
 - validation defects caused by missing context.
 
 Recorded baseline (2026-09-28, clean template, bytes of `AGENTS.md` plus the mandatory route; no tokenizer): the sum over all 34 session and event routes fell from 563 KB in V0.19.0 to 526 KB in V0.20.0 (−6.6%) when section-routed documents count their preamble plus their largest section, and grew from 912 KB to 948 KB when every file is read whole, which is what section routes exist to avoid. 24 routes shrank or held; 10 grew by 0.1 to 2.3 KB, mostly because the single `PROJECT.md` replaced near-empty placeholder profiles. In a filled project the same content moves rather than grows. A project profile edit reads about 22 KB of mandatory context.
+
+First-read ranges (2026-09-30, same method, V0.21.0 candidate): over 13 common session and event routes, whole files total 664 KB and the first-read ranges plus the route output itself 314 KB (−53%); the map alone drops from 19 KB to about 4 KB when the route output replaces its tables.
 
 ### Complete-chunk budget estimates
 
