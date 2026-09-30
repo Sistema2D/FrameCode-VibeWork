@@ -63,6 +63,11 @@ class SectionRangeTests(TemporaryRoot):
         self.assertLess(result["context_bytes"]["first_read"], result["context_bytes"]["whole_files"])
         self.assertTrue(ranges["FCVW/PROJECT.md"]["alternatives"])
 
+    def test_alternatives_are_recognized_in_every_release_language(self) -> None:
+        for hint in ("One of: `A`; `B`", "Um de: `A`; `B`", "Uno de: `A`; `B`", "Eines von: `A`; `B`"):
+            self.assertEqual((["A", "B"], True), named_sections(hint))
+        self.assertEqual((["A"], False), named_sections("`A` and `tool.py`"))
+
     def test_unresolved_heading_falls_back_to_the_whole_file(self) -> None:
         root = self.make_root()
         (root / "FCVW" / "CONTEXT_MAP.md").write_text(

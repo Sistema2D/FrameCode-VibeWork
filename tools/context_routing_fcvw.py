@@ -156,11 +156,15 @@ def section_hints(root: Path, selected: set[str]) -> dict[str, str]:
     return {path: cells[0] for path, cells in selective_rows(root).items() if path in selected}
 
 
+# 'One of:' as written in each release language (en-US, pt-BR, es, de).
+ALTERNATIVE_PREFIXES = ('one of', 'um de', 'uma de', 'uno de', 'una de', 'eines von', 'einer von', 'eine von')
+
+
 def named_sections(hint: str) -> tuple[list[str], bool]:
     """Backticked heading names of a first-read hint and whether they are alternatives ('One of:')."""
     names = [token for token in re.findall(r'`([^`]+)`', hint)
              if '/' not in token and not re.search(r'\.[A-Za-z]{1,4}$', token)]
-    return names, hint.lower().startswith('one of')
+    return names, hint.lower().startswith(ALTERNATIVE_PREFIXES)
 
 
 def section_ranges(root: Path, paths: list[str]) -> dict:
