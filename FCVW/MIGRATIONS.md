@@ -333,3 +333,10 @@ Routes now add `FCVW/APP_RULES.md` when application files change in a project
 whose rules are `complete`, as the context map already required. In
 `PROJECT.md`, replace a governance-layer line that names a framework version
 with a pointer to `FRAMEWORK_LOCK.md`.
+
+## V0.22.0 to V0.23.0
+
+Additive; nothing to migrate. `FCVW/tools/hook_fcvw.py` adds opt-in hooks for
+Claude Code and Codex. To enable them, add the configuration from
+`AUTOMATION.md` and record an `fcvw/automation@1` contract with
+`scenario: "2"` and `authorized_by`; `FCVW_HOOKS=off` disables them.

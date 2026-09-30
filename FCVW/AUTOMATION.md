@@ -55,6 +55,40 @@ Each hook declares:
 
 Scenario 1 hooks are Markdown checklists. Do not claim a Git hook is installed unless its executable artifact exists and was authorized.
 
+### Agent harness hooks (optional, Scenario 2)
+
+`tools/hook_fcvw.py` (`FCVW/tools/` when installed) turns three rules into checks for Claude Code and Codex, whose hook protocols share what it uses ([ADR-0014](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0014-optional-harness-hooks.md)):
+
+| Hook | Event | Effect |
+|---|---|---|
+| `session-start` | `SessionStart` | adds a short status: plans in progress, how to route |
+| `pre-edit` | `PreToolUse` on edits | denies edits to versioned files while no plan is in `Plans/in_progress/` (a plan completed in uncommitted work still counts) |
+| `stop` | `Stop` | validates changes since `HEAD`; errors keep the agent working once |
+
+A project enables them only by decision: it adds the harness configuration below and records an `fcvw/automation@1` contract (`kind: hook`, `scenario: "2"`, `authorized_by`), linked from `PROJECT.md` so it stays reachable. `FCVW_HOOKS=off` disables every hook. The hooks read files and run the validator; they never write, change git or call the network. Shell commands are not inspected, so an edit made through a shell escapes `pre-edit`.
+
+Claude Code, `.claude/settings.json`:
+
+```json
+{"hooks": {
+  "SessionStart": [{"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/FCVW/tools/hook_fcvw.py\" session-start"}]}],
+  "PreToolUse": [{"matcher": "Edit|Write|MultiEdit|NotebookEdit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/FCVW/tools/hook_fcvw.py\" pre-edit"}]}],
+  "Stop": [{"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/FCVW/tools/hook_fcvw.py\" stop", "timeout": 120}]}]
+}}
+```
+
+Codex, `.codex/hooks.json` (loaded only for a trusted project; edits arrive as `apply_patch`):
+
+```json
+{"hooks": {
+  "SessionStart": [{"hooks": [{"type": "command", "command": "python3 FCVW/tools/hook_fcvw.py session-start"}]}],
+  "PreToolUse": [{"matcher": "apply_patch", "hooks": [{"type": "command", "command": "python3 FCVW/tools/hook_fcvw.py pre-edit"}]}],
+  "Stop": [{"hooks": [{"type": "command", "command": "python3 FCVW/tools/hook_fcvw.py stop", "timeout": 120}]}]
+}}
+```
+
+Measured on one small project with headless Claude Code, two runs per condition: with the task naming FCVW, cost matched the run without hooks (US$0.39 against US$0.37); without naming it, hooks kept the plan before the code in 2 of 2 runs against 1 of 2, for about 27% more cost. The evidence is indicative, which is why the hooks stay opt-in. Codex support follows its published hook schemas and was not exercised live.
+
 ## Watchers
 
 A watcher maps an observable event to a bounded reaction.
