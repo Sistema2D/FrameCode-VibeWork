@@ -677,6 +677,11 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 
 - [x] Leitura por recorte (`ranges` na saída de rotas), âncoras por seção (links e `source_digest`), sucessor de links quebrados (`--fix-moved-links`), `evidence_method`/`verified_by` na wiki e histórico de campos no `SCHEMAS.md` — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-connectome-data-practices.md). Adianta parte de H-02, H-06 e H-07 (âncora por seção em fontes Markdown) e fornece a tabela de migração que o K-04 pede.
 
+### Fora das fases — integração com harnesses (V0.22.0, em preparação)
+
+- [x] Servidor MCP opcional e somente leitura (`tools/mcp_server_fcvw.py`) em vez de um harness próprio — [plano](FCVW/Plans/completed/P2-R3-2026-09-30-optional-mcp-server.md), [ADR-0013](FCVW/decisions/ADR-0013-optional-mcp-server.md).
+- [ ] Hooks por harness (início de sessão com a rota, plano exigido antes de editar, validação ao encerrar), só depois de medir tokens e qualidade como no H-05.
+
 **Aceite:** nenhum schema ou diretório novo; fixtures negativas para cada regra nova no inventário congelado; a certeza recalculada pela ferramenta confere com a declarada; nenhuma proposta que afrouxe regra protegida sai sem decisão humana; corpus plantado (duplicadas, obsoletas, contraditórias, injeção) tratado corretamente.
 
 ---
