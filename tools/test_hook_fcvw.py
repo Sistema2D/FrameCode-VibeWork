@@ -12,7 +12,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from hook_fcvw import configured_hooks, edited_paths, hook_contracts, main
+from unittest import mock
+
+from hook_fcvw import caused_errors, command_events, configured_hooks, edited_paths, hook_contracts, main
 from validate_fcvw import Finding, validate_automation, validate_automation_binding
 from release_layout_fcvw import governed_root
 
@@ -89,6 +91,24 @@ class PathTests(unittest.TestCase):
         self.assertEqual([], edited_paths({"tool_name": "Edit", "tool_input": "bad"}))
 
 
+    def test_command_events_accept_options_before_the_event(self) -> None:
+        self.assertEqual({"pre-edit"}, command_events('python3 "$D/FCVW/tools/hook_fcvw.py" --profile strict pre-edit'))
+        self.assertEqual({"stop"}, command_events("py FCVW\\tools\\hook_fcvw.py stop --profile instantiated"))
+        self.assertEqual(set(), command_events("python3 FCVW/tools/hook_fcvw.py && echo stop"))
+        self.assertEqual(set(), command_events("python3 other_hook_fcvw.pyc stop"))
+
+    def test_stop_reports_only_errors_caused_by_changed_files(self) -> None:
+        findings = [
+            {"severity": "error", "path": "FCVW/PROJECT.md", "message": "x"},
+            {"severity": "error", "path": "FCVW/a.md", "message": "line 3: missing target: ../src/app.py"},
+            {"severity": "error", "path": "FCVW/b.md", "message": "missing target: TEMPLATE_PROJECT.md"},
+            {"severity": "warning", "path": "FCVW/PROJECT.md", "message": "w"},
+            "not a finding",
+        ]
+        kept = caused_errors(findings, {"FCVW/PROJECT.md", "src/app.py"})
+        self.assertEqual(["FCVW/PROJECT.md", "FCVW/a.md"], [item["path"] for item in kept])
+
+
 class PreEditTests(Repo):
     def decision(self, root: Path, payload: dict) -> str | None:
         run = run_hook("pre-edit", {"cwd": str(root), "hook_event_name": "PreToolUse", **payload})
@@ -149,6 +169,7 @@ class SessionStartTests(Repo):
         self.assertEqual("SessionStart", output["hookEventName"])
         self.assertIn("P3-R2-2026-01-01-x", output["additionalContext"])
         self.assertLess(len(output["additionalContext"].encode()), 1500)
+        self.assertRegex(output["additionalContext"], r"\(or (?:FCVW/)?tools/retrieve_context\.py\)")
 
 
 class StopTests(Repo):
@@ -248,6 +269,30 @@ class BindingTests(unittest.TestCase):
         self.assertTrue(any("unknown hook_events: bogus" in m for m in messages))
         self.assertTrue(any("unknown harnesses: vim" in m for m in messages))
         self.assertTrue(any("implementation is missing" in m for m in messages))
+
+
+    def test_options_before_the_event_still_bind(self) -> None:
+        root = self.root()
+        write_contract(root, contract(events=("pre-edit",), harnesses=("claude-code",)))
+        (root / ".claude/settings.json").write_text(json.dumps({"hooks": {"PreToolUse": [{"hooks": [
+            {"type": "command", "command": "python3 FCVW/tools/hook_fcvw.py --profile strict pre-edit"}]}]}}), encoding="utf-8")
+        self.assertEqual([], self.findings(root))
+
+    def test_wrong_kind_is_reported_on_the_contract(self) -> None:
+        root = self.root()
+        write_contract(root, contract().replace('kind: "hook"', 'kind: "watcher"'))
+        messages = [f.message for f in self.findings(root) if f.rule == "automation-contract"]
+        self.assertTrue(any('kind: "hook"' in m for m in messages), messages)
+
+    def test_toml_without_tomllib_is_a_warning_not_a_false_error(self) -> None:
+        root = self.root()
+        write_contract(root, contract(events=("stop",), harnesses=("codex",)))
+        (root / ".codex/config.toml").write_text(
+            '[[hooks.Stop]]\n[[hooks.Stop.hooks]]\ntype = "command"\ncommand = "python3 FCVW/tools/hook_fcvw.py stop"\n',
+            encoding="utf-8")
+        with mock.patch.dict(sys.modules, {"tomllib": None}):
+            binding = [f for f in self.findings(root) if f.rule == "automation-binding"]
+        self.assertEqual(["warning"], [f.severity for f in binding])
 
 
 class InProcessTests(unittest.TestCase):
