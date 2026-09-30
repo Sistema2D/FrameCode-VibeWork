@@ -88,7 +88,7 @@ A generated catalog is a disposable view, never a source of policy. Graph reacha
 
 ## Context retrieval
 
-Mandatory reads come from [CONTEXT_MAP.md](CONTEXT_MAP.md) routes; `tools/retrieve_context.py` resolves them and, with an index and query, adds ranked optional chunks within an optional budget. See [usage and limits](AI.md) and [benchmark and installed verification](TESTS.md).
+Mandatory reads come from [CONTEXT_MAP.md](CONTEXT_MAP.md) routes; `tools/retrieve_context.py` resolves them and, with an index and query, adds ranked optional chunks within an optional budget. See [usage and limits](AI.md) and [benchmark and installed verification](TESTS.md). The optional `tools/mcp_server_fcvw.py` exposes routes, section reads, validation, the plan queue and digests to MCP-capable harnesses ([MCP server](AI.md#optional-mcp-server)).
 
 ## Local validation
 

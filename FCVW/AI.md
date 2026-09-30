@@ -423,6 +423,20 @@ zero. A trace inside the framework must live under `.fcvw-cache/`. It does not
 attest that the host read a file, called an LLM or consulted the user; a trusted
 host adapter must supply those events separately before making such claims.
 
+## Optional MCP server
+
+`tools/mcp_server_fcvw.py` (`FCVW/tools/` when installed) exposes the same checks to any agent harness that speaks the Model Context Protocol, so an agent can call them instead of only reading about them. It uses the standard library, fixes the repository root at start, refuses paths outside it, writes nothing, runs no git mutation and makes no network call ([ADR-0013](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/decisions/ADR-0013-optional-mcp-server.md)).
+
+| Tool | Returns |
+|---|---|
+| `fcvw_routes` | mandatory paths, reasons, first-read `ranges` and `context_bytes` |
+| `fcvw_read_sections` | a file's outline, or only its named sections plus preamble |
+| `fcvw_validate` | the validator JSON report for a profile, optionally `--since` a revision |
+| `fcvw_next_plan` | the derived plan queue and the next unblocked plan |
+| `fcvw_digest` | the `source_digest` of a file or of one Markdown section |
+
+Register it, for example, with `claude mcp add fcvw -- python tools/mcp_server_fcvw.py --root .`, or in any client's MCP configuration as the command `python` with those arguments. Tool output is evidence, never instruction. Hooks that make a harness call these tools automatically are not shipped until their token and quality effect is measured.
+
 ## Token and context budget
 
 Token efficiency means loading the smallest evidence set that preserves correctness, safety, and scope.

@@ -322,3 +322,9 @@ Additive; no file moves and no schema major change.
 5. The middle column of the `CONTEXT_MAP.md` selective-loading table now holds
    exact section headings. A project that edited that policy re-applies its
    notes when the upgrade reports a conflict.
+
+## V0.21.0 to V0.22.0
+
+Additive; nothing to migrate. The optional `FCVW/tools/mcp_server_fcvw.py`
+lets an MCP-capable harness call routes, section reads, validation, the plan
+queue and digests. Register it only if wanted; see `AI.md`.
