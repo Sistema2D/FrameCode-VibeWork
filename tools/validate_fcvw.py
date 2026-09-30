@@ -13,7 +13,15 @@ from datetime import date
 from pathlib import Path
 from document_graph_fcvw import build_graph
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
-from frontmatter_fcvw import FrontmatterValue, parse_frontmatter, scalar, scan_fences, string_list
+from frontmatter_fcvw import (
+    FrontmatterValue,
+    heading_anchors,
+    heading_slug,
+    parse_frontmatter,
+    scalar,
+    scan_fences,
+    string_list,
+)
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
 # One list for both layouts (E-04), mapped to the installed layout by installed_path.
@@ -171,6 +179,9 @@ FEEDBACK_ASSESSMENT_TITLE = "Assessment of prior notes"
 
 WIKI_STATUSES = {"draft", "in_validation", "validated", "obsolete", "superseded", "contradictory"}
 WIKI_CONFIDENCE = {"low", "medium", "high"}
+# How a wiki claim was established. Only ai_inference is not independent: like a
+# predicted value beside a measured one, it can inform but never validate.
+EVIDENCE_METHODS = {"test", "tool", "human_review", "code_reading", "external_source", "ai_inference"}
 REGRESSION_TYPES = {
     "functional",
     "interface",
@@ -906,6 +917,7 @@ REPOSITORY_WIDE_RULES = {
     "duplicate-id",
     "frontmatter-relationship",
     "regression-surface",
+    "markdown-anchor",
 }
 # Rule families that compare files with each other. Matching by prefix keeps a
 # newly added rule of the family repository-wide; an exact list silently drifted
@@ -1022,9 +1034,132 @@ def validate_markdown(root: Path, findings: list[Finding], scope: set[str] | Non
                     continue
                 candidate = path.parent / target
                 if not candidate.exists():
+                    hint = successor_hint(root, path, target)
                     findings.append(
-                        Finding("markdown-link", relative, f"line {line_number}: missing target: {target}")
+                        Finding("markdown-link", relative, f"line {line_number}: missing target: {target}{hint}")
                     )
+
+
+def markdown_link_targets(text: str) -> list[tuple[int, str]]:
+    """(line, raw destination) for every Markdown link outside code."""
+
+    targets: list[tuple[int, str]] = []
+    for line_number, line in outside_code_fences(text):
+        code_ranges = [match.span() for match in INLINE_CODE.finditer(line)]
+        for match in MARKDOWN_LINK.finditer(line):
+            if any(start <= match.start() and match.end() <= end for start, end in code_ranges):
+                continue
+            raw = match.group(1).strip()
+            raw = raw[1:raw.find(">")] if raw.startswith("<") and ">" in raw else raw.split(maxsplit=1)[0]
+            targets.append((line_number, raw))
+    return targets
+
+
+def lineage(root: Path) -> dict[str, str]:
+    """Removed or merged framework paths and their successors, read from the MIGRATIONS.md tables.
+
+    A table whose header starts with `Removed` or `Legacy file` maps each
+    backticked path in its first column to the text of its second column.
+    """
+
+    path = root / "FCVW" / "MIGRATIONS.md"
+    mapping: dict[str, str] = {}
+    active = False
+    successor_label = ""
+    for _, raw_line in outside_code_fences(read_text(path)) if path.is_file() else []:
+        line = raw_line.strip()
+        if not line.startswith("|"):
+            active = False
+            continue
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        if len(cells) < 2:
+            continue
+        if cells[0] in {"Removed", "Legacy file"}:
+            active = True
+            successor_label = "" if cells[1].startswith("Consolidated") else cells[1].replace("`", "") + " "
+            continue
+        if active and not set(cells[0]) <= set("-: "):
+            for token in re.findall(r"`([^`]+)`", cells[0]):
+                mapping[token.strip("/")] = successor_label + cells[1].replace("`", "")
+    return mapping
+
+
+def moved_plan(root: Path, source: Path, target: str) -> str | None:
+    """Source-relative path of the plan a stale `Plans/<status>/` link names, when unique."""
+
+    if "Plans/" not in target.replace("\\", "/") or not target.endswith(".md"):
+        return None
+    matches = sorted((root / "FCVW" / "Plans").glob(f"*/{Path(target).name}"))
+    if len(matches) != 1:
+        return None
+    return os.path.relpath(matches[0], source.parent).replace(os.sep, "/")
+
+
+def successor_hint(root: Path, source: Path, target: str) -> str:
+    """A '; ...' suffix naming where a missing link target went, or ''."""
+
+    plan = moved_plan(root, source, target)
+    if plan:
+        return f"; plan moved, use {plan} (--fix-moved-links rewrites it)"
+    try:
+        resolved = os.path.relpath((source.parent / target).resolve(), (root / "FCVW").resolve())
+    except ValueError:
+        resolved = target
+    candidates = {target.replace("\\", "/").strip("/"), resolved.replace(os.sep, "/")}
+    for old, new in lineage(root).items():
+        if any(value == old or value.endswith("/" + old) or f"/{old}/" in f"/{value}" for value in candidates):
+            return f"; removed upstream, now in {new} (see MIGRATIONS.md)"
+    return ""
+
+
+def governed_markdown(root: Path) -> list[Path]:
+    """Root entrypoints plus every Markdown file under FCVW/."""
+
+    return [*sorted(root.glob("*.md")), *markdown_files(root)]
+
+
+def validate_anchors(root: Path, findings: list[Finding]) -> None:
+    """Every `#fragment` of a local Markdown link must name a heading or an explicit anchor.
+
+    Repository-wide: renaming a heading breaks links in files that did not change.
+    """
+
+    anchors: dict[Path, set[str]] = {}
+    for path in governed_markdown(root):
+        relative = path.relative_to(root).as_posix()
+        for line_number, raw in markdown_link_targets(read_text(path)):
+            target, _, fragment = raw.partition("#")
+            if not fragment or re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I):
+                continue
+            candidate = (path.parent / unquote(target)) if target else path
+            if candidate.suffix.lower() != ".md" or not candidate.is_file():
+                continue
+            known = anchors.setdefault(candidate, heading_anchors(read_text(candidate)))
+            value = unquote(fragment)
+            if value not in known and heading_slug(value) not in known:
+                findings.append(
+                    Finding("markdown-anchor", relative, f"line {line_number}: missing anchor #{fragment} in {target or relative}")
+                )
+
+
+def fix_moved_plan_links(root: Path) -> list[str]:
+    """Rewrite links whose plan changed status directory. Only unambiguous plan moves are touched."""
+
+    changes: list[str] = []
+    for path in governed_markdown(root):
+        text = read_text(path)
+        updated = text
+        for line_number, raw in markdown_link_targets(text):
+            target, separator, fragment = raw.partition("#")
+            if not target or (path.parent / unquote(target)).exists():
+                continue
+            plan = moved_plan(root, path, unquote(target))
+            if plan:
+                updated = updated.replace(f"]({raw})", f"]({plan}{separator}{fragment})")
+                changes.append(f"{path.relative_to(root).as_posix()}:{line_number}: {target} -> {plan}")
+        if updated != text:
+            path.write_text(updated, encoding="utf-8")
+    return changes
 
 
 def level_two_section(text: str, title: str) -> str | None:
@@ -1597,8 +1732,38 @@ def validate_wiki_ids(root: Path, findings: list[Finding]) -> None:
         schema = scalar(metadata, "schema")
         if schema in {"fcvw/wiki@1", "fcvw/regression@1"}:
             check_record(root, relative, read_text(path), metadata, RECORD_SPECS[schema], findings)
+            check_evidence(root, path, metadata, findings)
         else:
             findings.append(Finding("wiki-schema", relative, f"unsupported knowledge schema: {schema!r}"))
+
+
+def check_evidence(root: Path, path: Path, metadata: dict[str, FrontmatterValue], findings: list[Finding]) -> None:
+    """Optional provenance: a validated claim names an independent method and resolvable evidence."""
+
+    relative = path.relative_to(root).as_posix()
+    method = scalar(metadata, "evidence_method")
+    if "verified_by" in metadata and not isinstance(metadata.get("verified_by"), list):
+        findings.append(Finding("wiki-schema", relative, "verified_by must be a first-level list"))
+    verified = string_list(metadata, "verified_by")
+    if method and method not in EVIDENCE_METHODS:
+        findings.append(Finding("wiki-schema", relative, f"invalid evidence_method: {method!r}"))
+    if method and scalar(metadata, "status") == "validated":
+        if method == "ai_inference":
+            findings.append(Finding("wiki-schema", relative, "ai_inference alone cannot validate a claim"))
+        elif not verified:
+            findings.append(Finding("wiki-schema", relative, "validated claim requires verified_by evidence"))
+    for reference in verified:
+        if re.match(r"^https?://", reference, re.I):
+            continue
+        if PLAN_ID.fullmatch(reference):
+            if _find_plan_by_id(root, reference) is None:
+                findings.append(Finding("wiki-schema", relative, f"verified_by plan is missing: {reference}"))
+            continue
+        target = reference.split("::", 1)[0].split("#", 1)[0]
+        candidates = [(base / target).resolve() for base in (root, path.parent)] if target else []
+        inside = [item for item in candidates if item.is_relative_to(root.resolve())]
+        if not any(candidate.exists() for candidate in inside):
+            findings.append(Finding("wiki-schema", relative, f"verified_by target is missing: {reference}"))
 
 
 def validate_audit_records(root: Path, findings: list[Finding]) -> None:
@@ -2509,8 +2674,16 @@ def main() -> int:
             "Repository-wide rules are always reported."
         ),
     )
+    parser.add_argument(
+        "--fix-moved-links",
+        action="store_true",
+        help="rewrite links to plans that moved between status directories, then validate",
+    )
     args = parser.parse_args()
     root = Path(args.root).resolve()
+    if args.fix_moved_links:
+        for change in fix_moved_plan_links(root):
+            print(f"FIXED {change}")
     findings: list[Finding] = []
     baseline_entries: list[BaselineEntry] = []
     accepted: list[Finding] = []
@@ -2545,6 +2718,7 @@ def main() -> int:
             scope = changed
 
     validate_markdown(root, findings, scope)
+    validate_anchors(root, findings)
     validate_character_integrity(root, findings, scope)
     validate_automation(root, findings, scope)
     validate_language_review(root, findings)

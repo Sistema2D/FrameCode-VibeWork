@@ -38,6 +38,83 @@ def scan_fences(text: str) -> tuple[list[tuple[int, str, str]], str]:
     return lines, marker
 
 
+HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
+EXPLICIT_ANCHOR = re.compile(r"""<a\s+(?:id|name)\s*=\s*["']([^"']+)["']""", re.I)
+
+
+def _body_lines(text: str) -> list[tuple[int, str, str]]:
+    """Fence-classified lines with a leading frontmatter block marked as code."""
+
+    lines = scan_fences(text)[0]
+    if lines and lines[0][1].strip() == "---":
+        for index in range(1, len(lines)):
+            if lines[index][1].strip() == "---":
+                return [(n, line, "code" if i <= index else kind) for i, (n, line, kind) in enumerate(lines)]
+    return lines
+
+
+def heading_slug(title: str) -> str:
+    """GitHub-style heading anchor: markup and punctuation dropped, spaces become hyphens."""
+
+    value = re.sub(r"<[^>]+>", "", title).replace("`", "").strip().lower()
+    return "".join(ch for ch in value if ch.isalnum() or ch in "-_ ").replace(" ", "-")
+
+
+def heading_anchors(text: str) -> set[str]:
+    """Every fragment a Markdown file answers to: heading slugs (with -N duplicates) and explicit anchors."""
+
+    anchors: set[str] = set()
+    seen: dict[str, int] = {}
+    for _, line, kind in _body_lines(text):
+        if kind != "text":
+            continue
+        anchors.update(EXPLICIT_ANCHOR.findall(line))
+        match = HEADING.match(line)
+        if match:
+            slug = heading_slug(match.group(2))
+            count = seen.get(slug, 0)
+            seen[slug] = count + 1
+            anchors.add(slug if count == 0 else f"{slug}-{count}")
+    return anchors
+
+
+def markdown_sections(text: str) -> list[dict[str, object]]:
+    """Heading outline with 1-based inclusive line ranges and UTF-8 byte sizes.
+
+    A section runs until the next heading of the same or a higher level. The
+    first entry is the preamble (frontmatter, title and text before the first
+    level-two heading).
+    """
+
+    lines = _body_lines(text)
+    heads = [
+        (number, len(match.group(1)), match.group(2).replace("`", "").strip())
+        for number, line, kind in lines
+        if kind == "text" and (match := HEADING.match(line)) and len(match.group(1)) >= 2
+    ]
+    total = len(lines)
+
+    def size(start: int, end: int) -> int:
+        return sum(len(line.encode("utf-8")) + 1 for _, line, _ in lines[start - 1:end])
+
+    first = heads[0][0] - 1 if heads else total
+    sections: list[dict[str, object]] = [
+        {"heading": "(preamble)", "level": 1, "lines": [1, first], "bytes": size(1, first)}
+    ]
+    for index, (start, level, title) in enumerate(heads):
+        end = next((n - 1 for n, other, _ in heads[index + 1:] if other <= level), total)
+        sections.append({"heading": title, "level": level, "lines": [start, end], "bytes": size(start, end)})
+    return sections
+
+
+def find_section(sections: list[dict[str, object]], title: str) -> dict[str, object] | None:
+    """The shallowest, earliest section whose heading equals the title, ignoring case and backticks."""
+
+    wanted = title.replace("`", "").strip().lower()
+    matches = [item for item in sections[1:] if str(item["heading"]).lower() == wanted]
+    return min(matches, key=lambda item: (item["level"], item["lines"][0])) if matches else None
+
+
 @dataclass(frozen=True)
 class FrontmatterIssue:
     line: int

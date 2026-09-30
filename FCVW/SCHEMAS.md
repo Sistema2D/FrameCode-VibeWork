@@ -86,6 +86,10 @@ Optional typed relationships are `related`, `depends_on`, `supports`, `contradic
 
 Optional source provenance fields are `source_type`, `source_path`, `source_url`, `source_digest`, `ingested_at`, and `last_checked`. `source_digest` uses `sha256:<64 lowercase hex>` and is distinct from the context index's chunk `content_hash`. Digest mismatches are review findings, not silent status changes.
 
+A Markdown `source_path` may end in `#anchor` (since V0.21.0): the digest then covers only that section, so edits elsewhere in the file raise no review. `knowledge_graph_fcvw.py --digest PATH#anchor` prints it.
+
+Optional evidence provenance (since V0.21.0): `evidence_method` (`test`, `tool`, `human_review`, `code_reading`, `external_source`, `ai_inference`) and a first-level `verified_by` list of plan IDs, repository paths (`path::test`) or URLs. A `validated` page that declares a method needs `verified_by`, and `ai_inference` alone never validates. Retrieval labels `ai_inference` results as unverified.
+
 ## Framework feedback — `fcvw/wiki@1` with `type: feedback`
 
 Feedback notes are one AI model's attributed assessment of what should
@@ -239,6 +243,20 @@ Create the evidence from [TEMPLATE_LANGUAGE_REVIEW.md](governance/TEMPLATE_LANGU
 New troubleshooting records use a collision-resistant `TRB-YYYYMMDD-<short-id>` ID and declare record ownership, `record_scope`, `search_only` retrieval, failure status, confidence, detection/review dates, related plan, sources, and tags. Allowed statuses are `draft`, `in_validation`, `validated`, and `obsolete`; allowed confidence values are `low`, `medium`, and `high`.
 
 The record preserves identification, symptom, hypotheses, root cause, applied solution, validation, prevention, wiki-promotion decision, and final status. A navigable Markdown link connects it to its authoritative plan, policy, or evidence. Untouched historical troubleshooting without a schema remains readable; once substantively edited, migrate it through [TEMPLATE_TROUBLESHOOTING.md](governance/TEMPLATE_TROUBLESHOOTING.md).
+
+## Field history
+
+Frontmatter fields added after V0.13.0, the first versioned frontmatter contract. Removed items stay listed, struck through. Migration steps live in [MIGRATIONS.md](MIGRATIONS.md).
+
+| Field | Schema or file | Since |
+|---|---|---|
+| `regression_contract`, `record_scope`, `instantiation_status` | `fcvw/plan@2`, record envelopes, `PROJECT.md` | V0.13.0 |
+| `retrieval_scope`; `release_languages`, `source_revision`, `publication_revision` | canonical envelope; `fcvw/framework-release@1` | V0.14.0 |
+| plan `depends_on`; wiki `maturity`, `domain`, typed relations, `source_*` provenance | `fcvw/plan@2`; `fcvw/wiki@1` | V0.15.0 |
+| `authored_by_model`, `topic`, `feedback_status`; `fcvw/plan-compact@1` | feedback notes; compact plans | V0.16.0 |
+| `category`, `blocked_external`, `before_in_progress` in plan frontmatter; `not_applicable_sections` | plans; `PROJECT.md` | V0.20.0 |
+| ~~`Plans/*/QUEUE.md` and `queue.d/` queue data~~; ~~`fcvw/plan@1` for pending or active plans~~ | plans | removed V0.20.0 |
+| `source_path` with `#anchor`; `evidence_method`, `verified_by` | `fcvw/wiki@1` | V0.21.0 |
 
 ## Derived outputs
 

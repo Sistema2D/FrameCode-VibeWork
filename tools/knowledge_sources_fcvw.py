@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
-from frontmatter_fcvw import FrontmatterValue, scalar
+from frontmatter_fcvw import FrontmatterValue, heading_slug, markdown_sections, scalar
 
 
 SOURCE_TYPES = {"repository_file", "web", "document", "dataset", "issue", "api", "conversation", "other"}
@@ -42,6 +42,33 @@ def _tracked_path(root: Path, page: Path, value: str) -> Path | None:
     except (OSError, ValueError):
         return None
     return resolved
+
+
+def section_bytes(text: str, anchor: str) -> bytes | None:
+    """UTF-8 bytes of the Markdown section whose heading slug equals the anchor, or None."""
+
+    lines = text.splitlines()
+    for section in markdown_sections(text)[1:]:
+        if heading_slug(str(section["heading"])) == anchor.lower():
+            start, end = section["lines"]
+            return ("\n".join(lines[start - 1:end]) + "\n").encode("utf-8")
+    return None
+
+
+def source_digest_of(root: Path, page: Path, source_path: str) -> str | None:
+    """sha256 of the tracked file, or of one Markdown section when source_path ends in #anchor."""
+
+    tracked = _tracked_path(root, page, source_path)
+    if tracked is None or not tracked.is_file():
+        return None
+    _, _, anchor = source_path.partition("#")
+    if anchor and tracked.suffix.lower() == ".md":
+        data = section_bytes(tracked.read_text(encoding="utf-8-sig"), anchor)
+        if data is None:
+            return None
+    else:
+        data = tracked.read_bytes()
+    return "sha256:" + hashlib.sha256(data).hexdigest()
 
 
 def validate_source_page(
@@ -79,9 +106,12 @@ def validate_source_page(
     if tracked is None or not tracked.is_file():
         findings.append(SourceFinding("knowledge-source", relative, f"source_path is missing: {source_path}"))
         return False, findings
+    actual = source_digest_of(root, path, source_path)
+    if actual is None:
+        findings.append(SourceFinding("knowledge-source", relative, f"source_path anchor is missing: {source_path}"))
+        return False, findings
     if not source_digest or not SOURCE_DIGEST.fullmatch(source_digest):
         return False, findings
-    actual = "sha256:" + hashlib.sha256(tracked.read_bytes()).hexdigest()
     if actual == source_digest:
         return False, findings
     findings.append(

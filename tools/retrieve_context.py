@@ -4,9 +4,10 @@
 JSON output (disposable): `mandatory_paths`, `mandatory_missing` and
 `complementary_results`, whose entries carry `chunk_id`, `chunk_hash` and
 `excerpt_complete`. Structured inputs add `routing` (source, events, per-path
-reasons, section hints and warnings). Opt-in selection adds `context_selection`
-(decisions, budget, cost estimate); selected chunks stay in
-`complementary_results`. Without `--index` and `--query` only routes are resolved.
+reasons, section hints, first-read line `ranges`, `context_bytes` and
+warnings). Opt-in selection adds `context_selection` (decisions, budget, cost
+estimate); selected chunks stay in `complementary_results`. Without `--index`
+and `--query` only routes are resolved.
 """
 
 from __future__ import annotations
@@ -199,6 +200,8 @@ def bm25(
                 reasons.append("active-plan relation")
             reasons.append(f"priority={priority}")
             reasons.append(f"freshness={freshness:.2f}")
+            if record.get("evidence_method") == "ai_inference":
+                reasons.append("unverified: ai_inference")
             scored.append((score, record, reasons))
     scored.sort(key=lambda item: (-item[0], str(item[1].get("path")), str(item[1].get("heading"))))
 
@@ -360,6 +363,8 @@ def main() -> int:
         "complementary_results": candidates[:min(max(args.top_k, 0), MAX_TOP_K)],
     }
     if routing:
+        from context_routing_fcvw import section_ranges
+        routing.update(section_ranges(root, mandatory))
         result["routing"] = routing
     if args.context_budget is not None:
         from context_selection_fcvw import select_chunks

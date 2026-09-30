@@ -302,3 +302,23 @@ project-owned file kept its SHA-256 digest.
    name a document or skill through a Markdown link or inline code; a bare prose
    mention no longer counts.
 
+
+## V0.20.0 to V0.21.0
+
+Additive; no file moves and no schema major change.
+
+1. New repository-wide rule `markdown-anchor`: every `#fragment` of a local
+   Markdown link names a heading or an explicit `<a id>`. Fix renamed headings,
+   or list existing debt in an incremental legacy baseline.
+2. A broken link now names its successor. For a plan that changed status
+   directory, `validate_fcvw.py --fix-moved-links` rewrites the link; for a
+   removed framework path, the hint comes from the tables in this file.
+3. Wiki pages may add `evidence_method`, `verified_by`, and a `#anchor` in a
+   Markdown `source_path`. Existing pages stay valid; after narrowing a
+   `source_path` to a section, refresh its digest with
+   `knowledge_graph_fcvw.py --digest PATH#anchor`.
+4. The route output of `retrieve_context.py` adds `ranges` and `context_bytes`;
+   existing keys are unchanged.
+5. The middle column of the `CONTEXT_MAP.md` selective-loading table now holds
+   exact section headings. A project that edited that policy re-applies its
+   notes when the upgrade reports a conflict.

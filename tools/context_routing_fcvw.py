@@ -7,7 +7,7 @@ import re
 
 from document_graph_fcvw import _outside_fences
 from fcvw_cache import frontmatter, read_text
-from frontmatter_fcvw import scalar
+from frontmatter_fcvw import find_section, markdown_sections, scalar
 
 FILE_OPERATIONS = {"add", "modify", "delete", "move", "rename", "unknown"}
 # Roles whose change is a framework policy change. A project profile such as
@@ -132,9 +132,9 @@ def changed_file_events(path: str, operation: str = "unknown", root: Path | None
     return result
 
 
-def section_hints(root: Path, selected: set[str]) -> dict[str, str]:
-    """Expose the canonical first-section guidance without loading whole policies."""
-    hints: dict[str, str] = {}
+def selective_rows(root: Path) -> dict[str, list[str]]:
+    """The 'Selective loading' table as {path: [first-read cell, expand-when cell]}."""
+    rows: dict[str, list[str]] = {}
     active = False
     for line in _outside_fences(read_text(root / 'FCVW/CONTEXT_MAP.md')):
         if line.startswith('## '):
@@ -147,10 +147,64 @@ def section_hints(root: Path, selected: set[str]) -> dict[str, str]:
             continue
         match = re.fullmatch(r'`([A-Za-z_][A-Za-z0-9_/-]*\.md)`', cells[0])
         if match:
-            path = 'FCVW/' + match.group(1)
-            if path in selected:
-                hints[path] = cells[1]
-    return hints
+            rows['FCVW/' + match.group(1)] = cells[1:]
+    return rows
+
+
+def section_hints(root: Path, selected: set[str]) -> dict[str, str]:
+    """Expose the canonical first-section guidance without loading whole policies."""
+    return {path: cells[0] for path, cells in selective_rows(root).items() if path in selected}
+
+
+def named_sections(hint: str) -> tuple[list[str], bool]:
+    """Backticked heading names of a first-read hint and whether they are alternatives ('One of:')."""
+    names = [token for token in re.findall(r'`([^`]+)`', hint)
+             if '/' not in token and not re.search(r'\.[A-Za-z]{1,4}$', token)]
+    return names, hint.lower().startswith('one of')
+
+
+def section_ranges(root: Path, paths: list[str]) -> dict:
+    """Line ranges of the first-read sections of each routed long document.
+
+    The host reads these ranges instead of whole files. A heading that no longer
+    resolves is reported and the whole file is counted, so the fallback reads
+    more, never less. Alternatives ('One of:') count the largest candidate.
+    """
+    rows = selective_rows(root)
+    ranges: dict[str, dict] = {}
+    whole = first = 0
+    for path in paths:
+        target = root / path
+        if not path.endswith('.md') or not target.is_file():
+            continue
+        size = target.stat().st_size
+        whole += size
+        if path not in rows:
+            first += size
+            continue
+        names, alternatives = named_sections(rows[path][0])
+        outline = markdown_sections(read_text(target))
+        found = [(name, find_section(outline, name)) for name in names]
+        chosen = [section for _, section in found if section]
+        unresolved = [name for name, section in found if not section]
+        preamble = outline[0]
+        if unresolved or not chosen:
+            first_read = size
+        elif alternatives:
+            first_read = int(preamble['bytes']) + max(int(item['bytes']) for item in chosen)
+        else:
+            first_read = int(preamble['bytes']) + sum(int(item['bytes']) for item in chosen)
+        first += first_read
+        ranges[path] = {
+            'file_bytes': size,
+            'first_read_bytes': first_read,
+            'alternatives': alternatives,
+            'sections': [{'heading': item['heading'], 'lines': item['lines'], 'bytes': item['bytes']}
+                         for item in [preamble, *chosen]],
+            'expand_when': rows[path][1],
+            'unresolved': unresolved,
+        }
+    return {'ranges': ranges, 'context_bytes': {'whole_files': whole, 'first_read': first}}
 
 
 def resolve_routes(root: Path, *, sessions: list[str] | None = None,

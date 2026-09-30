@@ -327,8 +327,15 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     parser.add_argument("--output", help="write derived graph JSON to a disposable path")
     parser.add_argument("--review-output", help="write warning-only review candidates as JSON")
+    parser.add_argument("--digest", metavar="PATH[#anchor]",
+                        help="print the source_digest of a repository file or of one Markdown section, then exit")
     args = parser.parse_args()
     root = Path(args.root).resolve()
+    if args.digest:
+        from knowledge_sources_fcvw import source_digest_of
+        digest = source_digest_of(root, root / "FCVW" / "wiki" / "index.md", args.digest)
+        print(digest or f"missing file or anchor: {args.digest}")
+        return 0 if digest else 1
     graph = build_knowledge_graph(root)
     if args.output:
         output = Path(args.output)

@@ -1950,6 +1950,7 @@ class StaticIntegrityTests(unittest.TestCase):
         "locale-source-parity",
         "locale-source-revision",
         "markdown-fence",
+        "markdown-anchor",
         "markdown-link",
         "markdown-link-absolute",
         "ownership",
