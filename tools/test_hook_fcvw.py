@@ -12,7 +12,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from hook_fcvw import edited_paths, main
+from hook_fcvw import configured_hooks, edited_paths, hook_contracts, main
+from validate_fcvw import Finding, validate_automation, validate_automation_binding
 from release_layout_fcvw import governed_root
 
 ROOT = governed_root(Path(__file__))
@@ -24,21 +25,52 @@ def git(root: Path, *args: str) -> None:
                    check=True, capture_output=True)
 
 
+def contract(status: str = "active", events=("session-start", "pre-edit", "stop"),
+             harnesses=("claude-code", "codex"), implementation: str = "FCVW/tools/hook_fcvw.py") -> str:
+    listed = lambda items: "".join(f'  - "{item}"\n' for item in items)
+    return (
+        '---\nschema: "fcvw/automation@1"\nid: "AUT-2026-01-01-hooks"\nkind: "hook"\n'
+        f'status: "{status}"\nowner: "t"\nscenario: "2"\nexecution_mode: "scenario_2"\nauthorized_by: "t"\n'
+        f'implementation: "{implementation}"\nhook_events:\n{listed(events)}harnesses:\n{listed(harnesses)}'
+        'trigger: "t"\npreconditions: "t"\nactions: "t"\nevidence: "t"\nfailure_policy: "t"\nrollback: "t"\n'
+        '---\n\n# Hooks\n'
+    )
+
+
+def write_contract(root: Path, text: str, *, stub: bool = True) -> None:
+    (root / "FCVW" / "automation").mkdir(parents=True, exist_ok=True)
+    (root / "FCVW" / "automation" / "AUT-hooks.md").write_text(text, encoding="utf-8")
+    if stub:
+        (root / "FCVW" / "tools").mkdir(parents=True, exist_ok=True)
+        (root / "FCVW" / "tools" / "hook_fcvw.py").write_text("# stub\n", encoding="utf-8")
+
+
 def run_hook(event: str, payload: dict, *extra: str, env: dict | None = None) -> subprocess.CompletedProcess:
     return subprocess.run([sys.executable, "-B", SCRIPT, event, *extra], input=json.dumps(payload),
                           capture_output=True, text=True, timeout=180, env={**os.environ, **(env or {})})
 
 
 class Repo(unittest.TestCase):
-    def repo(self, *, full: bool = False) -> Path:
+    def repo(self, *, full: bool = False, status: str | None = "active", **kwargs) -> Path:
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name).resolve() / "repo"
         if full:
             shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", ".fcvw-cache", "__pycache__"))
+            # A coherent opt-in: an active stop contract and the configuration that runs it.
+            tool = "tools/hook_fcvw.py" if (root / "tools" / "hook_fcvw.py").is_file() else "FCVW/tools/hook_fcvw.py"
+            write_contract(root, contract(events=("stop",), harnesses=("claude-code",), implementation=tool), stub=False)
+            (root / "FCVW" / "README.md").write_text((root / "FCVW" / "README.md").read_text(encoding="utf-8")
+                                                     + "\n[Hooks contract](automation/AUT-hooks.md)\n", encoding="utf-8")
+            (root / ".claude").mkdir(exist_ok=True)
+            (root / ".claude" / "settings.json").write_text(json.dumps({"hooks": {"Stop": [{"hooks": [
+                {"type": "command", "command": f"python3 {tool} stop"}]}]}}), encoding="utf-8")
+            status = None
         else:
             (root / "FCVW" / "Plans").mkdir(parents=True)
             (root / "AGENTS.md").write_text("# Agents\n", encoding="utf-8")
+        if status:
+            write_contract(root, contract(status, **kwargs))
         (root / ".gitignore").write_text("build/\n", encoding="utf-8")
         git(root, "init", "-q")
         git(root, "add", "-A")
@@ -137,6 +169,85 @@ class StopTests(Repo):
         run = run_hook("stop", base, "--profile", "clean-template")
         self.assertEqual(2, run.returncode)
         self.assertIn("does-not-exist.md", run.stderr)
+
+
+class ContractSwitchTests(Repo):
+    EDIT = {"tool_name": "Edit", "tool_input": {"file_path": "src/app.py"}}
+
+    def outputs(self, root: Path) -> tuple[str, str]:
+        payload = {**self.EDIT, "cwd": str(root)}
+        return (run_hook("pre-edit", payload).stdout.strip(),
+                run_hook("session-start", {"cwd": str(root)}).stdout.strip())
+
+    def test_hooks_act_only_while_an_active_contract_declares_them(self) -> None:
+        self.assertTrue(all(self.outputs(self.repo())))
+        self.assertEqual(("", ""), self.outputs(self.repo(status=None)))
+        self.assertEqual(("", ""), self.outputs(self.repo(status="paused")))
+        self.assertEqual(("", ""), self.outputs(self.repo(status="retired")))
+        only_stop = self.outputs(self.repo(events=("stop",)))
+        self.assertEqual(("", ""), only_stop)
+
+    def test_contract_must_name_this_script(self) -> None:
+        root = self.repo(implementation="scripts/other.py")
+        self.assertEqual([], hook_contracts(root))
+        self.assertEqual(("", ""), self.outputs(root))
+
+
+class BindingTests(unittest.TestCase):
+    def root(self) -> Path:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name).resolve()
+        (root / "FCVW").mkdir()
+        (root / ".claude").mkdir()
+        (root / ".codex").mkdir()
+        return root
+
+    @staticmethod
+    def configure(root: Path, harness: str, events: tuple[str, ...]) -> None:
+        names = {"session-start": "SessionStart", "pre-edit": "PreToolUse", "stop": "Stop"}
+        hooks = {names[e]: [{"hooks": [{"type": "command", "command": f"python3 FCVW/tools/hook_fcvw.py {e}"}]}] for e in events}
+        target = root / (".claude/settings.json" if harness == "claude-code" else ".codex/hooks.json")
+        target.write_text(json.dumps({"hooks": hooks}), encoding="utf-8")
+
+    def findings(self, root: Path) -> list[Finding]:
+        findings: list[Finding] = []
+        validate_automation(root, findings)
+        validate_automation_binding(root, findings)
+        return findings
+
+    def test_matching_contract_and_configuration(self) -> None:
+        root = self.root()
+        write_contract(root, contract())
+        self.configure(root, "claude-code", ("session-start", "pre-edit", "stop"))
+        self.configure(root, "codex", ("session-start", "pre-edit", "stop"))
+        self.assertEqual({"claude-code": {"session-start", "pre-edit", "stop"},
+                          "codex": {"session-start", "pre-edit", "stop"}}, configured_hooks(root))
+        self.assertEqual([], self.findings(root))
+
+    def test_configured_hook_without_active_contract(self) -> None:
+        root = self.root()
+        self.configure(root, "claude-code", ("pre-edit",))
+        errors = [f for f in self.findings(root) if f.rule == "automation-binding"]
+        self.assertEqual(["error"], [f.severity for f in errors])
+        write_contract(root, contract("paused", events=("pre-edit",), harnesses=("claude-code",)))
+        warnings = [f for f in self.findings(root) if f.rule == "automation-binding"]
+        self.assertEqual(["warning"], [f.severity for f in warnings])
+
+    def test_active_contract_without_configuration(self) -> None:
+        root = self.root()
+        write_contract(root, contract(harnesses=("codex",)))
+        self.configure(root, "codex", ("stop",))
+        messages = [f.message for f in self.findings(root) if f.rule == "automation-binding"]
+        self.assertTrue(any("pre-edit, session-start" in m and "codex" in m for m in messages), messages)
+
+    def test_contract_field_checks(self) -> None:
+        root = self.root()
+        write_contract(root, contract(events=("pre-edit", "bogus"), harnesses=("vim",), implementation="FCVW/tools/missing.py"))
+        messages = [f.message for f in self.findings(root) if f.rule == "automation-contract"]
+        self.assertTrue(any("unknown hook_events: bogus" in m for m in messages))
+        self.assertTrue(any("unknown harnesses: vim" in m for m in messages))
+        self.assertTrue(any("implementation is missing" in m for m in messages))
 
 
 class InProcessTests(unittest.TestCase):

@@ -9,10 +9,13 @@ on PreToolUse; exit code 2 with a message on stderr to keep a Stop from ending.
     session-start  add a short FCVW status (active plans, next plan, how to route)
     pre-edit       deny edits to versioned project files while no plan is in progress
                    (a plan completed in the uncommitted work still counts, for closeout edits)
-    stop           run the validator on changes since HEAD; ask the agent to fix errors
+    stop           validate the uncommitted work; ask the agent to fix the errors it caused
 
-Each project enables the hooks explicitly (see FCVW/AUTOMATION.md) and records
-an `fcvw/automation@1` contract. `FCVW_HOOKS=off` disables every hook. The
+The contract is the switch: a hook acts only when an `fcvw/automation@1`
+contract with `status: active` names this script in `implementation` and the
+event in `hook_events` (see FCVW/AUTOMATION.md). Without one, or with the
+contract `paused` or `retired`, the hook does nothing. `FCVW_HOOKS=off` is the
+emergency switch for one session. The
 hooks read the repository and run the validator; they never write files, call
 the network or change git. Shell commands are not inspected, so an edit made
 through a shell escapes the pre-edit check.
@@ -28,11 +31,21 @@ import subprocess
 import sys
 from pathlib import Path
 
+from frontmatter_fcvw import parse_frontmatter, scalar, string_list
+
 EDIT_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit", "apply_patch"}
 PATCH_PATH = re.compile(r"^\*\*\* (?:Update|Add|Delete) File: (.+?)\s*$|^\*\*\* Move to: (.+?)\s*$", re.M)
 # Paths an agent may create or change while opening a plan, plus disposable state.
 PLAN_FREE_PREFIXES = ("FCVW/Plans/", ".fcvw-cache/", ".git/")
 VALIDATE_TIMEOUT = 120
+HOOK_EVENTS = ("session-start", "pre-edit", "stop")
+HARNESSES = ("claude-code", "codex")
+SCRIPT_NAME = "hook_fcvw.py"
+HOOK_COMMAND = re.compile(r"hook_fcvw\.py[\"']?\s+(session-start|pre-edit|stop)\b")
+HARNESS_CONFIGS = {
+    "claude-code": (".claude/settings.json", ".claude/settings.local.json"),
+    "codex": (".codex/hooks.json", ".codex/config.toml"),
+}
 MAX_REPORTED = 8
 
 
@@ -43,6 +56,80 @@ def governed_root(start: Path) -> Path | None:
         if (candidate / "AGENTS.md").is_file() and (candidate / "FCVW").is_dir():
             return candidate
     return None
+
+
+def hook_contracts(root: Path) -> list[dict]:
+    """Every fcvw/automation@1 contract that binds this script, with its declared events and harnesses."""
+
+    contracts = []
+    for path in sorted((root / "FCVW").rglob("*.md")):
+        if path.name.startswith("TEMPLATE_") or ".fcvw-cache" in path.parts:
+            continue
+        try:
+            with path.open(encoding="utf-8-sig") as handle:
+                head = handle.read(8192)
+        except OSError:
+            continue
+        if not head.startswith("---") or "fcvw/automation@1" not in head:
+            continue
+        metadata = parse_frontmatter(path.read_text(encoding="utf-8-sig")).data
+        if scalar(metadata, "schema") != "fcvw/automation@1" or scalar(metadata, "kind") != "hook":
+            continue
+        implementation = scalar(metadata, "implementation")
+        if Path(implementation).name != SCRIPT_NAME:
+            continue
+        contracts.append({
+            "path": path.relative_to(root).as_posix(),
+            "id": scalar(metadata, "id"),
+            "status": scalar(metadata, "status"),
+            "implementation": implementation,
+            "events": string_list(metadata, "hook_events"),
+            "harnesses": string_list(metadata, "harnesses"),
+        })
+    return contracts
+
+
+def active_events(root: Path) -> set[str]:
+    return {event for contract in hook_contracts(root) if contract["status"] == "active" for event in contract["events"]}
+
+
+def configured_hooks(root: Path) -> dict[str, set[str]]:
+    """Events of this script that each harness configuration file runs."""
+
+    configured: dict[str, set[str]] = {}
+    for harness, files in HARNESS_CONFIGS.items():
+        for name in files:
+            path = root / name
+            if not path.is_file():
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+                if name.endswith(".toml"):
+                    try:
+                        import tomllib
+                    except ImportError:  # Python 3.10: TOML hooks are not inspected
+                        continue
+                    data = tomllib.loads(text)
+                else:
+                    data = json.loads(text)
+            except (OSError, ValueError):
+                continue
+            commands: list[str] = []
+
+            def collect(node) -> None:
+                if isinstance(node, dict):
+                    if isinstance(node.get("command"), str):
+                        commands.append(node["command"])
+                    for value in node.values():
+                        collect(value)
+                elif isinstance(node, list):
+                    for value in node:
+                        collect(value)
+
+            collect(data.get("hooks", {}))
+            for command in commands:
+                configured.setdefault(harness, set()).update(HOOK_COMMAND.findall(command))
+    return configured
 
 
 def plans(root: Path, state: str) -> list[str]:
@@ -142,7 +229,7 @@ def stop(root: Path, payload: dict, profile: str) -> tuple[int, str, str]:
     if payload.get("stop_hook_active"):
         return 0, "", ""  # already asked once in this stop cycle; never loop
     try:
-        status = subprocess.run(["git", "status", "--porcelain"], cwd=root, capture_output=True,
+        status = subprocess.run(["git", "status", "--porcelain", "--untracked-files=all"], cwd=root, capture_output=True,
                                 text=True, timeout=20, check=False)
     except (OSError, subprocess.TimeoutExpired):
         return 0, "", ""
@@ -157,7 +244,15 @@ def stop(root: Path, payload: dict, profile: str) -> tuple[int, str, str]:
         report = json.loads(run.stdout)
     except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError):
         return 0, "", ""  # a broken validator run never traps the agent
-    errors = [item for item in report.get("findings", []) if item.get("severity") == "error"]
+    # Only what the uncommitted work caused: findings on a changed file, or naming one
+    # (a renamed heading breaks links elsewhere). Older debt never traps the agent.
+    changed = {line[3:].split(" -> ")[-1].strip().strip('"') for line in status.stdout.splitlines()}
+    names = {Path(path).name for path in changed}
+    errors = [
+        item for item in report.get("findings", [])
+        if item.get("severity") == "error"
+        and (item.get("path") in changed or any(name and name in item.get("message", "") for name in names))
+    ]
     if not errors:
         return 0, "", ""
     listed = "\n".join(f"- [{item['rule']}] {item['path']}: {item['message']}" for item in errors[:MAX_REPORTED])
@@ -186,6 +281,8 @@ def main(argv: list[str] | None = None) -> int:
     root = governed_root(start)
     if root is None:
         return 0  # not an FCVW repository: stay silent
+    if args.event not in active_events(root):
+        return 0  # no active contract declares this hook: it does nothing
     if args.event == "session-start":
         code, out, err = session_start(root, payload)
     elif args.event == "pre-edit":

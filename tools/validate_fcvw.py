@@ -22,6 +22,7 @@ from frontmatter_fcvw import (
     scan_fences,
     string_list,
 )
+from hook_fcvw import HARNESS_CONFIGS, HARNESSES, HOOK_EVENTS, configured_hooks, hook_contracts
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
 # One list for both layouts (E-04), mapped to the installed layout by installed_path.
@@ -823,6 +824,66 @@ def validate_automation(root: Path, findings: list[Finding], scope: set[str] | N
                     f"scenario {scenario} automation requires an explicit authorized_by",
                 )
             )
+        implementation = scalar(metadata, "implementation")
+        if implementation and not implementation_exists(root, implementation):
+            findings.append(Finding("automation-contract", relative, f"implementation is missing: {implementation}"))
+        for field, allowed in (("hook_events", HOOK_EVENTS), ("harnesses", HARNESSES)):
+            if field in metadata and not isinstance(metadata.get(field), list):
+                findings.append(Finding("automation-contract", relative, f"{field} must be a first-level list"))
+            unknown = sorted(set(string_list(metadata, field)) - set(allowed))
+            if unknown:
+                findings.append(Finding("automation-contract", relative, f"unknown {field}: {', '.join(unknown)}"))
+
+
+def implementation_exists(root: Path, value: str) -> bool:
+    """The implementation path in this layout, or its installed equivalent (tools/ -> FCVW/tools/)."""
+
+    try:
+        mapped = installed_path(Path(value))
+    except ValueError:
+        return False
+    return (root / value).is_file() or (mapped is not None and (root / mapped).is_file())
+
+
+def validate_automation_binding(root: Path, findings: list[Finding]) -> None:
+    """A configured FCVW hook needs an active contract that declares it, and the reverse.
+
+    AUTOMATION.md: never claim a hook is installed unless its executable
+    artifact exists and was authorized. The contract is the switch the hooks
+    read, so a mismatch means either an unauthorized hook or a contract that
+    claims a hook nothing runs.
+    """
+
+    contracts = hook_contracts(root)
+    configured = configured_hooks(root)
+    for harness, events in sorted(configured.items()):
+        for event in sorted(events):
+            covering = [c for c in contracts if event in c["events"] and harness in c["harnesses"]]
+            active = [c for c in covering if c["status"] == "active"]
+            if active:
+                continue
+            location = ", ".join(name for name in HARNESS_CONFIGS[harness] if (root / name).is_file())
+            if covering:
+                findings.append(Finding("automation-binding", covering[0]["path"],
+                                        f"{harness} runs hook_fcvw.py {event} ({location}) but the contract is "
+                                        f"{covering[0]['status']}; the hook does nothing until it is active", "warning"))
+            else:
+                findings.append(Finding("automation-binding", location,
+                                        f"{harness} runs hook_fcvw.py {event} without an active fcvw/automation@1 "
+                                        "contract that declares it"))
+    for contract in contracts:
+        if contract["status"] != "active":
+            continue
+        for harness in contract["harnesses"] or ["(none declared)"]:
+            missing = sorted(set(contract["events"]) - configured.get(harness, set()))
+            if harness not in HARNESS_CONFIGS:
+                findings.append(Finding("automation-binding", contract["path"], "active hook contract declares no harness"))
+            elif missing:
+                findings.append(Finding("automation-binding", contract["path"],
+                                        f"active contract declares {', '.join(missing)} for {harness}, "
+                                        "but its configuration does not run them"))
+        if not contract["events"]:
+            findings.append(Finding("automation-binding", contract["path"], "active hook contract declares no hook_events"))
 
 
 def validate_character_integrity(root: Path, findings: list[Finding], scope: set[str] | None = None) -> None:
@@ -918,6 +979,7 @@ REPOSITORY_WIDE_RULES = {
     "frontmatter-relationship",
     "regression-surface",
     "markdown-anchor",
+    "automation-binding",
 }
 # Rule families that compare files with each other. Matching by prefix keeps a
 # newly added rule of the family repository-wide; an exact list silently drifted
@@ -2721,6 +2783,7 @@ def main() -> int:
     validate_anchors(root, findings)
     validate_character_integrity(root, findings, scope)
     validate_automation(root, findings, scope)
+    validate_automation_binding(root, findings)
     validate_language_review(root, findings)
     validate_frontmatter_documents(root, findings)
     validate_queues(root, findings)
