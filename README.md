@@ -1,3 +1,4 @@
+<img width="1672" height="941" alt="Capa FrameCode com subtítulo em inglês" src="https://github.com/user-attachments/assets/9be5cbf1-c776-4220-9747-f1fa794bf6b5" />
 <a id="top"></a>
 
 <div align="center">
