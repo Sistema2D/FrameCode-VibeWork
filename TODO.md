@@ -686,6 +686,11 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 
 **Aceite:** nenhum schema ou diretório novo; fixtures negativas para cada regra nova no inventário congelado; a certeza recalculada pela ferramenta confere com a declarada; nenhuma proposta que afrouxe regra protegida sai sem decisão humana; corpus plantado (duplicadas, obsoletas, contraditórias, injeção) tratado corretamente.
 
+### Fora das fases — retroalimentação do uso real (V0.24.0)
+
+- [x] Sinal de validação, fechamento decidido, inventário do grafo, gates proporcionais e sanitização de remoção — ver a seção 15 e o [registro V0.24.0](FCVW/framework-releases/V0.24.0.md).
+- [ ] Publicação da V0.24.0 — [plano pendente](FCVW/Plans/pending/P2-R3-2026-11-13-v0240-publication.md).
+
 ---
 
 ## 13. Balanço de complexidade (o plano de fato simplifica?)
@@ -756,3 +761,49 @@ Estimativas, a confirmar pelas medições das Fases 1 a 3:
   - Derivar os caminhos instalados obrigatórios da lista de fonte (E-04) quebrou o empacotamento. O mínimo estrutural do pacote continua explícito, e a completude de conteúdo continua com o validador.
 - **Encontrado pelo ensaio de migração:** o `wiki/index.md` do projeto aponta para `schema.md` e `taxonomy.md`, que foram removidos; o passo de correção está no `MIGRATIONS.md`.
 - **Adiado:** F-04/F-03 (dependem do pipeline de variantes). O F-02 foi feito na Fase 3.
+
+---
+
+## 15. L — Retroalimentação do uso real (V0.24.0)
+
+Fonte: seis notas de lições escritas durante o uso do FCVW V0.14.0 numa aplicação real (o "projeto de campo", 2026-09-09 a 2026-10-22), cruzadas com o código da V0.23.0. Medições de campo feitas **somente leitura** em 2026-11-13.
+
+| Nota de campo | Estado na V0.23.0 | Correção na V0.24.0 | Evidência |
+|---|---|---|---|
+| Um gate permanentemente vermelho perde o sinal | perfil padrão `clean-template`; baseline sem gerador, quebrada por números de linha e impressa linha a linha; `context_files` lidos da pasta do plano enquanto `retrieve_context.py` lê da raiz; sem sugestão por renomeação do git | `--profile auto`; `--write-baseline` em `FCVW/audits/legacy-baseline.md`; comparação sem `line N:` nem dicas; resumo por regra; `context_files` relativos à raiz (com compatibilidade); sucessor provado pelo histórico de renomeações e `--fix-moved-links` também no frontmatter; alvo apagado depois de plano concluído vira aviso de histórico | projeto de campo: 34.461 erros (perfil errado) → 2.921 (+170 avisos históricos); 70 s → 26 s; teste ponta a ponta "gravar baseline → só achado novo falha" |
+| Gerar e validar o grafo precisam ser operações separadas | `--write` escreve e sai com 1; escrita não atômica; duas varreduras; só 5 nomes excluídos | inventário único e git-aware para grafo, catálogo, grafo de conhecimento e índice; exclusões por contrato (`node_modules`, `.tmp*`, relatórios de teste, worktrees aninhadas) e `ungoverned_paths`; estados `catalog_written`/`validation` e códigos 0/1/2; escrita atômica | projeto de campo: 22.336 → 3.510 nós (14.039 vinham de `.claude/worktrees`, 1.189 de `node_modules`); grafo 40 s → 6,6 s |
+| Critério adiado não tem endereço | nenhuma regra olha as caixas; `[~]` sem semântica | `plan-acceptance` (concluído = toda caixa decidida: `[x]`, `[~] deferred:` ou `[~] waived:`) e `plan-deferral` (o plano de destino carrega `from:`, então não fecha sem decidir) | projeto de campo: 167 caixas indecididas + 7 `[~]` sem endereço (a nota contou 171 + 7); o framework tinha 2 caixas indecididas nos próprios planos, reconciliadas |
+| Link para pending não é evidência pendente | corrigido na V0.19.1 (A-04) | mantido; `` `pending` `` e `**pending**` em célula passam a ser detectados | testes positivos e negativos |
+| Proporcionalidade declarada precisa reduzir os gates | sem procedimento | `gates_fcvw.py` + tabela Validation gates no `PROJECT.md` + regra `project-gates`; caminho não declarado, R4/R5 ou release → `full` | simulação de mudança só documental: 3 gates de governança em vez de tsc/build/suíte |
+| Remoção pedida sem regra de sanitização deixa código morto | só existia na cópia local do projeto de campo (perdida no próximo upgrade) | `REFACTORING.md` §26, `code-hygiene-refactor` 1.4.0, rota `removal`, regra `plan-removal` | primeira versão da regra acusou 58 registros reais em prosa (falso positivo); corrigida para aceitar prosa |
+
+**Encontrado durante a análise (fora das notas):**
+
+- O `plan-regression` acusava "placeholder" quando o código inline citava marcação (`<g>`, `<main>`, `<picture>`): 3 de 4 casos no projeto de campo. Placeholders agora são lidos fora do código inline.
+- A `INSTANTIATION.md` não mandava marcar `project-instantiated` no lock; agora manda, e o perfil `auto` também aceita `instantiation_status: complete`.
+- As dicas de sucessor por linhagem (`MIGRATIONS.md`) só funcionavam em inglês: os pacotes `pt-BR`, `es` e `de` da V0.23.0 traduzem os cabeçalhos das tabelas (`Removido`, `Eliminado`, `Entfernt`, `Arquivo legado`…). Agora os quatro idiomas são reconhecidos.
+- No Windows, um teste de empacotamento falhava 1 vez em 4 na limpeza do diretório temporário (antivírus segurando o ZIP recém-criado); a limpeza passou a tolerar isso.
+- Passos de migração aposentados pela V0.20.0 (fila em `QUEUE.md`, `DOCUMENT_GRAPH.md` versionado, regenerar o manifesto) induziam trabalho inútil em upgrades de várias versões; foram removidos.
+
+**Regras locais do projeto de campo (comparadas com o pacote oficial V0.14.0 pt-BR):**
+
+| Regra local | Destino na V0.24.0 |
+|---|---|
+| Falha encontrada, falha corrigida (com triagem por complexidade e risco) | **portada**: `AGENTS.md` + `PLANNING.md` (Failures found during execution); `found_by` e regra `plan-origin` tornam o rastro verificável nos dois planos |
+| Guarda de recorrência da montagem de release e `tools/release_gate_fcvw.py` | **portada** como regras do validador: `release-backlog` (bloqueia acima de `unreleased_limit` do `PROJECT.md`) e `release-unassembled` (aviso); a data fixa de autoridade virou "depois do release publicado mais recente" |
+| Parar e explicar diante de instrução insegura, destrutiva ou incompatível com o repositório | **portada** (`AGENTS.md`) |
+| Esclarecer decisão material antes de criar o plano; confirmar que o plano retomado ainda representa a necessidade | **portada** (`AGENTS.md`) |
+| Disciplina das notas de lições: registrar no momento, com a medição; erro do agente é lição, não falha do framework | **portada** para o feedback do framework (`wiki/README.md`) |
+| Remoção pedida é sanitização (§26 e skill 1.3.0) | portada antes (ver acima) |
+| Exclusões locais do grafo e leitura semântica de `pending` | superadas pelo inventário git-aware e pela regra de resultados |
+| Estados de troubleshooting `draft`/`in_validation`/`validated`/`obsolete` | já existiam no upstream |
+| Precedência de instruções em 6 níveis (regras do projeto acima do usuário) | **não portada**: escolha do projeto, contrária à ordem do framework |
+| Planos da revisão de capturas (`source: "screenshot-review"`, `ai_review`) | **portada e generalizada**: plano redigido fora do agente (ferramenta, importação, comentários) só executa depois de revisado e confirmado com o usuário; mesmos nomes de campo, regra `plan-review` e bloqueio na fila |
+| Ferramentas locais de tradução de registros | **não portadas**: migração única da V0.14; o mecanismo de proteção de Markdown pode servir às variantes de idioma |
+| Regras específicas do produto (contratos de módulo, layout, folhas de estilo, retenção da auditoria, notas para o usuário, autoridade de publicação concedida) | ficam no projeto; o padrão "autoridade permanente registrada com data, alcance e exclusões" entrou no `RELEASE.md` |
+
+**Em aberto:**
+
+- [ ] Publicar a V0.24.0 (variantes `pt-BR`, `es`, `de`, revisão, pacotes, tag) — [plano](FCVW/Plans/pending/P2-R3-2026-11-13-v0240-publication.md).
+- [x] Ensaiar o upgrade numa cópia do projeto de campo (V0.14.0 → V0.24.0) terminando com `--write-baseline`: passou e encontrou dois defeitos da baseline, já corrigidos (ver o plano de publicação).
+- [ ] Rodar `check_fcvw.py` em Linux e macOS (no Windows já passou com Python 3.11, 3.12 e 3.14).

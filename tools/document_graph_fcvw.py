@@ -15,7 +15,7 @@ from urllib.parse import quote, unquote
 
 from frontmatter_fcvw import parse_frontmatter, scalar, scan_fences
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
-from path_policy_fcvw import DISPOSABLE_PARTS
+from path_policy_fcvw import governed_markdown_inventory
 
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
@@ -73,13 +73,9 @@ def _outside_fences(text: str) -> list[str]:
 
 
 def markdown_files(root: Path) -> list[Path]:
-    paths: list[Path] = []
-    for path in root.rglob("*.md"):
-        relative = path.relative_to(root)
-        if any(part in DISPOSABLE_PARTS for part in relative.parts):
-            continue
-        paths.append(path)
-    return sorted(paths, key=lambda item: item.relative_to(root).as_posix().lower())
+    """The shared governed inventory (git-aware, transient and ungoverned paths excluded)."""
+
+    return governed_markdown_inventory(root)
 
 
 def _link_destination(raw_target: str) -> str:
@@ -280,11 +276,11 @@ def build_graph(root: Path, *, files: list[Path] | None = None) -> DocumentGraph
     )
 
 
-def render_catalog(root: Path, catalog: Path) -> str:
+def render_catalog(root: Path, catalog: Path, *, files: list[Path] | None = None) -> str:
     root = root.resolve()
     catalog = catalog.resolve()
     groups: dict[str, list[str]] = defaultdict(list)
-    for path in markdown_files(root):
+    for path in markdown_files(root) if files is None else files:
         relative = path.relative_to(root).as_posix()
         if path == catalog:
             continue
@@ -314,37 +310,79 @@ def render_catalog(root: Path, catalog: Path) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+EXIT_OK = 0
+EXIT_INVALID = 1  # the graph has blocking findings (a requested catalog may still have been written)
+EXIT_NOT_WRITTEN = 2  # generation failed; nothing was written
+
+
+def write_catalog_atomically(catalog: Path, content: str) -> None:
+    """Write through a sibling temporary file so a reader never sees half a catalog."""
+
+    catalog.parent.mkdir(parents=True, exist_ok=True)
+    temporary = catalog.with_name(f".{catalog.name}.{os.getpid()}.tmp")
+    try:
+        temporary.write_text(content, encoding="utf-8", newline="\n")
+        os.replace(temporary, catalog)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        epilog=(
+            "Without --write the command validates (exit 0 valid, 1 invalid). --write only generates "
+            "(exit 0 written, 2 not written); add --check to also validate the same inventory "
+            "(exit 1 when the written catalog describes an invalid graph)."
+        ),
+    )
     parser.add_argument("--root", default=".")
     parser.add_argument(
         "--catalog",
         default=".fcvw-cache/document-graph.md",
         help="disposable navigation catalog written with --write; never versioned",
     )
-    parser.add_argument("--write", action="store_true")
+    parser.add_argument("--write", action="store_true", help="generate the disposable catalog")
+    parser.add_argument("--check", action="store_true", help="validate; implied when --write is absent")
     args = parser.parse_args()
+    check = args.check or not args.write
     root = Path(args.root).resolve()
     if not root.is_dir():
         print(f"ERROR [document-root] {root}: root directory is missing")
-        return 1
+        return EXIT_NOT_WRITTEN if args.write else EXIT_INVALID
     catalog = (root / args.catalog).resolve()
     try:
         catalog.relative_to(root)
     except ValueError:
         print(f"ERROR [document-catalog] {catalog}: catalog must remain inside the root")
-        return 1
+        return EXIT_NOT_WRITTEN if args.write else EXIT_INVALID
+    # One inventory for generation and validation: both answer about the same tree.
+    files = markdown_files(root)
+    written = False
     if args.write:
-        catalog.parent.mkdir(parents=True, exist_ok=True)
-        catalog.write_text(render_catalog(root, catalog), encoding="utf-8")
-    graph = build_graph(root)
-    for finding in graph.findings:
-        print(f"{finding.severity.upper()} [{finding.rule}] {finding.path}: {finding.message}")
-    print(
-        f"FCVW document graph: nodes={len(graph.nodes)} entrypoints={len(graph.entrypoints)} "
-        f"findings={len(graph.findings)}"
-    )
-    return 1 if any(item.severity == "error" for item in graph.findings) else 0
+        try:
+            write_catalog_atomically(catalog, render_catalog(root, catalog, files=files))
+            written = True
+        except OSError as error:
+            print(f"ERROR [document-catalog] {catalog}: catalog not written: {error}")
+    graph = build_graph(root, files=files)
+    errors = [item for item in graph.findings if item.severity == "error"]
+    if check:
+        for finding in graph.findings:
+            print(f"{finding.severity.upper()} [{finding.rule}] {finding.path}: {finding.message}")
+    states = [f"nodes={len(graph.nodes)}", f"entrypoints={len(graph.entrypoints)}"]
+    if args.write:
+        states.append(f"catalog_written={'true' if written else 'false'}")
+    if check:
+        states.append(f"validation={'fail' if errors else 'pass'}")
+        states.append(f"findings={len(graph.findings)}")
+    else:
+        states.append(f"validation=not_run (findings={len(graph.findings)}; add --check)")
+    print("FCVW document graph: " + " ".join(states))
+    if args.write and not written:
+        return EXIT_NOT_WRITTEN
+    return EXIT_INVALID if check and errors else EXIT_OK
 
 
 if __name__ == "__main__":

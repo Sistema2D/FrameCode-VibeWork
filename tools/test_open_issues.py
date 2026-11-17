@@ -57,7 +57,10 @@ from validate_fcvw import (
 
 class TemporaryRootTest(unittest.TestCase):
     def make_root(self) -> tuple[tempfile.TemporaryDirectory[str], Path]:
-        temporary = tempfile.TemporaryDirectory()
+        # On Windows a real-time scanner may still hold a freshly written ZIP when
+        # the test ends (WinError 145, measured 1 run in 4); removing the scratch
+        # directory is not what these tests verify.
+        temporary = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.addCleanup(temporary.cleanup)
         return temporary, Path(temporary.name)
 

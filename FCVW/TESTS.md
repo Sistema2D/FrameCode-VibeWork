@@ -56,6 +56,18 @@ Authentication, authorization, persistent data, public APIs or file formats, age
 
 Release tests also cover state transitions, content-versus-publication revisions, completed related plans, copyable template completeness, language-variant asset/checksum evidence, and external publication URLs.
 
+## Gate selection by change surface
+
+A project declares its surfaces once in `PROJECT.md` (Validation gates): repository globs and the gate commands of each, plus a `full` row with the complete set. `python FCVW/tools/gates_fcvw.py --root .` reads the diff since `HEAD` plus untracked files and prints the union of the matched surfaces' gates; it never runs them.
+
+| Diff touches | Minimum gates |
+|---|---|
+| Governance Markdown only (`FCVW/**/*.md`, `AGENTS.md`) | `git diff --check`, validator, plan queue |
+| A declared code surface | that surface's gates (type check, focused tests, build) |
+| A path outside every surface, an R4/R5 plan, or a release | `full` |
+
+Risk is the highest among in-progress plans unless `--risk` is given. Without a declared table only governance Markdown is known; everything else is `full`. Record the decision and gate results in the plan.
+
 ## Regression test design
 
 1. Name the protected behavior and its authoritative contract.
@@ -112,7 +124,7 @@ Normal source validation must pass without language directories and must not inv
 
 Local `.obsidian/` state may be recreated by the editor and is ignored by source validation, but clean release-asset inspection must prove it was not packaged.
 
-Release packaging tests cover deterministic ZIP bytes, exact per-language archive roots, manifest inspection, SHA-256 binding, refusal to package forbidden editor/repository/cache state or symlinks, safe replacement boundaries, and the rule that candidate mode tolerates only an `in_review` approval blocker. V0.15.0 layout tests additionally cover source-only exclusions, path collisions, the exact `AGENTS.md` + `FCVW/` payload root, installed required paths, local graph regeneration, extra-root rejection, and proof that removing `FCVW/` preserves an unrelated application file.
+Release packaging tests cover deterministic ZIP bytes, exact per-language archive roots, manifest inspection, SHA-256 binding, refusal to package forbidden editor/repository/cache state or symlinks, safe replacement boundaries, candidate mode tolerating only an `in_review` blocker, source-only exclusions, path collisions, the exact `AGENTS.md` + `FCVW/` payload root, and proof that removing `FCVW/` preserves an unrelated application file.
 
 ## Structural suite
 
@@ -129,7 +141,9 @@ python -B FCVW/tools/plan_queue_fcvw.py --root . --recommend
 python -B FCVW/tools/validate_fcvw.py --root . --profile clean-template
 ```
 
-`--since` narrows the per-file rules to the changed files and skips reading the rest; repository-wide rules — graph, queues, identifier uniqueness, release surfaces — keep reading the whole tree, so a scoped run still fails when the tree as a whole is inconsistent.
+`--since` narrows the per-file rules to the changed files and skips reading the rest; repository-wide rules — graph, queues, identifier uniqueness, release surfaces — keep reading the whole tree, so a scoped run still fails when the tree as a whole is inconsistent. In a project with recorded debt, the legacy baseline ([MIGRATIONS.md](MIGRATIONS.md#legacy-baseline)) separates it: known findings are summarized, new ones fail.
+
+`document_graph_fcvw.py` validates by default (exit 1 when invalid). `--write` only generates the catalog atomically (exit 0 written, 2 not written); `--write --check` does both on one inventory and reports `catalog_written` and `validation` separately. The inventory respects `.gitignore` inside a git work tree, skips transient trees (`node_modules`, `.tmp-*`, test reports, nested worktrees) and the project's `ungoverned_paths`.
 
 The language gate is separate and runs only against prepared release artifacts:
 
@@ -155,8 +169,6 @@ Archive verification checks SHA-256, paths, size limits, containment and version
 
 
 ## Local validation without hosted services
-
-Available in the source checkout; use the installed tool prefix only in a package that includes this command. V0.18.0 assets remain immutable and do not contain the new runner.
 
 ```sh
 python -B tools/check_fcvw.py --root .

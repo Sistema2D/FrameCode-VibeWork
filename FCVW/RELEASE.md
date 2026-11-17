@@ -26,6 +26,10 @@ Publication status for a changelog and external tag/release status are separate 
 9. When externally published, record the deployed/tagged revision, asset/checksum state, and evidence URL.
 10. Create a wiki synthesis only when the release adds reusable knowledge.
 
+### Recurrence guard
+
+Assembly is the step that disappears in long sessions, so `changelogs/unreleased/` is not a destination: a fragment lives from plan closeout to the next assembly. When `PROJECT.md` declares `unreleased_limit` (template default `5`), more fragments block validation (`release-backlog`): assemble a release before opening new scope and record why assembly was skipped. A plan completed after the newest published release that no changelog names is a warning (`release-unassembled`). The semantic bump comes from the content, not from the fragment template's default `patch`; record the reason in the release. A standing authority to publish records its date, grantor, coverage and exclusions; it is never inferred and covers no framework release or external tag unless it says so.
+
 ## Framework release
 
 1. Use a framework plan and `framework-releases/Vx.y.z.md`.
@@ -59,9 +63,9 @@ Framework releases publish independent clean empty-template variants for `pt-BR`
 
 Recommended asset names are `FrameCode-VibeWork-Vx.y.z-pt-BR.zip`, `-en-US.zip`, `-es.zip`, and `-de.zip`, plus `SHA256SUMS.txt`. GitHub-generated source archives are source snapshots and must not be described as clean templates.
 
-The user chooses the framework language by downloading one asset. A downloaded variant contains no automatic language selector, fallback, synchronization process, or dependency on the other variants. The four-language requirement measures release completeness; it is not a runtime feature. Starting with V0.15.0, it does change the installed package boundary: the template root contains only `AGENTS.md` and `FCVW/`, while the governed source and pre-package staging remain conventional development trees.
+The user chooses the framework language by downloading one asset. A downloaded variant contains no automatic language selector, fallback, synchronization process, or dependency on the other variants. The four-language requirement measures release completeness; it is not a runtime feature.
 
-Every V0.15.0-or-later ZIP must have one conventional archive wrapper whose first-level payload is exactly `AGENTS.md` and `FCVW/`. The packager relocates root tools, legal notices, and provider bridges under `FCVW/`, excludes repository-only root `README.md` and `.gitignore`, rejects path collisions or additional root entries, leaves out framework history (records with `record_scope: framework` and every framework release record), and preserves deterministic bytes/checksums. Removing `FCVW/` is the bounded filesystem uninstall; `AGENTS.md` requires a separate review because downstream users may customize it.
+Every ZIP has one conventional archive wrapper whose first-level payload is exactly `AGENTS.md` and `FCVW/`. The packager relocates root tools, legal notices, and provider bridges under `FCVW/`, excludes repository-only root `README.md` and `.gitignore`, rejects path collisions or additional root entries, leaves out framework history (records with `record_scope: framework` and every framework release record), and preserves deterministic bytes/checksums. Removing `FCVW/` is the bounded filesystem uninstall; `AGENTS.md` requires a separate review because downstream users may customize it.
 
 Application and framework GitHub release notes use the same sections: summary, included plans, added/changed/fixed/removed behavior, compatibility, migration, validation, known gaps, rollback, assets, checksums, and publication evidence.
 

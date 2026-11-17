@@ -13,7 +13,7 @@ from pathlib import Path
 from frontmatter_fcvw import parse_frontmatter, scalar, scan_fences, string_list
 from knowledge_graph_fcvw import TYPED_RELATION_FIELDS
 from fcvw_cache import frontmatter as cache_frontmatter, read_text as cache_read_text
-from path_policy_fcvw import DISPOSABLE_PARTS
+from path_policy_fcvw import DISPOSABLE_PARTS, governed_markdown_inventory
 
 
 HEADING = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
@@ -113,7 +113,7 @@ def bounded_chunks(content: str, limit: int = MAX_CHUNK_CHARS) -> list[str]:
 def build_index(root: Path, include_excluded: bool = False) -> list[dict[str, object]]:
     root = root.resolve()
     records: list[dict[str, object]] = []
-    for path in sorted(root.rglob("*.md"), key=lambda item: item.as_posix().lower()):
+    for path in governed_markdown_inventory(root):
         relative_path = path.relative_to(root)
         if any(part in DISPOSABLE_PARTS for part in relative_path.parts):
             continue

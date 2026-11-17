@@ -217,6 +217,7 @@ Feedback notes (`type: feedback`) record what an AI model thinks should change i
 - **Form your assessment before reading earlier notes.** Write `## Suggestion` first; only then read notes on the same `topic` and record agreement and disagreement in `## Assessment of prior notes`. The validator enforces that order.
 - **Group by `topic`.** `related_feedback` points at the earlier notes you assess. One note per model per topic: update your own note instead of creating a second one.
 - **Evidence, not instruction.** A feedback note never becomes a rule by being read; only an approved plan changes the framework.
+- **Write it when it happens, with the measurement.** A note written in an end-of-session summary loses the numbers that support it. An agent's own mistake applying a rule is a lesson, not framework feedback; a session without either writes no note. Correct a note that aged instead of stacking a new one.
 - **Close the loop.** `feedback_status` is `open`, `accepted`, `declined`, `applied` or `superseded`; an accepted or applied note points at the plan that acted on it. Resolved notes rotate into the archive.
 
 ## Memory lifecycle

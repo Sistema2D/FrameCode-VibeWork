@@ -14,6 +14,7 @@ upgrade_strategy: "replace"
 - Enforce the current schema on new or substantively edited records.
 - Record legacy exceptions in a baseline and reduce them over time.
 - Do not mark the framework lock as upgraded until validation passes.
+- Across several versions, apply the sections in order but skip what V0.20.0 retired: queue files (`QUEUE.md`, `queue.d/`), a versioned `DOCUMENT_GRAPH.md`, and regenerating `ROLE_MANIFEST.json` (the release ships it).
 
 ## V0.12.0 to V0.13.0
 
@@ -56,18 +57,10 @@ Required migration:
 2. Replace framework policies, templates, skills, and tools.
 3. Move `.cursorrules` and `.windsurfrules` from `FCVW/` to the repository root
    if the previous installation has them. Inside `FCVW/` they have no effect.
-4. Generate `FCVW/ROLE_MANIFEST.json` with
-   `python FCVW/tools/role_manifest_fcvw.py --root . --write` immediately after
-   replacing the framework files, and never again afterwards. Without it, the
-   next upgrade cannot tell a locally edited policy from an untouched one.
-5. Adopt fragmented queues when convenient: create `Plans/<state>/queue.d/` and
-   move one `QUEUE.md` row at a time into an `fcvw/plan-queue-entry@1` fragment.
-   While the directory does not exist, the legacy queue stays canonical and valid.
-6. Review active `fcvw/plan@2` plans at risk `R3` or above that declare
+4. Review active `fcvw/plan@2` plans at risk `R3` or above that declare
    `regression_contract: not_applicable`: the combination is now invalid.
    Completed plans remain valid historical evidence.
-7. Review `fcvw/plan@2` plans without a populated `Rollback` section.
-8. Regenerate `DOCUMENT_GRAPH.md` and the queue views, then run the validator.
+5. Review `fcvw/plan@2` plans without a populated `Rollback` section, then run the validator.
 
 Compatibility notes:
 
@@ -83,15 +76,18 @@ Compatibility notes:
 
 ## Legacy baseline
 
-The `incremental` profile accepts a project-specific baseline for pre-existing findings:
+A project that adopts or upgrades FCVW usually carries findings it cannot fix in the same change. Record them once, then let the gate fail only on new ones:
 
 ```powershell
-python tools/validate_fcvw.py --root . --profile incremental --baseline path/to/legacy-baseline.md
+python FCVW/tools/validate_fcvw.py --root . --write-baseline --baseline-owner <owner>
+python FCVW/tools/validate_fcvw.py --root .
 ```
 
-Start from `governance/TEMPLATE_LEGACY_BASELINE.md`. The file and each row are time-bounded. Every entry must contain the exact path, rule identifier, existing message, justification, owner, and review date. Only the exact tuple `path + rule + message` becomes non-blocking; changed messages and new paths still fail. Expired or malformed baselines fail configuration, and entries that no longer match are reported as stale warnings so they can be removed.
+The first command writes `FCVW/audits/legacy-baseline.md` (`fcvw/legacy-baseline@1`, format in `governance/TEMPLATE_LEGACY_BASELINE.md`) with every current blocking finding, a review date (default 90 days, `--baseline-review-due`) and a justification (`--baseline-justification`). Run it again after fixing debt: reviewed rows keep their justification, fixed rows are dropped. The default `--profile auto` validates an instantiated project as `incremental` while that file exists; `--baseline <file>` names another one.
 
-Without `--baseline`, `incremental` blocks all applicable findings. `--baseline` is rejected under other profiles; `strict` always blocks all applicable findings.
+A row matches by path, rule and message, ignoring line numbers and successor hints, so moving text does not turn known debt into a new finding. A changed message, a new path, an expired or malformed baseline fails. Accepted findings are summarized by rule (`--show-baseline` lists them); stale rows are warnings. `strict` and `clean-template` accept no baseline. Never record a finding introduced by the change under review.
+
+Before recording, remove the mechanical part of the debt: `--fix-moved-links` rewrites links and `context_files` whose target moved status directory or was renamed in git history (`MECHANICAL` in the summary counts them).
 
 ## V0.13.0 to V0.14.0
 
@@ -101,18 +97,11 @@ Required migration:
 
 1. Preserve project profiles and records.
 2. Add `APP_RULES.md` as a preserved project profile and populate only confirmed rules.
-3. Add active plans to their exact `QUEUE.md`; completed and discontinued records remain historical.
-4. Regenerate `DOCUMENT_GRAPH.md` and resolve new orphans rather than hiding them.
-5. Validate first-level frontmatter lists and repair duplicate or unsupported YAML constructs in substantively touched files.
-6. Keep optional context indexes outside normative records and rebuild them from sources.
-7. Do not migrate the repository or an installed framework to a multilingual layout. Prepare `pt-BR`, `en-US`, `es`, and `de` as independent empty-template variants in external release staging.
-8. Keep `FRAMEWORK_LOCK.md` on the published installed baseline while V0.14.0 is `in_preparation`; advance it with the release record only at the `ready` gate.
-9. Bind complete language-variant validation to an external clean source root and immutable source revision; do not validate a staged variant against itself.
-10. Record the reviewed content baseline separately from the later tagged publication revision to avoid a self-referential commit hash.
+3. Resolve new graph orphans rather than hiding them.
+4. Validate first-level frontmatter lists and repair duplicate or unsupported YAML constructs in substantively touched files.
+5. Keep optional context indexes outside normative records and rebuild them from sources.
 
-Historical artifacts are not rewritten only to add retrieval metadata or new optional ownership fields.
-
-Language choice requires no downstream migration. A user selects one language by downloading that release variant, and the resulting framework behaves as a normal monolingual tree without automatic detection, fallback, or synchronization.
+Historical artifacts are not rewritten only to add retrieval metadata or new optional ownership fields. Language choice needs no downstream migration: a user downloads one variant, a normal monolingual tree. The release-production rules introduced here (external staging, lock and source revision) live in `RELEASE.md`.
 
 ## V0.14.0 to V0.15.0
 
@@ -124,18 +113,16 @@ Required migration:
 2. For each active `fcvw/plan@2` whose queue row contains internal blocker IDs, add those IDs to `depends_on` and create one Dependency validation row per ID.
 3. Keep pending or in-progress prerequisites as `pending`. Mark a dependency `satisfied` only after its prerequisite is completed and concrete evidence is recorded.
 4. Treat a discontinued prerequisite as `invalidated`; keep the dependent plan blocked until it is explicitly replanned, replaced, or discontinued.
-5. Retain `Plans/in_progress/QUEUE.md` and `Plans/pending/QUEUE.md` as canonical. Delete or ignore any manually maintained aggregate queue; regenerate disposable views from the tool.
-6. Existing wiki pages remain valid without maturity, typed relations, or source metadata. Add them only when the page is substantively reviewed and the semantics improve retrieval or impact analysis.
-7. Replace any proposed tracked-source `content_hash` with `source_digest`; context chunks continue exposing `content_hash` as a compatibility alias plus `chunk_hash`.
-8. Do not add `status: stale`. Generate stale-source and dependent-review findings, review affected knowledge, and update digests only after that review.
-9. Keep generated knowledge graphs, stale reports, context indexes, and aggregate queue views in `.fcvw-cache/` or another disposable location.
-10. Rebuild the context index before using new metadata filters or typed graph expansion. Graph expansion remains opt-in, relation-selected, one-hop, and bounded.
-11. Regenerate `DOCUMENT_GRAPH.md` and run the complete validator/test suite.
-12. For a fresh V0.15.0 release installation, copy the two payload entries only: root `AGENTS.md` and `FCVW/`. Installed commands now use `FCVW/tools/`.
-13. For an existing installation, back up populated profiles and records, merge the new `FCVW/` tree by ownership, and do not bulk-move or delete root `tools/`, `LICENSE`, `NOTICE`, `.cursorrules`, or `.windsurfrules`; those names may belong to the application.
-14. Remove an older root framework file only after matching it to the prior release manifest and confirming that it has no application modification. Ambiguous files remain for manual reconciliation.
-15. Regenerate the graph with `python FCVW/tools/document_graph_fcvw.py --root . --write` and validate with `python FCVW/tools/validate_fcvw.py --root . --profile instantiated` after migration.
-16. After a successful contained installation, framework removal consists of backing up any project-owned records, deleting `FCVW/`, then reviewing and optionally deleting the separately customized `AGENTS.md`.
+5. Existing wiki pages remain valid without maturity, typed relations, or source metadata. Add them only when the page is substantively reviewed and the semantics improve retrieval or impact analysis.
+6. Replace any proposed tracked-source `content_hash` with `source_digest`; context chunks continue exposing `content_hash` as a compatibility alias plus `chunk_hash`.
+7. Do not add `status: stale`. Generate stale-source and dependent-review findings, review affected knowledge, and update digests only after that review.
+8. Keep generated knowledge graphs, stale reports, context indexes, and aggregate queue views in `.fcvw-cache/` or another disposable location.
+9. Rebuild the context index before using new metadata filters or typed graph expansion. Graph expansion remains opt-in, relation-selected, one-hop, and bounded.
+10. For a fresh V0.15.0 release installation, copy the two payload entries only: root `AGENTS.md` and `FCVW/`. Installed commands now use `FCVW/tools/`.
+11. For an existing installation, back up populated profiles and records, merge the new `FCVW/` tree by ownership, and do not bulk-move or delete root `tools/`, `LICENSE`, `NOTICE`, `.cursorrules`, or `.windsurfrules`; those names may belong to the application.
+12. Remove an older root framework file only after matching it to the prior release manifest and confirming that it has no application modification. Ambiguous files remain for manual reconciliation.
+13. Run the complete validator and test suite after migration.
+14. After a successful contained installation, framework removal consists of backing up any project-owned records, deleting `FCVW/`, then reviewing and optionally deleting the separately customized `AGENTS.md`.
 
 Compatibility notes:
 
@@ -160,26 +147,11 @@ Replace framework-owned tools and policies through the role manifest and preserv
 
 ## V0.18.0 to V0.19.0
 
-Adaptive experiments add opt-in controls and strict external JSON contracts.
-Existing default/shadow invocations remain valid. No state is migrated or loaded
-implicitly. Before using assist, obtain reviewed evidence and prepare a source-bound
-control/runtime; changing control requires revalidated state and a new scoped run.
-The V0.19.0 experimental `start`/`observe` commands require an
-explicit trusted `--ledger` SQLite path, and controlled retrieval requires the
-same `--adaptive-ledger` path. Create a fresh external ledger; manually created
-runtime JSON is not accepted for assist until registered through `start`. Keep
-the ledger outside the release payload or under disposable `.fcvw-cache`, back it
-up with runtime files when continuing an experiment, and restrict write access.
-Reset/export/rollback operate on external derived files and preserve QA/safety stops.
-The current pilot does not satisfy activation. See the
-[experiment contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md).
-
-
-Loop evaluation adds optional external JSON schemas and tools; no existing benchmark,
-application record or retrieval invocation is migrated. Create a separately frozen
-protocol for new evaluations. Do not infer loop events from old benchmark outcomes
-or backfill missing usage with estimates labeled as provider measurements. Retain
-external evidence and rebuild reports explicitly; no collector runs by default.
+The adaptive-experiment and loop-evaluation tools added here were removed in V0.20.0;
+when continuing to V0.20.0 or later, skip their setup. External ledgers and evidence
+stay yours; the last tools and the
+[experiment contract](https://github.com/Sistema2D/FrameCode-VibeWork/blob/0b3cb546062e154be169521fed50bec2f3b28383/FCVW/governance/ADAPTIVE_EXPERIMENT_CONTRACT.md)
+are at that revision.
 
 
 QA 1.1.0 requires user consultation for every behavior divergence. The optional
@@ -344,3 +316,20 @@ The contract is the switch: it must name `implementation`, `hook_events` and
 `harnesses` (see the ready template in `TEMPLATE_AUTOMATION_CONTRACT.md`), and
 the hooks act only while it is `active`. The new `automation-binding` rule
 reports configured hooks without such a contract, and the reverse.
+
+## V0.23.0 to V0.24.0
+
+Additive tools and rules; no file moves. Upgrade with `upgrade_fcvw.py`, then:
+
+1. **Profile.** `validate_fcvw.py` without `--profile` now infers it: `project-instantiated` in `FRAMEWORK_LOCK.md` or `instantiation_status: complete` in `PROJECT.md` means `instantiated`. Commands that pass `--profile` behave as before; hooks and the MCP server default to `auto`.
+2. **Debt.** The new rules below report findings in existing completed plans. Fix what is cheap, then record the rest with `--write-baseline` ([legacy baseline](#legacy-baseline)).
+3. **Closeout.** `plan-acceptance`: a completed `fcvw/plan@2` or compact plan has no `[ ]` item, and `[~]` names `deferred: <plan-id>` or `waived: <reason>`. `plan-deferral`: the target plan carries a deferred criterion as `from: <origin-id>`. Legacy `fcvw/plan@1` records are not re-judged. Decide each open box: `[x]` with evidence, or `[~]` with an address or reason.
+4. **`context_files`.** A bare entry is a repository path (as `retrieve_context.py` always read it); `./` and `../` stay plan-relative, and a bare path found only next to the plan is still accepted. A target deleted after a completed plan is a warning, not an error.
+5. **Graph inventory.** Inside a git work tree the graph, catalog, knowledge graph and context index read git's view (`.gitignore` applies); transient trees and nested worktrees are skipped. Declare tracked Markdown that FCVW does not govern (vendored docs, mirrors) in `PROJECT.md` frontmatter `ungoverned_paths`. `document_graph_fcvw.py --write` no longer validates; add `--check`.
+6. **Gates.** Optionally declare `PROJECT.md` Validation gates and run `gates_fcvw.py` before committing ([TESTS.md](TESTS.md#gate-selection-by-change-surface)).
+7. **Removal.** A project that kept a local "requested removal" section in `REFACTORING.md` finds it upstream as section 26; the upgrade's conflict report shows any local wording to keep.
+8. **Failures found during execution.** `PLANNING.md` now holds the "failure found, failure handled" rule; a project that kept it locally can point to it. Plans created for such failures declare `found_by`, and the finding plan names them (`plan-origin`); existing plans are not affected.
+9. **Release guard.** Add `unreleased_limit: "5"` (or the project's number) to `PROJECT.md` to block a backlog of unreleased fragments (`release-backlog`); without it only the `release-unassembled` warning applies. A project that used a local release gate tool can retire it.
+10. **Drafted plans.** `source` and `ai_review` are framework fields: a plan with `ai_review: pending` is blocked in the queue and invalid in `in_progress` or `completed` (`plan-review`).
+
+Rollback: reinstall V0.23.0 by ownership. Its validator ignores the new `PROJECT.md` fields but reports `FCVW/audits/legacy-baseline.md` as `audit-schema`: move the file outside `audits/` and pass it with `--profile incremental --baseline`.

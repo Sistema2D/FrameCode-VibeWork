@@ -29,7 +29,9 @@ Required frontmatter: `id`, `status`, `priority`, `risk`, `created_at`, `updated
 
 Allowed statuses: `pending`, `in_progress`, `completed`, `discontinued`.
 
-Priority and risk use the controlled values `P1` through `P5` and `R1` through `R5`. The values encoded in `id` and filename must match frontmatter. Required scalar fields cannot be empty, and `context_files` must be a non-empty list of resolvable local paths.
+Priority and risk use the controlled values `P1` through `P5` and `R1` through `R5`. The values encoded in `id` and filename must match frontmatter. Required scalar fields cannot be empty, and `context_files` must be a non-empty list of resolvable repository paths; `./` or `../` spellings are plan-relative.
+
+Checklist items in Acceptance criteria, Validation plan and Regression checks required use `[ ]`, `[x]` or `[~]`. `[~]` carries `deferred: <plan-id>` or `waived: <reason>`; a plan receiving a deferred criterion lists it with `from: <origin-id>`. These tokens stay in English in every language variant. A completed plan has no `[ ]` item (`plan-acceptance`, `plan-deferral`; see `PLANNING.md`). An optional `## Removal sanitization` section of a completed plan may not be empty or keep a blank labelled field (`plan-removal`). Optional `found_by: <plan-id>` marks a plan that treats a failure another plan found; that plan must name it (`plan-origin`). Optional `source` names where a plan drafted outside the agent came from, and `ai_review` (`pending`, `confirmed`) gates its execution (`plan-review`).
 
 Allowed regression contracts: `required`, `not_applicable`. The body requirements and completion blockers are defined in `REGRESSION_GUARDS.md`. `not_applicable` is refused at risk `R3` or above and in plans routed through `SECURITY.md`, `DATA.md`, or `MIGRATIONS.md`, and requires a justification of at least 40 characters. Every `fcvw/plan@2` declares a non-empty `Rollback` section.
 
@@ -146,7 +148,7 @@ Optional binding (since V0.23.0): `implementation` (repository path of the execu
 
 Required frontmatter: `created_at`, `review_due`, and `owner`. Each Markdown table row requires exact path, rule ID, complete existing finding message, justification, owner, and review date.
 
-The baseline is valid only with the validator's `incremental` profile. Matching uses the exact normalized tuple `path + rule + message`; expired or malformed entries block, and stale entries are reported for removal. Baseline configuration errors cannot themselves be baselined.
+The baseline is valid only with the validator's `incremental` profile ([generation and use](MIGRATIONS.md#legacy-baseline)). Matching uses the normalized tuple `path + rule + message`, without `line N:` prefixes or successor hints; a literal `|` inside a cell is written `\|`. The header row may be translated. Expired or malformed entries block, and stale entries are reported for removal. Baseline configuration errors cannot themselves be baselined.
 
 ## Instantiation status — `instantiation_status`
 
@@ -162,6 +164,8 @@ controlled values:
 `not_applicable` requires a `not_applicable_reason` of at least 40 characters and
 deliberately keeps the template placeholders: the project is declaring that the
 concern does not apply, not pretending to have filled it in.
+
+Optional `PROJECT.md` frontmatter `ungoverned_paths` lists repository globs (`*` within one folder, `**` across folders, a folder covers its contents) whose Markdown FCVW does not govern, such as vendored documentation. A table after `<a id="validation-gates"></a>` in `PROJECT.md` declares Surface, Paths and Gates rows plus a `full` row (`project-gates`). Optional `unreleased_limit` (a whole number; `0` or absent disables it) caps unreleased changelog fragments (`release-backlog`).
 
 `PROJECT.md` (`fcvw/project@1`) cannot be waived as a whole, and its *Identity and scope* section cannot appear in `not_applicable_sections`: a project always has a name and an edge. Other `PROJECT.md` sections are waived individually through `not_applicable_sections` plus `not_applicable_reason`; only waived sections may keep placeholders. `SECURITY.md`, `DATA.md` and `APP_RULES.md` are waived as whole files.
 
@@ -260,6 +264,7 @@ Frontmatter fields added after V0.13.0, the first versioned frontmatter contract
 | ~~`Plans/*/QUEUE.md` and `queue.d/` queue data~~; ~~`fcvw/plan@1` for pending or active plans~~ | plans | removed V0.20.0 |
 | `source_path` with `#anchor`; `evidence_method`, `verified_by` | `fcvw/wiki@1` | V0.21.0 |
 | `implementation`, `hook_events`, `harnesses` | `fcvw/automation@1` | V0.23.0 |
+| `ungoverned_paths`, `unreleased_limit`, Validation gates table; `found_by`, `source`, `ai_review`; checklist tokens `deferred:`, `waived:`, `from:` | `PROJECT.md`; plans; plan bodies | V0.24.0 |
 
 ## Derived outputs
 

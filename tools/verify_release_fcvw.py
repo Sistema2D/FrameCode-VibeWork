@@ -14,6 +14,7 @@ import tempfile
 import zipfile
 
 from package_release_fcvw import FORBIDDEN_ARCHIVE_PARTS
+from path_policy_fcvw import git_ignored_root_entries
 from release_layout_fcvw import materialize_release_layout, validate_release_layout, governed_root
 from role_manifest_fcvw import build_manifest
 
@@ -82,7 +83,9 @@ def verify_archive(archive: Path, checksum_file: Path, source_root: Path, *, run
 def smoke_source(source_root: Path, *, run_tests: bool = False) -> None:
     """Exercise the contained layout without manufacturing language reviews."""
     source_root = source_root.resolve()
+    local_state = git_ignored_root_entries(source_root)  # a checkout's ignored root entries are never packaged
     files = [p for p in source_root.rglob("*") if p.is_file()
+             and p.relative_to(source_root).parts[0] not in local_state
              and not {".git", ".github", ".fcvw-cache", ".obsidian", "__pycache__", ".codex-test-tmp"}.intersection(p.relative_to(source_root).parts)]
     with tempfile.TemporaryDirectory(prefix="fcvw-source-smoke-") as temp:
         installed = Path(temp) / "installed"

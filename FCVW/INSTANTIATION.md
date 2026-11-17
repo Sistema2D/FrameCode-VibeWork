@@ -98,7 +98,7 @@ They must remain generic, reusable, and reside inside the `FCVW/` subfolder:
 8. Create a changelog fragment in `changelogs/unreleased/{plan-name}.md`.
 9. Validate remaining placeholders according to artifact role.
 10. Update `wiki/index.md` if the instantiation generates reusable learning.
-11. Run `python FCVW/tools/validate_fcvw.py --root . --profile instantiated` for an installed release (`python tools/validate_fcvw.py ...` in the framework source checkout), then complete the plan.
+11. Set `Installed profile` in `FRAMEWORK_LOCK.md` to `project-instantiated`, run `python FCVW/tools/validate_fcvw.py --root .` (the profile is inferred from the lock and `PROJECT.md`), optionally declare the Validation gates in `PROJECT.md`, then complete the plan.
 
 ## Recommended Validation
 
@@ -205,4 +205,4 @@ During retroactive adoption:
 2. promote only confirmed application rules to `FCVW/APP_RULES.md`, with stable IDs and affected boundaries;
 3. link the adopted policies and profiles from official entrypoints and let the validator check reachability;
 4. report pre-existing orphan records explicitly instead of inventing relationships; and
-5. if an incremental orphan baseline is temporarily approved for legacy content, restrict it to exact paths and never add new artifacts to it.
+5. declare tracked Markdown that FCVW does not govern in `PROJECT.md` `ungoverned_paths`, run `--fix-moved-links`, then record the remaining pre-existing findings once with `validate_fcvw.py --write-baseline` ([legacy baseline](MIGRATIONS.md#legacy-baseline)); never add new artifacts to it.
