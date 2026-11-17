@@ -312,7 +312,7 @@ To ensure that temporary shortcuts or non-blocking design flaws do not accumulat
 Agents must not treat refactoring guidance as passive reading. The following skills are active gates:
 
 - Load `skills/anti-monolith-guard/SKILL.md` before creating or expanding a non-trivial module, component, route, service, prompt pack, workflow, or catch-all utility file.
-- Load `skills/code-hygiene-refactor/SKILL.md` when the work involves duplication, stale files, dead code, unnecessary files, cleanup, retroactive refactoring, or monolith remediation.
+- Load `skills/code-hygiene-refactor/SKILL.md` when the work involves duplication, stale files, dead code, unnecessary files, cleanup, retroactive refactoring, monolith remediation, or a removal the user requested (section 26).
 - Load `skills/agent-factory/SKILL.md` before creating a new skill or agent profile as a refactoring response.
 - Load `skills/self-improvement/SKILL.md` before changing any existing skill, agent profile, trigger, or reusable operational rule.
 
@@ -343,3 +343,22 @@ Before cleanup or retroactive refactoring, classify findings as:
 - missing characterization test.
 
 The agent must choose one small reversible cleanup batch, validate behavior, and defer the rest explicitly. Broad "clean everything" refactors are invalid unless decomposed into smaller plans.
+
+---
+
+## 26. Requested Removal and Sanitization
+
+When the user asks to remove or discontinue an application item (button, field, column, modal, tab, page, route, menu, action, report, integration or a whole feature), the removal includes the **sanitization of the code that existed only for that item**. Hiding, disabling, commenting out or disconnecting it does not complete the request: it leaves dead code that the next reader treats as live. This is not the cautious dead-code case of section 25: what died is known, and its residue belongs to the removal, not to a later cleanup plan.
+
+**Inventory.** Before removing, search for the component name, visible label, key, route, handler, policy or permission key, text key, style class and test identifiers, and classify each hit:
+
+1. the item's interface and the state, handlers, hooks and effects used only by it;
+2. exclusive styles, icons, images and texts;
+3. exclusive routes, endpoints, services, queries, parameters and configuration keys;
+4. policies, permissions and contract or registry entries that declared the item;
+5. tests, fixtures, mocks and scripts (E2E, captures, smoke) that exercised it — removed or rewritten for the new behavior, never only disabled;
+6. documentation, manuals and living records that describe it as existing.
+
+**Justified exceptions,** each recorded in the plan with its reason: code **shared** with another consumer stays, without the item's exclusive part; **persisted data and migrations** are not deleted with it (removing data needs its own data plan, with backup and rollback; legacy reads may stay with a deadline); a **public contract** with external consumers goes through a compatibility window with an adapter and a retirement date; **historical records** (published changelogs, completed plans, session notes) are not rewritten. A temporary exception carries a deadline or a follow-up plan.
+
+**Evidence.** The plan's `## Removal sanitization` section records the inventory, what was removed, the exceptions and a final search for the same terms with no unjustified remaining hit, besides the gates; the validator rejects it empty or with a blank field (`plan-removal`). If sanitization reaches another surface or changes behavior beyond the item, it becomes a separate batch or plan (section 15).

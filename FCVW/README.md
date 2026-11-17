@@ -7,7 +7,7 @@ upgrade_strategy: "replace"
 
 # FCVW operational index
 
-This directory is the governance layer installed in a project. This package is framework version V0.23.0. `AGENTS.md` remains at repository root as the only framework file outside this directory in V0.15.0-or-later release assets.
+This directory is the governance layer installed in a project. This package is framework version V0.23.0.
 
 ## Installation and removal boundary
 
@@ -81,7 +81,9 @@ Record directories are created by their first record. Application examples, hist
 |---|---|---|
 | Review application-specific rules | [`APP_RULES.md`](APP_RULES.md) | unique rule IDs and project-profile ownership |
 | Select the next plan | [PLANNING.md](PLANNING.md#priority-queue) and `tools/plan_queue_fcvw.py --recommend` | derived queue findings |
-| Browse all governed Markdown | Obsidian graph and backlinks, or `tools/document_graph_fcvw.py --write` into `.fcvw-cache/` | incoming links and entrypoint reachability |
+| Browse all governed Markdown | Obsidian graph and backlinks, or `tools/document_graph_fcvw.py --write` into `.fcvw-cache/` (`--check` also validates) | incoming links and entrypoint reachability |
+| Choose the gates for a diff | [TESTS.md](TESTS.md#gate-selection-by-change-surface) and `tools/gates_fcvw.py` | surfaces declared in `PROJECT.md`; undeclared paths escalate to `full` |
+| Separate new findings from known debt | [MIGRATIONS.md](MIGRATIONS.md#legacy-baseline) and `tools/validate_fcvw.py --write-baseline` | `--profile auto` applies `audits/legacy-baseline.md` |
 | Build optional lexical context | [`AI.md`](AI.md) | mandatory routes remain authoritative |
 
 A generated catalog is a disposable view, never a source of policy. Graph reachability proves navigation, not that a host activated a skill or read a rule during a real task.

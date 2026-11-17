@@ -75,7 +75,11 @@ class KnowledgeGraph:
 
 def _metadata_files(root: Path, files: list[Path] | None = None) -> list[tuple[Path, dict[str, FrontmatterValue]]]:
     records: list[tuple[Path, dict[str, FrontmatterValue]]] = []
-    for path in sorted(root.rglob("*.md") if files is None else files, key=lambda item: item.as_posix().lower()):
+    if files is None:
+        from path_policy_fcvw import governed_markdown_inventory
+
+        files = governed_markdown_inventory(root)
+    for path in sorted(files, key=lambda item: item.as_posix().lower()):
         if any(part in {".git", ".obsidian", ".fcvw-cache", "__pycache__"} for part in path.parts):
             continue
         metadata = cache_frontmatter(path)

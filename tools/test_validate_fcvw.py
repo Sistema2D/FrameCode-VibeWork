@@ -1957,29 +1957,37 @@ class StaticIntegrityTests(unittest.TestCase):
         "ownership",
         "placeholder",
         "profile-legacy",
+        "plan-acceptance",
         "plan-compact",
+        "plan-deferral",
         "plan-dependency-completion",
         "plan-dependency-cycle",
         "plan-dependency-evidence",
         "plan-dependency-schema",
         "plan-filename",
         "plan-id",
+        "plan-origin",
         "plan-priority",
         "plan-queue-blocker",
         "plan-queue-category",
         "plan-queue-legacy",
         "plan-queue-override",
         "plan-regression",
+        "plan-removal",
+        "plan-review",
         "plan-risk",
         "plan-risk-binding",
         "plan-rollback",
         "plan-schema",
         "plan-state",
+        "project-gates",
         "project-profile",
         "provider-neutrality",
         "reading-route",
         "regression-schema",
         "regression-surface",
+        "release-backlog",
+        "release-unassembled",
         "required-path",
         "scope-config",
         "skill-catalog",
@@ -2013,8 +2021,13 @@ class SurfaceGuardTests(unittest.TestCase):
 
     # Non-record FCVW surface after the V0.20.0 reduction. Growth above the
     # tolerance must update this baseline in a plan that answers PLANNING.md's
-    # "What is removed in exchange?".
-    SURFACE_BASELINE = {"files": 65, "directories": 21, "bytes": 455_000}
+    # "What is removed in exchange?". V0.24.0 (474,292 -> 488,233 bytes, files
+    # and directories unchanged): every added paragraph backs an executable rule
+    # (plan-acceptance, plan-deferral, plan-removal, plan-origin, project-gates,
+    # release-backlog, the removal route); superseded migration steps, stale
+    # version notes and historical measurements were removed in exchange. See
+    # P2-R3-2026-11-13-validation-signal-and-closeout.
+    SURFACE_BASELINE = {"files": 65, "directories": 21, "bytes": 465_000}
     SURFACE_TOLERANCE = 1.05
 
     def source_root(self) -> Path:

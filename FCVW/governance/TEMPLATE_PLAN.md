@@ -23,6 +23,7 @@ context_files:
   - "path/to/file"
 category: "other"            # correction | optimization | code_hygiene | visual | other
 depends_on: []
+# found_by: "P3-R2-YYYY-MM-DD-plan-that-found-the-failure"   # only for a failure found during other work
 ---
 
 # Short change title
@@ -73,6 +74,8 @@ For a trivial bounded change, state `Not applicable — <specific reason>`.
 ## Acceptance criteria
 
 - [ ] <Observable result.>
+
+Before completion every item is `[x]` (met, evidence below) or `[~]` with `deferred: <open-plan-id>` or `waived: <reason>`. A criterion received from another plan ends with `from: <origin-plan-id>`. The same applies to the Validation plan and Regression checks required lists.
 
 ## Dependency validation
 
@@ -138,6 +141,7 @@ The plan must sit in the directory matching its status and contain at least one 
 | Check | Result | Evidence |
 |---|---|---|
 | <Check> | <pass/fail/blocked/not_applicable> | <Evidence> |
+| Failure found: <defect> | <fixed/planned> | <commit, or the pending plan's ID> |
 
 ## Gaps and residual risk
 

@@ -1,11 +1,12 @@
 ---
 schema: "fcvw/skill@1"
 name: "code-hygiene-refactor"
-description: "Select a bounded, behavior-preserving cleanup batch. Use when removing duplication, dead code or stale files without changing behavior. Do not use for feature work or large restructurings (REFACTORING_GUIDE.md)."
-version: "1.3.1"
+description: "Select a bounded, behavior-preserving cleanup batch, and sanitize the code of an item the user asked to remove. Use when removing duplication, dead code or stale files, or when the user asks to remove or discontinue a button, field, screen, route or feature. Do not use for feature work or large restructurings (REFACTORING_GUIDE.md)."
+version: "1.4.0"
 session_types:
   - "refactoring"
   - "audit"
+  - "removal"
 ---
 # SKILL: Code Hygiene Refactor
 
@@ -22,7 +23,8 @@ Load this skill when:
 - a file is large, low-cohesion, or repeatedly changed;
 - a plan touches code with known `#tech-debt`;
 - an agent is tempted to copy/paste similar code;
-- a cleanup/refactoring plan is opened.
+- a cleanup/refactoring plan is opened;
+- the user asks to remove, delete, retire or discontinue an application item (button, field, column, modal, tab, page, route, menu, action, feature) — the removal includes sanitizing the item's code, per `REFACTORING.md` section 26.
 
 ## Inputs
 
@@ -32,7 +34,8 @@ Active plan and scope, changed-path and ownership evidence, similar-code search,
 
 - Preserve observable behavior unless a separate functional plan exists.
 - Do not remove dead code without evidence from search, tests, owners, routes, or build behavior.
-- Do not combine broad cleanup with a feature delivery unless the cleanup is required to keep the feature small.
+- Do not combine broad cleanup with a feature delivery unless the cleanup is required to keep the feature small. Code that existed only for an item the user asked to remove is not broad cleanup: it is part of the removal.
+- A requested removal does not end at hiding, disabling or disconnecting: inventory and remove the item's exclusive interface, state, styles, texts, routes, services, policies, tests, scripts and documentation; record each exception (shared code, persisted data, public contract, historical record) with its reason.
 - Do not introduce new dependencies for cleanup without explicit research and plan approval.
 - Prefer extracting existing repeated logic over inventing generic abstractions.
 - Keep each cleanup batch reviewable and reversible.
@@ -108,6 +111,20 @@ Classify each finding before editing:
 7. Validate behavior.
 8. Record result in plan, changelog, and wiki if reusable.
 
+## Requested Removal
+
+Use the **Local** scan for a button or field and **Module** for a modal, page or feature. The full rule, inventory and exceptions are in `REFACTORING.md` section 26. Plan block (prose is equally valid; a blank labelled field fails `plan-removal`):
+
+```markdown
+## Removal sanitization
+
+- Removed item and originating request:
+- Terms searched (component, label, key, route, policy, text, style, test):
+- Removed: interface / state / styles and texts / routes and services / policies / tests and scripts / documentation
+- Exceptions with reason (shared, data, public contract, history) and deadline:
+- Final search without an unjustified remaining hit:
+```
+
 ## Output Required
 
 Create or fill a report using the code hygiene section of `governance/TEMPLATE_REFACTORING.md` when the scan is module-level or systemic. For local scans, add this compact block to the active plan:
@@ -127,4 +144,4 @@ Create or fill a report using the code hygiene section of `governance/TEMPLATE_R
 
 ## Exit Criteria
 
-The cleanup is complete only when duplication, monolith risk, stale files, or dead code were reduced or explicitly deferred with evidence and a follow-up plan.
+The cleanup is complete only when duplication, monolith risk, stale files, or dead code were reduced or explicitly deferred with evidence and a follow-up plan. A requested removal is complete only with its Removal sanitization block filled and a clean final search.

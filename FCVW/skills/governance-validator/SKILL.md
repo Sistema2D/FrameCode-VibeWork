@@ -2,7 +2,7 @@
 schema: "fcvw/skill@1"
 name: "governance-validator"
 description: "Validate FCVW structure, schemas, ownership, plan states, reading routes, Markdown and wiki health, and clean-template boundaries. Use before structural closeout, after moving governed files, or when auditing the framework. Do not use to change a skill or policy's content."
-version: "2.0.1"
+version: "2.1.0"
 session_types:
   - "audit"
   - "release"
@@ -23,6 +23,7 @@ Evaluate the human-readable FCVW invariants. The optional script automates deter
 - `instantiated`: required project profiles must be complete.
 - `incremental`: new violations fail; exact legacy baseline findings are reported but do not block.
 - `strict`: all applicable findings block.
+- `auto` (default): `instantiated` when `FRAMEWORK_LOCK.md` or `PROJECT.md` declares the project instantiated, `incremental` when `FCVW/audits/legacy-baseline.md` also exists, otherwise `clean-template`. The run prints the reason.
 
 ## Inputs
 
@@ -44,6 +45,7 @@ Evaluate the human-readable FCVW invariants. The optional script automates deter
 9. Framework lock, release record, and migration coherence.
 10. The filesystem layout in `OWNERSHIP.md` covers every path class.
 11. Operational-index and reading-route coverage for every root framework policy, project profile, and declared skill session type.
+12. Closeout: no undecided checklist item in a completed plan, and every deferred criterion carried by its target (`plan-acceptance`, `plan-deferral`).
 
 ## Optional execution
 
@@ -55,9 +57,7 @@ Framework source checkout:
 
 `python tools/validate_fcvw.py --root . --profile <profile>`
 
-For controlled legacy debt:
-
-Use the matching installed/source tool prefix with `--profile incremental --baseline path/to/legacy-baseline.md`.
+For controlled legacy debt: run `--fix-moved-links` for the mechanical part, then `--write-baseline --baseline-owner <owner>` once; later runs with the default profile fail only on new findings. Record a baseline only for findings that predate the change under review.
 
 Scripts do not auto-correct historical evidence. Review every proposed remediation and keep the report attached to the active plan or release.
 

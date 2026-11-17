@@ -14,7 +14,7 @@ Scoped planning · regression protection · selective context · controlled tech
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
 [![Release](https://img.shields.io/badge/Release-v0.23.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.23.0)
 
-Stable release **V0.23.0**
+Stable release **V0.23.0** · In preparation: [V0.24.0](FCVW/framework-releases/V0.24.0.md)
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
@@ -44,9 +44,12 @@ Toda mudança versionada ganha um plano em `FCVW/Plans/`, evidência de validaç
 Ferramentas em Python 3.10+, só biblioteca padrão:
 
 ```sh
-python FCVW/tools/validate_fcvw.py --root . --profile instantiated
+python FCVW/tools/validate_fcvw.py --root .
 python FCVW/tools/plan_queue_fcvw.py --root . --recommend
+python FCVW/tools/gates_fcvw.py --root .
 ```
+
+O validador infere o perfil do projeto. Com dívida anterior, registre-a uma vez (`--write-baseline --baseline-owner <dono>`): depois disso ele falha só com achados novos. `gates_fcvw.py` lista os gates que o diff atual exige.
 
 ### Saiba mais
 
@@ -79,9 +82,12 @@ Every versioned change gets a plan under `FCVW/Plans/`, validation evidence and 
 Python 3.10+ tools, standard library only:
 
 ```sh
-python FCVW/tools/validate_fcvw.py --root . --profile instantiated
+python FCVW/tools/validate_fcvw.py --root .
 python FCVW/tools/plan_queue_fcvw.py --root . --recommend
+python FCVW/tools/gates_fcvw.py --root .
 ```
+
+The validator infers the project's profile. With pre-existing debt, record it once (`--write-baseline --baseline-owner <owner>`): from then on it fails only on new findings. `gates_fcvw.py` lists the gates the current diff needs.
 
 ### Learn more
 

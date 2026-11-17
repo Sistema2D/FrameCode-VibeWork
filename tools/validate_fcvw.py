@@ -26,7 +26,7 @@ from hook_fcvw import HARNESS_CONFIGS, HARNESSES, HOOK_EVENTS, configured_hooks,
 from knowledge_graph_fcvw import build_knowledge_graph
 from plan_queue_fcvw import validate_plan_queues
 # One list for both layouts (E-04), mapped to the installed layout by installed_path.
-from path_policy_fcvw import CLEAN_ROOT_ENTRIES, REQUIRED_SOURCE_PATHS as REQUIRED_PATHS
+from path_policy_fcvw import CLEAN_ROOT_ENTRIES, REQUIRED_SOURCE_PATHS as REQUIRED_PATHS, git_ignored_root_entries
 from release_layout_fcvw import installed_path, is_installed_release_layout
 
 from urllib.parse import unquote
@@ -122,7 +122,9 @@ MINIMUM_JUSTIFICATION = 40
 # list item. Prose that merely mentions Plans/pending/ or "no pending items" is
 # not a recorded result and must not block completion.
 PENDING_RESULT = re.compile(
-    r"(?im)(?:\|\s*pending\s*(?=\|)|^\s*(?:[-*]\s*)?(?:result|status)\s*:\s*`?pending\b|^\s*[-*]?\s*pending\s*\.?\s*$)"
+    r"(?im)(?:\|\s*(?:\*\*|`)?pending(?:\*\*|`)?\s*(?=\|)"
+    r"|^\s*(?:[-*]\s*)?(?:\*\*)?(?:result|status)(?:\*\*)?\s*:(?:\*\*)?\s*(?:\*\*|`)?pending\b"
+    r"|^\s*[-*]?\s*(?:\*\*|`)?pending(?:\*\*|`)?\s*\.?\s*$)"
 )
 INVISIBLE_CHARACTERS = {
     "\u200b": "zero-width space",
@@ -514,7 +516,37 @@ LOCALIZED_TITLES = {
         "einschrankungen und restrisiko",
     },
     "follow-up": {"acompanhamento", "seguimiento", "nachverfolgung"},
+    "acceptance criteria": {"criterios de aceitacao", "criterios de aceptacion", "akzeptanzkriterien"},
+    "legacy file": {"arquivo legado", "archivo heredado", "legacy-datei"},
+    "removal sanitization": {
+        "sanitizacao da remocao",
+        "sanitizacion de la eliminacion",
+        "bereinigung der entfernung",
+    },
 }
+
+# Closeout grammar for plan checklists (PLANNING.md, "Completion"). A completed
+# plan has no undecided box: [x] is met with evidence; [~] is decided but not met
+# here and names where it went (`deferred: <plan-id>`) or why it was dropped
+# (`waived: <reason>`). The receiving plan carries the criterion with
+# `from: <origin-plan-id>`, so the obligation is data on both ends, not prose.
+CHECKLIST_ITEM = re.compile(r"^\s*[-*+]\s+\[(?P<mark>[ xX~])\]\s+(?P<text>.*)$")
+PLAN_ID_TOKEN = r"P[1-5]-R[1-5]-\d{4}-\d{2}-\d{2}-[a-z0-9-]+"
+DEFERRED_TO = re.compile(rf"\bdeferred:\s*`?({PLAN_ID_TOKEN})`?")
+WAIVED_BECAUSE = re.compile(r"\bwaived:\s*(\S.*)$")
+INHERITED_FROM = re.compile(rf"\bfrom:\s*`?({PLAN_ID_TOKEN})`?")
+MINIMUM_WAIVER = 12
+PLAN_REVIEW_STATES = {"pending", "confirmed"}
+# Line numbers and successor hints change without the violation changing, so a
+# baseline compares findings without them (`--write-baseline` stores this form).
+LINE_PREFIX = re.compile(r"\bline \d+:\s*")
+HINT_SUFFIX = re.compile(r";\s+(?:plan moved, use|removed upstream, now in|renamed in git history to)\b.*$")
+DEFAULT_BASELINE = "FCVW/audits/legacy-baseline.md"
+# States to resolve, not history to record: a broken baseline, and a backlog of
+# unreleased fragments (the rehearsal on a real project baselined one by accident).
+NON_BASELINABLE_RULES = {"baseline-config", "baseline-expired", "baseline-stale", "release-backlog"}
+BASELINE_SCHEMA = "fcvw/legacy-baseline@1"
+PROFILES = ("auto", "clean-template", "instantiated", "incremental", "strict")
 
 PROVIDER_TERMS = (
     "IsSkillFile",
@@ -671,13 +703,17 @@ def load_legacy_baseline(path: Path) -> tuple[list[BaselineEntry], list[Finding]
             errors.append(Finding("baseline-expired", label, f"baseline review expired on {value}"))
 
     entries: list[BaselineEntry] = []
-    for number, line in enumerate(text.splitlines(), 1):
+    lines = text.splitlines()
+    for number, line in enumerate(lines, 1):
         stripped = line.strip()
         if not (stripped.startswith("|") and stripped.endswith("|")):
             continue
-        cells = [cell.strip() for cell in stripped[1:-1].split("|")]
-        if not cells or cells[0] == "Exact path" or all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
+        cells = table_cells(stripped)
+        if not cells or all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
             continue
+        following = lines[number].strip() if number < len(lines) else ""
+        if cells[0] == "Exact path" or re.fullmatch(r"\|(?:\s*:?-{3,}:?\s*\|)+", following):
+            continue  # a header row, in any language
         if len(cells) != 6 or not any(cells):
             errors.append(Finding("baseline-config", label, f"invalid baseline row at line {number}"))
             continue
@@ -709,21 +745,41 @@ def load_legacy_baseline(path: Path) -> tuple[list[BaselineEntry], list[Finding]
     return entries, errors
 
 
+def table_cells(row: str) -> list[str]:
+    """Cells of one Markdown table row; `\\|` is a literal pipe inside a cell."""
+
+    body = row.strip()
+    body = body[1:] if body.startswith("|") else body
+    body = body[:-1] if body.endswith("|") and not body.endswith("\\|") else body
+    return [cell.strip().replace("\\|", "|") for cell in re.split(r"(?<!\\)\|", body)]
+
+
+def comparable_message(message: str) -> str:
+    """The part of a finding message that identifies the violation itself."""
+
+    return HINT_SUFFIX.sub("", LINE_PREFIX.sub("", message)).strip()
+
+
+def baseline_key(path: str, rule: str, message: str) -> tuple[str, str, str]:
+    return (normalized_finding_path(path), rule, comparable_message(message))
+
+
 def apply_legacy_baseline(
     findings: list[Finding], entries: list[BaselineEntry]
 ) -> tuple[list[Finding], list[Finding], list[Finding]]:
-    """Return blocking findings, accepted exact matches, and stale baseline warnings."""
-    entry_keys = {(entry.path, entry.rule, entry.message) for entry in entries}
+    """Return blocking findings, accepted exact matches, and stale baseline warnings.
+
+    Exact means path, rule and message; line numbers and successor hints are not
+    part of the violation, so moving text inside a file does not turn known debt
+    into a "new" finding.
+    """
+    entry_keys = {baseline_key(entry.path, entry.rule, entry.message) for entry in entries}
     matched: set[tuple[str, str, str]] = set()
     blocking: list[Finding] = []
     accepted: list[Finding] = []
     for finding in findings:
-        key = (normalized_finding_path(finding.path), finding.rule, finding.message)
-        if (
-            finding.severity == "error"
-            and finding.rule not in {"baseline-config", "baseline-expired"}
-            and key in entry_keys
-        ):
+        key = baseline_key(finding.path, finding.rule, finding.message)
+        if finding.severity == "error" and finding.rule not in NON_BASELINABLE_RULES and key in entry_keys:
             accepted.append(finding)
             matched.add(key)
         else:
@@ -736,9 +792,84 @@ def apply_legacy_baseline(
             severity="warning",
         )
         for entry in entries
-        if (entry.path, entry.rule, entry.message) not in matched
+        if baseline_key(entry.path, entry.rule, entry.message) not in matched
     ]
     return blocking, accepted, stale
+
+
+def escape_cell(value: str) -> str:
+    return value.replace("\n", " ").replace("|", "\\|").strip()
+
+
+def write_legacy_baseline(
+    path: Path,
+    root: Path,
+    findings: list[Finding],
+    *,
+    owner: str,
+    review_due: date,
+    justification: str,
+) -> tuple[int, int, int]:
+    """Record the current blocking findings as reviewed debt; keep reviewed rows.
+
+    Rows that still match keep their justification, owner and review date; rows
+    that no longer match are dropped (they are fixed); new rows get the defaults.
+    Returns (added, kept, removed).
+    """
+
+    previous: dict[tuple[str, str, str], BaselineEntry] = {}
+    created_at = date.today().isoformat()
+    if path.is_file():
+        entries, _ = load_legacy_baseline(path)
+        previous = {baseline_key(entry.path, entry.rule, entry.message): entry for entry in entries}
+        created_at = scalar(frontmatter(read_text(path)), "created_at") or created_at
+    rows: dict[tuple[str, str, str], tuple[str, str, str]] = {}
+    for finding in findings:
+        if finding.severity != "error" or finding.rule in NON_BASELINABLE_RULES:
+            continue
+        key = baseline_key(finding.path, finding.rule, finding.message)
+        if key in rows:
+            continue
+        kept = previous.get(key)
+        if kept is not None:
+            rows[key] = (kept.justification, kept.owner, kept.review_due.isoformat())
+        else:
+            rows[key] = (justification, owner, review_due.isoformat())
+    added = sum(1 for key in rows if key not in previous)
+    kept_count = len(rows) - added
+    removed = sum(1 for key in previous if key not in rows)
+    policy = os.path.relpath(root / "FCVW" / "MIGRATIONS.md", path.parent).replace(os.sep, "/")
+    lines = [
+        "---",
+        f'schema: "{BASELINE_SCHEMA}"',
+        'artifact_role: "record"',
+        'record_scope: "application"',
+        'upgrade_strategy: "preserve"',
+        'retrieval_scope: "exact_only"',
+        f'created_at: "{created_at}"',
+        f'review_due: "{review_due.isoformat()}"',
+        f'owner: "{owner}"',
+        "---",
+        "",
+        "# Legacy validation baseline",
+        "",
+        # No #fragment: a project may still carry an older MIGRATIONS.md whose
+        # headings differ, and the baseline must not create the first new finding.
+        f"Known findings that do not block `--profile incremental`; see Legacy baseline in [MIGRATIONS.md]({policy}).",
+        "Regenerate with `validate_fcvw.py --write-baseline` after fixing debt; rows that no longer match are dropped.",
+        "",
+        "| Exact path | Rule ID | Existing finding | Justification | Owner | Review due |",
+        "|---|---|---|---|---|---|",
+    ]
+    for (finding_path, rule, message), (why, who, due) in sorted(rows.items()):
+        lines.append(
+            "| " + " | ".join(escape_cell(value) for value in (finding_path, rule, message, why, who, due)) + " |"
+        )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    temporary.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    os.replace(temporary, path)
+    return added, kept_count, removed
 
 
 def outside_code_fences(text: str) -> list[tuple[int, str]]:
@@ -987,6 +1118,10 @@ REPOSITORY_WIDE_RULES = {
     "regression-surface",
     "markdown-anchor",
     "automation-binding",
+    "plan-deferral",
+    "plan-origin",
+    "release-backlog",
+    "release-unassembled",
 }
 # Rule families that compare files with each other. Matching by prefix keeps a
 # newly added rule of the family repository-wide; an exact list silently drifted
@@ -1143,9 +1278,13 @@ def lineage(root: Path) -> dict[str, str]:
         cells = [cell.strip() for cell in line.strip("|").split("|")]
         if len(cells) < 2:
             continue
-        if cells[0] in {"Removed", "Legacy file"}:
+        # Language variants translate these headers ("Removido", "Entfernt",
+        # "Arquivo legado"); matching only English left lineage hints empty there.
+        header = normalized_title(cells[0])
+        if header in title_aliases("Removed") | title_aliases("Legacy file"):
             active = True
-            successor_label = "" if cells[1].startswith("Consolidated") else cells[1].replace("`", "") + " "
+            consolidated = normalized_title(cells[1]).startswith(("consolidated", "consolidado", "konsolidiert"))
+            successor_label = "" if consolidated else cells[1].replace("`", "") + " "
             continue
         if active and not set(cells[0]) <= set("-: "):
             for token in re.findall(r"`([^`]+)`", cells[0]):
@@ -1164,12 +1303,108 @@ def moved_plan(root: Path, source: Path, target: str) -> str | None:
     return os.path.relpath(matches[0], source.parent).replace(os.sep, "/")
 
 
+_GIT_RENAMES: dict[str, dict[str, str]] = {}
+
+
+def git_renames(root: Path) -> dict[str, str]:
+    """Old path -> newest new path, from git's own rename detection; {} outside git.
+
+    Read lazily (only when a target is missing) and once per root and process.
+    """
+
+    key = str(root)
+    if key in _GIT_RENAMES:
+        return _GIT_RENAMES[key]
+    import subprocess
+
+    mapping: dict[str, str] = {}
+    try:
+        top = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+                             capture_output=True, text=True, timeout=30, check=False)
+        if top.returncode == 0 and Path(top.stdout.strip()).resolve() == root.resolve():
+            log = subprocess.run(
+                ["git", "-C", str(root), "-c", "core.quotepath=off", "log", "--name-status", "-M",
+                 "--diff-filter=R", "--format="],
+                capture_output=True, timeout=120, check=False)
+            if log.returncode == 0:
+                for line in log.stdout.decode("utf-8", "surrogateescape").splitlines():
+                    parts = line.split("\t")
+                    if len(parts) == 3 and parts[0].startswith("R"):
+                        mapping.setdefault(parts[1], parts[2])  # log is newest first
+    except (OSError, subprocess.SubprocessError):
+        mapping = {}
+    _GIT_RENAMES[key] = mapping
+    return mapping
+
+
+_GIT_DELETED: dict[str, set[str]] = {}
+
+
+def git_deleted_paths(root: Path) -> set[str]:
+    """Repository paths that git history shows were deleted at some point; set() outside git."""
+
+    key = str(root)
+    if key in _GIT_DELETED:
+        return _GIT_DELETED[key]
+    import subprocess
+
+    deleted: set[str] = set()
+    try:
+        top = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+                             capture_output=True, text=True, timeout=30, check=False)
+        if top.returncode == 0 and Path(top.stdout.strip()).resolve() == root.resolve():
+            log = subprocess.run(
+                ["git", "-C", str(root), "-c", "core.quotepath=off", "log", "--name-only", "--no-renames",
+                 "--diff-filter=D", "--format="],
+                capture_output=True, timeout=120, check=False)
+            if log.returncode == 0:
+                deleted = {line.strip() for line in log.stdout.decode("utf-8", "surrogateescape").splitlines() if line.strip()}
+    except (OSError, subprocess.SubprocessError):
+        deleted = set()
+    _GIT_DELETED[key] = deleted
+    return deleted
+
+
+def rename_successor(root: Path, relative: str) -> str | None:
+    """Follow git renames from a repository path to an existing file, if any."""
+
+    mapping = git_renames(root)
+    current, seen = relative, set()
+    while current in mapping and current not in seen:
+        seen.add(current)
+        current = mapping[current]
+    return current if current != relative and (root / current).is_file() else None
+
+
+def relationship_successor_hint(root: Path, source: Path, missing: Path, field: str) -> str:
+    """Hint for a missing frontmatter relationship; context_files keep the root form."""
+
+    try:
+        relative = missing.relative_to(root).as_posix()
+    except ValueError:
+        return ""
+    successor = rename_successor(root, relative)
+    if not successor:
+        return ""
+    if field != "context_files":
+        successor = os.path.relpath(root / successor, source.parent).replace(os.sep, "/")
+    return f"; renamed in git history to {successor} (--fix-moved-links rewrites it)"
+
+
 def successor_hint(root: Path, source: Path, target: str) -> str:
     """A '; ...' suffix naming where a missing link target went, or ''."""
 
     plan = moved_plan(root, source, target)
     if plan:
         return f"; plan moved, use {plan} (--fix-moved-links rewrites it)"
+    try:
+        repository_path = Path(os.path.normpath(source.parent / target)).relative_to(root).as_posix()
+    except ValueError:
+        repository_path = ""
+    successor = rename_successor(root, repository_path) if repository_path else None
+    if successor:
+        moved = os.path.relpath(root / successor, source.parent).replace(os.sep, "/")
+        return f"; renamed in git history to {moved} (--fix-moved-links rewrites it)"
     try:
         resolved = os.path.relpath((source.parent / target).resolve(), (root / "FCVW").resolve())
     except ValueError:
@@ -1211,8 +1446,71 @@ def validate_anchors(root: Path, findings: list[Finding]) -> None:
                 )
 
 
+FRONTMATTER_KEY_LINE = re.compile(r"^(?P<key>[A-Za-z_][A-Za-z0-9_-]*):(?P<rest>.*)$")
+FRONTMATTER_ITEM_LINE = re.compile(r"^(?P<lead>\s+-\s*)(?P<quote>[\"']?)(?P<value>[^\"']*)(?P=quote)\s*$")
+FRONTMATTER_SCALAR_REST = re.compile(r"^(?P<lead>\s*)(?P<quote>[\"']?)(?P<value>[^\"']*)(?P=quote)\s*$")
+
+
+def _fixed_relationship(root: Path, source: Path, field: str, value: str) -> str | None:
+    """The successor spelling for one missing relationship value, or None."""
+
+    if not value or not _looks_like_local_relationship(field, value):
+        return None
+    candidates = [Path(os.path.normpath(item)) for item in _relationship_candidates(root, source, value, field)]
+    if not candidates or any(item.exists() for item in candidates):
+        return None
+    try:
+        relative = candidates[0].relative_to(root).as_posix()
+    except ValueError:
+        return None
+    successor = rename_successor(root, relative)
+    if not successor:
+        return None
+    if field == "context_files":
+        return successor
+    return os.path.relpath(root / successor, source.parent).replace(os.sep, "/")
+
+
+def fix_frontmatter_relationships(root: Path, path: Path, text: str) -> tuple[str, list[str]]:
+    """Rewrite relationship values whose target git records as renamed."""
+
+    lines = text.split("\n")
+    if not lines or lines[0].strip() != "---":
+        return text, []
+    changes: list[str] = []
+    field = ""
+    for index in range(1, len(lines)):
+        line = lines[index]
+        if line.strip() == "---":
+            break
+        key_match = FRONTMATTER_KEY_LINE.match(line)
+        if key_match:
+            field = key_match.group("key")
+            rest = FRONTMATTER_SCALAR_REST.match(key_match.group("rest"))
+            if field in LOCAL_RELATIONSHIP_FIELDS and rest and rest.group("value").strip():
+                fixed = _fixed_relationship(root, path, field, rest.group("value").strip())
+                if fixed:
+                    quote = rest.group("quote")
+                    lines[index] = f"{field}: {quote}{fixed}{quote}"
+                    changes.append(f"{field}: {rest.group('value').strip()} -> {fixed}")
+            continue
+        item = FRONTMATTER_ITEM_LINE.match(line)
+        if item and field in LOCAL_RELATIONSHIP_FIELDS:
+            fixed = _fixed_relationship(root, path, field, item.group("value").strip())
+            if fixed:
+                quote = item.group("quote")
+                lines[index] = f"{item.group('lead')}{quote}{fixed}{quote}"
+                changes.append(f"{field}: {item.group('value').strip()} -> {fixed}")
+    return "\n".join(lines), changes
+
+
 def fix_moved_plan_links(root: Path) -> list[str]:
-    """Rewrite links whose plan changed status directory. Only unambiguous plan moves are touched."""
+    """Rewrite links and frontmatter relationships with one proven successor.
+
+    A successor is proven when the plan changed status directory (unique match)
+    or when git's rename history leads to an existing file. Anything ambiguous
+    is left for a person; every rewrite is printed.
+    """
 
     changes: list[str] = []
     for path in governed_markdown(root):
@@ -1220,15 +1518,31 @@ def fix_moved_plan_links(root: Path) -> list[str]:
         updated = text
         for line_number, raw in markdown_link_targets(text):
             target, separator, fragment = raw.partition("#")
-            if not target or (path.parent / unquote(target)).exists():
+            if not target or re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I) or (path.parent / unquote(target)).exists():
                 continue
             plan = moved_plan(root, path, unquote(target))
+            if not plan:
+                try:
+                    repository_path = Path(os.path.normpath(path.parent / unquote(target))).relative_to(root).as_posix()
+                except ValueError:
+                    continue
+                successor = rename_successor(root, repository_path)
+                plan = os.path.relpath(root / successor, path.parent).replace(os.sep, "/") if successor else None
             if plan:
                 updated = updated.replace(f"]({raw})", f"]({plan}{separator}{fragment})")
                 changes.append(f"{path.relative_to(root).as_posix()}:{line_number}: {target} -> {plan}")
+        updated, relationship_changes = fix_frontmatter_relationships(root, path, updated)
+        changes.extend(f"{path.relative_to(root).as_posix()}: {change}" for change in relationship_changes)
         if updated != text:
             path.write_text(updated, encoding="utf-8")
     return changes
+
+
+def prose_placeholder(text: str) -> bool:
+    """A `<placeholder>` in prose. Inline code may quote markup (`<main>`, `<select id="x">`)
+    as evidence; counting it made filled plan sections fail as placeholders."""
+
+    return bool(PLACEHOLDER.search(INLINE_CODE.sub("", text)))
 
 
 def level_two_section(text: str, title: str) -> str | None:
@@ -1271,7 +1585,7 @@ def validate_plan_regression(
     if section is None:
         findings.append(Finding("plan-regression", relative, "Regression impact section is missing"))
         return
-    if not section or PLACEHOLDER.search(section):
+    if not section or prose_placeholder(section):
         findings.append(Finding("plan-regression", relative, "Regression impact is empty or contains placeholders"))
     if contract == "required":
         for marker in REGRESSION_MARKERS:
@@ -1303,7 +1617,7 @@ def validate_plan_regression(
     rollback = level_two_section(text, "Rollback")
     if rollback is None:
         findings.append(Finding("plan-rollback", relative, "Rollback section is missing"))
-    elif not rollback.strip() or PLACEHOLDER.search(rollback) or len(rollback.strip()) < 12:
+    elif not rollback.strip() or prose_placeholder(rollback) or len(rollback.strip()) < 12:
         findings.append(
             Finding("plan-rollback", relative, "Rollback is empty, placeholder, or too short to be a procedure")
         )
@@ -1389,8 +1703,285 @@ def validate_compact_plan(
         if not has_localized_heading(text, 2, title):
             findings.append(Finding("plan-compact", relative, f"missing required section: {title}"))
     rollback = level_two_section(text, "Rollback")
-    if rollback is not None and (not rollback.strip() or PLACEHOLDER.search(rollback)):
+    if rollback is not None and (not rollback.strip() or prose_placeholder(rollback)):
         findings.append(Finding("plan-rollback", relative, "Rollback is empty or contains placeholders"))
+
+
+def level_three_section(section: str, title: str) -> str | None:
+    """Body of a `### title` subsection inside an already extracted section."""
+
+    accepted = title_aliases(title)
+    body: list[str] = []
+    inside = False
+    for _, line in outside_code_fences(section):
+        stripped = line.strip()
+        if re.match(r"^#{1,6}\s", stripped):
+            if inside:
+                break
+            inside = stripped.startswith("### ") and normalized_title(stripped[4:]) in accepted
+            continue
+        if inside:
+            body.append(line)
+    return "\n".join(body).strip() if inside else None
+
+
+def checklist_items(section: str) -> list[tuple[str, str]]:
+    """(mark, text) for every task-list item outside code."""
+
+    items: list[tuple[str, str]] = []
+    for _, line in outside_code_fences(section):
+        match = CHECKLIST_ITEM.match(line)
+        if match:
+            items.append((match.group("mark").lower(), match.group("text").strip()))
+    return items
+
+
+def closeout_checklists(schema: str, text: str) -> list[tuple[str, str]]:
+    """The checklists a plan must have decided before it may be completed."""
+
+    # level_two_section keeps the lines inside a code fence; an example checklist
+    # in a fenced block is not a decision, so read from the prose only.
+    text = "\n".join(line for _, line in outside_code_fences(text))
+    titles = ("Validation",) if schema == COMPACT_PLAN_SCHEMA else ("Acceptance criteria", "Validation")
+    sections = [(title, body) for title in titles if (body := level_two_section(text, title))]
+    if schema != COMPACT_PLAN_SCHEMA:
+        regression = level_two_section(text, "Regression impact") or ""
+        checks = level_three_section(regression, "Regression checks required")
+        if checks:
+            sections.append(("Regression checks required", checks))
+    return sections
+
+
+def validate_plan_acceptance(
+    relative: str,
+    metadata: dict[str, FrontmatterValue],
+    text: str,
+    findings: list[Finding],
+) -> None:
+    """`completed` means every checklist item was decided (PLANNING.md, Completion).
+
+    Before V0.24.0 a plan closed with open boxes as long as its regression table
+    did not say "pending"; in one real project 171 open criteria sat in completed
+    plans, so an open box stopped meaning anything.
+    """
+
+    schema = scalar(metadata, "schema")
+    if schema not in {"fcvw/plan@2", COMPACT_PLAN_SCHEMA}:
+        return  # fcvw/plan@1 is history; it is not re-judged
+    plan_id = scalar(metadata, "id")
+    completed = scalar(metadata, "status") == "completed"
+    for title, body in closeout_checklists(schema, text):
+        for mark, item in checklist_items(body):
+            excerpt = item[:80]
+            if mark == "~":
+                deferred = DEFERRED_TO.search(item)
+                waived = WAIVED_BECAUSE.search(item)
+                if deferred and deferred.group(1) == plan_id:
+                    findings.append(Finding("plan-acceptance", relative, f"{title}: criterion deferred to its own plan: {excerpt!r}"))
+                elif not deferred and not (waived and len(waived.group(1).strip()) >= MINIMUM_WAIVER):
+                    findings.append(
+                        Finding(
+                            "plan-acceptance",
+                            relative,
+                            f"{title}: [~] must name `deferred: <plan-id>` or `waived: <reason>`: {excerpt!r}",
+                        )
+                    )
+            elif mark == " " and completed:
+                findings.append(
+                    Finding(
+                        "plan-acceptance",
+                        relative,
+                        f"{title}: completed plan has an undecided item: {excerpt!r} "
+                        "(mark [x] with evidence, or [~] with deferred:/waived:)",
+                    )
+                )
+
+
+def validate_removal_sanitization(
+    relative: str,
+    metadata: dict[str, FrontmatterValue],
+    text: str,
+    findings: list[Finding],
+) -> None:
+    """A completed requested removal records its sanitization (REFACTORING.md section 26)."""
+
+    if scalar(metadata, "status") != "completed":
+        return
+    section = level_two_section(text, "Removal sanitization")
+    if section is None:
+        return
+    # Prose and the template's labelled list are both valid records; what is not
+    # valid is an empty section, a placeholder, or a labelled field left blank.
+    if not section.strip() or prose_placeholder(section):
+        findings.append(Finding("plan-removal", relative, "Removal sanitization is empty or contains placeholders"))
+        return
+    lines = [line for _, line in outside_code_fences(section)]
+    for index, line in enumerate(lines):
+        field = re.match(r"^(?P<indent>\s*)[-*]\s+(?P<label>[^:]{2,80}):\s*$", line)
+        if not field:
+            continue
+        following = next((item for item in lines[index + 1:] if item.strip()), "")
+        nested = len(following) - len(following.lstrip()) > len(field.group("indent"))
+        if not nested:
+            findings.append(
+                Finding("plan-removal", relative, f"Removal sanitization field is empty: {field.group('label').strip()}")
+            )
+
+
+def validate_plan_deferrals(root: Path, findings: list[Finding]) -> None:
+    """A deferred criterion is an obligation both plans can see (repository-wide).
+
+    The origin writes `[~] ... deferred: <target-id>`; the target carries
+    `[ ] ... from: <origin-id>` in its own checklist, so the completion rule
+    keeps it from closing without deciding it. A deferral the target does not
+    carry, a missing or discontinued target, or a dangling `from:` is reported.
+    """
+
+    plans: dict[str, tuple[str, str]] = {}
+    deferrals: list[tuple[str, str, str]] = []
+    carried: dict[str, set[str]] = {}
+    carried_at: dict[str, str] = {}
+    for state in ("pending", "in_progress", "completed", "discontinued"):
+        for path in sorted((root / "FCVW" / "Plans" / state).glob("*.md")):
+            if path.name in {"README.md", "QUEUE.md", "INDEX.md"}:
+                continue
+            text = read_text(path)
+            metadata = frontmatter(text)
+            plan_id = scalar(metadata, "id") or path.stem
+            relative = path.relative_to(root).as_posix()
+            plans[plan_id] = (relative, state)
+            for _, body in closeout_checklists(scalar(metadata, "schema"), text):
+                for mark, item in checklist_items(body):
+                    deferred = DEFERRED_TO.search(item)
+                    if mark == "~" and deferred and deferred.group(1) != plan_id:
+                        deferrals.append((plan_id, relative, deferred.group(1)))
+                    inherited = INHERITED_FROM.search(item)
+                    if inherited:
+                        carried.setdefault(plan_id, set()).add(inherited.group(1))
+                        carried_at[plan_id] = relative
+    declared = {(origin, target) for origin, _, target in deferrals}
+    for origin, relative, target in deferrals:
+        if target not in plans:
+            findings.append(Finding("plan-deferral", relative, f"criterion deferred to a missing plan: {target}"))
+        elif plans[target][1] == "discontinued":
+            findings.append(
+                Finding("plan-deferral", relative, f"criterion deferred to discontinued plan {target}; address it again")
+            )
+        elif origin not in carried.get(target, set()):
+            closed = " (it is completed: defer to an open plan or reopen it)" if plans[target][1] == "completed" else ""
+            findings.append(
+                Finding(
+                    "plan-deferral",
+                    relative,
+                    f"{target} does not carry the deferred criterion; add `- [ ] <criterion> from: {origin}` "
+                    f"to its checklist{closed}",
+                )
+            )
+    for target, origins in sorted(carried.items()):
+        for origin in sorted(origins):
+            if origin not in plans:
+                findings.append(Finding("plan-deferral", carried_at[target], f"inherited criterion names a missing plan: {origin}"))
+            elif (origin, target) not in declared:
+                findings.append(
+                    Finding(
+                        "plan-deferral",
+                        carried_at[target],
+                        f"criterion carried from {origin}, which does not record `deferred: {target}`",
+                        severity="warning",
+                    )
+                )
+
+
+def plan_records(root: Path) -> dict[str, tuple[str, str, str, dict[str, FrontmatterValue]]]:
+    """plan id -> (relative path, state, text, frontmatter) for every plan file."""
+
+    records: dict[str, tuple[str, str, str, dict[str, FrontmatterValue]]] = {}
+    for state in ("pending", "in_progress", "completed", "discontinued"):
+        for path in sorted((root / "FCVW" / "Plans" / state).glob("*.md")):
+            if path.name in {"README.md", "QUEUE.md", "INDEX.md"}:
+                continue
+            text = read_text(path)
+            metadata = frontmatter(text)
+            records[scalar(metadata, "id") or path.stem] = (path.relative_to(root).as_posix(), state, text, metadata)
+    return records
+
+
+def validate_plan_origins(root: Path, findings: list[Finding]) -> None:
+    """A failure plan and the plan that found it name each other (PLANNING.md).
+
+    `found_by: <plan-id>` on the plan that treats a failure is data; the plan
+    that found the failure must name it back (Validation executed), so neither
+    a fix without origin nor a forgotten failure can pass as normal work.
+    """
+
+    records = plan_records(root)
+    for plan_id, (relative, _, _, metadata) in sorted(records.items()):
+        origin = scalar(metadata, "found_by").strip()
+        if not origin:
+            continue
+        if not PLAN_ID.fullmatch(origin):
+            findings.append(Finding("plan-origin", relative, f"found_by is not a plan id: {origin!r}"))
+        elif origin == plan_id:
+            findings.append(Finding("plan-origin", relative, "found_by names the plan itself"))
+        elif origin not in records:
+            findings.append(Finding("plan-origin", relative, f"found_by names a missing plan: {origin}"))
+        elif plan_id not in records[origin][2]:
+            findings.append(
+                Finding(
+                    "plan-origin",
+                    relative,
+                    f"{origin} found this failure but does not name {plan_id}; list it in its Validation executed",
+                )
+            )
+
+
+def validate_release_assembly(root: Path, findings: list[Finding]) -> None:
+    """Application releases do not pile up silently (RELEASE.md, recurrence guard).
+
+    Measured downstream: 139 and then 57 unreleased fragments accumulated while
+    plans kept closing, because assembling a release was a step nobody's gate
+    checked. More fragments than PROJECT.md `unreleased_limit` block; a plan
+    completed after the newest published release that no changelog names warns.
+    """
+
+    changelogs = root / "FCVW" / "changelogs"
+    if not changelogs.is_dir():
+        return
+    project = root / "FCVW" / "PROJECT.md"
+    limit = scalar(frontmatter_of(project), "unreleased_limit").strip() if project.is_file() else ""
+    fragments = [path for path in (changelogs / "unreleased").glob("*.md") if path.name != "README.md"]
+    if limit and not limit.isdigit():
+        findings.append(Finding("release-backlog", "FCVW/PROJECT.md", f"unreleased_limit must be a whole number: {limit!r}"))
+    elif limit and int(limit) > 0 and len(fragments) > int(limit):
+        findings.append(
+            Finding(
+                "release-backlog",
+                "FCVW/changelogs/unreleased",
+                f"{len(fragments)} unreleased fragments exceed unreleased_limit {limit}: "
+                "assemble a release before opening new scope and record why assembly was skipped",
+            )
+        )
+    named: set[str] = set()
+    newest = ""
+    for path in changelogs.rglob("*.md"):
+        metadata = frontmatter_of(path)
+        named.update(string_list(metadata, "related_plans"))
+        named.update(Path(unquote(target.split("#", 1)[0])).stem for _, target in markdown_link_targets(read_text(path)))
+        if path.parent == changelogs and scalar(metadata, "release_status") == "published":
+            newest = max(newest, scalar(metadata, "date"))
+    for plan_id, (relative, state, _, metadata) in sorted(plan_records(root).items()):
+        if state != "completed" or scalar(metadata, "record_scope") == "framework" or plan_id in named:
+            continue
+        if newest and scalar(metadata, "updated_at") <= newest:
+            continue  # closed before the newest published release: history, not backlog
+        findings.append(
+            Finding(
+                "release-unassembled",
+                relative,
+                "completed plan is named by no changelog; add its unreleased fragment or include it in a release",
+                severity="warning",
+            )
+        )
 
 
 def validate_plans(root: Path, findings: list[Finding]) -> None:
@@ -1447,6 +2038,24 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
                     findings.append(Finding("plan-schema", relative, "context_files must be a non-empty list"))
             if status != state:
                 findings.append(Finding("plan-state", relative, f"status {status!r} != directory {state!r}"))
+            if "ai_review" in metadata:
+                # A plan drafted outside the executing agent (a tool, an import,
+                # comments on screenshots) is executed only after the agent
+                # reviewed it and the user confirmed its understanding.
+                review = scalar(metadata, "ai_review")
+                if review not in PLAN_REVIEW_STATES:
+                    findings.append(
+                        Finding("plan-review", relative, f"invalid ai_review: {review!r}; use pending or confirmed")
+                    )
+                elif review == "pending" and state in {"in_progress", "completed"}:
+                    findings.append(
+                        Finding(
+                            "plan-review",
+                            relative,
+                            f"{state} plan still awaits review (ai_review: pending); review it whole, confirm "
+                            "your understanding with the user, then set ai_review: confirmed",
+                        )
+                    )
             if not PLAN_ID.fullmatch(plan_id):
                 findings.append(Finding("plan-id", relative, f"invalid plan id: {plan_id!r}"))
             priority = scalar(metadata, "priority")
@@ -1470,6 +2079,8 @@ def validate_plans(root: Path, findings: list[Finding]) -> None:
             else:
                 validate_plan_risk_binding(relative, metadata, findings)
                 validate_plan_regression(relative, metadata, text, findings)
+            validate_plan_acceptance(relative, metadata, text, findings)
+            validate_removal_sanitization(relative, metadata, text, findings)
 
 
 def referenced_names(text: str, *, tables_only: bool = False) -> set[str]:
@@ -1843,6 +2454,14 @@ def validate_audit_records(root: Path, findings: list[Finding]) -> None:
         relative = path.relative_to(root).as_posix()
         text = read_text(path)
         metadata = frontmatter(text)
+        if scalar(metadata, "schema") == BASELINE_SCHEMA:
+            # The accepted-debt inventory is an audit artifact; check it even when unused.
+            findings.extend(
+                Finding(item.rule, relative, item.message, item.severity)
+                for item in load_legacy_baseline(path)[1]
+                if item.rule == "baseline-config"
+            )
+            continue
         if scalar(metadata, "schema") != "fcvw/audit@1":
             findings.append(Finding("audit-schema", relative, "audit must use fcvw/audit@1"))
             continue
@@ -2005,8 +2624,10 @@ def validate_clean_template(root: Path, findings: list[Finding]) -> None:
     for name in FORBIDDEN_ROOT_ENTRIES:
         if (root / name).exists():
             findings.append(Finding("clean-contamination", name, "production-derived comparison fixture in project root"))
+    # A root entry the source checkout's git ignores is local state: never committed or packaged.
+    local_state = git_ignored_root_entries(root)
     for path in sorted(root.iterdir(), key=lambda item: item.name.lower()):
-        if path.name not in CLEAN_ROOT_ENTRIES and path.name not in FORBIDDEN_ROOT_ENTRIES:
+        if path.name not in CLEAN_ROOT_ENTRIES and path.name not in FORBIDDEN_ROOT_ENTRIES and path.name not in local_state:
             findings.append(
                 Finding(
                     "clean-contamination",
@@ -2283,7 +2904,10 @@ def validate_version(root: Path, findings: list[Finding]) -> None:
         findings.append(Finding("framework-version", "FCVW/FRAMEWORK_LOCK.md", "installed version not found"))
         return
     readme = root / ("FCVW/README.md" if is_installed_release_layout(root) else "README.md")
-    if version not in read_text(readme):
+    if not readme.is_file():
+        # A project without a root README used to crash the whole run here.
+        findings.append(Finding("framework-version", readme.relative_to(root).as_posix(), "README is missing"))
+    elif version not in read_text(readme):
         findings.append(
             Finding("framework-version", readme.relative_to(root).as_posix(), f"README does not reference {version}")
         )
@@ -2486,18 +3110,34 @@ def _looks_like_local_relationship(field: str, value: str) -> bool:
     )
 
 
-def _relationship_candidate(root: Path, source: Path, value: str) -> Path | None:
+def _relationship_candidates(root: Path, source: Path, value: str, field: str = "") -> list[Path]:
+    """Where a frontmatter relationship may point, in resolution order.
+
+    `context_files` are repository paths: `retrieve_context.py` loads them from
+    the root, and the framework's own plans write `FCVW/...`. Reading them from
+    the plan's folder made every application path (`src/App.tsx`) "missing".
+    A `./` or `../` spelling stays plan-relative, and a bare path that only
+    resolves from the plan's folder is still accepted for older plans.
+    """
+
     target = unquote(value.strip().strip("<>")).split("#", 1)[0]
     if not target or PLACEHOLDER.search(target):
-        return None
+        return []
     target = target.replace("\\", "/")
     if target.startswith("/"):
-        return root / target.lstrip("/")
+        return [root / target.lstrip("/")]
     if target == "README.md" and is_installed_release_layout(root):
-        return root / "FCVW" / "README.md"
+        return [root / "FCVW" / "README.md"]
     if target.startswith(("FCVW/", "AGENTS.md", "README.md")):
-        return root / target
-    return source.parent / target
+        return [root / target]
+    if field == "context_files" and not target.startswith(("./", "../")):
+        return [root / target, source.parent / target]
+    return [source.parent / target]
+
+
+def _relationship_candidate(root: Path, source: Path, value: str, field: str = "") -> Path | None:
+    candidates = _relationship_candidates(root, source, value, field)
+    return candidates[0] if candidates else None
 
 
 def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
@@ -2564,11 +3204,10 @@ def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
         )
         if template_surface:
             continue
-        historical_legacy = (
-            not role
-            and "Plans" in path.relative_to(root).parts
-            and any(state in path.relative_to(root).parts for state in ("completed", "discontinued"))
+        terminal_plan = "Plans" in path.relative_to(root).parts and any(
+            state in path.relative_to(root).parts for state in ("completed", "discontinued")
         )
+        historical_legacy = not role and terminal_plan
         for field in (
             "created_at",
             "updated_at",
@@ -2599,23 +3238,43 @@ def validate_frontmatter_documents(root: Path, findings: list[Finding]) -> None:
             for target in dict.fromkeys(normalized):
                 if not target or not _looks_like_local_relationship(field, target):
                     continue
-                candidate = _relationship_candidate(root, path, target)
-                if candidate is None:
+                candidates = _relationship_candidates(root, path, target, field)
+                if not candidates:
                     continue
-                try:
+                inside: list[Path] = []
+                for candidate in candidates:
                     # `root` is resolved once in main(); frontmatter relationships
                     # are portable repository paths, so lexical normalisation is
                     # both correct and free of filesystem round trips.
                     resolved = Path(os.path.normpath(candidate))
-                    resolved.relative_to(root)
-                except (ValueError, OSError):
+                    try:
+                        resolved.relative_to(root)
+                    except (ValueError, OSError):
+                        continue
+                    inside.append(resolved)
+                if not inside:
                     findings.append(
                         Finding("frontmatter-relationship", relative, f"{field} escapes repository root: {target}")
                     )
                     continue
-                if not resolved.exists():
+                if not any(candidate.exists() for candidate in inside):
+                    hint = relationship_successor_hint(root, path, inside[0], field)
+                    if not hint and field == "context_files" and terminal_plan and any(
+                        candidate.relative_to(root).as_posix() in git_deleted_paths(root) for candidate in inside
+                    ):
+                        # The record was right when it was written; the file was
+                        # deleted later. History is not rewritten (MIGRATIONS.md).
+                        findings.append(
+                            Finding(
+                                "frontmatter-relationship",
+                                relative,
+                                f"{field} target was deleted after this record (history, not a defect): {target}",
+                                severity="warning",
+                            )
+                        )
+                        continue
                     findings.append(
-                        Finding("frontmatter-relationship", relative, f"{field} target is missing: {target}")
+                        Finding("frontmatter-relationship", relative, f"{field} target is missing: {target}{hint}")
                     )
 
 
@@ -2712,18 +3371,181 @@ def validate_app_rules(root: Path, profile: str, findings: list[Finding]) -> Non
                     findings.append(
                         Finding("app-rules-contract", relative, f"{rule_id} section must contain a Markdown link: {section}")
                     )
+def validate_project_gates(root: Path, findings: list[Finding]) -> None:
+    """The declared gate matrix must be usable: named surfaces, paths, commands and `full`."""
+
+    from gates_fcvw import read_gate_table
+
+    for problem in read_gate_table(root).problems:
+        findings.append(Finding("project-gates", "FCVW/PROJECT.md", problem))
+
+
+def lock_profile(root: Path) -> str:
+    """The installed profile token in FRAMEWORK_LOCK.md, in any language variant."""
+
+    path = root / "FCVW" / "FRAMEWORK_LOCK.md"
+    if not path.is_file():
+        return ""
+    for line in read_text(path).splitlines():
+        if line.strip().startswith("|"):
+            for cell in table_cells(line):
+                value = cell.strip("` ")
+                if value in {"project-instantiated", "clean-template"}:
+                    return value
+    return ""
+
+
+def resolve_profile(root: Path, requested: str, baseline: str | None) -> tuple[str, Path | None, str]:
+    """(profile, baseline path, reason). `auto` reads the project's own declarations.
+
+    Omitting `--profile` used to validate an instantiated project as a clean
+    template (4,482 findings instead of 2,792 in one real project); the lock and
+    PROJECT.md already say which one applies.
+    """
+
+    baseline_path = None
+    if baseline:
+        baseline_path = Path(baseline)
+        baseline_path = (baseline_path if baseline_path.is_absolute() else root / baseline_path).resolve()
+    default_baseline = root / DEFAULT_BASELINE
+    if requested != "auto":
+        if requested == "incremental" and baseline_path is None and default_baseline.is_file():
+            return requested, default_baseline, f"requested; baseline {DEFAULT_BASELINE}"
+        return requested, baseline_path, "requested"
+    project = root / "FCVW" / "PROJECT.md"
+    status = scalar(frontmatter_of(project), "instantiation_status") if project.is_file() else ""
+    if lock_profile(root) == "project-instantiated":
+        profile, reason = "instantiated", "auto: FRAMEWORK_LOCK.md declares project-instantiated"
+    elif status == "complete":
+        profile, reason = "instantiated", "auto: PROJECT.md instantiation_status is complete"
+    else:
+        profile, reason = "clean-template", "auto: no instantiation declared in FRAMEWORK_LOCK.md or PROJECT.md"
+    if baseline_path is None and profile == "instantiated" and default_baseline.is_file():
+        baseline_path = default_baseline
+    if baseline_path is not None:
+        label = baseline_path.relative_to(root).as_posix() if baseline_path.is_relative_to(root) else str(baseline_path)
+        return "incremental", baseline_path, f"{reason}; baseline {label}"
+    return profile, None, reason
+
+
+def run_validation(root: Path, profile: str, scope: set[str] | None, findings: list[Finding]) -> None:
+    """Every rule, in a fixed order, for one profile."""
+
+    validate_markdown(root, findings, scope)
+    validate_anchors(root, findings)
+    validate_character_integrity(root, findings, scope)
+    validate_automation(root, findings, scope)
+    validate_automation_binding(root, findings)
+    validate_language_review(root, findings)
+    validate_frontmatter_documents(root, findings)
+    validate_queues(root, findings)
+    validate_document_graph(root, findings)
+    validate_knowledge_graph(root, findings)
+    validate_canonical_metadata(root, findings, scope)
+    validate_plans(root, findings)
+    validate_plan_deferrals(root, findings)
+    validate_plan_origins(root, findings)
+    validate_release_assembly(root, findings)
+    validate_skills(root, findings)
+    validate_reading_routes(root, findings)
+    validate_wiki_ids(root, findings)
+    validate_feedback_notes(root, findings)
+    validate_audit_records(root, findings)
+    validate_troubleshooting_records(root, findings)
+    validate_adr_records(root, findings)
+    validate_profiles(root, profile, findings)
+    validate_project_gates(root, findings)
+    validate_app_rules(root, profile, findings)
+    validate_version(root, findings)
+    validate_application_releases(root, findings)
+    validate_regression_surfaces(root, findings)
+    if profile == "clean-template":
+        validate_clean_template(root, findings)
+
+
+def write_baseline_command(root: Path, args: argparse.Namespace, profile: str, baseline: Path | None) -> int:
+    """`--write-baseline`: record today's blocking findings as reviewed, time-bounded debt."""
+
+    if args.since:
+        print("ERROR [baseline-config] --write-baseline: a scoped run cannot become a baseline; drop --since")
+        return 2
+    if profile in {"clean-template", "strict"}:
+        print(f"ERROR [baseline-config] --write-baseline: profile {profile} accepts no baseline; an application "
+              "declares itself instantiated in FRAMEWORK_LOCK.md or PROJECT.md, or passes --profile instantiated")
+        return 2
+    target = Path(args.write_baseline)
+    target = (target if target.is_absolute() else root / target).resolve()
+    existing = frontmatter_of(target) if target.is_file() else {}
+    owner = args.baseline_owner or scalar(existing, "owner")
+    if not owner:
+        print("ERROR [baseline-config] --write-baseline: a new baseline needs --baseline-owner")
+        return 2
+    try:
+        review_due = date.fromisoformat(args.baseline_review_due) if args.baseline_review_due else None
+    except ValueError:
+        print(f"ERROR [baseline-config] invalid --baseline-review-due: {args.baseline_review_due}")
+        return 2
+    if review_due is None:
+        from datetime import timedelta
+
+        review_due = date.today() + timedelta(days=90)
+    if review_due < date.today():
+        print("ERROR [baseline-config] --baseline-review-due is in the past")
+        return 2
+    findings: list[Finding] = []
+    validate_required(root, findings)
+    run_validation(root, profile, None, findings)
+    blocking = [item for item in findings if item.severity == "error" and item.rule not in NON_BASELINABLE_RULES]
+    for item in findings:
+        if item.severity == "error" and item.rule in NON_BASELINABLE_RULES:
+            print(f"ERROR [{item.rule}] {item.path}: {item.message} (cannot be baselined; resolve it)")
+    if not blocking:
+        note = f"; {target.relative_to(root).as_posix()} is no longer needed and can be deleted" if target.is_file() else ""
+        print(f"FCVW baseline: no blocking findings, nothing recorded{note}")
+        return 0
+    added, kept, removed = write_legacy_baseline(
+        target, root, blocking, owner=owner, review_due=review_due, justification=args.baseline_justification
+    )
+    label = target.relative_to(root).as_posix() if target.is_relative_to(root) else str(target)
+    print(f"FCVW baseline written: path={label} rows={added + kept} added={added} kept={kept} removed={removed} "
+          f"review_due={review_due.isoformat()}")
+    if label != DEFAULT_BASELINE:
+        print(f"Pass --baseline {label} explicitly; only {DEFAULT_BASELINE} is picked up by --profile auto.")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".", help="repository root")
     parser.add_argument(
         "--profile",
-        choices=("clean-template", "instantiated", "incremental", "strict"),
-        default="clean-template",
+        choices=PROFILES,
+        default="auto",
+        help=(
+            "auto (default) reads FRAMEWORK_LOCK.md and PROJECT.md: an instantiated project is validated as "
+            f"instantiated, or as incremental when {DEFAULT_BASELINE} exists; otherwise clean-template"
+        ),
     )
     parser.add_argument(
         "--baseline",
-        help="legacy baseline Markdown file; valid only with --profile incremental",
+        help=f"legacy baseline Markdown file for --profile incremental (default: {DEFAULT_BASELINE} when present)",
     )
+    parser.add_argument(
+        "--write-baseline",
+        nargs="?",
+        const=DEFAULT_BASELINE,
+        metavar="PATH",
+        help=f"record the current blocking findings as known debt (default path: {DEFAULT_BASELINE}); "
+        "reviewed rows are kept, fixed rows are dropped",
+    )
+    parser.add_argument("--baseline-owner", help="owner of new baseline rows (required for a new baseline)")
+    parser.add_argument("--baseline-review-due", help="ISO review date of new rows; default: 90 days from today")
+    parser.add_argument(
+        "--baseline-justification",
+        default="pre-existing finding recorded by --write-baseline; reconcile or justify before the review date",
+        help="justification written on new baseline rows",
+    )
+    parser.add_argument("--show-baseline", action="store_true", help="list every accepted baseline finding")
     parser.add_argument(
         "--format",
         choices=("text", "json"),
@@ -2746,10 +3568,14 @@ def main() -> int:
     parser.add_argument(
         "--fix-moved-links",
         action="store_true",
-        help="rewrite links to plans that moved between status directories, then validate",
+        help="rewrite links and frontmatter relationships with a proven successor "
+        "(plan moved between status directories, or renamed in git history), then validate",
     )
     args = parser.parse_args()
     root = Path(args.root).resolve()
+    profile, baseline_path, profile_reason = resolve_profile(root, args.profile, args.baseline)
+    if args.write_baseline:
+        return write_baseline_command(root, args, profile, baseline_path)
     if args.fix_moved_links:
         for change in fix_moved_plan_links(root):
             print(f"FIXED {change}")
@@ -2757,7 +3583,7 @@ def main() -> int:
     baseline_entries: list[BaselineEntry] = []
     accepted: list[Finding] = []
 
-    if args.baseline and args.profile != "incremental":
+    if baseline_path is not None and profile != "incremental":
         findings.append(
             Finding(
                 "baseline-config",
@@ -2765,11 +3591,8 @@ def main() -> int:
                 "--baseline is valid only with --profile incremental",
             )
         )
-    elif args.baseline:
-        baseline_path = Path(args.baseline)
-        if not baseline_path.is_absolute():
-            baseline_path = root / baseline_path
-        baseline_entries, baseline_errors = load_legacy_baseline(baseline_path.resolve())
+    elif baseline_path is not None:
+        baseline_entries, baseline_errors = load_legacy_baseline(baseline_path)
         findings.extend(baseline_errors)
 
     validate_required(root, findings)
@@ -2786,34 +3609,9 @@ def main() -> int:
         else:
             scope = changed
 
-    validate_markdown(root, findings, scope)
-    validate_anchors(root, findings)
-    validate_character_integrity(root, findings, scope)
-    validate_automation(root, findings, scope)
-    validate_automation_binding(root, findings)
-    validate_language_review(root, findings)
-    validate_frontmatter_documents(root, findings)
-    validate_queues(root, findings)
-    validate_document_graph(root, findings)
-    validate_knowledge_graph(root, findings)
-    validate_canonical_metadata(root, findings, scope)
-    validate_plans(root, findings)
-    validate_skills(root, findings)
-    validate_reading_routes(root, findings)
-    validate_wiki_ids(root, findings)
-    validate_feedback_notes(root, findings)
-    validate_audit_records(root, findings)
-    validate_troubleshooting_records(root, findings)
-    validate_adr_records(root, findings)
-    validate_profiles(root, args.profile, findings)
-    validate_app_rules(root, args.profile, findings)
-    validate_version(root, findings)
-    validate_application_releases(root, findings)
-    validate_regression_surfaces(root, findings)
-    if args.profile == "clean-template":
-        validate_clean_template(root, findings)
+    run_validation(root, profile, scope, findings)
 
-    if args.profile == "incremental" and baseline_entries:
+    if profile == "incremental" and baseline_entries:
         findings, accepted, stale = apply_legacy_baseline(findings, baseline_entries)
         findings.extend(stale)
 
@@ -2825,6 +3623,10 @@ def main() -> int:
 
     errors = [item for item in findings if item.severity == "error"]
     warnings = [item for item in findings if item.severity == "warning"]
+    from collections import Counter
+
+    baseline_by_rule = Counter(item.rule for item in accepted)
+    mechanical = sum(1 for item in (*findings, *accepted) if "(--fix-moved-links rewrites it)" in item.message)
 
     if args.format == "json":
         import json
@@ -2832,7 +3634,8 @@ def main() -> int:
         print(
             json.dumps(
                 {
-                    "profile": args.profile,
+                    "profile": profile,
+                    "profile_reason": profile_reason,
                     "errors": len(errors),
                     "warnings": len(warnings),
                     "findings": [
@@ -2848,6 +3651,8 @@ def main() -> int:
                         {"rule": item.rule, "path": item.path, "message": item.message}
                         for item in accepted
                     ],
+                    "baseline_by_rule": dict(baseline_by_rule.most_common()),
+                    "mechanical_fixes": mechanical,
                     "scoped_out": scoped_out,
                     "since": args.since,
                 },
@@ -2856,13 +3661,20 @@ def main() -> int:
             )
         )
     else:
-        for finding in accepted:
-            print(f"BASELINE [{finding.rule}] {finding.path}: {finding.message}")
+        if args.show_baseline:
+            for finding in accepted:
+                print(f"BASELINE [{finding.rule}] {finding.path}: {finding.message}")
         for finding in findings:
             print(f"{finding.severity.upper()} [{finding.rule}] {finding.path}: {finding.message}")
+        if accepted and not args.show_baseline:
+            by_rule = ", ".join(f"{rule}={count}" for rule, count in baseline_by_rule.most_common())
+            print(f"BASELINE {len(accepted)} known finding(s) accepted ({by_rule}); --show-baseline lists them")
+        if mechanical:
+            print(f"MECHANICAL {mechanical} finding(s) name a proven successor; --fix-moved-links rewrites them")
+        print(f"FCVW validation profile: {profile} ({profile_reason})")
         scope_note = f" scoped_out={scoped_out}" if args.since else ""
         print(
-            f"FCVW validation: profile={args.profile} errors={len(errors)} "
+            f"FCVW validation: profile={profile} errors={len(errors)} "
             f"warnings={len(warnings)} findings={len(findings)} "
             f"baseline={len(accepted)}{scope_note}"
         )

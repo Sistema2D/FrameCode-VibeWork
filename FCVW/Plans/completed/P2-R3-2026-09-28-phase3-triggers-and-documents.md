@@ -64,7 +64,7 @@ Routing, then validator, then documents; each batch keeps the suite green.
 ## Acceptance criteria
 
 - [x] A path-to-events case table (framework and typical application paths) is tested: 23 cases in both layouts.
-- [ ] A project profile edit reads at most 40 KB of mandatory context; no route reads more than the phase 1 baseline. **Partly met:** a `PROJECT.md` edit reads 22 KB. Summed over the 34 routes, section-first reading fell from 563 to 526 KB against V0.19.0 (the phase 1 tree is equivalent for routes), but 10 routes grew by 0.1 to 2.3 KB, mainly because one `PROJECT.md` (preamble plus its largest section) replaced near-empty placeholder profiles.
+- [~] A project profile edit reads at most 40 KB of mandatory context; no route reads more than the phase 1 baseline. waived: the 40 KB limit was met (22 KB); 10 routes grew by at most 2.3 KB because content moved into `PROJECT.md`, not because it grew (decision marker made explicit in V0.24.0). **Partly met:** a `PROJECT.md` edit reads 22 KB. Summed over the 34 routes, section-first reading fell from 563 to 526 KB against V0.19.0 (the phase 1 tree is equivalent for routes), but 10 routes grew by 0.1 to 2.3 KB, mainly because one `PROJECT.md` (preamble plus its largest section) replaced near-empty placeholder profiles.
 - [x] Every rule of the frozen inventory still emits; new rules are added to it (`adr-schema`, 117 IDs).
 - [x] Suite, governance, benchmark and installed smoke pass on Python 3.10 to 3.13.
 

@@ -381,14 +381,14 @@ Optional semantic wiki review remains a `governance-validator` (wiki lint mode) 
 
 ## Verifiable retrieval and complete chunks
 
-V0.18.0 adds structured routes derived directly from [CONTEXT_MAP.md](CONTEXT_MAP.md), with no duplicate rule store. Required context stays outside optional scoring and budgets; callers must read the returned mandatory paths. The CLI does not load complete mandatory documents into its JSON response.
+Structured routes derive directly from [CONTEXT_MAP.md](CONTEXT_MAP.md), with no duplicate rule store. Required context stays outside optional scoring and budgets; callers must read the returned mandatory paths. The CLI does not load complete mandatory documents into its JSON response.
 
 ```sh
 python -B FCVW/tools/build_context_index.py --root . --output .fcvw-cache/context-index.jsonl
 python -B FCVW/tools/retrieve_context.py --root . --index .fcvw-cache/context-index.jsonl --query "retrieval injection defense" --session ai_governance --versioned-change --event ai --file-change modify:FCVW/AI.md --context-budget 2000 --candidate-k 20 --top-k 8 --max-chunks-per-file 2
 ```
 
-In a source checkout use root tools instead. Rebuild old indexes: sections now split at paragraph boundaries around 1200 characters, preserving fenced code and oversized atomic blocks. Chunk IDs distinguish fragments; hashes detect content changes. Exact-only matching requires a bounded identity, so an incidental substring such as “maintain” cannot activate “AI”. Explicit filename stems remain supported.
+In a source checkout use root tools instead. Sections split at paragraph boundaries around 1200 characters, preserving fenced code and oversized atomic blocks. Chunk IDs distinguish fragments; hashes detect content changes. Exact-only matching requires a bounded identity, so an incidental substring such as “maintain” cannot activate “AI”. Explicit filename stems remain supported.
 
 For changed files, `--file-change OPERATION:PATH` distinguishes an edit from an
 addition, move, rename or deletion; `--versioned-change` requires an explicit
@@ -482,9 +482,7 @@ Useful repository metrics:
 - repeated clarification count;
 - validation defects caused by missing context.
 
-Recorded baseline (2026-09-28, clean template, bytes of `AGENTS.md` plus the mandatory route; no tokenizer): the sum over all 34 session and event routes fell from 563 KB in V0.19.0 to 526 KB in V0.20.0 (−6.6%) when section-routed documents count their preamble plus their largest section, and grew from 912 KB to 948 KB when every file is read whole, which is what section routes exist to avoid. 24 routes shrank or held; 10 grew by 0.1 to 2.3 KB, mostly because the single `PROJECT.md` replaced near-empty placeholder profiles. In a filled project the same content moves rather than grows. A project profile edit reads about 22 KB of mandatory context.
-
-First-read ranges (2026-09-30, same method, V0.21.0 candidate): over 13 common session and event routes, whole files total 664 KB and the first-read ranges plus the route output itself 314 KB (−53%); the map alone drops from 19 KB to about 4 KB when the route output replaces its tables.
+Measure routes as bytes of `AGENTS.md` plus the mandatory route, counting a section-routed document as its preamble plus its first-read sections, without a tokenizer. The framework's recorded baselines (V0.20.0 and V0.21.0 release records) use this method: first-read ranges cut 13 common routes by about half against whole files, and a project-profile edit reads about 22 KB.
 
 ### Complete-chunk budget estimates
 

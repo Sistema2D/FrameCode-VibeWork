@@ -6,6 +6,8 @@ upgrade_strategy: "preserve"
 instantiation_status: "pending"
 not_applicable_sections: []
 not_applicable_reason: ""
+ungoverned_paths: []
+unreleased_limit: "5"
 ---
 
 # Project profile
@@ -112,6 +114,18 @@ Do not copy the application version into multiple documents unless it is derived
 | Integration tests | `<command>` | |
 | Build | `<command>` | |
 | Start | `<command>` | |
+
+### Validation gates
+
+Read by `tools/gates_fcvw.py` ([TESTS.md](TESTS.md#gate-selection-by-change-surface)); a path outside every row, an R4/R5 plan or a release runs `full`.
+
+<a id="validation-gates"></a>
+
+| Surface | Paths | Gates |
+|---|---|---|
+| governance | `FCVW/**/*.md`, `AGENTS.md` | `git diff --check`, `python FCVW/tools/validate_fcvw.py --root . --since HEAD`, `python FCVW/tools/plan_queue_fcvw.py --root . --recommend` |
+| `<surface>` | `<glob>` | `<command>` |
+| full | | `<complete gate set>` |
 
 ### Boundaries
 

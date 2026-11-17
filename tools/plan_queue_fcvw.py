@@ -73,6 +73,10 @@ def derive_queue(root: Path) -> tuple[list[QueueEntry], list[QueueFinding]]:
                 for dependency in snapshot.dependencies.get(plan_id, [])
                 if dependency_state(dependency, snapshot.catalog, evidence)[0] != "satisfied"
             ]
+            if scalar(metadata, "ai_review").strip() == "pending":
+                # Drafted outside the agent: never recommended for execution
+                # until reviewed with the user (PLANNING.md).
+                blockers.append("review: ai_review pending, confirm with the user")
             external = scalar(metadata, "blocked_external").strip()
             if external:
                 if len(external) < MINIMUM_REASON:

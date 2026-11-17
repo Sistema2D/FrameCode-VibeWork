@@ -18,7 +18,7 @@ Skills are provider-neutral, just-in-time procedures using `fcvw/skill@1`. Load 
 | [`agent-hermes`](agent-hermes/SKILL.md) | measured performance investigation |
 | [`anti-monolith-guard`](anti-monolith-guard/SKILL.md) | responsibility and size boundaries |
 | [`brainstorming-and-tdd`](brainstorming-and-tdd/SKILL.md) | specification and test-first workflow |
-| [`code-hygiene-refactor`](code-hygiene-refactor/SKILL.md) | bounded cleanup/refactoring |
+| [`code-hygiene-refactor`](code-hygiene-refactor/SKILL.md) | bounded cleanup/refactoring; sanitization of a requested removal |
 | [`git-conventional-commits`](git-conventional-commits/SKILL.md) | commit, tag, and release message preparation |
 | [`governance-validator`](governance-validator/SKILL.md) | FCVW conformance, reading-route coverage, clean-template validation, Markdown lint and wiki lint |
 | [`obsidian-markdown`](obsidian-markdown/SKILL.md) | portable Markdown/Obsidian formatting |

@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import re
 import time
 from collections import Counter
@@ -71,6 +72,25 @@ def load_knowledge_graph(path: Path) -> dict[str, object]:
     return value
 
 
+def context_file_path(root: Path, plan: Path, value: str) -> str:
+    """Repository path of one `context_files` entry, resolved as the validator does.
+
+    A bare path is read from the root; `./` and `../` spellings, and a bare path
+    that exists only next to the plan, are read from the plan's folder.
+    """
+
+    value = value.strip().replace("\\", "/")
+    plan_relative = value.startswith(("./", "../"))
+    if not plan_relative and (root / value).exists():
+        return value
+    local = Path(os.path.normpath(plan.parent / value))
+    try:
+        relative = local.relative_to(root).as_posix()
+    except ValueError:
+        return value
+    return relative if plan_relative or local.exists() else value
+
+
 def mandatory_paths(root: Path, active_plan: Path | None, additional: list[str] | None = None) -> list[str]:
     root = root.resolve()
     paths = ["AGENTS.md", "FCVW/CONTEXT_MAP.md"]
@@ -84,7 +104,7 @@ def mandatory_paths(root: Path, active_plan: Path | None, additional: list[str] 
             paths.append(relative)
             if resolved_plan.is_file():
                 metadata = parse_frontmatter(resolved_plan.read_text(encoding="utf-8-sig")).data
-                paths.extend(string_list(metadata, "context_files"))
+                paths.extend(context_file_path(root, resolved_plan, value) for value in string_list(metadata, "context_files"))
     if additional:
         paths.extend(item.replace("\\", "/").removeprefix("./") for item in additional)
     seen: set[str] = set()

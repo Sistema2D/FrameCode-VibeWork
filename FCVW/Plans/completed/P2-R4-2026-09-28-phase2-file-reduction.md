@@ -72,7 +72,7 @@ See the work packages above; each records its evidence in the table below before
 
 ## Acceptance criteria
 
-- [ ] `FCVW/` has at most 110 files and 30 directories (at most 10 outside `skills/`). **Partly met:** 113 files and 28 directories (9 outside `skills/`), from 228 and 65. The 3 files over target are this phase's own history (3 phase 1 plans, this plan, 2 ADRs and 2 release records were added). The target counted records, which grow with every change, so the regrowth guard measures only the surface outside record directories (65 files).
+- [~] `FCVW/` has at most 110 files and 30 directories (at most 10 outside `skills/`). waived: the target counted records, which grow with every change; the surface guard outside record directories replaced it (decision marker made explicit in V0.24.0). **Partly met:** 113 files and 28 directories (9 outside `skills/`), from 228 and 65. The 3 files over target are this phase's own history (3 phase 1 plans, this plan, 2 ADRs and 2 release records were added). The target counted records, which grow with every change, so the regrowth guard measures only the surface outside record directories (65 files).
 - [x] Every rule ID of the frozen inventory still has an emitting rule, or its removal is justified here: 12 `plan-queue-*` IDs were retired with WP5 (the queue/plan parity they protected no longer exists), and 3 were added (`plan-queue-legacy`, `profile-legacy`, `clean-scaffold-directory`).
 - [x] A V0.19.0 installation migrates without losing records (digest comparison).
 - [x] Suite, governance, benchmark and installed smoke pass on Python 3.10 to 3.13.

@@ -311,8 +311,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     parser.add_argument("event", choices=HOOK_EVENTS)
     parser.add_argument("--root", help="repository root; default: nearest governed root above the hook cwd")
-    parser.add_argument("--profile", default="instantiated",
-                        choices=("clean-template", "instantiated", "incremental", "strict"))
+    parser.add_argument("--profile", default="auto",
+                        choices=("auto", "clean-template", "instantiated", "incremental", "strict"),
+                        help="validator profile for the stop check; auto follows the project's lock, "
+                             "PROJECT.md and legacy baseline")
     args = parser.parse_args(argv)
     if os.environ.get("FCVW_HOOKS", "").lower() in {"off", "0", "false"}:
         return 0

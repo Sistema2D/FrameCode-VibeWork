@@ -25,6 +25,8 @@ The plan covers its own creation and related changelog. Group files that form on
 
 A trivial prose fix needs no plan: a typo, grammar or wording correction that changes no meaning and touches no frontmatter, link, table, heading, code block or `framework_policy` file. It is recorded only in a conventional commit (`docs: …`). When in doubt, use a compact plan.
 
+A plan drafted outside the executing agent (by a tool, an import or from the user's comments) declares `source` and `ai_review: pending`. It is not executed until the agent has read it whole, opened what it cites, completed its fields, presented its understanding and open questions to the user and received confirmation; then `ai_review: confirmed`. While pending, the queue lists it as blocked and the validator refuses it in `in_progress` or `completed` (`plan-review`).
+
 ## Lifecycle
 
 ```mermaid
@@ -112,7 +114,7 @@ An in-progress plan declares `owner`. Parallel agents must not modify the same f
 
 A plan is completed only when:
 
-- acceptance criteria are decided;
+- every item of Acceptance criteria, Validation plan and Regression checks required is decided (rule `plan-acceptance`): `[x]` met, with its evidence in the plan; `[~] … deferred: <plan-id>` moved to another open plan, which carries it as `[ ] … from: <origin-id>` in its own checklist (rule `plan-deferral`); or `[~] … waived: <reason>` dropped with a reason of at least 12 characters. `[~]` always names one of the two; partial progress stays `[ ]` with a note until closeout;
 - required validation ran and evidence is concise but reproducible;
 - applicable regression checks have final results and no blocking Regression gate remains;
 - gaps and residual risks are explicit;
@@ -120,7 +122,17 @@ A plan is completed only when:
 - changelog/release record exists;
 - status and directory agree.
 
-Legacy plans retain their original schema. Apply the current schema when a legacy plan is substantively reopened.
+A deferral is data on both ends, so the receiving plan cannot close without deciding the criterion, and a criterion cannot be deferred to a completed plan without reopening it. Prose such as "this half is solved in the cutover" is not an address. Legacy plans retain their original schema. Apply the current schema when a legacy plan is substantively reopened.
+
+## Failures found during execution
+
+A failure found while executing any task is handled, even when it has little or nothing to do with the task's scope. It is not worked around, not left because it belongs to "another subject", and not noted anywhere outside governance: it is fixed now or it becomes a pending plan. Plans inherit this rule by reference; do not copy it into each plan.
+
+- **A failure is a defect:** an error, regression, security gap, failing test, corrupted data, broken contract, or a document that describes what no longer exists. An improvement opportunity is not a failure: refactoring, redesign or renaming by preference still needs its own plan.
+- **Fix now**, in the batch that found it, only when all hold: risk `R1` or `R2`, not higher than the current plan's; known cause and a localized fix with no open investigation; no material decision pending with the owner (behavior, text, contract or measure they approved); no authentication, authorization, security, schema, migration, persisted-data, destructive, new-dependency or public-interface trigger; and the gates the current plan already runs prove it. The fix goes in its own commit with its own justification, so the plan's diff stays readable and the fix stays revertible alone.
+- **Otherwise plan it, in the same batch:** create an `fcvw/plan@2` in `Plans/pending/` with `category: correction`, `found_by: <plan-id of the plan that found it>`, the evidence that revealed the failure and any question for the owner. When in doubt, plan: an unnecessary pending plan costs minutes; a risky fix inside the wrong plan skips the gates it needs.
+- **Leave a trail:** the plan that found the failure names every failure it handled, fixed or planned, in its Validation executed section; for a planned one it names the new plan's ID (rule `plan-origin` checks both ends).
+- **Read-only session:** report the failure with its evidence and propose the pending plan; do not write files the user did not ask for.
 
 ## Priority queue
 
@@ -185,4 +197,4 @@ advisory or blocking gate used for application work applies here.
 
 ## Document relationships
 
-Plans link affected policies and profiles through `context_files`, use portable Markdown links for related records, and remain reachable through their state directory. A plan may not close while its related changelog, release, decision, regression, or validation evidence is an orphan.
+Plans link affected policies, profiles and files through `context_files`, written as repository paths (`src/App.tsx`, `FCVW/DATA.md`), use portable Markdown links for related records, and remain reachable through their state directory. A plan may not close while its related changelog, release, decision, regression, or validation evidence is an orphan.

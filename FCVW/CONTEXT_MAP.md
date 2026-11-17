@@ -36,6 +36,7 @@ Hard triggers are cumulative and override a row's “usually skip” guidance. C
 | Data / migration (`migration`) | schema, persistence, import/export, retention, file format | `DATA.md`, `TESTS.md`, `REGRESSION_GUARDS.md` | `SECURITY.md`, `PROJECT.md`, migration/rollback record | unrelated UI |
 | Performance (`performance`) | latency, memory, bundle, startup, capacity, bottleneck | `PROJECT.md`, `TESTS.md` | `agent-hermes`, environment | full wiki |
 | Refactoring (`refactoring`) | behavior-preserving structure, monolith, duplication, dead code | `REFACTORING.md` relevant sections, `PLANNING.md`, `REGRESSION_GUARDS.md` | `REFACTORING_GUIDE.md` section for the stage, characterization tests, hygiene skills | release until closeout |
+| Feature removal (`removal`) | remove, delete or discontinue a button, field, screen, route, report or feature | `REFACTORING.md` section 26, `PLANNING.md`, `REGRESSION_GUARDS.md` | `code-hygiene-refactor`, `DATA.md` for persisted data, `ARCHITECTURAL_DECISIONS.md` for a public contract | unrelated redesign |
 | Architecture / public interface | module boundary, API/CLI/file contract, runtime topology | `ARCHITECTURAL_DECISIONS.md`, `APPLICATION_DOCUMENTATION.md`, `REGRESSION_GUARDS.md` | `PROJECT.md`, `DATA.md`, ADR template | routine histories |
 | Documentation / file movement (`documentation`) | add/move/delete/rename Markdown, docs, generated index | `OWNERSHIP.md`, relevant document contract | `APPLICATION_DOCUMENTATION.md`, `obsidian-markdown`, validator | application runtime docs unless affected |
 | Environment / deploy | configuration, environment variable, port, packaging, promotion, recovery | `PROJECT.md`, `SECURITY.md`, `REGRESSION_GUARDS.md` | `TESTS.md`, release policy | design/wiki |
@@ -80,7 +81,7 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 |---|---|---|
 | `CONTEXT_MAP.md` | `Routing algorithm`, `Missing-route and escalation rules` and `Cross-cutting application-rule and graph triggers`, when `retrieve_context.py` resolved the route | no route output exists: read `Session routing` and `Event-triggered mandatory reads` |
 | `AI.md` | One of: `AI Usage Types`; `Instruction Hierarchy` with `Prompt Injection`; `Memory and History` with `AI Interaction Context Compression (AICC)`; `AI Skills Engine (ASE)`; `Third-Party Service Research`; `AI Quality Evaluation` | the task crosses more than one AI boundary |
-| `REFACTORING.md` | `2. Central Principle`, `14. Entry and Block Criteria`, `18. Minimum Tests by Risk`, `20. Checklists` (the chosen checklist) and `25. Anti-Monolith and Code Hygiene Gates` | a systemic refactor needs the full lifecycle |
+| `REFACTORING.md` | `2. Central Principle`, `14. Entry and Block Criteria`, `18. Minimum Tests by Risk`, `20. Checklists` (the chosen checklist), `25. Anti-Monolith and Code Hygiene Gates` and `26. Requested Removal and Sanitization` | a systemic refactor needs the full lifecycle |
 | `REFACTORING_GUIDE.md` | One of: `01 — Decision Guide`; `08 — Code Smells Map`; `00 — General Refactoring Governance` (risk, entry, exit and rollback); `09 — Refactoring Pull Request Checklist` | the refactor spans several stages |
 | `TROUBLESHOOTING.md` | `Mandatory Consultation Rule`, `Relationship with Change Plans` and `Criteria to Close an Issue` | creating or closing a durable failure record |
 | `skills/project-instantiation/BRIEFING.md` | `Mandatory Activation Rule`, `Gap Levels` and `Phase 0 Closure Rule`, then only the relevant questionnaire domains | performing full Phase 0 discovery |
@@ -89,7 +90,7 @@ For a mixed QA request, choose `product_qa` when the task requires observing the
 | `ARCHITECTURAL_DECISIONS.md` | `When to Create an ADR`, `When Not to Create an ADR` and `Checklist Before Accepting an ADR` | authoring or superseding an ADR |
 | `SCHEMAS.md` | `Common fields` plus only the schema of the artifact at hand | changing a schema or auditing compatibility |
 | `PROJECT.md` | One of: `Identity and scope`; `Stack`; `Environment`; `Design`; `Performance`; `Workflows` | instantiation or a change that crosses concerns |
-| `PLANNING.md` | `When planning applies`, `Regression impact` and `Priority queue` | reopening a plan or revising queue policy |
+| `PLANNING.md` | `When planning applies`, `Regression impact`, `Failures found during execution` and `Priority queue` | reopening a plan or revising queue policy |
 | `TESTS.md` | `Minimum regression evidence by risk` plus the changed-surface row of `Evidence matrix by change surface` | defining project test strategy |
 | `MIGRATIONS.md` | `Principles`, then only the sections from the installed version to the target | reconstructing an old migration path |
 | `OWNERSHIP.md` | `Required metadata`, `Upgrade algorithm` and `Protected paths` | paths change (`Filesystem layout`) or ownership rules change |
@@ -121,6 +122,7 @@ Every `session_types` value in `skills/*/SKILL.md` must appear here or directly 
 | `performance` | Performance |
 | `planning` | Planning |
 | `refactoring` | Refactoring |
+| `removal` | Feature removal |
 | `release` | Release |
 | `security` | Security / privacy |
 | `troubleshooting` | Bugfix / troubleshooting |

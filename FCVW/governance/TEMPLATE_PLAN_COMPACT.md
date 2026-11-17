@@ -54,6 +54,8 @@ context_files:
 - Changelog/framework release: <link>
 ```
 
+Before completion each Validation item is `[x]`, or `[~]` with `deferred: <plan-id>` or `waived: <reason>`.
+
 ## Escalation rule
 
 If, during execution, the change starts touching existing behavior, a consumer,
