@@ -689,7 +689,7 @@ Os itens abaixo **estendem** esses mecanismos. Um schema paralelo ou um agente a
 ### Fora das fases — retroalimentação do uso real (V0.24.0)
 
 - [x] Sinal de validação, fechamento decidido, inventário do grafo, gates proporcionais e sanitização de remoção — ver a seção 15 e o [registro V0.24.0](FCVW/framework-releases/V0.24.0.md).
-- [ ] Publicação da V0.24.0 — [plano pendente](FCVW/Plans/pending/P2-R3-2026-11-13-v0240-publication.md).
+- [x] Publicação da V0.24.0 ("Half-life release") — [plano](FCVW/Plans/completed/P2-R3-2026-11-13-v0240-publication.md) e [release](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.24.0).
 
 ---
 
@@ -804,6 +804,6 @@ Fonte: seis notas de lições escritas durante o uso do FCVW V0.14.0 numa aplica
 
 **Em aberto:**
 
-- [ ] Publicar a V0.24.0 (variantes `pt-BR`, `es`, `de`, revisão, pacotes, tag) — [plano](FCVW/Plans/pending/P2-R3-2026-11-13-v0240-publication.md).
+- [x] Publicar a V0.24.0 (variantes `pt-BR`, `es`, `de`, revisão, pacotes, tag) — [plano](FCVW/Plans/completed/P2-R3-2026-11-13-v0240-publication.md).
 - [x] Ensaiar o upgrade numa cópia do projeto de campo (V0.14.0 → V0.24.0) terminando com `--write-baseline`: passou e encontrou dois defeitos da baseline, já corrigidos (ver o plano de publicação).
 - [ ] Rodar `check_fcvw.py` em Linux e macOS (no Windows já passou com Python 3.11, 3.12 e 3.14).

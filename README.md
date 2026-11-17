@@ -15,7 +15,7 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Release](https://img.shields.io/badge/Release-v0.24.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.24.0)
 [![Half-life release](https://img.shields.io/badge/%E2%98%A2-Half--life_release-3b5bdb?style=flat-square)](#half-life)
 
-Stable release **V0.23.0** · Ready candidate **V0.24.0** · *Half-life release*
+Stable release **V0.24.0** · *Half-life release*
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
