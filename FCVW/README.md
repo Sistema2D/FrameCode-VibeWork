@@ -7,7 +7,7 @@ upgrade_strategy: "replace"
 
 # FCVW operational index
 
-This directory is the governance layer installed in a project. This package is framework version V0.23.0.
+This directory is the governance layer installed in a project. This package is framework version V0.24.0.
 
 ## Installation and removal boundary
 
@@ -62,7 +62,7 @@ The document graph catalog, the plan queue view, context indexes and knowledge g
 
 ## Framework versus application releases
 
-Framework version: [V0.23.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.23.0.md). Previous version: [V0.22.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.22.0.md).
+Framework version: [V0.24.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.24.0.md). Previous version: [V0.23.0](https://github.com/Sistema2D/FrameCode-VibeWork/blob/main/FCVW/framework-releases/V0.23.0.md).
 
 - FCVW releases: `framework-releases/Vx.y.z.md`.
 - Application releases: `changelogs/Vx.y.z.md`.

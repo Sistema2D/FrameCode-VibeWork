@@ -1,4 +1,4 @@
-<img width="1672" height="941" alt="Capa FrameCode com subtítulo em inglês" src="https://github.com/user-attachments/assets/9be5cbf1-c776-4220-9747-f1fa794bf6b5" />
+<img width="1672" height="941" alt="FrameCode-VibeWork v0.24.0 — Half-life release" src=".github/assets/fcvw-v0.24.0-half-life.png" />
 <a id="top"></a>
 
 <div align="center">
@@ -12,9 +12,10 @@ Scoped planning · regression protection · selective context · controlled tech
 [![Support](https://img.shields.io/badge/Support-Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/hugomelovek)
 [![License](https://img.shields.io/badge/License-Apache_2.0-6f42c1?style=flat-square)](LICENSE)
 [![LinkedIn](https://img.shields.io/badge/Contact-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hugoaraujo92/)
-[![Release](https://img.shields.io/badge/Release-v0.23.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.23.0)
+[![Release](https://img.shields.io/badge/Release-v0.24.0-6f42c1?style=flat-square)](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.24.0)
+[![Half-life release](https://img.shields.io/badge/%E2%98%A2-Half--life_release-3b5bdb?style=flat-square)](#half-life)
 
-Stable release **V0.23.0** · In preparation: [V0.24.0](FCVW/framework-releases/V0.24.0.md)
+Stable release **V0.23.0** · Ready candidate **V0.24.0** · *Half-life release*
 
 [![PT-BR](https://img.shields.io/badge/Leia_em-PT--BR-009C3B?style=for-the-badge)](#pt-br)
 [![ENG-US](https://img.shields.io/badge/Read_in-ENG--US-3C3B6E?style=for-the-badge)](#en-us)
@@ -27,13 +28,17 @@ Stable release **V0.23.0** · In preparation: [V0.24.0](FCVW/framework-releases/
 
 ## Português (Brasil)
 
+<a id="half-life"></a>
+
+> ☢ **Half-life release.** O FCVW chegou à sua meia-vida: daqui em diante, cada versão traz menos novidade e mais do que já foi provado. Aproveite enquanto ele brilha.
+
 FrameCode VibeWork (FCVW) é uma camada de governança em Markdown para projetos feitos por pessoas e agentes de IA. Cada mudança segue um caminho verificável: contexto mínimo → plano → execução no escopo → evidência → registro de versão.
 
 **O que resolve:** mudanças sem escopo ou rollback, agentes que leem contexto de menos (ou demais), entregas sem prova de não regressão e memória de sessões sem curadoria.
 
 ### Como usar
 
-1. Baixe o template no idioma desejado na [release estável](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.23.0) e copie `AGENTS.md` e `FCVW/` para o seu projeto.
+1. Baixe o template no idioma desejado na [release estável](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.24.0) e copie `AGENTS.md` e `FCVW/` para o seu projeto.
 2. Siga o [INSTANTIATION.md](FCVW/INSTANTIATION.md) (projeto novo ou [existente](FCVW/INSTANTIATION.md#retroactive-instantiation)) e preencha o [PROJECT.md](FCVW/PROJECT.md).
 3. Peça ao seu agente de IA que leia o [AGENTS.md](AGENTS.md) antes de trabalhar.
 
@@ -65,13 +70,15 @@ O FCVW não é runtime de agente nem substitui testes, CI ou revisão humana.
 
 ## English (United States)
 
+> ☢ **Half-life release.** FCVW has reached its half-life: from here on, each release brings less novelty and more of what has already been proven. Enjoy it while it glows.
+
 FrameCode VibeWork (FCVW) is a Markdown governance layer for projects built by people and AI agents. Every change follows a verifiable path: minimum context → plan → scoped execution → evidence → version record.
 
 **What it solves:** changes without scope or rollback, agents reading too little (or too much) context, delivery without regression evidence, and uncurated session memory.
 
 ### How to use
 
-1. Download the template in your language from the [stable release](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.23.0) and copy `AGENTS.md` and `FCVW/` into your project.
+1. Download the template in your language from the [stable release](https://github.com/Sistema2D/FrameCode-VibeWork/releases/tag/v0.24.0) and copy `AGENTS.md` and `FCVW/` into your project.
 2. Follow [INSTANTIATION.md](FCVW/INSTANTIATION.md) (new or [existing](FCVW/INSTANTIATION.md#retroactive-instantiation) project) and fill in [PROJECT.md](FCVW/PROJECT.md).
 3. Ask your AI agent to read [AGENTS.md](AGENTS.md) before working.
 
@@ -101,6 +108,6 @@ FCVW is not an agent runtime and does not replace tests, CI or human review.
 
 <div align="center">
 
-[Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [Release record V0.23.0](FCVW/framework-releases/V0.23.0.md) · [Maintainer backlog](TODO.md)
+[Apache License 2.0](LICENSE) · [Attribution / Atribuição](NOTICE) · [Release record V0.24.0](FCVW/framework-releases/V0.24.0.md) · [Maintainer backlog](TODO.md)
 
 </div>
