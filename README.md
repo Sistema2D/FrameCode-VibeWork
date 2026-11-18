@@ -30,7 +30,7 @@ Stable release **V0.24.0** · *Half-life release*
 
 <a id="half-life"></a>
 
-> ☢ **Half-life release.** O FCVW chegou à sua meia-vida: daqui em diante, cada versão traz menos novidade e mais do que já foi provado. Aproveite enquanto ele brilha.
+> ☢ **Half-life release.** O FCVW chegou à sua meia-vida: daqui em diante, cada versão traz menos novidade e mais do que já foi provado. Aproveite (é de graça).
 
 FrameCode VibeWork (FCVW) é uma camada de governança em Markdown para projetos feitos por pessoas e agentes de IA. Cada mudança segue um caminho verificável: contexto mínimo → plano → execução no escopo → evidência → registro de versão.
 
